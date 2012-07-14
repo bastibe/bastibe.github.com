@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="">	
+<head>
+	<meta charset="utf-8"/>
+	<title>Tagged File System - Das Krachen</title>	
+	<meta name="author" content="Bastian Bechtold">
+	
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0">
+	
+	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:700,400|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
+		
+	<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	
+	
+	
+	
+	<link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Das Krachen ATOM Feed" />
+	
+	<link href="./feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Das Krachen RSS Feed" />
+	
+</head>
+	
+<body>		
+	<header class="clearfix" role="banner">
+		<div class="wrapper">
+			<h1 class="huge"><a href=".">Das Krachen</a></h1>
+		</div>
+	</header>
+	
+	
+<div role="main" class="content clearfix">	
+	<article>
+		<div class="post wrapper">
+			<h1>Tagged File System</h1>
+			<p>Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff "Ordner" wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen "Verzeichnis" wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für "Verzeichnis"...)</p>
+<p><a href="static/images/2009-04/standard_finder.png"><img alt="Standard Finder" src="static/images/2009-04/standard_finder_small.png" /></a></p>
+<p>Es wäre daher wünschenswert, eine einfacher zu verstehende Alternative zu Ordnerhierarchien zu haben. Die gibt es auch schon, in Form der bekannten Verzeichnisse "Meine Bilder", "Meine Dokumente", etc.
+Diese Ordner wollen den Benutzer mit einfachen Piktogrammen und klaren Namen dazu animieren, einen natürlichen Ort für seine Dateien zu wählen und so ein wenig Ordnung zu schaffen. Tatsächlich ist dieses Konzept einer Tag-Struktur schon relativ ähnlich, da auch hier nicht davon ausgegangen wird, dass sich der Benutzer selbst um eine tief geschachtelte Orderhierarchie kümmert, sondern nur wenige, einfach zu verstehende Markierungsmöglichkeiten ("Bilder", "Dokumente") geboten werden.</p>
+<p>Ein echtes Tag-basiertes System könnte vollkommen ohne Verzeichnisse auskommen, wobei man dann eben beim Speichern einer Datei nicht mehr aus einer hierarchischen Liste von Ordnern den Speicherort auswählen würde, sondern von einer flachen Liste von Tags. Die Usability-Kosten davon wären vernachlässigbar.</p>
+<p><a href="static/images/2009-04/tagged_finder.png"><img alt="Tagged Finder" src="static/images/2009-04/tagged_finder_small.png" /></a></p>
+<p>Ähnlich würde das Finden von Dateien funktionieren: Statt eine hierarchische Liste von Ordnern nacheinander anzuklicken, würde man eine flache Liste von Tags nacheinander anklicken, jedoch mit dem Bonus, dass man die gesuchte Datei nicht erst bei Anklicken aller Tags, sondern mit großer Wahrscheinlichkeit schon nach ein oder zwei Tags gefunden hätte.</p>
+<p>Ein Problem würde jedoch mit Projekten entstehen, die aus mehreren Dateien bestehen. Hier müsste man sicher stellen, dass sie im Dateisystem nur als einzelne große Projektdatei auftauchen und nicht jede einzelne Unterdatei gelistet wird. Das ließe sich zum Beispiel durch "Bundles" lösen, wie sie heute schon in OSX vorkommen (Ordner mit definierter Namesendung und Inhalt werden wie Dateien behandelt) oder einfach durch einen speziellen Tag, der die einzelnen Dateien vor der normalen Suche versteckt.
+Dieses Konzept wird übrigens heute schon vielfach verwendet, so ist etwa eine aktuelle Word-Datei nur eine ZIP-Datei, die eine definierte Verzeichnisstruktur mit allen Bildern, dem Text (als XML), einer Vorschau-Grafik etc. enthält.</p>
+<p><a href="static/images/2009-04/bundles.png"><img alt="Bundles" src="static/images/2009-04/bundles_small.png" /></a></p>
+<p>Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfacher arbeiten könnte als mit den heute üblichen Verzeichnisstrukturen. Tja, jetzt fehlt nur noch eine innovative Firma, die sich um die Umsetzung kümmert...</p>
+			
+			<a href="https://twitter.com/share" class="twitter-share-button" data-via="paperflyer" data-lang="en" data-size="large" data-related="paperflyer">Tweet</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						
+			
+			<div class="comments">
+			<h2>Comments !</h2>
+			    <div id="disqus_thread"></div>
+			    <script type="text/javascript">
+			       var disqus_identifier = "tagged-file-system.html";
+			       (function() {
+			       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			       dsq.src = 'http://bastibe.disqus.com/embed.js';
+			       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			      })();
+			    </script>
+			</div>
+						
+		</div>
+	
+	<div class="meta wrapper">
+	<time datetime="2009-04-19T09:41:00" pubdate>Sun 19 April 2009</time>
+	<ul class="tag clearfix">
+		<li><a href="./">misc</a></li>
+
+	
+		<li><a href="./">file-system</a></li>
+	
+		<li><a href="./">UI</a></li>
+	
+
+	</ul>
+	
+</div>
+	</article>	
+</div>
+
+	
+		
+<footer class="clearfix">
+	<div class="wrapper pages">
+		<ul class="nav">
+		
+			<li><a href="./archives.html">Archive</a></li>
+		</ul>
+	</div>
+	
+	<div class="copy wrapper">
+		<ul class="social">
+			
+			<li><a href="http://twitter.com/paperflyer">twitter</a></li>
+			
+			<li><a href="http://github.com/bastibe">github</a></li>
+			
+		</ul>
+	
+		<p role="contentinfo">© 2012 Bastian Bechtold<br>
+		Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a>.</p>
+	</div>
+</footer>
+	
+	<script>
+	  var _gaq=[['_setAccount',''],['_trackPageview']];
+	  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	  s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+</body>
+</html>

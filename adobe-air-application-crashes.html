@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="">	
+<head>
+	<meta charset="utf-8"/>
+	<title>Adobe AIR Application Crashes - Das Krachen</title>	
+	<meta name="author" content="Bastian Bechtold">
+	
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0">
+	
+	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:700,400|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
+		
+	<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	
+	
+	
+	
+	<link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Das Krachen ATOM Feed" />
+	
+	<link href="./feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Das Krachen RSS Feed" />
+	
+</head>
+	
+<body>		
+	<header class="clearfix" role="banner">
+		<div class="wrapper">
+			<h1 class="huge"><a href=".">Das Krachen</a></h1>
+		</div>
+	</header>
+	
+	
+<div role="main" class="content clearfix">	
+	<article>
+		<div class="post wrapper">
+			<h1>Adobe AIR Application Crashes</h1>
+			<p>Adobe, oh Adobe. Why?</p>
+<p>Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.</p>
+<p>Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.</p>
+<p>See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.</p>
+<p>At least this is an error that can easily be fixed. Fire up your terminal, type
+<code>cd /Library/Frameworks/Adobe\ AIR.framework/Version/Current/Resources/</code>
+<code>sudo ln -s WebKit.dylib Webkit.dylib</code>
+Then enter your password and your AIR applications should work again.</p>
+<p>Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!</p>
+			
+			<a href="https://twitter.com/share" class="twitter-share-button" data-via="paperflyer" data-lang="en" data-size="large" data-related="paperflyer">Tweet</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						
+			
+			<div class="comments">
+			<h2>Comments !</h2>
+			    <div id="disqus_thread"></div>
+			    <script type="text/javascript">
+			       var disqus_identifier = "adobe-air-application-crashes.html";
+			       (function() {
+			       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			       dsq.src = 'http://bastibe.disqus.com/embed.js';
+			       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			      })();
+			    </script>
+			</div>
+						
+		</div>
+	
+	<div class="meta wrapper">
+	<time datetime="2011-09-03T13:08:00" pubdate>Sat 03 September 2011</time>
+	<ul class="tag clearfix">
+		<li><a href="./">misc</a></li>
+
+	
+		<li><a href="./">computers</a></li>
+	
+
+	</ul>
+	
+</div>
+	</article>	
+</div>
+
+	
+		
+<footer class="clearfix">
+	<div class="wrapper pages">
+		<ul class="nav">
+		
+			<li><a href="./archives.html">Archive</a></li>
+		</ul>
+	</div>
+	
+	<div class="copy wrapper">
+		<ul class="social">
+			
+			<li><a href="http://twitter.com/paperflyer">twitter</a></li>
+			
+			<li><a href="http://github.com/bastibe">github</a></li>
+			
+		</ul>
+	
+		<p role="contentinfo">© 2012 Bastian Bechtold<br>
+		Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a>.</p>
+	</div>
+</footer>
+	
+	<script>
+	  var _gaq=[['_setAccount',''],['_trackPageview']];
+	  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	  s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="">	
+<head>
+	<meta charset="utf-8"/>
+	<title>How to make Tagbar work with Objective-C - Das Krachen</title>	
+	<meta name="author" content="Bastian Bechtold">
+	
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0">
+	
+	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:700,400|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
+		
+	<!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	
+	
+	
+	
+	<link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Das Krachen ATOM Feed" />
+	
+	<link href="./feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Das Krachen RSS Feed" />
+	
+</head>
+	
+<body>		
+	<header class="clearfix" role="banner">
+		<div class="wrapper">
+			<h1 class="huge"><a href=".">Das Krachen</a></h1>
+		</div>
+	</header>
+	
+	
+<div role="main" class="content clearfix">	
+	<article>
+		<div class="post wrapper">
+			<h1>How to make Tagbar work with Objective-C</h1>
+			<p>For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)</p>
+<p>Recently however, ctags finally gained support for Objective-C! Hurrah!
+As of today, Objective-C support is not in the stable branch yet, but thanks to the magic of homebrew, an Obj-C ready ctags is only a <code>brew install ctags --HEAD</code> away!</p>
+<p>With that, tag navigation in Vim works for Objective-C. Awesome!
+However, Tagbar does not work yet. There used to be <a href="http://stackoverflow.com/a/5790832/1034">a workaround</a> that apparently worked for some people, but it did not work for me.
+Things like this drive me nuts. I can see that tags are being generated, but Tagbar won't show them. What is going wrong?</p>
+<p>Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:</p>
+<div class="codehilite"><pre>&quot; <span class="n">add</span> <span class="n">a</span> <span class="n">definition</span> <span class="k">for</span> <span class="n">Objective</span><span class="o">-</span><span class="n">C</span> <span class="n">to</span> <span class="n">tagbar</span>
+<span class="n">let</span> <span class="n">g</span><span class="p">:</span><span class="n">tagbar_type_objc</span> <span class="p">=</span> <span class="p">{</span>
+    <span class="o">\</span> <span class="s">&#39;ctagstype&#39;</span> <span class="p">:</span> <span class="s">&#39;ObjectiveC&#39;</span><span class="p">,</span>
+    <span class="o">\</span> <span class="s">&#39;kinds&#39;</span>     <span class="p">:</span> <span class="p">[</span>
+        <span class="o">\</span> <span class="s">&#39;i:interface&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;I:implementation&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;p:Protocol&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;m:Object_method&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;c:Class_method&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;v:Global_variable&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;F:Object field&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;f:function&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;p:property&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;t:type_alias&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;s:type_structure&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;e:enumeration&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;M:preprocessor_macro&#39;</span><span class="p">,</span>
+    <span class="o">\</span> <span class="p">],</span>
+    <span class="o">\</span> <span class="s">&#39;sro&#39;</span>        <span class="p">:</span> <span class="s">&#39; &#39;</span><span class="p">,</span>
+    <span class="o">\</span> <span class="s">&#39;kind2scope&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="o">\</span> <span class="s">&#39;i&#39;</span> <span class="p">:</span> <span class="s">&#39;interface&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;I&#39;</span> <span class="p">:</span> <span class="s">&#39;implementation&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;p&#39;</span> <span class="p">:</span> <span class="s">&#39;Protocol&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;s&#39;</span> <span class="p">:</span> <span class="s">&#39;type_structure&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;e&#39;</span> <span class="p">:</span> <span class="s">&#39;enumeration&#39;</span>
+    <span class="o">\</span> <span class="p">},</span>
+    <span class="o">\</span> <span class="s">&#39;scope2kind&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="o">\</span> <span class="s">&#39;interface&#39;</span>      <span class="p">:</span> <span class="s">&#39;i&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;implementation&#39;</span> <span class="p">:</span> <span class="s">&#39;I&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;Protocol&#39;</span>       <span class="p">:</span> <span class="s">&#39;p&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;type_structure&#39;</span> <span class="p">:</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s">&#39;enumeration&#39;</span>    <span class="p">:</span> <span class="s">&#39;e&#39;</span>
+    <span class="o">\</span> <span class="p">}</span>
+<span class="o">\</span> <span class="p">}</span>
+</pre></div>
+
+
+<p>With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!</p>
+<p>Happy Vimming!</p>
+			
+			<a href="https://twitter.com/share" class="twitter-share-button" data-via="paperflyer" data-lang="en" data-size="large" data-related="paperflyer">Tweet</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						
+			
+			<div class="comments">
+			<h2>Comments !</h2>
+			    <div id="disqus_thread"></div>
+			    <script type="text/javascript">
+			       var disqus_identifier = "how-to-make-tagbar-work-with-objective-c.html";
+			       (function() {
+			       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			       dsq.src = 'http://bastibe.disqus.com/embed.js';
+			       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			      })();
+			    </script>
+			</div>
+						
+		</div>
+	
+	<div class="meta wrapper">
+	<time datetime="2011-12-04T20:21:00" pubdate>Sun 04 December 2011</time>
+	<ul class="tag clearfix">
+		<li><a href="./">misc</a></li>
+
+	
+		<li><a href="./">vim</a></li>
+	
+		<li><a href="./">text-editor</a></li>
+	
+
+	</ul>
+	
+</div>
+	</article>	
+</div>
+
+	
+		
+<footer class="clearfix">
+	<div class="wrapper pages">
+		<ul class="nav">
+		
+			<li><a href="./archives.html">Archive</a></li>
+		</ul>
+	</div>
+	
+	<div class="copy wrapper">
+		<ul class="social">
+			
+			<li><a href="http://twitter.com/paperflyer">twitter</a></li>
+			
+			<li><a href="http://github.com/bastibe">github</a></li>
+			
+		</ul>
+	
+		<p role="contentinfo">© 2012 Bastian Bechtold<br>
+		Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a>.</p>
+	</div>
+</footer>
+	
+	<script>
+	  var _gaq=[['_setAccount',''],['_trackPageview']];
+	  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	  s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
+</body>
+</html>
