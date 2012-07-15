@@ -2,7 +2,7 @@
 <html lang="">	
 <head>
 	<meta charset="utf-8"/>
-	<title>Das Krachen</title>	
+	<title>Bastis Scratchpad On The Internet</title>	
 	<meta name="author" content="Bastian Bechtold">
 	
 	<meta name="HandheldFriendly" content="True">
@@ -19,16 +19,16 @@
 	
 	
 	
-	<link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Das Krachen ATOM Feed" />
+	<link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Bastis Scratchpad On The Internet ATOM Feed" />
 	
-	<link href="./feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Das Krachen RSS Feed" />
+	<link href="./feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Bastis Scratchpad On The Internet RSS Feed" />
 	
 </head>
 	
 <body>		
 	<header class="clearfix" role="banner">
 		<div class="wrapper">
-			<h1 class="huge"><a href=".">Das Krachen</a></h1>
+			<h1 class="huge"><a href=".">Bastis Scratchpad On The Internet</a></h1>
 		</div>
 	</header>
 	
@@ -44,11 +44,20 @@
 </pre></div>
 
 
-<p>Oh, would it be nice if everyone agreed on how to install stuff like this. Case in point, homebrew installs liblua (quite ...</p> <a class="btn" href="./how-to-gem-install-rlua-on-osxhomebrew.html">read more →</a>
+<p>Oh, would it be nice if everyone agreed on how to install stuff like this. Case in point, homebrew installs liblua (quite reasonable) in <code>/usr/local/lib/liblua.[5.1[.4]].dylib</code></p>
+<p>rlua however expects it to be called <code>liblua5.1.dylib</code> (notice the missing <code>.</code>).</p>
+<p>Similarly, the headers are installed plainly into <code>/usr/local/include</code>, whereas rlua expects them to be in a folder called <code>lua5.1</code>.</p>
+<p>Hence, here is how you get rlua to install:</p>
+<div class="codehilite"><pre><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">Cellar</span><span class="o">/</span><span class="n">lua</span><span class="o">/</span>5<span class="p">.</span>1<span class="p">.</span>4<span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">liblua</span><span class="p">.</span>5<span class="p">.</span>1<span class="p">.</span>4<span class="p">.</span><span class="n">dylib</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">liblua5</span><span class="p">.</span>1<span class="p">.</span><span class="n">dylib</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">Cellar</span><span class="o">/</span><span class="n">lua</span><span class="o">/</span>5<span class="p">.</span>1<span class="p">.</span>4<span class="o">/</span><span class="n">include</span><span class="o">/</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">lua5</span><span class="p">.</span>1
+</pre></div>
+
+
+<p>Not exactly a beautiful solution, but it works.</p> <a class="btn" href="./how-to-gem-install-rlua-on-osxhomebrew.html">read more →</a>
 	</article>
 
 	
-	<div class="wrapper main">		
+	<div class="wrapper main">
 		<h3>More posts</h3>
 		<ol class="archive">
 	
@@ -56,27 +65,27 @@
 	
 
 	
-			<li class="clearfix"><a href="./text-editors.html" rel="bookmark" title="Permalink to Text Editors"><time datetime="2012-02-03T18:22:00" pubdate>Fri 03 February 2012</time> Text Editors</a></li>
+			<li class="clearfix"><a href="./text-editors.html" rel="bookmark" title="Permalink to Text Editors"><time datetime="2012-02-03T18:22:00" pubdate>03/02/2012</time> Text Editors</a></li>
 	
 	
 
 	
-			<li class="clearfix"><a href="./how-to-make-tagbar-work-with-objective-c.html" rel="bookmark" title="Permalink to How to make Tagbar work with Objective-C"><time datetime="2011-12-04T20:21:00" pubdate>Sun 04 December 2011</time> How to make Tagbar work with Objective-C</a></li>
+			<li class="clearfix"><a href="./how-to-make-tagbar-work-with-objective-c.html" rel="bookmark" title="Permalink to How to make Tagbar work with Objective-C"><time datetime="2011-12-04T20:21:00" pubdate>04/12/2011</time> How to make Tagbar work with Objective-C</a></li>
 	
 	
 
 	
-			<li class="clearfix"><a href="./compiling-scipy-and-matplotlib-again.html" rel="bookmark" title="Permalink to Compiling Scipy and Matplotlib again"><time datetime="2011-10-13T15:27:00" pubdate>Thu 13 October 2011</time> Compiling Scipy and Matplotlib again</a></li>
+			<li class="clearfix"><a href="./compiling-scipy-and-matplotlib-again.html" rel="bookmark" title="Permalink to Compiling Scipy and Matplotlib again"><time datetime="2011-10-13T15:27:00" pubdate>13/10/2011</time> Compiling Scipy and Matplotlib again</a></li>
 	
 	
 
 	
-			<li class="clearfix"><a href="./adobe-air-application-crashes.html" rel="bookmark" title="Permalink to Adobe AIR Application Crashes"><time datetime="2011-09-03T13:08:00" pubdate>Sat 03 September 2011</time> Adobe AIR Application Crashes</a></li>
+			<li class="clearfix"><a href="./adobe-air-application-crashes.html" rel="bookmark" title="Permalink to Adobe AIR Application Crashes"><time datetime="2011-09-03T13:08:00" pubdate>03/09/2011</time> Adobe AIR Application Crashes</a></li>
 	
 	
 
 	
-			<li class="clearfix"><a href="./compiling-scipy-and-matplotlib-using-pip-on-lion.html" rel="bookmark" title="Permalink to Compiling Scipy and Matplotlib using pip on Lion"><time datetime="2011-08-01T12:40:00" pubdate>Mon 01 August 2011</time> Compiling Scipy and Matplotlib using pip on Lion</a></li>
+			<li class="clearfix"><a href="./compiling-scipy-and-matplotlib-using-pip-on-lion.html" rel="bookmark" title="Permalink to Compiling Scipy and Matplotlib using pip on Lion"><time datetime="2011-08-01T12:40:00" pubdate>01/08/2011</time> Compiling Scipy and Matplotlib using pip on Lion</a></li>
 	
 	
 
@@ -122,7 +131,7 @@
 	
 	
 		</ol>
-		
+
 		<p>More posts in the <a href="./archives.html">archive</a>.</p>
 	</div>
 </div>
