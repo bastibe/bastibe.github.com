@@ -1,43 +1,73 @@
-<!doctype html>
-<html lang="">	
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta charset="utf-8"/>
-	<title>Debugging und GCC auf Windows - Bastis Scratchpad On The Internet</title>	
-	<meta name="author" content="Bastian Bechtold">
-	
-	<meta name="HandheldFriendly" content="True">
-	<meta name="MobileOptimized" content="320">
-	<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0">
-	
-	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:700,400|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="./theme/css/main.css" type="text/css" />
-		
-	<!--[if lt IE 9]>
-		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	
-	
-	
-	
-	<link href="./feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Bastis Scratchpad On The Internet ATOM Feed" />
-	
-	<link href="./feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Bastis Scratchpad On The Internet RSS Feed" />
-	
+    <meta charset="utf-8">
+    <title>Bastis Scratchpad On The Internet</title>
+    <meta name="description" content="">
+    <meta name="author" content="Bastian Bechtold">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="./theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="./theme/bootstrap.min.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+
 </head>
+
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href=".">Bastis Scratchpad On The Internet</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+        
+            
+        
+        
+        
+        </ul>
+        </div>
+        
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+        
+    <div class='article'>
+        <div class="content-title">
+            <h1>Debugging und GCC auf Windows</h1>
+            15/03/2009
+
+
+by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+
+        </div>
 	
-<body>		
-	<header class="clearfix" role="banner">
-		<div class="wrapper">
-			<h1 class="huge"><a href=".">Bastis Scratchpad On The Internet</a></h1>
-		</div>
-	</header>
-	
-	
-<div role="main" class="content clearfix">	
-	<article>
-		<div class="post wrapper">
-			<h1>Debugging und GCC auf Windows</h1>
-			<p><img alt="Code" src="static/images/2009-03/code.png" /></p>
+        <div><p><img alt="Code" src="static/images/2009-03/code.png" /></p>
 <p>So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.</p>
 <p><a href="http://en.wikipedia.org/wiki/State_of_the_Union">The State of The Union</a>: Kleine Dateien einlesen, kein Problem. Exotische Formate einlesen, kein Problem. Metadaten auslesen, kein Problem. Dateigröße, Bitrate und Samplerate auslesen, ein kleines Problem, da diese Parameter bei komprimierten Formaten nicht unbedingt fest stehen. Große Dateien einlösen, auf dem Mac kein Problem, auf Windows… nun ja, es dauert. Eine WAV-Datei von 5:30 min einzulesen, dauert mit Windows momentan ca. eine Stunde. Das kann nicht sein, in der Zeit habe ich die Datei dem Programm vorgelesen, wenn es sein muss.</p>
 <p>Also, was ist da faul? Jetzt heißt es debuggen: <a href="http://de.wikipedia.org/wiki/GNU_Debugger">GDB</a> ist mein Freund, aber leider spreche ich seine Sprache nicht, also Oldschool-Debugging mit <a href="http://www.cplusplus.com/reference/clibrary/cstdio/printf.html">printf()</a> (bzw. <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexprintf.html">mexPrintf()</a>; Aber da <code>#define printf mexPrintf</code> ist das das selbe). Blöd nur, dass Matlab selbst entscheidet, wann es meine Printfs auf den Bildschirm schreibt und es sich dazu entschlossen hat, dies immer erst nach dem Ausführen der Datei, also erst nachdem es bereits eine Stunde gearbeitet hat, zu tun. Einiges Hirnen später konnte ich Matlab endlich über eine Kombination aus <a href="http://de.wikipedia.org/wiki/Typumwandlung">Typecasts</a>, <a href="http://www.cplusplus.com/reference/clibrary/cstdio/sprintf.html">sprintf</a> und <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexwarnmsgtxt.html">mexWarnMsgTxt</a> dazu überreden, wenigstens sporadisch ein paar Informationen herauszugeben.</p>
@@ -64,73 +94,100 @@ Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, gr
 
 <p>Das Spannende ist: Ich ändere durch meine Methodik praktisch nichts außer der Anzahl und Größe der realloc-Aufrufe, aber man erkennt einen eindeutigen Zusammenhang zwischen Performance und Anzahl der Aufrufe, ergo ist realloc der alleinige Schuldige für mein Performanceproblem auf Windows.</p>
 <p>An dieser Stelle fiel mir ein, dass ich bereits an früherer Stelle einmal die gesamte Länge des Audio-Streams anhand der Metadaten geschätzt hatte. Durch eine somit vorgenommene Prä-Allokation des gesamten Speichers lässt sie die Laufzeit weiter auf 2.2 s drücken. Das ist immernoch nicht einmal halb so schnell wie auf OSX (0.9 s), aber das mag auch an der virtuellen Maschine liegen.</p>
-<p>Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sicher, dass ich ab jetzt die Finger von inkrementiellen Speichervergrößerungen auf MinGW/Windows lassen werde. Ist das in MSVC ähnlich schlimm, oder habe ich da etwa einen Bug entdeckt?</p>
-			
-			<a href="https://twitter.com/share" class="twitter-share-button" data-via="paperflyer" data-lang="en" data-size="large" data-related="paperflyer">Tweet</a>
-			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-						
-			
-			<div class="comments">
-			<h2>Comments !</h2>
-			    <div id="disqus_thread"></div>
-			    <script type="text/javascript">
-			       var disqus_identifier = "debugging-und-gcc-auf-windows.html";
-			       (function() {
-			       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-			       dsq.src = 'http://bastibe.disqus.com/embed.js';
-			       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-			      })();
-			    </script>
-			</div>
-						
-		</div>
+<p>Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sicher, dass ich ab jetzt die Finger von inkrementiellen Speichervergrößerungen auf MinGW/Windows lassen werde. Ist das in MSVC ähnlich schlimm, oder habe ich da etwa einen Bug entdeckt?</p></div>
 	
-	<div class="meta wrapper">
-	<time datetime="2009-03-15T15:10:00" pubdate>15/03/2009</time>
-	<ul class="tag clearfix">
-		<li><a href="./category/misc.html">misc</a></li>
+        <hr>
+    	   
+        <h2>Comments</h2>
+	
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="paperflyer">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
 	
-		<li><a href="./tag/compiling.html">compiling</a></li>
-	
-		<li><a href="./tag/computers.html">computers</a></li>
-	
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'bastibe'; 
 
-	</ul>
-	
-</div>
-	</article>	
-</div>
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-	
-		
-<footer class="clearfix">
-	<div class="wrapper pages">
-		<ul class="nav">
-		
-			<li><a href="./archives.html">Archive</a></li>
-		</ul>
-	</div>
-	
-	<div class="copy wrapper">
-		<ul class="social">
-			
-			<li><a href="http://twitter.com/paperflyer">twitter</a></li>
-			
-			<li><a href="http://github.com/bastibe">github</a></li>
-			
-		</ul>
-	
-		<p role="contentinfo">© 2012 Bastian Bechtold<br>
-		Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a>.</p>
-	</div>
+    </div>
+
+        </div>
+        
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Site
+                </li>
+            
+                <li><a href="./archives.html">Archives</a>
+                <li><a href="./tags.html">Tags</a>
+                <li><a href="./feeds/all.atom.xml" rel="alternate">Atom feed</a></li>
+                
+                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                
+            </ul>
+            </div>
+
+
+            
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Categories
+                </li>
+                
+                
+                <li><a href="./category/misc.html">misc</a></li>
+                                   
+            </ul>
+            </div>
+            
+
+
+            
+
+
+            
+            <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Social
+                </li>
+           
+                
+                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                
+                <li><a href="http://github.com/bastibe">github</a></li>
+                
+            </ul>
+            </div>
+            </div>
+            
+
+        </div>  
+    </div> 
+    </div> 
+
+<footer>
+<br />
+<p><a href=".">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
 </footer>
-	
-	<script>
-	  var _gaq=[['_setAccount',''],['_trackPageview']];
-	  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-	  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-	  s.parentNode.insertBefore(g,s)}(document,'script'));
-	</script>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+
+
+<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+ 
 </body>
 </html>

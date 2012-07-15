@@ -1,80 +1,232 @@
-<!doctype html>
-<html lang="">	
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta charset="utf-8"/>
-	<title>python - Bastis Scratchpad On The Internet</title>	
-	<meta name="author" content="Bastian Bechtold">
-	
-	<meta name="HandheldFriendly" content="True">
-	<meta name="MobileOptimized" content="320">
-	<meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0">
-	
-	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:700,400|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href=".././theme/css/main.css" type="text/css" />
-		
-	<!--[if lt IE 9]>
-		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	
-	
-	
-	
-	<link href=".././feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Bastis Scratchpad On The Internet ATOM Feed" />
-	
-	<link href=".././feeds/all.rss.xml" type="application/atom+xml" rel="alternate" title="Bastis Scratchpad On The Internet RSS Feed" />
-	
+    <meta charset="utf-8">
+    <title>Bastis Scratchpad On The Internet</title>
+    <meta name="description" content="">
+    <meta name="author" content="Bastian Bechtold">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src=".././theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href=".././theme/bootstrap.min.css" rel="stylesheet">
+    <link href=".././theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href=".././theme/local.css" rel="stylesheet">
+    <link href=".././theme/pygments.css" rel="stylesheet">
+
 </head>
-	
-<body>		
-	<header class="clearfix" role="banner">
-		<div class="wrapper">
-			<h1 class="huge"><a href="../.">Bastis Scratchpad On The Internet</a></h1>
-		</div>
-	</header>
-	
-	
-<div role="main" class="content clearfix">
-<div class="wrapper main">		
-	<h2>Post tagged: python</h2>
-	
-	<ol class="archive">
-		
-		<li class="clearfix"><a href=".././installing-pythonnumpyscipymatplotlib-on-osx.html"><time datetime="2011-02-03T16:23:00" pubdate>03/02/2011</time> Installing Python/Numpy/Scipy/Matplotlib on OSX</a></li>
-		
-	</ol>
 
-</div>
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href="../.">Bastis Scratchpad On The Internet</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+        
+            
+        
+        
+        
+        </ul>
+        </div>
+        
+    </div>
+    </div>
 </div>
 
-	
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+                
+
+
+        
+
+
+
+
+    <div class='article'>
+        <div class="content-title">
+            <a href=".././installing-pythonnumpyscipymatplotlib-on-osx.html"><h1>Installing Python/Numpy/Scipy/Matplotlib on OSX</h1></a>
+            03/02/2011
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ 
+        </div>
+        
+        <div><p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
+<p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/">Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
+<p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/">Numpy</a>, which seems to be nearly as fast as Matlab when it comes to matrix processing and linear algebra. You then discover <a href="http://www.scipy.org/">SciPy</a>, which would add all that signal processing prowess of Matlab (do quick transformations, random numbers, statistics) to your toolbox. Last but not least, you need plotting. That would be <a href="http://matplotlib.sourceforge.net/">Matplotlib</a> then, which provides quick plotting facilities in Python.</p>
+<p>And the best thing is, these three systems work really well together. They seem to be the perfect replacement for Matlab that could even be superiour to it in many regards.</p>
+<p>Next up, you need to install all that stuff. If you are like me, you naturally want to do all that on a Mac. Also, you kind of dislike all these installer-thingies, which install stuff to unknown places and are nigh impossible to uninstall or update cleanly. Even though, you could of course just go to the individual websites, download Python, Numpy, SciPy and Matplotlib, run them installers, and be done. You would save yourself a lot of trouble that way.</p>
+<p>But since you allegedly are like me, you instead fire up <a href="http://mxcl.github.com/homebrew"><code>brew</code></a> and try to install all that stuff using that. Again, you could use <a href="http://www.macports.org/">MacPorts</a> or <a href="http://www.finkproject.org/">Fink</a> instead, but you probably had some bad experiences with them and you generally love the hackishness of Homebrew, so this is your natural first try.</p>
+<p>So you set about this, you believe in packet managers and trust them to take care of every obstacle that might be lying in your way. First of all, install the latest developer tools from <a href="http://developer.apple.com/">developer.apple.com</a>. You might need to register (for free) to get them. Also, you need to install <a href="http://mxcl.github.com/homebrew">Homebrew</a>.</p>
+<p>To cut this short, here is what you need to get that Python running:</p>
+<div class="codehilite"><pre><span class="n">brew</span> <span class="n">install</span> <span class="n">python</span>
+</pre></div>
+
+
+<p>This one should be obvious. At the time of writing, it will install Python 2.7.1. You could take Python 3, but matplotlib is not compatible to it, so you kind of have to stick with 2.7.1 instead.</p>
+<p>You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code> in the beginning of your path to make sure the new Python gets loaded instead of the pre-installed one. You do that by writing</p>
+<div class="codehilite"><pre><span class="n">export</span> <span class="n">PATH</span><span class="p">=</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span>$<span class="n">PATH</span>
+</pre></div>
+
+
+<p>in your <code>~/.bash_profile</code>. (Create it if its not there--it is just a simple text file).</p>
+<p>Now, if you type <code>python --version</code>, you should get <code>Python 2.7.1</code> as a response.</p>
+<p>Alright, next up, install the python package manager:</p>
+<div class="codehilite"><pre><span class="n">brew</span> <span class="n">install</span> <span class="n">distribute</span>
+<span class="n">brew</span> <span class="n">install</span> <span class="n">pip</span>
+</pre></div>
+
+
+<p>This will come preconfigured for your newly installed Python. In an ideal world, this should be all. The world being as it is, the pip package of Matplotlib is severely broken and has one other unstated dependency:</p>
+<div class="codehilite"><pre><span class="n">brew</span> <span class="n">install</span> <span class="n">pkg</span><span class="o">-</span><span class="n">config</span>
+</pre></div>
+
+
+<p>Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:</p>
+<div class="codehilite"><pre><span class="n">brew</span> <span class="n">install</span> <span class="n">gfortran</span>
+</pre></div>
+
+
+<p>Alright. That was enough. Now on to pip. With all these dependencies cleared, pip should be able to download Numpy and Scipy without trouble:</p>
+<div class="codehilite"><pre><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">scipy</span>
+</pre></div>
+
+
+<p>Matplotlib, on the other hand, is more difficult to install. You see, pip is looking at the Python package repository <a href="http://pypi.python.org/">PyPi</a> for each package. PyPi then provides a URL. Pip then scans that website for links to suitable package files. But, <a href="http://sourceforge.net/">Sourceforge</a> changed its links a while ago, so pip gets confused and will download an outdated version. Sourceforge says, its new links are way better and no way we will change them back; Pip says, well, if Sourceforge can't provide proper links, that's not our problem. Oh My. Silly children.</p>
+<p>So we have to do this manually:</p>
+<div class="codehilite"><pre><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">f</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">sourceforge</span><span class="p">.</span><span class="n">net</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">matplotlib</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="n">matplotlib</span><span class="o">/</span><span class="n">matplotlib</span><span class="o">-</span>1<span class="p">.</span>0<span class="p">.</span>1<span class="o">/</span><span class="n">matplotlib</span><span class="o">-</span>1<span class="p">.</span>0<span class="p">.</span>1<span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span> <span class="n">matplotlib</span>
+</pre></div>
+
+
+<p>That URL comes straight from Sourceforge. Look for the latest version of Matplotlib, search for the download link to the source distribution (<code>*.tar.gz</code>), copy that link and strip any trailing '/download'.</p>
+<p>UPDATE:</p>
+<p>It seems the matplotlib package was updated in the meantime, so you can just run <code>pip install matplotlib</code> now.</p>
+<p>This should now download and install matplotlib.</p>
+<p>Thank you for reading.</p></div>
+        <hr />
+    </div>
 		
-<footer class="clearfix">
-	<div class="wrapper pages">
-		<ul class="nav">
-		
-			<li><a href=".././archives.html">Archive</a></li>
-		</ul>
-	</div>
-	
-	<div class="copy wrapper">
-		<ul class="social">
-			
-			<li><a href="http://twitter.com/paperflyer">twitter</a></li>
-			
-			<li><a href="http://github.com/bastibe">github</a></li>
-			
-		</ul>
-	
-		<p role="contentinfo">© 2012 Bastian Bechtold<br>
-		Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">Pelican</a>.</p>
-	</div>
+    
+        <div class="pagination">
+<ul>
+
+    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+
+
+
+    <li class="active"><a href=".././tag/python.html">1</a></li>
+
+
+
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
+
+</ul>
+</div>
+    
+
+
+ 
+
+ 
+ 
+
+
+        </div>
+        
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Site
+                </li>
+            
+                <li><a href=".././archives.html">Archives</a>
+                <li><a href=".././tags.html">Tags</a>
+                <li><a href=".././feeds/all.atom.xml" rel="alternate">Atom feed</a></li>
+                
+                <li><a href=".././feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                
+            </ul>
+            </div>
+
+
+            
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Categories
+                </li>
+                
+                
+                <li><a href=".././category/misc.html">misc</a></li>
+                                   
+            </ul>
+            </div>
+            
+
+
+            
+
+
+            
+            <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Social
+                </li>
+           
+                
+                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                
+                <li><a href="http://github.com/bastibe">github</a></li>
+                
+            </ul>
+            </div>
+            </div>
+            
+
+        </div>  
+    </div> 
+    </div> 
+
+<footer>
+<br />
+<p><a href="../.">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
 </footer>
-	
-	<script>
-	  var _gaq=[['_setAccount',''],['_trackPageview']];
-	  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-	  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-	  s.parentNode.insertBefore(g,s)}(document,'script'));
-	</script>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+
+
+<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+ 
 </body>
 </html>
