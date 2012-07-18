@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="./solarized-for-pygments.html"><h1>Solarized for Pygments</h1></a>
-            15/07/2012
+            <a href="./blogging-with-pelican.html"><h1>Blogging with Pelican</h1></a>
+            18/07/2012
 
 
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,7 +74,42 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
         </div>
         
-        <div><h2>How to get solarized syntax highlighting on your blog</h2>
+        <div><h1>Blogging with Pelican (and not Octopress)</h1>
+<p>For a while now, I have been moving more and more services I use off Google. The reasons for that are manyfold, and few of them have anything to do with Google being evil or not--just to get that out of the way.</p>
+<p>One of the last holdouts has been <a href="http://daskrachen.com">my neglected Blogspot blog</a>. And one of the reasons for it being neglected is that it was hosted on Blogspot. Now don't get me wrong here, Blogspot is a terriffic blogging platform. You have this very nice nearly-WYSIWYG text editor right in your browser, you can upload images, you can publish instantly to your blog... Basically everything is taken care of for you conveniently right there in your browser. Google Style.</p>
+<p>Its just that I don't like to work that way. I like plain text. I like typing stuff into a plain text editor. I like to be in control. And Blogspot might be convenient, but it did not make me feel like I was in control. In fact, I lost at least one article to Blogspot for unknown reasons.</p>
+<p>Enter static site generators. The idea is that instead of writing rich text into some website, you create you content however you want on your own computer, then use a static generator which converts it into a set of static HTML pages and upload those to your website. Now all of the creation process is happening on your computer. You are in control. Probably the most popular program to do that is <a href="https://github.com/mojombo/jekyll">Jekyll</a>.</p>
+<p>The second part of the equation is some kind of publishing platform. With these static site generators, really any web server does that trick. Just push your generated HTML files to the server and be done with it. Even cooler is Github. Using <a href="http://pages.github.com/">Github pages</a>, you can use your existing Github account and infrastructure to publish your blog just by pushing the HTML to Github. This is seriously cool!</p>
+<p>So, I set out and tried <a href="http://octopress.org/">Octopress</a>, which combines these two things into a nice blogging platform. Honestly though, I don't know much Ruby and all that <code>rake</code> workflow did not make me much more comfortable than pushing stuff into Blogspot.</p>
+<p>Hence, I looked for alternatives. What I ended up with is <a href="http://pelican.notmyidea.org/">Pelican</a>, a very simple static site generator written in Python. Finally, this is a codebase that is easy enough for me to understand and modify. If there is any trouble with my blog, I will be (and have been) able to just look at the source code and figure out what is going wrong. I like this!</p>
+<p>To publish a new blog post, I will start by writing the post in <a href="http://daringfireball.net/projects/markdown/">Markdown</a> (a format I understand), process it using the very simple command line <code>pelican -s my_config_file.py posts/</code>, and push the result to GitHub. Easy as pie. And I feel like I am in control again!</p>
+<p>Actually, if this is just a bit too technical for you, check out <a href="http://calepin.co/">Calepin</a> instead. It uses the very same Pelican engine, but instead of fiddling with Git, you just put your markdown files into your Dropbox, and--poof--you magically have a Blog!</p>
+<p>If you want to see my blog as a repo on Github, just <a href="https://github.com/bastibe/bastibe.github.com/">go have a look</a> (the <code>master</code> branch contains the HTML, the <code>source</code> branch contains the configuration and Markdown).</p></div>
+        <hr />
+    </div>
+		
+    
+
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href="./solarized-for-pygments.html"><h2>Solarized for Pygments</h2></a>
+        <div class= "well small"> 15/07/2012
+
+
+by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><h2>How to get solarized syntax highlighting on your blog</h2>
 <p>Yesterday, I spent a few hours creating a solarized like CSS file for use with my new blogging tool. You could just scrape the settings from this very website, but for convenience, here they are:</p>
 <div class="codehilite"><pre><span class="c">/* Text */</span>
 <span class="nc">.codehilite</span> <span class="nc">.t</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
@@ -92,114 +127,10 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 <span class="nc">.codehilite</span> <span class="nc">.kn</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#b58900</span> <span class="p">}</span> <span class="c">/* Keyword.Namespace */</span>
 <span class="nc">.codehilite</span> <span class="nc">.kp</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#859900</span> <span class="p">}</span> <span class="c">/* Keyword.Pseudo */</span>
 <span class="nc">.codehilite</span> <span class="nc">.kr</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#073642</span> <span class="p">}</span> <span class="c">/* Keyword.Reserved */</span>
-<span class="nc">.codehilite</span> <span class="nc">.kt</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#b58900</span> <span class="p">}</span> <span class="c">/* Keyword.Type */</span>
-
-<span class="c">/* Name */</span>
-<span class="nc">.codehilite</span> <span class="nc">.n</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.na</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Name.Attribute */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nb</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Name.Builtin */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nc</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Name.Class */</span>
-<span class="nc">.codehilite</span> <span class="nc">.ne</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span> <span class="p">}</span> <span class="c">/* Name.Error */</span>
-<span class="nc">.codehilite</span> <span class="nc">.no</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Name.Constant */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nd</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Name.Decorator */</span>
-<span class="nc">.codehilite</span> <span class="nc">.ni</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span> <span class="p">}</span> <span class="c">/* Name.Entity */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nf</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Name.Function */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nn</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span><span class="p">;</span> <span class="p">}</span> <span class="c">/* Name.Namespace */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nt</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span> <span class="p">}</span> <span class="c">/* Name.Tag */</span>
-<span class="nc">.codehilite</span> <span class="nc">.nv</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span> <span class="p">}</span> <span class="c">/* Name.Variable */</span>
-
-<span class="c">/* Builtin */</span>
-<span class="nc">.codehilite</span> <span class="nc">.b</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#859900</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.bp</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Name.Builtin.Pseudo */</span>
-
-<span class="c">/* Variable */</span>
-<span class="nc">.codehilite</span> <span class="nc">.v</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.vc</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Name.Variable.Class */</span>
-<span class="nc">.codehilite</span> <span class="nc">.vg</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Name.Variable.Global */</span>
-<span class="nc">.codehilite</span> <span class="nc">.vi</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Name.Variable.Instance */</span>
-
-<span class="c">/* Literal */</span>
-
-<span class="c">/* Literal.Number */</span>
-<span class="nc">.codehilite</span> <span class="nc">.m</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Literal.Number */</span>
-<span class="nc">.codehilite</span> <span class="nc">.mf</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Literal.Number.Float */</span>
-<span class="nc">.codehilite</span> <span class="nc">.mh</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Literal.Number.Hex */</span>
-<span class="nc">.codehilite</span> <span class="nc">.mi</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Literal.Number.Integer */</span>
-<span class="nc">.codehilite</span> <span class="nc">.mo</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Literal.Number.Oct */</span>
-
-<span class="c">/* Literal.String */</span>
-<span class="nc">.codehilite</span> <span class="nc">.s</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.sb</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Backtick */</span>
-<span class="nc">.codehilite</span> <span class="nc">.sc</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Char */</span>
-<span class="nc">.codehilite</span> <span class="nc">.sd</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Doc */</span>
-<span class="nc">.codehilite</span> <span class="nc">.s2</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Double */</span>
-<span class="nc">.codehilite</span> <span class="nc">.se</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span> <span class="p">}</span> <span class="c">/* Literal.String.Escape */</span>
-<span class="nc">.codehilite</span> <span class="nc">.sh</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Heredoc */</span>
-<span class="nc">.codehilite</span> <span class="nc">.si</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span> <span class="p">}</span> <span class="c">/* Literal.String.Interpol */</span>
-<span class="nc">.codehilite</span> <span class="nc">.sx</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Other */</span>
-<span class="nc">.codehilite</span> <span class="nc">.sr</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span> <span class="p">}</span> <span class="c">/* Literal.String.Regex */</span>
-<span class="nc">.codehilite</span> <span class="nc">.s1</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Literal.String.Single */</span>
-<span class="nc">.codehilite</span> <span class="nc">.ss</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span> <span class="p">}</span> <span class="c">/* Literal.String.Symbol */</span>
-
-<span class="c">/* Literal.Integer */</span>
-<span class="nc">.codehilite</span> <span class="nc">.il</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Literal.Number.Integer.Long */</span>
-
-<span class="c">/* Operator */</span>
-<span class="nc">.codehilite</span> <span class="nc">.o</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.ow</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#859900</span> <span class="p">}</span> <span class="c">/* Operator.Word */</span>
-
-<span class="c">/* Punctuation */</span>
-<span class="nc">.codehilite</span> <span class="nc">.p</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-
-<span class="c">/* Comment */</span>
-<span class="nc">.codehilite</span> <span class="nc">.c</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#93a1a1</span><span class="p">;</span> <span class="k">font-style</span><span class="o">:</span> <span class="k">italic</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.cm</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#93a1a1</span><span class="p">;</span> <span class="p">}</span> <span class="c">/* Comment.Multiline */</span>
-<span class="nc">.codehilite</span> <span class="nc">.cp</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#93a1a1</span> <span class="p">}</span> <span class="c">/* Comment.Preproc */</span>
-<span class="nc">.codehilite</span> <span class="nc">.c1</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#93a1a1</span><span class="p">;</span> <span class="p">}</span> <span class="c">/* Comment.Single */</span>
-<span class="nc">.codehilite</span> <span class="nc">.cs</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#93a1a1</span><span class="p">;</span> <span class="p">}</span> <span class="c">/* Comment.Special */</span>
-
-<span class="nc">.codehilite</span> <span class="nc">.hll</span> <span class="p">{</span> <span class="k">background-color</span><span class="o">:</span> <span class="m">#dc322f</span> <span class="p">}</span>
-
-<span class="c">/* Generic */</span>
-<span class="nc">.codehilite</span> <span class="nc">.g</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.gd</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Generic.Deleted */</span>
-<span class="nc">.codehilite</span> <span class="nc">.ge</span> <span class="p">{</span> <span class="k">font-style</span><span class="o">:</span> <span class="k">italic</span> <span class="p">}</span> <span class="c">/* Generic.Emph */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gr</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Generic.Error */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gh</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span> <span class="p">}</span> <span class="c">/* Generic.Heading */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gi</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Generic.Inserted */</span>
-<span class="nc">.codehilite</span> <span class="nc">.go</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Generic.Output */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gp</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Generic.Prompt */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gs</span> <span class="p">{</span> <span class="k">font-weight</span><span class="o">:</span> <span class="m">586</span><span class="n">e75</span> <span class="p">}</span> <span class="c">/* Generic.Strong */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gu</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span><span class="p">;</span> <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span> <span class="p">}</span> <span class="c">/* Generic.Subheading */</span>
-<span class="nc">.codehilite</span> <span class="nc">.gt</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span> <span class="c">/* Generic.Traceback */</span>
-</pre></div>
-
-
-<div class="codehilite"><pre><span class="nt">code</span><span class="o">,</span> <span class="nt">pre</span> <span class="p">{</span>
-    <span class="k">background</span><span class="o">:</span> <span class="m">#fdf6e3</span><span class="p">;</span>
-    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="o">:</span> <span class="k">inset</span> <span class="m">0</span> <span class="m">0</span> <span class="m">2px</span> <span class="m">#000000</span><span class="p">;</span>
-    <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="o">:</span> <span class="k">inset</span> <span class="m">0</span> <span class="m">0</span> <span class="m">2px</span> <span class="m">#000000</span><span class="p">;</span>
-    <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="o">:</span> <span class="k">inset</span> <span class="m">0</span> <span class="m">0</span> <span class="m">2px</span> <span class="m">#000000</span><span class="p">;</span>
-    <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span><span class="p">;</span>
-    <span class="k">margin-left</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
-    <span class="k">font-family</span><span class="o">:</span> <span class="s1">&#39;Droid Sans Mono&#39;</span><span class="o">,</span> <span class="k">monospace</span><span class="p">;</span>
-    <span class="k">padding</span><span class="o">:</span> <span class="m">2px</span><span class="p">;</span>
-    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
-    <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
-    <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
-    <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="k">background</span><span class="o">-</span><span class="k">clip</span><span class="o">:</span> <span class="k">padding</span><span class="p">;</span>
-    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="k">background</span><span class="o">-</span><span class="k">clip</span><span class="o">:</span> <span class="k">padding</span><span class="o">-</span><span class="n">box</span><span class="p">;</span>
-    <span class="k">background</span><span class="o">-</span><span class="k">clip</span><span class="o">:</span> <span class="k">padding</span><span class="o">-</span><span class="n">box</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>Keep in mind though that I have no formal knowledge of CSS whatsoever beyond what I could gather from these very files.</p></div>
-        <hr />
-    </div>
-		
+<span class="nc">.codehilite</span> <span class="nc">.kt</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#b58900</span> <span class="p">}</span> <span class="c">/* Keyword.Type ...</span></pre></div> <a class="btn btn-info xsmall" href="./solarized-for-pygments.html">read more</a></div>
+    </div>	
+				
     
-
 
  
 
@@ -414,31 +345,6 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <div class="summary"><p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
 <p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/">Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
 <p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/">Numpy</a>, which seems to be nearly ...</p> <a class="btn btn-info xsmall" href="./installing-pythonnumpyscipymatplotlib-on-osx.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./the-strangeness-of-widescreen-displays-in-modern-operating-systems.html"><h2>The strangeness of widescreen displays in modern operating systems</h2></a>
-        <div class= "well small"> 03/07/2010
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>So today, pretty much everyone has widescreen displays. That is, displays that are far more wide than high. This was not always so. In ye olden days, computers were mainly used for displaying text, hence displays tended to have a similar layout as books or magazines. Today, they are more like movies (which might be worrying in itself).</p>
-<p><img alt="Aspect Ratios" src="static/images/2010-03/aspect_ratios.png" /></p>
-<p>So todays displays are widescreen. To do all that modern stuff, like watch (widesreened) videos or multitask (display two windows side by side). However, this also means that vertical pixels are something of a scarcity. Especially on those small Laptop screens. In ...</p> <a class="btn btn-info xsmall" href="./the-strangeness-of-widescreen-displays-in-modern-operating-systems.html">read more</a></div>
     </div>	
 				
     

@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././adobe-air-application-crashes.html"><h1>Adobe AIR Application Crashes</h1></a>
-            03/09/2011
+            <a href=".././blogging-with-pelican.html"><h1>Blogging with Pelican</h1></a>
+            18/07/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,20 +74,49 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p>Adobe, oh Adobe. Why?</p>
-<p>Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.</p>
-<p>Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.</p>
-<p>See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.</p>
-<p>At least this is an error that can easily be fixed. Fire up your terminal, type
-<code>cd /Library/Frameworks/Adobe\ AIR.framework/Version/Current/Resources/</code>
-<code>sudo ln -s WebKit.dylib Webkit.dylib</code>
-Then enter your password and your AIR applications should work again.</p>
-<p>Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!</p></div>
+        <div><h1>Blogging with Pelican (and not Octopress)</h1>
+<p>For a while now, I have been moving more and more services I use off Google. The reasons for that are manyfold, and few of them have anything to do with Google being evil or not--just to get that out of the way.</p>
+<p>One of the last holdouts has been <a href="http://daskrachen.com">my neglected Blogspot blog</a>. And one of the reasons for it being neglected is that it was hosted on Blogspot. Now don't get me wrong here, Blogspot is a terriffic blogging platform. You have this very nice nearly-WYSIWYG text editor right in your browser, you can upload images, you can publish instantly to your blog... Basically everything is taken care of for you conveniently right there in your browser. Google Style.</p>
+<p>Its just that I don't like to work that way. I like plain text. I like typing stuff into a plain text editor. I like to be in control. And Blogspot might be convenient, but it did not make me feel like I was in control. In fact, I lost at least one article to Blogspot for unknown reasons.</p>
+<p>Enter static site generators. The idea is that instead of writing rich text into some website, you create you content however you want on your own computer, then use a static generator which converts it into a set of static HTML pages and upload those to your website. Now all of the creation process is happening on your computer. You are in control. Probably the most popular program to do that is <a href="https://github.com/mojombo/jekyll">Jekyll</a>.</p>
+<p>The second part of the equation is some kind of publishing platform. With these static site generators, really any web server does that trick. Just push your generated HTML files to the server and be done with it. Even cooler is Github. Using <a href="http://pages.github.com/">Github pages</a>, you can use your existing Github account and infrastructure to publish your blog just by pushing the HTML to Github. This is seriously cool!</p>
+<p>So, I set out and tried <a href="http://octopress.org/">Octopress</a>, which combines these two things into a nice blogging platform. Honestly though, I don't know much Ruby and all that <code>rake</code> workflow did not make me much more comfortable than pushing stuff into Blogspot.</p>
+<p>Hence, I looked for alternatives. What I ended up with is <a href="http://pelican.notmyidea.org/">Pelican</a>, a very simple static site generator written in Python. Finally, this is a codebase that is easy enough for me to understand and modify. If there is any trouble with my blog, I will be (and have been) able to just look at the source code and figure out what is going wrong. I like this!</p>
+<p>To publish a new blog post, I will start by writing the post in <a href="http://daringfireball.net/projects/markdown/">Markdown</a> (a format I understand), process it using the very simple command line <code>pelican -s my_config_file.py posts/</code>, and push the result to GitHub. Easy as pie. And I feel like I am in control again!</p>
+<p>Actually, if this is just a bit too technical for you, check out <a href="http://calepin.co/">Calepin</a> instead. It uses the very same Pelican engine, but instead of fiddling with Git, you just put your markdown files into your Dropbox, and--poof--you magically have a Blog!</p>
+<p>If you want to see my blog as a repo on Github, just <a href="https://github.com/bastibe/bastibe.github.com/">go have a look</a> (the <code>master</code> branch contains the HTML, the <code>source</code> branch contains the configuration and Markdown).</p></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././adobe-air-application-crashes.html"><h2>Adobe AIR Application Crashes</h2></a>
+        <div class= "well small"> 03/09/2011
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>Adobe, oh Adobe. Why?</p>
+<p>Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.</p>
+<p>Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.</p>
+<p>See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.</p>
+<p>At least this is ...</p> <a class="btn btn-info xsmall" href=".././adobe-air-application-crashes.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
