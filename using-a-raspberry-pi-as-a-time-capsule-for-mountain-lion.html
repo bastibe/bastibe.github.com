@@ -86,7 +86,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 </pre></div>
 
 
-<p>Also, the afp demon should be configured to use the proper authentification schemes. Thus, add this to <em>/etc/netatalk/afpd.conf</em>:</p>
+<p>Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <em>/etc/netatalk/afpd.conf</em>:</p>
 <div class="codehilite"><pre><span class="o">-</span> <span class="o">-</span><span class="n">transall</span> <span class="o">-</span><span class="n">uamlist</span> <span class="n">uams_randnum</span><span class="p">.</span><span class="n">so</span><span class="p">,</span><span class="n">uams_dhx</span><span class="p">.</span><span class="n">so</span><span class="p">,</span><span class="n">uams_dhx2</span><span class="p">.</span><span class="n">so</span> <span class="o">-</span><span class="n">nosavepassword</span> <span class="o">-</span><span class="n">advertise_ssh</span>
 </pre></div>
 
@@ -112,7 +112,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 
 <p>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.</p>
 <p>I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.</p>
-<p>Anyway, with all that done, restart both the netatalk and the Bonjour demon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>n.</p>
+<p>Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>n.</p>
 <h3>Setting up the Time Machine</h3>
 <p>Now, back to the Mac. In order to make Time Machine accept the new network share, run</p>
 <div class="codehilite"><pre><span class="n">defaults</span> <span class="n">write</span> <span class="n">com</span><span class="p">.</span><span class="n">apple</span><span class="p">.</span><span class="n">systempreferences</span> <span class="n">TMShowUnsupportedNetworkVolumes</span> 1

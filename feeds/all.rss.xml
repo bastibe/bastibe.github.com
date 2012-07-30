@@ -18,7 +18,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Also, the afp demon should be configured to use the proper authentification schemes. Thus, add this to &lt;em&gt;/etc/netatalk/afpd.conf&lt;/em&gt;:&lt;/p&gt;
+&lt;p&gt;Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to &lt;em&gt;/etc/netatalk/afpd.conf&lt;/em&gt;:&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;transall&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;uamlist&lt;/span&gt; &lt;span class="n"&gt;uams_randnum&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;so&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;uams_dhx&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;so&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;uams_dhx2&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;so&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;nosavepassword&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;advertise_ssh&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -44,7 +44,7 @@
 
 &lt;p&gt;And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using &lt;code&gt;touch ~/TimeMachine/.com.apple.timemachine.supported&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.&lt;/p&gt;
-&lt;p&gt;Anyway, with all that done, restart both the netatalk and the Bonjour demon using &lt;code&gt;sudo /etc/init.d/netatalk restart&lt;/code&gt; and &lt;code&gt;sudo /etc/init.d/avahi-daemon restart&lt;/code&gt;n.&lt;/p&gt;
+&lt;p&gt;Anyway, with all that done, restart both the netatalk and the Bonjour daemon using &lt;code&gt;sudo /etc/init.d/netatalk restart&lt;/code&gt; and &lt;code&gt;sudo /etc/init.d/avahi-daemon restart&lt;/code&gt;n.&lt;/p&gt;
 &lt;h3&gt;Setting up the Time Machine&lt;/h3&gt;
 &lt;p&gt;Now, back to the Mac. In order to make Time Machine accept the new network share, run&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;defaults&lt;/span&gt; &lt;span class="n"&gt;write&lt;/span&gt; &lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apple&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;systempreferences&lt;/span&gt; &lt;span class="n"&gt;TMShowUnsupportedNetworkVolumes&lt;/span&gt; 1
