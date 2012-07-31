@@ -46,13 +46,16 @@
 &lt;p&gt;I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.&lt;/p&gt;
 &lt;p&gt;Anyway, with all that done, restart both the netatalk and the Bonjour daemon using &lt;code&gt;sudo /etc/init.d/netatalk restart&lt;/code&gt; and &lt;code&gt;sudo /etc/init.d/avahi-daemon restart&lt;/code&gt;n.&lt;/p&gt;
 &lt;h3&gt;Setting up the Time Machine&lt;/h3&gt;
-&lt;p&gt;Now, back to the Mac. In order to make Time Machine accept the new network share, run&lt;/p&gt;
+&lt;p&gt;&lt;strike&gt;Now, back to the Mac. In order to make Time Machine accept the new network share, run&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;defaults&lt;/span&gt; &lt;span class="n"&gt;write&lt;/span&gt; &lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;apple&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;systempreferences&lt;/span&gt; &lt;span class="n"&gt;TMShowUnsupportedNetworkVolumes&lt;/span&gt; 1
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;p&gt;&lt;/strike&gt;
+&lt;strong&gt;Edit:&lt;/strong&gt; Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.&lt;/p&gt;
 &lt;p&gt;Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!&lt;/p&gt;
 &lt;p&gt;Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.&lt;/p&gt;
+&lt;p&gt;Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!&lt;/p&gt;
 &lt;p&gt;This article heavily steals from these fine folks on the internet:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/"&gt;Matthias Kretschmann&lt;/a&gt;&lt;/li&gt;

@@ -114,13 +114,16 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 <p>I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.</p>
 <p>Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>n.</p>
 <h3>Setting up the Time Machine</h3>
-<p>Now, back to the Mac. In order to make Time Machine accept the new network share, run</p>
+<p><strike>Now, back to the Mac. In order to make Time Machine accept the new network share, run</p>
 <div class="codehilite"><pre><span class="n">defaults</span> <span class="n">write</span> <span class="n">com</span><span class="p">.</span><span class="n">apple</span><span class="p">.</span><span class="n">systempreferences</span> <span class="n">TMShowUnsupportedNetworkVolumes</span> 1
 </pre></div>
 
 
+<p></strike>
+<strong>Edit:</strong> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.</p>
 <p>Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!</p>
 <p>Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.</p>
+<p>Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!</p>
 <p>This article heavily steals from these fine folks on the internet:</p>
 <ul>
 <li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a></li>
