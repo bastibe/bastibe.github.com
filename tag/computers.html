@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html"><h1>Using a Raspberry Pi as a Time Capsule for Mountain Lion</h1></a>
-            29/07/2012
+            <a href=".././fixing-errors-in-epydoc.html"><h1>Fixing Errors in Epydoc</h1></a>
+            28/08/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,74 +74,64 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p>A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.</p>
-<p>This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:</p>
-<h3>Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h3>
-<p>Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.</p>
-<p>Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi's HDMI output to the LED display's Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.</p>
-<p>After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <em>Internet Sharing</em> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.</p>
-<h3>Setting up the hard drive</h3>
-<p>First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <em>/etc/fstab</em></p>
-<div class="codehilite"><pre><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="nb">pi</span><span class="o">/</span><span class="n">TimeMachine</span> <span class="n">ext4</span> <span class="n">rw</span><span class="p">,</span><span class="n">auto</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="n">exec</span><span class="p">,</span><span class="n">sync</span> 0 0
+        <div><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+<p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
+<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
+<span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
 </pre></div>
 
 
-<p>Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.</p>
-<h3>Setting up the shared folder</h3>
-<p>First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <em>/etc/netatalk/AppleVolume.default</em>:</p>
-<div class="codehilite"><pre><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="nb">pi</span><span class="o">/</span><span class="n">TimeMachine</span> <span class="n">TimeMachine</span> <span class="n">allow</span><span class="p">:</span><span class="nb">pi</span> <span class="n">cnidscheme</span><span class="p">:</span><span class="n">dbd</span> <span class="n">options</span><span class="p">:</span><span class="n">upriv</span><span class="p">,</span><span class="n">usedot</span><span class="p">,</span><span class="n">tm</span>
+<p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
+<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
+<p>Short answer: Find your <em>site-packages</em> directory:</p>
+<div class="codehilite"><pre>    <span class="kn">from</span> <span class="nn">distutils.sysconfig</span> <span class="kn">import</span> <span class="n">get_python_lib</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">get_python_lib</span><span class="p">())</span>
 </pre></div>
 
 
-<p>Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <em>/etc/netatalk/afpd.conf</em>:</p>
-<div class="codehilite"><pre><span class="o">-</span> <span class="o">-</span><span class="n">transall</span> <span class="o">-</span><span class="n">uamlist</span> <span class="n">uams_randnum</span><span class="p">.</span><span class="n">so</span><span class="p">,</span><span class="n">uams_dhx</span><span class="p">.</span><span class="n">so</span><span class="p">,</span><span class="n">uams_dhx2</span><span class="p">.</span><span class="n">so</span> <span class="o">-</span><span class="n">nosavepassword</span> <span class="o">-</span><span class="n">advertise_ssh</span>
+<p>Go there, navigate to the <em>epydoc/markup</em> directory and change line 307 of the file <em>restructuredtext.py</em> from</p>
+<div class="codehilite"><pre>    <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 
 
-<p>(maybe append <code>mdns</code> to the hosts in <em>/etc/nsswitch.conf</em>? Probably not necessary.)</p>
-<p>I am also not quite sure whether I actually had to create a new file <em>/etc/avahi/services/afpd.service</em> and write into it:</p>
-<div class="codehilite"><pre>    <span class="cp">&lt;?xml version=&quot;1.0&quot; standalone=&#39;no&#39;?&gt;</span><span class="c">&lt;!--*-nxml-*--&gt;</span>
-    <span class="cp">&lt;!DOCTYPE service-group SYSTEM &quot;avahi-service.dtd&quot;&gt;</span>
-    <span class="nt">&lt;service-group&gt;</span>
-        <span class="nt">&lt;name</span> <span class="na">replace-wildcards=</span><span class="s">&quot;yes&quot;</span><span class="nt">&gt;</span>%h<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;service&gt;</span>
-            <span class="nt">&lt;type&gt;</span>_afpovertcp._tcp<span class="nt">&lt;/type&gt;</span>
-            <span class="nt">&lt;port&gt;</span>548<span class="nt">&lt;/port&gt;</span>
-        <span class="nt">&lt;/service&gt;</span>
-        <span class="nt">&lt;service&gt;</span>
-            <span class="nt">&lt;type&gt;</span>_device-info._tcp<span class="nt">&lt;/type&gt;</span>
-            <span class="nt">&lt;port&gt;</span>0<span class="nt">&lt;/port&gt;</span>
-            <span class="nt">&lt;txt-record&gt;</span>model=Xserve<span class="nt">&lt;/txt-record&gt;</span>
-        <span class="nt">&lt;/service&gt;</span>
-    <span class="nt">&lt;/service-group&gt;</span>
+<p>to</p>
+<div class="codehilite"><pre>    <span class="k">try</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">None</span>
 </pre></div>
 
 
-<p>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.</p>
-<p>I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.</p>
-<p>Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>n.</p>
-<h3>Setting up the Time Machine</h3>
-<p><strike>Now, back to the Mac. In order to make Time Machine accept the new network share, run</p>
-<div class="codehilite"><pre><span class="n">defaults</span> <span class="n">write</span> <span class="n">com</span><span class="p">.</span><span class="n">apple</span><span class="p">.</span><span class="n">systempreferences</span> <span class="n">TMShowUnsupportedNetworkVolumes</span> 1
-</pre></div>
-
-
-<p></strike>
-<strong>Edit:</strong> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.</p>
-<p>Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!</p>
-<p>Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.</p>
-<p>Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!</p>
-<p>This article heavily steals from these fine folks on the internet:</p>
-<ul>
-<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a></li>
-<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a></li>
-<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a></li>
-</ul></div>
+<p>This should fix that problem.</p></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html"><h2>Using a Raspberry Pi as a Time Capsule for Mountain Lion</h2></a>
+        <div class= "well small"> 29/07/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.</p>
+<p>This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I ...</p> <a class="btn btn-info xsmall" href=".././using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
@@ -347,32 +337,6 @@ Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-ma
     </div>	
 				
     
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././great-scott.html"><h2>Great Scott</h2></a>
-        <div class= "well small"> 05/03/2009
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><h2>Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</h2>
-<p><img alt="Bitte warten..." src="../static/images/2009-03/bitte_warten.png" /></p>
-<p>Mal wieder: Ich schreibe ein Stück Software für meinen Nebenjob bei meinem Signalverarbeitung-Prof. Diesmal geht es darum, beliebige Audio-Files in Matlab einlesen zu können. Perfekt geeignet ist dafür die selbe Bibliothek, die auch von VLC verwendet wird, libavcodec/libavformat. Das ist eine normale C-Bibliothek, es braucht also nur noch ein kleines mex-File, um ihre Funktionalität für Matlab zur Verfügung zu stellen. Klappt auch wunderbar. Auf dem Mac.</p>
-<p>Schritt zwei ist dann, das Ganze auf Windows und Linux zum Laufen zu bringen. Eigentlich kein Problem, denn ich habe keine wilden Dinge getan und die ...</p> <a class="btn btn-info xsmall" href=".././great-scott.html">read more</a></div>
-    </div>	
-				
-    
         <div class="pagination">
 <ul>
 
@@ -382,9 +346,11 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 
     <li class="active"><a href=".././tag/computers.html">1</a></li>
 
+    <li class=""><a href=".././tag/computers2.html">2</a></li>
 
 
-    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
+    <li class="next"><a href=".././tag/computers2.html">Next &rarr;</a></li>
 
 
 </ul>
@@ -409,7 +375,7 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
             
                 <li><a href=".././archives.html">Archives</a>
                 <li><a href=".././tags.html">Tags</a>
-                <li><a href=".././feeds/all.atom.xml" rel="alternate">Atom feed</a></li>
+                <li><a href=".././" rel="alternate">Atom feed</a></li>
                 
                 <li><a href=".././feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
                 

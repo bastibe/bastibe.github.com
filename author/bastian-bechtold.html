@@ -254,6 +254,38 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
 
     <div class='article'>
+        <a href=".././fixing-errors-in-epydoc.html"><h2>Fixing Errors in Epydoc</h2></a>
+        <div class= "well small"> 28/08/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+<p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
+<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
+<span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
+</pre></div>
+
+
+<p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
+<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
+<p>Short answer: Find your <em>site-packages</em> directory ...</p> <a class="btn btn-info xsmall" href=".././fixing-errors-in-epydoc.html">read more</a></div>
+    </div>	
+				
+    
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
         <a href=".././gedanken-zu-user-interfaces.html"><h2>Gedanken zu User Interfaces</h2></a>
         <div class= "well small"> 25/04/2009
 
@@ -299,32 +331,6 @@ Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-ma
     </div>	
 				
     
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././great-scott.html"><h2>Great Scott</h2></a>
-        <div class= "well small"> 05/03/2009
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><h2>Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</h2>
-<p><img alt="Bitte warten..." src="../static/images/2009-03/bitte_warten.png" /></p>
-<p>Mal wieder: Ich schreibe ein Stück Software für meinen Nebenjob bei meinem Signalverarbeitung-Prof. Diesmal geht es darum, beliebige Audio-Files in Matlab einlesen zu können. Perfekt geeignet ist dafür die selbe Bibliothek, die auch von VLC verwendet wird, libavcodec/libavformat. Das ist eine normale C-Bibliothek, es braucht also nur noch ein kleines mex-File, um ihre Funktionalität für Matlab zur Verfügung zu stellen. Klappt auch wunderbar. Auf dem Mac.</p>
-<p>Schritt zwei ist dann, das Ganze auf Windows und Linux zum Laufen zu bringen. Eigentlich kein Problem, denn ich habe keine wilden Dinge getan und die ...</p> <a class="btn btn-info xsmall" href=".././great-scott.html">read more</a></div>
-    </div>	
-				
-    
         <div class="pagination">
 <ul>
 
@@ -365,7 +371,7 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
             
                 <li><a href=".././archives.html">Archives</a>
                 <li><a href=".././tags.html">Tags</a>
-                <li><a href=".././feeds/all.atom.xml" rel="alternate">Atom feed</a></li>
+                <li><a href=".././" rel="alternate">Atom feed</a></li>
                 
                 <li><a href=".././feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
                 

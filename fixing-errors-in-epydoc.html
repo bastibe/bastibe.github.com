@@ -55,8 +55,8 @@
         
     <div class='article'>
         <div class="content-title">
-            <h1>Western Digital Festplatten-Umtausch mit Überraschungen</h1>
-            19/03/2009
+            <h1>Fixing Errors in Epydoc</h1>
+            28/08/2012
 
 
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -67,13 +67,35 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 
         </div>
 	
-        <div><p><img alt="Western Digital MyBook" src="static/images/2009-03/festplatte.jpg" /></p>
-<p>Ich hatte mir vor einer Weile eine externe Festplatte nur für TimeMachine gekauft. Denn TimeMachine ist super, die einzige Backup-Lösung die ganz bewusst nie in Erscheinung tritt es sei denn man braucht sie. TimeMachine läuft leise und unbeachtet im Hintergrund, und gibt mir dieses flauschige Gefühl von Sicherheit, quasi das unsicht- und spürbare Kondom der Computerwelt (bzw. Apple-Welt).</p>
-<p>...Bis ich einmal den fatalen Fehler beging, meine externe Festplatte HOCHZUHEBEN. Nicht ruckartig, nicht gewaltsam, sondern tatsächlich sehr sanft, aber wohl gerade zu einem ungünstigen Zeitpunkt, denn die Festplatte gab ein leises Klick von sich und hörte auf zu funktionieren.</p>
-<p>Es handelt sich hierbei um eine externe Festplatte der Marke Western Digital MyBook mit 500 Gigabytes, gekauft bei Norskit. Ein Anruf beim Verkäufer ergab, dass dies eine alte Bestellung (weltbewegende 9 Monate) sei und ich daher bei einer anderen Nummer anrufen sollte. Eine sehr freundliche Mitarbeiterin teilte mir dort mit, dass die Firma leider Insolvent sei und ich meine Supportanfrage daher an den Hersteller richten sollte. Und was soll ich sagen? EIN GLÜCK, dass sie das sagte!</p>
-<p>Denn auf der Webseite von Western Digital gibt es nicht nur eine Support-Telefonnummer, sondern gleich ein komplettes austausch-Programm für Festplatten, welches vollkommen automatisiert abläuft: Man gibt die Modellnummer seiner Festplatte und -für Notfälle- seine Email-Adresse an und bekommt sofort eine neue Festplatte zugeschickt, mit der einzigen Auflage, die alte, defekte Platte innerhalb von 30 Tagen einzuschicken. Und tatsächlich wurde die neue Platte prompt am nächsten Tag verschickt und kam heute pünktlich per UPS bei mir an.</p>
-<p>Faszinierend, so wünsche ich mir Kundenservice. Der einzige Wermutstropfen ist, dass Western Digital offenbar nicht sehr überzeugt von der Ausfallsicherheit seiner Festplatten ist, wenn sie so viel Infrastruktur für den einfachen Austausch bereitstellen... Na egal, ich will mal nicht meckern ;-)</p>
-<p><strong>Nachschlag:</strong> Es stellt sich heraus, die neue Festplatte unterscheidet sich ein wenig von der alten: Sie ist silber statt schwarz und hat zwei Firewire 800 Anschlüsse anstatt Firewire 400 -- ein Glück, dass auch Kabel mitgeliefert wurden, sonst könnte ich sie jetzt nicht anschließen!</p></div>
+        <div><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+<p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
+<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
+<span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
+</pre></div>
+
+
+<p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
+<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
+<p>Short answer: Find your <em>site-packages</em> directory:</p>
+<div class="codehilite"><pre>    <span class="kn">from</span> <span class="nn">distutils.sysconfig</span> <span class="kn">import</span> <span class="n">get_python_lib</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">get_python_lib</span><span class="p">())</span>
+</pre></div>
+
+
+<p>Go there, navigate to the <em>epydoc/markup</em> directory and change line 307 of the file <em>restructuredtext.py</em> from</p>
+<div class="codehilite"><pre>    <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+
+<p>to</p>
+<div class="codehilite"><pre>    <span class="k">try</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+
+
+<p>This should fix that problem.</p></div>
 	
         <hr>
     	   

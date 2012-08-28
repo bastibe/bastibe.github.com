@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Bastis Scratchpad On The Internet</title><link href="http://bastibe.de/" rel="alternate"></link><link href="http://bastibe.de/feeds/all-en.atom.xml" rel="self"></link><id>http://bastibe.de/</id><updated>2012-07-29T21:18:00+02:00</updated><entry><title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title><link href="http://bastibe.de/using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html" rel="alternate"></link><updated>2012-07-29T21:18:00+02:00</updated><author><name>Bastian Bechtold</name></author><id>tag:bastibe.de,2012-07-29:using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html</id><summary type="html">&lt;p&gt;A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes &lt;code&gt;hdiutil&lt;/code&gt; would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Bastis Scratchpad On The Internet</title><link href="http://bastibe.de/" rel="alternate"></link><link href="http://bastibe.de/feeds/all-en.atom.xml" rel="self"></link><id>http://bastibe.de/</id><updated>2012-08-28T12:14:00+02:00</updated><entry><title>Fixing Errors in Epydoc</title><link href="http://bastibe.de/fixing-errors-in-epydoc.html" rel="alternate"></link><updated>2012-08-28T12:14:00+02:00</updated><author><name>Bastian Bechtold</name></author><id>tag:bastibe.de,2012-08-28:fixing-errors-in-epydoc.html</id><summary type="html">&lt;p&gt;I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.&lt;/p&gt;
+&lt;p&gt;If you ever get this error when using &lt;a href="http://epydoc.sourceforge.net/"&gt;epydoc&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;UNEXPECTED&lt;/span&gt; &lt;span class="n"&gt;ERROR&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="s"&gt;&amp;#39;Text&amp;#39;&lt;/span&gt; &lt;span class="n"&gt;object&lt;/span&gt; &lt;span class="n"&gt;has&lt;/span&gt; &lt;span class="n"&gt;no&lt;/span&gt; &lt;span class="n"&gt;attribute&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;data&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.&lt;/p&gt;
+&lt;p&gt;Luckily, some &lt;a href="http://www.agapow.net/programming/python/epydoc-go-boom"&gt;fine&lt;/a&gt; &lt;a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data"&gt;folks&lt;/a&gt; on the internet have figured out how to fix these things.&lt;/p&gt;
+&lt;p&gt;Short answer: Find your &lt;em&gt;site-packages&lt;/em&gt; directory:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;distutils.sysconfig&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;get_python_lib&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;get_python_lib&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Go there, navigate to the &lt;em&gt;epydoc/markup&lt;/em&gt; directory and change line 307 of the file &lt;em&gt;restructuredtext.py&lt;/em&gt; from&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_SUMMARY_RE&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;match&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;child&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;to&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;    &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_SUMMARY_RE&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;match&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;child&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="ne"&gt;AttributeError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This should fix that problem.&lt;/p&gt;</summary><category term="computers"></category></entry><entry><title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title><link href="http://bastibe.de/using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html" rel="alternate"></link><updated>2012-07-29T21:18:00+02:00</updated><author><name>Bastian Bechtold</name></author><id>tag:bastibe.de,2012-07-29:using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html</id><summary type="html">&lt;p&gt;A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes &lt;code&gt;hdiutil&lt;/code&gt; would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.&lt;/p&gt;
 &lt;p&gt;This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:&lt;/p&gt;
 &lt;h3&gt;Ingredients: &lt;a href="http://www.raspberrypi.org/"&gt;A Raspberry Pi&lt;/a&gt;, an external hard drive, some patience&lt;/h3&gt;
 &lt;p&gt;Format an SD card as described &lt;a href="http://elinux.org/RPi_Easy_SD_Card_Setup"&gt;in the wiki&lt;/a&gt;. I just installed the version of Debian that is provided on &lt;a href="http://www.raspberrypi.org/downloads"&gt;the official website&lt;/a&gt;. Now just boot up.&lt;/p&gt;
