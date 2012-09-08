@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="./fixing-errors-in-epydoc.html"><h1>Fixing Errors in Epydoc</h1></a>
-            28/08/2012
+            <a href="./on-the-virtue-of-contributing-to-and-using-open-source-software.html"><h1>On the Virtue of Contributing to and Using Open Source Software</h1></a>
+            08/09/2012
 
 
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,7 +74,42 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
         </div>
         
-        <div><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+        <div><p>I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.</p>
+<p>About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/" title="NumPy">numerical</a> <a href="http://scipy.org/" title="SciPy">computation</a> and <a href="http://matplotlib.sourceforge.net/" title="matplotlib">plotting</a> that, for my particular purposes, rivals Matlab.</p>
+<p>However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used <a href="http://playrec.co.uk/" title="Playrec">Playrec</a> for that purpose, which implements <a href="http://www.portaudio.com/" title="PortAudio">PortAudio</a> bindings for Matlab. Luckily, there was a similar package available for Python, called <a href="http://people.csail.mit.edu/hubert/pyaudio/" title="PyAudio">PyAudio</a>.</p>
+<p>But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.</p>
+<p>At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!</p>
+<p>This was a revelation to me: I could not only <em>use</em> a piece of software, I could also <em>change</em> it and mold it to my special needs!</p>
+<p>Thus, I put up my changes on <a href="https://github.com/bastibe/PyAudio" title="PyAudio on github">github</a> and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!</p>
+<p>This, again, was a revelation to me: Not only could <em>I</em> change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!</p>
+<p>Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.</p>
+<p>And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.</p>
+<p><em>By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.</em></p></div>
+        <hr />
+    </div>
+		
+    
+
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href="./fixing-errors-in-epydoc.html"><h2>Fixing Errors in Epydoc</h2></a>
+        <div class= "well small"> 28/08/2012
+
+
+by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
 <p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
 <div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
 <span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
@@ -83,31 +118,10 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 
 <p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
 <p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
-<p>Short answer: Find your <em>site-packages</em> directory:</p>
-<div class="codehilite"><pre>    <span class="kn">from</span> <span class="nn">distutils.sysconfig</span> <span class="kn">import</span> <span class="n">get_python_lib</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">get_python_lib</span><span class="p">())</span>
-</pre></div>
-
-
-<p>Go there, navigate to the <em>epydoc/markup</em> directory and change line 307 of the file <em>restructuredtext.py</em> from</p>
-<div class="codehilite"><pre>    <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-
-
-<p>to</p>
-<div class="codehilite"><pre>    <span class="k">try</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">None</span>
-</pre></div>
-
-
-<p>This should fix that problem.</p></div>
-        <hr />
-    </div>
-		
+<p>Short answer: Find your <em>site-packages</em> directory ...</p> <a class="btn btn-info xsmall" href="./fixing-errors-in-epydoc.html">read more</a></div>
+    </div>	
+				
     
-
 
  
 
@@ -339,33 +353,6 @@ It seems things have improved since I tried to compile last time! Well, it still
 <p><code>pip install -e git+https://github.com/scipy/scipy#egg=scipy-dev</code><br />
 <code>pip install -e git+https://github.com/matplotlib/matplotlib#egg=matplotlib</code></p>
 <p>I must say, this is still a mess. But at least, it is getting less ...</p> <a class="btn btn-info xsmall" href="./compiling-scipy-and-matplotlib-again.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./adobe-air-application-crashes.html"><h2>Adobe AIR Application Crashes</h2></a>
-        <div class= "well small"> 03/09/2011
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>Adobe, oh Adobe. Why?</p>
-<p>Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.</p>
-<p>Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.</p>
-<p>See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.</p>
-<p>At least this is ...</p> <a class="btn btn-info xsmall" href="./adobe-air-application-crashes.html">read more</a></div>
     </div>	
 				
     
