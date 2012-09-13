@@ -261,6 +261,39 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
 
     <div class='article'>
+        <a href=".././kindleapp-not-starting-on-a-case-sensitive-file-system.html"><h2>Kindle.app not starting on a case-sensitive file system</h2></a>
+        <div class= "well small"> 13/09/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.</p>
+<p>A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with</p>
+<div class="codehilite"><pre><span class="n">Dyld</span> <span class="n">Error</span> <span class="n">Message</span><span class="p">:</span>
+  <span class="n">Library</span> <span class="n">not</span> <span class="n">loaded</span><span class="p">:</span> <span class="p">@</span><span class="n">executable_path</span><span class="o">/</span><span class="p">.</span><span class="o">./</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="n">Referenced</span> <span class="n">from</span><span class="p">:</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Kindle</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWebCoreViewer</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="n">Reason</span><span class="p">:</span> <span class="n">image</span> <span class="n">not</span> <span class="n">found</span>
+</pre></div>
+
+
+<p><code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type</p>
+<div class="codehilite"><pre><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">libWebCoreKRF</span><span class="p">.</span><span class="n">dylib</span> <span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib ...</span></pre></div> <a class="btn btn-info xsmall" href=".././kindleapp-not-starting-on-a-case-sensitive-file-system.html">read more</a></div>
+    </div>	
+				
+    
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
         <a href=".././kompilieren-auf-windows.html"><h2>Kompilieren auf Windows</h2></a>
         <div class= "well small"> 12/03/2009
 
@@ -301,31 +334,6 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 <p>Es wurde schon viel gesagt über dieses Spiel. Müde Story, schlechte Charactermodelle, schlechte Shooter-Elemente, unübersichtliche Atmosphäre, kurze Spieldauer, um nur einige der üblichen Kritikpunkte zu nennen.</p>
 <p><img alt="Jump!" src="../static/images/2009-03/mirrors_edge_jump.png" /></p>
 <p>Ich sage: Alles Popauswurf. Was Mirror’s Edge versucht, ist die Direktheit und Intimität der Egoperspektive mit ...</p> <a class="btn btn-info xsmall" href=".././mirrors-edge.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././on-the-virtue-of-contributing-to-and-using-open-source-software.html"><h2>On the Virtue of Contributing to and Using Open Source Software</h2></a>
-        <div class= "well small"> 08/09/2012
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.</p>
-<p>About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/" title="NumPy">numerical</a> <a href="http://scipy.org/" title="SciPy">computation</a> and <a href="http://matplotlib.sourceforge.net/" title="matplotlib">plotting</a> that, for my particular purposes, rivals Matlab.</p>
-<p>However, just like Matlab, Python lacked a way of playing real time audio out of ...</p> <a class="btn btn-info xsmall" href=".././on-the-virtue-of-contributing-to-and-using-open-source-software.html">read more</a></div>
     </div>	
 				
     

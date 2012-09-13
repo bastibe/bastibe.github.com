@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././fixing-errors-in-epydoc.html"><h1>Fixing Errors in Epydoc</h1></a>
-            28/08/2012
+            <a href=".././kindleapp-not-starting-on-a-case-sensitive-file-system.html"><h1>Kindle.app not starting on a case-sensitive file system</h1></a>
+            13/09/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,7 +74,48 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+        <div><p>So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.</p>
+<p>A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with</p>
+<div class="codehilite"><pre><span class="n">Dyld</span> <span class="n">Error</span> <span class="n">Message</span><span class="p">:</span>
+  <span class="n">Library</span> <span class="n">not</span> <span class="n">loaded</span><span class="p">:</span> <span class="p">@</span><span class="n">executable_path</span><span class="o">/</span><span class="p">.</span><span class="o">./</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="n">Referenced</span> <span class="n">from</span><span class="p">:</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Kindle</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWebCoreViewer</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="n">Reason</span><span class="p">:</span> <span class="n">image</span> <span class="n">not</span> <span class="n">found</span>
+</pre></div>
+
+
+<p><code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type</p>
+<div class="codehilite"><pre><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">libWebCoreKRF</span><span class="p">.</span><span class="n">dylib</span> <span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
+</pre></div>
+
+
+<p>to create a symlink with the misspelled name. Done.</p>
+<p>Kindle works again.</p>
+<p>Spelling is hard, it seems.</p></div>
+        <hr />
+    </div>
+		
+    
+
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././fixing-errors-in-epydoc.html"><h2>Fixing Errors in Epydoc</h2></a>
+        <div class= "well small"> 28/08/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
 <p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
 <div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
 <span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
@@ -83,31 +124,10 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 
 <p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
 <p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
-<p>Short answer: Find your <em>site-packages</em> directory:</p>
-<div class="codehilite"><pre>    <span class="kn">from</span> <span class="nn">distutils.sysconfig</span> <span class="kn">import</span> <span class="n">get_python_lib</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">get_python_lib</span><span class="p">())</span>
-</pre></div>
-
-
-<p>Go there, navigate to the <em>epydoc/markup</em> directory and change line 307 of the file <em>restructuredtext.py</em> from</p>
-<div class="codehilite"><pre>    <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-
-
-<p>to</p>
-<div class="codehilite"><pre>    <span class="k">try</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="bp">None</span>
-</pre></div>
-
-
-<p>This should fix that problem.</p></div>
-        <hr />
-    </div>
-		
+<p>Short answer: Find your <em>site-packages</em> directory ...</p> <a class="btn btn-info xsmall" href=".././fixing-errors-in-epydoc.html">read more</a></div>
+    </div>	
+				
     
-
 
  
 
@@ -305,35 +325,6 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
         <div class="summary"><p><img alt="Code" src="../static/images/2009-03/code.png" /></p>
 <p>So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.</p>
 <p><a href="http://en.wikipedia.org/wiki/State_of_the_Union">The State of The Union</a>: Kleine Dateien einlesen, kein Problem. Exotische Formate einlesen, kein Problem. Metadaten auslesen, kein Problem. Dateigröße, Bitrate und Samplerate auslesen, ein kleines Problem, da diese Parameter bei komprimierten Formaten nicht unbedingt fest stehen. Große Dateien einlösen, auf dem Mac kein Problem, auf Windows… nun ja, es dauert. Eine WAV-Datei von 5:30 min einzulesen, dauert mit Windows momentan ...</p> <a class="btn btn-info xsmall" href=".././debugging-und-gcc-auf-windows.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././get-a-mac.html"><h2>Get a Mac</h2></a>
-        <div class= "well small"> 14/03/2009
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p><img alt="OSX" src="../static/images/2009-03/osx.png" /></p>
-<p>Bei meinem üblichen, Samstagmorgendlichen, bettlägrigen Web-Rundgang habe ich heute drei sehr nette Artikel von David Alison gefunden, einem Windows-Programmierer und selbsternanntem Microsoft-Fanboy, der sich einen Mac zulegt und unverhofft glücklich damit wird. So glücklich sogar, dass er inzwischen mehr oder weniger ein Mac-only-User geworden ist.</p>
-<p>Ziemlich genau wie ihm ging es mir auch.</p>
-<p>Teil 1: <a href="http://www.davidalison.com/2008/02/hardcore-windows-guy-switches-to-mac.html">A hardcore Windows guy gets a Mac</a><br />
-Teil 2: <a href="http://www.davidalison.com/2008/04/mac-after-two-months-of-mac-heres-why-i.html">After two months of Mac, here's why I switched</a><br />
-Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-mac-one-year.html">Switching from Windows to Mac - One Year Later</a></p>
-<p>Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll sind. Viel besser als ...</p> <a class="btn btn-info xsmall" href=".././get-a-mac.html">read more</a></div>
     </div>	
 				
     
