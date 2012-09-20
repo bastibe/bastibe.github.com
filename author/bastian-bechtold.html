@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././adobe-air-application-crashes.html"><h1>Adobe AIR Application Crashes</h1></a>
-            03/09/2011
+            <a href=".././a-story-about-schemes.html"><h1>A Story about Schemes</h1></a>
+            20/09/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,20 +74,53 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p>Adobe, oh Adobe. Why?</p>
-<p>Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.</p>
-<p>Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.</p>
-<p>See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.</p>
-<p>At least this is an error that can easily be fixed. Fire up your terminal, type
-<code>cd /Library/Frameworks/Adobe\ AIR.framework/Version/Current/Resources/</code>
-<code>sudo ln -s WebKit.dylib Webkit.dylib</code>
-Then enter your password and your AIR applications should work again.</p>
-<p>Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!</p></div>
+        <div><p><strong>Disclaimer:</strong> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)</p>
+<p>I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and how it should be done. </p>
+<p>However, this is not about SICP, it is about Scheme, which happens to be the programming language that SICP uses to preach its sermons. Above all, Scheme beautiful. It is an astounding marriage of simplicity and power. It is also a mess in terms of implementations. There are dozens of implementations and they all implement a different, partly overlapping set of features that may or may not be part of the canonical Scheme--if there is such a thing.</p>
+<p>So, how to select the correct Scheme? Naively, I first chose the one SICP uses, <a href="http://www.gnu.org/software/mit-scheme/">MIT-Scheme</a>. However, I soon found out that it does not work well with Emacs (that is, it did not work at all with <code>scheme-mode</code> and <code>run-scheme</code>). Also, its prompt is weird: <code>]=&gt;</code>. Whatever.</p>
+<p>So next, I tried <a href="http://dynamo.iro.umontreal.ca/~gambit/wiki/index.php/Main_Page">Gambit Scheme</a>, which works a lot better with Emacs. But then, I soon found out that it does not support functions like <code>filter</code>, which are kind of essential. I was quick to write my own version of that, but really, this stuff should be provided. Turns out, <code>filter</code> is part of a Scheme Request For Implementation, or SRFI. <code>filter</code> is part of SRFI1. There is a <a href="http://srfi.schemers.org/srfi-implementers.html">huge list</a> of different Schemes and the SRFIs they support. Also, there is a list of <a href="http://www.cs.utah.edu/~mflatt/benchmarks-20100126/log3/Benchmarks.html">Schemes sorted by performance</a>. With <a href="http://www.cs.utah.edu/%7Emflatt/benchmarks-20100126/log3/Benchmarks-plot.html">plots</a>, even. It's a mess.</p>
+<p>So this left me profoundly confused. What Scheme would I use? Ideally, it should be fast, work with Emacs and implement a reasonable set of SRFIs. Homebrew lists these:</p>
+<div class="codehilite"><pre><span class="n">bigloo</span>         <span class="n">chibi</span><span class="o">-</span><span class="n">scheme</span>  <span class="n">chicken</span>
+<span class="n">gambit</span><span class="o">-</span><span class="n">scheme</span>  <span class="n">gauche</span>        <span class="n">guile</span>
+<span class="n">kawa</span>           <span class="n">mit</span><span class="o">-</span><span class="n">scheme</span>    <span class="n">plt</span><span class="o">-</span><span class="n">racket</span>
+<span class="n">scheme48</span>       <span class="n">scsh</span>          <span class="n">sisc</span><span class="o">-</span><span class="n">scheme</span>
+<span class="n">stklos</span>         <span class="n">tinyscheme</span>
+</pre></div>
+
+
+<p>Difficult decision. Frankly, I don't have an answer. That said, I found <code>plt-racket</code> to be a joy to work with. <code>(help filter)</code> will open your browser with the appropriate help page for <code>filter</code>. Amazing. Also, it implements <a href="http://srfi.schemers.org/srfi-implementers.html">a long list</a> of SRFIs that will probably satisfy my simplistic needs. And the <a href="http://docs.racket-lang.org/">documentation</a> is excellent. And then there is DrRacket, which is a nice REPL that comes right with <a href="http://racket-lang.org/">Racket</a>. I like it.</p></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././adobe-air-application-crashes.html"><h2>Adobe AIR Application Crashes</h2></a>
+        <div class= "well small"> 03/09/2011
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>Adobe, oh Adobe. Why?</p>
+<p>Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.</p>
+<p>Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.</p>
+<p>See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.</p>
+<p>At least this is ...</p> <a class="btn btn-info xsmall" href=".././adobe-air-application-crashes.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
@@ -299,35 +332,6 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
         <div class="summary"><p>Jeder kennt dieses Fenster:</p>
 <p><img alt="delete file" src="../static/images/2009-04/delete_file.png" /></p>
 <p>Dieses Fenster ist eine ziemlich schlechte Idee, denn jeder geübte Benutzer hat irgendwann gelernt, dass die Aktion "Dateien Löschen" aus drei Gesten besteht: (1) Dateien auswählen, (2) Die Löschaktion einleiten, (3) Den Löschdialog bestätigen. Leider hat man schon vor mehr als zwanzig Jahren nachgewiesen, dass solche zusammengehörigen Gesten von den Benutzern als einzelne "Datei-Löschen" Geste abstrahiert werden. Man kennt das vom Tippen: Man tippt Worte nicht, indem man einzelne Buchstaben aneinander hängt, sondern man tippt Worte fast immer am Stück; Hat man erst einmal angefangen, ein falsches Wort zu tippen, kann man damit nicht aufhören, bis ...</p> <a class="btn btn-info xsmall" href=".././gedanken-zu-user-interfaces.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././get-a-mac.html"><h2>Get a Mac</h2></a>
-        <div class= "well small"> 14/03/2009
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p><img alt="OSX" src="../static/images/2009-03/osx.png" /></p>
-<p>Bei meinem üblichen, Samstagmorgendlichen, bettlägrigen Web-Rundgang habe ich heute drei sehr nette Artikel von David Alison gefunden, einem Windows-Programmierer und selbsternanntem Microsoft-Fanboy, der sich einen Mac zulegt und unverhofft glücklich damit wird. So glücklich sogar, dass er inzwischen mehr oder weniger ein Mac-only-User geworden ist.</p>
-<p>Ziemlich genau wie ihm ging es mir auch.</p>
-<p>Teil 1: <a href="http://www.davidalison.com/2008/02/hardcore-windows-guy-switches-to-mac.html">A hardcore Windows guy gets a Mac</a><br />
-Teil 2: <a href="http://www.davidalison.com/2008/04/mac-after-two-months-of-mac-heres-why-i.html">After two months of Mac, here's why I switched</a><br />
-Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-mac-one-year.html">Switching from Windows to Mac - One Year Later</a></p>
-<p>Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll sind. Viel besser als ...</p> <a class="btn btn-info xsmall" href=".././get-a-mac.html">read more</a></div>
     </div>	
 				
     
