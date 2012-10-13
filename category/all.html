@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././a-story-about-schemes.html"><h1>A Story about Schemes</h1></a>
-            20/09/2012
+            <a href=".././text-editing-with-confidence-and-emacs.html"><h1>Text editing with confidence and Emacs</h1></a>
+            13/10/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,26 +74,60 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p><strong>Disclaimer:</strong> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)</p>
-<p>I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and how it should be done. </p>
-<p>However, this is not about SICP, it is about Scheme, which happens to be the programming language that SICP uses to preach its sermons. Above all, Scheme beautiful. It is an astounding marriage of simplicity and power. It is also a mess in terms of implementations. There are dozens of implementations and they all implement a different, partly overlapping set of features that may or may not be part of the canonical Scheme--if there is such a thing.</p>
-<p>So, how to select the correct Scheme? Naively, I first chose the one SICP uses, <a href="http://www.gnu.org/software/mit-scheme/">MIT-Scheme</a>. However, I soon found out that it does not work well with Emacs (that is, it did not work at all with <code>scheme-mode</code> and <code>run-scheme</code>). Also, its prompt is weird: <code>]=&gt;</code>. Whatever.</p>
-<p>So next, I tried <a href="http://dynamo.iro.umontreal.ca/~gambit/wiki/index.php/Main_Page">Gambit Scheme</a>, which works a lot better with Emacs. But then, I soon found out that it does not support functions like <code>filter</code>, which are kind of essential. I was quick to write my own version of that, but really, this stuff should be provided. Turns out, <code>filter</code> is part of a Scheme Request For Implementation, or SRFI. <code>filter</code> is part of SRFI1. There is a <a href="http://srfi.schemers.org/srfi-implementers.html">huge list</a> of different Schemes and the SRFIs they support. Also, there is a list of <a href="http://www.cs.utah.edu/~mflatt/benchmarks-20100126/log3/Benchmarks.html">Schemes sorted by performance</a>. With <a href="http://www.cs.utah.edu/%7Emflatt/benchmarks-20100126/log3/Benchmarks-plot.html">plots</a>, even. It's a mess.</p>
-<p>So this left me profoundly confused. What Scheme would I use? Ideally, it should be fast, work with Emacs and implement a reasonable set of SRFIs. Homebrew lists these:</p>
-<div class="codehilite"><pre><span class="n">bigloo</span>         <span class="n">chibi</span><span class="o">-</span><span class="n">scheme</span>  <span class="n">chicken</span>
-<span class="n">gambit</span><span class="o">-</span><span class="n">scheme</span>  <span class="n">gauche</span>        <span class="n">guile</span>
-<span class="n">kawa</span>           <span class="n">mit</span><span class="o">-</span><span class="n">scheme</span>    <span class="n">plt</span><span class="o">-</span><span class="n">racket</span>
-<span class="n">scheme48</span>       <span class="n">scsh</span>          <span class="n">sisc</span><span class="o">-</span><span class="n">scheme</span>
-<span class="n">stklos</span>         <span class="n">tinyscheme</span>
-</pre></div>
-
-
-<p>Difficult decision. Frankly, I don't have an answer. That said, I found <code>plt-racket</code> to be a joy to work with. <code>(help filter)</code> will open your browser with the appropriate help page for <code>filter</code>. Amazing. Also, it implements <a href="http://srfi.schemers.org/srfi-implementers.html">a long list</a> of SRFIs that will probably satisfy my simplistic needs. And the <a href="http://docs.racket-lang.org/">documentation</a> is excellent. And then there is DrRacket, which is a nice REPL that comes right with <a href="http://racket-lang.org/">Racket</a>. I like it.</p></div>
+        <div><p>In college, I realized for the first time that a good text editor could save me serious time when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later on my first job, I realized for the first time that a good text editor could save me serious time when learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. A year later I was bored and tried Emacs and discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>. Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!</p>
+<h2>Text editing</h2>
+<p>In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.</p>
+<p>Here is one of my pet peeve with many text editors: Whenever I initiate a text search, a modal dialog box pops up where I have to enter the search phrase, then click a button to search for that word. In contrast <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search">great</a> <a href="http://vimdoc.sourceforge.net/htmldoc/usr_03.html#03.8">text</a> <a href="http://docs.sublimetext.info/en/latest/search_and_replace/search_and_replace.html">editors</a> allow searching for text without changing to a different window and show the results immediately while entering the search string. This is very fast and precise. In fact, it is so useful that searching is one of the most popular means of text navigation in text editors that have it.</p>
+<p>This is a theme that goes through all these features: I look for stuff that is fast and precise, because this will enable more powerful applications of seemingly simple techniques.</p>
+<h2>Outlining and task management</h2>
+<p>Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.</p>
+<p>But with Emacs, I found out about <a href="http://orgmode.org">org-mode</a>, which is at its heart an outliner with a syntax somewhat like Markdown. It proved to be surprisingly powerful to be able to easily refile entries or whole sub-trees in my todo lists. Also, having trees be collapsible effectively enabled me to consolidate all my todo management into one file without that file becoming unmanageably big.</p>
+<p>Add to that the more advanced task tracking features of org-mode, such as <a href="http://orgmode.org/features.html#clocking">time tracking</a> or <a href="http://orgmode.org/features.html#planning">advanced todo planning</a> and this has become one of the most pivotal tools I use daily. </p>
+<h2>Shell interaction and operating system compatibility</h2>
+<p>Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.</p>
+<p>Again, Emacs came to the rescue though: <a href="http://www.gnu.org/software/emacs/manual/html_node/eshell/What-is-Eshell_003f.html">Eshell</a> is a shell implemented in Emacs with no external dependencies. Thus, it comes installed on all my machines and works the same way on every operating system. Sadly though, Eshell is not quite full-featured and compatibility with some shell programs is kind of rough. In particular, it does not work well with <code>less</code> like scrolling buffers. However, some of those, like <code>man</code> or <code>info</code> are automatically opened in a special mode in Emacs itself, so this is not as bad as it sounds.</p>
+<p>At more than one point, Eshell probably saved my sanity.</p>
+<h2>Git interaction</h2>
+<p>Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.</p>
+<p>Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.github.com/magit/magit.html#Introduction">magit</a>, which builds an interactive git interaction program within Emacs. With magit, all the major git commands are just a keystroke away and diffs or logs are easily accessible, too. It really is a major feat!</p>
+<h2>Grab bag</h2>
+<ul>
+<li>Emacs' integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.</li>
+<li>REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.</li>
+<li>Emacs' <a href="http://www.gnu.org/software/auctex/">LaTeX mode</a> is amazingly powerful. Combine that with Emacs' ability to display PDF files <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html">graphically</a> in a buffer and you have an awesome LaTeX environment.</li>
+<li>Emacs' documentation is wonderful. I learned many a trick just idly leafing through the built in Emacs documentation.</li>
+<li>Built in package management for extensions is a great time saver. This is available in <a href="https://github.com/gmarik/vundle#about">Vim</a> and <a href="http://wbond.net/sublime_packages/package_control">Sublime Text</a> as an addon, too.</li>
+<li>Lisp is indeed beautiful and elisp is quite joyful to program. I never really went beyond simple configuration in Vim. My <code>.emacs</code> file contains some quite sophisticated small programs though.</li>
+</ul></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././a-story-about-schemes.html"><h2>A Story about Schemes</h2></a>
+        <div class= "well small"> 20/09/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p><strong>Disclaimer:</strong> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)</p>
+<p>I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and ...</p> <a class="btn btn-info xsmall" href=".././a-story-about-schemes.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
@@ -328,38 +362,6 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 <p>rlua however expects it to be called <code>liblua5.1.dylib</code> (notice the missing <code>.</code>).</p>
 <p>Similarly, the headers are installed plainly into <code>/usr/local/include</code>, whereas rlua expects them to be in a folder called <code>lua5.1</code>.</p>
 <p>Hence, here is how you ...</p> <a class="btn btn-info xsmall" href=".././how-to-gem-install-rlua-on-osxhomebrew.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././text-editors.html"><h2>Text Editors</h2></a>
-        <div class= "well small"> 03/02/2012
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>As far as I can tell, there has been a resurgence of development in the landscape of text editors of late. Only a few years ago, the text editing scene one the Mac seemed to be dominated by</p>
-<ul>
-<li>Crazy unix farts using Vim or Emacs</li>
-<li>BBEdit users</li>
-<li>Textmate users</li>
-</ul>
-<p>During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.</p>
-<h3><a href="http://www.vim.org/">Vim</a></h3>
-<p><a href="../static/images/2012-02/vim.png"><img alt="Vim" src="../static/images/2012-02/vim_small.png" /></a></p>
-<p>Vim ...</p> <a class="btn btn-info xsmall" href=".././text-editors.html">read more</a></div>
     </div>	
 				
     
