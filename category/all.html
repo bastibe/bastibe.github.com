@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././text-editing-with-confidence-and-emacs.html"><h1>Text editing with confidence and Emacs</h1></a>
-            13/10/2012
+            <a href=".././my-emacs-customizations.html"><h1>My Emacs customizations</h1></a>
+            14/10/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,36 +74,125 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p>In college, I realized for the first time that a good text editor could save me serious time when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later on my first job, I realized for the first time that a good text editor could save me serious time when learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. A year later I was bored and tried Emacs and discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>. Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!</p>
-<h2>Text editing</h2>
-<p>In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.</p>
-<p>Here is one of my pet peeve with many text editors: Whenever I initiate a text search, a modal dialog box pops up where I have to enter the search phrase, then click a button to search for that word. In contrast <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search">great</a> <a href="http://vimdoc.sourceforge.net/htmldoc/usr_03.html#03.8">text</a> <a href="http://docs.sublimetext.info/en/latest/search_and_replace/search_and_replace.html">editors</a> allow searching for text without changing to a different window and show the results immediately while entering the search string. This is very fast and precise. In fact, it is so useful that searching is one of the most popular means of text navigation in text editors that have it.</p>
-<p>This is a theme that goes through all these features: I look for stuff that is fast and precise, because this will enable more powerful applications of seemingly simple techniques.</p>
-<h2>Outlining and task management</h2>
-<p>Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.</p>
-<p>But with Emacs, I found out about <a href="http://orgmode.org">org-mode</a>, which is at its heart an outliner with a syntax somewhat like Markdown. It proved to be surprisingly powerful to be able to easily refile entries or whole sub-trees in my todo lists. Also, having trees be collapsible effectively enabled me to consolidate all my todo management into one file without that file becoming unmanageably big.</p>
-<p>Add to that the more advanced task tracking features of org-mode, such as <a href="http://orgmode.org/features.html#clocking">time tracking</a> or <a href="http://orgmode.org/features.html#planning">advanced todo planning</a> and this has become one of the most pivotal tools I use daily. </p>
-<h2>Shell interaction and operating system compatibility</h2>
-<p>Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.</p>
-<p>Again, Emacs came to the rescue though: <a href="http://www.gnu.org/software/emacs/manual/html_node/eshell/What-is-Eshell_003f.html">Eshell</a> is a shell implemented in Emacs with no external dependencies. Thus, it comes installed on all my machines and works the same way on every operating system. Sadly though, Eshell is not quite full-featured and compatibility with some shell programs is kind of rough. In particular, it does not work well with <code>less</code> like scrolling buffers. However, some of those, like <code>man</code> or <code>info</code> are automatically opened in a special mode in Emacs itself, so this is not as bad as it sounds.</p>
-<p>At more than one point, Eshell probably saved my sanity.</p>
-<h2>Git interaction</h2>
-<p>Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.</p>
-<p>Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.github.com/magit/magit.html#Introduction">magit</a>, which builds an interactive git interaction program within Emacs. With magit, all the major git commands are just a keystroke away and diffs or logs are easily accessible, too. It really is a major feat!</p>
-<h2>Grab bag</h2>
-<ul>
-<li>Emacs' integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.</li>
-<li>REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.</li>
-<li>Emacs' <a href="http://www.gnu.org/software/auctex/">LaTeX mode</a> is amazingly powerful. Combine that with Emacs' ability to display PDF files <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html">graphically</a> in a buffer and you have an awesome LaTeX environment.</li>
-<li>Emacs' documentation is wonderful. I learned many a trick just idly leafing through the built in Emacs documentation.</li>
-<li>Built in package management for extensions is a great time saver. This is available in <a href="https://github.com/gmarik/vundle#about">Vim</a> and <a href="http://wbond.net/sublime_packages/package_control">Sublime Text</a> as an addon, too.</li>
-<li>Lisp is indeed beautiful and elisp is quite joyful to program. I never really went beyond simple configuration in Vim. My <code>.emacs</code> file contains some quite sophisticated small programs though.</li>
-</ul></div>
+        <div><p>I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.</p>
+<p>One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes</p>
+<p><a href="https://dl.dropbox.com/s/0ne31wkur81wgzb/.emacs">My <em>.emacs</em></a></p>
+<p>Now on to the meat of this post: Some customizations I made that I think are cool.</p>
+<h2>When Emacs starts up, make it fit the left half of the screen</h2>
+<p>First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nb">defun</span> <span class="nv">set-frame-pixel-size</span> <span class="p">(</span><span class="nv">frame</span> <span class="nv">width</span> <span class="nv">height</span><span class="p">)</span>
+  <span class="s">&quot;Sets size of FRAME to WIDTH by HEIGHT, measured in pixels.&quot;</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">pixels-per-char-width</span> <span class="p">(</span><span class="nb">/</span> <span class="p">(</span><span class="nv">frame-pixel-width</span><span class="p">)</span> <span class="p">(</span><span class="nv">frame-width</span><span class="p">)))</span>
+        <span class="p">(</span><span class="nv">pixels-per-char-height</span> <span class="p">(</span><span class="nb">/</span> <span class="p">(</span><span class="nv">frame-pixel-height</span><span class="p">)</span> <span class="p">(</span><span class="nv">frame-height</span><span class="p">))))</span>
+    <span class="p">(</span><span class="nv">set-frame-size</span> <span class="nv">frame</span>
+                    <span class="p">(</span><span class="nb">floor</span> <span class="p">(</span><span class="nb">/</span> <span class="nv">width</span> <span class="nv">pixels-per-char-width</span><span class="p">))</span>
+                    <span class="p">(</span><span class="nb">floor</span> <span class="p">(</span><span class="nb">/</span> <span class="nv">height</span> <span class="nv">pixels-per-char-height</span><span class="p">)))))</span>
+</pre></div>
+
+
+<p>Next, a function that uses the above to set the frame size to exactly fit the left half of the screen. Note that the <code>excess-...</code> variables account for things like the menu bar, the dock or the task bar so you might have to adapt these values to your particular windowing environment. The values given here work for dockless OSX.</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nb">defun</span> <span class="nv">use-left-half-screen</span> <span class="p">()</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let*</span> <span class="p">((</span><span class="nv">excess-width</span> <span class="mi">32</span><span class="p">)</span>
+         <span class="p">(</span><span class="nv">excess-height</span> <span class="mi">48</span><span class="p">)</span>
+         <span class="p">(</span><span class="nv">half-screen-width</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">/</span> <span class="p">(</span><span class="nv">x-display-pixel-width</span><span class="p">)</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">excess-width</span><span class="p">))</span>
+         <span class="p">(</span><span class="nv">screen-height</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nv">x-display-pixel-height</span><span class="p">)</span> <span class="nv">excess-height</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nv">set-frame-pixel-size</span> <span class="p">(</span><span class="nv">selected-frame</span><span class="p">)</span> <span class="nv">half-screen-width</span> <span class="nv">screen-height</span><span class="p">)))</span>
+</pre></div>
+
+
+<p>Finally, when Emacs starts up, make it use half the screen. Just how I like it!</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="k">if</span> <span class="nv">window-system</span>
+    <span class="p">(</span><span class="nv">use-left-half-screen</span><span class="p">))</span>
+</pre></div>
+
+
+<h2>Make shell split windows auto-resize</h2>
+<p>Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nv">add-hook</span> <span class="ss">&#39;window-configuration-change-hook</span>
+          <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span>
+            <span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">or</span> <span class="p">(</span><span class="nb">string-equal</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="s">&quot;*Python*&quot;</span><span class="p">)</span>
+                      <span class="p">(</span><span class="nb">string-equal</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="s">&quot;*eshell*&quot;</span><span class="p">)</span>
+                      <span class="p">(</span><span class="nb">string-equal</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="s">&quot;*tex-shell*&quot;</span><span class="p">))</span>
+              <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nb">eq</span> <span class="p">(</span><span class="nv">window-height</span><span class="p">)</span> <span class="mi">15</span><span class="p">))</span>
+                  <span class="p">(</span><span class="nv">enlarge-window</span> <span class="p">(</span><span class="nb">-</span> <span class="mi">15</span> <span class="p">(</span><span class="nv">window-height</span><span class="p">)))))))</span>
+</pre></div>
+
+
+<h2>Create a new line above/below the current one</h2>
+<p>There is one feature of Vim that I really missed: <code>o</code>/<code>O</code>, which 'opens' a new line above or below the current one without changing the current line.</p>
+<div class="codehilite"><pre><span class="p">(</span><span class="nb">defun</span> <span class="nv">vi-open-line-above</span> <span class="p">()</span>
+  <span class="s">&quot;Insert a newline above the current line and put point at beginning.&quot;</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">bolp</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">beginning-of-line</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">newline</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">forward-line</span> <span class="mi">-1</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">indent-according-to-mode</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">vi-open-line-below</span> <span class="p">()</span>
+  <span class="s">&quot;Insert a newline below the current line and put point at beginning.&quot;</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">eolp</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">end-of-line</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">newline-and-indent</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-o&quot;</span><span class="p">)</span> <span class="ss">&#39;vi-open-line-below</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;M-o&quot;</span><span class="p">)</span> <span class="ss">&#39;vi-open-line-above</span><span class="p">)</span>
+</pre></div>
+
+
+<h2>When editing LaTeX, show PDF output in Emacs</h2>
+<p>Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.</p>
+<p>This function will open or refresh a split window with the generated PDF file in it. Thus, when I edit LaTeX, I will hit C-c C-c to compile, then C-c C-v to see the PDF. All that without having to leave the LaTeX file.</p>
+<div class="codehilite"><pre><span class="c1">;; open/show pdf file within Emacs using doc-view-mode</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">open-show-pdf</span> <span class="p">()</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">tex-buffer-name</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span>
+        <span class="p">(</span><span class="nv">pdf-buffer-name</span> <span class="p">(</span><span class="nv">concat</span> <span class="p">(</span><span class="nv">TeX-master-file</span><span class="p">)</span> <span class="s">&quot;.pdf&quot;</span><span class="p">)))</span>
+    <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nv">get-buffer</span> <span class="nv">pdf-buffer-name</span><span class="p">)</span>
+        <span class="p">(</span><span class="nv">switch-to-buffer-other-window</span> <span class="nv">pdf-buffer-name</span><span class="p">)</span>
+      <span class="p">(</span><span class="nv">find-file-other-window</span> <span class="nv">pdf-buffer-name</span><span class="p">))</span>
+    <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nb">eq</span> <span class="nv">major-mode</span> <span class="ss">&#39;doc-view-mode</span><span class="p">))</span>
+        <span class="p">(</span><span class="nv">doc-view-mode</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">doc-view-revert-buffer</span> <span class="no">t</span> <span class="no">t</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">switch-to-buffer-other-window</span> <span class="nv">tex-buffer-name</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">&#39;LaTeX-mode-hook</span>
+          <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span>
+            <span class="p">(</span><span class="nv">define-key</span> <span class="nv">LaTeX-mode-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-c C-v&quot;</span><span class="p">)</span> <span class="ss">&#39;open-show-pdf</span><span class="p">)</span>
+            <span class="p">(</span><span class="nv">visual-line-mode</span> <span class="no">t</span><span class="p">)</span>
+            <span class="p">(</span><span class="nv">turn-on-reftex</span><span class="p">))</span>
+          <span class="no">t</span><span class="p">)</span>
+</pre></div></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././text-editing-with-confidence-and-emacs.html"><h2>Text editing with confidence and Emacs</h2></a>
+        <div class= "well small"> 13/10/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>In college, I realized for the first time that a good text editor could save me serious time when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later on my first job, I realized for the first time that a good text editor could save me serious time when learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. A year later I was bored and tried Emacs and discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>. Note that this is ...</p> <a class="btn btn-info xsmall" href=".././text-editing-with-confidence-and-emacs.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
@@ -331,37 +420,6 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 <span class="c">/* Name */</span>
 <span class="nc">.codehilite</span> <span class="nc">.n</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
 <span class="nc">.codehilite</span> <span class="nc">.na</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198 ...</span></pre></div> <a class="btn btn-info xsmall" href=".././how-to-get-solarized-syntax-highlighting-on-your-blog.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././how-to-gem-install-rlua-on-osxhomebrew.html"><h2>How to gem install rlua on OSX/homebrew</h2></a>
-        <div class= "well small"> 22/02/2012
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using</p>
-<div class="codehilite"><pre><span class="n">brew</span> <span class="n">install</span> <span class="n">lua</span>
-</pre></div>
-
-
-<p>Oh, would it be nice if everyone agreed on how to install stuff like this. Case in point, homebrew installs liblua (quite reasonable) in <code>/usr/local/lib/liblua.[5.1[.4]].dylib</code></p>
-<p>rlua however expects it to be called <code>liblua5.1.dylib</code> (notice the missing <code>.</code>).</p>
-<p>Similarly, the headers are installed plainly into <code>/usr/local/include</code>, whereas rlua expects them to be in a folder called <code>lua5.1</code>.</p>
-<p>Hence, here is how you ...</p> <a class="btn btn-info xsmall" href=".././how-to-gem-install-rlua-on-osxhomebrew.html">read more</a></div>
     </div>	
 				
     
