@@ -62,8 +62,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="./my-emacs-customizations.html"><h1>My Emacs customizations</h1></a>
-            14/10/2012
+            <a href="./matlab-mex-homebrew-and-os-x-108-mountain-lion.html"><h1>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h1></a>
+            20/10/2012
 
 
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -74,102 +74,106 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
         </div>
         
-        <div><p>I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.</p>
-<p>One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes</p>
-<p><a href="https://dl.dropbox.com/s/0ne31wkur81wgzb/.emacs">My <em>.emacs</em></a></p>
-<p>Now on to the meat of this post: Some customizations I made that I think are cool.</p>
-<h2>When Emacs starts up, make it fit the left half of the screen</h2>
-<p>First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.</p>
-<div class="codehilite"><pre><span class="p">(</span><span class="nb">defun</span> <span class="nv">set-frame-pixel-size</span> <span class="p">(</span><span class="nv">frame</span> <span class="nv">width</span> <span class="nv">height</span><span class="p">)</span>
-  <span class="s">&quot;Sets size of FRAME to WIDTH by HEIGHT, measured in pixels.&quot;</span>
-  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">pixels-per-char-width</span> <span class="p">(</span><span class="nb">/</span> <span class="p">(</span><span class="nv">frame-pixel-width</span><span class="p">)</span> <span class="p">(</span><span class="nv">frame-width</span><span class="p">)))</span>
-        <span class="p">(</span><span class="nv">pixels-per-char-height</span> <span class="p">(</span><span class="nb">/</span> <span class="p">(</span><span class="nv">frame-pixel-height</span><span class="p">)</span> <span class="p">(</span><span class="nv">frame-height</span><span class="p">))))</span>
-    <span class="p">(</span><span class="nv">set-frame-size</span> <span class="nv">frame</span>
-                    <span class="p">(</span><span class="nb">floor</span> <span class="p">(</span><span class="nb">/</span> <span class="nv">width</span> <span class="nv">pixels-per-char-width</span><span class="p">))</span>
-                    <span class="p">(</span><span class="nb">floor</span> <span class="p">(</span><span class="nb">/</span> <span class="nv">height</span> <span class="nv">pixels-per-char-height</span><span class="p">)))))</span>
+        <div><p>Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.</p>
+<p>Because it does not work. So angry.</p>
+<p>Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <em>/Developer/SDKs/MacOSX10.6.sdk</em>. However, as of 10.7 (I think), the <em>/Developer</em> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been deprecated in favor of <code>clang</code>. While a <code>gcc</code> binary is still provided, <code>gcc-4.2</code> is not. Of course, that is what <code>mex</code> relies on. Lastly, <code>mex</code> of course completely disregards common system paths such as, say, <em>/usr/local/bin</em>, so compiling against some homebrew library won't work.</p>
+<p>At least these things are rather easy to fix, since all these settings are saved in a file called <em>mexopts.sh</em>, which is saved to <em>~/.matlab/R2012a/</em> by default. The relevant section on 64-bit OS X begins after <code>maci64)</code> and should look like this: (changes are marked by comments)</p>
+<div class="codehilite"><pre><span class="c">#----------------------------------------------------------------------------</span>
+            <span class="c"># StorageVersion: 1.0</span>
+            <span class="c"># CkeyName: GNU C</span>
+            <span class="c"># CkeyManufacturer: GNU</span>
+            <span class="c"># CkeyLanguage: C</span>
+            <span class="c"># CkeyVersion:</span>
+            <span class="nv">CC</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span> <span class="c"># used to be &#39;gcc-4.2&#39;</span>
+
+            <span class="c"># used to be &#39;/Developer/SDKs/MacOSX10.6.sdk&#39;</span>
+            <span class="nv">SDKROOT</span><span class="o">=</span><span class="s1">&#39;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk&#39;</span> 
+            <span class="nv">MACOSX_DEPLOYMENT_TARGET</span><span class="o">=</span><span class="s1">&#39;10.8&#39;</span> <span class="c"># used to be &#39;10.5&#39;</span>
+            <span class="nv">ARCHS</span><span class="o">=</span><span class="s1">&#39;x86_64&#39;</span>
+            <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET&quot;</span>
+            <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;$CFLAGS  -fexceptions&quot;</span>
+            <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;$CFLAGS -I/usr/local/include&quot;</span> <span class="c"># Homebrew include path</span>
+            <span class="nv">CLIBS</span><span class="o">=</span><span class="s2">&quot;$MLIBS&quot;</span>
+            <span class="nv">COPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O2 -DNDEBUG&#39;</span>
+            <span class="nv">CDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
+<span class="c">#</span>
+            <span class="nv">CLIBS</span><span class="o">=</span><span class="s2">&quot;$CLIBS -lstdc++&quot;</span>
+            <span class="c"># C++keyName: GNU C++</span>
+            <span class="c"># C++keyManufacturer: GNU</span>
+            <span class="c"># C++keyLanguage: C++</span>
+            <span class="c"># C++keyVersion:</span>
+            <span class="nv">CXX</span><span class="o">=</span>g++ <span class="c"># used to be &#39;g++-4.2&#39;</span>
+            <span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET&quot;</span>
+            <span class="nv">CXXLIBS</span><span class="o">=</span><span class="s2">&quot;$MLIBS -lstdc++&quot;</span>
+            <span class="nv">CXXOPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O2 -DNDEBUG&#39;</span>
+            <span class="nv">CXXDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
+<span class="c">#</span>
+            <span class="c"># FortrankeyName: GNU Fortran</span>
+            <span class="c"># FortrankeyManufacturer: GNU</span>
+            <span class="c"># FortrankeyLanguage: Fortran</span>
+            <span class="c"># FortrankeyVersion:</span>
+            <span class="nv">FC</span><span class="o">=</span><span class="s1">&#39;gfortran&#39;</span>
+            <span class="nv">FFLAGS</span><span class="o">=</span><span class="s1">&#39;-fexceptions -m64 -fbackslash&#39;</span>
+            <span class="nv">FC_LIBDIR</span><span class="o">=</span><span class="sb">`</span><span class="nv">$FC</span> -print-file-name<span class="o">=</span>libgfortran.dylib 2&gt;&amp;1 | sed -n <span class="s1">&#39;1s/\/*libgfortran\.dylib//p&#39;</span><span class="sb">`</span>
+            <span class="nv">FC_LIBDIR2</span><span class="o">=</span><span class="sb">`</span><span class="nv">$FC</span> -print-file-name<span class="o">=</span>libgfortranbegin.a 2&gt;&amp;1 | sed -n <span class="s1">&#39;1s/\/*libgfortranbegin\.a//p&#39;</span><span class="sb">`</span>
+            <span class="nv">FLIBS</span><span class="o">=</span><span class="s2">&quot;$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin&quot;</span>
+            <span class="nv">FOPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O&#39;</span>
+            <span class="nv">FDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
+<span class="c">#</span>
+            <span class="nv">LD</span><span class="o">=</span><span class="s2">&quot;$CC&quot;</span>
+            <span class="nv">LDEXTENSION</span><span class="o">=</span><span class="s1">&#39;.mexmaci64&#39;</span>
+            <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET&quot;</span>
+            <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE&quot;</span>
+            <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;$LDFLAGS -L/usr/local/lib&quot;</span> <span class="c"># Homebrew library path</span>
+            <span class="nv">LDOPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O&#39;</span>
+            <span class="nv">LDDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
+<span class="c">#</span>
+            <span class="nv">POSTLINK_CMDS</span><span class="o">=</span><span class="s1">&#39;:&#39;</span>
+<span class="c">#----------------------------------------------------------------------------</span>
 </pre></div>
 
 
-<p>Next, a function that uses the above to set the frame size to exactly fit the left half of the screen. Note that the <code>excess-...</code> variables account for things like the menu bar, the dock or the task bar so you might have to adapt these values to your particular windowing environment. The values given here work for dockless OSX.</p>
-<div class="codehilite"><pre><span class="p">(</span><span class="nb">defun</span> <span class="nv">use-left-half-screen</span> <span class="p">()</span>
-  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">let*</span> <span class="p">((</span><span class="nv">excess-width</span> <span class="mi">32</span><span class="p">)</span>
-         <span class="p">(</span><span class="nv">excess-height</span> <span class="mi">48</span><span class="p">)</span>
-         <span class="p">(</span><span class="nv">half-screen-width</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">/</span> <span class="p">(</span><span class="nv">x-display-pixel-width</span><span class="p">)</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">excess-width</span><span class="p">))</span>
-         <span class="p">(</span><span class="nv">screen-height</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nv">x-display-pixel-height</span><span class="p">)</span> <span class="nv">excess-height</span><span class="p">)))</span>
-    <span class="p">(</span><span class="nv">set-frame-pixel-size</span> <span class="p">(</span><span class="nv">selected-frame</span><span class="p">)</span> <span class="nv">half-screen-width</span> <span class="nv">screen-height</span><span class="p">)))</span>
-</pre></div>
-
-
-<p>Finally, when Emacs starts up, make it use half the screen. Just how I like it!</p>
-<div class="codehilite"><pre><span class="p">(</span><span class="k">if</span> <span class="nv">window-system</span>
-    <span class="p">(</span><span class="nv">use-left-half-screen</span><span class="p">))</span>
-</pre></div>
-
-
-<h2>Make shell split windows auto-resize</h2>
-<p>Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.</p>
-<div class="codehilite"><pre><span class="p">(</span><span class="nv">add-hook</span> <span class="ss">&#39;window-configuration-change-hook</span>
-          <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span>
-            <span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">or</span> <span class="p">(</span><span class="nb">string-equal</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="s">&quot;*Python*&quot;</span><span class="p">)</span>
-                      <span class="p">(</span><span class="nb">string-equal</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="s">&quot;*eshell*&quot;</span><span class="p">)</span>
-                      <span class="p">(</span><span class="nb">string-equal</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">)</span> <span class="s">&quot;*tex-shell*&quot;</span><span class="p">))</span>
-              <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nb">eq</span> <span class="p">(</span><span class="nv">window-height</span><span class="p">)</span> <span class="mi">15</span><span class="p">))</span>
-                  <span class="p">(</span><span class="nv">enlarge-window</span> <span class="p">(</span><span class="nb">-</span> <span class="mi">15</span> <span class="p">(</span><span class="nv">window-height</span><span class="p">)))))))</span>
-</pre></div>
-
-
-<h2>Create a new line above/below the current one</h2>
-<p>There is one feature of Vim that I really missed: <code>o</code>/<code>O</code>, which 'opens' a new line above or below the current one without changing the current line.</p>
-<div class="codehilite"><pre><span class="p">(</span><span class="nb">defun</span> <span class="nv">vi-open-line-above</span> <span class="p">()</span>
-  <span class="s">&quot;Insert a newline above the current line and put point at beginning.&quot;</span>
-  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
-  <span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">bolp</span><span class="p">)</span>
-    <span class="p">(</span><span class="nv">beginning-of-line</span><span class="p">))</span>
-  <span class="p">(</span><span class="nv">newline</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">forward-line</span> <span class="mi">-1</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">indent-according-to-mode</span><span class="p">))</span>
-
-<span class="p">(</span><span class="nb">defun</span> <span class="nv">vi-open-line-below</span> <span class="p">()</span>
-  <span class="s">&quot;Insert a newline below the current line and put point at beginning.&quot;</span>
-  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
-  <span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">eolp</span><span class="p">)</span>
-    <span class="p">(</span><span class="nv">end-of-line</span><span class="p">))</span>
-  <span class="p">(</span><span class="nv">newline-and-indent</span><span class="p">))</span>
-
-<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-o&quot;</span><span class="p">)</span> <span class="ss">&#39;vi-open-line-below</span><span class="p">)</span>
-<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;M-o&quot;</span><span class="p">)</span> <span class="ss">&#39;vi-open-line-above</span><span class="p">)</span>
-</pre></div>
-
-
-<h2>When editing LaTeX, show PDF output in Emacs</h2>
-<p>Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.</p>
-<p>This function will open or refresh a split window with the generated PDF file in it. Thus, when I edit LaTeX, I will hit C-c C-c to compile, then C-c C-v to see the PDF. All that without having to leave the LaTeX file.</p>
-<div class="codehilite"><pre><span class="c1">;; open/show pdf file within Emacs using doc-view-mode</span>
-<span class="p">(</span><span class="nb">defun</span> <span class="nv">open-show-pdf</span> <span class="p">()</span>
-  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">tex-buffer-name</span> <span class="p">(</span><span class="nv">buffer-name</span><span class="p">))</span>
-        <span class="p">(</span><span class="nv">pdf-buffer-name</span> <span class="p">(</span><span class="nv">concat</span> <span class="p">(</span><span class="nv">TeX-master-file</span><span class="p">)</span> <span class="s">&quot;.pdf&quot;</span><span class="p">)))</span>
-    <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nv">get-buffer</span> <span class="nv">pdf-buffer-name</span><span class="p">)</span>
-        <span class="p">(</span><span class="nv">switch-to-buffer-other-window</span> <span class="nv">pdf-buffer-name</span><span class="p">)</span>
-      <span class="p">(</span><span class="nv">find-file-other-window</span> <span class="nv">pdf-buffer-name</span><span class="p">))</span>
-    <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nb">eq</span> <span class="nv">major-mode</span> <span class="ss">&#39;doc-view-mode</span><span class="p">))</span>
-        <span class="p">(</span><span class="nv">doc-view-mode</span><span class="p">))</span>
-    <span class="p">(</span><span class="nv">doc-view-revert-buffer</span> <span class="no">t</span> <span class="no">t</span><span class="p">)</span>
-    <span class="p">(</span><span class="nv">switch-to-buffer-other-window</span> <span class="nv">tex-buffer-name</span><span class="p">)))</span>
-
-<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">&#39;LaTeX-mode-hook</span>
-          <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span>
-            <span class="p">(</span><span class="nv">define-key</span> <span class="nv">LaTeX-mode-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">&quot;C-c C-v&quot;</span><span class="p">)</span> <span class="ss">&#39;open-show-pdf</span><span class="p">)</span>
-            <span class="p">(</span><span class="nv">visual-line-mode</span> <span class="no">t</span><span class="p">)</span>
-            <span class="p">(</span><span class="nv">turn-on-reftex</span><span class="p">))</span>
-          <span class="no">t</span><span class="p">)</span>
-</pre></div></div>
+<p>To summarize:</p>
+<ul>
+<li>changed <code>gcc-4.2</code> to <code>gcc</code></li>
+<li>changed <code>/Developer/SDKs/MacOSX10.6.sdk</code> to <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code></li>
+<li>changed <code>10.5</code> to <code>10.8</code></li>
+<li>added <code>CFLAGS="$CFLAGS -I/usr/local/include"</code></li>
+<li>changed <code>g++-4.2</code> to <code>g++</code></li>
+<li>added <code>LDFLAGS="$LDFLAGS -L/usr/local/lib"</code></li>
+</ul>
+<p>With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.</p></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href="./my-emacs-customizations.html"><h2>My Emacs customizations</h2></a>
+        <div class= "well small"> 14/10/2012
+
+
+by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.</p>
+<p>One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes</p>
+<p><a href="https://dl.dropbox.com/s/0ne31wkur81wgzb/.emacs">My <em>.emacs</em></a></p>
+<p>Now on to the meat of this post: Some ...</p> <a class="btn btn-info xsmall" href="./my-emacs-customizations.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
@@ -380,50 +384,6 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./how-to-get-solarized-syntax-highlighting-on-your-blog.html"><h2>How to get solarized syntax highlighting on your blog</h2></a>
-        <div class= "well small"> 15/07/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>Yesterday, I spent a few hours creating a solarized like CSS file for use with my new blogging tool. You could just scrape the settings from this very website, but for convenience, here they are:</p>
-<div class="codehilite"><pre><span class="c">/* Text */</span>
-<span class="nc">.codehilite</span> <span class="nc">.t</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-
-<span class="c">/* Whitespace */</span>
-<span class="nc">.codehilite</span> <span class="nc">.w</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#073642</span> <span class="p">}</span>
-
-<span class="c">/* Error */</span>
-<span class="nc">.codehilite</span> <span class="nc">.err</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#cb4b16</span><span class="p">;</span> <span class="p">}</span>
-
-<span class="c">/* Keyword */</span>
-<span class="nc">.codehilite</span> <span class="nc">.k</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#859900</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.kc</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198</span> <span class="p">}</span> <span class="c">/* Keyword.Constant */</span>
-<span class="nc">.codehilite</span> <span class="nc">.kd</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#268bd2</span> <span class="p">}</span> <span class="c">/* Keyword.Declaration */</span>
-<span class="nc">.codehilite</span> <span class="nc">.kn</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#b58900</span> <span class="p">}</span> <span class="c">/* Keyword.Namespace */</span>
-<span class="nc">.codehilite</span> <span class="nc">.kp</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#859900</span> <span class="p">}</span> <span class="c">/* Keyword.Pseudo */</span>
-<span class="nc">.codehilite</span> <span class="nc">.kr</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#073642</span> <span class="p">}</span> <span class="c">/* Keyword.Reserved */</span>
-<span class="nc">.codehilite</span> <span class="nc">.kt</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#b58900</span> <span class="p">}</span> <span class="c">/* Keyword.Type */</span>
-
-<span class="c">/* Name */</span>
-<span class="nc">.codehilite</span> <span class="nc">.n</span>   <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#586e75</span> <span class="p">}</span>
-<span class="nc">.codehilite</span> <span class="nc">.na</span>  <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#2aa198 ...</span></pre></div> <a class="btn btn-info xsmall" href="./how-to-get-solarized-syntax-highlighting-on-your-blog.html">read more</a></div>
-    </div>	
-				
-    
         <div class="pagination">
 <ul>
 
@@ -436,6 +396,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     <li class=""><a href="./index2.html">2</a></li>
 
     <li class=""><a href="./index3.html">3</a></li>
+
+    <li class=""><a href="./index4.html">4</a></li>
 
 
 

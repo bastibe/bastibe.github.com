@@ -8,14 +8,14 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-    <script src=".././theme/html5.js"></script>
+    <script src="./theme/html5.js"></script>
     <![endif]-->
 
     <!-- Le styles -->
-    <link href=".././theme/bootstrap.min.css" rel="stylesheet">
-    <link href=".././theme/bootstrap.min.responsive.css" rel="stylesheet">
-    <link href=".././theme/local.css" rel="stylesheet">
-    <link href=".././theme/pygments.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
 
 </head>
 
@@ -31,7 +31,7 @@
              <span class="icon-bar"></span>
          </a>
 
-        <a class="brand" href="../.">Bastis Scratchpad On The Internet</a>
+        <a class="brand" href=".">Bastis Scratchpad On The Internet</a>
 
         <div class="nav-collapse">
         <ul class="nav">
@@ -52,28 +52,21 @@
     <div class="row">
 
         <div class="span9">
-                
-
-
         
-
-
-
-
     <div class='article'>
         <div class="content-title">
-            <a href=".././matlab-mex-homebrew-and-os-x-108-mountain-lion.html"><h1>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h1></a>
+            <h1>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h1>
             20/10/2012
 
 
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
 
 
 
- 
+
         </div>
-        
+	
         <div><p>Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.</p>
 <p>Because it does not work. So angry.</p>
 <p>Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <em>/Developer/SDKs/MacOSX10.6.sdk</em>. However, as of 10.7 (I think), the <em>/Developer</em> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been deprecated in favor of <code>clang</code>. While a <code>gcc</code> binary is still provided, <code>gcc-4.2</code> is not. Of course, that is what <code>mex</code> relies on. Lastly, <code>mex</code> of course completely disregards common system paths such as, say, <em>/usr/local/bin</em>, so compiling against some homebrew library won't work.</p>
@@ -143,59 +136,27 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 <li>added <code>LDFLAGS="$LDFLAGS -L/usr/local/lib"</code></li>
 </ul>
 <p>With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.</p></div>
-        <hr />
+	
+        <hr>
+    	   
+        <h2>Comments</h2>
+	
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="paperflyer">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+	
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'bastibe'; 
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
     </div>
-		
-    
-
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././kompilieren-auf-windows.html"><h2>Kompilieren auf Windows</h2></a>
-        <div class= "well small"> 12/03/2009
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p><img alt="Open Source Rules!" src="../static/images/2009-03/open_source_rules.png" /></p>
-<p>Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.</p>
-<p>Und da FFmpeg freie Software ist, kann man sie auch für andere Dinge verwenden, etwa, um mit Matlab Audiodateien zu öffnen. Fehlt noch eine Verbindung zwischen Matlab ...</p> <a class="btn btn-info xsmall" href=".././kompilieren-auf-windows.html">read more</a></div>
-    </div>	
-				
-    
-        <div class="pagination">
-<ul>
-
-    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
-
-
-
-    <li class="active"><a href=".././tag/matlab.html">1</a></li>
-
-
-
-    <li class="next disabled"><a href="#">&rarr; Next</a></li>
-
-
-</ul>
-</div>
-    
-
- 
-
- 
- 
-
 
         </div>
         
@@ -207,11 +168,11 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
                 Site
                 </li>
             
-                <li><a href=".././archives.html">Archives</a>
-                <li><a href=".././tags.html">Tags</a>
-                <li><a href=".././" rel="alternate">Atom feed</a></li>
+                <li><a href="./archives.html">Archives</a>
+                <li><a href="./tags.html">Tags</a>
+                <li><a href="./" rel="alternate">Atom feed</a></li>
                 
-                <li><a href=".././feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
                 
             </ul>
             </div>
@@ -225,7 +186,7 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
                 </li>
                 
                 
-                <li><a href=".././category/all.html">all</a></li>
+                <li><a href="./category/all.html">all</a></li>
                                    
             </ul>
             </div>
@@ -259,7 +220,7 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 
 <footer>
 <br />
-<p><a href="../.">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
+<p><a href=".">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
 </footer>
 
 </div> <!-- /container -->
