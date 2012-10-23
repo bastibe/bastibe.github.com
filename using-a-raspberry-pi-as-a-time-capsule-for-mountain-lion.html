@@ -17,6 +17,28 @@
     <link href="./theme/local.css" rel="stylesheet">
     <link href="./theme/pygments.css" rel="stylesheet">
 
+    <script language="javascript">
+    if(window.MathJax===undefined){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
+        var config = 'MathJax.Hub.Config({' +
+                    'extensions: ["tex2jax.js"],' +
+                    'tex2jax: { '+
+                      'inlineMath: [ ["$","$"]], '+
+                      'displayMath: [["\\[","\\]"]],'+
+                      'processEscapes: true '+
+                    '},' +
+                    'jax: ["input/TeX","output/HTML-CSS"]' +
+                    '});' +
+                    'MathJax.Hub.Startup.onload();';
+        if (window.opera)
+            script.innerHTML = config;
+        else
+            script.text = config;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+    </script>
 </head>
 
 <body>
@@ -36,13 +58,13 @@
         <div class="nav-collapse">
         <ul class="nav">
         
-            
+
         
         
         
         </ul>
         </div>
-        
+
     </div>
     </div>
 </div>
@@ -153,15 +175,15 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>
 
         </div>
-        
+
         <div class="span3">
 
             <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
-                <li class="nav-header"> 
+                <li class="nav-header">
                 Site
                 </li>
-            
+
                 <li><a href="./archives.html">Archives</a>
                 <li><a href="./tags.html">Tags</a>
                 <li><a href="./" rel="alternate">Atom feed</a></li>
@@ -175,13 +197,13 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
             
             <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
-                <li class="nav-header"> 
+                <li class="nav-header">
                 Categories
                 </li>
-                
+
                 
                 <li><a href="./category/all.html">all</a></li>
-                                   
+                
             </ul>
             </div>
             
@@ -194,10 +216,10 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
             <div class="social">
             <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
-                <li class="nav-header"> 
+                <li class="nav-header">
                 Social
                 </li>
-           
+
                 
                 <li><a href="http://twitter.com/paperflyer">twitter</a></li>
                 
@@ -208,7 +230,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
             </div>
             
 
-        </div>  
+        </div> 
     </div> 
     </div> 
 
@@ -223,6 +245,6 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 
 
 <a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
- 
+
 </body>
 </html>
