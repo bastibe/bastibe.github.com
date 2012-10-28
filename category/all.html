@@ -84,8 +84,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././matlab-mex-homebrew-and-os-x-108-mountain-lion.html"><h1>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h1></a>
-            20/10/2012
+            <a href=".././names.html"><h1>Names</h1></a>
+            28/10/2012
 
 
 by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
@@ -96,80 +96,44 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  
         </div>
         
-        <div><p>Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.</p>
-<p>Because it does not work. So angry.</p>
-<p>Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <em>/Developer/SDKs/MacOSX10.6.sdk</em>. However, as of 10.7 (I think), the <em>/Developer</em> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been deprecated in favor of <code>clang</code>. While a <code>gcc</code> binary is still provided, <code>gcc-4.2</code> is not. Of course, that is what <code>mex</code> relies on. Lastly, <code>mex</code> of course completely disregards common system paths such as, say, <em>/usr/local/bin</em>, so compiling against some homebrew library won't work.</p>
-<p>At least these things are rather easy to fix, since all these settings are saved in a file called <em>mexopts.sh</em>, which is saved to <em>~/.matlab/R2012a/</em> by default. The relevant section on 64-bit OS X begins after <code>maci64)</code> and should look like this: (changes are marked by comments)</p>
-<div class="codehilite"><pre><span class="c">#----------------------------------------------------------------------------</span>
-            <span class="c"># StorageVersion: 1.0</span>
-            <span class="c"># CkeyName: GNU C</span>
-            <span class="c"># CkeyManufacturer: GNU</span>
-            <span class="c"># CkeyLanguage: C</span>
-            <span class="c"># CkeyVersion:</span>
-            <span class="nv">CC</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span> <span class="c"># used to be &#39;gcc-4.2&#39;</span>
-
-            <span class="c"># used to be &#39;/Developer/SDKs/MacOSX10.6.sdk&#39;</span>
-            <span class="nv">SDKROOT</span><span class="o">=</span><span class="s1">&#39;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk&#39;</span> 
-            <span class="nv">MACOSX_DEPLOYMENT_TARGET</span><span class="o">=</span><span class="s1">&#39;10.8&#39;</span> <span class="c"># used to be &#39;10.5&#39;</span>
-            <span class="nv">ARCHS</span><span class="o">=</span><span class="s1">&#39;x86_64&#39;</span>
-            <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET&quot;</span>
-            <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;$CFLAGS  -fexceptions&quot;</span>
-            <span class="nv">CFLAGS</span><span class="o">=</span><span class="s2">&quot;$CFLAGS -I/usr/local/include&quot;</span> <span class="c"># Homebrew include path</span>
-            <span class="nv">CLIBS</span><span class="o">=</span><span class="s2">&quot;$MLIBS&quot;</span>
-            <span class="nv">COPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O2 -DNDEBUG&#39;</span>
-            <span class="nv">CDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
-<span class="c">#</span>
-            <span class="nv">CLIBS</span><span class="o">=</span><span class="s2">&quot;$CLIBS -lstdc++&quot;</span>
-            <span class="c"># C++keyName: GNU C++</span>
-            <span class="c"># C++keyManufacturer: GNU</span>
-            <span class="c"># C++keyLanguage: C++</span>
-            <span class="c"># C++keyVersion:</span>
-            <span class="nv">CXX</span><span class="o">=</span>g++ <span class="c"># used to be &#39;g++-4.2&#39;</span>
-            <span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET&quot;</span>
-            <span class="nv">CXXLIBS</span><span class="o">=</span><span class="s2">&quot;$MLIBS -lstdc++&quot;</span>
-            <span class="nv">CXXOPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O2 -DNDEBUG&#39;</span>
-            <span class="nv">CXXDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
-<span class="c">#</span>
-            <span class="c"># FortrankeyName: GNU Fortran</span>
-            <span class="c"># FortrankeyManufacturer: GNU</span>
-            <span class="c"># FortrankeyLanguage: Fortran</span>
-            <span class="c"># FortrankeyVersion:</span>
-            <span class="nv">FC</span><span class="o">=</span><span class="s1">&#39;gfortran&#39;</span>
-            <span class="nv">FFLAGS</span><span class="o">=</span><span class="s1">&#39;-fexceptions -m64 -fbackslash&#39;</span>
-            <span class="nv">FC_LIBDIR</span><span class="o">=</span><span class="sb">`</span><span class="nv">$FC</span> -print-file-name<span class="o">=</span>libgfortran.dylib 2&gt;&amp;1 | sed -n <span class="s1">&#39;1s/\/*libgfortran\.dylib//p&#39;</span><span class="sb">`</span>
-            <span class="nv">FC_LIBDIR2</span><span class="o">=</span><span class="sb">`</span><span class="nv">$FC</span> -print-file-name<span class="o">=</span>libgfortranbegin.a 2&gt;&amp;1 | sed -n <span class="s1">&#39;1s/\/*libgfortranbegin\.a//p&#39;</span><span class="sb">`</span>
-            <span class="nv">FLIBS</span><span class="o">=</span><span class="s2">&quot;$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin&quot;</span>
-            <span class="nv">FOPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O&#39;</span>
-            <span class="nv">FDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
-<span class="c">#</span>
-            <span class="nv">LD</span><span class="o">=</span><span class="s2">&quot;$CC&quot;</span>
-            <span class="nv">LDEXTENSION</span><span class="o">=</span><span class="s1">&#39;.mexmaci64&#39;</span>
-            <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET&quot;</span>
-            <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE&quot;</span>
-            <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;$LDFLAGS -L/usr/local/lib&quot;</span> <span class="c"># Homebrew library path</span>
-            <span class="nv">LDOPTIMFLAGS</span><span class="o">=</span><span class="s1">&#39;-O&#39;</span>
-            <span class="nv">LDDEBUGFLAGS</span><span class="o">=</span><span class="s1">&#39;-g&#39;</span>
-<span class="c">#</span>
-            <span class="nv">POSTLINK_CMDS</span><span class="o">=</span><span class="s1">&#39;:&#39;</span>
-<span class="c">#----------------------------------------------------------------------------</span>
-</pre></div>
-
-
-<p>To summarize:</p>
-<ul>
-<li>changed <code>gcc-4.2</code> to <code>gcc</code></li>
-<li>changed <code>/Developer/SDKs/MacOSX10.6.sdk</code> to <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code></li>
-<li>changed <code>10.5</code> to <code>10.8</code></li>
-<li>added <code>CFLAGS="$CFLAGS -I/usr/local/include"</code></li>
-<li>changed <code>g++-4.2</code> to <code>g++</code></li>
-<li>added <code>LDFLAGS="$LDFLAGS -L/usr/local/lib"</code></li>
-</ul>
-<p>With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.</p></div>
+        <div><blockquote>
+<p>Names are everywhere in software. We name our variables, our functions, our arguments, classes, and packages. We name our source files and the directories that contain them. We name our jar files and war files and ear files. We name and name and name. Because we do so much of it, we'd better do it well.</p>
+</blockquote>
+<p>-- from the Introduction to chapter 2 "Meaningful Names" of "Clean Code" by Robert C. Martin.</p>
+<p>Indeed we name a lot of things in software. As The Structure and Interpretation of Computer Programs points out, the primary purpose of a function (lambda) is to provide names for its arguments that are independent of names elsewhere. A function provides a closure in which stuff has defined names. The closure itself can then be embedded into other closures to form composite structures. Take any complex program structure and decompose its names through all its lambdas and you will only find more names right until you reach turtles.</p>
+<p>At its heart, programming is about naming things. If I squint my eyes a little, I can nearly convince myself that naming is really all there is. All the rest is just playing games with syntax.</p>
+<p>It's situations like this that I realize that The Structure and Interpretation of Computer Programs really changed how I view programming.</p>
+<p>If you like programming at all, I implore you to <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">read it</a>, or <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video-lectures/">watch it</a>, or <a href="http://mitpress.mit.edu/books/structure-and-interpretation-computer-programs">buy it</a>. It really blew my mind.</p></div>
         <hr />
     </div>
 		
     
 
+
+ 
+
+        
+
+
+ 
+
+    <div class='article'>
+        <a href=".././matlab-mex-homebrew-and-os-x-108-mountain-lion.html"><h2>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h2></a>
+        <div class= "well small"> 20/10/2012
+
+
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+
+ </div>
+        <div class="summary"><p>Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.</p>
+<p>Because it does not work. So angry.</p>
+<p>Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <em>/Developer/SDKs/MacOSX10.6.sdk</em>. However, as of 10.7 (I think), the <em>/Developer</em> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been ...</p> <a class="btn btn-info xsmall" href=".././matlab-mex-homebrew-and-os-x-108-mountain-lion.html">read more</a></div>
+    </div>	
+				
+    
 
  
 
@@ -379,30 +343,6 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
  </div>
         <div class="summary"><p>I bought my first Apple computer in 2007 after a long time of gaming on Windows and a few years of Linux. In the beginning, I was just amazed at the consistency, practicality and sanity of the whole experience. I think I had a bad case of tinkeritis and neophilia in my Linux days, so this was probably to be expected.</p>
 <p>Later, I marveled at the level of polish in the third party software ecosystem around Macs. Then I was just glad to have a slick GUI with actual Unix underpinnings. For reference, this happened in the time span from ...</p> <a class="btn btn-info xsmall" href=".././how-apple-is-failing-me.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href=".././blogging-with-pelican-and-not-octopress.html"><h2>Blogging with Pelican (and not Octopress)</h2></a>
-        <div class= "well small"> 18/07/2012
-
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>For a while now, I have been moving more and more services I use off Google. The reasons for that are manyfold, and few of them have anything to do with Google being evil or not--just to get that out of the way.</p>
-<p>One of the last holdouts has been <a href="http://daskrachen.com">my neglected Blogspot blog</a>. And one of the reasons for it being neglected is that it was hosted on Blogspot. Now don't get me wrong here, Blogspot is a terriffic blogging platform. You have this very nice nearly-WYSIWYG text editor right in your browser, you can upload images, you ...</p> <a class="btn btn-info xsmall" href=".././blogging-with-pelican-and-not-octopress.html">read more</a></div>
     </div>	
 				
     
