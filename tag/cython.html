@@ -8,14 +8,14 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-    <script src="./theme/html5.js"></script>
+    <script src=".././theme/html5.js"></script>
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="./theme/bootstrap.min.css" rel="stylesheet">
-    <link href="./theme/bootstrap.min.responsive.css" rel="stylesheet">
-    <link href="./theme/local.css" rel="stylesheet">
-    <link href="./theme/pygments.css" rel="stylesheet">
+    <link href=".././theme/bootstrap.min.css" rel="stylesheet">
+    <link href=".././theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href=".././theme/local.css" rel="stylesheet">
+    <link href=".././theme/pygments.css" rel="stylesheet">
 
     <script language="javascript">
     if(window.MathJax===undefined){
@@ -53,7 +53,7 @@
              <span class="icon-bar"></span>
          </a>
 
-        <a class="brand" href=".">Bastis Scratchpad On The Internet</a>
+        <a class="brand" href="../.">Bastis Scratchpad On The Internet</a>
 
         <div class="nav-collapse">
         <ul class="nav">
@@ -84,11 +84,11 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="./real-time-signal-processing-in-python.html"><h1>Real Time Signal Processing in Python</h1></a>
+            <a href=".././real-time-signal-processing-in-python.html"><h1>Real Time Signal Processing in Python</h1></a>
             02/11/2012
 
 
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
+by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
  
 
 
@@ -106,7 +106,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 <p>$ e[n] = \max( |s[n]|, e[n-1] \cdot f_r ) $</p>
 <p>where $s[n]$ is the current signal and $0 &lt; f_r &lt; 1$ is a release factor.</p>
 <p>If this is applied to a signal, it will create an envelope like this:</p>
-<p><img alt="Envelope" src="static/images/2012-11/envelope.png" /></p>
+<p><img alt="Envelope" src="../static/images/2012-11/envelope.png" /></p>
 <p>Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using</p>
 <p>\begin{equation}
 g_t[n] = \begin{cases}
@@ -118,9 +118,9 @@ g_t[n] = \begin{cases}
 <p>$ g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a) $</p>
 <p>where $0 &lt; f_a \ll f_r$ is the attack factor.</p>
 <p>Here you can see how that would look in practice:</p>
-<p><img alt="Gain" src="static/images/2012-11/gain.png" /></p>
+<p><img alt="Gain" src="../static/images/2012-11/gain.png" /></p>
 <p>Zooming in on one of the limited section reveals that the gain is actually moving smoothly.</p>
-<p><img alt="Detail Gain" src="static/images/2012-11/detail.png" /></p>
+<p><img alt="Detail Gain" src="../static/images/2012-11/detail.png" /></p>
 <p>This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.</p>
 <p>In Python, this might look like this:</p>
 <div class="codehilite"><pre><span class="k">class</span> <span class="nc">Limiter</span><span class="p">:</span>
@@ -340,252 +340,6 @@ g_t[n] = \begin{cases}
     </div>
 		
     
-
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./an-error-occurred-loading-this-content-try-again-later.html"><h2>An error occurred loading this content. Try again later.</h2></a>
-        <div class= "well small"> 01/11/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>Since we moved, our Apple TV has been giving us trouble: we would rent a movie on the Apple TV, and instead of playing it, the Apple TV would just display</p>
-<blockquote>
-<p>An error occurred loading this content.
-Try again later.</p>
-</blockquote>
-<p>Rebooting, then trying again, would sometimes solve the issue. Trying to play a trailer before trying to play the movie seemed to increase chances of the Apple TV actually downloading the movie, too.</p>
-<p>Finally, some forum or other pointed me to the correct solution: For some reason, the Apple TV did not play nice with our ISP DNS server. Simply ...</p> <a class="btn btn-info xsmall" href="./an-error-occurred-loading-this-content-try-again-later.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./names.html"><h2>Names</h2></a>
-        <div class= "well small"> 28/10/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><blockquote>
-<p>Names are everywhere in software. We name our variables, our functions, our arguments, classes, and packages. We name our source files and the directories that contain them. We name our jar files and war files and ear files. We name and name and name. Because we do so much of it, we'd better do it well.</p>
-</blockquote>
-<p>-- from the Introduction to chapter 2 "Meaningful Names" of "Clean Code" by Robert C. Martin.</p>
-<p>Indeed we name a lot of things in software. As The Structure and Interpretation of Computer Programs points out, the primary purpose of a function (lambda) is to ...</p> <a class="btn btn-info xsmall" href="./names.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./matlab-mex-homebrew-and-os-x-108-mountain-lion.html"><h2>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h2></a>
-        <div class= "well small"> 20/10/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.</p>
-<p>Because it does not work. So angry.</p>
-<p>Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <em>/Developer/SDKs/MacOSX10.6.sdk</em>. However, as of 10.7 (I think), the <em>/Developer</em> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been ...</p> <a class="btn btn-info xsmall" href="./matlab-mex-homebrew-and-os-x-108-mountain-lion.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./my-emacs-customizations.html"><h2>My Emacs customizations</h2></a>
-        <div class= "well small"> 14/10/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.</p>
-<p>One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes</p>
-<p><a href="https://dl.dropbox.com/s/0ne31wkur81wgzb/.emacs">My <em>.emacs</em></a></p>
-<p>Now on to the meat of this post: Some ...</p> <a class="btn btn-info xsmall" href="./my-emacs-customizations.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./text-editing-with-confidence-and-emacs.html"><h2>Text editing with confidence and Emacs</h2></a>
-        <div class= "well small"> 13/10/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>.</p>
-<p>Note that ...</p> <a class="btn btn-info xsmall" href="./text-editing-with-confidence-and-emacs.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./a-story-about-schemes.html"><h2>A Story about Schemes</h2></a>
-        <div class= "well small"> 20/09/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p><strong>Disclaimer:</strong> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)</p>
-<p>I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and ...</p> <a class="btn btn-info xsmall" href="./a-story-about-schemes.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./kindleapp-not-starting-on-a-case-sensitive-file-system.html"><h2>Kindle.app not starting on a case-sensitive file system</h2></a>
-        <div class= "well small"> 13/09/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.</p>
-<p>A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with</p>
-<div class="codehilite"><pre><span class="n">Dyld</span> <span class="n">Error</span> <span class="n">Message</span><span class="p">:</span>
-  <span class="n">Library</span> <span class="n">not</span> <span class="n">loaded</span><span class="p">:</span> <span class="p">@</span><span class="n">executable_path</span><span class="o">/</span><span class="p">.</span><span class="o">./</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
-  <span class="n">Referenced</span> <span class="n">from</span><span class="p">:</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Kindle</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWebCoreViewer</span><span class="p">.</span><span class="n">dylib</span>
-  <span class="n">Reason</span><span class="p">:</span> <span class="n">image</span> <span class="n">not</span> <span class="n">found</span>
-</pre></div>
-
-
-<p><code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type</p>
-<div class="codehilite"><pre><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">libWebCoreKRF</span><span class="p">.</span><span class="n">dylib</span> <span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib ...</span></pre></div> <a class="btn btn-info xsmall" href="./kindleapp-not-starting-on-a-case-sensitive-file-system.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./on-the-virtue-of-contributing-to-and-using-open-source-software.html"><h2>On the Virtue of Contributing to and Using Open Source Software</h2></a>
-        <div class= "well small"> 08/09/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.</p>
-<p>About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/" title="NumPy">numerical</a> <a href="http://scipy.org/" title="SciPy">computation</a> and <a href="http://matplotlib.sourceforge.net/" title="matplotlib">plotting</a> that, for my particular purposes, rivals Matlab.</p>
-<p>However, just like Matlab, Python lacked a way of playing real time audio out of ...</p> <a class="btn btn-info xsmall" href="./on-the-virtue-of-contributing-to-and-using-open-source-software.html">read more</a></div>
-    </div>	
-				
-    
-
- 
-
-        
-
-
- 
-
-    <div class='article'>
-        <a href="./fixing-errors-in-epydoc.html"><h2>Fixing Errors in Epydoc</h2></a>
-        <div class= "well small"> 28/08/2012
-
-
-by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
-
- </div>
-        <div class="summary"><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
-<p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
-<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
-<span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
-</pre></div>
-
-
-<p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
-<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
-<p>Short answer: Find your <em>site-packages</em> directory ...</p> <a class="btn btn-info xsmall" href="./fixing-errors-in-epydoc.html">read more</a></div>
-    </div>	
-				
-    
         <div class="pagination">
 <ul>
 
@@ -593,22 +347,17 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 
 
 
-    <li class="active"><a href="./index.html">1</a></li>
-
-    <li class=""><a href="./index2.html">2</a></li>
-
-    <li class=""><a href="./index3.html">3</a></li>
-
-    <li class=""><a href="./index4.html">4</a></li>
+    <li class="active"><a href=".././tag/Cython.html">1</a></li>
 
 
 
-    <li class="next"><a href="./index2.html">Next &rarr;</a></li>
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
 
 
 </ul>
 </div>
     
+
 
  
 
@@ -626,11 +375,11 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
                 Site
                 </li>
 
-                <li><a href="./archives.html">Archives</a>
-                <li><a href="./tags.html">Tags</a>
-                <li><a href="./" rel="alternate">Atom feed</a></li>
+                <li><a href=".././archives.html">Archives</a>
+                <li><a href=".././tags.html">Tags</a>
+                <li><a href=".././" rel="alternate">Atom feed</a></li>
                 
-                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                <li><a href=".././feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
                 
             </ul>
             </div>
@@ -644,7 +393,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
                 </li>
 
                 
-                <li><a href="./category/all.html">all</a></li>
+                <li><a href=".././category/all.html">all</a></li>
                 
             </ul>
             </div>
@@ -678,7 +427,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 
 <footer>
 <br />
-<p><a href=".">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
+<p><a href="../.">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
 </footer>
 
 </div> <!-- /container -->
