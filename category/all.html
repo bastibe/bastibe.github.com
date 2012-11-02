@@ -330,6 +330,7 @@ g_t[n] = \begin{cases}
 <p>With that saved as <em>setup.py</em>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.</p>
 <h2>Conclusion</h2>
 <p>In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.</p>
+<p>You can find all the source code in this article at https://github.com/bastibe/simple-cython-limiter</p>
 <h2>Disclaimer</h2>
 <ol>
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
