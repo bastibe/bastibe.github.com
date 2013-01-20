@@ -77,8 +77,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="../real-time-signal-processing-in-python.html"><h1>Real Time Signal Processing in Python</h1></a>
-            02/11/2012
+            <a href="../a-python-primer-for-matlab-users.html"><h1>A Python Primer for Matlab Users</h1></a>
+            20/01/2013
 
 by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
  
@@ -87,250 +87,200 @@ by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
  
         </div>
         
-        <div><p>Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.</p>
-<p>But this is not going to be about Matlab. This is going to be about Python. Combine Python with Numpy (and Scipy and Matplotlib) and you have a signal processing system very comparable to Matlab. Additionally, you can do real-time audio input/output using PyAudio. PyAudio is a wrapper around PortAudio and provides cross platform audio recording/playback in a nice, pythonic way. (Real time capabilities were added in 0.2.6 with the help of yours truly).</p>
-<p>However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:</p>
-<h2>A Simple Limiter</h2>
-<p>A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <em>smoothly</em>, since otherwise it would introduce a lot of distortion.</p>
-<p>If a signal peak is detected, the limiter will thus need a certain amount of time to reduce the gain accordingly. If you still want to prevent all peaks, the limiter will have to know of the peaks in advance, which is of course impossible in a real time system. Instead, the signal is delayed by a short time to give the limiter time to adjust the system gain before the peak is actually played. To keep this delay as short as possible, this "attack" phase where the gain is decreased should be very short, too. "Releasing" the gain back up to its original value can be done more slowly, thus introducing less distortion.</p>
-<p>With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope $e[n]$ that catches all the peaks and smoothly decays after them:</p>
-<p>$ e[n] = \max( |s[n]|, e[n-1] \cdot f_r ) $</p>
-<p>where $s[n]$ is the current signal and $0 &lt; f_r &lt; 1$ is a release factor.</p>
-<p>If this is applied to a signal, it will create an envelope like this:</p>
-<p><img alt="Envelope" src="images/2012-11/envelope.png" /></p>
-<p>Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using</p>
-<p>\begin{equation}
-g_t[n] = \begin{cases}
-    1 &amp; e[n] &lt; t \\
-    1 + t - e[n] &amp; e[n] &gt; t
-\end{cases}
-\end{equation}</p>
-<p>Now, the output gain $g[n]$ can smoothly move towards that target gain using</p>
-<p>$ g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a) $</p>
-<p>where $0 &lt; f_a \ll f_r$ is the attack factor.</p>
-<p>Here you can see how that would look in practice:</p>
-<p><img alt="Gain" src="images/2012-11/gain.png" /></p>
-<p>Zooming in on one of the limited section reveals that the gain is actually moving smoothly.</p>
-<p><img alt="Detail Gain" src="images/2012-11/detail.png" /></p>
-<p>This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.</p>
-<p>In Python, this might look like this:</p>
-<div class="codehilite"><pre><span class="k">class</span> <span class="nc">Limiter</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack_coeff</span><span class="p">,</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gain</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">release_coeff</span> <span class="o">=</span> <span class="n">release_coeff</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">attack_coeff</span> <span class="o">=</span> <span class="n">attack_coeff</span>
-
-    <span class="k">def</span> <span class="nf">limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
-
-            <span class="c"># calculate an envelope of the signal</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">release_coeff</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span><span class="p">)</span>
-
-            <span class="c"># have self.gain go towards a desired limiter gain</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
-                <span class="n">target_gain</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">threshold</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">envelope</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">target_gain</span> <span class="o">=</span> <span class="mf">1.0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gain</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">gain</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">attack_coeff</span> <span class="o">+</span>
-                          <span class="n">target_gain</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">attack_coeff</span><span class="p">)</span> <span class="p">)</span>
-
-            <span class="c"># limit the delayed signal</span>
-            <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gain</span>
+        <div><blockquote>
+<p>Why would you want to use Python over Matlab?</p>
+</blockquote>
+<ul>
+<li>Because Python is free and Matlab is not.</li>
+<li>Because Python is a general purpose programming language and Matlab is not.</li>
+</ul>
+<p>Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging back end in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.</p>
+<h2>Python as a Matlab replacement</h2>
+<p>The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:</p>
+<ul>
+<li>Numpy (the matrix engine)</li>
+<li>Scipy (matrix manipulation)</li>
+<li>Matplotlib (plotting)</li>
+</ul>
+<p>You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.</p>
+<h2>A 30000ft overview</h2>
+<p>Like Matlab, Python is <em>interpreted</em>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.</p>
+<p>Like Matlab, Python is <em>dynamically typed</em>, that is, every variable can hold data of any type, as in:</p>
+<div class="codehilite"><pre><span class="c"># Python</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>         <span class="c"># a number</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c"># a list</span>
+<span class="n">a</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>    <span class="c"># a string</span>
 </pre></div>
 
 
-<p>Note that this limiter does not <em>actually</em> clip all peaks completely, since the envelope for a single peak will have decayed a bit before the target gain will have reached it. Thus, the output gain will actually be slightly higher than what would be necessary to limit the output to the threshold. Since the attack factor is supposed to be significantly smaller than the release factor, this does not matter much though.</p>
-<p>Also, it would probably be more useful to define the factors $f_a$ and $f_r$ in terms of the time they take to reach their target and the threshold $t$ in dB FS.</p>
-<h2>Implementing audio processing in Python</h2>
-<p>A real-time audio processing framework using PyAudio would look like this:</p>
-<p>(<code>callback</code> is a function that will be defined shortly)</p>
-<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">pyaudio</span> <span class="kn">import</span> <span class="n">PyAudio</span><span class="p">,</span> <span class="n">paFloat32</span>
-
-<span class="n">pa</span> <span class="o">=</span> <span class="n">PyAudio</span><span class="p">()</span>
-
-<span class="n">stream</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">format</span> <span class="o">=</span> <span class="n">paFloat32</span><span class="p">,</span>
-                 <span class="n">channels</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-                 <span class="n">rate</span> <span class="o">=</span> <span class="mi">44100</span><span class="p">,</span>
-                 <span class="n">output</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
-                 <span class="n">frames_per_buffer</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
-                 <span class="n">stream_callback</span> <span class="o">=</span> <span class="n">callback</span><span class="p">)</span>
-
-<span class="k">while</span> <span class="n">stream</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
-    <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-
-<span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">pa</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<p>Contrast this with C, where you can not assign different data types to the same variable:</p>
+<div class="codehilite"><pre><span class="c1">// C</span>
+<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
+<span class="kt">char</span> <span class="n">c</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;text&quot;</span><span class="p">;</span>
 </pre></div>
 
 
-<p>This will open a <code>stream</code>, which is a PyAudio construct that manages input and output to/from one sound device. In this case, it is configured to use <code>float</code> values, only open one channel, play audio at a sample rate of 44100 Hz, have that one channel be output only and call the function <code>callback</code> every 1024 samples.</p>
-<p>Since the <code>callback</code> will be executed on a different thread, control flow will continue immediately after <code>pa.open()</code>. In order to analyze the resulting signal, the <code>while stream.is_active()</code> loop waits until the signal has been processed completely.</p>
-<p>Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:</p>
-<div class="codehilite"><pre><span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">attack_coeff</span><span class="p">,</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">frame_count</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">&quot;Playback Error: </span><span class="si">%i</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">flag</span><span class="p">)</span>
-    <span class="n">played_frames</span> <span class="o">=</span> <span class="n">counter</span>
-    <span class="n">counter</span> <span class="o">+=</span> <span class="n">frame_count</span>
-    <span class="n">limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">played_frames</span><span class="p">:</span><span class="n">counter</span><span class="p">],</span> <span class="n">threshold</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">signal</span><span class="p">[</span><span class="n">played_frames</span><span class="p">:</span><span class="n">counter</span><span class="p">],</span> <span class="n">paContinue</span>
+<p>Unlike Matlab, Python is <em>strongly typed</em>, that is, you can not add a number to a string.
+In Matlab, adding a single number to a string will convert that string into an array of numbers, then add the single number to each of the numbers in the array. Python will simply throw an error.</p>
+<div class="codehilite"><pre><span class="c">% Matlab</span>
+<span class="n">a</span> <span class="p">=</span> <span class="s">&#39;text&#39;</span>
+<span class="n">b</span> <span class="p">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c">% [121 106 125 121]</span>
 </pre></div>
 
 
-<p>The <code>paContinue</code> at the end is a flag signifying that the audio processing is not done yet and the <code>callback</code> wants to be called again. Returning <code>paComplete</code> or an insufficient number of samples instead would stop audio processing after the current block and thus invalidate <code>stream.is_active()</code> and resume control flow in the snippet above.</p>
-<p>Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).</p>
-<h2>Speeding up execution using Cython</h2>
-<p>The limiter defined above could be rewritten in C like this:</p>
-<div class="codehilite"><pre><span class="c1">// this corresponds to the Python Limiter class.</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="kt">limiter_state_t</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">delay_index</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">delay_length</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">envelope</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">current_gain</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">attack_coeff</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">release_coeff</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">limiter_state</span><span class="p">;</span>
-
-<span class="cp">#define MAX(x,y) ((x)&gt;(y)?(x):(y))</span>
-
-<span class="c1">// this corresponds to the Python __init__ function.</span>
-<span class="n">limiter_state</span> <span class="nf">init_limiter</span><span class="p">(</span><span class="kt">float</span> <span class="n">attack_coeff</span><span class="p">,</span> <span class="kt">float</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="kt">int</span> <span class="n">delay_len</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">limiter_state</span> <span class="n">state</span><span class="p">;</span>
-    <span class="n">state</span><span class="p">.</span><span class="n">attack_coeff</span> <span class="o">=</span> <span class="n">attack_coeff</span><span class="p">;</span>
-    <span class="n">state</span><span class="p">.</span><span class="n">release_coeff</span> <span class="o">=</span> <span class="n">release_coeff</span><span class="p">;</span>
-    <span class="n">state</span><span class="p">.</span><span class="n">delay_index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">state</span><span class="p">.</span><span class="n">envelope</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">state</span><span class="p">.</span><span class="n">current_gain</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">state</span><span class="p">.</span><span class="n">delay_length</span> <span class="o">=</span> <span class="n">delay_len</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">state</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">limit</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span> <span class="kt">int</span> <span class="n">block_length</span><span class="p">,</span> <span class="kt">float</span> <span class="n">threshold</span><span class="p">,</span>
-           <span class="kt">float</span> <span class="o">*</span><span class="n">delay_line</span><span class="p">,</span> <span class="n">limiter_state</span> <span class="o">*</span><span class="n">state</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">block_length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">delay_line</span><span class="p">[</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_length</span><span class="p">;</span>
-
-        <span class="c1">// calculate an envelope of the signal</span>
-        <span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span> <span class="o">*=</span> <span class="n">state</span><span class="o">-&gt;</span><span class="n">release_coeff</span><span class="p">;</span>
-        <span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="p">);</span>
-
-        <span class="c1">// have current_gain go towards a desired limiter target_gain</span>
-        <span class="kt">float</span> <span class="n">target_gain</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span>
-            <span class="n">target_gain</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">threshold</span><span class="o">-</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="p">);</span>
-        <span class="k">else</span>
-            <span class="n">target_gain</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-        <span class="n">state</span><span class="o">-&gt;</span><span class="n">current_gain</span> <span class="o">=</span> <span class="n">state</span><span class="o">-&gt;</span><span class="n">current_gain</span><span class="o">*</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">attack_coeff</span> <span class="o">+</span>
-            <span class="n">target_gain</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">attack_coeff</span><span class="p">);</span>
-
-        <span class="c1">// limit the delayed signal</span>
-        <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">delay_line</span><span class="p">[</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span><span class="p">]</span> <span class="o">*</span> <span class="n">state</span><span class="o">-&gt;</span><span class="n">current_gain</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<div class="codehilite"><pre><span class="c"># Python</span>
+<span class="n">a</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c"># TypeError: Can&#39;t convert &#39;int&#39; object to str implicitly</span>
 </pre></div>
 
 
-<p>In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.</p>
-<p>Now in order to plug this code into Python I will use Cython. First of all, a "Cython header" file has to be created that declares all exported types and functions to Cython:</p>
-<div class="codehilite"><pre><span class="n">cdef</span> <span class="n">extern</span> <span class="kn">from</span> <span class="s">&quot;limiter.h&quot;</span><span class="p">:</span>
-    <span class="n">ctypedef</span> <span class="n">struct</span> <span class="n">limiter_state</span><span class="p">:</span>
-        <span class="nb">int</span> <span class="n">delay_index</span>
-        <span class="nb">int</span> <span class="n">delay_length</span>
-        <span class="nb">float</span> <span class="n">envelope</span>
-        <span class="nb">float</span> <span class="n">current_gain</span>
-        <span class="nb">float</span> <span class="n">attack_coeff</span>
-        <span class="nb">float</span> <span class="n">release_coeff</span>
-
-    <span class="n">limiter_state</span> <span class="n">init_limiter</span><span class="p">(</span><span class="nb">float</span> <span class="n">attack_factor</span><span class="p">,</span> <span class="nb">float</span> <span class="n">release_factor</span><span class="p">,</span> <span class="nb">int</span> <span class="n">delay_len</span><span class="p">)</span>
-    <span class="n">void</span> <span class="n">limit</span><span class="p">(</span><span class="nb">float</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span> <span class="nb">int</span> <span class="n">block_length</span><span class="p">,</span> <span class="nb">float</span> <span class="n">threshold</span><span class="p">,</span>
-               <span class="nb">float</span> <span class="o">*</span><span class="n">delay_line</span><span class="p">,</span> <span class="n">limiter_state</span> <span class="o">*</span><span class="n">state</span><span class="p">)</span>
+<p>Unlike Matlab, every Python file can contain as many functions as you like. Basically, you can organize your code in as many files as you want. To access functions from other files, use <code>import filename</code>.</p>
+<p>Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.</p>
+<p>Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner working is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.</p>
+<h2>Reading Python</h2>
+<p>When you start up Python, it is a rather empty environment. In order to do anything useful, you first have <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <em>namespaces</em>, so if you <code>import numpy</code>, you will have to prefix every feature of numpy with its name, like this:</p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
 
-<p>This is very similar to the C header file of the limiter:</p>
-<div class="codehilite"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="kt">limiter_state_t</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">delay_index</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">delay_length</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">envelope</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">current_gain</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">attack_coeff</span><span class="p">;</span>
-    <span class="kt">float</span> <span class="n">release_coeff</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">limiter_state</span><span class="p">;</span>
-
-<span class="n">limiter_state</span> <span class="nf">init_limiter</span><span class="p">(</span><span class="kt">float</span> <span class="n">attack_factor</span><span class="p">,</span> <span class="kt">float</span> <span class="n">release_factor</span><span class="p">,</span> <span class="kt">int</span> <span class="n">delay_len</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">limit</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span> <span class="kt">int</span> <span class="n">block_length</span><span class="p">,</span> <span class="kt">float</span> <span class="n">threshold</span><span class="p">,</span>
-           <span class="kt">float</span> <span class="o">*</span><span class="n">delay_line</span><span class="p">,</span> <span class="n">limiter_state</span> <span class="o">*</span><span class="n">state</span><span class="p">);</span>
+<p>This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of numpy into the global environment like this:</p>
+<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
 
-<p>With that squared away, the C functions are accessible for Cython. Now, we only need a small Python wrapper around this code so it becomes usable from Python:</p>
-<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="n">cimport</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
-<span class="n">cimport</span> <span class="n">limiter</span>
-
-<span class="n">DTYPE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
-<span class="n">ctypedef</span> <span class="n">np</span><span class="o">.</span><span class="n">float32_t</span> <span class="n">DTYPE_t</span>
-
-<span class="n">cdef</span> <span class="k">class</span> <span class="nc">Limiter</span><span class="p">:</span>
-    <span class="n">cdef</span> <span class="n">limiter</span><span class="o">.</span><span class="n">limiter_state</span> <span class="n">state</span>
-    <span class="n">cdef</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="n">delay_line</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">float</span> <span class="n">attack_coeff</span><span class="p">,</span> <span class="nb">float</span> <span class="n">release_coeff</span><span class="p">,</span>
-                 <span class="nb">int</span> <span class="n">delay_length</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">limiter</span><span class="o">.</span><span class="n">init_limiter</span><span class="p">(</span><span class="n">attack_coeff</span><span class="p">,</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="n">delay_length</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">delay_length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">DTYPE_t</span><span class="p">,</span><span class="n">ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="n">signal</span><span class="p">,</span> <span class="nb">float</span> <span class="n">threshold</span><span class="p">):</span>
-        <span class="n">limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="o">&lt;</span><span class="nb">float</span><span class="o">*&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">PyArray_DATA</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span>
-                   <span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">threshold</span><span class="p">,</span>
-                   <span class="o">&lt;</span><span class="nb">float</span><span class="o">*&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">PyArray_DATA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span><span class="p">),</span>
-                   <span class="o">&lt;</span><span class="n">limiter</span><span class="o">.</span><span class="n">limiter_state</span><span class="o">*&gt;&amp;</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+<p>Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib-stack in one piece:</p>
+<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">show</span><span class="p">()</span>
 </pre></div>
 
 
-<p>The first two lines set this file up to access Numpy arrays both from the Python domain and the C domain, thus bridging the gap. The <code>cimport limiter</code> imports the C functions and types from above. The <code>DTYPE</code> stuff is advertising the Numpy <code>float32</code> type to C.</p>
-<p>The class is defined using <code>cdef</code> as a C data structure for speed. Also, Cython would naturally translate every C struct into a Python dict and vice versa, but we need to pass the struct to <code>limit</code> <em>and</em> have <code>limit</code> modify it. Thus, <code>cdef limiter.limiter_state state</code> makes Cython treat it as a C struct only. Finally, the <code>np.PyArray_DATA()</code> expressions expose the C arrays underlying the Numpy vectors. This is really handy since we don't have to copy any data around in order to modify the vectors from C.</p>
-<p>As can be seen, the Cython implementation behaves nearly identically to the initial Python implementation (except for passing the <code>dtype</code> to the constructor) and can be used as a plug-in replacement (with the aforementioned caveat).</p>
-<p>Finally, we need to build the whole contraption. The easiest way to do this is to use a setup file like this:</p>
-<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
-<span class="kn">from</span> <span class="nn">distutils.extension</span> <span class="kn">import</span> <span class="n">Extension</span>
-<span class="kn">from</span> <span class="nn">Cython.Distutils</span> <span class="kn">import</span> <span class="n">build_ext</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">get_include</span>
-
-<span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">Extension</span><span class="p">(</span><span class="s">&quot;cython_limiter&quot;</span><span class="p">,</span>
-                         <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;cython_limiter.pyx&quot;</span><span class="p">,</span>
-                                  <span class="s">&quot;limiter.c&quot;</span><span class="p">],</span>
-                         <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">get_include</span><span class="p">()])]</span>
-
-<span class="n">setup</span><span class="p">(</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;cython_limiter&quot;</span><span class="p">,</span>
-    <span class="n">cmdclass</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;build_ext&#39;</span><span class="p">:</span> <span class="n">build_ext</span><span class="p">},</span>
-    <span class="n">ext_modules</span> <span class="o">=</span> <span class="n">ext_modules</span>
-    <span class="p">)</span>
+<p>Note that Python does not plot immediately when you type <code>plot()</code>. Instead, it will collect all plotting information and only show it on the screen once you type <code>show()</code>.</p>
+<p>So far, the code you have seen should look pretty familiar. A few differences:</p>
+<ul>
+<li>
+<p>No semicolons at the end of lines;<br />
+  In order to print stuff to the console, use the <code>print()</code> function instead.</p>
+</li>
+<li>
+<p>No <code>end</code> anywhere.<br />
+  In Python, blocks of code are identified by indentation and they always start with a colon like so:</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="n">n</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
 </pre></div>
 
 
-<p>With that saved as <em>setup.py</em>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.</p>
-<h2>Conclusion</h2>
-<p>In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.</p>
-<p>You can find all the source code in this article at https://github.com/bastibe/simple-cython-limiter</p>
-<h2>Disclaimer</h2>
-<ol>
-<li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
-<li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
-<li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.</li>
-</ol></div>
+<ul>
+<li>Function definitions are different.<br />
+  They use the <code>def</code> keyword instead of <code>function</code>.<br />
+  You don't have to name the output variable names in the definition and instead use <code>return()</code>.</li>
+</ul>
+<div class="codehilite"><pre><span class="c"># Python</span>
+<span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">number</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">number</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span class="c">% Matlab</span>
+<span class="k">function</span><span class="w"> </span>[out] <span class="p">=</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span>number<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">out</span> <span class="p">=</span> <span class="n">number</span>
+    <span class="k">else</span>
+        <span class="n">out</span> <span class="p">=</span> <span class="o">-</span><span class="n">number</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<ul>
+<li>There is no easy way to write out a list or matrix.<br />
+  Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <em>must</em> use commas to separate items and can not use semicolons to separate lines.</li>
+</ul>
+<div class="codehilite"><pre><span class="c"># create a numpy matrix:</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
+<span class="c"># create a Python list:</span>
+<span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+
+
+<ul>
+<li>Arrays access uses brackets and is numbered from 0.<br />
+  Thus, ranges <em>exclude</em> the last number (see below).<br />
+  Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays any more.</li>
+</ul>
+<div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">one</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">two</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c"># &quot;6:8&quot; is a range of two elements:</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">]</span> <span class="c"># &lt;-- a Python list!</span>
+</pre></div>
+
+
+<h2>Common traps</h2>
+<ul>
+<li>Array slicing does not copy.</li>
+</ul>
+<div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="c"># [2 3 4]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="c"># this will change a and b!</span>
+<span class="c"># make a copy like this:</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c"># copy=True can be omitted</span>
+<span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="c"># changes only c</span>
+</pre></div>
+
+
+<ul>
+<li>Arrays retain their data type.
+  You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).</li>
+</ul>
+<div class="codehilite"><pre><span class="c"># pretend this came from a wave file:</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int16</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">10</span> <span class="c"># int16 only goes to 32768!</span>
+<span class="c"># a is now [10000, 20000, 30000, -25536, -15536]</span>
+</pre></div>
+
+
+<h2>Going further</h2>
+<p>Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot the numerical code you write in Python will look very similar to the equivalent code in Matlab.</p>
+<p>However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (sort of unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.</p>
+<p>Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Getting_Started">tutorial</a> and <a href="http://docs.scipy.org/doc/">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.</p>
+<p>A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/">project euler</a>.</p></div>
         <hr />
     </div>
 		
+    
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../real-time-signal-processing-in-python.html"><h2>Real Time Signal Processing in Python</h2></a>
+        <div class= "well small"> 02/11/2012
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ </div>
+        <div class="summary"><p>Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.</p>
+<p>But this is not going to be about Matlab. This is going to be about Python. Combine Python with Numpy (and Scipy and Matplotlib) and you have a signal ...</p> <a class="btn btn-info xsmall" href="../real-time-signal-processing-in-python.html">read more</a></div>
+    </div>	
+				
     
  
         
@@ -502,33 +452,6 @@ by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
         <div class="summary"><p>I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.</p>
 <p>About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/" title="NumPy">numerical</a> <a href="http://scipy.org/" title="SciPy">computation</a> and <a href="http://matplotlib.sourceforge.net/" title="matplotlib">plotting</a> that, for my particular purposes, rivals Matlab.</p>
 <p>However, just like Matlab, Python lacked a way of playing real time audio out of ...</p> <a class="btn btn-info xsmall" href="../on-the-virtue-of-contributing-to-and-using-open-source-software.html">read more</a></div>
-    </div>	
-				
-    
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../fixing-errors-in-epydoc.html"><h2>Fixing Errors in Epydoc</h2></a>
-        <div class= "well small"> 28/08/2012
-
-by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
- </div>
-        <div class="summary"><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
-<p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
-<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="o">:</span>
-<span class="err">&#39;</span><span class="n">Text</span><span class="err">&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="err">&#39;</span><span class="n">data</span><span class="err">&#39;</span>
-</pre></div>
-
-
-<p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
-<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
-<p>Short answer: Find your <em>site-packages</em> directory ...</p> <a class="btn btn-info xsmall" href="../fixing-errors-in-epydoc.html">read more</a></div>
     </div>	
 				
             <div class="pagination">

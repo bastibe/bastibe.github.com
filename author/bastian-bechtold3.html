@@ -77,6 +77,34 @@
  
 
     <div class='article'>
+        <a href="../kindleapp-not-starting-on-a-case-sensitive-file-system.html"><h2>Kindle.app not starting on a case-sensitive file system</h2></a>
+        <div class= "well small"> 13/09/2012
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ </div>
+        <div class="summary"><p>So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.</p>
+<p>A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with</p>
+<div class="codehilite"><pre><span class="n">Dyld</span> <span class="n">Error</span> <span class="n">Message</span><span class="o">:</span>
+  <span class="n">Library</span> <span class="n">not</span> <span class="n">loaded</span><span class="o">:</span> <span class="err">@</span><span class="n">executable_path</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="n">Referenced</span> <span class="n">from</span><span class="o">:</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Kindle</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWebCoreViewer</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="nl">Reason:</span> <span class="n">image</span> <span class="n">not</span> <span class="n">found</span>
+</pre></div>
+
+
+<p><code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type</p>
+<div class="codehilite"><pre><span class="n">sudo</span> <span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">libWebCoreKRF</span><span class="p">.</span><span class="n">dylib</span> <span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib ...</span></pre></div> <a class="btn btn-info xsmall" href="../kindleapp-not-starting-on-a-case-sensitive-file-system.html">read more</a></div>
+    </div>	
+				
+    
+ 
+        
+
+ 
+
+    <div class='article'>
         <a href="../kompilieren-auf-windows.html"><h2>Kompilieren auf Windows</h2></a>
         <div class= "well small"> 12/03/2009
 
@@ -250,25 +278,6 @@ by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
 
  </div>
         <div class="summary"><p>Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff "Ordner" wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen "Verzeichnis" wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für "Verzeichnis ...</p> <a class="btn btn-info xsmall" href="../tagged-file-system.html">read more</a></div>
-    </div>	
-				
-    
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../text-editing-with-confidence-and-emacs.html"><h2>Text editing with confidence and Emacs</h2></a>
-        <div class= "well small"> 13/10/2012
-
-by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
- </div>
-        <div class="summary"><p>In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>.</p>
-<p>Note that ...</p> <a class="btn btn-info xsmall" href="../text-editing-with-confidence-and-emacs.html">read more</a></div>
     </div>	
 				
             <div class="pagination">
