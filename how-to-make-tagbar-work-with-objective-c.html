@@ -58,11 +58,7 @@
         <div class="nav-collapse">
         <ul class="nav">
         
-
-        
-        
-        
-        </ul>
+                                </ul>
         </div>
 
     </div>
@@ -74,17 +70,13 @@
     <div class="row">
 
         <div class="span9">
-        
-    <div class='article'>
+            <div class='article'>
         <div class="content-title">
             <h1>How to make Tagbar work with Objective-C</h1>
             04/12/2011
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
-
 
 
         </div>
@@ -96,40 +88,40 @@ As of today, Objective-C support is not in the stable branch yet, but thanks to 
 However, Tagbar does not work yet. There used to be <a href="http://stackoverflow.com/a/5790832/1034">a workaround</a> that apparently worked for some people, but it did not work for me.
 Things like this drive me nuts. I can see that tags are being generated, but Tagbar won't show them. What is going wrong?</p>
 <p>Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:</p>
-<div class="codehilite"><pre>&quot; <span class="n">add</span> <span class="n">a</span> <span class="n">definition</span> <span class="k">for</span> <span class="n">Objective</span><span class="o">-</span><span class="n">C</span> <span class="n">to</span> <span class="n">tagbar</span>
-<span class="n">let</span> <span class="n">g</span><span class="p">:</span><span class="n">tagbar_type_objc</span> <span class="p">=</span> <span class="p">{</span>
-    <span class="o">\</span> <span class="s">&#39;ctagstype&#39;</span> <span class="p">:</span> <span class="s">&#39;ObjectiveC&#39;</span><span class="p">,</span>
-    <span class="o">\</span> <span class="s">&#39;kinds&#39;</span>     <span class="p">:</span> <span class="p">[</span>
-        <span class="o">\</span> <span class="s">&#39;i:interface&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;I:implementation&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;p:Protocol&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;m:Object_method&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;c:Class_method&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;v:Global_variable&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;F:Object field&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;f:function&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;p:property&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;t:type_alias&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;s:type_structure&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;e:enumeration&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;M:preprocessor_macro&#39;</span><span class="p">,</span>
-    <span class="o">\</span> <span class="p">],</span>
-    <span class="o">\</span> <span class="s">&#39;sro&#39;</span>        <span class="p">:</span> <span class="s">&#39; &#39;</span><span class="p">,</span>
-    <span class="o">\</span> <span class="s">&#39;kind2scope&#39;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="o">\</span> <span class="s">&#39;i&#39;</span> <span class="p">:</span> <span class="s">&#39;interface&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;I&#39;</span> <span class="p">:</span> <span class="s">&#39;implementation&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;p&#39;</span> <span class="p">:</span> <span class="s">&#39;Protocol&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;s&#39;</span> <span class="p">:</span> <span class="s">&#39;type_structure&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;e&#39;</span> <span class="p">:</span> <span class="s">&#39;enumeration&#39;</span>
-    <span class="o">\</span> <span class="p">},</span>
-    <span class="o">\</span> <span class="s">&#39;scope2kind&#39;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="o">\</span> <span class="s">&#39;interface&#39;</span>      <span class="p">:</span> <span class="s">&#39;i&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;implementation&#39;</span> <span class="p">:</span> <span class="s">&#39;I&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;Protocol&#39;</span>       <span class="p">:</span> <span class="s">&#39;p&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;type_structure&#39;</span> <span class="p">:</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
-        <span class="o">\</span> <span class="s">&#39;enumeration&#39;</span>    <span class="p">:</span> <span class="s">&#39;e&#39;</span>
-    <span class="o">\</span> <span class="p">}</span>
-<span class="o">\</span> <span class="p">}</span>
+<div class="codehilite"><pre><span class="err">&quot;</span> <span class="nx">add</span> <span class="nx">a</span> <span class="nx">definition</span> <span class="k">for</span> <span class="nx">Objective</span><span class="o">-</span><span class="nx">C</span> <span class="nx">to</span> <span class="nx">tagbar</span>
+<span class="kd">let</span> <span class="nx">g</span><span class="o">:</span><span class="nx">tagbar_type_objc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="err">\</span> <span class="s1">&#39;ctagstype&#39;</span> <span class="o">:</span> <span class="s1">&#39;ObjectiveC&#39;</span><span class="p">,</span>
+    <span class="err">\</span> <span class="s1">&#39;kinds&#39;</span>     <span class="o">:</span> <span class="cp">[</span>
+        <span class="o">\</span> <span class="s1">&#39;i:interface&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;I:implementation&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;p:Protocol&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;m:Object_method&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;c:Class_method&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;v:Global_variable&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;F:Object field&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;f:function&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;p:property&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;t:type_alias&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;s:type_structure&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;e:enumeration&#39;</span><span class="p">,</span>
+        <span class="o">\</span> <span class="s1">&#39;M:preprocessor_macro&#39;</span><span class="p">,</span>
+    <span class="o">\</span> <span class="cp">]</span><span class="p">,</span>
+    <span class="err">\</span> <span class="s1">&#39;sro&#39;</span>        <span class="o">:</span> <span class="s1">&#39; &#39;</span><span class="p">,</span>
+    <span class="err">\</span> <span class="s1">&#39;kind2scope&#39;</span> <span class="o">:</span> <span class="p">{</span>
+        <span class="err">\</span> <span class="s1">&#39;i&#39;</span> <span class="o">:</span> <span class="s1">&#39;interface&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;I&#39;</span> <span class="o">:</span> <span class="s1">&#39;implementation&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;p&#39;</span> <span class="o">:</span> <span class="s1">&#39;Protocol&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;s&#39;</span> <span class="o">:</span> <span class="s1">&#39;type_structure&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;e&#39;</span> <span class="o">:</span> <span class="s1">&#39;enumeration&#39;</span>
+    <span class="err">\</span> <span class="p">},</span>
+    <span class="err">\</span> <span class="s1">&#39;scope2kind&#39;</span> <span class="o">:</span> <span class="p">{</span>
+        <span class="err">\</span> <span class="s1">&#39;interface&#39;</span>      <span class="o">:</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;implementation&#39;</span> <span class="o">:</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;Protocol&#39;</span>       <span class="o">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;type_structure&#39;</span> <span class="o">:</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span>
+        <span class="err">\</span> <span class="s1">&#39;enumeration&#39;</span>    <span class="o">:</span> <span class="s1">&#39;e&#39;</span>
+    <span class="err">\</span> <span class="p">}</span>
+<span class="err">\</span> <span class="p">}</span>
 </pre></div>
 
 
@@ -139,11 +131,8 @@ Things like this drive me nuts. I can see that tags are being generated, but Tag
         <hr>
     	   
         <h2>Comments</h2>
-	
-<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="paperflyer">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-
-	
-<div id="disqus_thread"></div>
+	<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="paperflyer">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	<div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'bastibe'; 
 
@@ -154,9 +143,7 @@ Things like this drive me nuts. I can see that tags are being generated, but Tag
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
     </div>
-
         </div>
 
         <div class="span3">
@@ -170,53 +157,38 @@ Things like this drive me nuts. I can see that tags are being generated, but Tag
                 <li><a href="./archives.html">Archives</a>
                 <li><a href="./tags.html">Tags</a>
                 <li><a href="./" rel="alternate">Atom feed</a></li>
-                
-                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
-                
-            </ul>
+                                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                            </ul>
             </div>
 
 
-            
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
                 <li class="nav-header">
                 Categories
                 </li>
 
-                
-                <li><a href="./category/all.html">all</a></li>
-                
-            </ul>
+                                <li><a href="./category/all.html">all</a></li>
+                            </ul>
             </div>
             
 
-
             
 
-
-            
-            <div class="social">
+                        <div class="social">
             <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
                 <li class="nav-header">
                 Social
                 </li>
 
-                
-                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
-                
-                <li><a href="http://github.com/bastibe">github</a></li>
-                
-            </ul>
+                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                                <li><a href="http://github.com/bastibe">github</a></li>
+                            </ul>
             </div>
             </div>
             
-
-        </div> 
-    </div> 
-    </div> 
-
+        </div>     </div>     </div> 
 <footer>
 <br />
 <p><a href=".">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
@@ -225,9 +197,6 @@ Things like this drive me nuts. I can see that tags are being generated, but Tag
 </div> <!-- /container -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-
-
 <a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
-
 </body>
 </html>

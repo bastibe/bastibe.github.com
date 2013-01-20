@@ -58,11 +58,7 @@
         <div class="nav-collapse">
         <ul class="nav">
         
-
-        
-        
-        
-        </ul>
+                                </ul>
         </div>
 
     </div>
@@ -76,10 +72,7 @@
         <div class="span9">
                 
 
-
         
-
-
 
 
     <div class='article'>
@@ -87,10 +80,8 @@
             <a href="./real-time-signal-processing-in-python.html"><h1>Real Time Signal Processing in Python</h1></a>
             02/11/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  
@@ -106,7 +97,7 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 <p>$ e[n] = \max( |s[n]|, e[n-1] \cdot f_r ) $</p>
 <p>where $s[n]$ is the current signal and $0 &lt; f_r &lt; 1$ is a release factor.</p>
 <p>If this is applied to a signal, it will create an envelope like this:</p>
-<p><img alt="Envelope" src="static/images/2012-11/envelope.png" /></p>
+<p><img alt="Envelope" src="images/2012-11/envelope.png" /></p>
 <p>Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using</p>
 <p>\begin{equation}
 g_t[n] = \begin{cases}
@@ -118,9 +109,9 @@ g_t[n] = \begin{cases}
 <p>$ g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a) $</p>
 <p>where $0 &lt; f_a \ll f_r$ is the attack factor.</p>
 <p>Here you can see how that would look in practice:</p>
-<p><img alt="Gain" src="static/images/2012-11/gain.png" /></p>
+<p><img alt="Gain" src="images/2012-11/gain.png" /></p>
 <p>Zooming in on one of the limited section reveals that the gain is actually moving smoothly.</p>
-<p><img alt="Detail Gain" src="static/images/2012-11/detail.png" /></p>
+<p><img alt="Detail Gain" src="images/2012-11/detail.png" /></p>
 <p>This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.</p>
 <p>In Python, this might look like this:</p>
 <div class="codehilite"><pre><span class="k">class</span> <span class="nc">Limiter</span><span class="p">:</span>
@@ -199,7 +190,7 @@ g_t[n] = \begin{cases}
 <h2>Speeding up execution using Cython</h2>
 <p>The limiter defined above could be rewritten in C like this:</p>
 <div class="codehilite"><pre><span class="c1">// this corresponds to the Python Limiter class.</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">limiter_state_t</span> <span class="p">{</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="kt">limiter_state_t</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">delay_index</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">delay_length</span><span class="p">;</span>
     <span class="kt">float</span> <span class="n">envelope</span><span class="p">;</span>
@@ -250,7 +241,7 @@ g_t[n] = \begin{cases}
 
 <p>In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.</p>
 <p>Now in order to plug this code into Python I will use Cython. First of all, a "Cython header" file has to be created that declares all exported types and functions to Cython:</p>
-<div class="codehilite"><pre><span class="n">cdef</span> <span class="n">extern</span> <span class="kn">from</span> <span class="err">&quot;</span><span class="nn">limiter.h</span><span class="err">&quot;:</span>
+<div class="codehilite"><pre><span class="n">cdef</span> <span class="n">extern</span> <span class="kn">from</span> <span class="s">&quot;limiter.h&quot;</span><span class="p">:</span>
     <span class="n">ctypedef</span> <span class="n">struct</span> <span class="n">limiter_state</span><span class="p">:</span>
         <span class="nb">int</span> <span class="n">delay_index</span>
         <span class="nb">int</span> <span class="n">delay_length</span>
@@ -266,7 +257,7 @@ g_t[n] = \begin{cases}
 
 
 <p>This is very similar to the C header file of the limiter:</p>
-<div class="codehilite"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">limiter_state_t</span> <span class="p">{</span>
+<div class="codehilite"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="kt">limiter_state_t</span> <span class="p">{</span>
     <span class="kt">int</span> <span class="n">delay_index</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">delay_length</span><span class="p">;</span>
     <span class="kt">float</span> <span class="n">envelope</span><span class="p">;</span>
@@ -275,8 +266,8 @@ g_t[n] = \begin{cases}
     <span class="kt">float</span> <span class="n">release_coeff</span><span class="p">;</span>
 <span class="p">}</span> <span class="n">limiter_state</span><span class="p">;</span>
 
-<span class="n">limiter_state</span> <span class="n">init_limiter</span><span class="p">(</span><span class="kt">float</span> <span class="n">attack_factor</span><span class="p">,</span> <span class="kt">float</span> <span class="n">release_factor</span><span class="p">,</span> <span class="kt">int</span> <span class="n">delay_len</span><span class="p">);</span>
-<span class="kt">void</span> <span class="n">limit</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span> <span class="kt">int</span> <span class="n">block_length</span><span class="p">,</span> <span class="kt">float</span> <span class="n">threshold</span><span class="p">,</span>
+<span class="n">limiter_state</span> <span class="nf">init_limiter</span><span class="p">(</span><span class="kt">float</span> <span class="n">attack_factor</span><span class="p">,</span> <span class="kt">float</span> <span class="n">release_factor</span><span class="p">,</span> <span class="kt">int</span> <span class="n">delay_len</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">limit</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span> <span class="kt">int</span> <span class="n">block_length</span><span class="p">,</span> <span class="kt">float</span> <span class="n">threshold</span><span class="p">,</span>
            <span class="kt">float</span> <span class="o">*</span><span class="n">delay_line</span><span class="p">,</span> <span class="n">limiter_state</span> <span class="o">*</span><span class="n">state</span><span class="p">);</span>
 </pre></div>
 
@@ -341,12 +332,8 @@ g_t[n] = \begin{cases}
     </div>
 		
     
-
-
  
-
         
-
 
  
 
@@ -354,10 +341,8 @@ g_t[n] = \begin{cases}
         <a href="./an-error-occurred-loading-this-content-try-again-later.html"><h2>An error occurred loading this content. Try again later.</h2></a>
         <div class= "well small"> 01/11/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -371,11 +356,8 @@ Try again later.</p>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -383,10 +365,8 @@ Try again later.</p>
         <a href="./names.html"><h2>Names</h2></a>
         <div class= "well small"> 28/10/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -398,11 +378,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -410,10 +387,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./matlab-mex-homebrew-and-os-x-108-mountain-lion.html"><h2>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h2></a>
         <div class= "well small"> 20/10/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -423,11 +398,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -435,10 +407,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./my-emacs-customizations.html"><h2>My Emacs customizations</h2></a>
         <div class= "well small"> 14/10/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -449,11 +419,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -461,10 +428,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./text-editing-with-confidence-and-emacs.html"><h2>Text editing with confidence and Emacs</h2></a>
         <div class= "well small"> 13/10/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -473,11 +438,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -485,10 +447,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./a-story-about-schemes.html"><h2>A Story about Schemes</h2></a>
         <div class= "well small"> 20/09/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -497,11 +457,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -509,19 +466,17 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./kindleapp-not-starting-on-a-case-sensitive-file-system.html"><h2>Kindle.app not starting on a case-sensitive file system</h2></a>
         <div class= "well small"> 13/09/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
         <div class="summary"><p>So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.</p>
 <p>A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with</p>
-<div class="codehilite"><pre><span class="n">Dyld</span> <span class="n">Error</span> <span class="n">Message</span><span class="p">:</span>
-  <span class="n">Library</span> <span class="n">not</span> <span class="n">loaded</span><span class="p">:</span> <span class="p">@</span><span class="n">executable_path</span><span class="o">/</span><span class="p">.</span><span class="o">./</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
-  <span class="n">Referenced</span> <span class="n">from</span><span class="p">:</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Kindle</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWebCoreViewer</span><span class="p">.</span><span class="n">dylib</span>
-  <span class="n">Reason</span><span class="p">:</span> <span class="n">image</span> <span class="n">not</span> <span class="n">found</span>
+<div class="codehilite"><pre><span class="n">Dyld</span> <span class="n">Error</span> <span class="n">Message</span><span class="o">:</span>
+  <span class="n">Library</span> <span class="n">not</span> <span class="n">loaded</span><span class="o">:</span> <span class="err">@</span><span class="n">executable_path</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWEbCoreKRF</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="n">Referenced</span> <span class="n">from</span><span class="o">:</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Kindle</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Frameworks</span><span class="o">/</span><span class="n">libWebCoreViewer</span><span class="p">.</span><span class="n">dylib</span>
+  <span class="nl">Reason:</span> <span class="n">image</span> <span class="n">not</span> <span class="n">found</span>
 </pre></div>
 
 
@@ -530,11 +485,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -542,10 +494,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./on-the-virtue-of-contributing-to-and-using-open-source-software.html"><h2>On the Virtue of Contributing to and Using Open Source Software</h2></a>
         <div class= "well small"> 08/09/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
@@ -555,11 +505,8 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
     </div>	
 				
     
-
  
-
         
-
 
  
 
@@ -567,17 +514,15 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
         <a href="./fixing-errors-in-epydoc.html"><h2>Fixing Errors in Epydoc</h2></a>
         <div class= "well small"> 28/08/2012
 
-
 by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  </div>
         <div class="summary"><p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
 <p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:</p>
-<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="p">:</span>
-<span class="s">&#39;Text&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s">&#39;data&#39;</span>
+<div class="codehilite"><pre><span class="n">UNEXPECTED</span> <span class="n">ERROR</span><span class="o">:</span>
+<span class="err">&#39;</span><span class="n">Text</span><span class="err">&#39;</span> <span class="n">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="err">&#39;</span><span class="n">data</span><span class="err">&#39;</span>
 </pre></div>
 
 
@@ -586,37 +531,21 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 <p>Short answer: Find your <em>site-packages</em> directory ...</p> <a class="btn btn-info xsmall" href="./fixing-errors-in-epydoc.html">read more</a></div>
     </div>	
 				
-    
-        <div class="pagination">
+            <div class="pagination">
 <ul>
-
     <li class="prev disabled"><a href="#">&larr; Previous</a></li>
 
-
-
     <li class="active"><a href="./index.html">1</a></li>
-
     <li class=""><a href="./index2.html">2</a></li>
-
     <li class=""><a href="./index3.html">3</a></li>
-
     <li class=""><a href="./index4.html">4</a></li>
-
-
 
     <li class="next"><a href="./index2.html">Next &rarr;</a></li>
 
-
 </ul>
-</div>
-    
-
+</div>    
  
-
- 
- 
-
-
+  
         </div>
 
         <div class="span3">
@@ -630,53 +559,38 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
                 <li><a href="./archives.html">Archives</a>
                 <li><a href="./tags.html">Tags</a>
                 <li><a href="./" rel="alternate">Atom feed</a></li>
-                
-                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
-                
-            </ul>
+                                <li><a href="./feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                            </ul>
             </div>
 
 
-            
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
                 <li class="nav-header">
                 Categories
                 </li>
 
-                
-                <li><a href="./category/all.html">all</a></li>
-                
-            </ul>
+                                <li><a href="./category/all.html">all</a></li>
+                            </ul>
             </div>
             
 
-
             
 
-
-            
-            <div class="social">
+                        <div class="social">
             <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
                 <li class="nav-header">
                 Social
                 </li>
 
-                
-                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
-                
-                <li><a href="http://github.com/bastibe">github</a></li>
-                
-            </ul>
+                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                                <li><a href="http://github.com/bastibe">github</a></li>
+                            </ul>
             </div>
             </div>
             
-
-        </div> 
-    </div> 
-    </div> 
-
+        </div>     </div>     </div> 
 <footer>
 <br />
 <p><a href=".">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
@@ -685,9 +599,6 @@ by <a class="url fn" href="./author/bastian-bechtold.html">Bastian Bechtold</a>
 </div> <!-- /container -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-
-
 <a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
-
 </body>
 </html>

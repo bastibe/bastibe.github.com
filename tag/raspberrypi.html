@@ -8,14 +8,14 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-    <script src=".././theme/html5.js"></script>
+    <script src="../theme/html5.js"></script>
     <![endif]-->
 
     <!-- Le styles -->
-    <link href=".././theme/bootstrap.min.css" rel="stylesheet">
-    <link href=".././theme/bootstrap.min.responsive.css" rel="stylesheet">
-    <link href=".././theme/local.css" rel="stylesheet">
-    <link href=".././theme/pygments.css" rel="stylesheet">
+    <link href="../theme/bootstrap.min.css" rel="stylesheet">
+    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="../theme/local.css" rel="stylesheet">
+    <link href="../theme/pygments.css" rel="stylesheet">
 
     <script language="javascript">
     if(window.MathJax===undefined){
@@ -53,16 +53,12 @@
              <span class="icon-bar"></span>
          </a>
 
-        <a class="brand" href="../.">Bastis Scratchpad On The Internet</a>
+        <a class="brand" href="..">Bastis Scratchpad On The Internet</a>
 
         <div class="nav-collapse">
         <ul class="nav">
         
-
-        
-        
-        
-        </ul>
+                                </ul>
         </div>
 
     </div>
@@ -76,21 +72,16 @@
         <div class="span9">
                 
 
-
         
-
-
 
 
     <div class='article'>
         <div class="content-title">
-            <a href=".././using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html"><h1>Using a Raspberry Pi as a Time Capsule for Mountain Lion</h1></a>
+            <a href="../using-a-raspberry-pi-as-a-time-capsule-for-mountain-lion.html"><h1>Using a Raspberry Pi as a Time Capsule for Mountain Lion</h1></a>
             29/07/2012
 
-
-by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</a>
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
  
-
 
 
  
@@ -104,14 +95,14 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 <p>After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <em>Internet Sharing</em> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.</p>
 <h3>Setting up the hard drive</h3>
 <p>First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <em>/etc/fstab</em></p>
-<div class="codehilite"><pre><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="nb">pi</span><span class="o">/</span><span class="n">TimeMachine</span> <span class="n">ext4</span> <span class="n">rw</span><span class="p">,</span><span class="n">auto</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="n">exec</span><span class="p">,</span><span class="n">sync</span> 0 0
+<div class="codehilite"><pre><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">pi</span><span class="o">/</span><span class="n">TimeMachine</span> <span class="n">ext4</span> <span class="n">rw</span><span class="p">,</span><span class="k">auto</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="n">exec</span><span class="p">,</span><span class="n">sync</span> <span class="mi">0</span> <span class="mi">0</span>
 </pre></div>
 
 
 <p>Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.</p>
 <h3>Setting up the shared folder</h3>
 <p>First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <em>/etc/netatalk/AppleVolumes.default</em>:</p>
-<div class="codehilite"><pre><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="nb">pi</span><span class="o">/</span><span class="n">TimeMachine</span> <span class="n">TimeMachine</span> <span class="n">allow</span><span class="p">:</span><span class="nb">pi</span> <span class="n">cnidscheme</span><span class="p">:</span><span class="n">dbd</span> <span class="n">options</span><span class="p">:</span><span class="n">upriv</span><span class="p">,</span><span class="n">usedot</span><span class="p">,</span><span class="n">tm</span>
+<div class="codehilite"><pre><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">pi</span><span class="o">/</span><span class="n">TimeMachine</span> <span class="n">TimeMachine</span> <span class="n">allow</span><span class="o">:</span><span class="n">pi</span> <span class="n">cnidscheme</span><span class="o">:</span><span class="n">dbd</span> <span class="n">options</span><span class="o">:</span><span class="n">upriv</span><span class="p">,</span><span class="n">usedot</span><span class="p">,</span><span class="n">tm</span>
 </pre></div>
 
 
@@ -144,7 +135,7 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
 <p>Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>n.</p>
 <h3>Setting up the Time Machine</h3>
 <p><strike>Now, back to the Mac. In order to make Time Machine accept the new network share, run</p>
-<div class="codehilite"><pre><span class="n">defaults</span> <span class="n">write</span> <span class="n">com</span><span class="p">.</span><span class="n">apple</span><span class="p">.</span><span class="n">systempreferences</span> <span class="n">TMShowUnsupportedNetworkVolumes</span> 1
+<div class="codehilite"><pre><span class="n">defaults</span> <span class="n">write</span> <span class="n">com</span><span class="p">.</span><span class="n">apple</span><span class="p">.</span><span class="n">systempreferences</span> <span class="n">TMShowUnsupportedNetworkVolumes</span> <span class="mi">1</span>
 </pre></div>
 
 
@@ -162,32 +153,18 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
         <hr />
     </div>
 		
-    
-        <div class="pagination">
+            <div class="pagination">
 <ul>
-
     <li class="prev disabled"><a href="#">&larr; Previous</a></li>
 
-
-
-    <li class="active"><a href=".././tag/raspberrypi.html">1</a></li>
-
-
+    <li class="active"><a href="../tag/raspberrypi.html">1</a></li>
 
     <li class="next disabled"><a href="#">&rarr; Next</a></li>
 
-
 </ul>
-</div>
-    
-
-
+</div>    
  
-
- 
- 
-
-
+  
         </div>
 
         <div class="span3">
@@ -198,67 +175,49 @@ by <a class="url fn" href=".././author/bastian-bechtold.html">Bastian Bechtold</
                 Site
                 </li>
 
-                <li><a href=".././archives.html">Archives</a>
-                <li><a href=".././tags.html">Tags</a>
-                <li><a href=".././" rel="alternate">Atom feed</a></li>
-                
-                <li><a href=".././feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
-                
-            </ul>
+                <li><a href="../archives.html">Archives</a>
+                <li><a href="../tags.html">Tags</a>
+                <li><a href="../" rel="alternate">Atom feed</a></li>
+                                <li><a href="../feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                            </ul>
             </div>
 
 
-            
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
                 <li class="nav-header">
                 Categories
                 </li>
 
-                
-                <li><a href=".././category/all.html">all</a></li>
-                
-            </ul>
+                                <li><a href="../category/all.html">all</a></li>
+                            </ul>
             </div>
             
 
-
             
 
-
-            
-            <div class="social">
+                        <div class="social">
             <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
             <ul class="nav nav-list">
                 <li class="nav-header">
                 Social
                 </li>
 
-                
-                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
-                
-                <li><a href="http://github.com/bastibe">github</a></li>
-                
-            </ul>
+                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                                <li><a href="http://github.com/bastibe">github</a></li>
+                            </ul>
             </div>
             </div>
             
-
-        </div> 
-    </div> 
-    </div> 
-
+        </div>     </div>     </div> 
 <footer>
 <br />
-<p><a href="../.">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
+<p><a href="..">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
 </footer>
 
 </div> <!-- /container -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-
-
 <a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
-
 </body>
 </html>
