@@ -94,16 +94,16 @@ by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
 <li>Because Python is free and Matlab is not.</li>
 <li>Because Python is a general purpose programming language and Matlab is not.</li>
 </ul>
-<p>Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging back end in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.</p>
+<p>Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.</p>
 <h2>Python as a Matlab replacement</h2>
-<p>The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:</p>
+<p>The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:</p>
 <ul>
 <li>Numpy (the matrix engine)</li>
 <li>Scipy (matrix manipulation)</li>
 <li>Matplotlib (plotting)</li>
 </ul>
 <p>You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.</p>
-<h2>A 30000ft overview</h2>
+<h2>A 30,000 foot overview</h2>
 <p>Like Matlab, Python is <em>interpreted</em>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.</p>
 <p>Like Matlab, Python is <em>dynamically typed</em>, that is, every variable can hold data of any type, as in:</p>
 <div class="codehilite"><pre><span class="c"># Python</span>
@@ -137,21 +137,21 @@ In Matlab, adding a single number to a string will convert that string into an a
 
 <p>Unlike Matlab, every Python file can contain as many functions as you like. Basically, you can organize your code in as many files as you want. To access functions from other files, use <code>import filename</code>.</p>
 <p>Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.</p>
-<p>Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner working is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.</p>
+<p>Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.</p>
 <h2>Reading Python</h2>
-<p>When you start up Python, it is a rather empty environment. In order to do anything useful, you first have <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <em>namespaces</em>, so if you <code>import numpy</code>, you will have to prefix every feature of numpy with its name, like this:</p>
+<p>When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <em>namespaces</em>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:</p>
 <div class="codehilite"><pre><span class="kn">import</span> <span class="nn">numpy</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
 
-<p>This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of numpy into the global environment like this:</p>
+<p>This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of Numpy into the global environment like this:</p>
 <div class="codehilite"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
 
-<p>Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib-stack in one piece:</p>
+<p>Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib stack in one piece:</p>
 <div class="codehilite"><pre><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -219,7 +219,7 @@ In Matlab, adding a single number to a string will convert that string into an a
 <ul>
 <li>Arrays access uses brackets and is numbered from 0.<br />
   Thus, ranges <em>exclude</em> the last number (see below).<br />
-  Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays any more.</li>
+  Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.</li>
 </ul>
 <div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="n">one</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -255,9 +255,9 @@ In Matlab, adding a single number to a string will convert that string into an a
 
 
 <h2>Going further</h2>
-<p>Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot the numerical code you write in Python will look very similar to the equivalent code in Matlab.</p>
-<p>However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (sort of unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.</p>
-<p>Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Getting_Started">tutorial</a> and <a href="http://docs.scipy.org/doc/">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.</p>
+<p>Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab.</p>
+<p>However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.</p>
+<p>Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation site</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Getting_Started">tutorial</a> and <a href="http://docs.scipy.org/doc/">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.</p>
 <p>A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/">project euler</a>.</p></div>
         <hr />
     </div>
