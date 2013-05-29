@@ -1,0 +1,57 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/testing//css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/testing//rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de/testing/">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
+<h1 class="title">Gedanken zu User Interfaces</h1>
+<div class="tags">
+Tagged as <a href="../tag/ui.html">ui</a> </div>
+<div class="date">
+Written on 2009-04-25 14:15 </div>
+</div>
+<div class="article-content">
+
+
+<p>Jeder kennt dieses Fenster:</p>
+
+<p><img src="http://bastibe.de/static/2009-04/delete_file.png" alt="delete file" /></p>
+
+<p>Dieses Fenster ist eine ziemlich schlechte Idee, denn jeder geübte Benutzer hat irgendwann gelernt, dass die Aktion &quot;Dateien Löschen&quot; aus drei Gesten besteht: (1) Dateien auswählen, (2) Die Löschaktion einleiten, (3) Den Löschdialog bestätigen. Leider hat man schon vor mehr als zwanzig Jahren nachgewiesen, dass solche zusammengehörigen Gesten von den Benutzern als einzelne &quot;Datei-Löschen&quot; Geste abstrahiert werden. Man kennt das vom Tippen: Man tippt Worte nicht, indem man einzelne Buchstaben aneinander hängt, sondern man tippt Worte fast immer am Stück; Hat man erst einmal angefangen, ein falsches Wort zu tippen, kann man damit nicht aufhören, bis das gesamte Wort getippt ist. Auf ähnliche Weise ist es dem Benutzer auch nicht möglich, auf den Löschdialog sinnvoll zu reagieren, da das Bestätigen der Sicherheitsfrage vollkommen automatisiert ist und daher nicht einmal verhindert werden könnte, wenn man wollte.
+Die Alternative ist ein alter Bekannter: Undo. Statt den Benutzer im Vorfeld zu fragen, ob er die Datei wirklich löschen möchte (was er durch Einleiten der Löschaktion bereits bejaht hat) gibt man ihm die Möglichkeit, die Aktion im Nachhinein wieder rückgängig zu machen. Das ist wesentlich effektiver und kommt ohne nerviger Dialogbox aus. Übrigens funktioniert Dateiaktion-Undo bereits heute in allen Betriebssystem außer Linux, jedoch ohne Menüicon und zumeist nur für die letzte Aktion. Wäre es nicht schön, wenn dies noch weiter ausgebaut würde?</p>
+
+<p>Noch ein gefährlicher Dialog:</p>
+
+<p><img src="http://bastibe.de/static/2009-04/ja_nein_abbrechen.png" alt="ja, nein, abbrechen" /></p>
+
+<p>Das ist ebenfalls ein alter Bekannter, der immer dann erscheint, wenn man ein Programm schließen will, welches noch ungesichte Änderungen enthält: Abgesehen von dem offensichtlichen Problem, dass &quot;Abbrechen&quot; keinen wirklichen Sinn ergibt (Was abbrechen? Das Programm?) erfordert diese Frage jedes Mal das komplette Lesen der Meldung, bis man entschlüsseln kann, was &quot;Ja&quot; und &quot;Nein&quot; in diesem Kontext bedeuten. Um das noch einmal zu verdeutlichen, hier ein besonders schlimmes Beispiel:</p>
+
+<p><img src="http://bastibe.de/static/2009-04/bad_gui.png" alt="bad GUI" /></p>
+
+<p>Es leuchtet ein, dass hier ein eindeutigerer Dialog wesentlich sinnvoller wäre, bei dem sofort ersichtlich ist, was welcher Button tun wird: (Merke: Auf Buttons gehören immer Verben)</p>
+
+<p><img src="http://bastibe.de/static/2009-04/speichern_windows.png" alt="speichern Windows" />
+<img src="http://bastibe.de/static/2009-04/speichern_mac.png" alt="speichern Mac" /></p>
+
+<p>Aber warum eigentlich überhaupt speichern? Warum muss ich mich persönlich darum kümmern, meine Arbeit zu speichern? Ich dachte, ich würde mit einer Datei arbeiten -- aber wenn diese Datei nicht geändert wird, wenn ich nicht zuerst &quot;Speichern&quot; anklicke, habe ich wohl eigentlich doch nicht mit dieser Datei, sondern mit einer heimlichen Kopie gearbeitet. Wäre es nicht viel sinnvoller, immer automatisch zu speichern, und statt des &quot;Speichern&quot;-Buttons eine &quot;auf Urzustand zurücksetzen&quot;-Funktion bereitzustellen? Ich bin mir auf jeden Fall sicher, dass man den &quot;Undo all changes&quot;-Button wesentlich seltener bräuchte als den &quot;Speichern&quot;-Button, denn wenn der Benutzer nicht vorgehabt hätte, neuen Text in eine Datei zu schreiben, dann hätte er keinen neuen Text in die Datei geschrieben. Hat er dennoch &quot;versehentlich&quot; Text eingegeben, ist das ein klarer &quot;Benutzerfehler&quot;, also der logische Einsatzzweck für Undo.</p>
+
+<p>Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll einsetzen könnte, um das Arbeiten am Computer angenehmer zu gestalten. Ich wünschte, mehr Leute würden sich mit diesen Dingen auseinander setzen...</p>
+ </div>
+<div class="relative-nav">
+<a href="http://bastibe.de/testing//posts/Tagged-File-System.html">Previous</a><br>
+<a href="http://bastibe.de/testing//posts/The-strangeness-of-widescreen-displays-in-modern-operating-systems.html">Next</a><br>
+</div>
+ </div> <div id="disqus_thread"></div>
+     <script type="text/javascript">
+       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+       var disqus_shortname = 'bastibe';
+       /* * * DON'T EDIT BELOW THIS LINE * * */
+       (function() {
+         var dsq = document.createElement('script');
+         dsq.type = 'text/javascript';
+         dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+           })();
+     </script>
+     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/testing//css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/testing//css/logo_small.jpg" /> </div> </body> </html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/testing//css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/testing//rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de/testing/">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
+<h1 class="title">Debugging und GCC auf Windows</h1>
+<div class="tags">
+Tagged as <a href="../tag/compiling.html">compiling</a>, <a href="../tag/computers.html">computers</a> </div>
+<div class="date">
+Written on 2009-03-15 15:10 </div>
+</div>
+<div class="article-content">
+
+
+<p><img src="http://bastibe.de/static/2009-03/code.png" alt="Code" /></p>
+
+<p>So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/State_of_the_Union" >The State of The Union</a>: Kleine Dateien einlesen, kein Problem. Exotische Formate einlesen, kein Problem. Metadaten auslesen, kein Problem. Dateigröße, Bitrate und Samplerate auslesen, ein kleines Problem, da diese Parameter bei komprimierten Formaten nicht unbedingt fest stehen. Große Dateien einlösen, auf dem Mac kein Problem, auf Windows… nun ja, es dauert. Eine WAV-Datei von 5:30 min einzulesen, dauert mit Windows momentan ca. eine Stunde. Das kann nicht sein, in der Zeit habe ich die Datei dem Programm vorgelesen, wenn es sein muss.</p>
+
+<p>Also, was ist da faul? Jetzt heißt es debuggen: <a href="http://de.wikipedia.org/wiki/GNU_Debugger" >GDB</a> ist mein Freund, aber leider spreche ich seine Sprache nicht, also Oldschool-Debugging mit <a href="http://www.cplusplus.com/reference/clibrary/cstdio/printf.html" >printf()</a> (bzw. <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexprintf.html" >mexPrintf()</a>; Aber da <code>#define printf mexPrintf</code> ist das das selbe). Blöd nur, dass Matlab selbst entscheidet, wann es meine Printfs auf den Bildschirm schreibt und es sich dazu entschlossen hat, dies immer erst nach dem Ausführen der Datei, also erst nachdem es bereits eine Stunde gearbeitet hat, zu tun. Einiges Hirnen später konnte ich Matlab endlich über eine Kombination aus <a href="http://de.wikipedia.org/wiki/Typumwandlung" >Typecasts</a>, <a href="http://www.cplusplus.com/reference/clibrary/cstdio/sprintf.html" >sprintf</a> und <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexwarnmsgtxt.html" >mexWarnMsgTxt</a> dazu überreden, wenigstens sporadisch ein paar Informationen herauszugeben.</p>
+
+<p>Das Ergebnis:</p>
+
+<ol>
+<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)</li>
+<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html" >Realloc</a> ist schuld!</li>
+</ol>
+
+<p>Das kam überraschend! Offenbar ist realloc auf dem Mac um mehrere Größenordnungen performanter als auf <a href="http://www.mingw.org/" >MinGW</a>/Windows, denn die selbe Anwendung, die auf dem Mac ca. eine Sekunde braucht, braucht auf Windows eine Stunde! Und das allein wegen realloc! (Eigentlich: eine halbe Stunde wegen realloc, der Rest ist der Tatsache geschuldet, dass Windows in einer <a href="http://www.vmware.com/de/products/fusion/" >VM</a> läuft)</p>
+
+<p>Bei WAV-Dateien werden immer 2048 Samples an einem Stück ausgelesen. Danach verwende ich ein realloc, um meinen haupt-Speicherpuffer um diese Größe zu vergrößern und kopiere die neuen Daten dort hinein. Bei meinen 5:30 min macht das bei einer Samplerate von 44100 kHz und zwei Kanälen ca. 15000 Aufrufe von realloc. Komprimierte Datenformate haben üblicherweise kleinere Frames und damit noch einmal wesentlich mehr realloc-Aufrufe.
+Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, größere Aufrufe zu machen. Zeit für ein paar Experimente:</p>
+
+<pre><code>realloc()-Größe   realloc()-Aufrufe   benötigte Zeit
+2^11 = 2048       15000               ~1 h
+2^16 = 65536      470                 ~2 min
+2^17 = 131072     240                 ~1 min
+2^18 = 262144     120                 30 s
+2^19 = 524288     60                  18 s
+2^20 = 1048576    30                  10.5 s
+2^21 = 2097152    15                  7.3 s
+2^22 = 4194304    7                   5.1 s
+2^23 = 8388608    3                   4.2 s
+</code></pre>
+
+<p>Das Spannende ist: Ich ändere durch meine Methodik praktisch nichts außer der Anzahl und Größe der realloc-Aufrufe, aber man erkennt einen eindeutigen Zusammenhang zwischen Performance und Anzahl der Aufrufe, ergo ist realloc der alleinige Schuldige für mein Performanceproblem auf Windows.</p>
+
+<p>An dieser Stelle fiel mir ein, dass ich bereits an früherer Stelle einmal die gesamte Länge des Audio-Streams anhand der Metadaten geschätzt hatte. Durch eine somit vorgenommene Prä-Allokation des gesamten Speichers lässt sie die Laufzeit weiter auf 2.2 s drücken. Das ist immernoch nicht einmal halb so schnell wie auf OSX (0.9 s), aber das mag auch an der virtuellen Maschine liegen.</p>
+
+<p>Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sicher, dass ich ab jetzt die Finger von inkrementiellen Speichervergrößerungen auf MinGW/Windows lassen werde. Ist das in MSVC ähnlich schlimm, oder habe ich da etwa einen Bug entdeckt?</p>
+ </div>
+<div class="relative-nav">
+<a href="http://bastibe.de/testing//posts/Get-a-Mac.html">Previous</a><br>
+<a href="http://bastibe.de/testing//posts/Western-Digital-Festplatten-Umtausch-mit-berraschungen.html">Next</a><br>
+</div>
+ </div> <div id="disqus_thread"></div>
+     <script type="text/javascript">
+       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+       var disqus_shortname = 'bastibe';
+       /* * * DON'T EDIT BELOW THIS LINE * * */
+       (function() {
+         var dsq = document.createElement('script');
+         dsq.type = 'text/javascript';
+         dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+           })();
+     </script>
+     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/testing//css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/testing//css/logo_small.jpg" /> </div> </body> </html>

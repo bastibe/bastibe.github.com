@@ -1,0 +1,82 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/testing//css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/testing//rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de/testing/">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/testing//posts/Installing-Pygame-using-Homebrew.html">Installing Pygame using Homebrew</a> <div class="date"> posted on 2011-03-04 14:16</div> <div class="article">
+
+<p>So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html" >Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.</p>
+
+<p><a href="http://www.pygame.org/news.html" >Pygame</a> is one package that allows this. (I will submit a patch to <a href="http://people.csail.mit.edu/hubert/pyaudio/" >Pyaudio</a> soon that will enable it there, too). There are pre-built binaries on the Pygame website that you can install easily. But then there would be no easy way to uninstall them, so what I would rather want is to install Pygame using package managers that allow easy updating and uninstallation. My tool of choice on the Mac is of course <a href="https://github.com/mxcl/homebrew/" >Homebrew</a>.</p>
+
+<p>Note that although I am mostly interested in audio playback, this post will detail the installation of all modules of Pygame, not just <code>pygame.mixer</code>.</p>
+
+<p>Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.</p>
+
+<pre><code>brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
+</code></pre>
+
+<p>This will install most packages for you. Note that <code>libpng</code> is also available as a system library, so it is installed <code>keg_only</code>, that is, without linking it in your path. We will need to compile against it though, so the next step is</p>
+
+<pre><code>brew link libpng
+</code></pre>
+
+<p>Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</code> does not install its headers, so you can't compile against it. To fix that, type</p>
+
+<pre><code>brew edit smpeg
+</code></pre>
+
+<p>and add the following line just above the two end at the end of the file</p>
+
+<pre><code>include.install Dir[&quot;*.h&quot;]
+</code></pre>
+
+<p>Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install <code>smpeg</code> with the usual</p>
+
+<pre><code>brew install smpeg
+</code></pre>
+
+<p>and you will get the headers, too. Isn't Homebrew great?</p>
+
+<p>Now that all the prerequisites are met, lets look at Pygame itself. This is rather more difficult, as it will not build properly against Homebrew libraries on its own. First, download the source package of Pygame from the <a href="http://www.pygame.org/download.shtml" >official website</a>. Unpack it to some directory.</p>
+
+<p>Now open a terminal and navigate to that directory. Me, I like <a href="http://iterm.sourceforge.net/" >iTerm</a>, but Terminal.app will do just fine, too. In there, run <code>python config.py</code> to create an initial setup file.</p>
+
+<p>At this point, the setup file is mostly useless since <code>config.py</code> failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file <code>Setup</code> (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this</p>
+
+<pre><code>SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
+</code></pre>
+
+<p>Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in <code>/usr/local…</code>. Hence, change this line to</p>
+
+<pre><code>SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+</code></pre>
+
+<p>The next lines are strangely garbled. They say, for example</p>
+
+<pre><code>FONT = -lS -lD -lL -l_ -lt -lt -lf
+</code></pre>
+
+<p>Where they actually should say</p>
+
+<pre><code>FONT = -lSDL_ttf
+</code></pre>
+
+<p>Instead of having one <code>-l</code> and then the library name <code>SDL_ttf</code>, they put <code>-l</code> in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for <code>FONT</code>, <code>IMAGE</code>, <code>MIXER</code> and <code>SMPEG</code>.</p>
+
+<p>Note that I did not tell you to do this for <code>PORTTIME</code>, too. Actually, <code>PORTTIME</code> is already correctly linked in <code>PORTMIDI</code>, so you don't need that at all any more. Just delete or comment the <code>PORTTIME</code> line.</p>
+
+<p>Now that all the dependencies are corrected, lets enable the features. A few lines further down, there will be a block of lines, where most lines begin with a <code>#</code> except for the ones beginning with <code>_numericsurfarray…</code> and <code>_camera…</code>, These are the different features of Pygame: The ones with the <code>#</code> are disabled, the other two are enabled.</p>
+
+<p>With all the stuff we installed earlier, you can now enable all features (remove the <code>#</code> in front of <code>imageext…</code>, <code>font…</code>, <code>mixer…</code>, <code>mixer_music…</code>, <code>_minericsndarray…</code>, <code>movie…</code>, <code>scrap…</code> and <code>pypm…</code>).</p>
+
+<p>Remember we disabled <code>PORTTIME</code> a while ago? Right, so we have to remove that dependency: In the line starting with <code>pypm…</code>, delete the part that says <code>$(PORTTIME)</code>. Great. That was easy, right? Now save that file and go back to the Terminal.</p>
+
+<p>We are now going to compile and install Pygame. The nice thing is, even though we are installing it manually, it will go in the right directories and it will be registered with <code>pip</code> or <code>easy_install</code>, so you can just invoke them if you want to uninstall it later by typing <code>pip uninstall pygame</code>. This is something I love about Python!</p>
+
+<p>Alright, now without further ado, install Pygame by typing</p>
+
+<pre><code>python setup.py install
+</code></pre>
+
+<p>Great! That's it! Everything should work now!</p>
+</div> <hr> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/testing//tag/apple.html">apple</a>, <a href="http://bastibe.de/testing//tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/testing//tag/blog.html">blog</a>, <a href="http://bastibe.de/testing//tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/testing//tag/compiling.html">compiling</a>, <a href="http://bastibe.de/testing//tag/computers.html">computers</a>, <a href="http://bastibe.de/testing//tag/cython.html">cython</a>, <a href="http://bastibe.de/testing//tag/emacs.html">emacs</a>, <a href="http://bastibe.de/testing//tag/error.html">error</a>, <a href="http://bastibe.de/testing//tag/file-system.html">file-system</a>, <a href="http://bastibe.de/testing//tag/gaming.html">gaming</a>, <a href="http://bastibe.de/testing//tag/gem.html">gem</a>, <a href="http://bastibe.de/testing//tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/testing//tag/matlab.html">matlab</a>, <a href="http://bastibe.de/testing//tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/testing//tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/testing//tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/testing//tag/numpy.html">numpy</a>, <a href="http://bastibe.de/testing//tag/open-source.html">open-source</a>, <a href="http://bastibe.de/testing//tag/pelican.html">pelican</a>, <a href="http://bastibe.de/testing//tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/testing//tag/pip.html">pip</a>, <a href="http://bastibe.de/testing//tag/programming.html">programming</a>, <a href="http://bastibe.de/testing//tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/testing//tag/pygame.html">pygame</a>, <a href="http://bastibe.de/testing//tag/pygments.html">pygments</a>, <a href="http://bastibe.de/testing//tag/python.html">python</a>, <a href="http://bastibe.de/testing//tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/testing//tag/scheme.html">scheme</a>, <a href="http://bastibe.de/testing//tag/scipy.html">scipy</a>, <a href="http://bastibe.de/testing//tag/solarized.html">solarized</a>, <a href="http://bastibe.de/testing//tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/testing//tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/testing//tag/ui.html">ui</a>, <a href="http://bastibe.de/testing//tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/testing//date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/testing//date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/testing//date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/testing//date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/testing//date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/testing//date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/testing//date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/testing//date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/testing//date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/testing//date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/testing//date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/testing//date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/testing//date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/testing//date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/testing//date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/testing//date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/testing//css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/testing//css/logo_small.jpg" /> </div> </body> </html>
