@@ -5,7 +5,7 @@
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de/testing/">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
 <h1 class="title">Real Time Signal Processing in Python</h1>
 <div class="tags">
-Tagged as <a href="../tag/Python.html">Python</a>, <a href="../tag/Cython.html">Cython</a>, <a href="../tag/Numpy.html">Numpy</a>, <a href="../tag/PyAudio.html">PyAudio</a> </div>
+Tagged as <a href="../tag/python.html">python</a>, <a href="../tag/cython.html">cython</a>, <a href="../tag/numpy.html">numpy</a>, <a href="../tag/pyaudio.html">pyaudio</a> </div>
 <div class="date">
 Written on 2012-11-02 10:53 </div>
 </div>
@@ -32,7 +32,7 @@ Written on 2012-11-02 10:53 </div>
 
 <p>If this is applied to a signal, it will create an envelope like this:</p>
 
-<p><img src="images/2012-11/envelope.png" alt="Envelope" /></p>
+<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="Envelope" /></p>
 
 <p>Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using</p>
 
@@ -51,11 +51,11 @@ g_t[n] = \begin{cases}
 
 <p>Here you can see how that would look in practice:</p>
 
-<p><img src="images/2012-11/gain.png" alt="Gain" /></p>
+<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="Gain" /></p>
 
 <p>Zooming in on one of the limited section reveals that the gain is actually moving smoothly.</p>
 
-<p><img src="images/2012-11/detail.png" alt="Detail Gain" /></p>
+<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="Detail Gain" /></p>
 
 <p>This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.</p>
 
@@ -72,17 +72,17 @@ class="keyword"> __init__</span><span class="paren1">(<span class="code">self, a
             self.delay_line = zeros<span class="paren1">(<span class="code">delay, dtype=dtype</span>)</span>
             self.release_coeff = release_coeff
             self.attack_coeff = attack_coeff
-    
+
         <span class="special">def</span><span
 class="keyword"> limit</span><span class="paren1">(<span class="code">self, signal, threshold</span>)</span>:
             <span class="symbol">for</span> i <span class="symbol">in</span> arange<span class="paren1">(<span class="code">len<span class="paren2">(<span class="code">signal</span>)</span></span>)</span>:
                 self.delay_line<span class="paren1">[<span class="code">self.delay_index</span>]</span> = signal<span class="paren1">[<span class="code">i</span>]</span>
                 self.delay_index = <span class="paren1">(<span class="code">self.delay_index + 1</span>)</span> % self.delay
-    
+
                 <span class="comment"># calculate an envelope of the signal
 </span>                self.envelope *= self.release_coeff
                 self.envelope  = max<span class="paren1">(<span class="code">abs<span class="paren2">(<span class="code">signal<span class="paren3">[<span class="code">i</span>]</span></span>)</span>, self.envelope</span>)</span>
-    
+
                 <span class="comment"># have self.gain go towards a desired limiter gain
 </span>                <span class="symbol">if</span> self.envelope &gt; threshold:
                     target_gain = <span class="paren1">(<span class="code">1+threshold-self.envelope</span>)</span>
@@ -90,7 +90,7 @@ class="keyword"> limit</span><span class="paren1">(<span class="code">self, sign
                     target_gain = 1.0
                 self.gain = <span class="paren1">(<span class="code"> self.gain*self.attack_coeff +
                               target_gain*<span class="paren2">(<span class="code">1-self.attack_coeff</span>)</span> </span>)</span>
-    
+
                 <span class="comment"># limit the delayed signal
 </span>                signal<span class="paren1">[<span class="code">i</span>]</span> = self.delay_line<span class="paren1">[<span class="code">self.delay_index</span>]</span> * self.gain</span></code></pre>
 
@@ -105,19 +105,19 @@ class="keyword"> limit</span><span class="paren1">(<span class="code">self, sign
 <p>(<code>callback</code> is a function that will be defined shortly)</p>
 
 <pre><code><span class="code">    <span class="symbol">from</span> pyaudio <span class="symbol">import</span> PyAudio, paFloat32
-    
+
     pa = PyAudio<span class="paren1">(<span class="code"></span>)</span>
-    
+
     stream = pa.open<span class="paren1">(<span class="code">format = paFloat32,
                      channels = 1,
                      rate = 44100,
                      output = True,
                      frames_per_buffer = 1024,
                      stream_callback = callback</span>)</span>
-    
+
     <span class="symbol">while</span> stream.is_active<span class="paren1">(<span class="code"></span>)</span>:
         sleep<span class="paren1">(<span class="code">0.1</span>)</span>
-    
+
     stream.close<span class="paren1">(<span class="code"></span>)</span>
     pa.terminate<span class="paren1">(<span class="code"></span>)</span></span></code></pre>
 
@@ -128,7 +128,7 @@ class="keyword"> limit</span><span class="paren1">(<span class="code">self, sign
 <p>Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:</p>
 
 <pre><code><span class="code">    limiter = Limiter<span class="paren1">(<span class="code">attack_coeff, release_coeff, delay, dtype</span>)</span>
-    
+
     <span class="special">def</span><span
 class="keyword"> callback</span><span class="paren1">(<span class="code">in_data, frame_count, time_info, flag</span>)</span>:
         <span class="symbol">if</span> flag:
@@ -155,9 +155,9 @@ class="keyword"> callback</span><span class="paren1">(<span class="code">in_data
         <span class="symbol">float</span> attack_coeff;
         <span class="symbol">float</span> release_coeff;
     </span>}</span> limiter_state;
-    
+
     <span class="special">#define MAX(x,y) ((x)&gt;(y)?(x):(y))
-</span>    
+</span>
     <span class="comment">// this corresponds to the Python __init__ function.
 </span>    limiter_state init_limiter<span class="paren1">(<span class="code"><span class="symbol">float</span> attack_coeff, <span class="symbol">float</span> release_coeff, <span class="symbol">int</span> delay_len</span>)</span> <span class="paren1">{<span class="code">
         limiter_state state;
@@ -169,17 +169,17 @@ class="keyword"> callback</span><span class="paren1">(<span class="code">in_data
         state.delay_length = delay_len;
         <span class="symbol">return</span> state;
     </span>}</span>
-    
+
     <span class="symbol">void</span> limit<span class="paren1">(<span class="code"><span class="symbol">float</span> *signal, <span class="symbol">int</span> block_length, <span class="symbol">float</span> threshold,
                <span class="symbol">float</span> *delay_line, limiter_state *state</span>)</span> <span class="paren1">{<span class="code">
         <span class="symbol">for</span><span class="paren2">(<span class="code"><span class="symbol">int</span> i=0; i&lt;block_length; i++</span>)</span> <span class="paren2">{<span class="code">
             delay_line<span class="paren3">[<span class="code">state-&gt;delay_index</span>]</span> = signal<span class="paren3">[<span class="code">i</span>]</span>;
             state-&gt;delay_index = <span class="paren3">(<span class="code">state-&gt;delay_index + 1</span>)</span> % state-&gt;delay_length;
-    
+
             <span class="comment">// calculate an envelope of the signal
 </span>            state-&gt;envelope *= state-&gt;release_coeff;
             state-&gt;envelope = MAX<span class="paren3">(<span class="code">fabs<span class="paren4">(<span class="code">signal<span class="paren5">[<span class="code">i</span>]</span></span>)</span>, state-&gt;envelope</span>)</span>;
-    
+
             <span class="comment">// have current_gain go towards a desired limiter target_gain
 </span>            <span class="symbol">float</span> target_gain;
             <span class="symbol">if</span> <span class="paren3">(<span class="code">state-&gt;envelope &gt; threshold</span>)</span>
@@ -188,7 +188,7 @@ class="keyword"> callback</span><span class="paren1">(<span class="code">in_data
                 target_gain = 1.0;
             state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
                 target_gain*<span class="paren3">(<span class="code">1-state-&gt;attack_coeff</span>)</span>;
-    
+
             <span class="comment">// limit the delayed signal
 </span>            signal<span class="paren3">[<span class="code">i</span>]</span> = delay_line<span class="paren3">[<span class="code">state-&gt;delay_index</span>]</span> * state-&gt;current_gain;
         </span>}</span>
@@ -206,7 +206,7 @@ class="keyword"> callback</span><span class="paren1">(<span class="code">in_data
             float current_gain
             float attack_coeff
             float release_coeff
-    
+
         limiter_state init_limiter<span class="paren1">(<span class="code">float attack_factor, float release_factor, int delay_len</span>)</span>
         void limit<span class="paren1">(<span class="code">float *signal, int block_length, float threshold,
                    float *delay_line, limiter_state *state</span>)</span></span></code></pre>
@@ -221,7 +221,7 @@ class="keyword"> callback</span><span class="paren1">(<span class="code">in_data
         <span class="symbol">float</span> attack_coeff;
         <span class="symbol">float</span> release_coeff;
     </span>}</span> limiter_state;
-    
+
     limiter_state init_limiter<span class="paren1">(<span class="code"><span class="symbol">float</span> attack_factor, <span class="symbol">float</span> release_factor, <span class="symbol">int</span> delay_len</span>)</span>;
     <span class="symbol">void</span> limit<span class="paren1">(<span class="code"><span class="symbol">float</span> *signal, <span class="symbol">int</span> block_length, <span class="symbol">float</span> threshold,
                <span class="symbol">float</span> *delay_line, limiter_state *state</span>)</span>;</span></code></pre>
@@ -231,10 +231,10 @@ class="keyword"> callback</span><span class="paren1">(<span class="code">in_data
 <pre><code><span class="code">    <span class="symbol">import</span> numpy as np
     cimport numpy as np
     cimport limiter
-    
+
     DTYPE = np.float32
     ctypedef np.float32_t DTYPE_t
-    
+
     cdef <span class="special">class</span><span
 class="keyword"> Limiter</span>:
         cdef limiter.limiter_state state
@@ -244,7 +244,7 @@ class="keyword"> __init__</span><span class="paren1">(<span class="code">self, f
                      int delay_length</span>)</span>:
             self.state = limiter.init_limiter<span class="paren1">(<span class="code">attack_coeff, release_coeff, delay_length</span>)</span>
             self.delay_line = np.zeros<span class="paren1">(<span class="code">delay_length, dtype=DTYPE</span>)</span>
-    
+
         <span class="special">def</span><span
 class="keyword"> limit</span><span class="paren1">(<span class="code">self, np.ndarray<span class="paren2">[<span class="code">DTYPE_t,ndim=1</span>]</span> signal, float threshold</span>)</span>:
             limiter.limit<span class="paren1">(<span class="code">&lt;float*&gt;np.PyArray_DATA<span class="paren2">(<span class="code">signal</span>)</span>,
@@ -264,12 +264,12 @@ class="keyword"> limit</span><span class="paren1">(<span class="code">self, np.n
     <span class="symbol">from</span> distutils.extension <span class="symbol">import</span> Extension
     <span class="symbol">from</span> Cython.Distutils <span class="symbol">import</span> build_ext
     <span class="symbol">from</span> numpy <span class="symbol">import</span> get_include
-    
+
     ext_modules = <span class="paren1">[<span class="code">Extension<span class="paren2">(<span class="code"><span class="string">"cython_limiter"</span>,
                              sources=<span class="paren3">[<span class="code"><span class="string">"cython_limiter.pyx"</span>,
                                       <span class="string">"limiter.c"</span></span>]</span>,
                              include_dirs=<span class="paren3">[<span class="code"><span class="string">'.'</span>, get_include<span class="paren4">(<span class="code"></span>)</span></span>]</span></span>)</span></span>]</span>
-    
+
     setup<span class="paren1">(<span class="code">
         name = <span class="string">"cython_limiter"</span>,
         cmdclass = <span class="paren2">{<span class="code"><span class="string">'build_ext'</span>: build_ext</span>}</span>,
