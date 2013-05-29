@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Bastis Scratchpad On The Internet</title>
+    <meta name="description" content="">
+    <meta name="author" content="Bastian Bechtold">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="../theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="../theme/bootstrap.min.css" rel="stylesheet">
+    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="../theme/local.css" rel="stylesheet">
+    <link href="../theme/pygments.css" rel="stylesheet">
+
+    <script language="javascript">
+    if(window.MathJax===undefined){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
+        var config = 'MathJax.Hub.Config({' +
+                    'extensions: ["tex2jax.js"],' +
+                    'tex2jax: { '+
+                      'inlineMath: [ ["$","$"]], '+
+                      'displayMath: [["\\[","\\]"]],'+
+                      'processEscapes: true '+
+                    '},' +
+                    'jax: ["input/TeX","output/HTML-CSS"]' +
+                    '});' +
+                    'MathJax.Hub.Startup.onload();';
+        if (window.opera)
+            script.innerHTML = config;
+        else
+            script.text = config;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+    </script>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href="..">Bastis Scratchpad On The Internet</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+        
+                                </ul>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+                
+
+        
+
+
+    <div class='article'>
+        <div class="content-title">
+            <a href="../a-python-primer-for-matlab-users.html"><h1>A Python Primer for Matlab Users</h1></a>
+            20/01/2013
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ 
+        </div>
+        
+        <div><blockquote>
+<p>Why would you want to use Python over Matlab?</p>
+</blockquote>
+<ul>
+<li>Because Python is free and Matlab is not.</li>
+<li>Because Python is a general purpose programming language and Matlab is not.</li>
+</ul>
+<p>Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.</p>
+<h2>Python as a Matlab replacement</h2>
+<p>The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:</p>
+<ul>
+<li>Numpy (the matrix engine)</li>
+<li>Scipy (matrix manipulation)</li>
+<li>Matplotlib (plotting)</li>
+</ul>
+<p>You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.</p>
+<h2>A 30,000 foot overview</h2>
+<p>Like Matlab, Python is <em>interpreted</em>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.</p>
+<p>Like Matlab, Python is <em>dynamically typed</em>, that is, every variable can hold data of any type, as in:</p>
+<div class="codehilite"><pre><span class="c"># Python</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>         <span class="c"># a number</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c"># a list</span>
+<span class="n">a</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>    <span class="c"># a string</span>
+</pre></div>
+
+
+<p>Contrast this with C, where you can not assign different data types to the same variable:</p>
+<div class="codehilite"><pre><span class="c1">// C</span>
+<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
+<span class="kt">char</span> <span class="n">c</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;text&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<p>Unlike Matlab, Python is <em>strongly typed</em>, that is, you can not add a number to a string.
+In Matlab, adding a single number to a string will convert that string into an array of numbers, then add the single number to each of the numbers in the array. Python will simply throw an error.</p>
+<div class="codehilite"><pre><span class="c">% Matlab</span>
+<span class="n">a</span> <span class="p">=</span> <span class="s">&#39;text&#39;</span>
+<span class="n">b</span> <span class="p">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c">% [121 106 125 121]</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span class="c"># Python</span>
+<span class="n">a</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c"># TypeError: Can&#39;t convert &#39;int&#39; object to str implicitly</span>
+</pre></div>
+
+
+<p>Unlike Matlab, every Python file can contain as many functions as you like. Basically, you can organize your code in as many files as you want. To access functions from other files, use <code>import filename</code>.</p>
+<p>Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.</p>
+<p>Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.</p>
+<h2>Reading Python</h2>
+<p>When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <em>namespaces</em>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:</p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of Numpy into the global environment like this:</p>
+<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib stack in one piece:</p>
+<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Note that Python does not plot immediately when you type <code>plot()</code>. Instead, it will collect all plotting information and only show it on the screen once you type <code>show()</code>.</p>
+<p>So far, the code you have seen should look pretty familiar. A few differences:</p>
+<ul>
+<li>
+<p>No semicolons at the end of lines;<br />
+  In order to print stuff to the console, use the <code>print()</code> function instead.</p>
+</li>
+<li>
+<p>No <code>end</code> anywhere.<br />
+  In Python, blocks of code are identified by indentation and they always start with a colon like so:</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="n">n</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
+</pre></div>
+
+
+<ul>
+<li>Function definitions are different.<br />
+  They use the <code>def</code> keyword instead of <code>function</code>.<br />
+  You don't have to name the output variable names in the definition and instead use <code>return()</code>.</li>
+</ul>
+<div class="codehilite"><pre><span class="c"># Python</span>
+<span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">number</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">number</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span class="c">% Matlab</span>
+<span class="k">function</span><span class="w"> </span>[out] <span class="p">=</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span>number<span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">out</span> <span class="p">=</span> <span class="n">number</span>
+    <span class="k">else</span>
+        <span class="n">out</span> <span class="p">=</span> <span class="o">-</span><span class="n">number</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+
+<ul>
+<li>There is no easy way to write out a list or matrix.<br />
+  Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <em>must</em> use commas to separate items and can not use semicolons to separate lines.</li>
+</ul>
+<div class="codehilite"><pre><span class="c"># create a numpy matrix:</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+           <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
+<span class="c"># create a Python list:</span>
+<span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+
+
+<ul>
+<li>Arrays access uses brackets and is numbered from 0.<br />
+  Thus, ranges <em>exclude</em> the last number (see below).<br />
+  Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.</li>
+</ul>
+<div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">one</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">two</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c"># &quot;6:8&quot; is a range of two elements:</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">]</span> <span class="c"># &lt;-- a Python list!</span>
+</pre></div>
+
+
+<h2>Common traps</h2>
+<ul>
+<li>Array slicing does not copy.</li>
+</ul>
+<div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="c"># [2 3 4]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="c"># this will change a and b!</span>
+<span class="c"># make a copy like this:</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c"># copy=True can be omitted</span>
+<span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="c"># changes only c</span>
+</pre></div>
+
+
+<ul>
+<li>Arrays retain their data type.
+  You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).</li>
+</ul>
+<div class="codehilite"><pre><span class="c"># pretend this came from a wave file:</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int16</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">10</span> <span class="c"># int16 only goes to 32768!</span>
+<span class="c"># a is now [10000, 20000, 30000, -25536, -15536]</span>
+</pre></div>
+
+
+<h2>Going further</h2>
+<p>Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.</p>
+<p>However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.</p>
+<p>Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation site</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Getting_Started">tutorial</a> and <a href="http://docs.scipy.org/doc/">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.</p>
+<p>A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/">project euler</a>.</p></div>
+        <hr />
+    </div>
+		
+    
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../installing-pythonnumpyscipymatplotlib-on-osx.html"><h2>Installing Python/Numpy/Scipy/Matplotlib on OSX</h2></a>
+        <div class= "well small"> 03/02/2011
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ </div>
+        <div class="summary"><p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
+<p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/">Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
+<p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/">Numpy</a>, which seems to be nearly ...</p> <a class="btn btn-info xsmall" href="../installing-pythonnumpyscipymatplotlib-on-osx.html">read more</a></div>
+    </div>	
+				
+            <div class="pagination">
+<ul>
+    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+
+    <li class="active"><a href="../tag/python.html">1</a></li>
+
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
+</ul>
+</div>    
+ 
+  
+        </div>
+
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Site
+                </li>
+
+                <li><a href="../archives.html">Archives</a>
+                <li><a href="../tags.html">Tags</a>
+                <li><a href="../" rel="alternate">Atom feed</a></li>
+                                <li><a href="../feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                            </ul>
+            </div>
+
+
+                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Categories
+                </li>
+
+                                <li><a href="../category/all.html">all</a></li>
+                            </ul>
+            </div>
+            
+
+            
+
+                        <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Social
+                </li>
+
+                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                                <li><a href="http://github.com/bastibe">github</a></li>
+                            </ul>
+            </div>
+            </div>
+            
+        </div>     </div>     </div> 
+<footer>
+<br />
+<p><a href="..">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
+</footer>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+</body>
+</html>

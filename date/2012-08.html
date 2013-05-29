@@ -1,0 +1,36 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Fixing-Errors-in-Epydoc.html">Fixing Errors in Epydoc</a> <div class="date"> posted on 2012-08-28 12:14</div> <div class="article">
+
+<p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+
+<p>If you ever get this error when using <a href="http://epydoc.sourceforge.net/" >epydoc</a>:</p>
+
+<pre><code>UNEXPECTED ERROR:
+'Text' object has no attribute 'data'
+</code></pre>
+
+<p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
+
+<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom" >fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data" >folks</a> on the internet have figured out how to fix these things.</p>
+
+<p>Short answer: Find your <em>site-packages</em> directory:</p>
+
+<pre><code><span class="code">    <span class="symbol">from</span> distutils.sysconfig <span class="symbol">import</span> get_python_lib
+    <span class="symbol">print</span><span class="paren1">(<span class="code">get_python_lib<span class="paren2">(<span class="code"></span>)</span></span>)</span></span></code></pre>
+
+<p>Go there, navigate to the <em>epydoc/markup</em> directory and change line 307 of the file <em>restructuredtext.py</em> from</p>
+
+<pre><code><span class="code">    m = self._SUMMARY_RE.match<span class="paren1">(<span class="code">child.data</span>)</span></span></code></pre>
+
+<p>to</p>
+
+<pre><code><span class="code">    try:
+        m = self._SUMMARY_RE.match<span class="paren1">(<span class="code">child.data</span>)</span>
+    <span class="symbol">except</span> AttributeError:
+        m = None</span></code></pre>
+
+<p>This should fix that problem.</p>
+</div> <hr> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/tag/apple.html">apple</a>, <a href="http://bastibe.de/tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/tag/blog.html">blog</a>, <a href="http://bastibe.de/tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/tag/compiling.html">compiling</a>, <a href="http://bastibe.de/tag/computers.html">computers</a>, <a href="http://bastibe.de/tag/cython.html">cython</a>, <a href="http://bastibe.de/tag/emacs.html">emacs</a>, <a href="http://bastibe.de/tag/error.html">error</a>, <a href="http://bastibe.de/tag/file-system.html">file-system</a>, <a href="http://bastibe.de/tag/gaming.html">gaming</a>, <a href="http://bastibe.de/tag/gem.html">gem</a>, <a href="http://bastibe.de/tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/tag/matlab.html">matlab</a>, <a href="http://bastibe.de/tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/tag/numpy.html">numpy</a>, <a href="http://bastibe.de/tag/open-source.html">open-source</a>, <a href="http://bastibe.de/tag/pelican.html">pelican</a>, <a href="http://bastibe.de/tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/tag/pip.html">pip</a>, <a href="http://bastibe.de/tag/programming.html">programming</a>, <a href="http://bastibe.de/tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/tag/pygame.html">pygame</a>, <a href="http://bastibe.de/tag/pygments.html">pygments</a>, <a href="http://bastibe.de/tag/python.html">python</a>, <a href="http://bastibe.de/tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/tag/scheme.html">scheme</a>, <a href="http://bastibe.de/tag/scipy.html">scipy</a>, <a href="http://bastibe.de/tag/solarized.html">solarized</a>, <a href="http://bastibe.de/tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/tag/ui.html">ui</a>, <a href="http://bastibe.de/tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

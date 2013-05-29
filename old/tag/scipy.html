@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Bastis Scratchpad On The Internet</title>
+    <meta name="description" content="">
+    <meta name="author" content="Bastian Bechtold">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="../theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="../theme/bootstrap.min.css" rel="stylesheet">
+    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="../theme/local.css" rel="stylesheet">
+    <link href="../theme/pygments.css" rel="stylesheet">
+
+    <script language="javascript">
+    if(window.MathJax===undefined){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
+        var config = 'MathJax.Hub.Config({' +
+                    'extensions: ["tex2jax.js"],' +
+                    'tex2jax: { '+
+                      'inlineMath: [ ["$","$"]], '+
+                      'displayMath: [["\\[","\\]"]],'+
+                      'processEscapes: true '+
+                    '},' +
+                    'jax: ["input/TeX","output/HTML-CSS"]' +
+                    '});' +
+                    'MathJax.Hub.Startup.onload();';
+        if (window.opera)
+            script.innerHTML = config;
+        else
+            script.text = config;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+    </script>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href="..">Bastis Scratchpad On The Internet</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+        
+                                </ul>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+                
+
+        
+
+
+    <div class='article'>
+        <div class="content-title">
+            <a href="../compiling-scipy-and-matplotlib-again.html"><h1>Compiling Scipy and Matplotlib again</h1></a>
+            13/10/2011
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ 
+        </div>
+        
+        <div><p>Well, it's compile time again. Once again, I need to install scipy and matplotlib using homebrew and pip on Lion.<br />
+It seems things have improved since I tried to compile last time! Well, it still does not work out of the box, but at least now it can be done without compiling by hand:
+(remember to brew install pkg-config and gfortran first)</p>
+<p><code>pip install -e git+https://github.com/scipy/scipy#egg=scipy-dev</code><br />
+<code>pip install -e git+https://github.com/matplotlib/matplotlib#egg=matplotlib</code></p>
+<p>I must say, this is still a mess. But at least, it is getting less bad.</p></div>
+        <hr />
+    </div>
+		
+    
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../compiling-scipy-and-matplotlib-using-pip-on-lion.html"><h2>Compiling Scipy and Matplotlib using pip on Lion</h2></a>
+        <div class= "well small"> 01/08/2011
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ </div>
+        <div class="summary"><p>So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.</p>
+<p>In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html">round of googling</a> reveals ...</p> <a class="btn btn-info xsmall" href="../compiling-scipy-and-matplotlib-using-pip-on-lion.html">read more</a></div>
+    </div>	
+				
+    
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../installing-pygame-using-homebrew.html"><h2>Installing Pygame using Homebrew</h2></a>
+        <div class= "well small"> 04/03/2011
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ </div>
+        <div class="summary"><p>So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows ...</p> <a class="btn btn-info xsmall" href="../installing-pygame-using-homebrew.html">read more</a></div>
+    </div>	
+				
+    
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../installing-pythonnumpyscipymatplotlib-on-osx.html"><h2>Installing Python/Numpy/Scipy/Matplotlib on OSX</h2></a>
+        <div class= "well small"> 03/02/2011
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ </div>
+        <div class="summary"><p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
+<p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/">Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
+<p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/">Numpy</a>, which seems to be nearly ...</p> <a class="btn btn-info xsmall" href="../installing-pythonnumpyscipymatplotlib-on-osx.html">read more</a></div>
+    </div>	
+				
+            <div class="pagination">
+<ul>
+    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+
+    <li class="active"><a href="../tag/scipy.html">1</a></li>
+
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
+</ul>
+</div>    
+ 
+  
+        </div>
+
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Site
+                </li>
+
+                <li><a href="../archives.html">Archives</a>
+                <li><a href="../tags.html">Tags</a>
+                <li><a href="../" rel="alternate">Atom feed</a></li>
+                                <li><a href="../feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                            </ul>
+            </div>
+
+
+                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Categories
+                </li>
+
+                                <li><a href="../category/all.html">all</a></li>
+                            </ul>
+            </div>
+            
+
+            
+
+                        <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Social
+                </li>
+
+                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                                <li><a href="http://github.com/bastibe">github</a></li>
+                            </ul>
+            </div>
+            </div>
+            
+        </div>     </div>     </div> 
+<footer>
+<br />
+<p><a href="..">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
+</footer>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+</body>
+</html>

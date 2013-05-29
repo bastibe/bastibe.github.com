@@ -1,0 +1,119 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
+<h1 class="title">How Apple is Failing Me</h1>
+<div class="tags">
+Tagged as <a href="../tag/apple.html">apple</a>, <a href="../tag/computers.html">computers</a> </div>
+<div class="date">
+Written on 2012-07-19 19:49 </div>
+</div>
+<div class="article-content">
+
+
+<p>I bought my first Apple computer in 2007 after a long time of gaming on Windows and a few years of Linux. In the beginning, I was just amazed at the consistency, practicality and sanity of the whole experience. I think I had a bad case of tinkeritis and neophilia in my Linux days, so this was probably to be expected.</p>
+
+<p>Later, I marveled at the level of polish in the third party software ecosystem around Macs. Then I was just glad to have a slick GUI with actual Unix underpinnings. For reference, this happened in the time span from OS X 10.5 Leopard until 10.7 Lion. However, in that same time frame, I also noticed a gradual increase in problems. The computer seems to crash slightly more often, programs seemed to become more buggy, behavior less logical. At first, I marked this up as mostly a matter of my own increasing knowledge of the system, but as time went on, I became more and more convinced that it was actually the system getting worse, not myself becoming more sensitive.</p>
+
+<p>So here are some of those problems:</p>
+
+<h3>Lack of Uninstallers</h3>
+
+<p>Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.</p>
+
+<p>At the moment, there are three ways of getting software on your Mac.</p>
+
+<ol>
+<li>Install from the App Store. Installation and un-installation work through the App Store.</li>
+<li>Install by dragging n <code>*.app</code> bundle onto your computer. Uninstall by deleting the bundle. Works fine unless the app installed some stuff outside the bundle.</li>
+<li>Install by executing a <code>*.pkg</code> file. No way to uninstall whatsoever unless the developer provides a separate uninstall mechanism.</li>
+</ol>
+
+<p>Really, this is beyond ridiculous. There is no way of uninstalling software that has been installed from a <code>*.pkg</code>. How the heck am I supposed to use my computer without uninstalling software? Seriously, Apple? Is this a joke?</p>
+
+<p>(So as a rule, I will only install <code>*.pkg</code>s if there is absolutely no other way. Most of the time, I use or abuse <a href="http://mxcl.github.com/homebrew/" >homebrew</a> to mitigate this problem.)</p>
+
+<h3>Failing Time Machine</h3>
+
+<p>So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don't even need to plug in that hard drive any more. Magic!</p>
+
+<p>Except, every few weeks the Time Machine icon in the menu bar will have a small exclamation point, which indicates that something went wrong. Usually, it means that Time Machine somehow lost track of what it was doing and silently corrupted all backups beyond repair. This happens across several computers and Time Machines. The only solution is to delete all backups and start anew.</p>
+
+<p>So, backups that are not backing up. How amazing is that?</p>
+
+<h3>Living in the Cloud</h3>
+
+<p>OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.</p>
+
+<p>Synchronization is cool. I used to live within the Googleverse, and all my contacts, calendars and email accounts would sync through Google to all my Apple devices. Life was good! Until things started to go bad. At some point, Mail.app lost an email or two. Not a big deal. Then iCal would not connect any more, and would need to be restarted every other day. And finally, Address Book deleted all my contacts from Google. Actually, it did not delete the whole contacts, just all the information inside them, and leave empty husks with only a name and maybe a partial email address.</p>
+
+<p>I wish I was making this up. I tested this quite thoroughly. Whenever Contacts was set up to sync with Google, after a few days or weeks it would delete all my contacts. Of course, this being cloud backed, it would delete them everywhere on all my devices, without any backup or anything. Thankfully, Address Book on iOS seems to not have this problem.</p>
+
+<p>Things can go wrong, I understand that. But deleting all my contacts? Not cool. Not. Cool.</p>
+
+<h3>iPhoto</h3>
+
+<p>My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.</p>
+
+<p>But to do that, we had to convert his old library from iPhoto 1876 to iPhoto 2008. iPhoto itself claims to be able to do that, and lo and behold, it magically imported the old library, started an update program, then another, then another, then another, then another, and updated the old library through the ages up to the most recent version. And everything seemed to work fine, all the albums were there, all the thumbnails looked right, just perfect. Except if you opened any image, it would only show black. I mean, I can understand that an import of a library that old does not work. But at least tell me so. Don't silently corrupt everything!</p>
+
+<p>And then there was my own library, started in late 2007 and handed through different revisions of iPhoto to today. It countains about 25 Gb worth of photos. Funny enough, its size on disk is actually 65 Gb. What. The. Heck?</p>
+
+<p>At this point, a giant <em>thank you</em> to the <a href="http://www.fatcatsoftware.com/iplm/" >iPhoto Library Manager</a> by Fat Cat Software, which saved both my library and my sanity! Those guys rock!</p>
+
+<h3>OS X Lion with Auto Save and Versions</h3>
+
+<p>The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.</p>
+
+<p>Now normally, I would applaud this. Just save everything automatically and give me a sensible undo mechanism instead. Great!</p>
+
+<p>However, in a stroke of genius, they also got rid of the possibility of <em>save as...</em>, which is just an easy way of duplicating a document. Say, because you received it in an email and want to file it somewhere else on your hard drive. Or because the document is saved on a thumb drive and you want to copy it over to your hard drive. No sir, you have to navigate to the document in the finder and copy it by hand from there. Thank you for your patience.</p>
+
+<p>But the worst offender is Preview. Every program on the Mac has this very handy <em>proxy icon</em> in the window title. Whenever a window is representing a file on your computer, it will show that very file in the title, so you can drag and drop it somewhere else. Except preview won't give you the actual document. Instead, it will give you an alias to that document. Which is worth <em>nothing at all</em> if you drag it into an email, your Dropbox or a thumb drive.</p>
+
+<p>Or try to enable File sharing on your local network, which works <em>sometimes</em>, but not all the time. Or Internet Sharing, which might share your internet connection, or break your DNS settings. Or take Bluetooth, which for the life of me, I can not make work for tethering with my iPhone, even though the same works just fine with the iPad and other Macs. Or take networking in general, which every once in a while just completely breaks down on my company's network and just refuses to send or receive any data over the Ethernet cable until I reboot my computer.</p>
+
+<p>I could go on. Let's just say that Lion increased my WTF-per-minute rate significantly.</p>
+
+<h3>Performance, Memory and File System</h3>
+
+<p>Lets talk performance. I can't really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.</p>
+
+<p>I mean, you don't feel the pain of starting applications much on OS X, because in general, you simply keep your programs running all the time. But even so, Firefox starts up on Windows in, like, no time at all, but takes noticeable time on OS X (same configuration and plugins). I have an SSD, so I mostly don't care, but still.</p>
+
+<p>Or take boot times. Even in a virtual machine, both Windows 7 and 8 and Ubuntu 12.04 and Fedora 17 boot up in less than half a minute. In comparison, OS X Lion takes significantly longer, sometimes minutes. Again, you usually don't feel that pain too much because you don't reboot your Mac all that often (unless you run Bootcamp for gaming regularly). Still, OS X boot and shutdown times are downright shameful these days.</p>
+
+<p>Lets run a few virtual machines. I have eight Gb of memory. Lets boot up a Windows VM and give it two Gb. Do anything you want, run Eclipse <em>and</em> Visual Studio <em>and</em> Firefox with loads of tabs <em>and</em> Steam. Windows will do just fine. Those two Gb are plenty for anything except gaming and photo/video editing. Do the same thing with Linux, same result. In fact, Linux will work just fine with even less memory. But OS X? Don't even <em>think</em> of running it with less than two Gb. Four Gb will give you a workable system if you don't run too many memory intensive applications. But start up XCode and Eclipse and you are done for. This is a huge waste.</p>
+
+<p>And lastly, let's talk HFS+. Did you know that HFS+ has a global lock that prevents any program from accessing the hard drive while another program is doing so? That explains why OS X is so friggin slow on non-SSD drives. And did you ever notice that HFS+ is slowly corrupting your data, even if there are no power failures or anything? I fire up Disk Utility every so often and it will always find some file system corruptions. It rarely breaks stuff, but really, the file system is the very last part of my system I want to see failing randomly.</p>
+
+<h3>So, what now?</h3>
+
+<p>With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<a href="As" >^sight</a>. But I don't.</p>
+
+<p>a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point</p>
+
+<p>And then there is software. Where is <a href="http://www.git-tower.com/" >Tower</a> for Windows or Linux? Or <a href="http://www.sparrowmailapp.com/" >Sparrow</a> or <a href="http://tapbots.com/blog/tweetbot/tweetbot-for-mac" >Tweetbot</a> or <a href="http://reederapp.com/mac/" >Reeder</a> or <a href="http://www.pixelmator.com/" >Pixelmator</a> or iPhoto? I'm not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.</p>
+
+<p>That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and Fedora 17 and I must say, I am quite taken with them. All of them. As for the next computer I am going to buy, I am doubtful if it will be an Apple computer again.</p>
+ </div>
+<div class="relative-nav">
+<a href="http://bastibe.de/posts/Blogging-with-Pelican-and-not-Octopress.html">Previous</a><br>
+<a href="http://bastibe.de/posts/Using-a-Raspberry-Pi-as-a-Time-Capsule-for-Mountain-Lion.html">Next</a><br>
+</div>
+ </div> <div id="disqus_thread"></div>
+     <script type="text/javascript">
+       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+       var disqus_shortname = 'bastibe';
+       /* * * DON'T EDIT BELOW THIS LINE * * */
+       (function() {
+         var dsq = document.createElement('script');
+         dsq.type = 'text/javascript';
+         dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+           })();
+     </script>
+     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

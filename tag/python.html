@@ -1,352 +1,531 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Bastis Scratchpad On The Internet</title>
-    <meta name="description" content="">
-    <meta name="author" content="Bastian Bechtold">
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/A-Python-Primer-for-Matlab-Users.html">A Python Primer for Matlab Users</a> <div class="date"> posted on 2013-01-20 10:55</div> <div class="article">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-    <script src="../theme/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le styles -->
-    <link href="../theme/bootstrap.min.css" rel="stylesheet">
-    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
-    <link href="../theme/local.css" rel="stylesheet">
-    <link href="../theme/pygments.css" rel="stylesheet">
-
-    <script language="javascript">
-    if(window.MathJax===undefined){
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
-        var config = 'MathJax.Hub.Config({' +
-                    'extensions: ["tex2jax.js"],' +
-                    'tex2jax: { '+
-                      'inlineMath: [ ["$","$"]], '+
-                      'displayMath: [["\\[","\\]"]],'+
-                      'processEscapes: true '+
-                    '},' +
-                    'jax: ["input/TeX","output/HTML-CSS"]' +
-                    '});' +
-                    'MathJax.Hub.Startup.onload();';
-        if (window.opera)
-            script.innerHTML = config;
-        else
-            script.text = config;
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    </script>
-</head>
-
-<body>
-
-<div class="navbar">
-    <div class="navbar-inner">
-    <div class="container">
-
-         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-             <span class="icon-bar"></span>
-             <span class="icon-bar"></span>
-             <span class="icon-bar"></span>
-         </a>
-
-        <a class="brand" href="..">Bastis Scratchpad On The Internet</a>
-
-        <div class="nav-collapse">
-        <ul class="nav">
-        
-                                </ul>
-        </div>
-
-    </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="content">
-    <div class="row">
-
-        <div class="span9">
-                
-
-        
-
-
-    <div class='article'>
-        <div class="content-title">
-            <a href="../a-python-primer-for-matlab-users.html"><h1>A Python Primer for Matlab Users</h1></a>
-            20/01/2013
-
-by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
- 
-        </div>
-        
-        <div><blockquote>
+<blockquote>
 <p>Why would you want to use Python over Matlab?</p>
 </blockquote>
+
 <ul>
 <li>Because Python is free and Matlab is not.</li>
 <li>Because Python is a general purpose programming language and Matlab is not.</li>
 </ul>
+
 <p>Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.</p>
+
 <h2>Python as a Matlab replacement</h2>
+
 <p>The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:</p>
+
 <ul>
 <li>Numpy (the matrix engine)</li>
 <li>Scipy (matrix manipulation)</li>
 <li>Matplotlib (plotting)</li>
 </ul>
-<p>You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.</p>
-<h2>A 30,000 foot overview</h2>
-<p>Like Matlab, Python is <em>interpreted</em>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.</p>
-<p>Like Matlab, Python is <em>dynamically typed</em>, that is, every variable can hold data of any type, as in:</p>
-<div class="codehilite"><pre><span class="c"># Python</span>
-<span class="n">a</span> <span class="o">=</span> <span class="mi">5</span>         <span class="c"># a number</span>
-<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c"># a list</span>
-<span class="n">a</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>    <span class="c"># a string</span>
-</pre></div>
 
+<p>You can either grab the individual installers for <a href="http://python.org" >Python</a>, <a href="http://numpy.org" >Numpy</a>, <a href="http://scipy.org" >Scipy</a> and <a href="http://matplotlib.org" >Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/" >pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php" >EPD</a>.</p>
+
+<h2>A 30,000 foot overview</h2>
+
+<p>Like Matlab, Python is <em>interpreted</em>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.</p>
+
+<p>Like Matlab, Python is <em>dynamically typed</em>, that is, every variable can hold data of any type, as in:</p>
+
+<pre><code><span class="code">    <span class="comment"># Python
+</span>    a = 5         <span class="comment"># a number
+</span>    a = <span class="paren1">[<span class="code">1, 2, 3</span>]</span> <span class="comment"># a list
+</span>    a = <span class="string">'text'</span>    <span class="comment"># a string</span></span></code></pre>
 
 <p>Contrast this with C, where you can not assign different data types to the same variable:</p>
-<div class="codehilite"><pre><span class="c1">// C</span>
-<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-<span class="kt">float</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
-<span class="kt">char</span> <span class="n">c</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;text&quot;</span><span class="p">;</span>
-</pre></div>
 
+<pre><code><span class="code">    <span class="comment">// C
+</span>    <span class="symbol">int</span> a = 5;
+    <span class="symbol">float</span> b<span class="paren1">[<span class="code">3</span>]</span> = <span class="paren1">{<span class="code">1.0, 2.0, 3.0</span>}</span>;
+    <span class="symbol">char</span> c<span class="paren1">[<span class="code"></span>]</span> = <span class="string">"text"</span>;</span></code></pre>
 
 <p>Unlike Matlab, Python is <em>strongly typed</em>, that is, you can not add a number to a string.
 In Matlab, adding a single number to a string will convert that string into an array of numbers, then add the single number to each of the numbers in the array. Python will simply throw an error.</p>
-<div class="codehilite"><pre><span class="c">% Matlab</span>
-<span class="n">a</span> <span class="p">=</span> <span class="s">&#39;text&#39;</span>
-<span class="n">b</span> <span class="p">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c">% [121 106 125 121]</span>
-</pre></div>
 
+<pre><code>    % Matlab
+    a = 'text'
+    b = a + 5 % [121 106 125 121]</code></pre>
 
-<div class="codehilite"><pre><span class="c"># Python</span>
-<span class="n">a</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">5</span> <span class="c"># TypeError: Can&#39;t convert &#39;int&#39; object to str implicitly</span>
-</pre></div>
-
+<pre><code><span class="code">    <span class="comment"># Python
+</span>    a = <span class="string">'text'</span>
+    b = a + 5 <span class="comment"># TypeError: Can't convert 'int' object to str implicitly</span></span></code></pre>
 
 <p>Unlike Matlab, every Python file can contain as many functions as you like. Basically, you can organize your code in as many files as you want. To access functions from other files, use <code>import filename</code>.</p>
-<p>Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.</p>
-<p>Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.</p>
-<h2>Reading Python</h2>
-<p>When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <em>namespaces</em>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:</p>
-<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">numpy</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
 
+<p>Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.</p>
+
+<p>Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.</p>
+
+<h2>Reading Python</h2>
+
+<p>When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <em>namespaces</em>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:</p>
+
+<pre><code><span class="code">    <span class="symbol">import</span> numpy
+    a = numpy.zeros<span class="paren1">(<span class="code">10, 1</span>)</span></span></code></pre>
 
 <p>This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of Numpy into the global environment like this:</p>
-<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
 
+<pre><code><span class="code">    <span class="symbol">from</span> numpy <span class="symbol">import</span> *
+    a = ones<span class="paren1">(<span class="code">30, 1</span>)</span></span></code></pre>
 
 <p>Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib stack in one piece:</p>
-<div class="codehilite"><pre><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="n">show</span><span class="p">()</span>
-</pre></div>
 
+<pre><code><span class="code">    <span class="symbol">from</span> pylab <span class="symbol">import</span> *
+    a = randn<span class="paren1">(<span class="code">100, 1</span>)</span>
+    plot<span class="paren1">(<span class="code">a</span>)</span>
+    show<span class="paren1">(<span class="code"></span>)</span></span></code></pre>
 
 <p>Note that Python does not plot immediately when you type <code>plot()</code>. Instead, it will collect all plotting information and only show it on the screen once you type <code>show()</code>.</p>
+
 <p>So far, the code you have seen should look pretty familiar. A few differences:</p>
+
 <ul>
-<li>
-<p>No semicolons at the end of lines;<br />
-  In order to print stuff to the console, use the <code>print()</code> function instead.</p>
-</li>
-<li>
-<p>No <code>end</code> anywhere.<br />
-  In Python, blocks of code are identified by indentation and they always start with a colon like so:</p>
-</li>
+<li><p>No semicolons at the end of lines;<br/>
+  In order to print stuff to the console, use the <code>print()</code> function instead.</p></li>
+<li><p>No <code>end</code> anywhere.<br/>
+  In Python, blocks of code are identified by indentation and they always start with a colon like so:</p></li>
 </ul>
-<div class="codehilite"><pre><span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
-    <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="n">n</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
-</pre></div>
 
+<pre><code><span class="code">    sum = 0
+    <span class="symbol">for</span> n <span class="symbol">in</span> <span class="paren1">[<span class="code">1, 2, 3, 4, 5</span>]</span>:
+        sum = sum + n
+    <span class="symbol">print</span><span class="paren1">(<span class="code">sum</span>)</span></span></code></pre>
 
 <ul>
-<li>Function definitions are different.<br />
-  They use the <code>def</code> keyword instead of <code>function</code>.<br />
+<li>Function definitions are different.<br/>
+  They use the <code>def</code> keyword instead of <code>function</code>.<br/>
   You don't have to name the output variable names in the definition and instead use <code>return()</code>.</li>
 </ul>
-<div class="codehilite"><pre><span class="c"># Python</span>
-<span class="k">def</span> <span class="nf">abs</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">number</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">number</span>
-</pre></div>
 
+<pre><code><span class="code">    <span class="comment"># Python
+</span>    <span class="special">def</span><span
+class="keyword"> abs</span><span class="paren1">(<span class="code">number</span>)</span>:
+        <span class="symbol">if</span> number &gt; 0:
+            <span class="symbol">return</span> number
+        else:
+            <span class="symbol">return</span> -number</span></code></pre>
 
-<div class="codehilite"><pre><span class="c">% Matlab</span>
-<span class="k">function</span><span class="w"> </span>[out] <span class="p">=</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span>number<span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span>
-        <span class="n">out</span> <span class="p">=</span> <span class="n">number</span>
-    <span class="k">else</span>
-        <span class="n">out</span> <span class="p">=</span> <span class="o">-</span><span class="n">number</span>
-    <span class="k">end</span>
-<span class="k">end</span>
-</pre></div>
-
+<pre><code>    % Matlab
+    function [out] = abs(number)
+        if number > 0
+            out = number
+        else
+            out = -number
+        end
+    end</code></pre>
 
 <ul>
-<li>There is no easy way to write out a list or matrix.<br />
+<li>There is no easy way to write out a list or matrix.<br/>
   Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <em>must</em> use commas to separate items and can not use semicolons to separate lines.</li>
 </ul>
-<div class="codehilite"><pre><span class="c"># create a numpy matrix:</span>
-<span class="n">m</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-           <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
-           <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
-<span class="c"># create a Python list:</span>
-<span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">]</span>
-</pre></div>
 
+<pre><code><span class="code">    <span class="comment"># create a numpy matrix:
+</span>    m = array<span class="paren1">(<span class="code"><span class="paren2">[<span class="code"><span class="paren3">[<span class="code">1, 2, 3</span>]</span>,
+               <span class="paren3">[<span class="code">4, 5, 6</span>]</span>,
+               <span class="paren3">[<span class="code">7, 8, 9</span>]</span></span>]</span></span>)</span>
+    <span class="comment"># create a Python list:
+</span>    l = <span class="paren1">[<span class="code">1 2 3</span>]</span></span></code></pre>
 
 <ul>
-<li>Arrays access uses brackets and is numbered from 0.<br />
-  Thus, ranges <em>exclude</em> the last number (see below).<br />
+<li>Arrays access uses brackets and is numbered from 0.<br/>
+  Thus, ranges <em>exclude</em> the last number (see below).<br/>
   Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.</li>
 </ul>
-<div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">one</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">two</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="c"># &quot;6:8&quot; is a range of two elements:</span>
-<span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">]</span> <span class="c"># &lt;-- a Python list!</span>
-</pre></div>
-
+<pre><code><span class="code">    a = linspace<span class="paren1">(<span class="code">1, 10, 10</span>)</span>
+    one = a<span class="paren1">[<span class="code">0</span>]</span>
+    two = a<span class="paren1">[<span class="code">1</span>]</span>
+    
+    <span class="comment"># "6:8" is a range of two elements:
+</span>    a<span class="paren1">[<span class="code">6:8</span>]</span> = <span class="paren1">[<span class="code">70, 80</span>]</span> <span class="comment"># &lt;-- a Python list!</span></span></code></pre>
 
 <h2>Common traps</h2>
+
 <ul>
 <li>Array slicing does not copy.</li>
 </ul>
-<div class="codehilite"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">])</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="c"># [2 3 4]</span>
-<span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="c"># this will change a and b!</span>
-<span class="c"># make a copy like this:</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c"># copy=True can be omitted</span>
-<span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="c"># changes only c</span>
-</pre></div>
 
+<pre><code><span class="code">    a = array<span class="paren1">(<span class="code"><span class="paren2">[<span class="code">1 2 3 4 5</span>]</span></span>)</span>
+    b = a<span class="paren1">[<span class="code">1:4</span>]</span> <span class="comment"># [2 3 4]
+</span>    b<span class="paren1">[<span class="code">1</span>]</span> = rand<span class="paren1">(<span class="code"></span>)</span> <span class="comment"># this will change a and b!
+</span>    <span class="comment"># make a copy like this:
+</span>    c = array<span class="paren1">(<span class="code">a<span class="paren2">[<span class="code">1:4</span>]</span>, copy=True</span>)</span> <span class="comment"># copy=True can be omitted
+</span>    c<span class="paren1">[<span class="code">1</span>]</span> = rand<span class="paren1">(<span class="code"></span>)</span> <span class="comment"># changes only c</span></span></code></pre>
 
 <ul>
 <li>Arrays retain their data type.
   You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).</li>
 </ul>
-<div class="codehilite"><pre><span class="c"># pretend this came from a wave file:</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int16</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">10</span> <span class="c"># int16 only goes to 32768!</span>
-<span class="c"># a is now [10000, 20000, 30000, -25536, -15536]</span>
-</pre></div>
 
+<pre><code><span class="code">    <span class="comment"># pretend this came from a wave file:
+</span>    a = array<span class="paren1">(<span class="code"><span class="paren2">[<span class="code">1000, 2000, 3000, 4000, 5000</span>]</span>, dtype=int16</span>)</span>
+    a = a * 10 <span class="comment"># int16 only goes to 32768!
+</span>    <span class="comment"># a is now [10000, 20000, 30000, -25536, -15536]</span></span></code></pre>
 
 <h2>Going further</h2>
-<p>Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.</p>
-<p>However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.</p>
-<p>Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation site</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Getting_Started">tutorial</a> and <a href="http://docs.scipy.org/doc/">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.</p>
-<p>A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/">project euler</a>.</p></div>
-        <hr />
-    </div>
-		
-    
- 
-        
 
- 
+<p>Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users" >the Numpy documentation for Matlab users</a>.</p>
 
-    <div class='article'>
-        <a href="../installing-pythonnumpyscipymatplotlib-on-osx.html"><h2>Installing Python/Numpy/Scipy/Matplotlib on OSX</h2></a>
-        <div class= "well small"> 03/02/2011
+<p>However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html" >internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro" >GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/" >real-time audio interfaces</a>, <a href="https://www.djangoproject.com/" >web frameworks</a> and <a href="http://www.pygame.org/" >game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source" >this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org" >static site generator</a>.</p>
 
-by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
- 
+<p>Lastly, Python has a great <a href="http://docs.python.org/3/" >online documentation site</a> including a <a href="http://docs.python.org/3.3/tutorial/" >tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks" >many books</a> <a href="http://www.learnpythonthehardway.org/" >on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide" >Wiki on Python</a>. There is also a <a href="http://scipy.org/Getting_Started" >tutorial</a> and <a href="http://docs.scipy.org/doc/" >documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html" >Matplotlib</a>.</p>
 
+<p>A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/" >project euler</a>.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Real-Time-Signal-Processing-in-Python.html">Real Time Signal Processing in Python</a> <div class="date"> posted on 2012-11-02 10:53</div> <div class="article">
 
- </div>
-        <div class="summary"><p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
-<p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/">Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
-<p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/">Numpy</a>, which seems to be nearly ...</p> <a class="btn btn-info xsmall" href="../installing-pythonnumpyscipymatplotlib-on-osx.html">read more</a></div>
-    </div>	
-				
-            <div class="pagination">
-<ul>
-    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+<p>Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.</p>
 
-    <li class="active"><a href="../tag/python.html">1</a></li>
+<p>But this is not going to be about Matlab. This is going to be about Python. Combine Python with Numpy (and Scipy and Matplotlib) and you have a signal processing system very comparable to Matlab. Additionally, you can do real-time audio input/output using PyAudio. PyAudio is a wrapper around PortAudio and provides cross platform audio recording/playback in a nice, pythonic way. (Real time capabilities were added in 0.2.6 with the help of yours truly).</p>
 
-    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+<p>However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:</p>
 
-</ul>
-</div>    
- 
-  
-        </div>
+<h2>A Simple Limiter</h2>
 
-        <div class="span3">
+<p>A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <em>smoothly</em>, since otherwise it would introduce a lot of distortion.</p>
 
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
-            <ul class="nav nav-list">
-                <li class="nav-header">
-                Site
-                </li>
+<p>If a signal peak is detected, the limiter will thus need a certain amount of time to reduce the gain accordingly. If you still want to prevent all peaks, the limiter will have to know of the peaks in advance, which is of course impossible in a real time system. Instead, the signal is delayed by a short time to give the limiter time to adjust the system gain before the peak is actually played. To keep this delay as short as possible, this &quot;attack&quot; phase where the gain is decreased should be very short, too. &quot;Releasing&quot; the gain back up to its original value can be done more slowly, thus introducing less distortion.</p>
 
-                <li><a href="../archives.html">Archives</a>
-                <li><a href="../tags.html">Tags</a>
-                <li><a href="../" rel="alternate">Atom feed</a></li>
-                                <li><a href="../feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
-                            </ul>
-            </div>
+<p>With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope $e[n]$ that catches all the peaks and smoothly decays after them:</p>
 
+<p>$ e[n] = \max( |s[n]|, e[n-1] \cdot f_r ) $</p>
 
-                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
-            <ul class="nav nav-list">
-                <li class="nav-header">
-                Categories
-                </li>
+<p>where $s[n]$ is the current signal and $0 &lt; f_r &lt; 1$ is a release factor.</p>
 
-                                <li><a href="../category/all.html">all</a></li>
-                            </ul>
-            </div>
-            
+<p>If this is applied to a signal, it will create an envelope like this:</p>
 
-            
+<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="Envelope" /></p>
 
-                        <div class="social">
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
-            <ul class="nav nav-list">
-                <li class="nav-header">
-                Social
-                </li>
+<p>Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using</p>
 
-                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
-                                <li><a href="http://github.com/bastibe">github</a></li>
-                            </ul>
-            </div>
-            </div>
-            
-        </div>     </div>     </div> 
-<footer>
-<br />
-<p><a href="..">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
-</footer>
+<p>\begin{equation}
+g_t[n] = \begin{cases}
+    1 &amp; e[n] &lt; t \\
+    1 + t - e[n] &amp; e[n] &gt; t
+\end{cases}
+\end{equation}</p>
 
-</div> <!-- /container -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
-</body>
-</html>
+<p>Now, the output gain $g[n]$ can smoothly move towards that target gain using</p>
+
+<p>$ g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a) $</p>
+
+<p>where $0 &lt; f_a \ll f_r$ is the attack factor.</p>
+
+<p>Here you can see how that would look in practice:</p>
+
+<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="Gain" /></p>
+
+<p>Zooming in on one of the limited section reveals that the gain is actually moving smoothly.</p>
+
+<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="Detail Gain" /></p>
+
+<p>This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.</p>
+
+<p>In Python, this might look like this:</p>
+
+<pre><code><span class="code">    <span class="special">class</span><span
+class="keyword"> Limiter</span>:
+        <span class="special">def</span><span
+class="keyword"> __init__</span><span class="paren1">(<span class="code">self, attack_coeff, release_coeff, delay, dtype=float32</span>)</span>:
+            self.delay_index = 0
+            self.envelope = 0
+            self.gain = 1
+            self.delay = delay
+            self.delay_line = zeros<span class="paren1">(<span class="code">delay, dtype=dtype</span>)</span>
+            self.release_coeff = release_coeff
+            self.attack_coeff = attack_coeff
+
+        <span class="special">def</span><span
+class="keyword"> limit</span><span class="paren1">(<span class="code">self, signal, threshold</span>)</span>:
+            <span class="symbol">for</span> i <span class="symbol">in</span> arange<span class="paren1">(<span class="code">len<span class="paren2">(<span class="code">signal</span>)</span></span>)</span>:
+                self.delay_line<span class="paren1">[<span class="code">self.delay_index</span>]</span> = signal<span class="paren1">[<span class="code">i</span>]</span>
+                self.delay_index = <span class="paren1">(<span class="code">self.delay_index + 1</span>)</span> % self.delay
+
+                <span class="comment"># calculate an envelope of the signal
+</span>                self.envelope *= self.release_coeff
+                self.envelope  = max<span class="paren1">(<span class="code">abs<span class="paren2">(<span class="code">signal<span class="paren3">[<span class="code">i</span>]</span></span>)</span>, self.envelope</span>)</span>
+
+                <span class="comment"># have self.gain go towards a desired limiter gain
+</span>                <span class="symbol">if</span> self.envelope &gt; threshold:
+                    target_gain = <span class="paren1">(<span class="code">1+threshold-self.envelope</span>)</span>
+                else:
+                    target_gain = 1.0
+                self.gain = <span class="paren1">(<span class="code"> self.gain*self.attack_coeff +
+                              target_gain*<span class="paren2">(<span class="code">1-self.attack_coeff</span>)</span> </span>)</span>
+
+                <span class="comment"># limit the delayed signal
+</span>                signal<span class="paren1">[<span class="code">i</span>]</span> = self.delay_line<span class="paren1">[<span class="code">self.delay_index</span>]</span> * self.gain</span></code></pre>
+
+<p>Note that this limiter does not <em>actually</em> clip all peaks completely, since the envelope for a single peak will have decayed a bit before the target gain will have reached it. Thus, the output gain will actually be slightly higher than what would be necessary to limit the output to the threshold. Since the attack factor is supposed to be significantly smaller than the release factor, this does not matter much though.</p>
+
+<p>Also, it would probably be more useful to define the factors $f_a$ and $f_r$ in terms of the time they take to reach their target and the threshold $t$ in dB FS.</p>
+
+<h2>Implementing audio processing in Python</h2>
+
+<p>A real-time audio processing framework using PyAudio would look like this:</p>
+
+<p>(<code>callback</code> is a function that will be defined shortly)</p>
+
+<pre><code><span class="code">    <span class="symbol">from</span> pyaudio <span class="symbol">import</span> PyAudio, paFloat32
+
+    pa = PyAudio<span class="paren1">(<span class="code"></span>)</span>
+
+    stream = pa.open<span class="paren1">(<span class="code">format = paFloat32,
+                     channels = 1,
+                     rate = 44100,
+                     output = True,
+                     frames_per_buffer = 1024,
+                     stream_callback = callback</span>)</span>
+
+    <span class="symbol">while</span> stream.is_active<span class="paren1">(<span class="code"></span>)</span>:
+        sleep<span class="paren1">(<span class="code">0.1</span>)</span>
+
+    stream.close<span class="paren1">(<span class="code"></span>)</span>
+    pa.terminate<span class="paren1">(<span class="code"></span>)</span></span></code></pre>
+
+<p>This will open a <code>stream</code>, which is a PyAudio construct that manages input and output to/from one sound device. In this case, it is configured to use <code>float</code> values, only open one channel, play audio at a sample rate of 44100 Hz, have that one channel be output only and call the function <code>callback</code> every 1024 samples.</p>
+
+<p>Since the <code>callback</code> will be executed on a different thread, control flow will continue immediately after <code>pa.open()</code>. In order to analyze the resulting signal, the <code>while stream.is_active()</code> loop waits until the signal has been processed completely.</p>
+
+<p>Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:</p>
+
+<pre><code><span class="code">    limiter = Limiter<span class="paren1">(<span class="code">attack_coeff, release_coeff, delay, dtype</span>)</span>
+
+    <span class="special">def</span><span
+class="keyword"> callback</span><span class="paren1">(<span class="code">in_data, frame_count, time_info, flag</span>)</span>:
+        <span class="symbol">if</span> flag:
+            <span class="symbol">print</span><span class="paren1">(<span class="code"><span class="string">"Playback Error: %i"</span> % flag</span>)</span>
+        played_frames = counter
+        counter += frame_count
+        limiter.limit<span class="paren1">(<span class="code">signal<span class="paren2">[<span class="code">played_frames:counter</span>]</span>, threshold</span>)</span>
+        <span class="symbol">return</span> signal<span class="paren1">[<span class="code">played_frames:counter</span>]</span>, paContinue</span></code></pre>
+
+<p>The <code>paContinue</code> at the end is a flag signifying that the audio processing is not done yet and the <code>callback</code> wants to be called again. Returning <code>paComplete</code> or an insufficient number of samples instead would stop audio processing after the current block and thus invalidate <code>stream.is_active()</code> and resume control flow in the snippet above.</p>
+
+<p>Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).</p>
+
+<h2>Speeding up execution using Cython</h2>
+
+<p>The limiter defined above could be rewritten in C like this:</p>
+
+<pre><code><span class="code">    <span class="comment">// this corresponds to the Python Limiter class.
+</span>    <span class="symbol">typedef</span> <span class="symbol">struct</span> limiter_state_t <span class="paren1">{<span class="code">
+        <span class="symbol">int</span> delay_index;
+        <span class="symbol">int</span> delay_length;
+        <span class="symbol">float</span> envelope;
+        <span class="symbol">float</span> current_gain;
+        <span class="symbol">float</span> attack_coeff;
+        <span class="symbol">float</span> release_coeff;
+    </span>}</span> limiter_state;
+
+    <span class="special">#define MAX(x,y) ((x)&gt;(y)?(x):(y))
+</span>
+    <span class="comment">// this corresponds to the Python __init__ function.
+</span>    limiter_state init_limiter<span class="paren1">(<span class="code"><span class="symbol">float</span> attack_coeff, <span class="symbol">float</span> release_coeff, <span class="symbol">int</span> delay_len</span>)</span> <span class="paren1">{<span class="code">
+        limiter_state state;
+        state.attack_coeff = attack_coeff;
+        state.release_coeff = release_coeff;
+        state.delay_index = 0;
+        state.envelope = 0;
+        state.current_gain = 1;
+        state.delay_length = delay_len;
+        <span class="symbol">return</span> state;
+    </span>}</span>
+
+    <span class="symbol">void</span> limit<span class="paren1">(<span class="code"><span class="symbol">float</span> *signal, <span class="symbol">int</span> block_length, <span class="symbol">float</span> threshold,
+               <span class="symbol">float</span> *delay_line, limiter_state *state</span>)</span> <span class="paren1">{<span class="code">
+        <span class="symbol">for</span><span class="paren2">(<span class="code"><span class="symbol">int</span> i=0; i&lt;block_length; i++</span>)</span> <span class="paren2">{<span class="code">
+            delay_line<span class="paren3">[<span class="code">state-&gt;delay_index</span>]</span> = signal<span class="paren3">[<span class="code">i</span>]</span>;
+            state-&gt;delay_index = <span class="paren3">(<span class="code">state-&gt;delay_index + 1</span>)</span> % state-&gt;delay_length;
+
+            <span class="comment">// calculate an envelope of the signal
+</span>            state-&gt;envelope *= state-&gt;release_coeff;
+            state-&gt;envelope = MAX<span class="paren3">(<span class="code">fabs<span class="paren4">(<span class="code">signal<span class="paren5">[<span class="code">i</span>]</span></span>)</span>, state-&gt;envelope</span>)</span>;
+
+            <span class="comment">// have current_gain go towards a desired limiter target_gain
+</span>            <span class="symbol">float</span> target_gain;
+            <span class="symbol">if</span> <span class="paren3">(<span class="code">state-&gt;envelope &gt; threshold</span>)</span>
+                target_gain = <span class="paren3">(<span class="code">1+threshold-state-&gt;envelope</span>)</span>;
+            <span class="symbol">else</span>
+                target_gain = 1.0;
+            state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
+                target_gain*<span class="paren3">(<span class="code">1-state-&gt;attack_coeff</span>)</span>;
+
+            <span class="comment">// limit the delayed signal
+</span>            signal<span class="paren3">[<span class="code">i</span>]</span> = delay_line<span class="paren3">[<span class="code">state-&gt;delay_index</span>]</span> * state-&gt;current_gain;
+        </span>}</span>
+    </span>}</span></span></code></pre>
+
+<p>In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.</p>
+
+<p>Now in order to plug this code into Python I will use Cython. First of all, a &quot;Cython header&quot; file has to be created that declares all exported types and functions to Cython:</p>
+
+<pre><code><span class="code">    cdef extern <span class="symbol">from</span> <span class="string">"limiter.h"</span>:
+        ctypedef struct limiter_state:
+            int delay_index
+            int delay_length
+            float envelope
+            float current_gain
+            float attack_coeff
+            float release_coeff
+
+        limiter_state init_limiter<span class="paren1">(<span class="code">float attack_factor, float release_factor, int delay_len</span>)</span>
+        void limit<span class="paren1">(<span class="code">float *signal, int block_length, float threshold,
+                   float *delay_line, limiter_state *state</span>)</span></span></code></pre>
+
+<p>This is very similar to the C header file of the limiter:</p>
+
+<pre><code><span class="code">    <span class="symbol">typedef</span> <span class="symbol">struct</span> limiter_state_t <span class="paren1">{<span class="code">
+        <span class="symbol">int</span> delay_index;
+        <span class="symbol">int</span> delay_length;
+        <span class="symbol">float</span> envelope;
+        <span class="symbol">float</span> current_gain;
+        <span class="symbol">float</span> attack_coeff;
+        <span class="symbol">float</span> release_coeff;
+    </span>}</span> limiter_state;
+
+    limiter_state init_limiter<span class="paren1">(<span class="code"><span class="symbol">float</span> attack_factor, <span class="symbol">float</span> release_factor, <span class="symbol">int</span> delay_len</span>)</span>;
+    <span class="symbol">void</span> limit<span class="paren1">(<span class="code"><span class="symbol">float</span> *signal, <span class="symbol">int</span> block_length, <span class="symbol">float</span> threshold,
+               <span class="symbol">float</span> *delay_line, limiter_state *state</span>)</span>;</span></code></pre>
+
+<p>With that squared away, the C functions are accessible for Cython. Now, we only need a small Python wrapper around this code so it becomes usable from Python:</p>
+
+<pre><code><span class="code">    <span class="symbol">import</span> numpy as np
+    cimport numpy as np
+    cimport limiter
+
+    DTYPE = np.float32
+    ctypedef np.float32_t DTYPE_t
+
+    cdef <span class="special">class</span><span
+class="keyword"> Limiter</span>:
+        cdef limiter.limiter_state state
+        cdef np.ndarray delay_line
+        <span class="special">def</span><span
+class="keyword"> __init__</span><span class="paren1">(<span class="code">self, float attack_coeff, float release_coeff,
+                     int delay_length</span>)</span>:
+            self.state = limiter.init_limiter<span class="paren1">(<span class="code">attack_coeff, release_coeff, delay_length</span>)</span>
+            self.delay_line = np.zeros<span class="paren1">(<span class="code">delay_length, dtype=DTYPE</span>)</span>
+
+        <span class="special">def</span><span
+class="keyword"> limit</span><span class="paren1">(<span class="code">self, np.ndarray<span class="paren2">[<span class="code">DTYPE_t,ndim=1</span>]</span> signal, float threshold</span>)</span>:
+            limiter.limit<span class="paren1">(<span class="code">&lt;float*&gt;np.PyArray_DATA<span class="paren2">(<span class="code">signal</span>)</span>,
+                       &lt;int&gt;len<span class="paren2">(<span class="code">signal</span>)</span>, threshold,
+                       &lt;float*&gt;np.PyArray_DATA<span class="paren2">(<span class="code">self.delay_line</span>)</span>,
+                       &lt;limiter.limiter_state*&gt;&amp;self.state</span>)</span></span></code></pre>
+
+<p>The first two lines set this file up to access Numpy arrays both from the Python domain and the C domain, thus bridging the gap. The <code>cimport limiter</code> imports the C functions and types from above. The <code>DTYPE</code> stuff is advertising the Numpy <code>float32</code> type to C.</p>
+
+<p>The class is defined using <code>cdef</code> as a C data structure for speed. Also, Cython would naturally translate every C struct into a Python dict and vice versa, but we need to pass the struct to <code>limit</code> <em>and</em> have <code>limit</code> modify it. Thus, <code>cdef limiter.limiter_state state</code> makes Cython treat it as a C struct only. Finally, the <code>np.PyArray_DATA()</code> expressions expose the C arrays underlying the Numpy vectors. This is really handy since we don't have to copy any data around in order to modify the vectors from C.</p>
+
+<p>As can be seen, the Cython implementation behaves nearly identically to the initial Python implementation (except for passing the <code>dtype</code> to the constructor) and can be used as a plug-in replacement (with the aforementioned caveat).</p>
+
+<p>Finally, we need to build the whole contraption. The easiest way to do this is to use a setup file like this:</p>
+
+<pre><code><span class="code">    <span class="symbol">from</span> distutils.core <span class="symbol">import</span> setup
+    <span class="symbol">from</span> distutils.extension <span class="symbol">import</span> Extension
+    <span class="symbol">from</span> Cython.Distutils <span class="symbol">import</span> build_ext
+    <span class="symbol">from</span> numpy <span class="symbol">import</span> get_include
+
+    ext_modules = <span class="paren1">[<span class="code">Extension<span class="paren2">(<span class="code"><span class="string">"cython_limiter"</span>,
+                             sources=<span class="paren3">[<span class="code"><span class="string">"cython_limiter.pyx"</span>,
+                                      <span class="string">"limiter.c"</span></span>]</span>,
+                             include_dirs=<span class="paren3">[<span class="code"><span class="string">'.'</span>, get_include<span class="paren4">(<span class="code"></span>)</span></span>]</span></span>)</span></span>]</span>
+
+    setup<span class="paren1">(<span class="code">
+        name = <span class="string">"cython_limiter"</span>,
+        cmdclass = <span class="paren2">{<span class="code"><span class="string">'build_ext'</span>: build_ext</span>}</span>,
+        ext_modules = ext_modules
+        </span>)</span></span></code></pre>
+
+<p>With that saved as <em>setup.py</em>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.</p>
+
+<h2>Conclusion</h2>
+
+<p>In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.</p>
+
+<p>You can find all the source code in this article at https://github.com/bastibe/simple-cython-limiter</p>
+
+<h2>Disclaimer</h2>
+
+<ol>
+<li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
+<li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
+<li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.</li>
+</ol>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Installing-PythonNumpyScipyMatplotlib-on-OSX.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a> <div class="date"> posted on 2011-02-03 16:23</div> <div class="article">
+
+<p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/" >Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
+
+<p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/" >Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
+
+<p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/" >Numpy</a>, which seems to be nearly as fast as Matlab when it comes to matrix processing and linear algebra. You then discover <a href="http://www.scipy.org/" >SciPy</a>, which would add all that signal processing prowess of Matlab (do quick transformations, random numbers, statistics) to your toolbox. Last but not least, you need plotting. That would be <a href="http://matplotlib.sourceforge.net/" >Matplotlib</a> then, which provides quick plotting facilities in Python.</p>
+
+<p>And the best thing is, these three systems work really well together. They seem to be the perfect replacement for Matlab that could even be superiour to it in many regards.</p>
+
+<p>Next up, you need to install all that stuff. If you are like me, you naturally want to do all that on a Mac. Also, you kind of dislike all these installer-thingies, which install stuff to unknown places and are nigh impossible to uninstall or update cleanly. Even though, you could of course just go to the individual websites, download Python, Numpy, SciPy and Matplotlib, run them installers, and be done. You would save yourself a lot of trouble that way.</p>
+
+<p>But since you allegedly are like me, you instead fire up <a href="http://mxcl.github.com/homebrew" ><code>brew</code></a> and try to install all that stuff using that. Again, you could use <a href="http://www.macports.org/" >MacPorts</a> or <a href="http://www.finkproject.org/" >Fink</a> instead, but you probably had some bad experiences with them and you generally love the hackishness of Homebrew, so this is your natural first try.</p>
+
+<p>So you set about this, you believe in packet managers and trust them to take care of every obstacle that might be lying in your way. First of all, install the latest developer tools from <a href="http://developer.apple.com/" >developer.apple.com</a>. You might need to register (for free) to get them. Also, you need to install <a href="http://mxcl.github.com/homebrew" >Homebrew</a>.</p>
+
+<p>To cut this short, here is what you need to get that Python running:</p>
+
+<pre><code>brew install python
+</code></pre>
+
+<p>This one should be obvious. At the time of writing, it will install Python 2.7.1. You could take Python 3, but matplotlib is not compatible to it, so you kind of have to stick with 2.7.1 instead.</p>
+
+<p>You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code> in the beginning of your path to make sure the new Python gets loaded instead of the pre-installed one. You do that by writing</p>
+
+<pre><code>export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+</code></pre>
+
+<p>in your <code>~/.bash_profile</code>. (Create it if its not there--it is just a simple text file).</p>
+
+<p>Now, if you type <code>python --version</code>, you should get <code>Python 2.7.1</code> as a response.</p>
+
+<p>Alright, next up, install the python package manager:</p>
+
+<pre><code>brew install distribute
+brew install pip
+</code></pre>
+
+<p>This will come preconfigured for your newly installed Python. In an ideal world, this should be all. The world being as it is, the pip package of Matplotlib is severely broken and has one other unstated dependency:</p>
+
+<pre><code>brew install pkg-config
+</code></pre>
+
+<p>Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:</p>
+
+<pre><code>brew install gfortran
+</code></pre>
+
+<p>Alright. That was enough. Now on to pip. With all these dependencies cleared, pip should be able to download Numpy and Scipy without trouble:</p>
+
+<pre><code>pip install numpy
+pip install scipy
+</code></pre>
+
+<p>Matplotlib, on the other hand, is more difficult to install. You see, pip is looking at the Python package repository <a href="http://pypi.python.org/" >PyPi</a> for each package. PyPi then provides a URL. Pip then scans that website for links to suitable package files. But, <a href="http://sourceforge.net/" >Sourceforge</a> changed its links a while ago, so pip gets confused and will download an outdated version. Sourceforge says, its new links are way better and no way we will change them back; Pip says, well, if Sourceforge can't provide proper links, that's not our problem. Oh My. Silly children.</p>
+
+<p>So we have to do this manually:</p>
+
+<pre><code>pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
+</code></pre>
+
+<p>That URL comes straight from Sourceforge. Look for the latest version of Matplotlib, search for the download link to the source distribution (<code>*.tar.gz</code>), copy that link and strip any trailing '/download'.</p>
+
+<p>UPDATE:</p>
+
+<p>It seems the matplotlib package was updated in the meantime, so you can just run <code>pip install matplotlib</code> now.</p>
+
+<p>This should now download and install matplotlib.</p>
+
+<p>Thank you for reading.</p>
+</div> <hr> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/tag/apple.html">apple</a>, <a href="http://bastibe.de/tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/tag/blog.html">blog</a>, <a href="http://bastibe.de/tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/tag/compiling.html">compiling</a>, <a href="http://bastibe.de/tag/computers.html">computers</a>, <a href="http://bastibe.de/tag/cython.html">cython</a>, <a href="http://bastibe.de/tag/emacs.html">emacs</a>, <a href="http://bastibe.de/tag/error.html">error</a>, <a href="http://bastibe.de/tag/file-system.html">file-system</a>, <a href="http://bastibe.de/tag/gaming.html">gaming</a>, <a href="http://bastibe.de/tag/gem.html">gem</a>, <a href="http://bastibe.de/tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/tag/matlab.html">matlab</a>, <a href="http://bastibe.de/tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/tag/numpy.html">numpy</a>, <a href="http://bastibe.de/tag/open-source.html">open-source</a>, <a href="http://bastibe.de/tag/pelican.html">pelican</a>, <a href="http://bastibe.de/tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/tag/pip.html">pip</a>, <a href="http://bastibe.de/tag/programming.html">programming</a>, <a href="http://bastibe.de/tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/tag/pygame.html">pygame</a>, <a href="http://bastibe.de/tag/pygments.html">pygments</a>, <a href="http://bastibe.de/tag/python.html">python</a>, <a href="http://bastibe.de/tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/tag/scheme.html">scheme</a>, <a href="http://bastibe.de/tag/scipy.html">scipy</a>, <a href="http://bastibe.de/tag/solarized.html">solarized</a>, <a href="http://bastibe.de/tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/tag/ui.html">ui</a>, <a href="http://bastibe.de/tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

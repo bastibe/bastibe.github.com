@@ -1,0 +1,53 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
+<h1 class="title">Tagged File System</h1>
+<div class="tags">
+Tagged as <a href="../tag/file-system.html">file-system</a>, <a href="../tag/ui.html">ui</a> </div>
+<div class="date">
+Written on 2009-04-19 09:41 </div>
+</div>
+<div class="article-content">
+
+
+<p>Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff &quot;Ordner&quot; wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen &quot;Verzeichnis&quot; wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für &quot;Verzeichnis&quot;...)</p>
+
+<p><a href="http://bastibe.de/static/2009-04/standard_finder.png" ><img src="http://bastibe.de/static/2009-04/standard_finder_small.png" alt="Standard Finder" /></a></p>
+
+<p>Es wäre daher wünschenswert, eine einfacher zu verstehende Alternative zu Ordnerhierarchien zu haben. Die gibt es auch schon, in Form der bekannten Verzeichnisse &quot;Meine Bilder&quot;, &quot;Meine Dokumente&quot;, etc.
+Diese Ordner wollen den Benutzer mit einfachen Piktogrammen und klaren Namen dazu animieren, einen natürlichen Ort für seine Dateien zu wählen und so ein wenig Ordnung zu schaffen. Tatsächlich ist dieses Konzept einer Tag-Struktur schon relativ ähnlich, da auch hier nicht davon ausgegangen wird, dass sich der Benutzer selbst um eine tief geschachtelte Orderhierarchie kümmert, sondern nur wenige, einfach zu verstehende Markierungsmöglichkeiten (&quot;Bilder&quot;, &quot;Dokumente&quot;) geboten werden.</p>
+
+<p>Ein echtes Tag-basiertes System könnte vollkommen ohne Verzeichnisse auskommen, wobei man dann eben beim Speichern einer Datei nicht mehr aus einer hierarchischen Liste von Ordnern den Speicherort auswählen würde, sondern von einer flachen Liste von Tags. Die Usability-Kosten davon wären vernachlässigbar.</p>
+
+<p><a href="http://bastibe.de/static/2009-04/tagged_finder.png" ><img src="http://bastibe.de/static/2009-04/tagged_finder_small.png" alt="Tagged Finder" /></a></p>
+
+<p>Ähnlich würde das Finden von Dateien funktionieren: Statt eine hierarchische Liste von Ordnern nacheinander anzuklicken, würde man eine flache Liste von Tags nacheinander anklicken, jedoch mit dem Bonus, dass man die gesuchte Datei nicht erst bei Anklicken aller Tags, sondern mit großer Wahrscheinlichkeit schon nach ein oder zwei Tags gefunden hätte.</p>
+
+<p>Ein Problem würde jedoch mit Projekten entstehen, die aus mehreren Dateien bestehen. Hier müsste man sicher stellen, dass sie im Dateisystem nur als einzelne große Projektdatei auftauchen und nicht jede einzelne Unterdatei gelistet wird. Das ließe sich zum Beispiel durch &quot;Bundles&quot; lösen, wie sie heute schon in OSX vorkommen (Ordner mit definierter Namesendung und Inhalt werden wie Dateien behandelt) oder einfach durch einen speziellen Tag, der die einzelnen Dateien vor der normalen Suche versteckt.
+Dieses Konzept wird übrigens heute schon vielfach verwendet, so ist etwa eine aktuelle Word-Datei nur eine ZIP-Datei, die eine definierte Verzeichnisstruktur mit allen Bildern, dem Text (als XML), einer Vorschau-Grafik etc. enthält.</p>
+
+<p><a href="http://bastibe.de/static/2009-04/bundles.png" ><img src="http://bastibe.de/static/2009-04/bundles_small.png" alt="Bundles" /></a></p>
+
+<p>Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfacher arbeiten könnte als mit den heute üblichen Verzeichnisstrukturen. Tja, jetzt fehlt nur noch eine innovative Firma, die sich um die Umsetzung kümmert...</p>
+ </div>
+<div class="relative-nav">
+<a href="http://bastibe.de/posts/Es-geht-um-Tabs.html">Previous</a><br>
+<a href="http://bastibe.de/posts/Gedanken-zu-User-Interfaces.html">Next</a><br>
+</div>
+ </div> <div id="disqus_thread"></div>
+     <script type="text/javascript">
+       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+       var disqus_shortname = 'bastibe';
+       /* * * DON'T EDIT BELOW THIS LINE * * */
+       (function() {
+         var dsq = document.createElement('script');
+         dsq.type = 'text/javascript';
+         dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+           })();
+     </script>
+     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

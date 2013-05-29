@@ -1,185 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Bastis Scratchpad On The Internet</title>
-    <meta name="description" content="">
-    <meta name="author" content="Bastian Bechtold">
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Compiling-Scipy-and-Matplotlib-again.html">Compiling Scipy and Matplotlib again</a> <div class="date"> posted on 2011-10-13 15:27</div> <div class="article">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-    <script src="../theme/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le styles -->
-    <link href="../theme/bootstrap.min.css" rel="stylesheet">
-    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
-    <link href="../theme/local.css" rel="stylesheet">
-    <link href="../theme/pygments.css" rel="stylesheet">
-
-    <script language="javascript">
-    if(window.MathJax===undefined){
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
-        var config = 'MathJax.Hub.Config({' +
-                    'extensions: ["tex2jax.js"],' +
-                    'tex2jax: { '+
-                      'inlineMath: [ ["$","$"]], '+
-                      'displayMath: [["\\[","\\]"]],'+
-                      'processEscapes: true '+
-                    '},' +
-                    'jax: ["input/TeX","output/HTML-CSS"]' +
-                    '});' +
-                    'MathJax.Hub.Startup.onload();';
-        if (window.opera)
-            script.innerHTML = config;
-        else
-            script.text = config;
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    </script>
-</head>
-
-<body>
-
-<div class="navbar">
-    <div class="navbar-inner">
-    <div class="container">
-
-         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-             <span class="icon-bar"></span>
-             <span class="icon-bar"></span>
-             <span class="icon-bar"></span>
-         </a>
-
-        <a class="brand" href="..">Bastis Scratchpad On The Internet</a>
-
-        <div class="nav-collapse">
-        <ul class="nav">
-        
-                                </ul>
-        </div>
-
-    </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="content">
-    <div class="row">
-
-        <div class="span9">
-                
-
-        
-
-
-    <div class='article'>
-        <div class="content-title">
-            <a href="../compiling-scipy-and-matplotlib-again.html"><h1>Compiling Scipy and Matplotlib again</h1></a>
-            13/10/2011
-
-by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
- 
-
-
- 
-        </div>
-        
-        <div><p>Well, it's compile time again. Once again, I need to install scipy and matplotlib using homebrew and pip on Lion.<br />
+<p>Well, it's compile time again. Once again, I need to install scipy and matplotlib using homebrew and pip on Lion.<br/>
 It seems things have improved since I tried to compile last time! Well, it still does not work out of the box, but at least now it can be done without compiling by hand:
 (remember to brew install pkg-config and gfortran first)</p>
-<p><code>pip install -e git+https://github.com/scipy/scipy#egg=scipy-dev</code><br />
+
+<p><code>pip install -e git+https://github.com/scipy/scipy#egg=scipy-dev</code><br/>
 <code>pip install -e git+https://github.com/matplotlib/matplotlib#egg=matplotlib</code></p>
-<p>I must say, this is still a mess. But at least, it is getting less bad.</p></div>
-        <hr />
-    </div>
-		
-    
- 
-        
 
- 
+<p>I must say, this is still a mess. But at least, it is getting less bad.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Compiling-Scipy-and-Matplotlib-using-pip-on-Lion.html">Compiling Scipy and Matplotlib using pip on Lion</a> <div class="date"> posted on 2011-08-01 12:40</div> <div class="article">
 
-    <div class='article'>
-        <a href="../compiling-scipy-and-matplotlib-using-pip-on-lion.html"><h2>Compiling Scipy and Matplotlib using pip on Lion</h2></a>
-        <div class= "well small"> 01/08/2011
+<p>So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.</p>
 
-by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
- 
+<p>In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html" >round of googling</a> reveals:</p>
 
+<p>In order to get Scipy to compile, you need to insert <code>#include &lt;complex.h&gt;</code> in</p>
 
- </div>
-        <div class="summary"><p>So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.</p>
-<p>In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html">round of googling</a> reveals ...</p> <a class="btn btn-info xsmall" href="../compiling-scipy-and-matplotlib-using-pip-on-lion.html">read more</a></div>
-    </div>	
-				
-            <div class="pagination">
-<ul>
-    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+<pre><code>./scipy/lib/blas/fblaswrap_veclib_c.c.src
+./scipy/linalg/src/fblaswrap_veclib_c.c
+./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
+</code></pre>
 
-    <li class="active"><a href="../tag/pip.html">1</a></li>
+<p>That done, Scipy compiles perfectly fine.</p>
 
-    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+<p>But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/07/21/installing-matplotlib-on-os-x-10-7-with-homebrew/" >this blogpost</a> outlines, Matplotlib is not currently compatible with <code>libpng</code> 1.5, which ships with Lion. Fortunately, this is already fixed in the most recent source on the Matplotlib repo, so you just have to checkout that:</p>
 
-</ul>
-</div>    
- 
-  
-        </div>
+<pre><code>pip install -e git+https://github.com/matplotlib/matplotlib.git#egg=matplotlib
+</code></pre>
 
-        <div class="span3">
+<p>By doing that, Matplotlib should install just fine.</p>
 
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
-            <ul class="nav nav-list">
-                <li class="nav-header">
-                Site
-                </li>
-
-                <li><a href="../archives.html">Archives</a>
-                <li><a href="../tags.html">Tags</a>
-                <li><a href="../" rel="alternate">Atom feed</a></li>
-                                <li><a href="../feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
-                            </ul>
-            </div>
-
-
-                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
-            <ul class="nav nav-list">
-                <li class="nav-header">
-                Categories
-                </li>
-
-                                <li><a href="../category/all.html">all</a></li>
-                            </ul>
-            </div>
-            
-
-            
-
-                        <div class="social">
-            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
-            <ul class="nav nav-list">
-                <li class="nav-header">
-                Social
-                </li>
-
-                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
-                                <li><a href="http://github.com/bastibe">github</a></li>
-                            </ul>
-            </div>
-            </div>
-            
-        </div>     </div>     </div> 
-<footer>
-<br />
-<p><a href="..">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
-</footer>
-
-</div> <!-- /container -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
-</body>
-</html>
+<p>Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?</p>
+</div> <hr> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/tag/apple.html">apple</a>, <a href="http://bastibe.de/tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/tag/blog.html">blog</a>, <a href="http://bastibe.de/tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/tag/compiling.html">compiling</a>, <a href="http://bastibe.de/tag/computers.html">computers</a>, <a href="http://bastibe.de/tag/cython.html">cython</a>, <a href="http://bastibe.de/tag/emacs.html">emacs</a>, <a href="http://bastibe.de/tag/error.html">error</a>, <a href="http://bastibe.de/tag/file-system.html">file-system</a>, <a href="http://bastibe.de/tag/gaming.html">gaming</a>, <a href="http://bastibe.de/tag/gem.html">gem</a>, <a href="http://bastibe.de/tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/tag/matlab.html">matlab</a>, <a href="http://bastibe.de/tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/tag/numpy.html">numpy</a>, <a href="http://bastibe.de/tag/open-source.html">open-source</a>, <a href="http://bastibe.de/tag/pelican.html">pelican</a>, <a href="http://bastibe.de/tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/tag/pip.html">pip</a>, <a href="http://bastibe.de/tag/programming.html">programming</a>, <a href="http://bastibe.de/tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/tag/pygame.html">pygame</a>, <a href="http://bastibe.de/tag/pygments.html">pygments</a>, <a href="http://bastibe.de/tag/python.html">python</a>, <a href="http://bastibe.de/tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/tag/scheme.html">scheme</a>, <a href="http://bastibe.de/tag/scipy.html">scipy</a>, <a href="http://bastibe.de/tag/solarized.html">solarized</a>, <a href="http://bastibe.de/tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/tag/ui.html">ui</a>, <a href="http://bastibe.de/tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
+<h1 class="title">My Emacs customizations</h1>
+<div class="tags">
+Tagged as <a href="../tag/computers.html">computers</a>, <a href="../tag/emacs.html">emacs</a> </div>
+<div class="date">
+Written on 2012-10-14 09:14 </div>
+</div>
+<div class="article-content">
+
+
+<p>I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.</p>
+
+<p>One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes</p>
+
+<p><a href="https://dl.dropbox.com/s/0ne31wkur81wgzb/.emacs" >My <em>.emacs</em></a></p>
+
+<p>Now on to the meat of this post: Some customizations I made that I think are cool.</p>
+
+<h2>When Emacs starts up, make it fit the left half of the screen</h2>
+
+<p>First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defun</span></i> set-frame-pixel-size <span class="paren2">(<span class="code">frame width height</span>)</span>
+  <span class="string">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
+  <span class="paren2">(<span class="code"><i><span class="symbol">let</span></i> <span class="paren3">(<span class="code"><span class="paren4">(<span class="code">pixels-per-char-width <span class="paren5">(<span class="code">/ <span class="paren6">(<span class="code">frame-pixel-width</span>)</span> <span class="paren6">(<span class="code">frame-width</span>)</span></span>)</span></span>)</span>
+        <span class="paren4">(<span class="code">pixels-per-char-height <span class="paren5">(<span class="code">/ <span class="paren6">(<span class="code">frame-pixel-height</span>)</span> <span class="paren6">(<span class="code">frame-height</span>)</span></span>)</span></span>)</span></span>)</span>
+    <span class="paren3">(<span class="code">set-frame-size frame
+                    <span class="paren4">(<span class="code">floor <span class="paren5">(<span class="code">/ width pixels-per-char-width</span>)</span></span>)</span>
+                    <span class="paren4">(<span class="code">floor <span class="paren5">(<span class="code">/ height pixels-per-char-height</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
+
+<p>Next, a function that uses the above to set the frame size to exactly fit the left half of the screen. Note that the <code>excess-...</code> variables account for things like the menu bar, the dock or the task bar so you might have to adapt these values to your particular windowing environment. The values given here work for dockless OSX.</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defun</span></i> use-left-half-screen <span class="paren2">(<span class="code"></span>)</span>
+  <span class="paren2">(<span class="code">interactive</span>)</span>
+  <span class="paren2">(<span class="code"><i><span class="symbol">let*</span></i> <span class="paren3">(<span class="code"><span class="paren4">(<span class="code">excess-width 32</span>)</span>
+         <span class="paren4">(<span class="code">excess-height 48</span>)</span>
+         <span class="paren4">(<span class="code">half-screen-width <span class="paren5">(<span class="code">- <span class="paren6">(<span class="code">/ <span class="paren1">(<span class="code">x-display-pixel-width</span>)</span> 2</span>)</span> excess-width</span>)</span></span>)</span>
+         <span class="paren4">(<span class="code">screen-height <span class="paren5">(<span class="code">- <span class="paren6">(<span class="code">x-display-pixel-height</span>)</span> excess-height</span>)</span></span>)</span></span>)</span>
+    <span class="paren3">(<span class="code">set-frame-pixel-size <span class="paren4">(<span class="code">selected-frame</span>)</span> half-screen-width screen-height</span>)</span></span>)</span></span>)</span></span></code></pre>
+
+<p>Finally, when Emacs starts up, make it use half the screen. Just how I like it!</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">if</span></i> window-system
+    <span class="paren2">(<span class="code">use-left-half-screen</span>)</span></span>)</span></span></code></pre>
+
+<h2>Make shell split windows auto-resize</h2>
+
+<p>Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code">add-hook 'window-configuration-change-hook
+          <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code"></span>)</span>
+            <span class="paren3">(<span class="code">when <span class="paren4">(<span class="code">or <span class="paren5">(<span class="code">string-equal <span class="paren6">(<span class="code">buffer-name</span>)</span> <span class="string">"*Python*"</span></span>)</span>
+                      <span class="paren5">(<span class="code">string-equal <span class="paren6">(<span class="code">buffer-name</span>)</span> <span class="string">"*eshell*"</span></span>)</span>
+                      <span class="paren5">(<span class="code">string-equal <span class="paren6">(<span class="code">buffer-name</span>)</span> <span class="string">"*tex-shell*"</span></span>)</span></span>)</span>
+              <span class="paren4">(<span class="code"><i><span class="symbol">if</span></i> <span class="paren5">(<span class="code">not <span class="paren6">(<span class="code">eq <span class="paren1">(<span class="code">window-height</span>)</span> 15</span>)</span></span>)</span>
+                  <span class="paren5">(<span class="code">enlarge-window <span class="paren6">(<span class="code">- 15 <span class="paren1">(<span class="code">window-height</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span></code></pre>
+
+<h2>Create a new line above/below the current one</h2>
+
+<p>There is one feature of Vim that I really missed: <code>o</code>/<code>O</code>, which 'opens' a new line above or below the current one without changing the current line.</p>
+
+<pre><code><span class="code"><span class="paren1">(<span class="code"><i><span class="symbol">defun</span></i> vi-open-line-above <span class="paren2">(<span class="code"></span>)</span>
+  <span class="string">"Insert a newline above the current line and put point at beginning."</span>
+  <span class="paren2">(<span class="code">interactive</span>)</span>
+  <span class="paren2">(<span class="code">unless <span class="paren3">(<span class="code">bolp</span>)</span>
+    <span class="paren3">(<span class="code">beginning-of-line</span>)</span></span>)</span>
+  <span class="paren2">(<span class="code">newline</span>)</span>
+  <span class="paren2">(<span class="code">forward-line -1</span>)</span>
+  <span class="paren2">(<span class="code">indent-according-to-mode</span>)</span></span>)</span>
+
+<span class="paren1">(<span class="code"><i><span class="symbol">defun</span></i> vi-open-line-below <span class="paren2">(<span class="code"></span>)</span>
+  <span class="string">"Insert a newline below the current line and put point at beginning."</span>
+  <span class="paren2">(<span class="code">interactive</span>)</span>
+  <span class="paren2">(<span class="code">unless <span class="paren3">(<span class="code">eolp</span>)</span>
+    <span class="paren3">(<span class="code">end-of-line</span>)</span></span>)</span>
+  <span class="paren2">(<span class="code">newline-and-indent</span>)</span></span>)</span>
+
+<span class="paren1">(<span class="code">global-set-key <span class="paren2">(<span class="code">kbd <span class="string">"C-o"</span></span>)</span> 'vi-open-line-below</span>)</span>
+<span class="paren1">(<span class="code">global-set-key <span class="paren2">(<span class="code">kbd <span class="string">"M-o"</span></span>)</span> 'vi-open-line-above</span>)</span></span></code></pre>
+
+<h2>When editing LaTeX, show PDF output in Emacs</h2>
+
+<p>Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.</p>
+
+<p>This function will open or refresh a split window with the generated PDF file in it. Thus, when I edit LaTeX, I will hit C-c C-c to compile, then C-c C-v to see the PDF. All that without having to leave the LaTeX file.</p>
+
+<pre><code><span class="code"><span class="comment">;; open/show pdf file within Emacs using doc-view-mode
+</span><span class="paren1">(<span class="code"><i><span class="symbol">defun</span></i> open-show-pdf <span class="paren2">(<span class="code"></span>)</span>
+  <span class="paren2">(<span class="code">interactive</span>)</span>
+  <span class="paren2">(<span class="code"><i><span class="symbol">let</span></i> <span class="paren3">(<span class="code"><span class="paren4">(<span class="code">tex-buffer-name <span class="paren5">(<span class="code">buffer-name</span>)</span></span>)</span>
+        <span class="paren4">(<span class="code">pdf-buffer-name <span class="paren5">(<span class="code">concat <span class="paren6">(<span class="code">TeX-master-file</span>)</span> <span class="string">".pdf"</span></span>)</span></span>)</span></span>)</span>
+    <span class="paren3">(<span class="code"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="code">get-buffer pdf-buffer-name</span>)</span>
+        <span class="paren4">(<span class="code">switch-to-buffer-other-window pdf-buffer-name</span>)</span>
+      <span class="paren4">(<span class="code">find-file-other-window pdf-buffer-name</span>)</span></span>)</span>
+    <span class="paren3">(<span class="code"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="code">not <span class="paren5">(<span class="code">eq major-mode 'doc-view-mode</span>)</span></span>)</span>
+        <span class="paren4">(<span class="code">doc-view-mode</span>)</span></span>)</span>
+    <span class="paren3">(<span class="code">doc-view-revert-buffer t t</span>)</span>
+    <span class="paren3">(<span class="code">switch-to-buffer-other-window tex-buffer-name</span>)</span></span>)</span></span>)</span>
+
+<span class="paren1">(<span class="code">add-hook 'LaTeX-mode-hook
+          <span class="paren2">(<span class="code"><i><span class="symbol">lambda</span></i> <span class="paren3">(<span class="code"></span>)</span>
+            <span class="paren3">(<span class="code"><i><span class="symbol">define-key</span></i> LaTeX-mode-map <span class="paren4">(<span class="code">kbd <span class="string">"C-c C-v"</span></span>)</span> 'open-show-pdf</span>)</span>
+            <span class="paren3">(<span class="code">visual-line-mode t</span>)</span>
+            <span class="paren3">(<span class="code">turn-on-reftex</span>)</span></span>)</span>
+          t</span>)</span></span></code></pre>
+ </div>
+<div class="relative-nav">
+<a href="http://bastibe.de/posts/Text-editing-with-confidence-and-Emacs.html">Previous</a><br>
+<a href="http://bastibe.de/posts/Matlab-Mex-Homebrew-and-OS-X-108-Mountain-Lion.html">Next</a><br>
+</div>
+ </div> <div id="disqus_thread"></div>
+     <script type="text/javascript">
+       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+       var disqus_shortname = 'bastibe';
+       /* * * DON'T EDIT BELOW THIS LINE * * */
+       (function() {
+         var dsq = document.createElement('script');
+         dsq.type = 'text/javascript';
+         dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+           })();
+     </script>
+     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

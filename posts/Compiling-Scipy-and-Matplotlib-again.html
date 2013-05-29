@@ -1,0 +1,42 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta">
+<h1 class="title">Compiling Scipy and Matplotlib again</h1>
+<div class="tags">
+Tagged as <a href="../tag/compiling.html">compiling</a>, <a href="../tag/scipy.html">scipy</a>, <a href="../tag/matplitlib.html">matplitlib</a>, <a href="../tag/pip.html">pip</a> </div>
+<div class="date">
+Written on 2011-10-13 15:27 </div>
+</div>
+<div class="article-content">
+
+
+<p>Well, it's compile time again. Once again, I need to install scipy and matplotlib using homebrew and pip on Lion.<br/>
+It seems things have improved since I tried to compile last time! Well, it still does not work out of the box, but at least now it can be done without compiling by hand:
+(remember to brew install pkg-config and gfortran first)</p>
+
+<p><code>pip install -e git+https://github.com/scipy/scipy#egg=scipy-dev</code><br/>
+<code>pip install -e git+https://github.com/matplotlib/matplotlib#egg=matplotlib</code></p>
+
+<p>I must say, this is still a mess. But at least, it is getting less bad.</p>
+ </div>
+<div class="relative-nav">
+<a href="http://bastibe.de/posts/Adobe-AIR-Application-Crashes.html">Previous</a><br>
+<a href="http://bastibe.de/posts/How-to-make-Tagbar-work-with-Objective-C.html">Next</a><br>
+</div>
+ </div> <div id="disqus_thread"></div>
+     <script type="text/javascript">
+       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+       var disqus_shortname = 'bastibe';
+       /* * * DON'T EDIT BELOW THIS LINE * * */
+       (function() {
+         var dsq = document.createElement('script');
+         dsq.type = 'text/javascript';
+         dsq.async = true;
+         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+           })();
+     </script>
+     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+     <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Bastis Scratchpad On The Internet</title>
+    <meta name="description" content="">
+    <meta name="author" content="Bastian Bechtold">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="../theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="../theme/bootstrap.min.css" rel="stylesheet">
+    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="../theme/local.css" rel="stylesheet">
+    <link href="../theme/pygments.css" rel="stylesheet">
+
+    <script language="javascript">
+    if(window.MathJax===undefined){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src  = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
+        var config = 'MathJax.Hub.Config({' +
+                    'extensions: ["tex2jax.js"],' +
+                    'tex2jax: { '+
+                      'inlineMath: [ ["$","$"]], '+
+                      'displayMath: [["\\[","\\]"]],'+
+                      'processEscapes: true '+
+                    '},' +
+                    'jax: ["input/TeX","output/HTML-CSS"]' +
+                    '});' +
+                    'MathJax.Hub.Startup.onload();';
+        if (window.opera)
+            script.innerHTML = config;
+        else
+            script.text = config;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+    </script>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href="..">Bastis Scratchpad On The Internet</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+        
+                                </ul>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+                
+
+        
+
+
+    <div class='article'>
+        <div class="content-title">
+            <a href="../blogging-with-pelican-and-not-octopress.html"><h1>Blogging with Pelican (and not Octopress)</h1></a>
+            18/07/2012
+
+by <a class="url fn" href="../author/bastian-bechtold.html">Bastian Bechtold</a>
+ 
+
+
+ 
+        </div>
+        
+        <div><p>For a while now, I have been moving more and more services I use off Google. The reasons for that are manyfold, and few of them have anything to do with Google being evil or not--just to get that out of the way.</p>
+<p>One of the last holdouts has been <a href="http://daskrachen.com">my neglected Blogspot blog</a>. And one of the reasons for it being neglected is that it was hosted on Blogspot. Now don't get me wrong here, Blogspot is a terriffic blogging platform. You have this very nice nearly-WYSIWYG text editor right in your browser, you can upload images, you can publish instantly to your blog... Basically everything is taken care of for you conveniently right there in your browser. Google Style.</p>
+<p>Its just that I don't like to work that way. I like plain text. I like typing stuff into a plain text editor. I like to be in control. And Blogspot might be convenient, but it did not make me feel like I was in control. In fact, I lost at least one article to Blogspot for unknown reasons.</p>
+<p>Enter static site generators. The idea is that instead of writing rich text into some website, you create you content however you want on your own computer, then use a static generator which converts it into a set of static HTML pages and upload those to your website. Now all of the creation process is happening on your computer. You are in control. Probably the most popular program to do that is <a href="https://github.com/mojombo/jekyll">Jekyll</a>.</p>
+<p>The second part of the equation is some kind of publishing platform. With these static site generators, really any web server does that trick. Just push your generated HTML files to the server and be done with it. Even cooler is Github. Using <a href="http://pages.github.com/">Github pages</a>, you can use your existing Github account and infrastructure to publish your blog just by pushing the HTML to Github. This is seriously cool!</p>
+<p>So, I set out and tried <a href="http://octopress.org/">Octopress</a>, which combines these two things into a nice blogging platform. Honestly though, I don't know much Ruby and all that <code>rake</code> workflow did not make me much more comfortable than pushing stuff into Blogspot.</p>
+<p>Hence, I looked for alternatives. What I ended up with is <a href="http://pelican.notmyidea.org/">Pelican</a>, a very simple static site generator written in Python. Finally, this is a codebase that is easy enough for me to understand and modify. If there is any trouble with my blog, I will be (and have been) able to just look at the source code and figure out what is going wrong. I like this!</p>
+<p>To publish a new blog post, I will start by writing the post in <a href="http://daringfireball.net/projects/markdown/">Markdown</a> (a format I understand), process it using the very simple command line <code>pelican -s my_config_file.py posts/</code>, and push the result to GitHub. Easy as pie. And I feel like I am in control again!</p>
+<p>Actually, if this is just a bit too technical for you, check out <a href="http://calepin.co/">Calepin</a> instead. It uses the very same Pelican engine, but instead of fiddling with Git, you just put your markdown files into your Dropbox, and--poof--you magically have a Blog!</p>
+<p>If you want to see my blog as a repo on Github, just <a href="https://github.com/bastibe/bastibe.github.com/">go have a look</a> (the <code>master</code> branch contains the HTML, the <code>source</code> branch contains the configuration and Markdown).</p></div>
+        <hr />
+    </div>
+		
+            <div class="pagination">
+<ul>
+    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+
+    <li class="active"><a href="../tag/blog.html">1</a></li>
+
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
+</ul>
+</div>    
+ 
+  
+        </div>
+
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Site
+                </li>
+
+                <li><a href="../archives.html">Archives</a>
+                <li><a href="../tags.html">Tags</a>
+                <li><a href="../" rel="alternate">Atom feed</a></li>
+                                <li><a href="../feeds/all.rss.xml" rel="alternate">RSS feed</a></li>
+                            </ul>
+            </div>
+
+
+                        <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Categories
+                </li>
+
+                                <li><a href="../category/all.html">all</a></li>
+                            </ul>
+            </div>
+            
+
+            
+
+                        <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header">
+                Social
+                </li>
+
+                                <li><a href="http://twitter.com/paperflyer">twitter</a></li>
+                                <li><a href="http://github.com/bastibe">github</a></li>
+                            </ul>
+            </div>
+            </div>
+            
+        </div>     </div>     </div> 
+<footer>
+<br />
+<p><a href="..">Bastis Scratchpad On The Internet</a> &copy; Bastian Bechtold 2012</p>
+</footer>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+<a href="http://github.com/bastibe/"><img style="position: absolute; top: 40px; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+</body>
+</html>

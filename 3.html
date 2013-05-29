@@ -1,0 +1,348 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Compiling-Scipy-and-Matplotlib-using-pip-on-Lion.html">Compiling Scipy and Matplotlib using pip on Lion</a> <div class="date"> posted on 2011-08-01 12:40</div> <div class="article">
+
+<p>So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.</p>
+
+<p>In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html" >round of googling</a> reveals:</p>
+
+<p>In order to get Scipy to compile, you need to insert <code>#include &lt;complex.h&gt;</code> in</p>
+
+<pre><code>./scipy/lib/blas/fblaswrap_veclib_c.c.src
+./scipy/linalg/src/fblaswrap_veclib_c.c
+./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
+</code></pre>
+
+<p>That done, Scipy compiles perfectly fine.</p>
+
+<p>But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/07/21/installing-matplotlib-on-os-x-10-7-with-homebrew/" >this blogpost</a> outlines, Matplotlib is not currently compatible with <code>libpng</code> 1.5, which ships with Lion. Fortunately, this is already fixed in the most recent source on the Matplotlib repo, so you just have to checkout that:</p>
+
+<pre><code>pip install -e git+https://github.com/matplotlib/matplotlib.git#egg=matplotlib
+</code></pre>
+
+<p>By doing that, Matplotlib should install just fine.</p>
+
+<p>Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Installing-Pygame-using-Homebrew.html">Installing Pygame using Homebrew</a> <div class="date"> posted on 2011-03-04 14:16</div> <div class="article">
+
+<p>So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html" >Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.</p>
+
+<p><a href="http://www.pygame.org/news.html" >Pygame</a> is one package that allows this. (I will submit a patch to <a href="http://people.csail.mit.edu/hubert/pyaudio/" >Pyaudio</a> soon that will enable it there, too). There are pre-built binaries on the Pygame website that you can install easily. But then there would be no easy way to uninstall them, so what I would rather want is to install Pygame using package managers that allow easy updating and uninstallation. My tool of choice on the Mac is of course <a href="https://github.com/mxcl/homebrew/" >Homebrew</a>.</p>
+
+<p>Note that although I am mostly interested in audio playback, this post will detail the installation of all modules of Pygame, not just <code>pygame.mixer</code>.</p>
+
+<p>Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.</p>
+
+<pre><code>brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
+</code></pre>
+
+<p>This will install most packages for you. Note that <code>libpng</code> is also available as a system library, so it is installed <code>keg_only</code>, that is, without linking it in your path. We will need to compile against it though, so the next step is</p>
+
+<pre><code>brew link libpng
+</code></pre>
+
+<p>Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</code> does not install its headers, so you can't compile against it. To fix that, type</p>
+
+<pre><code>brew edit smpeg
+</code></pre>
+
+<p>and add the following line just above the two end at the end of the file</p>
+
+<pre><code>include.install Dir[&quot;*.h&quot;]
+</code></pre>
+
+<p>Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install <code>smpeg</code> with the usual</p>
+
+<pre><code>brew install smpeg
+</code></pre>
+
+<p>and you will get the headers, too. Isn't Homebrew great?</p>
+
+<p>Now that all the prerequisites are met, lets look at Pygame itself. This is rather more difficult, as it will not build properly against Homebrew libraries on its own. First, download the source package of Pygame from the <a href="http://www.pygame.org/download.shtml" >official website</a>. Unpack it to some directory.</p>
+
+<p>Now open a terminal and navigate to that directory. Me, I like <a href="http://iterm.sourceforge.net/" >iTerm</a>, but Terminal.app will do just fine, too. In there, run <code>python config.py</code> to create an initial setup file.</p>
+
+<p>At this point, the setup file is mostly useless since <code>config.py</code> failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file <code>Setup</code> (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this</p>
+
+<pre><code>SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
+</code></pre>
+
+<p>Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in <code>/usr/local…</code>. Hence, change this line to</p>
+
+<pre><code>SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+</code></pre>
+
+<p>The next lines are strangely garbled. They say, for example</p>
+
+<pre><code>FONT = -lS -lD -lL -l_ -lt -lt -lf
+</code></pre>
+
+<p>Where they actually should say</p>
+
+<pre><code>FONT = -lSDL_ttf
+</code></pre>
+
+<p>Instead of having one <code>-l</code> and then the library name <code>SDL_ttf</code>, they put <code>-l</code> in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for <code>FONT</code>, <code>IMAGE</code>, <code>MIXER</code> and <code>SMPEG</code>.</p>
+
+<p>Note that I did not tell you to do this for <code>PORTTIME</code>, too. Actually, <code>PORTTIME</code> is already correctly linked in <code>PORTMIDI</code>, so you don't need that at all any more. Just delete or comment the <code>PORTTIME</code> line.</p>
+
+<p>Now that all the dependencies are corrected, lets enable the features. A few lines further down, there will be a block of lines, where most lines begin with a <code>#</code> except for the ones beginning with <code>_numericsurfarray…</code> and <code>_camera…</code>, These are the different features of Pygame: The ones with the <code>#</code> are disabled, the other two are enabled.</p>
+
+<p>With all the stuff we installed earlier, you can now enable all features (remove the <code>#</code> in front of <code>imageext…</code>, <code>font…</code>, <code>mixer…</code>, <code>mixer_music…</code>, <code>_minericsndarray…</code>, <code>movie…</code>, <code>scrap…</code> and <code>pypm…</code>).</p>
+
+<p>Remember we disabled <code>PORTTIME</code> a while ago? Right, so we have to remove that dependency: In the line starting with <code>pypm…</code>, delete the part that says <code>$(PORTTIME)</code>. Great. That was easy, right? Now save that file and go back to the Terminal.</p>
+
+<p>We are now going to compile and install Pygame. The nice thing is, even though we are installing it manually, it will go in the right directories and it will be registered with <code>pip</code> or <code>easy_install</code>, so you can just invoke them if you want to uninstall it later by typing <code>pip uninstall pygame</code>. This is something I love about Python!</p>
+
+<p>Alright, now without further ado, install Pygame by typing</p>
+
+<pre><code>python setup.py install
+</code></pre>
+
+<p>Great! That's it! Everything should work now!</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Installing-PythonNumpyScipyMatplotlib-on-OSX.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a> <div class="date"> posted on 2011-02-03 16:23</div> <div class="article">
+
+<p>For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/" >Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.</p>
+
+<p>So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/" >Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.</p>
+
+<p>Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/" >Numpy</a>, which seems to be nearly as fast as Matlab when it comes to matrix processing and linear algebra. You then discover <a href="http://www.scipy.org/" >SciPy</a>, which would add all that signal processing prowess of Matlab (do quick transformations, random numbers, statistics) to your toolbox. Last but not least, you need plotting. That would be <a href="http://matplotlib.sourceforge.net/" >Matplotlib</a> then, which provides quick plotting facilities in Python.</p>
+
+<p>And the best thing is, these three systems work really well together. They seem to be the perfect replacement for Matlab that could even be superiour to it in many regards.</p>
+
+<p>Next up, you need to install all that stuff. If you are like me, you naturally want to do all that on a Mac. Also, you kind of dislike all these installer-thingies, which install stuff to unknown places and are nigh impossible to uninstall or update cleanly. Even though, you could of course just go to the individual websites, download Python, Numpy, SciPy and Matplotlib, run them installers, and be done. You would save yourself a lot of trouble that way.</p>
+
+<p>But since you allegedly are like me, you instead fire up <a href="http://mxcl.github.com/homebrew" ><code>brew</code></a> and try to install all that stuff using that. Again, you could use <a href="http://www.macports.org/" >MacPorts</a> or <a href="http://www.finkproject.org/" >Fink</a> instead, but you probably had some bad experiences with them and you generally love the hackishness of Homebrew, so this is your natural first try.</p>
+
+<p>So you set about this, you believe in packet managers and trust them to take care of every obstacle that might be lying in your way. First of all, install the latest developer tools from <a href="http://developer.apple.com/" >developer.apple.com</a>. You might need to register (for free) to get them. Also, you need to install <a href="http://mxcl.github.com/homebrew" >Homebrew</a>.</p>
+
+<p>To cut this short, here is what you need to get that Python running:</p>
+
+<pre><code>brew install python
+</code></pre>
+
+<p>This one should be obvious. At the time of writing, it will install Python 2.7.1. You could take Python 3, but matplotlib is not compatible to it, so you kind of have to stick with 2.7.1 instead.</p>
+
+<p>You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code> in the beginning of your path to make sure the new Python gets loaded instead of the pre-installed one. You do that by writing</p>
+
+<pre><code>export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+</code></pre>
+
+<p>in your <code>~/.bash_profile</code>. (Create it if its not there--it is just a simple text file).</p>
+
+<p>Now, if you type <code>python --version</code>, you should get <code>Python 2.7.1</code> as a response.</p>
+
+<p>Alright, next up, install the python package manager:</p>
+
+<pre><code>brew install distribute
+brew install pip
+</code></pre>
+
+<p>This will come preconfigured for your newly installed Python. In an ideal world, this should be all. The world being as it is, the pip package of Matplotlib is severely broken and has one other unstated dependency:</p>
+
+<pre><code>brew install pkg-config
+</code></pre>
+
+<p>Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:</p>
+
+<pre><code>brew install gfortran
+</code></pre>
+
+<p>Alright. That was enough. Now on to pip. With all these dependencies cleared, pip should be able to download Numpy and Scipy without trouble:</p>
+
+<pre><code>pip install numpy
+pip install scipy
+</code></pre>
+
+<p>Matplotlib, on the other hand, is more difficult to install. You see, pip is looking at the Python package repository <a href="http://pypi.python.org/" >PyPi</a> for each package. PyPi then provides a URL. Pip then scans that website for links to suitable package files. But, <a href="http://sourceforge.net/" >Sourceforge</a> changed its links a while ago, so pip gets confused and will download an outdated version. Sourceforge says, its new links are way better and no way we will change them back; Pip says, well, if Sourceforge can't provide proper links, that's not our problem. Oh My. Silly children.</p>
+
+<p>So we have to do this manually:</p>
+
+<pre><code>pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
+</code></pre>
+
+<p>That URL comes straight from Sourceforge. Look for the latest version of Matplotlib, search for the download link to the source distribution (<code>*.tar.gz</code>), copy that link and strip any trailing '/download'.</p>
+
+<p>UPDATE:</p>
+
+<p>It seems the matplotlib package was updated in the meantime, so you can just run <code>pip install matplotlib</code> now.</p>
+
+<p>This should now download and install matplotlib.</p>
+
+<p>Thank you for reading.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/The-strangeness-of-widescreen-displays-in-modern-operating-systems.html">The strangeness of widescreen displays in modern operating systems</a> <div class="date"> posted on 2010-07-03 12:08</div> <div class="article">
+
+<p>So today, pretty much everyone has widescreen displays. That is, displays that are far more wide than high. This was not always so. In ye olden days, computers were mainly used for displaying text, hence displays tended to have a similar layout as books or magazines. Today, they are more like movies (which might be worrying in itself).</p>
+
+<p><img src="http://bastibe.de/static/2010-03/aspect_ratios.png" alt="Aspect Ratios" /></p>
+
+<p>So todays displays are widescreen. To do all that modern stuff, like watch (widesreened) videos or multitask (display two windows side by side). However, this also means that vertical pixels are something of a scarcity. Especially on those small Laptop screens. In fact, the first Netbook screens were so tiny that many of Windows' own windows could not be used at all since the lower parts did not fit on the screen. Raise your hand if Word 2007 leaves barely ten lines of visible text between all its blue-tinted UI-splendour on your laptop screen.</p>
+
+<p><a href="http://bastibe.de/static/2010-03/word.png" ><img src="http://bastibe.de/static/2010-03/word_small.png" alt="Microsoft Word" /></a></p>
+
+<p>This gets most straining when reading text. On the internet for example. There is practically no website at all that can be displayed in its entirity even on one of those full HD displays. Print-formatted documents are a similar matter. Actually, I find myself craving for pixels regularly. I even disable the bookmark bar in my browser to free those extra two lines of text. And I memorize keyboard shortcuts so I can hide toolbars. And I use Google Chrome instead of Firefox/Safari/Internet Explorer, not least of all since it has the smallest title bar and no bottom bar.</p>
+
+<p>Why, then, do modern operating systems still waste so much vertical space with that Dock/Taskbar? This is something I really don't get. Vertical space is such a scarcity, yet virtually every operating system choses to waste at least three lines of text with something that could easily go on the side of the display. Well, at least on Windows 7 and OSX that is something you can easily change.</p>
+
+<p><a href="http://bastibe.de/static/2010-03/dock.png" ><img src="http://bastibe.de/static/2010-03/dock_small.png" alt="The OSX Dock" /></a></p>
+
+<p>So if you are like me and appreciate every added line of text, do yourself a favour and put your Dock/Taskbar on the side. Really, this should be the default.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Gedanken-zu-User-Interfaces.html">Gedanken zu User Interfaces</a> <div class="date"> posted on 2009-04-25 14:15</div> <div class="article">
+
+<p>Jeder kennt dieses Fenster:</p>
+
+<p><img src="http://bastibe.de/static/2009-04/delete_file.png" alt="delete file" /></p>
+
+<p>Dieses Fenster ist eine ziemlich schlechte Idee, denn jeder geübte Benutzer hat irgendwann gelernt, dass die Aktion &quot;Dateien Löschen&quot; aus drei Gesten besteht: (1) Dateien auswählen, (2) Die Löschaktion einleiten, (3) Den Löschdialog bestätigen. Leider hat man schon vor mehr als zwanzig Jahren nachgewiesen, dass solche zusammengehörigen Gesten von den Benutzern als einzelne &quot;Datei-Löschen&quot; Geste abstrahiert werden. Man kennt das vom Tippen: Man tippt Worte nicht, indem man einzelne Buchstaben aneinander hängt, sondern man tippt Worte fast immer am Stück; Hat man erst einmal angefangen, ein falsches Wort zu tippen, kann man damit nicht aufhören, bis das gesamte Wort getippt ist. Auf ähnliche Weise ist es dem Benutzer auch nicht möglich, auf den Löschdialog sinnvoll zu reagieren, da das Bestätigen der Sicherheitsfrage vollkommen automatisiert ist und daher nicht einmal verhindert werden könnte, wenn man wollte.
+Die Alternative ist ein alter Bekannter: Undo. Statt den Benutzer im Vorfeld zu fragen, ob er die Datei wirklich löschen möchte (was er durch Einleiten der Löschaktion bereits bejaht hat) gibt man ihm die Möglichkeit, die Aktion im Nachhinein wieder rückgängig zu machen. Das ist wesentlich effektiver und kommt ohne nerviger Dialogbox aus. Übrigens funktioniert Dateiaktion-Undo bereits heute in allen Betriebssystem außer Linux, jedoch ohne Menüicon und zumeist nur für die letzte Aktion. Wäre es nicht schön, wenn dies noch weiter ausgebaut würde?</p>
+
+<p>Noch ein gefährlicher Dialog:</p>
+
+<p><img src="http://bastibe.de/static/2009-04/ja_nein_abbrechen.png" alt="ja, nein, abbrechen" /></p>
+
+<p>Das ist ebenfalls ein alter Bekannter, der immer dann erscheint, wenn man ein Programm schließen will, welches noch ungesichte Änderungen enthält: Abgesehen von dem offensichtlichen Problem, dass &quot;Abbrechen&quot; keinen wirklichen Sinn ergibt (Was abbrechen? Das Programm?) erfordert diese Frage jedes Mal das komplette Lesen der Meldung, bis man entschlüsseln kann, was &quot;Ja&quot; und &quot;Nein&quot; in diesem Kontext bedeuten. Um das noch einmal zu verdeutlichen, hier ein besonders schlimmes Beispiel:</p>
+
+<p><img src="http://bastibe.de/static/2009-04/bad_gui.png" alt="bad GUI" /></p>
+
+<p>Es leuchtet ein, dass hier ein eindeutigerer Dialog wesentlich sinnvoller wäre, bei dem sofort ersichtlich ist, was welcher Button tun wird: (Merke: Auf Buttons gehören immer Verben)</p>
+
+<p><img src="http://bastibe.de/static/2009-04/speichern_windows.png" alt="speichern Windows" />
+<img src="http://bastibe.de/static/2009-04/speichern_mac.png" alt="speichern Mac" /></p>
+
+<p>Aber warum eigentlich überhaupt speichern? Warum muss ich mich persönlich darum kümmern, meine Arbeit zu speichern? Ich dachte, ich würde mit einer Datei arbeiten -- aber wenn diese Datei nicht geändert wird, wenn ich nicht zuerst &quot;Speichern&quot; anklicke, habe ich wohl eigentlich doch nicht mit dieser Datei, sondern mit einer heimlichen Kopie gearbeitet. Wäre es nicht viel sinnvoller, immer automatisch zu speichern, und statt des &quot;Speichern&quot;-Buttons eine &quot;auf Urzustand zurücksetzen&quot;-Funktion bereitzustellen? Ich bin mir auf jeden Fall sicher, dass man den &quot;Undo all changes&quot;-Button wesentlich seltener bräuchte als den &quot;Speichern&quot;-Button, denn wenn der Benutzer nicht vorgehabt hätte, neuen Text in eine Datei zu schreiben, dann hätte er keinen neuen Text in die Datei geschrieben. Hat er dennoch &quot;versehentlich&quot; Text eingegeben, ist das ein klarer &quot;Benutzerfehler&quot;, also der logische Einsatzzweck für Undo.</p>
+
+<p>Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll einsetzen könnte, um das Arbeiten am Computer angenehmer zu gestalten. Ich wünschte, mehr Leute würden sich mit diesen Dingen auseinander setzen...</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Tagged-File-System.html">Tagged File System</a> <div class="date"> posted on 2009-04-19 09:41</div> <div class="article">
+
+<p>Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff &quot;Ordner&quot; wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen &quot;Verzeichnis&quot; wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für &quot;Verzeichnis&quot;...)</p>
+
+<p><a href="http://bastibe.de/static/2009-04/standard_finder.png" ><img src="http://bastibe.de/static/2009-04/standard_finder_small.png" alt="Standard Finder" /></a></p>
+
+<p>Es wäre daher wünschenswert, eine einfacher zu verstehende Alternative zu Ordnerhierarchien zu haben. Die gibt es auch schon, in Form der bekannten Verzeichnisse &quot;Meine Bilder&quot;, &quot;Meine Dokumente&quot;, etc.
+Diese Ordner wollen den Benutzer mit einfachen Piktogrammen und klaren Namen dazu animieren, einen natürlichen Ort für seine Dateien zu wählen und so ein wenig Ordnung zu schaffen. Tatsächlich ist dieses Konzept einer Tag-Struktur schon relativ ähnlich, da auch hier nicht davon ausgegangen wird, dass sich der Benutzer selbst um eine tief geschachtelte Orderhierarchie kümmert, sondern nur wenige, einfach zu verstehende Markierungsmöglichkeiten (&quot;Bilder&quot;, &quot;Dokumente&quot;) geboten werden.</p>
+
+<p>Ein echtes Tag-basiertes System könnte vollkommen ohne Verzeichnisse auskommen, wobei man dann eben beim Speichern einer Datei nicht mehr aus einer hierarchischen Liste von Ordnern den Speicherort auswählen würde, sondern von einer flachen Liste von Tags. Die Usability-Kosten davon wären vernachlässigbar.</p>
+
+<p><a href="http://bastibe.de/static/2009-04/tagged_finder.png" ><img src="http://bastibe.de/static/2009-04/tagged_finder_small.png" alt="Tagged Finder" /></a></p>
+
+<p>Ähnlich würde das Finden von Dateien funktionieren: Statt eine hierarchische Liste von Ordnern nacheinander anzuklicken, würde man eine flache Liste von Tags nacheinander anklicken, jedoch mit dem Bonus, dass man die gesuchte Datei nicht erst bei Anklicken aller Tags, sondern mit großer Wahrscheinlichkeit schon nach ein oder zwei Tags gefunden hätte.</p>
+
+<p>Ein Problem würde jedoch mit Projekten entstehen, die aus mehreren Dateien bestehen. Hier müsste man sicher stellen, dass sie im Dateisystem nur als einzelne große Projektdatei auftauchen und nicht jede einzelne Unterdatei gelistet wird. Das ließe sich zum Beispiel durch &quot;Bundles&quot; lösen, wie sie heute schon in OSX vorkommen (Ordner mit definierter Namesendung und Inhalt werden wie Dateien behandelt) oder einfach durch einen speziellen Tag, der die einzelnen Dateien vor der normalen Suche versteckt.
+Dieses Konzept wird übrigens heute schon vielfach verwendet, so ist etwa eine aktuelle Word-Datei nur eine ZIP-Datei, die eine definierte Verzeichnisstruktur mit allen Bildern, dem Text (als XML), einer Vorschau-Grafik etc. enthält.</p>
+
+<p><a href="http://bastibe.de/static/2009-04/bundles.png" ><img src="http://bastibe.de/static/2009-04/bundles_small.png" alt="Bundles" /></a></p>
+
+<p>Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfacher arbeiten könnte als mit den heute üblichen Verzeichnisstrukturen. Tja, jetzt fehlt nur noch eine innovative Firma, die sich um die Umsetzung kümmert...</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Es-geht-um-Tabs.html">Es geht um Tabs</a> <div class="date"> posted on 2009-03-31 20:09</div> <div class="article">
+
+<p>Tabs sind kaputt. Tabs waren noch nie eine gute Idee. Tabs werden dafür benutzt, um in einem Programm mehrere Fensterflächen voll Inhalt in nur einem Fenster darzustellen. Speziell zu diesem Zweck entwarf man in grauer Vorzeit eine neue Klasse von Programmen namens Fenstermanager. Fenstermanager erlauben es, mehrere Fenster gleichzeitig darzustellen, gerne auch nebeneinander, hintereinander oder übereinander. Kennt jeder. Und Tabs sind eine Krücke, die genau dieses Prinzip unterlaufen, denn sie organisieren Fenster ineinander.</p>
+
+<p>Aber es ist ja nicht nur das. Wir kennen Tabs schon lange in ganz verschiedenen Formen:</p>
+
+<p><img src="http://bastibe.de/static/2009-03/tabs_firefoc_preferences.png" alt="Tabs Firefox Preferences" /><br/>
+<img src="http://bastibe.de/static/2009-03/tabs_osx.png" alt="Tabs OSX" /><br/>
+<img src="http://bastibe.de/static/2009-03/tabs_windows.png" alt="Tabs Windows" />  </p>
+
+<p>All diesen Formen gemein ist, dass sie wenigstens einen Rahmen bilden, der andeutet, welcher Teil des Fensters sich ändern wird, wenn man einen anderen Tab öffnet. Die Ausnahme: Browser.</p>
+
+<p><img src="http://bastibe.de/static/2009-03/tabs_ie8.png" alt="Tabs IE8" /><br/>
+<img src="http://bastibe.de/static/2009-03/tabs_firefox.png" alt="Tabs Firefox" /></p>
+
+<p>Wo hat ein Browser seine Tabs? zwischen Adressleiste und Webseiteninhalt. Bei Firefox (besondere Perversion) sind die Tabs sogar so dargestellt, als würden sie nur die Adresszeile ändern (oben befestigte Reiter), ganz im Gegensatz dazu ändern sie aber sowohl die Adresszeile als auch -viel wichtiger- den Webseiteninhalt. Wenn überhaupt, dann sollten sich die Tabs also am oberen Bildschirmrand befinden, so dass man mit ihnen wenigstens konsistent den kompletten Fensterinhalt ändert. Immerhin hier sieht man bereits Licht: Google Chrome und Safari 4 funktionieren bereits so:</p>
+
+<p><img src="http://bastibe.de/static/2009-03/tabs_chrome.png" alt="Tabs Chrome" /><br/>
+<img src="http://bastibe.de/static/2009-03/tabs_safari_windows.png" alt="Tabs Safari Windows" /><br/>
+<img src="http://bastibe.de/static/2009-03/tabs_safari_osx.png" alt="Tabs Safari OSX" /></p>
+
+<p>Die Lösung von Safari hat noch ein paar Probleme: Wo verschiebt man Tabs? (Ungeschickt: an dem kleinen Handle am rechten Tabgreifer-Rand), Wieso haben die Tabs keine Favicons? Aber nicht verzagen: Noch ist Safari 4 lediglich eine Beta. Gut hingegen fände ich es, wenn dieses Tabbed-Fenster-Interface nicht nur für Safari, sondern für jedes andere Programm auch verwendbar wäre, also als Feature des Fenstermanagers implementiert würde. Man müsste daran noch ein wenig feilen, aber es würde Einiges sehr viel übersichtlicher gestalten. Snow Leopard anyone?</p>
+
+<p>Weitere gute Ideen rund um Tabs, sortiert nach Browser:</p>
+
+<h3><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" >Microsoft Internet Explorer 8</a></h3>
+
+<ul>
+<li>Tabs werden nach Farben sortiert, je nach dem von welchem Tab aus sie geöffnet wurden</li>
+<li>Im neuen Fenstermanager von Windows 7 werden alle Tabs als eigene Fenster aufgeführt</li>
+<li><p>Jeder Tab läuft in seinem eigenen Prozess. Bringt aber nix, weil wenn einer abstürzt nimmt er trotzdem den ganzen Browser mit. Ist aber auch noch nur Beta!<br/>
+  <a href="http://bastibe.de/static/2009-03/tabs_ie8_goodness.png" ><img src="http://bastibe.de/static/2009-03/tabs_ie8_goodness_small.png" alt="Tabs IE8 Goodness" /></a></p>
+
+<h3><a href="http://www.mozilla-europe.org/de/firefox/" >Firefox 3</a> Preview</h3></li>
+<li>Tabs sollen über ein neuartiges Interface beim Wechsel als Miniaturen dargestellt werden, so dass man einfacher zwischen ihnen wechseln kann</li>
+<li><p>Viele andere nette Vorschläge rund um diese Idee gibts hier: <a href="http://www.azarask.in/blog/post/new-tab-iterations/" >Aza Raskins Blog</a></p>
+
+<h3><a href="http://www.apple.com/safari/" >Safari 4</a></h3></li>
+<li>Die Tableiste nimmt keinen eigenen Platz auf dem Bildschirm ein</li>
+<li><p>Tabs sind am richtigen Ort (oben)</p>
+
+<h3><a href="http://www.google.com/chrome" >Google Chrome</a></h3></li>
+<li>Tabs sind am richtigen Ort (oben) aber es gibt dennoch eine klassische Titelleiste des Fensters (im Gegensatz zu Safari 4)</li>
+<li>Jeder Tab läuft in einem eigenen Prozess, daher können einzelne Tabs abstürzen ohne den Browser mitzunehmen.</li>
+<li>Jeder Tab läuft in seiner eigenen Sandbox, was es Angreifern wesentlich erschwert, den Browser hochzunehmen.
+  <img src="http://bastibe.de/static/2009-03/tabs_chrome_goodness.png" alt="Tabs Chrome Goodness" /></li>
+</ul>
+
+<p>Fazit: Es gibt noch viel zu tun, aber anscheinend ergibt sich langsam aber sicher ein Konsens, dass etwas mit Tabs getan werden muss. Es bleibt spannend.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Mirrors-Edge.html">Mirror&#039;s Edge</a> <div class="date"> posted on 2009-03-29 22:22</div> <div class="article">
+
+<p><img src="http://bastibe.de/static/2009-03/mirrors_edge.png" alt="Mirror's Edge" /></p>
+
+<p>Ich habe am Wochenende, wie in Twitter schon verkündet, Mirror’s Edge (durch-) gespielt. Ganz kurz: Mirror’s Edge ist ein Videospiel für PC/XBOX360/PS3, im Endeffekt ein Platformer aus der Ego-Perspektive, zwar mit der Möglichkeit, Waffen aufzunehmen, aber mit dem klaren Fokus auf Rennen, genauer: Parkours, dem modernen Hindernislauf, hier mit dem Extratwist: auf Hochhausdächern.</p>
+
+<p>Es wurde schon viel gesagt über dieses Spiel. Müde Story, schlechte Charactermodelle, schlechte Shooter-Elemente, unübersichtliche Atmosphäre, kurze Spieldauer, um nur einige der üblichen Kritikpunkte zu nennen.</p>
+
+<p><img src="http://bastibe.de/static/2009-03/mirrors_edge_jump.png" alt="Jump!" /></p>
+
+<p>Ich sage: Alles Popauswurf. Was Mirror’s Edge versucht, ist die Direktheit und Intimität der Egoperspektive mit dem Flow und der Geschwindigkeit eines modernen Platformers zu verbinden. Faith, der Hauptcharakter ist eine kleine “Eurasierin” (Zitat der Entwickler), deren Eltern in einem Widerstandskampf… Bla, bla, bla.
+Es geht um Flow, es geht darum, mit blitzschnellen Reflexen und akrobatischem Geschick einen Weg über die Dächer einer Großstadt zu finden. Es geht darum, nicht stehen zu bleiben, nicht zu zögern. Es geht um Geschwindigkeit und Freiheit, über Straßenschluchten zu springen, zwischen Klimaanlagen und Baugerüsten zu sprinten und immer schneller, immer weiter, den Großstadtlärm hinter sich zu lassen. Nur begleitet von Faiths immer wieder ins Bild ragenden Armen und Beinen, ihrem schnellen Atem, dem Rhythmus ihrer Schritte. Und ja, man stirbt häufig, wenn man sich bei einem Sprung verschätzt oder es doch nicht schafft, den Jägern zu entkommen. Aber um so größer ist die Befriedigung einen komplizierten Run endlich zu schaffen und mit einem perfekten Sprung über eine Häuserschlucht die Polizei hinter sich zu lassen.</p>
+
+<p>Mirror’s Edge perfektioniert den Flow, das Gefühl der Freiheit und der Geschwindigkeit. Klar, dass da die Ego-Shooter-Mechanik auf der Strecke bleibt, aber Faith ist auch keine Kämpferin, sondern selbsterklärter Runner. Sicher, die Story ist ein wenig lahm, aber wir reden hier über ein Computerspiel: Die Story hat allein das Ziel, die einzelnen Schauplätze miteinander zu verbinden, und das gelingt ihr. Charakterentwicklung kennt das Spiel nicht, allein der Spieler wird besser. Und auch das ist gut so, denn in den späteren Leveln ist der Schwierigkeitsgrad nicht von schlechten Eltern. Aber Checkpoints sind häufig und fair verteilt, so dass dies selten ein Problem wird.</p>
+
+<p>Ach ja, und der Sound ist genial, selten habe ich mich so sehr in eine Spielfigur hineinversetzt gefühlt wie in Faith. Und die Grafik… Ich könnte hier viel schreiben; Ich glaube schlicht, dass die aktuelle Konsolengeneration im Grunde ein Niveau erreicht hat, auf dem weitere Verbesserungen keine große Rolle mehr spielen. Mirror’s Edge, mit seiner gleißend-Weiß-plus-Farbe Ästhetik zeigt hier eine Welt, wie man sie noch nie gesehen hat, in der Farbe nicht nur als Stilmittel, sondern auch als Wegweiser und tatsächlich Spielhilfe eingesetzt wird: Rot ist, wo es weiter geht. Diese Ästhetik ist schwer in Worte zu fassen und gibt dem Ganzen eine ganz eigene Freiheit, im starken Kontrast zum “realistisch”-Grau-Braun, dem sich so viele andere Spiele verschrieben haben.</p>
+
+<p>Und was bleibt unterm Strich? Ich sage: Das Spiel ist es Wert. Es mag seine Mängel haben, aber allein der Mut, einmal etwas Neues zu machen und nicht dem Einheitsbrei ins Land der Realo-Shooter und der digitalen Nebenjobs zu folgen ist der Beachtung Wert. Einmal nicht schießen zu müssen und stumpfen Missionen zu folgen, sondern in einem Spiel Freiheit zu finden, dass ist eine außergewöhnliche Erfahrung. Wer als Spieler etwas Erfrischung sucht, sollte es probieren. Ich finds geil!</p>
+
+<p><img src="http://bastibe.de/static/2009-03/mirrors_edge_faith.png" alt="Faith" /></p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Synchronisieren-von-Google-pfeln-Fenstern-und-Telefonen.html">Synchronisieren von Google, Äpfeln, Fenstern und Telefonen</a> <div class="date"> posted on 2009-03-28 17:18</div> <div class="article">
+
+<p><img src="http://bastibe.de/static/2009-03/cloud.jpg" alt="Cloud" /></p>
+
+<p>Ich hatte lange Zeit zwei Computer, einen Desktop und einen Laptop, jeweils mit verschiedenen Betriebssystemen und Datensätzen. Um dennoch immer mit den selben Daten arbeiten zu können, verwendete ich eine externe Festplatte. Obwohl sehr low-tech, funktionierte diese Lösung absolut tadellos: Meine Linux-Kisten mounteten die Festplatte automatisch in ihr jeweiliges home-Verzeichnis und so konnte ich auf verschiedenen Computern arbeiten, ohne mich um die Synchronizität der Daten kümmern zu müssen.</p>
+
+<p>Fast-forward ein Jahr, tausche Linux gegen Apple und finde es jetzt doch sehr anstrengend, immer eine externe Festplatte mit mir herumzuschleppen -- Apple-Snob, der ich bin. Sieht auch unelegant aus, dieses schwarze Kästchen an den hübschen Laptop zu klemmen. Es muss also eine andere Lösung her, um immer auf beiden Rechnern mit aktuellen Dateien arbeiten zu können. Es bietet sich an: MobileMe (damals noch .Mac), genauer, die iDisk, also ein Stück online-Speicher bei Apple, auf dem man von mehreren (Apple-) Rechnern aus arbeiten kann. Das Angebot ist verlockend, aber leider erfüllt MobileMe meine Erwartungen nicht, es gehen Daten verloren und ich ärgere mich, jemals Geld für diesen Dreck ausgegeben zu haben.</p>
+
+<p>Eine Alternative finde ich in Dropbox, welches die Vision des immer synchronen Datenspeichers &quot;in the cloud&quot; endlich erfüllt, wenn auch als Ordner und nicht als Laufwerk. Inzwischen erbringt auch Syncplicity diese Leistung, wenn auch mit einem eigenen Set an Einschränkungen (Es ist aber noch Beta, also kein Grund zur Sorge).</p>
+
+<p>Dennoch: ganz zufrieden bin ich nicht, einfach, weil zwei Rechner immer eine gewisse Menge &quot;mental overhead&quot; bedeuten. Allein, nicht immer am selben Gerät zu sitzen stellt einfach eine Irritation dar, die im Grunde nicht nötig ist. Na gut, und dieses neue &quot;Unibody&quot;-MacBook Pro ist einfach sexy. Also, tausche iMac + MacBook gegen MacBook Pro. Das löst -logisch- auch alle Synchronizitätsprobleme.</p>
+
+<p>Aber ich wäre nicht der Sohn meines Vaters, wenn ich nicht immer noch mehr technischen Schnickschnack haben müsste, enter: the iPhone. Dank Apple und iTunes ist es natürlich kein Problem, Kalender, Email, Kontakte und Musik immer synchronisiert zu halten; Kabel reinstecken, iTunes machen lassen und fertig.<br/>
+Perfektioniert wird das alles aber erst durch Beihilfe von Google, welches durch ActiveSync (sprich: Exchange) nun auch alle meine Kontakte, Kalendereinträge, Emails und Dokumente auf allen Geräten zur Verfügung stellt. Dieses Setup ist nun endlich wirklich extrem zufriedenstellend. Es ist zwar ein Haufen Kleinkram, den man durcharbeiten muss, bis man das alles richtig konfiguriert hat, aber hat man das einmal getan funktioniert es wirklich tadellos! Und Syncplicity und Dropbox laufen auf dem Rechner einfach nur noch als Backup weiter.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/E-Text-Editor-goes-Open-Source.html">E Text Editor goes Open Source</a> <div class="date"> posted on 2009-03-24 15:16</div> <div class="article">
+
+<p><img src="http://bastibe.de/static/2009-03/e_text_editor.png" alt="E Text Editor" /></p>
+
+<p>Als ich heute von der FH nach Hause kam, lag <a href="http://e-texteditor.com/blog/2009/opencompany" >das hier</a> in meinem Newsreader und ich war, in Ermangelung eines besseren Wortes, geschockt.</p>
+
+<p>Nur, um es noch einmal zu wiederholen: E, der meiner Meinung nach beste Texteditor der Welt wird Open Source. Das kann man nicht oft genug sagen.</p>
+
+<p>Warum ist E so fantastisch?
+<a href="http://www.e-texteditor.com/" >E</a> ist ein recht neuer, kleiner <a href="http://de.wikipedia.org/wiki/Texteditor" >Texteditor</a> für Windows. Nein, um ihm Genüge zu tun, muss man E in einem Satz mit <a href="http://de.wikipedia.org/wiki/Emacs" >Emacs</a>, <a href="http://de.wikipedia.org/wiki/Vim" >Vim</a> und <a href="http://macromates.com/" >Textmate</a> nennen, denn wie diese Drei Großen Texteditoren sind auch E keine Grenzen gesetzt, da all seine Funktionalität durch kleine, einfache Skripte entsteht, die von jedem Nutzer beliebig verbessert werden können. Genauer gesagt: E tritt in die direkten Fußstapfen von Textmate, einem Editor für den Mac und ist vollkommen kompatibel mit dessen Erweiterungen, so dass E schon bei seiner Markteinführung auf eine riesige Masse von <a href="http://svn.textmate.org/trunk/Bundles/" >Sprachen, Snippets und Programmen</a> zurückgreifen konnte, mit der sich jede noch so obskure Textmanipulation bewältigen lässt. Anders als Emacs oder Vim folgt E dabei aber modernen Bedienungs- und Designrichtlinien und fühlt sich genauso flüssig und heimisch an, wie das für eine Windows-Anwendung nur möglich ist.
+Seine zweite große, und kaum weniger berauschende Stärke ist sein <a href="http://e-texteditor.com/blog/2006/making-undo-usable" >History-System</a>. Jeder Benutzer eines Texteditors kennt die Undo-Taste (<a href="http://stackoverflow.com/questions/247568/how-can-i-undo-more-than-a-single-character-in-textmate/248255" >mit Ausnahme von Textmate</a>. <a href="http://nslog.com/2006/11/08/textmates_undo" >What a shame</a>.). Undo macht die zuletzt gemachte Änderung rückgängig und ist damit der beste Freund von notirisch fehleranfälligen Menschen. E bringt Undo auf das nächste Level: Denn neben dem normalen Undo-Befehl gibt es noch eine komplette Übersicht aller jemals an einem Dokument gemachten Änderungen, komplett mit verschiedenen Pfaden, die zu verschiedenen Zeiten genommen wurden kompakt und übersichtlich verpackt in einem fantastischen Baumdiagramm.
+Dazu kommen ein riesiger Haufen Features, die eigentlich jedes Programm haben sollte, welche man aber nur viel zu selten findet:</p>
+
+<ul>
+<li>Inkrementielle Suche mit sofortiger Ergebnisvorschau und Unterstützung von Regulären Ausdrücken!</li>
+<li>Direkte Unterstützung von Cygwin für alle möglichen Skriptsprachen!</li>
+<li>Syntax-Highlighting für so ziemlich jede denkbare Sprache!</li>
+<li>Unterstützung für Snippets!</li>
+<li>Multiline-Editing!</li>
+<li>Kontinuierliche Weiterentwicklung des Editors!</li>
+<li>...</li>
+</ul>
+
+<p>Wer mehr wissen will, der surfe nach <a href="http://e-texteditor.com/index.html" >e-texteditor.com</a> und schaue sich dort den Screencast und den Blog an, lade sich die Demo herunter oder suche im Internet nach Reviews zu E.</p>
+
+<p>Selbst ich, als eingefleischter Textmate-Benutzer halte E als meinen heimlichen Lieblingseditor, denn schließlich kann er alles, was Textmate kann (und das ist schon enorm gut) und dazu noch eine gute Latte mehr. Wer, wie ich, eigentlich seinen Tag nur mit (a) surfen und (b) tippen verbringt, sollte wirklich darüber nachdenken, ein wenig Geld für einen guten Texteditor auszugeben. Es lohnt sich, und E ist ohne Frage einer der Besten. Und jetzt wird er Open Source. Ich bin begeistert!</p>
+</div> <hr> </div> <div id="relative-nav"> <a href="2.html">Previous</a> <a href="4.html">Next</a> </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/tag/apple.html">apple</a>, <a href="http://bastibe.de/tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/tag/blog.html">blog</a>, <a href="http://bastibe.de/tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/tag/compiling.html">compiling</a>, <a href="http://bastibe.de/tag/computers.html">computers</a>, <a href="http://bastibe.de/tag/cython.html">cython</a>, <a href="http://bastibe.de/tag/emacs.html">emacs</a>, <a href="http://bastibe.de/tag/error.html">error</a>, <a href="http://bastibe.de/tag/file-system.html">file-system</a>, <a href="http://bastibe.de/tag/gaming.html">gaming</a>, <a href="http://bastibe.de/tag/gem.html">gem</a>, <a href="http://bastibe.de/tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/tag/matlab.html">matlab</a>, <a href="http://bastibe.de/tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/tag/numpy.html">numpy</a>, <a href="http://bastibe.de/tag/open-source.html">open-source</a>, <a href="http://bastibe.de/tag/pelican.html">pelican</a>, <a href="http://bastibe.de/tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/tag/pip.html">pip</a>, <a href="http://bastibe.de/tag/programming.html">programming</a>, <a href="http://bastibe.de/tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/tag/pygame.html">pygame</a>, <a href="http://bastibe.de/tag/pygments.html">pygments</a>, <a href="http://bastibe.de/tag/python.html">python</a>, <a href="http://bastibe.de/tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/tag/scheme.html">scheme</a>, <a href="http://bastibe.de/tag/scipy.html">scipy</a>, <a href="http://bastibe.de/tag/solarized.html">solarized</a>, <a href="http://bastibe.de/tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/tag/ui.html">ui</a>, <a href="http://bastibe.de/tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>
+"http://bastibe.de//css/logo_small.jpg" /> </div> </body> </html>

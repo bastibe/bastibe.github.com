@@ -1,0 +1,72 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/A-Story-about-Schemes.html">A Story about Schemes</a> <div class="date"> posted on 2012-09-20 20:21</div> <div class="article">
+
+<p><strong>Disclaimer:</strong> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/" >The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/" >here</a>)</p>
+
+<p>I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html" >the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and how it should be done. </p>
+
+<p>However, this is not about SICP, it is about Scheme, which happens to be the programming language that SICP uses to preach its sermons. Above all, Scheme beautiful. It is an astounding marriage of simplicity and power. It is also a mess in terms of implementations. There are dozens of implementations and they all implement a different, partly overlapping set of features that may or may not be part of the canonical Scheme--if there is such a thing.</p>
+
+<p>So, how to select the correct Scheme? Naively, I first chose the one SICP uses, <a href="http://www.gnu.org/software/mit-scheme/" >MIT-Scheme</a>. However, I soon found out that it does not work well with Emacs (that is, it did not work at all with <code>scheme-mode</code> and <code>run-scheme</code>). Also, its prompt is weird: <code>]=&gt;</code>. Whatever.</p>
+
+<p>So next, I tried <a href="http://dynamo.iro.umontreal.ca/~gambit/wiki/index.php/Main_Page" >Gambit Scheme</a>, which works a lot better with Emacs. But then, I soon found out that it does not support functions like <code>filter</code>, which are kind of essential. I was quick to write my own version of that, but really, this stuff should be provided. Turns out, <code>filter</code> is part of a Scheme Request For Implementation, or SRFI. <code>filter</code> is part of SRFI1. There is a <a href="http://srfi.schemers.org/srfi-implementers.html" >huge list</a> of different Schemes and the SRFIs they support. Also, there is a list of <a href="http://www.cs.utah.edu/~mflatt/benchmarks-20100126/log3/Benchmarks.html" >Schemes sorted by performance</a>. With <a href="http://www.cs.utah.edu/%7Emflatt/benchmarks-20100126/log3/Benchmarks-plot.html" >plots</a>, even. It's a mess.</p>
+
+<p>So this left me profoundly confused. What Scheme would I use? Ideally, it should be fast, work with Emacs and implement a reasonable set of SRFIs. Homebrew lists these:</p>
+
+<pre><code>bigloo         chibi-scheme  chicken
+gambit-scheme  gauche        guile
+kawa           mit-scheme    plt-racket
+scheme48       scsh          sisc-scheme
+stklos         tinyscheme
+</code></pre>
+
+<p>Difficult decision. Frankly, I don't have an answer. That said, I found <code>plt-racket</code> to be a joy to work with. <code>(help filter)</code> will open your browser with the appropriate help page for <code>filter</code>. Amazing. Also, it implements <a href="http://srfi.schemers.org/srfi-implementers.html" >a long list</a> of SRFIs that will probably satisfy my simplistic needs. And the <a href="http://docs.racket-lang.org/" >documentation</a> is excellent. And then there is DrRacket, which is a nice REPL that comes right with <a href="http://racket-lang.org/" >Racket</a>. I like it.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Kindleapp-not-starting-on-a-case-sensitive-file-system.html">Kindle.app not starting on a case-sensitive file system</a> <div class="date"> posted on 2012-09-13 20:19</div> <div class="article">
+
+<p>So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.</p>
+
+<p>A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with</p>
+
+<pre><code>Dyld Error Message:
+  Library not loaded: @executable_path/../Frameworks/libWEbCoreKRF.dylib
+  Referenced from: /Applications/Kindle.app/Contents/Frameworks/libWebCoreViewer.dylib
+  Reason: image not found
+</code></pre>
+
+<p><code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type</p>
+
+<pre><code>sudo ln -s libWebCoreKRF.dylib libWEbCoreKRF.dylib
+</code></pre>
+
+<p>to create a symlink with the misspelled name. Done.</p>
+
+<p>Kindle works again.</p>
+
+<p>Spelling is hard, it seems.</p>
+</div> <hr> </div><div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/On-the-Virtue-of-Contributing-to-and-Using-Open-Source-Software.html">On the Virtue of Contributing to and Using Open Source Software</a> <div class="date"> posted on 2012-09-08 08:44</div> <div class="article">
+
+<p>I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.</p>
+
+<p>About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/" title="NumPy">numerical</a> <a href="http://scipy.org/" title="SciPy">computation</a> and <a href="http://matplotlib.sourceforge.net/" title="matplotlib">plotting</a> that, for my particular purposes, rivals Matlab.</p>
+
+<p>However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used <a href="http://playrec.co.uk/" title="Playrec">Playrec</a> for that purpose, which implements <a href="http://www.portaudio.com/" title="PortAudio">PortAudio</a> bindings for Matlab. Luckily, there was a similar package available for Python, called <a href="http://people.csail.mit.edu/hubert/pyaudio/" title="PyAudio">PyAudio</a>.</p>
+
+<p>But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.</p>
+
+<p>At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!</p>
+
+<p>This was a revelation to me: I could not only <em>use</em> a piece of software, I could also <em>change</em> it and mold it to my special needs!</p>
+
+<p>Thus, I put up my changes on <a href="https://github.com/bastibe/PyAudio" title="PyAudio on github">github</a> and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!</p>
+
+<p>This, again, was a revelation to me: Not only could <em>I</em> change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!</p>
+
+<p>Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.</p>
+
+<p>And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.</p>
+
+<p><em>By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.</em></p>
+</div> <hr> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/tag/apple.html">apple</a>, <a href="http://bastibe.de/tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/tag/blog.html">blog</a>, <a href="http://bastibe.de/tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/tag/compiling.html">compiling</a>, <a href="http://bastibe.de/tag/computers.html">computers</a>, <a href="http://bastibe.de/tag/cython.html">cython</a>, <a href="http://bastibe.de/tag/emacs.html">emacs</a>, <a href="http://bastibe.de/tag/error.html">error</a>, <a href="http://bastibe.de/tag/file-system.html">file-system</a>, <a href="http://bastibe.de/tag/gaming.html">gaming</a>, <a href="http://bastibe.de/tag/gem.html">gem</a>, <a href="http://bastibe.de/tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/tag/matlab.html">matlab</a>, <a href="http://bastibe.de/tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/tag/numpy.html">numpy</a>, <a href="http://bastibe.de/tag/open-source.html">open-source</a>, <a href="http://bastibe.de/tag/pelican.html">pelican</a>, <a href="http://bastibe.de/tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/tag/pip.html">pip</a>, <a href="http://bastibe.de/tag/programming.html">programming</a>, <a href="http://bastibe.de/tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/tag/pygame.html">pygame</a>, <a href="http://bastibe.de/tag/pygments.html">pygments</a>, <a href="http://bastibe.de/tag/python.html">python</a>, <a href="http://bastibe.de/tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/tag/scheme.html">scheme</a>, <a href="http://bastibe.de/tag/scipy.html">scipy</a>, <a href="http://bastibe.de/tag/solarized.html">solarized</a>, <a href="http://bastibe.de/tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/tag/ui.html">ui</a>, <a href="http://bastibe.de/tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>
