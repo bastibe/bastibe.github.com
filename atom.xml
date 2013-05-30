@@ -1,5 +1,106 @@
 <?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom"> <title>Bastis Scratchpad on the Internet</title> <link href="http://bastibe.de"/> <link type="application/atom+xml" rel="self" href="http://bastibe.de/atom.xml"/> <updated>Wed, 29 May 2013 16:12:23 GMT</updated> <author> <name>Bastian Bechtold</name> </author> <entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/A-Python-Primer-for-Matlab-Users.html"/> <title>A Python Primer for Matlab Users</title> <published>2013-01-20 10:55</published> <updated>2013-01-20 10:55</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
+<feed xmlns="http://www.w3.org/2005/Atom"> <title>Bastis Scratchpad on the Internet</title> <link href="http://bastibe.de"/> <link type="application/atom+xml" rel="self" href="http://bastibe.de/atom.xml"/> <updated>Thu, 30 May 2013 14:32:44 GMT</updated> <author> <name>Bastian Bechtold</name> </author> <entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/Speeding-up-Matplotlib.html"/> <title>Speeding up Matplotlib</title> <published>2013-05-30 10:50</published> <updated>2013-05-30 10:50</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
+
+&lt;p&gt;For the record, &lt;a href=&quot;http://matplotlib.org&quot; &gt;Matplotlib&lt;/a&gt; is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?&lt;/p&gt;
+
+&lt;p&gt;Well... speed. If there is one thing I could criticize about Matplotlib, it is its relative slowness. To measure that, lets make a very simple line plot and draw some random numbers as quickly as possible:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; matplotlib.pyplot as plt
+&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; numpy as np
+&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; time
+   
+fig, ax = plt.subplots&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+   
+tstart = time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+num_plots = 0
+&lt;span class=&quot;symbol&quot;&gt;while&lt;/span&gt; time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;-tstart &amp;lt; 1:
+    ax.clear&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+    ax.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    plt.pause&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;0.001&lt;/span&gt;)&lt;/span&gt;
+    num_plots += 1
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;num_plots&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On my machine, I get about 11 plots per second. I am using &lt;code&gt;pause()&lt;/code&gt; here to update the plot without blocking. The correct way to do this is to use &lt;code&gt;draw()&lt;/code&gt; instead, but due to a bug in the Qt4Agg backend, you can&#039;t use it there. If you are not using the Qt4Agg backend, &lt;code&gt;draw()&lt;/code&gt; is supposedly the correct choice.&lt;/p&gt;
+
+&lt;p&gt;For a single plot, ten plots per second is not terrible. But then, this is really the simplest case possible, so ten frames per second in the simplest case probably means bad things for not so simple cases.&lt;/p&gt;
+
+&lt;p&gt;One thing that really takes time here is creating all the axes and text labels over and over again. So let&#039;s not do that.&lt;/p&gt;
+
+&lt;p&gt;Instead of calling &lt;code&gt;clear()&lt;/code&gt; and then &lt;code&gt;plot()&lt;/code&gt;, thus effectively deleting everything about the plot, then re-creating it for every frame, we can keep an existing plot and only modify its data:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;fig, ax = plt.subplots&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+line, = ax.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+   
+tstart = time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+num_plots = 0
+&lt;span class=&quot;symbol&quot;&gt;while&lt;/span&gt; time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;-tstart &amp;lt; 1:
+    line.set_ydata&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    plt.pause&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;0.001&lt;/span&gt;)&lt;/span&gt;
+    num_plots += 1
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;num_plots&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;which yields about 26 plots per second. Not bad for a simple change like this. The downside is that the axes are not re-scaled any longer when the data changes. Thus, they won&#039;t change their limits based on the data any more.&lt;/p&gt;
+
+&lt;p&gt;Profiling this yields some interesting results:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+15      0.167    0.011    0.167    0.011 {built-in method sleep}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The one function that uses the biggest chunk of runtime is &lt;code&gt;sleep()&lt;/code&gt;, of all things. Clearly, this is not what we want. Delving deeper into the profiler shows that this is indeed happening in the call do &lt;code&gt;pause()&lt;/code&gt;. Then again, I &lt;em&gt;was&lt;/em&gt; wondering if using &lt;em&gt;pause&lt;/em&gt; really was a great idea for performance...&lt;/p&gt;
+
+&lt;p&gt;As it turns out, &lt;code&gt;pause()&lt;/code&gt; internally calls &lt;code&gt;fig.canvas.draw()&lt;/code&gt;, then &lt;code&gt;plt.show()&lt;/code&gt;, then &lt;code&gt;fig.canvas.start_event_loop()&lt;/code&gt;. The default implementation of &lt;code&gt;fig.canvas.start_event_loop()&lt;/code&gt; then calls &lt;code&gt;fig.canvas.flush_events()&lt;/code&gt;, then sleeps for the requested time. To add insult to injury, it even insists on sleeping at least one hundredth of a second, which actually explains the profiler output of 0.167 seconds of &lt;code&gt;sleep()&lt;/code&gt; for 15 calls very well.&lt;/p&gt;
+
+&lt;p&gt;Putting this all together now yields:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;fig, ax = plt.subplots&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+line, = ax.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+
+tstart = time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+num_plots = 0
+&lt;span class=&quot;symbol&quot;&gt;while&lt;/span&gt; time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;-tstart &amp;lt; 1:
+    line.set_ydata&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    fig.canvas.draw&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+    fig.canvas.flush_events&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+    num_plots += 1
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;num_plots&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;which now plots about 40 frames per second. Note that the call to &lt;code&gt;show()&lt;/code&gt; mentioned earlier can be omitted since the figure is already on screen. &lt;code&gt;flush_events()&lt;/code&gt; just runs the Qt event loop, so there is probably nothing to optimize there.&lt;/p&gt;
+
+&lt;p&gt;The only thing left to optimize now is thus &lt;code&gt;fig.canvas.draw()&lt;/code&gt;. What this really is doing is drawing all the artists contained in the &lt;code&gt;ax&lt;/code&gt;. Those artists can be accessed using &lt;code&gt;ax.get_children()&lt;/code&gt;. For a simple plot like this, the artists are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the background &lt;code&gt;ax.patch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;the line, as returned from the &lt;code&gt;plot()&lt;/code&gt; function&lt;/li&gt;
+&lt;li&gt;the spines &lt;code&gt;ax.spines&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;the axes &lt;code&gt;ax.xaxis&lt;/code&gt; and &lt;code&gt;ax.yaxis&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What we can do here is to selectively draw only the parts that are actually changing. That is, at least the background and the line. To only redraw these, the code now looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;fig, ax = plt.subplots&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+line, = ax.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+plt.show&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;block=False&lt;/span&gt;)&lt;/span&gt;
+
+tstart = time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+num_plots = 0
+&lt;span class=&quot;symbol&quot;&gt;while&lt;/span&gt; time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;-tstart &amp;lt; 5:
+    line.set_ydata&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
+    ax.draw_artist&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;ax.patch&lt;/span&gt;)&lt;/span&gt;
+    ax.draw_artist&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;line&lt;/span&gt;)&lt;/span&gt;
+    fig.canvas.blit&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;ax.bbox&lt;/span&gt;)&lt;/span&gt;
+    fig.canvas.flush_events&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
+    num_plots += 1
+&lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;num_plots/5&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!&lt;/p&gt;
+
+&lt;p&gt;Note that since we are only redrawing the background and the line, some detail in the axes will be overwritten. To also draw the spines, use &lt;code&gt;for spine in ax.spines.values(): ax.draw_artist(spine)&lt;/code&gt;. To draw the axes, use &lt;code&gt;ax.draw_artist(ax.xaxis)&lt;/code&gt; and &lt;code&gt;ax.draw_artist(ax.yaxis)&lt;/code&gt;. If you draw all of them, you get roughly the same performance as &lt;code&gt;fig.canvas.draw()&lt;/code&gt;. The axes in particular are quite expensive.&lt;/p&gt;
+
+&lt;p&gt;There is also &lt;a href=&quot;http://stackoverflow.com/a/8956211/1034&quot; &gt;a way&lt;/a&gt; of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.&lt;/p&gt;
+
+&lt;p&gt;In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!&lt;/p&gt;
+</content> </entry><entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/A-Python-Primer-for-Matlab-Users.html"/> <title>A Python Primer for Matlab Users</title> <published>2013-01-20 10:55</published> <updated>2013-01-20 10:55</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
 
 &lt;blockquote&gt;
 &lt;p&gt;Why would you want to use Python over Matlab?&lt;/p&gt;
@@ -744,27 +845,4 @@ stklos         tinyscheme
 &lt;p&gt;Kindle works again.&lt;/p&gt;
 
 &lt;p&gt;Spelling is hard, it seems.&lt;/p&gt;
-</content> </entry><entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/On-the-Virtue-of-Contributing-to-and-Using-Open-Source-Software.html"/> <title>On the Virtue of Contributing to and Using Open Source Software</title> <published>2012-09-08 08:44</published> <updated>2012-09-08 08:44</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
-
-&lt;p&gt;I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.&lt;/p&gt;
-
-&lt;p&gt;About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for &lt;a href=&quot;http://numpy.scipy.org/&quot; title=&quot;NumPy&quot;&gt;numerical&lt;/a&gt; &lt;a href=&quot;http://scipy.org/&quot; title=&quot;SciPy&quot;&gt;computation&lt;/a&gt; and &lt;a href=&quot;http://matplotlib.sourceforge.net/&quot; title=&quot;matplotlib&quot;&gt;plotting&lt;/a&gt; that, for my particular purposes, rivals Matlab.&lt;/p&gt;
-
-&lt;p&gt;However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used &lt;a href=&quot;http://playrec.co.uk/&quot; title=&quot;Playrec&quot;&gt;Playrec&lt;/a&gt; for that purpose, which implements &lt;a href=&quot;http://www.portaudio.com/&quot; title=&quot;PortAudio&quot;&gt;PortAudio&lt;/a&gt; bindings for Matlab. Luckily, there was a similar package available for Python, called &lt;a href=&quot;http://people.csail.mit.edu/hubert/pyaudio/&quot; title=&quot;PyAudio&quot;&gt;PyAudio&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.&lt;/p&gt;
-
-&lt;p&gt;At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!&lt;/p&gt;
-
-&lt;p&gt;This was a revelation to me: I could not only &lt;em&gt;use&lt;/em&gt; a piece of software, I could also &lt;em&gt;change&lt;/em&gt; it and mold it to my special needs!&lt;/p&gt;
-
-&lt;p&gt;Thus, I put up my changes on &lt;a href=&quot;https://github.com/bastibe/PyAudio&quot; title=&quot;PyAudio on github&quot;&gt;github&lt;/a&gt; and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!&lt;/p&gt;
-
-&lt;p&gt;This, again, was a revelation to me: Not only could &lt;em&gt;I&lt;/em&gt; change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!&lt;/p&gt;
-
-&lt;p&gt;Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.&lt;/p&gt;
-
-&lt;p&gt;And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.&lt;/em&gt;&lt;/p&gt;
 </content> </entry> </feed>

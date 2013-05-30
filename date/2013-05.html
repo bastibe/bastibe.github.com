@@ -1,0 +1,106 @@
+<!doctype html>
+<html> <head> <title>Bastis Scratchpad on the Internet</title> <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" /> <link href= "http://bastibe.de/css/style.css" rel="stylesheet" type="text/css" /> <link rel="alternate" href="http://bastibe.de/rss.xml" type="application/rss+xml" /> <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: { inlineMath: [["$","$"]] }});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> </head> <body> <div class="header"> <a href="http://bastibe.de">Bastis Scratchpad on the Internet</a> <div class="sitelinks"> <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>  </div> </div> <div id="content"> <div class="article-meta"> <a class="article-title" href="http://bastibe.de/posts/Speeding-up-Matplotlib.html">Speeding up Matplotlib</a> <div class="date"> posted on 2013-05-30 10:50</div> <div class="article">
+
+<p>For the record, <a href="http://matplotlib.org" >Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?</p>
+
+<p>Well... speed. If there is one thing I could criticize about Matplotlib, it is its relative slowness. To measure that, lets make a very simple line plot and draw some random numbers as quickly as possible:</p>
+
+<pre><code><span class="code"><span class="symbol">import</span> matplotlib.pyplot as plt
+<span class="symbol">import</span> numpy as np
+<span class="symbol">import</span> time
+   
+fig, ax = plt.subplots<span class="paren1">(<span class="code"></span>)</span>
+   
+tstart = time.time<span class="paren1">(<span class="code"></span>)</span>
+num_plots = 0
+<span class="symbol">while</span> time.time<span class="paren1">(<span class="code"></span>)</span>-tstart &lt; 1:
+    ax.clear<span class="paren1">(<span class="code"></span>)</span>
+    ax.plot<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+    plt.pause<span class="paren1">(<span class="code">0.001</span>)</span>
+    num_plots += 1
+<span class="symbol">print</span><span class="paren1">(<span class="code">num_plots</span>)</span></span></code></pre>
+
+<p>On my machine, I get about 11 plots per second. I am using <code>pause()</code> here to update the plot without blocking. The correct way to do this is to use <code>draw()</code> instead, but due to a bug in the Qt4Agg backend, you can't use it there. If you are not using the Qt4Agg backend, <code>draw()</code> is supposedly the correct choice.</p>
+
+<p>For a single plot, ten plots per second is not terrible. But then, this is really the simplest case possible, so ten frames per second in the simplest case probably means bad things for not so simple cases.</p>
+
+<p>One thing that really takes time here is creating all the axes and text labels over and over again. So let's not do that.</p>
+
+<p>Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effectively deleting everything about the plot, then re-creating it for every frame, we can keep an existing plot and only modify its data:</p>
+
+<pre><code><span class="code">fig, ax = plt.subplots<span class="paren1">(<span class="code"></span>)</span>
+line, = ax.plot<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+   
+tstart = time.time<span class="paren1">(<span class="code"></span>)</span>
+num_plots = 0
+<span class="symbol">while</span> time.time<span class="paren1">(<span class="code"></span>)</span>-tstart &lt; 1:
+    line.set_ydata<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+    plt.pause<span class="paren1">(<span class="code">0.001</span>)</span>
+    num_plots += 1
+<span class="symbol">print</span><span class="paren1">(<span class="code">num_plots</span>)</span></span></code></pre>
+
+<p>which yields about 26 plots per second. Not bad for a simple change like this. The downside is that the axes are not re-scaled any longer when the data changes. Thus, they won't change their limits based on the data any more.</p>
+
+<p>Profiling this yields some interesting results:</p>
+
+<pre><code>ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+15      0.167    0.011    0.167    0.011 {built-in method sleep}
+</code></pre>
+
+<p>The one function that uses the biggest chunk of runtime is <code>sleep()</code>, of all things. Clearly, this is not what we want. Delving deeper into the profiler shows that this is indeed happening in the call do <code>pause()</code>. Then again, I <em>was</em> wondering if using <em>pause</em> really was a great idea for performance...</p>
+
+<p>As it turns out, <code>pause()</code> internally calls <code>fig.canvas.draw()</code>, then <code>plt.show()</code>, then <code>fig.canvas.start_event_loop()</code>. The default implementation of <code>fig.canvas.start_event_loop()</code> then calls <code>fig.canvas.flush_events()</code>, then sleeps for the requested time. To add insult to injury, it even insists on sleeping at least one hundredth of a second, which actually explains the profiler output of 0.167 seconds of <code>sleep()</code> for 15 calls very well.</p>
+
+<p>Putting this all together now yields:</p>
+
+<pre><code><span class="code">fig, ax = plt.subplots<span class="paren1">(<span class="code"></span>)</span>
+line, = ax.plot<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+
+tstart = time.time<span class="paren1">(<span class="code"></span>)</span>
+num_plots = 0
+<span class="symbol">while</span> time.time<span class="paren1">(<span class="code"></span>)</span>-tstart &lt; 1:
+    line.set_ydata<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+    fig.canvas.draw<span class="paren1">(<span class="code"></span>)</span>
+    fig.canvas.flush_events<span class="paren1">(<span class="code"></span>)</span>
+    num_plots += 1
+<span class="symbol">print</span><span class="paren1">(<span class="code">num_plots</span>)</span></span></code></pre>
+
+<p>which now plots about 40 frames per second. Note that the call to <code>show()</code> mentioned earlier can be omitted since the figure is already on screen. <code>flush_events()</code> just runs the Qt event loop, so there is probably nothing to optimize there.</p>
+
+<p>The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What this really is doing is drawing all the artists contained in the <code>ax</code>. Those artists can be accessed using <code>ax.get_children()</code>. For a simple plot like this, the artists are:</p>
+
+<ul>
+<li>the background <code>ax.patch</code></li>
+<li>the line, as returned from the <code>plot()</code> function</li>
+<li>the spines <code>ax.spines</code></li>
+<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code></li>
+</ul>
+
+<p>What we can do here is to selectively draw only the parts that are actually changing. That is, at least the background and the line. To only redraw these, the code now looks like this:</p>
+
+<pre><code><span class="code">fig, ax = plt.subplots<span class="paren1">(<span class="code"></span>)</span>
+line, = ax.plot<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+plt.show<span class="paren1">(<span class="code">block=False</span>)</span>
+
+tstart = time.time<span class="paren1">(<span class="code"></span>)</span>
+num_plots = 0
+<span class="symbol">while</span> time.time<span class="paren1">(<span class="code"></span>)</span>-tstart &lt; 5:
+    line.set_ydata<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
+    ax.draw_artist<span class="paren1">(<span class="code">ax.patch</span>)</span>
+    ax.draw_artist<span class="paren1">(<span class="code">line</span>)</span>
+    fig.canvas.blit<span class="paren1">(<span class="code">ax.bbox</span>)</span>
+    fig.canvas.flush_events<span class="paren1">(<span class="code"></span>)</span>
+    num_plots += 1
+<span class="symbol">print</span><span class="paren1">(<span class="code">num_plots/5</span>)</span></span></code></pre>
+
+<p>This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!</p>
+
+<p>Note that since we are only redrawing the background and the line, some detail in the axes will be overwritten. To also draw the spines, use <code>for spine in ax.spines.values(): ax.draw_artist(spine)</code>. To draw the axes, use <code>ax.draw_artist(ax.xaxis)</code> and <code>ax.draw_artist(ax.yaxis)</code>. If you draw all of them, you get roughly the same performance as <code>fig.canvas.draw()</code>. The axes in particular are quite expensive.</p>
+
+<p>There is also <a href="http://stackoverflow.com/a/8956211/1034" >a way</a> of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.</p>
+
+<p>In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!</p>
+</div> <hr> </div> <div id="relative-nav">   </div> <div id="tagsoup"> <p>This blog covers <a href="http://bastibe.de/tag/apple.html">apple</a>, <a href="http://bastibe.de/tag/apple-tv.html">apple-tv</a>, <a href="http://bastibe.de/tag/blog.html">blog</a>, <a href="http://bastibe.de/tag/codehilite.html">codehilite</a>, <a href="http://bastibe.de/tag/compiling.html">compiling</a>, <a href="http://bastibe.de/tag/computers.html">computers</a>, <a href="http://bastibe.de/tag/cython.html">cython</a>, <a href="http://bastibe.de/tag/emacs.html">emacs</a>, <a href="http://bastibe.de/tag/error.html">error</a>, <a href="http://bastibe.de/tag/file-system.html">file-system</a>, <a href="http://bastibe.de/tag/gaming.html">gaming</a>, <a href="http://bastibe.de/tag/gem.html">gem</a>, <a href="http://bastibe.de/tag/homebrew.html">homebrew</a>, <a href="http://bastibe.de/tag/matlab.html">matlab</a>, <a href="http://bastibe.de/tag/matplitlib.html">matplitlib</a>, <a href="http://bastibe.de/tag/matplotlib.html">matplotlib</a>, <a href="http://bastibe.de/tag/mountainlion.html">mountainlion</a>, <a href="http://bastibe.de/tag/numpy.html">numpy</a>, <a href="http://bastibe.de/tag/open-source.html">open-source</a>, <a href="http://bastibe.de/tag/pelican.html">pelican</a>, <a href="http://bastibe.de/tag/philosophy.html">philosophy</a>, <a href="http://bastibe.de/tag/pip.html">pip</a>, <a href="http://bastibe.de/tag/programming.html">programming</a>, <a href="http://bastibe.de/tag/pyaudio.html">pyaudio</a>, <a href="http://bastibe.de/tag/pygame.html">pygame</a>, <a href="http://bastibe.de/tag/pygments.html">pygments</a>, <a href="http://bastibe.de/tag/python.html">python</a>, <a href="http://bastibe.de/tag/raspberrypi.html">raspberrypi</a>, <a href="http://bastibe.de/tag/scheme.html">scheme</a>, <a href="http://bastibe.de/tag/scipy.html">scipy</a>, <a href="http://bastibe.de/tag/solarized.html">solarized</a>, <a href="http://bastibe.de/tag/sublime-text.html">sublime-text</a>, <a href="http://bastibe.de/tag/text-editor.html">text-editor</a>, <a href="http://bastibe.de/tag/ui.html">ui</a>, <a href="http://bastibe.de/tag/vim.html">vim</a> </div> <div id="monthsoup"> <p>View posts from <a href="http://bastibe.de/date/2013-05.html">2013-05</a>, <a href="http://bastibe.de/date/2013-01.html">2013-01</a>, <a href="http://bastibe.de/date/2012-11.html">2012-11</a>, <a href="http://bastibe.de/date/2012-10.html">2012-10</a>, <a href="http://bastibe.de/date/2012-09.html">2012-09</a>, <a href="http://bastibe.de/date/2012-08.html">2012-08</a>, <a href="http://bastibe.de/date/2012-07.html">2012-07</a>, <a href="http://bastibe.de/date/2012-02.html">2012-02</a>, <a href="http://bastibe.de/date/2011-12.html">2011-12</a>, <a href="http://bastibe.de/date/2011-10.html">2011-10</a>, <a href="http://bastibe.de/date/2011-09.html">2011-09</a>, <a href="http://bastibe.de/date/2011-08.html">2011-08</a>, <a href="http://bastibe.de/date/2011-03.html">2011-03</a>, <a href="http://bastibe.de/date/2011-02.html">2011-02</a>, <a href="http://bastibe.de/date/2010-07.html">2010-07</a>, <a href="http://bastibe.de/date/2009-04.html">2009-04</a>, <a href="http://bastibe.de/date/2009-03.html">2009-03</a> </div> </div>  <div class="fineprint"> <hr> Unless otherwise credited all material <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"> <img alt="Creative Commons License" style="border-width:0" src="http://bastibe.de/css/cc-by-sa.png" /> </a> by Bastian Bechtold <img align="right" src="http://bastibe.de/css/logo_small.jpg" /> </div> </body> </html>
