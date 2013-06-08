@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom"> <title>Bastis Scratchpad on the Internet</title> <link href="http://bastibe.de"/> <link type="application/atom+xml" rel="self" href="http://bastibe.de/atom.xml"/> <updated>Fri, 07 Jun 2013 12:38:18 GMT</updated> <author> <name>Bastian Bechtold</name> </author> <entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/Speeding-up-Matplotlib.html"/> <title>Speeding up Matplotlib</title> <published>2013-05-30 10:50</published> <updated>2013-05-30 10:50</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
+<feed xmlns="http://www.w3.org/2005/Atom"> <title>Bastis Scratchpad on the Internet</title> <link href="http://bastibe.de"/> <link type="application/atom+xml" rel="self" href="http://bastibe.de/atom.xml"/> <updated>Sat, 08 Jun 2013 16:53:11 GMT</updated> <author> <name>Bastian Bechtold</name> </author> <entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/Speeding-up-Matplotlib.html"/> <title>Speeding up Matplotlib</title> <published>2013-05-30 10:50</published> <updated>2013-05-30 10:50</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
 
 &lt;p&gt;For the record, &lt;a href=&quot;http://matplotlib.org&quot; &gt;Matplotlib&lt;/a&gt; is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?&lt;/p&gt;
 
@@ -8,9 +8,9 @@
 &lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; matplotlib.pyplot as plt
 &lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; numpy as np
 &lt;span class=&quot;symbol&quot;&gt;import&lt;/span&gt; time
-   
+
 fig, ax = plt.subplots&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
-   
+
 tstart = time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
 num_plots = 0
 &lt;span class=&quot;symbol&quot;&gt;while&lt;/span&gt; time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;-tstart &amp;lt; 1:
@@ -30,7 +30,7 @@ num_plots = 0
 
 &lt;pre&gt;&lt;code&gt;&lt;span class=&quot;code&quot;&gt;fig, ax = plt.subplots&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
 line, = ax.plot&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
-   
+
 tstart = time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
 num_plots = 0
 &lt;span class=&quot;symbol&quot;&gt;while&lt;/span&gt; time.time&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;-tstart &amp;lt; 1:
@@ -88,10 +88,12 @@ num_plots = 0
     line.set_ydata&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;np.random.randn&lt;span class=&quot;paren2&quot;&gt;(&lt;span class=&quot;code&quot;&gt;100&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;)&lt;/span&gt;
     ax.draw_artist&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;ax.patch&lt;/span&gt;)&lt;/span&gt;
     ax.draw_artist&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;line&lt;/span&gt;)&lt;/span&gt;
-    fig.canvas.blit&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;ax.bbox&lt;/span&gt;)&lt;/span&gt;
+    fig.canvas.update&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
     fig.canvas.flush_events&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;&lt;/span&gt;)&lt;/span&gt;
     num_plots += 1
 &lt;span class=&quot;symbol&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;paren1&quot;&gt;(&lt;span class=&quot;code&quot;&gt;num_plots/5&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that you have to add &lt;code&gt;fig.canvas.update()&lt;/code&gt; to copy the newly rendered lines to the drawing backend.&lt;/p&gt;
 
 &lt;p&gt;This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!&lt;/p&gt;
 
@@ -100,6 +102,8 @@ num_plots = 0
 &lt;p&gt;There is also &lt;a href=&quot;http://stackoverflow.com/a/8956211/1034&quot; &gt;a way&lt;/a&gt; of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.&lt;/p&gt;
 
 &lt;p&gt;In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;EDIT&lt;/strong&gt;: As it turns out, &lt;code&gt;fig.canvas.blit(ax.bbox)&lt;/code&gt; is a bad idea since it leaks memory like crazy. What you should use instead is &lt;code&gt;fig.canvas.update()&lt;/code&gt;, which is equally fast but does not leak memory.&lt;/p&gt;
 </content> </entry><entry> <link type="text/html" rel="alternate" href="http://bastibe.de/posts/A-Python-Primer-for-Matlab-Users.html"/> <title>A Python Primer for Matlab Users</title> <published>2013-01-20 10:55</published> <updated>2013-01-20 10:55</updated> <author> <name>Bastian Bechtold</name> <uri>http://bastibe.de</uri> </author> <content type="html">
 
 &lt;blockquote&gt;

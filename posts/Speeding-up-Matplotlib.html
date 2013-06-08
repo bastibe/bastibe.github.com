@@ -19,9 +19,9 @@ Written on 2013-05-30 10:50 </div>
 <pre><code><span class="code"><span class="symbol">import</span> matplotlib.pyplot as plt
 <span class="symbol">import</span> numpy as np
 <span class="symbol">import</span> time
-   
+
 fig, ax = plt.subplots<span class="paren1">(<span class="code"></span>)</span>
-   
+
 tstart = time.time<span class="paren1">(<span class="code"></span>)</span>
 num_plots = 0
 <span class="symbol">while</span> time.time<span class="paren1">(<span class="code"></span>)</span>-tstart &lt; 1:
@@ -41,7 +41,7 @@ num_plots = 0
 
 <pre><code><span class="code">fig, ax = plt.subplots<span class="paren1">(<span class="code"></span>)</span>
 line, = ax.plot<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
-   
+
 tstart = time.time<span class="paren1">(<span class="code"></span>)</span>
 num_plots = 0
 <span class="symbol">while</span> time.time<span class="paren1">(<span class="code"></span>)</span>-tstart &lt; 1:
@@ -99,10 +99,12 @@ num_plots = 0
     line.set_ydata<span class="paren1">(<span class="code">np.random.randn<span class="paren2">(<span class="code">100</span>)</span></span>)</span>
     ax.draw_artist<span class="paren1">(<span class="code">ax.patch</span>)</span>
     ax.draw_artist<span class="paren1">(<span class="code">line</span>)</span>
-    fig.canvas.blit<span class="paren1">(<span class="code">ax.bbox</span>)</span>
+    fig.canvas.update<span class="paren1">(<span class="code"></span>)</span>
     fig.canvas.flush_events<span class="paren1">(<span class="code"></span>)</span>
     num_plots += 1
 <span class="symbol">print</span><span class="paren1">(<span class="code">num_plots/5</span>)</span></span></code></pre>
+
+<p>Note that you have to add <code>fig.canvas.update()</code> to copy the newly rendered lines to the drawing backend.</p>
 
 <p>This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!</p>
 
@@ -111,6 +113,8 @@ num_plots = 0
 <p>There is also <a href="http://stackoverflow.com/a/8956211/1034" >a way</a> of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.</p>
 
 <p>In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!</p>
+
+<p><strong>EDIT</strong>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.</p>
  </div>
 <div class="relative-nav">
 <a href="http://bastibe.de/posts/A-Python-Primer-for-Matlab-Users.html">Previous</a><br>
