@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title>
-<!-- 2013-11-12 Tue 17:26 -->
+<!-- 2013-11-12 Tue 17:31 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -57,7 +57,7 @@ After that, I disconnected the display and immediately was stumped because I now
 <h2 id="sec-2">Setting up the hard drive</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>\/etc\/fstab</i>
+First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
 
 <pre class="example">
@@ -73,7 +73,7 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 <h2 id="sec-3">Setting up the shared folder</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>\/etc\/netatalk\/AppleVolumes.default</i>:
+First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
 
 <pre class="example">
@@ -81,7 +81,7 @@ First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get updat
 </pre>
 
 <p>
-Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>\/etc\/netatalk\/afpd.conf</i>:
+Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
 </p>
 
 <pre class="example">
@@ -89,11 +89,11 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </pre>
 
 <p>
-(maybe append <code>mdns</code> to the hosts in <i>\/etc\/nsswitch.conf</i>? Probably not necessary.)
+(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)
 </p>
 
 <p>
-I am also not quite sure whether I actually had to create a new file <i>\/etc\/avahi\/services\/afpd.service</i> and write into it:
+I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:
 </p>
 
 <div class="org-src-container">
