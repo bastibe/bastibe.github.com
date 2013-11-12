@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Installing Pygame using Homebrew</title>
-<!-- 2013-11-12 Tue 16:38 -->
+<!-- 2013-11-12 Tue 17:25 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -45,51 +45,41 @@ Note that although I am mostly interested in audio playback, this post will deta
 Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    brew install sdl, sdl<sub>mixer</sub>, sdl<sub>ttf</sub>, libpng, jpeg, sdl<sub>image</sub>, portmidi
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
+</pre>
 
 <p>
 This will install most packages for you. Note that <code>libpng</code> is also available as a system library, so it is installed <code>keg_only</code>, that is, without linking it in your path. We will need to compile against it though, so the next step is
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    brew link libpng
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+brew link libpng
+</pre>
 
 <p>
 Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</code> does not install its headers, so you can't compile against it. To fix that, type
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    brew edit smpeg
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+brew edit smpeg
+</pre>
 
 <p>
 and add the following line just above the two end at the end of the file
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    include.install Dir["*.h"]
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+include.install Dir["*.h"]
+</pre>
 
 <p>
 Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install <code>smpeg</code> with the usual
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    brew install smpeg
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+brew install smpeg
+</pre>
 
 <p>
 and you will get the headers, too. Isn't Homebrew great?
@@ -107,41 +97,33 @@ Now open a terminal and navigate to that directory. Me, I like [iTerm](<a href="
 At this point, the setup file is mostly useless since <code>config.py</code> failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file <code>Setup</code> (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    SDL = -I/NEED<sub>INC</sub><sub>PATH</sub><sub>FIX</sub> -L/NEED<sub>LIB</sub><sub>PATH</sub><sub>FIX</sub> -lSDL
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
+</pre>
 
 <p>
 Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in <code>/usr/local…</code>. Hence, change this line to
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+</pre>
 
 <p>
 The next lines are strangely garbled. They say, for example
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    FONT = -lS -lD -lL -l_ -lt -lt -lf
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+FONT = -lS -lD -lL -l_ -lt -lt -lf
+</pre>
 
 <p>
 Where they actually should say
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    FONT = -lSDL<sub>ttf</sub>
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+FONT = -lSDL_ttf
+</pre>
 
 <p>
 Instead of having one <code>-l</code> and then the library name <code>SDL_ttf</code>, they put <code>-l</code> in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for <code>FONT</code>, <code>IMAGE</code>, <code>MIXER</code> and <code>SMPEG</code>.
@@ -171,11 +153,9 @@ We are now going to compile and install Pygame. The nice thing is, even though w
 Alright, now without further ado, install Pygame by typing
 </p>
 
-<p>
-#+begin<sub>src</sub> sh
-    python setup.py install
-#+end<sub>src</sub> sh
-</p>
+<pre class="example">
+python setup.py install
+</pre>
 
 <p>
 Great! That's it! Everything should work now!
