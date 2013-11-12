@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Speeding up Matplotlib</title>
+<!-- 2013-11-12 Tue 16:39 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Speeding up Matplotlib</h1>
+<p>
+For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
+</p>
+
+<p>
+Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it is its relative slowness. To measure that, lets make a very simple line plot and draw some random numbers as quickly as possible:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">import</span> matplotlib.pyplot <span style="color: #718c00;">as</span> plt
+<span style="color: #718c00;">import</span> numpy <span style="color: #718c00;">as</span> np
+<span style="color: #718c00;">import</span> time
+
+<span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+
+<span style="color: #eab700;">tstart</span> = time.time()
+<span style="color: #eab700;">num_plots</span> = 0
+<span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+    ax.clear()
+    ax.plot(np.random.randn(100))
+    plt.pause(0.001)
+    <span style="color: #eab700;">num_plots</span> += 1
+<span style="color: #718c00;">print</span>(num_plots)
+</pre>
+</div>
+
+<p>
+On my machine, I get about 11 plots per second. I am using <code>pause()</code> here to update the plot without blocking. The correct way to do this is to use <code>draw()</code> instead, but due to a bug in the Qt4Agg backend, you can't use it there. If you are not using the Qt4Agg backend, <code>draw()</code> is supposedly the correct choice.
+</p>
+
+<p>
+For a single plot, ten plots per second is not terrible. But then, this is really the simplest case possible, so ten frames per second in the simplest case probably means bad things for not so simple cases.
+</p>
+
+<p>
+One thing that really takes time here is creating all the axes and text labels over and over again. So let's not do that.
+</p>
+
+<p>
+Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effectively deleting everything about the plot, then re-creating it for every frame, we can keep an existing plot and only modify its data:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+line, = ax.plot(np.random.randn(100))
+
+<span style="color: #eab700;">tstart</span> = time.time()
+<span style="color: #eab700;">num_plots</span> = 0
+<span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+    line.set_ydata(np.random.randn(100))
+    plt.pause(0.001)
+    <span style="color: #eab700;">num_plots</span> += 1
+<span style="color: #718c00;">print</span>(num_plots)
+</pre>
+</div>
+
+<p>
+which yields about 26 plots per second. Not bad for a simple change like this. The downside is that the axes are not re-scaled any longer when the data changes. Thus, they won't change their limits based on the data any more.
+</p>
+
+<p>
+Profiling this yields some interesting results:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">ncalls</td>
+<td class="right">tottime</td>
+<td class="right">percall</td>
+<td class="right">cumtime</td>
+<td class="right">percall</td>
+<td class="left">filename:lineno(function)</td>
+</tr>
+
+<tr>
+<td class="right">15</td>
+<td class="right">0.167</td>
+<td class="right">0.011</td>
+<td class="right">0.167</td>
+<td class="right">0.011</td>
+<td class="left">{built-in method sleep)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The one function that uses the biggest chunk of runtime is <code>sleep()</code>, of all things. Clearly, this is not what we want. Delving deeper into the profiler shows that this is indeed happening in the call do <code>pause()</code>. Then again, I <i>was</i> wondering if using <i>pause</i> really was a great idea for performance&#x2026;
+</p>
+
+<p>
+As it turns out, <code>pause()</code> internally calls <code>fig.canvas.draw()</code>, then <code>plt.show()</code>, then <code>fig.canvas.start_event_loop()</code>. The default implementation of <code>fig.canvas.start_event_loop()</code> then calls <code>fig.canvas.flush_events()</code>, then sleeps for the requested time. To add insult to injury, it even insists on sleeping at least one hundredth of a second, which actually explains the profiler output of 0.167 seconds of <code>sleep()</code> for 15 calls very well.
+</p>
+
+<p>
+Putting this all together now yields:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+line, = ax.plot(np.random.randn(100))
+
+<span style="color: #eab700;">tstart</span> = time.time()
+<span style="color: #eab700;">num_plots</span> = 0
+<span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+    line.set_ydata(np.random.randn(100))
+    fig.canvas.draw()
+    fig.canvas.flush_events()
+    <span style="color: #eab700;">num_plots</span> += 1
+<span style="color: #718c00;">print</span>(num_plots)
+</pre>
+</div>
+
+<p>
+which now plots about 40 frames per second. Note that the call to <code>show()</code> mentioned earlier can be omitted since the figure is already on screen. <code>flush_events()</code> just runs the Qt event loop, so there is probably nothing to optimize there.
+</p>
+
+<p>
+The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What this really is doing is drawing all the artists contained in the <code>ax</code>. Those artists can be accessed using <code>ax.get_children()</code>. For a simple plot like this, the artists are:
+</p>
+
+<ul class="org-ul">
+<li>the background <code>ax.patch</code>
+</li>
+<li>the line, as returned from the <code>plot()</code> function
+</li>
+<li>the spines <code>ax.spines</code>
+</li>
+<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code>
+</li>
+</ul>
+
+<p>
+What we can do here is to selectively draw only the parts that are actually changing. That is, at least the background and the line. To only redraw these, the code now looks like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+line, = ax.plot(np.random.randn(100))
+plt.show(block=<span style="color: #4271ae;">False</span>)
+
+<span style="color: #eab700;">tstart</span> = time.time()
+<span style="color: #eab700;">num_plots</span> = 0
+<span style="color: #718c00;">while</span> time.time()-tstart &lt; 5:
+    line.set_ydata(np.random.randn(100))
+    ax.draw_artist(ax.patch)
+    ax.draw_artist(line)
+    fig.canvas.update()
+    fig.canvas.flush_events()
+    <span style="color: #eab700;">num_plots</span> += 1
+<span style="color: #718c00;">print</span>(num_plots/5)
+</pre>
+</div>
+
+<p>
+Note that you have to add <code>fig.canvas.update()</code> to copy the newly rendered lines to the drawing backend.
+</p>
+
+<p>
+This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!
+</p>
+
+<p>
+Note that since we are only redrawing the background and the line, some detail in the axes will be overwritten. To also draw the spines, use <code>for spine in ax.spines.values(): ax.draw_artist(spine)</code>. To draw the axes, use <code>ax.draw_artist(ax.xaxis)</code> and <code>ax.draw_artist(ax.yaxis)</code>. If you draw all of them, you get roughly the same performance as <code>fig.canvas.draw()</code>. The axes in particular are quite expensive.
+</p>
+
+<p>
+There is also <a href="http://stackoverflow.com/a/8956211/1034">a way</a> of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.
+</p>
+
+<p>
+In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!
+</p>
+
+<p>
+<b>EDIT</b>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

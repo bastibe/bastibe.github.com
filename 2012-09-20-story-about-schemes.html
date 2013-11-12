@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>A Story about Schemes</title>
+<!-- 2013-11-12 Tue 16:39 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">A Story about Schemes</h1>
+<p>
+<b>Disclaimer:</b> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)
+</p>
+
+<p>
+I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and how it should be done.
+</p>
+
+<p>
+However, this is not about SICP, it is about Scheme, which happens to be the programming language that SICP uses to preach its sermons. Above all, Scheme beautiful. It is an astounding marriage of simplicity and power. It is also a mess in terms of implementations. There are dozens of implementations and they all implement a different, partly overlapping set of features that may or may not be part of the canonical Scheme&#x2013;if there is such a thing.
+</p>
+
+<p>
+So, how to select the correct Scheme? Naively, I first chose the one SICP uses, <a href="http://www.gnu.org/software/mit-scheme/">MIT-Scheme</a>. However, I soon found out that it does not work well with Emacs (that is, it did not work at all with <code>scheme-mode</code> and <code>run-scheme</code>). Also, its prompt is weird: <code>]=&gt;</code>. Whatever.
+</p>
+
+<p>
+So next, I tried <a href="http://dynamo.iro.umontreal.ca/~gambit/wiki/index.php/Main_Page">Gambit Scheme</a>, which works a lot better with Emacs. But then, I soon found out that it does not support functions like <code>filter</code>, which are kind of essential. I was quick to write my own version of that, but really, this stuff should be provided. Turns out, <code>filter</code> is part of a Scheme Request For Implementation, or SRFI. <code>filter</code> is part of SRFI1. There is a <a href="http://srfi.schemers.org/srfi-implementers.html">huge list</a> of different Schemes and the SRFIs they support. Also, there is a list of <a href="http://www.cs.utah.edu/~mflatt/benchmarks-20100126/log3/Benchmarks.html">Schemes sorted by performance</a>. With <a href="http://www.cs.utah.edu/%7Emflatt/benchmarks-20100126/log3/Benchmarks-plot.html">plots</a>, even. It's a mess.
+</p>
+
+<p>
+So this left me profoundly confused. What Scheme would I use? Ideally, it should be fast, work with Emacs and implement a reasonable set of SRFIs. Homebrew lists these:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">bigloo</td>
+<td class="left">chibi-scheme</td>
+<td class="left">chicken</td>
+</tr>
+
+<tr>
+<td class="left">gambit-scheme</td>
+<td class="left">gauche</td>
+<td class="left">guile</td>
+</tr>
+
+<tr>
+<td class="left">kawa</td>
+<td class="left">mit-scheme</td>
+<td class="left">plt-racket</td>
+</tr>
+
+<tr>
+<td class="left">scheme48</td>
+<td class="left">scsh</td>
+<td class="left">sisc-scheme</td>
+</tr>
+
+<tr>
+<td class="left">stklos</td>
+<td class="left">tinyscheme</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Difficult decision. Frankly, I don't have an answer. That said, I found <code>plt-racket</code> to be a joy to work with. <code>(help filter)</code> will open your browser with the appropriate help page for <code>filter</code>. Amazing. Also, it implements <a href="http://srfi.schemers.org/srfi-implementers.html">a long list</a> of SRFIs that will probably satisfy my simplistic needs. And the <a href="http://docs.racket-lang.org/">documentation</a> is excellent. And then there is DrRacket, which is a nice REPL that comes right with <a href="http://racket-lang.org/">Racket</a>. I like it.
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

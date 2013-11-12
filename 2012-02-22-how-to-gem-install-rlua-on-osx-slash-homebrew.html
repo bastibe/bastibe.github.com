@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>How to gem install rlua on OSX/homebrew</title>
+<!-- 2013-11-12 Tue 16:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">How to gem install rlua on OSX/homebrew</h1>
+<p>
+If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using
+</p>
+
+<p>
+#+begin src sh
+    brew install lua
+#end<sub>src</sub>
+</p>
+
+<p>
+Oh, would it be nice if everyone agreed on how to install stuff like this. Case in point, homebrew installs liblua (quite reasonable) in <code>/usr/local/lib/liblua.[5.1[.4]].dylib</code>
+</p>
+
+<p>
+rlua however expects it to be called <code>liblua5.1.dylib</code> (notice the missing <code>.</code>).
+</p>
+
+<p>
+Similarly, the headers are installed plainly into <code>/usr/local/include</code>, whereas rlua expects them to be in a folder called <code>lua5.1</code>.
+</p>
+
+<p>
+Hence, here is how you get rlua to install:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">ln -s /usr/local/Cellar/lua/5.1.4/lib/liblua.5.1.4.dylib /usr/local/lib/liblua5.1.dylib
+ln -s /usr/local/Cellar/lua/5.1.4/include/ /usr/local/include/lua5.1
+</pre>
+</div>
+
+<p>
+Not exactly a beautiful solution, but it works.
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

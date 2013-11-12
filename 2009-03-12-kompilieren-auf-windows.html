@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Kompilieren auf Windows</title>
+<!-- 2013-11-12 Tue 16:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Kompilieren auf Windows</h1>
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png" />
+</p>
+</div>
+
+<p>
+Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.
+</p>
+
+<p>
+Und da FFmpeg freie Software ist, kann man sie auch für andere Dinge verwenden, etwa, um mit Matlab Audiodateien zu öffnen. Fehlt noch eine Verbindung zwischen Matlab und den FFmpeg-C-Bibliotheken, und die gibt es in Form von <a href="http://www.mathworks.com/support/tech-notes/1600/1605.html#intro">Mex</a>, der C-Schnittstelle von Matlab. Feine Sache, zwar hat es eine Weile gedauert, bis ich mich in libavformat und libavcodec eingearbeitet hatte (die beiden wichtigsten FFmpeg-Bibliotheken), aber im Endeffekt lief das alles sehr schmerzfrei &#x2013; und das, obwohl ich bisher Mex-Kompilieren mit Matlab immer als eine grausige Beschäftigung in Erinnerung hatte, gespickt von kryptischen Kompiler-Fehlern und hässlichen Notlösungen.
+</p>
+
+<p>
+Bumms, Zack, kaum hatte ich mich versehen, hatte ich ein lauffähiges, tadellos funktionierendes <a href="http://en.wikipedia.org/wiki/MATLAB#Calling_C_and_Fortran_functions">Mex-File</a> auf meinem Mac liegen. Damit hatte ich nicht gerechnet. Also sofort die momentane Euphorie ausnutzen und weiter zu Schritt 2, das Ganze nochmal auf Windows. Meine Probleme, Windows so einzurichten, dass ich endlich Kompilieren kann, <a href="http://www.daskrachen.com/2009/03/great-scott.html">hatte ich ja schon berichtet</a>. Ich hatte also Visual Studio 2005 installiert, um Matlab zufrieden zu stellen und einen anständigen Kompiler auf dem System zu haben. Aber war ja klar, MSVC macht wieder sein eigenes Ding und nichts ist mit Standardkonformität und Trallalla: Keine <a href="http://de.wikipedia.org/wiki/C99#C99">C99</a>-Unterstützung, also keine Variablendeklarationen mitten im Code und keine stdint.h oder inttype.h. Ein Glück, es gibt wieder ein wenig mehr Free Software, die wenigstens <a href="http://code.google.com/p/msinttypes/">letztere Lücke schließt</a>. Dennoch; Ich bekomme mein mex-File nicht zum Laufen. Es ist wie verflucht, kaum setze ich mich an eine Windows-Maschine zum Programmieren, fällt meine Produktivität auf das Niveau eines Backsteins.
+</p>
+
+<p>
+Enter <a href="http://sourceforge.net/projects/gnumex">gnumex</a>, noch ein weiteres Stück FOSS, das es ermöglicht, GCC als Mex-Kompiler zu verwenden, AUF WINDOWS. Um die Dinge zu vereinfachen, verwendete ich die <a href="http://www.mingw.org/">MinGW</a>-Variante und kaum war diese Hürde genommen&#x2026; lief alles. Einfach so. Wahrscheinlich bin ich ein Dickschädel und habe einfach nicht die Geistesschärfe, mit Windows-Kompilern zu arbeiten, aber mir scheint, alles was ich diesbezüglich anfasse und das nicht GCC heißt ist zum Scheitern verurteilt. Ein Glück, dass es die vielen klugen Jungen und Mädchen gibt, die so wunderbare freie Software schreiben, die mir das Leben so viel einfacher macht!
+</p>
+
+<p>
+Eine Fortsetzung kommt noch&#x2026;
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

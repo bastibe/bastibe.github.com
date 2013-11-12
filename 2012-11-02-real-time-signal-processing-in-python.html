@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Real Time Signal Processing in Python</title>
+<!-- 2013-11-12 Tue 16:39 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Real Time Signal Processing in Python</h1>
+<p>
+Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.
+</p>
+
+<p>
+But this is not going to be about Matlab. This is going to be about Python. Combine Python with Numpy (and Scipy and Matplotlib) and you have a signal processing system very comparable to Matlab. Additionally, you can do real-time audio input/output using PyAudio. PyAudio is a wrapper around PortAudio and provides cross platform audio recording/playback in a nice, pythonic way. (Real time capabilities were added in 0.2.6 with the help of yours truly).
+</p>
+
+<p>
+However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
+</p>
+
+<p>
+If a signal peak is detected, the limiter will thus need a certain amount of time to reduce the gain accordingly. If you still want to prevent all peaks, the limiter will have to know of the peaks in advance, which is of course impossible in a real time system. Instead, the signal is delayed by a short time to give the limiter time to adjust the system gain before the peak is actually played. To keep this delay as short as possible, this "attack" phase where the gain is decreased should be very short, too. "Releasing" the gain back up to its original value can be done more slowly, thus introducing less distortion.
+</p>
+
+<p>
+With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope \(e[n]\) that catches all the peaks and smoothly decays after them:
+</p>
+
+<p>
+\[
+e[n] = \max( |s[n]|, e[n-1] \cdot f_r )
+\]
+</p>
+
+<p>
+where \(s[n]\) is the current signal and \(0 < f_r < 1\) is a release factor.
+</p>
+
+<p>
+If this is applied to a signal, it will create an envelope like this:
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png" />
+</p>
+</div>
+
+<p>
+Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain \(g_t[n]\) can be calculated using
+</p>
+
+\begin{equation}
+g_t[n] = \begin{cases}
+    1 & e[n] < t \\\\
+    1 + t - e[n] & e[n] > t
+\end{cases}
+\end{equation}
+
+<p>
+Now, the output gain \(g[n]\) can smoothly move towards that target gain using
+</p>
+
+<p>
+\[
+g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a)
+\]
+</p>
+
+<p>
+where \(0 < f_a \ll f_r\) is the attack factor.
+</p>
+
+<p>
+Here you can see how that would look in practice:
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png" />
+</p>
+</div>
+
+<p>
+Zooming in on one of the limited section reveals that the gain is actually moving smoothly.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png" />
+</p>
+</div>
+
+<p>
+This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.
+</p>
+
+<p>
+In Python, this might look like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">class</span> <span style="color: #4271ae;">Limiter</span>:
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">__init__</span>(<span style="color: #718c00;">self</span>, attack_coeff, release_coeff, delay, dtype=float32):
+        <span style="color: #718c00;">self</span>.delay_index = 0
+        <span style="color: #718c00;">self</span>.envelope = 0
+        <span style="color: #718c00;">self</span>.gain = 1
+        <span style="color: #718c00;">self</span>.delay = delay
+        <span style="color: #718c00;">self</span>.delay_line = zeros(delay, dtype=dtype)
+        <span style="color: #718c00;">self</span>.release_coeff = release_coeff
+        <span style="color: #718c00;">self</span>.attack_coeff = attack_coeff
+
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">limit</span>(<span style="color: #718c00;">self</span>, signal, threshold):
+        <span style="color: #718c00;">for</span> i <span style="color: #718c00;">in</span> arange(<span style="color: #8959a8;">len</span>(signal)):
+            <span style="color: #718c00;">self</span>.delay_line[<span style="color: #718c00;">self</span>.delay_index] = signal[i]
+            <span style="color: #718c00;">self</span>.delay_index = (<span style="color: #718c00;">self</span>.delay_index + 1) % <span style="color: #718c00;">self</span>.delay
+
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">calculate an envelope of the signal</span>
+            <span style="color: #718c00;">self</span>.envelope *= <span style="color: #718c00;">self</span>.release_coeff
+            <span style="color: #718c00;">self</span>.envelope  = <span style="color: #8959a8;">max</span>(<span style="color: #8959a8;">abs</span>(signal[i]), <span style="color: #718c00;">self</span>.envelope)
+
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">have self.gain go towards a desired limiter gain</span>
+            <span style="color: #718c00;">if</span> <span style="color: #718c00;">self</span>.envelope &gt; threshold:
+                <span style="color: #eab700;">target_gain</span> = (1+threshold-<span style="color: #718c00;">self</span>.envelope)
+            <span style="color: #718c00;">else</span>:
+                <span style="color: #eab700;">target_gain</span> = 1.0
+            <span style="color: #718c00;">self</span>.gain = ( <span style="color: #718c00;">self</span>.gain*<span style="color: #718c00;">self</span>.attack_coeff +
+                          target_gain*(1-<span style="color: #718c00;">self</span>.attack_coeff) )
+
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">limit the delayed signal</span>
+            <span style="color: #eab700;">signal</span>[i] = <span style="color: #718c00;">self</span>.delay_line[<span style="color: #718c00;">self</span>.delay_index] * <span style="color: #718c00;">self</span>.gain
+</pre>
+</div>
+
+<p>
+Note that this limiter does not <i>actually</i> clip all peaks completely, since the envelope for a single peak will have decayed a bit before the target gain will have reached it. Thus, the output gain will actually be slightly higher than what would be necessary to limit the output to the threshold. Since the attack factor is supposed to be significantly smaller than the release factor, this does not matter much though.
+</p>
+
+<p>
+Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\) in terms of the time they take to reach their target and the threshold \(t\) in dB FS.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+A real-time audio processing framework using PyAudio would look like this:
+</p>
+
+<p>
+(<code>callback</code> is a function that will be defined shortly)
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">from</span> pyaudio <span style="color: #718c00;">import</span> PyAudio, paFloat32
+
+<span style="color: #eab700;">pa</span> = PyAudio()
+
+<span style="color: #eab700;">stream</span> = pa.<span style="color: #8959a8;">open</span>(<span style="color: #8959a8;">format</span> = paFloat32,
+                 channels = 1,
+                 rate = 44100,
+                 output = <span style="color: #4271ae;">True</span>,
+                 frames_per_buffer = 1024,
+                 stream_callback = callback)
+
+<span style="color: #718c00;">while</span> stream.is_active():
+    sleep(0.1)
+
+stream.close()
+pa.terminate()
+</pre>
+</div>
+
+<p>
+This will open a <code>stream</code>, which is a PyAudio construct that manages input and output to/from one sound device. In this case, it is configured to use <code>float</code> values, only open one channel, play audio at a sample rate of 44100 Hz, have that one channel be output only and call the function <code>callback</code> every 1024 samples.
+</p>
+
+<p>
+Since the <code>callback</code> will be executed on a different thread, control flow will continue immediately after <code>pa.open()</code>. In order to analyze the resulting signal, the <code>while stream.is_active()</code> loop waits until the signal has been processed completely.
+</p>
+
+<p>
+Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eab700;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
+
+<span style="color: #718c00;">def</span> <span style="color: #f5871f;">callback</span>(in_data, frame_count, time_info, flag):
+    <span style="color: #718c00;">if</span> flag:
+        <span style="color: #718c00;">print</span>(<span style="color: #3e999f;">"Playback Error: %i"</span> % flag)
+    <span style="color: #eab700;">played_frames</span> = counter
+    <span style="color: #eab700;">counter</span> += frame_count
+    limiter.limit(signal[played_frames:counter], threshold)
+    <span style="color: #718c00;">return</span> signal[played_frames:counter], paContinue
+</pre>
+</div>
+
+<p>
+The <code>paContinue</code> at the end is a flag signifying that the audio processing is not done yet and the <code>callback</code> wants to be called again. Returning <code>paComplete</code> or an insufficient number of samples instead would stop audio processing after the current block and thus invalidate <code>stream.is_active()</code> and resume control flow in the snippet above.
+</p>
+
+<p>
+Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The limiter defined above could be rewritten in C like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">this corresponds to the Python Limiter class.</span>
+<span style="color: #718c00;">typedef</span> <span style="color: #718c00;">struct</span> <span style="color: #4271ae;">limiter_state_t</span> {
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_index</span>;
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_length</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">envelope</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">current_gain</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_coeff</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_coeff</span>;
+} <span style="color: #4271ae;">limiter_state</span>;
+
+<span style="color: #8959a8;">#define</span> <span style="color: #f5871f;">MAX</span>(<span style="color: #eab700;">x</span>,<span style="color: #eab700;">y</span>) ((x)&gt;(y)?(x):(y))
+
+<span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">this corresponds to the Python __init__ function.</span>
+<span style="color: #4271ae;">limiter_state</span> <span style="color: #f5871f;">init_limiter</span>(<span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_coeff</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_coeff</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_len</span>) {
+    <span style="color: #4271ae;">limiter_state</span> <span style="color: #eab700;">state</span>;
+    state.attack_coeff = attack_coeff;
+    state.release_coeff = release_coeff;
+    state.delay_index = 0;
+    state.envelope = 0;
+    state.current_gain = 1;
+    state.delay_length = delay_len;
+    <span style="color: #718c00;">return</span> state;
+}
+
+<span style="color: #4271ae;">void</span> <span style="color: #f5871f;">limit</span>(<span style="color: #4271ae;">float</span> *<span style="color: #eab700;">signal</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">block_length</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">threshold</span>,
+           <span style="color: #4271ae;">float</span> *<span style="color: #eab700;">delay_line</span>, <span style="color: #4271ae;">limiter_state</span> *<span style="color: #eab700;">state</span>) {
+    <span style="color: #718c00;">for</span>(<span style="color: #4271ae;">int</span> <span style="color: #eab700;">i</span>=0; i&lt;block_length; i++) {
+        delay_line[state-&gt;delay_index] = signal[i];
+        state-&gt;delay_index = (state-&gt;delay_index + 1) % state-&gt;delay_length;
+
+        <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">calculate an envelope of the signal</span>
+        state-&gt;envelope *= state-&gt;release_coeff;
+        state-&gt;envelope = MAX(fabs(signal[i]), state-&gt;envelope);
+
+        <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">have current_gain go towards a desired limiter target_gain</span>
+        <span style="color: #4271ae;">float</span> <span style="color: #eab700;">target_gain</span>;
+        <span style="color: #718c00;">if</span> (state-&gt;envelope &gt; threshold)
+            target_gain = (1+threshold-state-&gt;envelope);
+        <span style="color: #718c00;">else</span>
+            target_gain = 1.0;
+        state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
+            target_gain*(1-state-&gt;attack_coeff);
+
+        <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">limit the delayed signal</span>
+        signal[i] = delay_line[state-&gt;delay_index] * state-&gt;current_gain;
+    }
+}
+</pre>
+</div>
+
+<p>
+In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.
+</p>
+
+<p>
+Now in order to plug this code into Python I will use Cython. First of all, a "Cython header" file has to be created that declares all exported types and functions to Cython:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">cdef extern <span style="color: #718c00;">from</span> <span style="color: #3e999f;">"limiter.h"</span>:
+    ctypedef struct limiter_state:
+        <span style="color: #8959a8;">int</span> delay_index
+        <span style="color: #8959a8;">int</span> delay_length
+        <span style="color: #8959a8;">float</span> envelope
+        <span style="color: #8959a8;">float</span> current_gain
+        <span style="color: #8959a8;">float</span> attack_coeff
+        <span style="color: #8959a8;">float</span> release_coeff
+
+    limiter_state init_limiter(<span style="color: #8959a8;">float</span> attack_factor, <span style="color: #8959a8;">float</span> release_factor, <span style="color: #8959a8;">int</span> delay_len)
+    void limit(<span style="color: #8959a8;">float</span> *signal, <span style="color: #8959a8;">int</span> block_length, <span style="color: #8959a8;">float</span> threshold,
+               <span style="color: #8959a8;">float</span> *delay_line, limiter_state *state)
+</pre>
+</div>
+
+<p>
+This is very similar to the C header file of the limiter:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span style="color: #718c00;">typedef</span> <span style="color: #718c00;">struct</span> <span style="color: #4271ae;">limiter_state_t</span> {
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_index</span>;
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_length</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">envelope</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">current_gain</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_coeff</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_coeff</span>;
+} <span style="color: #4271ae;">limiter_state</span>;
+
+<span style="color: #4271ae;">limiter_state</span> <span style="color: #f5871f;">init_limiter</span>(<span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_factor</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_factor</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_len</span>);
+<span style="color: #4271ae;">void</span> <span style="color: #f5871f;">limit</span>(<span style="color: #4271ae;">float</span> *<span style="color: #eab700;">signal</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">block_length</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">threshold</span>,
+           <span style="color: #4271ae;">float</span> *<span style="color: #eab700;">delay_line</span>, <span style="color: #4271ae;">limiter_state</span> *<span style="color: #eab700;">state</span>);
+</pre>
+</div>
+
+<p>
+With that squared away, the C functions are accessible for Cython. Now, we only need a small Python wrapper around this code so it becomes usable from Python:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">import</span> numpy <span style="color: #718c00;">as</span> np
+cimport numpy <span style="color: #718c00;">as</span> np
+cimport limiter
+
+<span style="color: #eab700;">DTYPE</span> = np.float32
+ctypedef np.float32_t DTYPE_t
+
+cdef <span style="color: #718c00;">class</span> <span style="color: #4271ae;">Limiter</span>:
+    cdef limiter.limiter_state state
+    cdef np.ndarray delay_line
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">__init__</span>(<span style="color: #718c00;">self</span>, <span style="color: #8959a8;">float</span> attack_coeff, <span style="color: #8959a8;">float</span> release_coeff,
+                 <span style="color: #8959a8;">int</span> delay_length):
+        <span style="color: #718c00;">self</span>.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
+        <span style="color: #718c00;">self</span>.delay_line = np.zeros(delay_length, dtype=DTYPE)
+
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">limit</span>(<span style="color: #718c00;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #8959a8;">float</span> threshold):
+        limiter.limit(&lt;<span style="color: #8959a8;">float</span>*&gt;np.PyArray_DATA(signal),
+                   &lt;<span style="color: #8959a8;">int</span>&gt;<span style="color: #8959a8;">len</span>(signal), threshold,
+                   &lt;<span style="color: #8959a8;">float</span>*&gt;np.PyArray_DATA(<span style="color: #718c00;">self</span>.delay_line),
+                   &lt;limiter.limiter_state*&gt;&amp;<span style="color: #718c00;">self</span>.state)
+</pre>
+</div>
+
+<p>
+The first two lines set this file up to access Numpy arrays both from the Python domain and the C domain, thus bridging the gap. The <code>cimport limiter</code> imports the C functions and types from above. The <code>DTYPE</code> stuff is advertising the Numpy <code>float32</code> type to C.
+</p>
+
+<p>
+The class is defined using <code>cdef</code> as a C data structure for speed. Also, Cython would naturally translate every C struct into a Python dict and vice versa, but we need to pass the struct to <code>limit</code> <i>and</i> have <code>limit</code> modify it. Thus, <code>cdef limiter.limiter_state state</code> makes Cython treat it as a C struct only. Finally, the <code>np.PyArray_DATA()</code> expressions expose the C arrays underlying the Numpy vectors. This is really handy since we don't have to copy any data around in order to modify the vectors from C.
+</p>
+
+<p>
+As can be seen, the Cython implementation behaves nearly identically to the initial Python implementation (except for passing the <code>dtype</code> to the constructor) and can be used as a plug-in replacement (with the aforementioned caveat).
+</p>
+
+<p>
+Finally, we need to build the whole contraption. The easiest way to do this is to use a setup file like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">from</span> distutils.core <span style="color: #718c00;">import</span> setup
+<span style="color: #718c00;">from</span> distutils.extension <span style="color: #718c00;">import</span> Extension
+<span style="color: #718c00;">from</span> Cython.Distutils <span style="color: #718c00;">import</span> build_ext
+<span style="color: #718c00;">from</span> numpy <span style="color: #718c00;">import</span> get_include
+
+<span style="color: #eab700;">ext_modules</span> = [Extension(<span style="color: #3e999f;">"cython_limiter"</span>,
+                         sources=[<span style="color: #3e999f;">"cython_limiter.pyx"</span>,
+                                  <span style="color: #3e999f;">"limiter.c"</span>],
+                         include_dirs=[<span style="color: #3e999f;">'.'</span>, get_include()])]
+
+setup(
+    name = <span style="color: #3e999f;">"cython_limiter"</span>,
+    cmdclass = {<span style="color: #3e999f;">'build_ext'</span>: build_ext},
+    ext_modules = ext_modules
+    )
+</pre>
+</div>
+
+<p>
+With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Conclusion</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
+</p>
+
+<p>
+You can find all the source code in this article at <a href="https://github.com/bastibe/simple-cython-limiter">https://github.com/bastibe/simple-cython-limiter</a>
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Disclaimer</h2>
+<div class="outline-text-2" id="text-5">
+<ol class="org-ol">
+<li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.
+</li>
+<li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.
+</li>
+<li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

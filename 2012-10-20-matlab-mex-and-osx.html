@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</title>
+<!-- 2013-11-12 Tue 16:39 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h1>
+<p>
+Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.
+</p>
+
+<p>
+Because it does not work. So angry.
+</p>
+
+<p>
+Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <i>\/Developer\/SDKs\/MacOSX10.6.sdk</i>. However, as of 10.7 (I think), the <i>\/Developer</i> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been deprecated in favor of <code>clang</code>. While a <code>gcc</code> binary is still provided, <code>gcc-4.2</code> is not. Of course, that is what <code>mex</code> relies on. Lastly, <code>mex</code> of course completely disregards common system paths such as, say, <i>\/usr\/local\/bin</i>, so compiling against some homebrew library won't work.
+</p>
+
+<p>
+At least these things are rather easy to fix, since all these settings are saved in a file called <i>mexopts.sh</i>, which is saved to <i>~\</i>.matlab\/R2012a\// by default. The relevant section on 64-bit OS X begins after <code>maci64)</code> and should look like this: (changes are marked by comments)
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-makefile"><span style="color: #8e908c; font-style: italic;">#</span><span style="color: #8e908c; font-style: italic;">----------------------------------------------------------------------------</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">StorageVersion: 1.0</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">CkeyName: GNU C</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">CkeyManufacturer: GNU</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">CkeyLanguage: C</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">CkeyVersion:</span>
+            <span style="color: #eab700;">CC</span>=<span style="color: #3e999f;">'gcc'</span> <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">used to be 'gcc-4.2'</span>
+
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
+            <span style="color: #eab700;">SDKROOT</span>=<span style="color: #3e999f;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
+            <span style="color: #eab700;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #3e999f;">'10.8'</span> <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">used to be '10.5'</span>
+            <span style="color: #eab700;">ARCHS</span>=<span style="color: #3e999f;">'x86_64'</span>
+            <span style="color: #eab700;">CFLAGS</span>=<span style="color: #3e999f;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+            <span style="color: #eab700;">CFLAGS</span>=<span style="color: #3e999f;">"$CFLAGS  -fexceptions"</span>
+            <span style="color: #eab700;">CFLAGS</span>=<span style="color: #3e999f;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Homebrew include path</span>
+            <span style="color: #eab700;">CLIBS</span>=<span style="color: #3e999f;">"$MLIBS"</span>
+            <span style="color: #eab700;">COPTIMFLAGS</span>=<span style="color: #3e999f;">'-O2 -DNDEBUG'</span>
+            <span style="color: #eab700;">CDEBUGFLAGS</span>=<span style="color: #3e999f;">'-g'</span>
+<span style="color: #8e908c; font-style: italic;">#</span>
+            <span style="color: #eab700;">CLIBS</span>=<span style="color: #3e999f;">"$CLIBS -lstdc++"</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">C++keyName: GNU C++</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">C++keyManufacturer: GNU</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">C++keyLanguage: C++</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">C++keyVersion:</span>
+            <span style="color: #eab700;">CXX</span>=g++ <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">used to be 'g++-4.2'</span>
+            <span style="color: #eab700;">CXXFLAGS</span>=<span style="color: #3e999f;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+            <span style="color: #eab700;">CXXLIBS</span>=<span style="color: #3e999f;">"$MLIBS -lstdc++"</span>
+            <span style="color: #eab700;">CXXOPTIMFLAGS</span>=<span style="color: #3e999f;">'-O2 -DNDEBUG'</span>
+            <span style="color: #eab700;">CXXDEBUGFLAGS</span>=<span style="color: #3e999f;">'-g'</span>
+<span style="color: #8e908c; font-style: italic;">#</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">FortrankeyName: GNU Fortran</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">FortrankeyManufacturer: GNU</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">FortrankeyLanguage: Fortran</span>
+            <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">FortrankeyVersion:</span>
+            <span style="color: #eab700;">FC</span>=<span style="color: #3e999f;">'gfortran'</span>
+            <span style="color: #eab700;">FFLAGS</span>=<span style="color: #3e999f;">'-fexceptions -m64 -fbackslash'</span>
+            <span style="color: #eab700;">FC_LIBDIR</span>=<span style="color: #3e999f;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
+            <span style="color: #eab700;">FC_LIBDIR2</span>=<span style="color: #3e999f;">`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`</span>
+            <span style="color: #eab700;">FLIBS</span>=<span style="color: #3e999f;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
+            <span style="color: #eab700;">FOPTIMFLAGS</span>=<span style="color: #3e999f;">'-O'</span>
+            <span style="color: #eab700;">FDEBUGFLAGS</span>=<span style="color: #3e999f;">'-g'</span>
+<span style="color: #8e908c; font-style: italic;">#</span>
+            <span style="color: #eab700;">LD</span>=<span style="color: #3e999f;">"$CC"</span>
+            <span style="color: #eab700;">LDEXTENSION</span>=<span style="color: #3e999f;">'.mexmaci64'</span>
+            <span style="color: #eab700;">LDFLAGS</span>=<span style="color: #3e999f;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+            <span style="color: #eab700;">LDFLAGS</span>=<span style="color: #3e999f;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
+            <span style="color: #eab700;">LDFLAGS</span>=<span style="color: #3e999f;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Homebrew library path</span>
+            <span style="color: #eab700;">LDOPTIMFLAGS</span>=<span style="color: #3e999f;">'-O'</span>
+            <span style="color: #eab700;">LDDEBUGFLAGS</span>=<span style="color: #3e999f;">'-g'</span>
+<span style="color: #8e908c; font-style: italic;">#</span>
+            <span style="color: #eab700;">POSTLINK_CMDS</span>=<span style="color: #3e999f;">':'</span>
+<span style="color: #8e908c; font-style: italic;">#</span><span style="color: #8e908c; font-style: italic;">----------------------------------------------------------------------------</span>
+</pre>
+</div>
+
+<p>
+To summarize:
+</p>
+
+<ul class="org-ul">
+<li>changed <code>gcc-4.2</code> to <code>gcc</code>
+</li>
+<li>changed <code>/Developer/SDKs/MacOSX10.6.sdk</code> to <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code>
+</li>
+<li>changed <code>10.5</code> to <code>10.8</code>
+</li>
+<li>added ~CFLAGS="$CFLAGS -I/usr/local/include"~
+</li>
+<li>changed <code>g++-4.2</code> to <code>g++</code>
+</li>
+<li>added ~LDFLAGS="$LDFLAGS -L/usr/local/lib"~
+</li>
+</ul>
+
+<p>
+With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

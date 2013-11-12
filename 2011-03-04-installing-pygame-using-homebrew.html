@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Installing Pygame using Homebrew</title>
+<!-- 2013-11-12 Tue 16:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Installing Pygame using Homebrew</h1>
+<p>
+So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
+</p>
+
+<p>
+<a href="http://www.pygame.org/news.html">Pygame</a> is one package that allows this. (I will submit a patch to <a href="http://people.csail.mit.edu/hubert/pyaudio/">Pyaudio</a> soon that will enable it there, too). There are pre-built binaries on the Pygame website that you can install easily. But then there would be no easy way to uninstall them, so what I would rather want is to install Pygame using package managers that allow easy updating and uninstallation. My tool of choice on the Mac is of course <a href="https://github.com/mxcl/homebrew/">Homebrew</a>.
+</p>
+
+<p>
+Note that although I am mostly interested in audio playback, this post will detail the installation of all modules of Pygame, not just <code>pygame.mixer</code>.
+</p>
+
+<p>
+Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    brew install sdl, sdl<sub>mixer</sub>, sdl<sub>ttf</sub>, libpng, jpeg, sdl<sub>image</sub>, portmidi
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+This will install most packages for you. Note that <code>libpng</code> is also available as a system library, so it is installed <code>keg_only</code>, that is, without linking it in your path. We will need to compile against it though, so the next step is
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    brew link libpng
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</code> does not install its headers, so you can't compile against it. To fix that, type
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    brew edit smpeg
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+and add the following line just above the two end at the end of the file
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    include.install Dir["*.h"]
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install <code>smpeg</code> with the usual
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    brew install smpeg
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+and you will get the headers, too. Isn't Homebrew great?
+</p>
+
+<p>
+Now that all the prerequisites are met, lets look at Pygame itself. This is rather more difficult, as it will not build properly against Homebrew libraries on its own. First, download the source package of Pygame from the [official website](<a href="http://www.pygame.org/download.shtml">http://www.pygame.org/download.shtml</a>). Unpack it to some directory.
+</p>
+
+<p>
+Now open a terminal and navigate to that directory. Me, I like [iTerm](<a href="http://iterm.sourceforge.net/">http://iterm.sourceforge.net/</a>), but Terminal.app will do just fine, too. In there, run <code>python config.py</code> to create an initial setup file.
+</p>
+
+<p>
+At this point, the setup file is mostly useless since <code>config.py</code> failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file <code>Setup</code> (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    SDL = -I/NEED<sub>INC</sub><sub>PATH</sub><sub>FIX</sub> -L/NEED<sub>LIB</sub><sub>PATH</sub><sub>FIX</sub> -lSDL
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in <code>/usr/local…</code>. Hence, change this line to
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+The next lines are strangely garbled. They say, for example
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    FONT = -lS -lD -lL -l_ -lt -lt -lf
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+Where they actually should say
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    FONT = -lSDL<sub>ttf</sub>
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+Instead of having one <code>-l</code> and then the library name <code>SDL_ttf</code>, they put <code>-l</code> in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for <code>FONT</code>, <code>IMAGE</code>, <code>MIXER</code> and <code>SMPEG</code>.
+</p>
+
+<p>
+Note that I did not tell you to do this for <code>PORTTIME</code>, too. Actually, <code>PORTTIME</code> is already correctly linked in <code>PORTMIDI</code>, so you don't need that at all any more. Just delete or comment the <code>PORTTIME</code> line.
+</p>
+
+<p>
+Now that all the dependencies are corrected, lets enable the features. A few lines further down, there will be a block of lines, where most lines begin with a <code>#</code> except for the ones beginning with <code>_numericsurfarray…</code> and <code>_camera…</code>, These are the different features of Pygame: The ones with the <code>#</code> are disabled, the other two are enabled.
+</p>
+
+<p>
+With all the stuff we installed earlier, you can now enable all features (remove the <code>#</code> in front of <code>imageext…</code>, <code>font…</code>, <code>mixer…</code>, <code>mixer_music…</code>, <code>_minericsndarray…</code>, <code>movie…</code>, <code>scrap…</code> and <code>pypm…</code>).
+</p>
+
+<p>
+Remember we disabled <code>PORTTIME</code> a while ago? Right, so we have to remove that dependency: In the line starting with <code>pypm…</code>, delete the part that says <code>$(PORTTIME)</code>. Great. That was easy, right? Now save that file and go back to the Terminal.
+</p>
+
+<p>
+We are now going to compile and install Pygame. The nice thing is, even though we are installing it manually, it will go in the right directories and it will be registered with <code>pip</code> or <code>easy_install</code>, so you can just invoke them if you want to uninstall it later by typing <code>pip uninstall pygame</code>. This is something I love about Python!
+</p>
+
+<p>
+Alright, now without further ado, install Pygame by typing
+</p>
+
+<p>
+#+begin<sub>src</sub> sh
+    python setup.py install
+#+end<sub>src</sub> sh
+</p>
+
+<p>
+Great! That's it! Everything should work now!
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>

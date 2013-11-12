@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>How to make Tagbar work with Objective-C</title>
+<!-- 2013-11-12 Tue 16:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">How to make Tagbar work with Objective-C</h1>
+<p>
+For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)
+</p>
+
+<p>
+Recently however, ctags finally gained support for Objective-C! Huzzah!
+As of today, Objective-C support is not in the stable branch yet, but thanks to the magic of homebrew, an Obj-C ready ctags is only a <code>brew install ctags --HEAD</code> away!
+</p>
+
+<p>
+With that, tag navigation in Vim works for Objective-C. Awesome!
+However, Tagbar does not work yet. There used to be <a href="http://stackoverflow.com/a/5790832/1034">a workaround</a> that apparently worked for some people, but it did not work for me.
+Things like this drive me nuts. I can see that tags are being generated, but Tagbar won't show them. What is going wrong?
+</p>
+
+<p>
+Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:
+</p>
+
+<pre class="example">
+" add a definition for Objective-C to tagbar
+let g:tagbar_type_objc = {
+    \ 'ctagstype' : 'ObjectiveC',
+    \ 'kinds'     : [
+        \ 'i:interface',
+        \ 'I:implementation',
+        \ 'p:Protocol',
+        \ 'm:Object_method',
+        \ 'c:Class_method',
+        \ 'v:Global_variable',
+        \ 'F:Object field',
+        \ 'f:function',
+        \ 'p:property',
+        \ 't:type_alias',
+        \ 's:type_structure',
+        \ 'e:enumeration',
+        \ 'M:preprocessor_macro',
+    \ ],
+    \ 'sro'        : ' ',
+    \ 'kind2scope' : {
+        \ 'i' : 'interface',
+        \ 'I' : 'implementation',
+        \ 'p' : 'Protocol',
+        \ 's' : 'type_structure',
+        \ 'e' : 'enumeration'
+    \ },
+    \ 'scope2kind' : {
+        \ 'interface'      : 'i',
+        \ 'implementation' : 'I',
+        \ 'Protocol'       : 'p',
+        \ 'type_structure' : 's',
+        \ 'enumeration'    : 'e'
+    \ }
+\ }
+</pre>
+
+<p>
+With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!
+</p>
+
+
+<p>
+Happy Vimming!
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+</body>
+</html>
