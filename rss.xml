@@ -14,8 +14,8 @@
   <link>http://bastibe.de/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Tue, 12 Nov 2013 17:26:39 +0100</pubDate>
-  <lastBuildDate>Tue, 12 Nov 2013 17:26:39 +0100</lastBuildDate>
+  <pubDate>Wed, 13 Nov 2013 17:09:17 +0100</pubDate>
+  <lastBuildDate>Wed, 13 Nov 2013 17:09:17 +0100</lastBuildDate>
   <generator>Emacs 24.3 Org-mode 8.2.2</generator>
   <webMaster>bb@randomtask (Bastian Bechtold)</webMaster>
   <image>
@@ -25,208 +25,505 @@
   </image>
 
   <item>
-    <title>Speeding up Matplotlib</title>
-    <link>http://bastibe.de/"http://bastibe.de/2013-05-30-speeding-up-matplotlib.html"</link>
-    <guid isPermaLink="false">http://bastibe.de/"http://bastibe.de/2013-05-30-speeding-up-matplotlib.html"</guid>
-    <pubDate>Thu, 30 May 2013 00:00:00 +0200</pubDate>
+    <title>Blogging with Emacs</title>
+    <link>http://bastibe.de/"http://bastibe.de/2013-11-13-blogging-with-emacs.html"</link>
+    <guid isPermaLink="false">http://bastibe.de/"http://bastibe.de/2013-11-13-blogging-with-emacs.html"</guid>
+    <pubDate>Wed, 13 Nov 2013 00:00:00 +0100</pubDate>
 
     <description><![CDATA[<p>
-    For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
+    When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
   </p>
 
   <p>
-    Well... speed. If there is one thing I could criticize about Matplotlib, it is its relative slowness. To measure that, lets make a very simple line plot and draw some random numbers as quickly as possible:
+    Thus I switched. Getting my blog posts out of blogger was... Let&rsquo;s just say that I lost anything I didn&rsquo;t have a plain-text backup of. And <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">I switched</a> to <a href="http://pelican.readthedocs.org/en/3.3.0/">Pelican</a>, a static site generator written in Python. It worked beautifully, until I updated something, at which point it resorted to just throwing errors. Now I don&rsquo;t have anything in particular against Python stack traces, but these particular traces traced deep into stuff that was (then?) too complex for me to understand.
+  </p>
+
+  <p>
+    Thus I switched again. This time to <a href="https://github.com/redline6561/coleslaw">C()λ∈slaw■</a>, a static site generator written in Common Lisp. Mainly because I was interested in Common Lisp at the time. It worked really well. However, this was supposed to give me a chance to delve into Common Lisp, and I failed to understand C()λ∈slaw■&rsquo;s code. Realistically though, this is probably not C()λ∈slaw■&rsquo;s fault. My knowledge of Common Lisp is far from perfect.
+  </p>
+
+  <p>
+    Thus it was time to switch again. Having been enamored with Emacs for the last few years, it made sense to blog with Emacs as well. Besides, I am kind of fed up with the many conflicting flavors of Markdown out there and have switched my personal note-taking to <a href="http://orgmode.org/">Org mode</a> long ago. So let&rsquo;s set up Emacs and Org as a blogging platform!
+  </p>
+
+  <p>
+    Before we start though, a short disclaimer: This will be a very bare bones blogging engine. It will consist of some articles, a front page, an archive page, and an RSS feed. And you will have to manage the front page and RSS feed semi-manually. No tags, no fancy history. Just what you see here.
+  </p>
+
+  <p>
+    On the plus side, this will be implemented entirely within Emacs and very simple to understand. Writing a new blog post will be as simple as writing an Org file and hitting a key combination! And you will get all of Org&rsquo;s fancy syntax highlighting and export magic for free!
+  </p>
+
+  <p>
+    Getting the pages to work is rather simple: You have to create a &ldquo;publishing project&rdquo; that specifies a <code>base-directory</code> where your Org files live and a <code>publishing-directory</code>, where the HTML files are going to be stored. Since this is Emacs, you could make your publishing directory any TRAMP path you like and insta-publish your workings!
+  </p>
+
+  <p>
+    (BTW, I am using Org 8.2.2 and I believe you need at least 8.0 for these examples to work)
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-python"><span style="color: #718c00;">import</span> matplotlib.pyplot <span style="color: #718c00;">as</span> plt
-    <span style="color: #718c00;">import</span> numpy <span style="color: #718c00;">as</span> np
-    <span style="color: #718c00;">import</span> time
-
-    <span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
-
-    <span style="color: #eab700;">tstart</span> = time.time()
-    <span style="color: #eab700;">num_plots</span> = 0
-    <span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
-    ax.clear()
-    ax.plot(np.random.randn(100))
-    plt.pause(0.001)
-    <span style="color: #eab700;">num_plots</span> += 1
-    <span style="color: #718c00;">print</span>(num_plots)
+    <pre class="src src-elisp">(<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-html</span>)
+    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-rss</span>)
+    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-publish</span>)
+    (setq org-publish-project-alist
+    '((<span style="color: #3e999f;">"blog-content"</span>
+    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+    <span style="color: #8959a8;">:html-extension</span> <span style="color: #3e999f;">"html"</span>
+    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+    <span style="color: #8959a8;">:publishing-function</span> (org-html-publish-to-html)
+    <span style="color: #8959a8;">:recursive</span> t          <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">descend into sub-folders?</span>
+    <span style="color: #8959a8;">:section-numbers</span> nil  <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">don't create numbered sections</span>
+    <span style="color: #8959a8;">:with-toc</span> nil         <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">don't create a table of contents</span>
+    <span style="color: #8959a8;">:with-latex</span> t         <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">do use MathJax for awesome formulas!</span>
+    <span style="color: #8959a8;">:html-head-extra</span> <span style="color: #3e999f;">""</span>   <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">extra &lt;head&gt; entries go here</span>
+    <span style="color: #8959a8;">:html-preamble</span> <span style="color: #3e999f;">""</span>     <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">this stuff is put before your post</span>
+    <span style="color: #8959a8;">:html-postamble</span> <span style="color: #3e999f;">""</span>    <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">this stuff is put after your post</span>
+    )))
     </pre>
   </div>
 
   <p>
-    On my machine, I get about 11 plots per second. I am using <code>pause()</code> here to update the plot without blocking. The correct way to do this is to use <code>draw()</code> instead, but due to a bug in the Qt4Agg backend, you can&rsquo;t use it there. If you are not using the Qt4Agg backend, <code>draw()</code> is supposedly the correct choice.
+    Now hit <code>M-x org-publish</code>, type in <code>blog-content</code>, and you have a blog! Awesome! We are done here.
   </p>
 
   <p>
-    For a single plot, ten plots per second is not terrible. But then, this is really the simplest case possible, so ten frames per second in the simplest case probably means bad things for not so simple cases.
+    Well, how about an archive page that lists all your previous blog entries?
   </p>
 
   <p>
-    One thing that really takes time here is creating all the axes and text labels over and over again. So let&rsquo;s not do that.
-  </p>
-
-  <p>
-    Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effectively deleting everything about the plot, then re-creating it for every frame, we can keep an existing plot and only modify its data:
+    Emacs can auto-generate this for you. Simply add these lines to <code>blog-content</code>:
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
-    line, = ax.plot(np.random.randn(100))
-
-    <span style="color: #eab700;">tstart</span> = time.time()
-    <span style="color: #eab700;">num_plots</span> = 0
-    <span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
-    line.set_ydata(np.random.randn(100))
-    plt.pause(0.001)
-    <span style="color: #eab700;">num_plots</span> += 1
-    <span style="color: #718c00;">print</span>(num_plots)
+    <pre class="src src-elisp"><span style="color: #8959a8;">:auto-sitemap</span> t
+    <span style="color: #8959a8;">:sitemap-filename</span> <span style="color: #3e999f;">"archive.org"</span>
+    <span style="color: #8959a8;">:sitemap-title</span> <span style="color: #3e999f;">"Archive"</span>
+    <span style="color: #8959a8;">:sitemap-sort-files</span> anti-chronologically
+    <span style="color: #8959a8;">:sitemap-style</span> list
+    <span style="color: #8959a8;">:makeindex</span> t
     </pre>
   </div>
 
   <p>
-    which yields about 26 plots per second. Not bad for a simple change like this. The downside is that the axes are not re-scaled any longer when the data changes. Thus, they won&rsquo;t change their limits based on the data any more.
-  </p>
-
-  <p>
-    Profiling this yields some interesting results:
-  </p>
-
-  <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-    <colgroup>
-      <col  class="right" />
-
-      <col  class="right" />
-
-      <col  class="right" />
-
-      <col  class="right" />
-
-      <col  class="right" />
-
-      <col  class="left" />
-    </colgroup>
-    <tbody>
-      <tr>
-        <td class="right">ncalls</td>
-        <td class="right">tottime</td>
-        <td class="right">percall</td>
-        <td class="right">cumtime</td>
-        <td class="right">percall</td>
-        <td class="left">filename:lineno(function)</td>
-      </tr>
-
-      <tr>
-        <td class="right">15</td>
-        <td class="right">0.167</td>
-        <td class="right">0.011</td>
-        <td class="right">0.167</td>
-        <td class="right">0.011</td>
-        <td class="left">{built-in method sleep)</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>
-    The one function that uses the biggest chunk of runtime is <code>sleep()</code>, of all things. Clearly, this is not what we want. Delving deeper into the profiler shows that this is indeed happening in the call do <code>pause()</code>. Then again, I <i>was</i> wondering if using <i>pause</i> really was a great idea for performance...
-  </p>
-
-  <p>
-    As it turns out, <code>pause()</code> internally calls <code>fig.canvas.draw()</code>, then <code>plt.show()</code>, then <code>fig.canvas.start_event_loop()</code>. The default implementation of <code>fig.canvas.start_event_loop()</code> then calls <code>fig.canvas.flush_events()</code>, then sleeps for the requested time. To add insult to injury, it even insists on sleeping at least one hundredth of a second, which actually explains the profiler output of 0.167 seconds of <code>sleep()</code> for 15 calls very well.
-  </p>
-
-  <p>
-    Putting this all together now yields:
+    Also, you can put something like
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
-    line, = ax.plot(np.random.randn(100))
-
-    <span style="color: #eab700;">tstart</span> = time.time()
-    <span style="color: #eab700;">num_plots</span> = 0
-    <span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
-    line.set_ydata(np.random.randn(100))
-    fig.canvas.draw()
-    fig.canvas.flush_events()
-    <span style="color: #eab700;">num_plots</span> += 1
-    <span style="color: #718c00;">print</span>(num_plots)
+    <pre class="src src-html">&lt;<span style="color: #f5871f;">a</span> <span style="color: #eab700;">href</span>=<span style="color: #3e999f;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #f5871f;">a</span>&gt;
     </pre>
   </div>
 
   <p>
-    which now plots about 40 frames per second. Note that the call to <code>show()</code> mentioned earlier can be omitted since the figure is already on screen. <code>flush_events()</code> just runs the Qt event loop, so there is probably nothing to optimize there.
+    into your <code>:html-postamble</code> to make every page link to this. You can also add your <a href="https://disqus.com/">Disqus</a> snippet there to enable comments.
   </p>
 
   <p>
-    The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What this really is doing is drawing all the artists contained in the <code>ax</code>. Those artists can be accessed using <code>ax.get_children()</code>. For a simple plot like this, the artists are:
-  </p>
-
-  <ul class="org-ul">
-    <li>the background <code>ax.patch</code>
-    </li>
-    <li>the line, as returned from the <code>plot()</code> function
-    </li>
-    <li>the spines <code>ax.spines</code>
-    </li>
-    <li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code>
-    </li>
-  </ul>
-
-  <p>
-    What we can do here is to selectively draw only the parts that are actually changing. That is, at least the background and the line. To only redraw these, the code now looks like this:
+    Adding a front page is simple, too. My front page is simply a normal page called <i>index.org</i>, which contains links and slugs for every article I want to have on the front page. For example:
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
-    line, = ax.plot(np.random.randn(100))
-    plt.show(block=<span style="color: #4271ae;">False</span>)
+    <pre class="src src-org"><span style="color: #718c00;">#+TITLE:</span> <span style="color: #f5871f; font-size: 144%; font-weight: bold;">RECENT POSTS</span>
 
-    <span style="color: #eab700;">tstart</span> = time.time()
-    <span style="color: #eab700;">num_plots</span> = 0
-    <span style="color: #718c00;">while</span> time.time()-tstart &lt; 5:
-    line.set_ydata(np.random.randn(100))
-    ax.draw_artist(ax.patch)
-    ax.draw_artist(line)
-    fig.canvas.update()
-    fig.canvas.flush_events()
-    <span style="color: #eab700;">num_plots</span> += 1
-    <span style="color: #718c00;">print</span>(num_plots/5)
+    <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][Speeding up Matplotlib]]</span>
+    <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
+    <span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][read more...]]</span>
     </pre>
   </div>
 
   <p>
-    Note that you have to add <code>fig.canvas.update()</code> to copy the newly rendered lines to the drawing backend.
+    But a blog is more than just text. There are images and CSS, too. I keep all that stuff in a separate directory and use a separate publishing project to copy it over to the publishing directory. Just add to your <code>publishing-alist</code>:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #3e999f;">"blog-static"</span>
+    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/static"</span>
+    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"png</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">jpg</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">css"</span>
+    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish/static"</span>
+    <span style="color: #8959a8;">:recursive</span> t
+    <span style="color: #8959a8;">:publishing-function</span> org-publish-attachment)
+    </pre>
+  </div>
+
+  <p>
+    Setting up the RSS feed works similarly. The RSS feed is created from a single Org file. Create a new publishing project and put it into your <code>publishing-alist</code>
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #3e999f;">"blog-rss"</span>
+    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+    <span style="color: #8959a8;">:publishing-function</span> (org-rss-publish-to-rss)
+    <span style="color: #8959a8;">:html-link-home</span> <span style="color: #3e999f;">"http://bastibe.de/"</span>
+    <span style="color: #8959a8;">:html-link-use-abs-url</span> t
+    <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">".*"</span>
+    <span style="color: #8959a8;">:include</span> (<span style="color: #3e999f;">"rss.org"</span>)
+    <span style="color: #8959a8;">:with-toc</span> nil
+    <span style="color: #8959a8;">:section-numbers</span> nil
+    <span style="color: #8959a8;">:title</span> <span style="color: #3e999f;">"Bastis Scratchpad on the Internet"</span>)
+    </pre>
+  </div>
+
+  <p>
+    Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code> project by adding it&rsquo;s name to the <code>:exclude</code> variable though. This <code>rss.org</code> file should contain headlines for every blog post. Every headline needs a publishing date and a permalink as property and the body of the post as content:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-org"><span style="color: #4271ae;">* Speeding up Matplotlib</span>
+    <span style="color: #f5871f;">:PROPERTIES:</span>
+    <span style="color: #f5871f;">:RSS_PERMALINK:</span> "<span style="color: #4271ae; text-decoration: underline;">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</span>"
+    <span style="color: #f5871f;">:PUBDATE:</span> <span style="color: #4271ae; text-decoration: underline;">&lt;2013-05-30&gt;</span>
+    <span style="color: #f5871f;">:END:</span>
+    <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
+    </pre>
+  </div>
+
+  <p>
+    I exclude the first three lines, since they only contain <code>#+title</code>, <code>#+date</code>, and <code>#+tags</code>. You should at least exclude the <code>#+title</code> line. Otherwise, <code>ox-rss</code> will get confused about which title to choose for the feed.
   </p>
 
   <p>
-    This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!
+    You can even create a meta publishing project that executes all three projects in one fell swoop!
   </p>
 
-  <p>
-    Note that since we are only redrawing the background and the line, some detail in the axes will be overwritten. To also draw the spines, use <code>for spine in ax.spines.values(): ax.draw_artist(spine)</code>. To draw the axes, use <code>ax.draw_artist(ax.xaxis)</code> and <code>ax.draw_artist(ax.yaxis)</code>. If you draw all of them, you get roughly the same performance as <code>fig.canvas.draw()</code>. The axes in particular are quite expensive.
-  </p>
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #3e999f;">"blog"</span>
+    <span style="color: #8959a8;">:components</span> (<span style="color: #3e999f;">"blog-content"</span> <span style="color: #3e999f;">"blog-static"</span> <span style="color: #3e999f;">"blog-rss"</span>))
+    </pre>
+  </div>
 
   <p>
-    There is also <a href="http://stackoverflow.com/a/8956211/1034">a way</a> of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.
+    There is one more thing that is kind of fiddly though: As I said, I use Disqus for comments, but I don&rsquo;t want to have comment boxes on the front page or the archive. Thankfully though, <code>ox-html</code> allows you to set <code>:html-preamble</code> and <code>:html-postamble</code> to a function, in which case that function can decide what pre/postamble to draw! The function can take an optional argument that contains a <code>plist</code> of article metadata. In this case, I decide on the <code>:title</code> metadata whether to print the archive link and Disqus, only the archive link, or neither:
   </p>
 
-  <p>
-    In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!
-  </p>
+  <div class="org-src-container">
+
+    <pre class="src src-elisp"><span style="color: #8959a8;">:html-postamble</span>
+    (<span style="color: #718c00;">lambda</span> (info)
+    <span style="color: #8959a8;">"Do not show disqus for Archive and Recent Posts"</span>
+    (<span style="color: #718c00;">cond</span> ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Archive"</span>)
+    <span style="color: #3e999f;">""</span>)
+    ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Recent Posts"</span>)
+    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+    (t
+    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+    <span style="color: #3e999f;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+    <span style="color: #3e999f;">     &lt;script type=\"text/javascript\"&gt;</span>
+    <span style="color: #3e999f;">     ..."</span>
+    </pre>
+  </div>
 
   <p>
-    <b>EDIT</b>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.
+    This should get you started! For completeness, here is my complete configuration:
   </p>
-  ]]></description>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-html</span>)
+    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-rss</span>)
+    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-publish</span>)
+    (setq org-publish-project-alist
+    '((<span style="color: #3e999f;">"blog"</span>
+    <span style="color: #8959a8;">:components</span> (<span style="color: #3e999f;">"blog-content"</span> <span style="color: #3e999f;">"blog-static"</span> <span style="color: #3e999f;">"blog-rss"</span>))
+    (<span style="color: #3e999f;">"blog-content"</span>
+    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+    <span style="color: #8959a8;">:html-extension</span> <span style="color: #3e999f;">"html"</span>
+    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+    <span style="color: #8959a8;">:publishing-function</span> (org-html-publish-to-html)
+    <span style="color: #8959a8;">:auto-sitemap</span> t
+    <span style="color: #8959a8;">:sitemap-filename</span> <span style="color: #3e999f;">"archive.org"</span>
+    <span style="color: #8959a8;">:sitemap-title</span> <span style="color: #3e999f;">"Archive"</span>
+    <span style="color: #8959a8;">:sitemap-sort-files</span> anti-chronologically
+    <span style="color: #8959a8;">:sitemap-style</span> list
+    <span style="color: #8959a8;">:makeindex</span> t
+    <span style="color: #8959a8;">:recursive</span> t
+    <span style="color: #8959a8;">:section-numbers</span> nil
+    <span style="color: #8959a8;">:with-toc</span> nil
+    <span style="color: #8959a8;">:with-latex</span> t
+    <span style="color: #8959a8;">:html-head-include-default-style</span> nil
+    <span style="color: #8959a8;">:html-head-include-scripts</span> nil
+    <span style="color: #8959a8;">:html-head-extra</span>
+    <span style="color: #3e999f;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
+    <span style="color: #3e999f;">                href=\"http://bastibe.de/rss.xml\"</span>
+    <span style="color: #3e999f;">                title=\"RSS feed for bastibe.de\"&gt;</span>
+    <span style="color: #3e999f;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
+    <span style="color: #3e999f;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
+    <span style="color: #3e999f;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+    <span style="color: #3e999f;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
+    <span style="color: #3e999f;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
+    <span style="color: #3e999f;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
+    <span style="color: #8959a8;">:html-preamble</span>
+    <span style="color: #3e999f;">"&lt;div class=\"header\"&gt;</span>
+    <span style="color: #3e999f;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
+    <span style="color: #3e999f;">              &lt;div class=\"sitelinks\"&gt;</span>
+    <span style="color: #3e999f;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
+    <span style="color: #3e999f;">              &lt;/div&gt;</span>
+    <span style="color: #3e999f;">          &lt;/div&gt;"</span>
+    <span style="color: #8959a8;">:html-postamble</span>
+    (<span style="color: #718c00;">lambda</span> (info)
+    <span style="color: #8959a8;">"Do not show disqus for Archive and Recent Posts"</span>
+    (<span style="color: #718c00;">cond</span> ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Archive"</span>) <span style="color: #3e999f;">""</span>)
+    ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Recent Posts"</span>)
+    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+    (t
+    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+    <span style="color: #3e999f;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+    <span style="color: #3e999f;">              &lt;script type=\"text/javascript\"&gt;</span>
+    <span style="color: #3e999f;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
+    <span style="color: #3e999f;">              var disqus_shortname = 'bastibe';</span>
+    <span style="color: #3e999f;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
+    <span style="color: #3e999f;">              (function() {</span>
+    <span style="color: #3e999f;">                var dsq = document.createElement('script');</span>
+    <span style="color: #3e999f;">                dsq.type = 'text/javascript';</span>
+    <span style="color: #3e999f;">                dsq.async = true;</span>
+    <span style="color: #3e999f;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
+    <span style="color: #3e999f;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
+    <span style="color: #3e999f;">                  })();</span>
+    <span style="color: #3e999f;">              &lt;/script&gt;</span>
+    <span style="color: #3e999f;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
+    <span style="color: #3e999f;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
+    <span style="color: #3e999f;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
+    <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">"rss.org</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">archive.org</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">theindex.org"</span>)
+    (<span style="color: #3e999f;">"blog-rss"</span>
+    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+    <span style="color: #8959a8;">:publishing-function</span> (org-rss-publish-to-rss)
+    <span style="color: #8959a8;">:html-link-home</span> <span style="color: #3e999f;">"http://bastibe.de/"</span>
+    <span style="color: #8959a8;">:html-link-use-abs-url</span> t
+    <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">".*"</span>
+    <span style="color: #8959a8;">:include</span> (<span style="color: #3e999f;">"rss.org"</span>)
+    <span style="color: #8959a8;">:with-toc</span> nil
+    <span style="color: #8959a8;">:section-numbers</span> nil
+    <span style="color: #8959a8;">:title</span> <span style="color: #3e999f;">"Bastis Scratchpad on the Internet"</span>)
+    (<span style="color: #3e999f;">"blog-static"</span>
+    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/static"</span>
+    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"png</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">jpg</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">css"</span>
+    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish/static"</span>
+    <span style="color: #8959a8;">:recursive</span> t
+    <span style="color: #8959a8;">:publishing-function</span> org-publish-attachment)))
+  </pre>
+</div>
+
+<p>
+  All other sources, including the source code to all blog posts, can be found on <a href="https://github.com/bastibe/bastibe.github.com">Github</a> (the <i>master</i> branch contains HTML, the <i>source</i> branch contains Org).
+</p>
+]]></description>
+</item>
+<item>
+  <title>Speeding up Matplotlib</title>
+  <link>http://bastibe.de/"http://bastibe.de/2013-05-30-speeding-up-matplotlib.html"</link>
+  <guid isPermaLink="false">http://bastibe.de/"http://bastibe.de/2013-05-30-speeding-up-matplotlib.html"</guid>
+  <pubDate>Thu, 30 May 2013 00:00:00 +0200</pubDate>
+
+  <description><![CDATA[<p>
+  For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
+</p>
+
+<p>
+  Well... speed. If there is one thing I could criticize about Matplotlib, it is its relative slowness. To measure that, lets make a very simple line plot and draw some random numbers as quickly as possible:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python"><span style="color: #718c00;">import</span> matplotlib.pyplot <span style="color: #718c00;">as</span> plt
+  <span style="color: #718c00;">import</span> numpy <span style="color: #718c00;">as</span> np
+  <span style="color: #718c00;">import</span> time
+
+  <span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+
+  <span style="color: #eab700;">tstart</span> = time.time()
+  <span style="color: #eab700;">num_plots</span> = 0
+  <span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+  ax.clear()
+  ax.plot(np.random.randn(100))
+  plt.pause(0.001)
+  <span style="color: #eab700;">num_plots</span> += 1
+  <span style="color: #718c00;">print</span>(num_plots)
+  </pre>
+</div>
+
+<p>
+  On my machine, I get about 11 plots per second. I am using <code>pause()</code> here to update the plot without blocking. The correct way to do this is to use <code>draw()</code> instead, but due to a bug in the Qt4Agg backend, you can&rsquo;t use it there. If you are not using the Qt4Agg backend, <code>draw()</code> is supposedly the correct choice.
+</p>
+
+<p>
+  For a single plot, ten plots per second is not terrible. But then, this is really the simplest case possible, so ten frames per second in the simplest case probably means bad things for not so simple cases.
+</p>
+
+<p>
+  One thing that really takes time here is creating all the axes and text labels over and over again. So let&rsquo;s not do that.
+</p>
+
+<p>
+  Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effectively deleting everything about the plot, then re-creating it for every frame, we can keep an existing plot and only modify its data:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+  line, = ax.plot(np.random.randn(100))
+
+  <span style="color: #eab700;">tstart</span> = time.time()
+  <span style="color: #eab700;">num_plots</span> = 0
+  <span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+  line.set_ydata(np.random.randn(100))
+  plt.pause(0.001)
+  <span style="color: #eab700;">num_plots</span> += 1
+  <span style="color: #718c00;">print</span>(num_plots)
+  </pre>
+</div>
+
+<p>
+  which yields about 26 plots per second. Not bad for a simple change like this. The downside is that the axes are not re-scaled any longer when the data changes. Thus, they won&rsquo;t change their limits based on the data any more.
+</p>
+
+<p>
+  Profiling this yields some interesting results:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+  <colgroup>
+    <col  class="right" />
+
+    <col  class="right" />
+
+    <col  class="right" />
+
+    <col  class="right" />
+
+    <col  class="right" />
+
+    <col  class="left" />
+  </colgroup>
+  <tbody>
+    <tr>
+      <td class="right">ncalls</td>
+      <td class="right">tottime</td>
+      <td class="right">percall</td>
+      <td class="right">cumtime</td>
+      <td class="right">percall</td>
+      <td class="left">filename:lineno(function)</td>
+    </tr>
+
+    <tr>
+      <td class="right">15</td>
+      <td class="right">0.167</td>
+      <td class="right">0.011</td>
+      <td class="right">0.167</td>
+      <td class="right">0.011</td>
+      <td class="left">{built-in method sleep)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  The one function that uses the biggest chunk of runtime is <code>sleep()</code>, of all things. Clearly, this is not what we want. Delving deeper into the profiler shows that this is indeed happening in the call do <code>pause()</code>. Then again, I <i>was</i> wondering if using <i>pause</i> really was a great idea for performance...
+</p>
+
+<p>
+  As it turns out, <code>pause()</code> internally calls <code>fig.canvas.draw()</code>, then <code>plt.show()</code>, then <code>fig.canvas.start_event_loop()</code>. The default implementation of <code>fig.canvas.start_event_loop()</code> then calls <code>fig.canvas.flush_events()</code>, then sleeps for the requested time. To add insult to injury, it even insists on sleeping at least one hundredth of a second, which actually explains the profiler output of 0.167 seconds of <code>sleep()</code> for 15 calls very well.
+</p>
+
+<p>
+  Putting this all together now yields:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+  line, = ax.plot(np.random.randn(100))
+
+  <span style="color: #eab700;">tstart</span> = time.time()
+  <span style="color: #eab700;">num_plots</span> = 0
+  <span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+  line.set_ydata(np.random.randn(100))
+  fig.canvas.draw()
+  fig.canvas.flush_events()
+  <span style="color: #eab700;">num_plots</span> += 1
+  <span style="color: #718c00;">print</span>(num_plots)
+  </pre>
+</div>
+
+<p>
+  which now plots about 40 frames per second. Note that the call to <code>show()</code> mentioned earlier can be omitted since the figure is already on screen. <code>flush_events()</code> just runs the Qt event loop, so there is probably nothing to optimize there.
+</p>
+
+<p>
+  The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What this really is doing is drawing all the artists contained in the <code>ax</code>. Those artists can be accessed using <code>ax.get_children()</code>. For a simple plot like this, the artists are:
+</p>
+
+<ul class="org-ul">
+  <li>the background <code>ax.patch</code>
+  </li>
+  <li>the line, as returned from the <code>plot()</code> function
+  </li>
+  <li>the spines <code>ax.spines</code>
+  </li>
+  <li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code>
+  </li>
+</ul>
+
+<p>
+  What we can do here is to selectively draw only the parts that are actually changing. That is, at least the background and the line. To only redraw these, the code now looks like this:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+  line, = ax.plot(np.random.randn(100))
+  plt.show(block=<span style="color: #4271ae;">False</span>)
+
+  <span style="color: #eab700;">tstart</span> = time.time()
+  <span style="color: #eab700;">num_plots</span> = 0
+  <span style="color: #718c00;">while</span> time.time()-tstart &lt; 5:
+  line.set_ydata(np.random.randn(100))
+  ax.draw_artist(ax.patch)
+  ax.draw_artist(line)
+  fig.canvas.update()
+  fig.canvas.flush_events()
+  <span style="color: #eab700;">num_plots</span> += 1
+  <span style="color: #718c00;">print</span>(num_plots/5)
+  </pre>
+</div>
+
+<p>
+  Note that you have to add <code>fig.canvas.update()</code> to copy the newly rendered lines to the drawing backend.
+</p>
+
+<p>
+  This now plots about 500 frames per second. Five hundred times per second! Frankly, this is quite amazing!
+</p>
+
+<p>
+  Note that since we are only redrawing the background and the line, some detail in the axes will be overwritten. To also draw the spines, use <code>for spine in ax.spines.values(): ax.draw_artist(spine)</code>. To draw the axes, use <code>ax.draw_artist(ax.xaxis)</code> and <code>ax.draw_artist(ax.yaxis)</code>. If you draw all of them, you get roughly the same performance as <code>fig.canvas.draw()</code>. The axes in particular are quite expensive.
+</p>
+
+<p>
+  There is also <a href="http://stackoverflow.com/a/8956211/1034">a way</a> of drawing the complete figure once and copying the complete but empty background, then reinstating that and only plotting a new line on top of it. This is equally fast as the code above without any visual artifacts, but breaks if you resize the plot.
+</p>
+
+<p>
+  In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotlib by default values quality over performance. But if you really need the performance at some point, it is flexible and hackable enough to let you tweak it to your hearts content. Really, an amazing piece of technology!
+</p>
+
+<p>
+  <b>EDIT</b>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.
+</p>
+]]></description>
 </item>
 <item>
   <title>A Python Primer for Matlab Users</title>
