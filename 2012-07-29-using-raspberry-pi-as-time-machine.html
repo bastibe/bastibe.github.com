@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title>
-<!-- 2013-11-16 Sat 11:19 -->
+<!-- 2013-11-16 Sat 11:25 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -89,11 +89,11 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </pre>
 
 <p>
-(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)
+<del>(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)</del>
 </p>
 
 <p>
-I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:
+<del>I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:</del>
 </p>
 
 <div class="org-src-container">
@@ -116,7 +116,11 @@ I am also not quite sure whether I actually had to create a new file <i>/etc/ava
 </div>
 
 <p>
-And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.
+<del>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.</del>
+</p>
+
+<p>
+<b>Edit:</b> Turns out, all these were not necessary. Thank you, reader Philipp, for trying them out!
 </p>
 
 <p>
