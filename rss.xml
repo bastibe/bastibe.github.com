@@ -14,9 +14,9 @@
   <link>http://bastibe.de/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Wed, 13 Nov 2013 18:12:39 +0100</pubDate>
-  <lastBuildDate>Wed, 13 Nov 2013 18:12:39 +0100</lastBuildDate>
-  <generator>Emacs 24.3 Org-mode 8.2.2</generator>
+  <pubDate>Sat, 16 Nov 2013 10:58:22 +0100</pubDate>
+  <lastBuildDate>Sat, 16 Nov 2013 10:58:22 +0100</lastBuildDate>
+  <generator>Emacs 24.3 Org-mode 8.2.3b</generator>
   <webMaster>bb@randomtask (Bastian Bechtold)</webMaster>
   <image>
     <url>http://orgmode.org/img/org-mode-unicorn-logo.png</url>
@@ -130,9 +130,9 @@
 
     <pre class="src src-org"><span style="color: #718c00;">#+TITLE:</span> <span style="color: #f5871f; font-size: 144%; font-weight: bold;">RECENT POSTS</span>
 
-    <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][Speeding up Matplotlib]]</span>
+    <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">Speeding up Matplotlib</span>
     <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
-    <span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][read more...]]</span>
+    <span style="color: #4271ae; text-decoration: underline;">read more...</span>
     </pre>
   </div>
 
@@ -547,7 +547,273 @@
 <p>
   Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+  <h3 id="sec-3-1">Python as a Matlab replacement</h3>
+  <p>
+    The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
+  </p>
+
+  <ul class="org-ul">
+    <li>Numpy (the matrix engine)
+    </li>
+    <li>Scipy (matrix manipulation)
+    </li>
+    <li>Matplotlib (plotting)
+    </li>
+  </ul>
+
+  <p>
+    You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.
+  </p>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+  <h3 id="sec-3-2">A 30,000 foot overview</h3>
+  <p>
+    Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
+  </p>
+
+  <p>
+    Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hold data of any type, as in:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Python</span>
+    <span style="color: #eab700;">a</span> = 5         <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">a number</span>
+    <span style="color: #eab700;">a</span> = [1, 2, 3] <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">a list</span>
+    <span style="color: #eab700;">a</span> = <span style="color: #3e999f;">'text'</span>    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">a string</span>
+    </pre>
+  </div>
+
+  <p>
+    Contrast this with C, where you can not assign different data types to the same variable:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-c"><span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">C</span>
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">a</span> = 5;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">b</span>[3] = {1.0, 2.0, 3.0};
+    <span style="color: #4271ae;">char</span> <span style="color: #eab700;">c</span>[] = <span style="color: #3e999f;">"text"</span>;
+    </pre>
+  </div>
+
+  <p>
+    Unlike Matlab, Python is <i>strongly typed</i>, that is, you can not add a number to a string.
+    In Matlab, adding a single number to a string will convert that string into an array of numbers, then add the single number to each of the numbers in the array. Python will simply throw an error.
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-octave"><span style="color: #8e908c; font-style: italic;">% </span><span style="color: #8e908c; font-style: italic;">Matlab</span>
+    a = <span style="color: #3e999f;">'text'</span>
+    b = a + 5 <span style="color: #8e908c; font-style: italic;">% </span><span style="color: #8e908c; font-style: italic;">[121 106 125 121]</span>
+    </pre>
+  </div>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Python</span>
+    <span style="color: #eab700;">a</span> = <span style="color: #3e999f;">'text'</span>
+    <span style="color: #eab700;">b</span> = a + 5 <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
+    </pre>
+  </div>
+
+  <p>
+    Unlike Matlab, every Python file can contain as many functions as you like. Basically, you can organize your code in as many files as you want. To access functions from other files, use <code>import filename</code>.
+  </p>
+
+  <p>
+    Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.
+  </p>
+
+  <p>
+    Unlike Matlab, the source code of Python is readily available. Every detail of Python&rsquo;s inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.
+  </p>
+</div>
+<div id="outline-container-sec-3-3" class="outline-3">
+  <h3 id="sec-3-3">Reading Python</h3>
+  <p>
+    When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #718c00;">import</span> numpy
+    <span style="color: #eab700;">a</span> = numpy.zeros(10, 1)
+    </pre>
+  </div>
+
+  <p>
+    This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of Numpy into the global environment like this:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #718c00;">from</span> numpy <span style="color: #718c00;">import</span> *
+    <span style="color: #eab700;">a</span> = ones(30, 1)
+    </pre>
+  </div>
+
+  <p>
+    Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib stack in one piece:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #718c00;">from</span> pylab <span style="color: #718c00;">import</span> *
+    <span style="color: #eab700;">a</span> = randn(100, 1)
+    plot(a)
+    show()
+    </pre>
+  </div>
+
+  <p>
+    Note that Python does not plot immediately when you type <code>plot()</code>. Instead, it will collect all plotting information and only show it on the screen once you type <code>show()</code>.
+  </p>
+
+  <p>
+    So far, the code you have seen should look pretty familiar. A few differences:
+  </p>
+
+  <ul class="org-ul">
+    <li>No semicolons at the end of lines;
+    In order to print stuff to the console, use the <code>print()</code> function instead.
+    </li>
+
+    <li>No <code>end</code> anywhere.
+    In Python, blocks of code are identified by indentation and they always start with a colon like so:
+    </li>
+  </ul>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #8959a8;">sum</span> = 0
+    <span style="color: #718c00;">for</span> n <span style="color: #718c00;">in</span> [1, 2, 3, 4, 5]:
+    <span style="color: #8959a8;">sum</span> = <span style="color: #8959a8;">sum</span> + n
+    <span style="color: #718c00;">print</span>(<span style="color: #8959a8;">sum</span>)
+    </pre>
+  </div>
+
+  <ul class="org-ul">
+    <li>Function definitions are different.
+    They use the <code>def</code> keyword instead of <code>function</code>.
+    You don&rsquo;t have to name the output variable names in the definition and instead use <code>return()</code>.
+    </li>
+  </ul>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Python</span>
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">abs</span>(number):
+    <span style="color: #718c00;">if</span> number &gt; 0:
+    <span style="color: #718c00;">return</span> number
+    <span style="color: #718c00;">else</span>:
+    <span style="color: #718c00;">return</span> -number
+    </pre>
+  </div>
+
+  <div class="org-src-container">
+
+    <pre class="src src-octave"><span style="color: #8e908c; font-style: italic;">% </span><span style="color: #8e908c; font-style: italic;">Matlab</span>
+    <span style="color: #718c00;">function</span> [out] = <span style="color: #f5871f;">abs</span>(number)
+    <span style="color: #718c00;">if</span> number <span style="color: #8959a8;">&gt;</span> 0
+    out = number
+    <span style="color: #718c00;">else</span>
+    out = -number
+    <span style="color: #718c00;">end</span>
+    <span style="color: #718c00;">end</span>
+    </pre>
+  </div>
+
+  <ul class="org-ul">
+    <li>There is no easy way to write out a list or matrix.
+    Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <i>must</i> use commas to separate items and can not use semicolons to separate lines.
+    </li>
+  </ul>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">create a numpy matrix:</span>
+    <span style="color: #eab700;">m</span> = array([[1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]])
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">create a Python list:</span>
+    <span style="color: #eab700;">l</span> = [1 2 3]
+    </pre>
+  </div>
+
+  <ul class="org-ul">
+    <li>Arrays access uses brackets and is numbered from 0.
+    Thus, ranges <i>exclude</i> the last number (see below).
+    Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.
+    </li>
+  </ul>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #eab700;">a</span> = linspace(1, 10, 10)
+    <span style="color: #eab700;">one</span> = a[0]
+    <span style="color: #eab700;">two</span> = a[1]
+
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">"6:8" is a range of two elements:</span>
+    <span style="color: #eab700;">a</span>[6:8] = [70, 80] <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">&lt;-- a Python list!</span>
+    </pre>
+  </div>
+</div>
+<div id="outline-container-sec-3-4" class="outline-3">
+  <h3 id="sec-3-4">Common traps</h3>
+  <ul class="org-ul">
+    <li>Array slicing does not copy.
+    </li>
+  </ul>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #eab700;">a</span> = array([1 2 3 4 5])
+    <span style="color: #eab700;">b</span> = a[1:4] <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">[2 3 4]</span>
+    <span style="color: #eab700;">b</span>[1] = rand() <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">this will change a and b!</span>
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">make a copy like this:</span>
+    <span style="color: #eab700;">c</span> = array(a[1:4], copy=<span style="color: #4271ae;">True</span>) <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">copy=True can be omitted</span>
+    <span style="color: #eab700;">c</span>[1] = rand() <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">changes only c</span>
+    </pre>
+  </div>
+  <ul class="org-ul">
+    <li>Arrays retain their data type.
+    You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).
+    </li>
+  </ul>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">pretend this came from a wave file:</span>
+    <span style="color: #eab700;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
+    <span style="color: #eab700;">a</span> = a * 10 <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">int16 only goes to 32768!</span>
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
+    </pre>
+  </div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+  <h3 id="sec-3-5">Going further</h3>
+  <p>
+    Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
+  </p>
+
+  <p>
+    However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.
+  </p>
+
+  <p>
+    Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation site</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Cookbook">tutorial</a> and <a href="http://scipy.org/Getting_Started">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.
+  </p>
+
+  <p>
+    A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/">project euler</a>.
+  </p>
+</div>
+]]></description>
 </item>
 <item>
   <title>Real Time Signal Processing in Python</title>
@@ -566,7 +832,396 @@
 <p>
   However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let&rsquo;s define an iterative algorithm that is not vectorizable:
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+  <h3 id="sec-4-1">A Simple Limiter</h3>
+  <p>
+    A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
+  </p>
+
+  <p>
+    If a signal peak is detected, the limiter will thus need a certain amount of time to reduce the gain accordingly. If you still want to prevent all peaks, the limiter will have to know of the peaks in advance, which is of course impossible in a real time system. Instead, the signal is delayed by a short time to give the limiter time to adjust the system gain before the peak is actually played. To keep this delay as short as possible, this &ldquo;attack&rdquo; phase where the gain is decreased should be very short, too. &ldquo;Releasing&rdquo; the gain back up to its original value can be done more slowly, thus introducing less distortion.
+  </p>
+
+  <p>
+    With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope \(e[n]\) that catches all the peaks and smoothly decays after them:
+  </p>
+
+  <p>
+    \[
+    e[n] = \max( |s[n]|, e[n-1] \cdot f_r )
+    \]
+  </p>
+
+  <p>
+    where \(s[n]\) is the current signal and \(0 < f_r < 1\) is a release factor.
+  </p>
+
+  <p>
+    If this is applied to a signal, it will create an envelope like this:
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png" />
+    </p>
+  </div>
+
+  <p>
+    Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain \(g_t[n]\) can be calculated using
+  </p>
+
+  \begin{equation}
+  g_t[n] = \begin{cases}
+  1 & e[n] < t \\\\
+  1 + t - e[n] & e[n] > t
+  \end{cases}
+  \end{equation}
+
+  <p>
+    Now, the output gain \(g[n]\) can smoothly move towards that target gain using
+  </p>
+
+  <p>
+    \[
+    g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a)
+    \]
+  </p>
+
+  <p>
+    where \(0 < f_a \ll f_r\) is the attack factor.
+  </p>
+
+  <p>
+    Here you can see how that would look in practice:
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png" />
+    </p>
+  </div>
+
+  <p>
+    Zooming in on one of the limited section reveals that the gain is actually moving smoothly.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png" />
+    </p>
+  </div>
+
+  <p>
+    This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.
+  </p>
+
+  <p>
+    In Python, this might look like this:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #718c00;">class</span> <span style="color: #4271ae;">Limiter</span>:
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">__init__</span>(<span style="color: #718c00;">self</span>, attack_coeff, release_coeff, delay, dtype=float32):
+    <span style="color: #718c00;">self</span>.delay_index = 0
+    <span style="color: #718c00;">self</span>.envelope = 0
+    <span style="color: #718c00;">self</span>.gain = 1
+    <span style="color: #718c00;">self</span>.delay = delay
+    <span style="color: #718c00;">self</span>.delay_line = zeros(delay, dtype=dtype)
+    <span style="color: #718c00;">self</span>.release_coeff = release_coeff
+    <span style="color: #718c00;">self</span>.attack_coeff = attack_coeff
+
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">limit</span>(<span style="color: #718c00;">self</span>, signal, threshold):
+    <span style="color: #718c00;">for</span> i <span style="color: #718c00;">in</span> arange(<span style="color: #8959a8;">len</span>(signal)):
+    <span style="color: #718c00;">self</span>.delay_line[<span style="color: #718c00;">self</span>.delay_index] = signal[i]
+    <span style="color: #718c00;">self</span>.delay_index = (<span style="color: #718c00;">self</span>.delay_index + 1) % <span style="color: #718c00;">self</span>.delay
+
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">calculate an envelope of the signal</span>
+    <span style="color: #718c00;">self</span>.envelope *= <span style="color: #718c00;">self</span>.release_coeff
+    <span style="color: #718c00;">self</span>.envelope  = <span style="color: #8959a8;">max</span>(<span style="color: #8959a8;">abs</span>(signal[i]), <span style="color: #718c00;">self</span>.envelope)
+
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">have self.gain go towards a desired limiter gain</span>
+    <span style="color: #718c00;">if</span> <span style="color: #718c00;">self</span>.envelope &gt; threshold:
+    <span style="color: #eab700;">target_gain</span> = (1+threshold-<span style="color: #718c00;">self</span>.envelope)
+    <span style="color: #718c00;">else</span>:
+    <span style="color: #eab700;">target_gain</span> = 1.0
+    <span style="color: #718c00;">self</span>.gain = ( <span style="color: #718c00;">self</span>.gain*<span style="color: #718c00;">self</span>.attack_coeff +
+    target_gain*(1-<span style="color: #718c00;">self</span>.attack_coeff) )
+
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">limit the delayed signal</span>
+    <span style="color: #eab700;">signal</span>[i] = <span style="color: #718c00;">self</span>.delay_line[<span style="color: #718c00;">self</span>.delay_index] * <span style="color: #718c00;">self</span>.gain
+    </pre>
+  </div>
+
+  <p>
+    Note that this limiter does not <i>actually</i> clip all peaks completely, since the envelope for a single peak will have decayed a bit before the target gain will have reached it. Thus, the output gain will actually be slightly higher than what would be necessary to limit the output to the threshold. Since the attack factor is supposed to be significantly smaller than the release factor, this does not matter much though.
+  </p>
+
+  <p>
+    Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\) in terms of the time they take to reach their target and the threshold \(t\) in dB FS.
+  </p>
+</div>
+<div id="outline-container-sec-4-2" class="outline-3">
+  <h3 id="sec-4-2">Implementing audio processing in Python</h3>
+  <p>
+    A real-time audio processing framework using PyAudio would look like this:
+  </p>
+
+  <p>
+    (<code>callback</code> is a function that will be defined shortly)
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #718c00;">from</span> pyaudio <span style="color: #718c00;">import</span> PyAudio, paFloat32
+
+    <span style="color: #eab700;">pa</span> = PyAudio()
+
+    <span style="color: #eab700;">stream</span> = pa.<span style="color: #8959a8;">open</span>(<span style="color: #8959a8;">format</span> = paFloat32,
+    channels = 1,
+    rate = 44100,
+    output = <span style="color: #4271ae;">True</span>,
+    frames_per_buffer = 1024,
+    stream_callback = callback)
+
+    <span style="color: #718c00;">while</span> stream.is_active():
+    sleep(0.1)
+
+    stream.close()
+    pa.terminate()
+    </pre>
+  </div>
+
+  <p>
+    This will open a <code>stream</code>, which is a PyAudio construct that manages input and output to/from one sound device. In this case, it is configured to use <code>float</code> values, only open one channel, play audio at a sample rate of 44100 Hz, have that one channel be output only and call the function <code>callback</code> every 1024 samples.
+  </p>
+
+  <p>
+    Since the <code>callback</code> will be executed on a different thread, control flow will continue immediately after <code>pa.open()</code>. In order to analyze the resulting signal, the <code>while stream.is_active()</code> loop waits until the signal has been processed completely.
+  </p>
+
+  <p>
+    Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-python"><span style="color: #eab700;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
+
+    <span style="color: #718c00;">def</span> <span style="color: #f5871f;">callback</span>(in_data, frame_count, time_info, flag):
+    <span style="color: #718c00;">if</span> flag:
+    <span style="color: #718c00;">print</span>(<span style="color: #3e999f;">"Playback Error: %i"</span> % flag)
+    <span style="color: #eab700;">played_frames</span> = counter
+    <span style="color: #eab700;">counter</span> += frame_count
+    limiter.limit(signal[played_frames:counter], threshold)
+    <span style="color: #718c00;">return</span> signal[played_frames:counter], paContinue
+    </pre>
+  </div>
+
+  <p>
+    The <code>paContinue</code> at the end is a flag signifying that the audio processing is not done yet and the <code>callback</code> wants to be called again. Returning <code>paComplete</code> or an insufficient number of samples instead would stop audio processing after the current block and thus invalidate <code>stream.is_active()</code> and resume control flow in the snippet above.
+  </p>
+
+  <p>
+    Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).
+  </p>
+</div>
+<div id="outline-container-sec-4-3" class="outline-3">
+  <h3 id="sec-4-3">Speeding up execution using Cython</h3>
+  <p>
+    The limiter defined above could be rewritten in C like this:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-c"><span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">this corresponds to the Python Limiter class.</span>
+    <span style="color: #718c00;">typedef</span> <span style="color: #718c00;">struct</span> <span style="color: #4271ae;">limiter_state_t</span> {
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_index</span>;
+    <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_length</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">envelope</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">current_gain</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_coeff</span>;
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_coeff</span>;
+    } <span style="color: #4271ae;">limiter_state</span>;
+
+    <span style="color: #8959a8;">#define</span> <span style="color: #f5871f;">MAX</span>(<span style="color: #eab700;">x</span>,<span style="color: #eab700;">y</span>) ((x)&gt;(y)?(x):(y))
+
+    <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">this corresponds to the Python __init__ function.</span>
+    <span style="color: #4271ae;">limiter_state</span> <span style="color: #f5871f;">init_limiter</span>(<span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_coeff</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_coeff</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_len</span>) {
+    <span style="color: #4271ae;">limiter_state</span> <span style="color: #eab700;">state</span>;
+    state.attack_coeff = attack_coeff;
+    state.release_coeff = release_coeff;
+    state.delay_index = 0;
+    state.envelope = 0;
+    state.current_gain = 1;
+    state.delay_length = delay_len;
+    <span style="color: #718c00;">return</span> state;
+    }
+
+    <span style="color: #4271ae;">void</span> <span style="color: #f5871f;">limit</span>(<span style="color: #4271ae;">float</span> *<span style="color: #eab700;">signal</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">block_length</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">threshold</span>,
+    <span style="color: #4271ae;">float</span> *<span style="color: #eab700;">delay_line</span>, <span style="color: #4271ae;">limiter_state</span> *<span style="color: #eab700;">state</span>) {
+    <span style="color: #718c00;">for</span>(<span style="color: #4271ae;">int</span> <span style="color: #eab700;">i</span>=0; i&lt;block_length; i++) {
+    delay_line[state-&gt;delay_index] = signal[i];
+    state-&gt;delay_index = (state-&gt;delay_index + 1) % state-&gt;delay_length;
+
+    <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">calculate an envelope of the signal</span>
+    state-&gt;envelope *= state-&gt;release_coeff;
+    state-&gt;envelope = MAX(fabs(signal[i]), state-&gt;envelope);
+
+    <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">have current_gain go towards a desired limiter target_gain</span>
+    <span style="color: #4271ae;">float</span> <span style="color: #eab700;">target_gain</span>;
+    <span style="color: #718c00;">if</span> (state-&gt;envelope &gt; threshold)
+    target_gain = (1+threshold-state-&gt;envelope);
+    <span style="color: #718c00;">else</span>
+    target_gain = 1.0;
+    state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
+    target_gain*(1-state-&gt;attack_coeff);
+
+    <span style="color: #8e908c; font-style: italic;">// </span><span style="color: #8e908c; font-style: italic;">limit the delayed signal</span>
+    signal[i] = delay_line[state-&gt;delay_index] * state-&gt;current_gain;
+    }
+    }
+  </pre>
+</div>
+
+<p>
+  In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.
+</p>
+
+<p>
+  Now in order to plug this code into Python I will use Cython. First of all, a &ldquo;Cython header&rdquo; file has to be created that declares all exported types and functions to Cython:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python">cdef extern <span style="color: #718c00;">from</span> <span style="color: #3e999f;">"limiter.h"</span>:
+  ctypedef struct limiter_state:
+  <span style="color: #8959a8;">int</span> delay_index
+  <span style="color: #8959a8;">int</span> delay_length
+  <span style="color: #8959a8;">float</span> envelope
+  <span style="color: #8959a8;">float</span> current_gain
+  <span style="color: #8959a8;">float</span> attack_coeff
+  <span style="color: #8959a8;">float</span> release_coeff
+
+  limiter_state init_limiter(<span style="color: #8959a8;">float</span> attack_factor, <span style="color: #8959a8;">float</span> release_factor, <span style="color: #8959a8;">int</span> delay_len)
+  void limit(<span style="color: #8959a8;">float</span> *signal, <span style="color: #8959a8;">int</span> block_length, <span style="color: #8959a8;">float</span> threshold,
+  <span style="color: #8959a8;">float</span> *delay_line, limiter_state *state)
+  </pre>
+</div>
+
+<p>
+  This is very similar to the C header file of the limiter:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-c"><span style="color: #718c00;">typedef</span> <span style="color: #718c00;">struct</span> <span style="color: #4271ae;">limiter_state_t</span> {
+  <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_index</span>;
+  <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_length</span>;
+  <span style="color: #4271ae;">float</span> <span style="color: #eab700;">envelope</span>;
+  <span style="color: #4271ae;">float</span> <span style="color: #eab700;">current_gain</span>;
+  <span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_coeff</span>;
+  <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_coeff</span>;
+  } <span style="color: #4271ae;">limiter_state</span>;
+
+  <span style="color: #4271ae;">limiter_state</span> <span style="color: #f5871f;">init_limiter</span>(<span style="color: #4271ae;">float</span> <span style="color: #eab700;">attack_factor</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">release_factor</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">delay_len</span>);
+  <span style="color: #4271ae;">void</span> <span style="color: #f5871f;">limit</span>(<span style="color: #4271ae;">float</span> *<span style="color: #eab700;">signal</span>, <span style="color: #4271ae;">int</span> <span style="color: #eab700;">block_length</span>, <span style="color: #4271ae;">float</span> <span style="color: #eab700;">threshold</span>,
+  <span style="color: #4271ae;">float</span> *<span style="color: #eab700;">delay_line</span>, <span style="color: #4271ae;">limiter_state</span> *<span style="color: #eab700;">state</span>);
+  </pre>
+</div>
+
+<p>
+  With that squared away, the C functions are accessible for Cython. Now, we only need a small Python wrapper around this code so it becomes usable from Python:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python"><span style="color: #718c00;">import</span> numpy <span style="color: #718c00;">as</span> np
+  cimport numpy <span style="color: #718c00;">as</span> np
+  cimport limiter
+
+  <span style="color: #eab700;">DTYPE</span> = np.float32
+  ctypedef np.float32_t DTYPE_t
+
+  cdef <span style="color: #718c00;">class</span> <span style="color: #4271ae;">Limiter</span>:
+  cdef limiter.limiter_state state
+  cdef np.ndarray delay_line
+  <span style="color: #718c00;">def</span> <span style="color: #f5871f;">__init__</span>(<span style="color: #718c00;">self</span>, <span style="color: #8959a8;">float</span> attack_coeff, <span style="color: #8959a8;">float</span> release_coeff,
+  <span style="color: #8959a8;">int</span> delay_length):
+  <span style="color: #718c00;">self</span>.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
+  <span style="color: #718c00;">self</span>.delay_line = np.zeros(delay_length, dtype=DTYPE)
+
+  <span style="color: #718c00;">def</span> <span style="color: #f5871f;">limit</span>(<span style="color: #718c00;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #8959a8;">float</span> threshold):
+  limiter.limit(&lt;<span style="color: #8959a8;">float</span>*&gt;np.PyArray_DATA(signal),
+  &lt;<span style="color: #8959a8;">int</span>&gt;<span style="color: #8959a8;">len</span>(signal), threshold,
+  &lt;<span style="color: #8959a8;">float</span>*&gt;np.PyArray_DATA(<span style="color: #718c00;">self</span>.delay_line),
+  &lt;limiter.limiter_state*&gt;&amp;<span style="color: #718c00;">self</span>.state)
+  </pre>
+</div>
+
+<p>
+  The first two lines set this file up to access Numpy arrays both from the Python domain and the C domain, thus bridging the gap. The <code>cimport limiter</code> imports the C functions and types from above. The <code>DTYPE</code> stuff is advertising the Numpy <code>float32</code> type to C.
+</p>
+
+<p>
+  The class is defined using <code>cdef</code> as a C data structure for speed. Also, Cython would naturally translate every C struct into a Python dict and vice versa, but we need to pass the struct to <code>limit</code> <i>and</i> have <code>limit</code> modify it. Thus, <code>cdef limiter.limiter_state state</code> makes Cython treat it as a C struct only. Finally, the <code>np.PyArray_DATA()</code> expressions expose the C arrays underlying the Numpy vectors. This is really handy since we don&rsquo;t have to copy any data around in order to modify the vectors from C.
+</p>
+
+<p>
+  As can be seen, the Cython implementation behaves nearly identically to the initial Python implementation (except for passing the <code>dtype</code> to the constructor) and can be used as a plug-in replacement (with the aforementioned caveat).
+</p>
+
+<p>
+  Finally, we need to build the whole contraption. The easiest way to do this is to use a setup file like this:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-python"><span style="color: #718c00;">from</span> distutils.core <span style="color: #718c00;">import</span> setup
+  <span style="color: #718c00;">from</span> distutils.extension <span style="color: #718c00;">import</span> Extension
+  <span style="color: #718c00;">from</span> Cython.Distutils <span style="color: #718c00;">import</span> build_ext
+  <span style="color: #718c00;">from</span> numpy <span style="color: #718c00;">import</span> get_include
+
+  <span style="color: #eab700;">ext_modules</span> = [Extension(<span style="color: #3e999f;">"cython_limiter"</span>,
+  sources=[<span style="color: #3e999f;">"cython_limiter.pyx"</span>,
+  <span style="color: #3e999f;">"limiter.c"</span>],
+  include_dirs=[<span style="color: #3e999f;">'.'</span>, get_include()])]
+
+  setup(
+  name = <span style="color: #3e999f;">"cython_limiter"</span>,
+  cmdclass = {<span style="color: #3e999f;">'build_ext'</span>: build_ext},
+  ext_modules = ext_modules
+  )
+  </pre>
+</div>
+
+<p>
+  With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.
+</p>
+</div>
+<div id="outline-container-sec-4-4" class="outline-3">
+  <h3 id="sec-4-4">Conclusion</h3>
+  <p>
+    In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
+  </p>
+
+  <p>
+    You can find all the source code in this article at <a href="https://github.com/bastibe/simple-cython-limiter">https://github.com/bastibe/simple-cython-limiter</a>
+  </p>
+</div>
+<div id="outline-container-sec-4-5" class="outline-3">
+  <h3 id="sec-4-5">Disclaimer</h3>
+  <ol class="org-ol">
+    <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.
+    </li>
+    <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don&rsquo;t divulge any company secrets. This limiter is not a descendant of any code I worked on.
+    </li>
+    <li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.
+    </li>
+  </ol>
+</div>
+]]></description>
 </item>
 <item>
   <title>An error occurred loading this content. Try again later.</title>
@@ -751,7 +1406,134 @@
 <p>
   Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-8-1" class="outline-3">
+  <h3 id="sec-8-1">When Emacs starts up, make it fit the left half of the screen</h3>
+  <p>
+    First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">set-frame-pixel-size</span> (frame width height)
+    <span style="color: #8959a8;">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
+    (<span style="color: #718c00;">let</span> ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
+    (pixels-per-char-height (/ (frame-pixel-height) (frame-height))))
+    (set-frame-size frame
+    (floor (/ width pixels-per-char-width))
+    (floor (/ height pixels-per-char-height)))))
+    </pre>
+  </div>
+
+  <p>
+    Next, a function that uses the above to set the frame size to exactly fit the left half of the screen. Note that the <code>excess-...</code> variables account for things like the menu bar, the dock or the task bar so you might have to adapt these values to your particular windowing environment. The values given here work for dockless OSX.
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">use-left-half-screen</span> ()
+    (interactive)
+    (<span style="color: #718c00;">let*</span> ((excess-width 32)
+    (excess-height 48)
+    (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
+    (screen-height (- (x-display-pixel-height) excess-height)))
+    (set-frame-pixel-size (selected-frame) half-screen-width screen-height)))
+    </pre>
+  </div>
+
+  <p>
+    Finally, when Emacs starts up, make it use half the screen. Just how I like it!
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #718c00;">if</span> window-system
+    (use-left-half-screen))
+    </pre>
+  </div>
+</div>
+<div id="outline-container-sec-8-2" class="outline-3">
+  <h3 id="sec-8-2">Make shell split windows auto-resize</h3>
+  <p>
+    Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
+    (<span style="color: #718c00;">lambda</span> ()
+    (<span style="color: #718c00;">when</span> (or (string-equal (buffer-name) <span style="color: #3e999f;">"*Python*"</span>)
+    (string-equal (buffer-name) <span style="color: #3e999f;">"*eshell*"</span>)
+    (string-equal (buffer-name) <span style="color: #3e999f;">"*tex-shell*"</span>))
+    (<span style="color: #718c00;">if</span> (not (eq (window-height) 15))
+    (enlarge-window (- 15 (window-height)))))))
+    </pre>
+  </div>
+</div>
+<div id="outline-container-sec-8-3" class="outline-3">
+  <h3 id="sec-8-3">Create a new line above/below the current one</h3>
+  <p>
+    There is one feature of Vim that I really missed: <code>o~/~O</code>, which &lsquo;opens&rsquo; a new line above or below the current one without changing the current line.
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">vi-open-line-above</span> ()
+    <span style="color: #8959a8;">"Insert a newline above the current line and put point at beginning."</span>
+    (interactive)
+    (<span style="color: #718c00;">unless</span> (bolp)
+    (beginning-of-line))
+    (newline)
+    (forward-line -1)
+    (indent-according-to-mode))
+
+    (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">vi-open-line-below</span> ()
+    <span style="color: #8959a8;">"Insert a newline below the current line and put point at beginning."</span>
+    (interactive)
+    (<span style="color: #718c00;">unless</span> (eolp)
+    (end-of-line))
+    (newline-and-indent))
+
+    (global-set-key (kbd <span style="color: #3e999f;">"C-o"</span>) 'vi-open-line-below)
+    (global-set-key (kbd <span style="color: #3e999f;">"M-o"</span>) 'vi-open-line-above)
+    </pre>
+  </div>
+</div>
+<div id="outline-container-sec-8-4" class="outline-3">
+  <h3 id="sec-8-4">When editing LaTeX, show PDF output in Emacs</h3>
+  <p>
+    Emacs provides an awesome mode for editing LaTeX files. But isn&rsquo;t it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
+  </p>
+
+  <p>
+    This function will open or refresh a split window with the generated PDF file in it. Thus, when I edit LaTeX, I will hit C-c C-c to compile, then C-c C-v to see the PDF. All that without having to leave the LaTeX file.
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-elisp"><span style="color: #8e908c; font-style: italic;">;; </span><span style="color: #8e908c; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
+    (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">open-show-pdf</span> ()
+    (interactive)
+    (<span style="color: #718c00;">let</span> ((tex-buffer-name (buffer-name))
+    (pdf-buffer-name (concat (TeX-master-file) <span style="color: #3e999f;">".pdf"</span>)))
+    (<span style="color: #718c00;">if</span> (get-buffer pdf-buffer-name)
+    (switch-to-buffer-other-window pdf-buffer-name)
+    (find-file-other-window pdf-buffer-name))
+    (<span style="color: #718c00;">if</span> (not (eq major-mode 'doc-view-mode))
+    (doc-view-mode))
+    (doc-view-revert-buffer t t)
+    (switch-to-buffer-other-window tex-buffer-name)))
+
+    (add-hook 'LaTeX-mode-hook
+    (<span style="color: #718c00;">lambda</span> ()
+    (define-key LaTeX-mode-map (kbd <span style="color: #3e999f;">"C-c C-v"</span>) 'open-show-pdf)
+    (visual-line-mode t)
+    (turn-on-reftex))
+    t)
+    </pre>
+  </div>
+</div>
+]]></description>
 </item>
 <item>
   <title>Emacs</title>
@@ -766,7 +1548,77 @@
 <p>
   Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-9-1" class="outline-3">
+  <h3 id="sec-9-1">Text editing</h3>
+  <p>
+    In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.
+  </p>
+
+  <p>
+    Here is one of my pet peeve with many text editors: Whenever I initiate a text search, a modal dialog box pops up where I have to enter the search phrase, then click a button to search for that word. In contrast <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search">great</a> <a href="http://vimdoc.sourceforge.net/htmldoc/usr_03.html#03.8">text</a> <a href="http://docs.sublimetext.info/en/latest/search_and_replace/search_and_replace.html">editors</a> allow searching for text without changing to a different window and show the results immediately while entering the search string. This is very fast and precise. In fact, it is so useful that searching is one of the most popular means of text navigation in text editors that have it.
+  </p>
+
+  <p>
+    This is a theme that goes through all these features: I look for stuff that is fast and precise, because this will enable more powerful applications of seemingly simple techniques.
+  </p>
+</div>
+<div id="outline-container-sec-9-2" class="outline-3">
+  <h3 id="sec-9-2">Outlining and task management</h3>
+  <p>
+    Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.
+  </p>
+
+  <p>
+    But with Emacs, I found out about <a href="http://orgmode.org">org-mode</a>, which is at its heart an outliner with a syntax somewhat like Markdown. It proved to be surprisingly powerful to be able to easily refile entries or whole sub-trees in my todo lists. Also, having trees be collapsible effectively enabled me to consolidate all my todo management into one file without that file becoming unmanageably big.
+  </p>
+
+  <p>
+    Add to that the more advanced task tracking features of org-mode, such as <a href="http://orgmode.org/features.html#clocking">time tracking</a> or <a href="http://orgmode.org/features.html#planning">advanced todo planning</a> and this has become one of the most pivotal tools I use daily.
+  </p>
+</div>
+<div id="outline-container-sec-9-3" class="outline-3">
+  <h3 id="sec-9-3">Shell interaction and operating system compatibility</h3>
+  <p>
+    Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.
+  </p>
+
+  <p>
+    Again, Emacs came to the rescue though: <a href="http://www.gnu.org/software/emacs/manual/html_node/eshell/What-is-Eshell_003f.html">Eshell</a> is a shell implemented in Emacs with no external dependencies. Thus, it comes installed on all my machines and works the same way on every operating system. Sadly though, Eshell is not quite full-featured and compatibility with some shell programs is kind of rough. In particular, it does not work well with <code>less</code> like scrolling buffers. However, some of those, like <code>man</code> or <code>info</code> are automatically opened in a special mode in Emacs itself, so this is not as bad as it sounds.
+  </p>
+
+  <p>
+    At more than one point, Eshell probably saved my sanity.
+  </p>
+</div>
+<div id="outline-container-sec-9-4" class="outline-3">
+  <h3 id="sec-9-4">Git interaction</h3>
+  <p>
+    Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.
+  </p>
+
+  <p>
+    Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.github.com/magit/magit.html#Introduction">magit</a>, which builds an interactive git interaction program within Emacs. With magit, all the major git commands are just a keystroke away and diffs or logs are easily accessible, too. It really is a major feat!
+  </p>
+</div>
+<div id="outline-container-sec-9-5" class="outline-3">
+  <h3 id="sec-9-5">Grab bag</h3>
+  <ul class="org-ul">
+    <li>Emacs&rsquo; integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.
+    </li>
+    <li>REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.
+    </li>
+    <li>Emacs&rsquo; <a href="http://www.gnu.org/software/auctex/">LaTeX mode</a> is amazingly powerful. Combine that with Emacs&rsquo; ability to display PDF files <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html">graphically</a> in a buffer and you have an awesome LaTeX environment.
+    </li>
+    <li>Emacs&rsquo; documentation is wonderful. I learned many a trick just idly leafing through the built in Emacs documentation.
+    </li>
+    <li>Built in package management for extensions is a great time saver. This is available in <a href="https://github.com/gmarik/vundle#about">Vim</a> and <a href="http://wbond.net/sublime_packages/package_control">Sublime Text</a> as an addon, too.
+    </li>
+    <li>Lisp is indeed beautiful and elisp is quite joyful to program. I never really went beyond simple configuration in Vim. My <code>.emacs</code> file contains some quite sophisticated small programs though.
+    </li>
+  </ul>
+</div>
+]]></description>
 </item>
 <item>
   <title>A Story about Schemes</title>
@@ -1020,7 +1872,133 @@
 <p>
   This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-14-1" class="outline-3">
+  <h3 id="sec-14-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h3>
+  <p>
+    Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
+  </p>
+
+  <p>
+    Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi&rsquo;s HDMI output to the LED display&rsquo;s Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.
+  </p>
+
+  <p>
+    After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi&rsquo;s IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <i>Internet Sharing</i> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.
+  </p>
+</div>
+<div id="outline-container-sec-14-2" class="outline-3">
+  <h3 id="sec-14-2">Setting up the hard drive</h3>
+  <p>
+    First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don&rsquo;t use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
+  </p>
+
+  <pre class="example">
+    /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
+  </pre>
+
+  <p>
+    Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won&rsquo;t allow any other network drive as Time Capsules.
+  </p>
+</div>
+<div id="outline-container-sec-14-3" class="outline-3">
+  <h3 id="sec-14-3">Setting up the shared folder</h3>
+  <p>
+    First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
+  </p>
+
+  <pre class="example">
+    /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
+  </pre>
+
+  <p>
+    Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
+  </p>
+
+  <pre class="example">
+    - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
+  </pre>
+
+  <p>
+    (maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)
+  </p>
+
+  <p>
+    I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:
+  </p>
+
+  <div class="org-src-container">
+
+    <pre class="src src-xml">&lt;?<span style="color: #718c00;">xml</span> <span style="color: #eab700;">version</span>=<span style="color: #3e999f;">"</span><span style="color: #3e999f;">1.0</span><span style="color: #3e999f;">"</span> <span style="color: #eab700;">standalone</span>=<span style="color: #3e999f;">'</span><span style="color: #3e999f;">no</span><span style="color: #3e999f;">'</span>?&gt;<span style="color: #8e908c; font-style: italic;">&lt;!--</span><span style="color: #8e908c; font-style: italic;">*-nxml-*</span><span style="color: #8e908c; font-style: italic;">--&gt;</span>
+    &lt;!<span style="color: #718c00;">DOCTYPE</span> service-group <span style="color: #718c00;">SYSTEM</span> <span style="color: #8959a8;">"</span><span style="color: #8959a8;">avahi-service.dtd</span><span style="color: #8959a8;">"</span>&gt;
+    &lt;<span style="color: #f5871f;">service-group</span>&gt;
+    &lt;<span style="color: #f5871f;">name</span> <span style="color: #eab700;">replace-wildcards</span>=<span style="color: #3e999f;">"</span><span style="color: #3e999f;">yes</span><span style="color: #3e999f;">"</span>&gt;%h&lt;/<span style="color: #f5871f;">name</span>&gt;
+    &lt;<span style="color: #f5871f;">service</span>&gt;
+    &lt;<span style="color: #f5871f;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #f5871f;">type</span>&gt;
+    &lt;<span style="color: #f5871f;">port</span>&gt;548&lt;/<span style="color: #f5871f;">port</span>&gt;
+    &lt;/<span style="color: #f5871f;">service</span>&gt;
+    &lt;<span style="color: #f5871f;">service</span>&gt;
+    &lt;<span style="color: #f5871f;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #f5871f;">type</span>&gt;
+    &lt;<span style="color: #f5871f;">port</span>&gt;0&lt;/<span style="color: #f5871f;">port</span>&gt;
+    &lt;<span style="color: #f5871f;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #f5871f;">txt-record</span>&gt;
+    &lt;/<span style="color: #f5871f;">service</span>&gt;
+    &lt;/<span style="color: #f5871f;">service-group</span>&gt;
+    </pre>
+  </div>
+
+  <p>
+    And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.
+  </p>
+
+  <p>
+    I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.
+  </p>
+
+  <p>
+    Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>.
+  </p>
+</div>
+<div id="outline-container-sec-14-4" class="outline-3">
+  <h3 id="sec-14-4">Setting up the Time Machine</h3>
+  <p>
+    <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
+  </p>
+
+  <p>
+    <del><code>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1</code></del>
+  </p>
+
+
+  <p>
+    <b>Edit:</b> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.
+  </p>
+
+  <p>
+    Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!
+  </p>
+
+  <p>
+    Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi&rsquo;s fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.
+  </p>
+
+  <p>
+    Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!
+  </p>
+
+  <p>
+    This article heavily steals from these fine folks on the internet:
+  </p>
+
+  <ul class="org-ul">
+    <li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a>
+    </li>
+    <li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>
+    </li>
+    <li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a>
+    </li>
+  </ul>
+</div>
+]]></description>
 </item>
 <item>
   <title>How Apple is Failing me</title>
@@ -1039,7 +2017,147 @@
 <p>
   So here are some of those problems:
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-15-1" class="outline-3">
+  <h3 id="sec-15-1">Lack of Uninstallers</h3>
+  <p>
+    Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
+  </p>
+
+  <p>
+    At the moment, there are three ways of getting software on your Mac.
+  </p>
+
+  <ol class="org-ol">
+    <li>Install from the App Store. Installation and un-installation work through the App Store.
+    </li>
+    <li>Install by dragging n <code>*.app</code> bundle onto your computer. Uninstall by deleting the bundle. Works fine unless the app installed some stuff outside the bundle.
+    </li>
+    <li>Install by executing a <code>*.pkg</code> file. No way to uninstall whatsoever unless the developer provides a separate uninstall mechanism.
+    </li>
+  </ol>
+
+  <p>
+    Really, this is beyond ridiculous. There is no way of uninstalling software that has been installed from a <code>*.pkg</code>. How the heck am I supposed to use my computer without uninstalling software? Seriously, Apple? Is this a joke?
+  </p>
+
+  <p>
+    (So as a rule, I will only install <code>*.pkg</code> if there is absolutely no other way. Most of the time, I use or abuse <a href="http://mxcl.github.com/homebrew/">homebrew</a> to mitigate this problem.)
+  </p>
+</div>
+<div id="outline-container-sec-15-2" class="outline-3">
+  <h3 id="sec-15-2">Failing Time Machine</h3>
+  <p>
+    So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don&rsquo;t even need to plug in that hard drive any more. Magic!
+  </p>
+
+  <p>
+    Except, every few weeks the Time Machine icon in the menu bar will have a small exclamation point, which indicates that something went wrong. Usually, it means that Time Machine somehow lost track of what it was doing and silently corrupted all backups beyond repair. This happens across several computers and Time Machines. The only solution is to delete all backups and start anew.
+  </p>
+
+  <p>
+    So, backups that are not backing up. How amazing is that?
+  </p>
+</div>
+<div id="outline-container-sec-15-3" class="outline-3">
+  <h3 id="sec-15-3">Living in the Cloud</h3>
+  <p>
+    OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
+  </p>
+
+  <p>
+    Synchronization is cool. I used to live within the Googleverse, and all my contacts, calendars and email accounts would sync through Google to all my Apple devices. Life was good! Until things started to go bad. At some point, Mail.app lost an email or two. Not a big deal. Then iCal would not connect any more, and would need to be restarted every other day. And finally, Address Book deleted all my contacts from Google. Actually, it did not delete the whole contacts, just all the information inside them, and leave empty husks with only a name and maybe a partial email address.
+  </p>
+
+  <p>
+    I wish I was making this up. I tested this quite thoroughly. Whenever Contacts was set up to sync with Google, after a few days or weeks it would delete all my contacts. Of course, this being cloud backed, it would delete them everywhere on all my devices, without any backup or anything. Thankfully, Address Book on iOS seems to not have this problem.
+  </p>
+
+  <p>
+    Things can go wrong, I understand that. But deleting all my contacts? Not cool. Not. Cool.
+  </p>
+</div>
+<div id="outline-container-sec-15-4" class="outline-3">
+  <h3 id="sec-15-4">iPhoto</h3>
+  <p>
+    My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
+  </p>
+
+  <p>
+    But to do that, we had to convert his old library from iPhoto 1876 to iPhoto 2008. iPhoto itself claims to be able to do that, and lo and behold, it magically imported the old library, started an update program, then another, then another, then another, then another, and updated the old library through the ages up to the most recent version. And everything seemed to work fine, all the albums were there, all the thumbnails looked right, just perfect. Except if you opened any image, it would only show black. I mean, I can understand that an import of a library that old does not work. But at least tell me so. Don&rsquo;t silently corrupt everything!
+  </p>
+
+  <p>
+    And then there was my own library, started in late 2007 and handed through different revisions of iPhoto to today. It countains about 25 Gb worth of photos. Funny enough, its size on disk is actually 65 Gb. What. The. Heck?
+  </p>
+
+  <p>
+    At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftware.com/iplm/">iPhoto Library Manager</a> by Fat Cat Software, which saved both my library and my sanity! Those guys rock!
+  </p>
+</div>
+<div id="outline-container-sec-15-5" class="outline-3">
+  <h3 id="sec-15-5">OS X Lion with Auto Save and Versions</h3>
+  <p>
+    The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
+  </p>
+
+  <p>
+    Now normally, I would applaud this. Just save everything automatically and give me a sensible undo mechanism instead. Great!
+  </p>
+
+  <p>
+    However, in a stroke of genius, they also got rid of the possibility of <i>save as...</i>, which is just an easy way of duplicating a document. Say, because you received it in an email and want to file it somewhere else on your hard drive. Or because the document is saved on a thumb drive and you want to copy it over to your hard drive. No sir, you have to navigate to the document in the finder and copy it by hand from there. Thank you for your patience.
+  </p>
+
+  <p>
+    But the worst offender is Preview. Every program on the Mac has this very handy <i>proxy icon</i> in the window title. Whenever a window is representing a file on your computer, it will show that very file in the title, so you can drag and drop it somewhere else. Except preview won&rsquo;t give you the actual document. Instead, it will give you an alias to that document. Which is worth <i>nothing at all</i> if you drag it into an email, your Dropbox or a thumb drive.
+  </p>
+
+  <p>
+    Or try to enable File sharing on your local network, which works <i>sometimes</i>, but not all the time. Or Internet Sharing, which might share your internet connection, or break your DNS settings. Or take Bluetooth, which for the life of me, I can not make work for tethering with my iPhone, even though the same works just fine with the iPad and other Macs. Or take networking in general, which every once in a while just completely breaks down on my company&rsquo;s network and just refuses to send or receive any data over the Ethernet cable until I reboot my computer.
+  </p>
+
+  <p>
+    I could go on. Let&rsquo;s just say that Lion increased my WTF-per-minute rate significantly.
+  </p>
+</div>
+<div id="outline-container-sec-15-6" class="outline-3">
+  <h3 id="sec-15-6">Performance, Memory and File System</h3>
+  <p>
+    Lets talk performance. I can&rsquo;t really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
+  </p>
+
+  <p>
+    I mean, you don&rsquo;t feel the pain of starting applications much on OS X, because in general, you simply keep your programs running all the time. But even so, Firefox starts up on Windows in, like, no time at all, but takes noticeable time on OS X (same configuration and plugins). I have an SSD, so I mostly don&rsquo;t care, but still.
+  </p>
+
+  <p>
+    Or take boot times. Even in a virtual machine, both Windows 7 and 8 and Ubuntu 12.04 and Fedora 17 boot up in less than half a minute. In comparison, OS X Lion takes significantly longer, sometimes minutes. Again, you usually don&rsquo;t feel that pain too much because you don&rsquo;t reboot your Mac all that often (unless you run Bootcamp for gaming regularly). Still, OS X boot and shutdown times are downright shameful these days.
+  </p>
+
+  <p>
+    Lets run a few virtual machines. I have eight Gb of memory. Lets boot up a Windows VM and give it two Gb. Do anything you want, run Eclipse <i>and</i> Visual Studio <i>and</i> Firefox with loads of tabs <i>and</i> Steam. Windows will do just fine. Those two Gb are plenty for anything except gaming and photo/video editing. Do the same thing with Linux, same result. In fact, Linux will work just fine with even less memory. But OS X? Don&rsquo;t even <i>think</i> of running it with less than two Gb. Four Gb will give you a workable system if you don&rsquo;t run too many memory intensive applications. But start up XCode and Eclipse and you are done for. This is a huge waste.
+  </p>
+
+  <p>
+    And lastly, let&rsquo;s talk HFS+. Did you know that HFS+ has a global lock that prevents any program from accessing the hard drive while another program is doing so? That explains why OS X is so friggin slow on non-SSD drives. And did you ever notice that HFS+ is slowly corrupting your data, even if there are no power failures or anything? I fire up Disk Utility every so often and it will always find some file system corruptions. It rarely breaks stuff, but really, the file system is the very last part of my system I want to see failing randomly.
+  </p>
+</div>
+<div id="outline-container-sec-15-7" class="outline-3">
+  <h3 id="sec-15-7">So, what now?</h3>
+  <p>
+    With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don&rsquo;t.
+  </p>
+
+  <p>
+    And then there is software. Where is <a href="http://www.git-tower.com/">Tower</a> for Windows or Linux? Or <a href="http://www.sparrowmailapp.com/">Sparrow</a> or <a href="http://tapbots.com/blog/tweetbot/tweetbot-for-mac">Tweetbot</a> or <a href="http://reederapp.com/mac/">Reeder</a> or <a href="http://www.pixelmator.com/">Pixelmator</a> or iPhoto? I&rsquo;m not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.
+  </p>
+
+  <p>
+    That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and Fedora 17 and I must say, I am quite taken with them. All of them. As for the next computer I am going to buy, I am doubtful if it will be an Apple computer again.
+  </p>
+</div>
+]]></description>
 </item>
 <item>
   <title>Blogging with Pelican (and not Octopress)</title>
@@ -1287,7 +2405,399 @@
 <p>
   During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
 </p>
-  ]]></description>
+
+<div id="outline-container-sec-19-1" class="outline-3">
+  <h3 id="sec-19-1"><a href="http://www.vim.org/">Vim</a></h3>
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/vim_small.png" alt="vim_small.png" />
+    </p>
+  </div>
+
+  <p>
+    Vim is very old software. It is a more or less direct descendant of ed from the early 1970s. It grew up in text based terminals without any graphical windows or mouses. Hence, all of its functionality is really meant to be used from the keyboard only, even though mousing is supported these days.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/vim_window_small.png" alt="vim_window_small.png" />
+    </p>
+  </div>
+
+  <p>
+    The terminal inheritance limits its graphical capabilities somewhat. There are no graphical drawers or animations or pixel-precise scrolling. Everything is displayed in terms of rectangular characters, hence scrolling can only ever scroll one line at a time and there are no graphical images anywhere. Since Vim predates graphical displays altogether, it does not adhere to its standards much. In fact, in its normal mode it won&rsquo;t even type out the characters you hit on your keyboard.
+  </p>
+
+  <p>
+    This is at really Vim&rsquo;s greatest strength and weakness: In its &lsquo;normal mode&rsquo;, all key presses are interpreted like keyboard shortcuts in other programs. And what shortcuts there are! Pretty much every key on the keyboard has some special function, most keys even serve multiple functions depending on what mode you are in at the moment. Thus it should come as no surprise that you can do anything with these shortcuts at astounding speed. Watching a seasoned Vimmer do his keyboard dance is something to behold. Moving the cursor is especially powerful. Usually, any place in the current file is reachable using just a few key strokes. But of course, you are not limited to just viewing one file at a time either: Vim supports arbitrary split views and can even be used for efficient diffing or merging. And when it comes to changing that text, Vim is no slouch, either. There are various registers for saving text or locations, there is an increadibly powerful macro system, amazing searching capabilities, command line integration, there are specialized functions for programming… Really, when it comes to pure text editing chops, nothing beats Vim.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/vim_full_window_small.png" alt="vim_full_window_small.png" />
+    </p>
+  </div>
+
+  <p>
+    Vim is also incredibly customizable. Of course, there is no graphical preferences windows to do the customization in. You customize Vim by editing simple text files. Vim even includes its very own scripting language, VimScript, to enable users to extend it. There is a huge wealth of plugins available. These range from file browsers to support for new languages, or even some limited integration with compilers or source control tools. However, VimScript is not exactly a very pleasant language to code in and Vim does not actually like to interface with external tools much. These two issues limit the scope of what is possible with Vim somewhat–deep compiler integration and graphical debugging are fiddly at best, so you will probably just keep a terminal open and do them there. That said, the plugin ecosystem for Vim is probably still leaps and bounds beyond what is possible with most other text editor out there, but it does not quite reach the same breadth or integration as some IDEs or Emacs do.
+    All that power comes at a price. Learning Vim is hard. If you start out with Vim, it will probably take at least a week or so until you can approach your old productivity again. Mastering Vim will take years. Even after months and months of diligent learning, you will find some new tricks and features to increase your speed.
+  </p>
+
+  <p>
+    At the end of the day though, Vim is an amazingly powerful tool, and it is certainly worth it to at least learn the basics of it. Actually, most people I know who tried it have actually stuck with it. Myself, I have some two years of Vimming under my belt, too, and it has proven to be a very important tool for me.
+  </p>
+</div>
+<div id="outline-container-sec-19-2" class="outline-3">
+  <h3 id="sec-19-2"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h3>
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/emacs_small.png" alt="emacs_small.png" />
+    </p>
+  </div>
+
+  <p>
+    The thing you have to realize about Emacs is that… Emacs is powerful. People have called it <a href="http://www.emacswiki.org/emacs/NealStephenson">the thermonuclear text editor</a>, and for a reason. Emacs can edit text, of course, but that is really only the most mundane of its features. Really, Emacs is a little world of its own. You can read and write your mail from within Emacs, you can do spreadsheets, calendaring, it can host terminals, debuggers, compilers, there is Tetris, hell, it even includes its very own psychiatrist! Speaking off the record here, I have a suspicion that Emacs might achieve sentience pretty soon.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/emacs_window_small.png" alt="emacs_window_small.png" />
+    </p>
+  </div>
+
+  <p>
+    Similar to Vim, Emacs is old software. It was invented in the late 1970s at MIT and has been growing ever since. Also like Vim, its terminal inheritance shows its teeth sometimes: mouseweel scrolling can be awkward, especially if you like your inertial scrolling, the menu bar seems to not get much love and keyboard shortcuts are not conformant with what you might be used to from other text editors. On the other hand, Emacs has some very modern features like mixing of proportional fonts and fixed-width fonts or inline image display.
+  </p>
+
+  <p>
+    The upside of being old is that Emacs is very mature software. There is a ginormous selection of extensions available for Emacs, most of it actually distributed right with Emacs itself and a lot of it is superbly documented. Besides that, there are <a href="http://tromey.com/elpa/">several</a> <a href="http://marmalade-repo.org/">integrated</a> <a href="http://elpa.gnu.org/">repositories</a> for additional tools that can be downloaded and installed from the internet.
+  </p>
+
+  <p>
+    The real power of Emacs is in that it is really not so much a text editor but a virtual machine for a programming language called eLisp. Really anything that can possibly be written in Lisp and remotely involves text editing is possible and probably already available in Emacs. As such, Emacs probably has the most diverse feature set of any text editor out there. Most relevant to programmers will be debugger integration, automatic syntax and spell checking, powerful and context-aware autocompletion, refactoring capabilities and much much more. Emacs is the only program in this list which can actually be used as a full fledged IDE on its own.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/emacs_full_window_small.png" alt="emacs_full_window_small.png" />
+    </p>
+  </div>
+
+  <p>
+    But Emacs is not limited to programming at all. As mentioned before, it includes an Email client, a great calendar with an agenda, several IM clients, RSS readers, an <a href="http://orgmode.org/">astoundingly powerful outliner</a> and spreadsheet editor, it is frequently used for blogging, writing screen plays, books or really anything you can think of.
+  </p>
+
+  <p>
+    The only real downside to this is that Emacs is, well, old. There is great power there, but is is only accessible to those willing to learn the myriad key combinations to invoke it. Rellay, mastering Emacs is a task for years, not weeks. But of course, you are not forced to wield all the power Emacs has to offer at once. Getting up to speed with basic text editing in Emacs will only take a few minutes, and the built-in help system and tutorial will guide you further whenever you feel the need to explore.
+  </p>
+
+  <p>
+    I have been using Emacs for several months now and I am really enjoying it. It has a few shortcomings, but it is constantly being improved and getting more modern every day. I can see myself giving in to it and just live in Emacs all day long, but for now, I&rsquo;m happy with it just being my primary text editor. However, I can&rsquo;t quite get beyond the fact that its pure text editing chops are nowhere near Vim. Then again, Emacs does <a href="http://gitorious.org/evil/pages/Home">support Vim key bindings</a>, so this might turn out not to bother me in the long run.
+  </p>
+
+  <p>
+    At any rate, I would recommend anyone to give Emacs a shot at least for a short while. The power of Emacs can be an exhilarating experience, really.
+  </p>
+</div>
+<div id="outline-container-sec-19-3" class="outline-3">
+  <h3 id="sec-19-3"><a href="http://macromates.com/">Textmate (2)</a></h3>
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/textmate_small.png" alt="textmate_small.png" />
+    </p>
+  </div>
+
+  <p>
+    For the longest time, all GUI text editors could generally be classified as either Vim-based, Emacs-based or shortcut-based. The prevalent crop of shortcut-based GUI text editors mapped all its advanced functions to certain modifier-letter combinations and/or menu bar items.
+  </p>
+
+  <p>
+    When Textmate was introduced, it introduced a new concept: snippets. Snippets are short pieces of text which, upon activating a certain trigger, would expand to arbitraryly complex constructs.
+  </p>
+
+  <p>
+    Thus, to define a class in some programming language, you would type <code>class</code>, then hit TAB, and it would expand to a complete class declaration with constructor, destructor and documentation. Further yet, the class name would be highlighted immediately, so you could start editing it to your liking. These edits would even automatically percolate to all the relevant places in the class declaration and thus automatically change all scope declarations and the like.
+    Or, you could drag some image file into some LaTeX code and it would expand (dragging being the trigger here) to a whole <code>\begin{figure}</code> complete with <code>\caption</code>, <code>\label</code>, the correct path to the image and everything else you need.
+  </p>
+
+  <p>
+    This has proven to be such a popular feature that since Textmate&rsquo;s inception, implementations of snippets have been developed for pretty much every IDE or text editor out there.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/textmate_window_small.png" alt="textmate_window_small.png" />
+    </p>
+  </div>
+
+  <p>
+    Textmate also featured a very flexible and easily extensible regex based syntax parser, beautiful color schemes, a very elegant project management system and a vibrant community extending it in many directions. This was even more fascinating in that most of this functionality was implemented using a convenient shell scripting engine that could utilize any programming language your shell supported.
+  </p>
+
+  <p>
+    Sadly though, its main developer got stuck somewhere along the way and development all but dried up for five years. This primarily meant that some issues just would not be fixed and thus, got all the more jarring. Most prominently, Textmate lacked split views, regex incremental search and would only do single character undo/redos. Many people left Textmate because of this lack of progress.
+  </p>
+
+  <p>
+    While I was in college, I used Textmate extensively and it proved to be a veritable tool for many editing tasks. It is somewhat limited in its integration with programming tools, though, so don&rsquo;t expect any complex compiler or debugger integration. Ultimately, I left it behind for lack of cross platform compatibility and lack of development. There used to be a Windows program called <a href="http://e-texteditor.com/">E Text Editor</a>, which wanted to become a fully compatible Textmate alternative for Windows and Linux, but development never even reached production quality.
+  </p>
+
+  <p>
+    Recently however, an early alpha version of Textmate 2 has been released that could reinvigorate the community and fix long standing issues. Whether that will actually happen will remain to be seen.
+  </p>
+</div>
+<div id="outline-container-sec-19-4" class="outline-3">
+  <h3 id="sec-19-4"><a href="http://www.vicoapp.com/">Vico</a></h3>
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/vico_small.png" alt="vico_small.png" />
+    </p>
+  </div>
+
+  <p>
+    Vico is a very new application that has spung to live only in 2011 and is not finished yet. It aims to be a modern Vim, combining the virtue of the powerful mode-based editing system of Vim with a modern Cocoa interface. It even merges Vim&rsquo;s editing capabilities with Textmate-derived snippets and syntax highlighting.
+  </p>
+
+  <p>
+    Really, it tries to be an organic symbiosis of Vim and Textmate. And for most purposes, it very much succeeds in this. Syntax highlighting is very solid, there is a code browser, a nice file browser and full support for Textmate snippets. Vico even includes a powerful scripting environment that enables you to extend it in a language called Nu, which has the interesting aspect of being able to call into every object or method in the Cocoa libraries, thus opening the doors to a boundless world of wonders. Its Vim integration is well on its way, too. The most notable omission at this point are macros. The developer is working on it though and has promised to implement them in the near future. Some other areas are lacking, too, but if development continues I see no reason why it should not become a very nice text editor.
+  </p>
+
+  <p>
+    As it stands though, development of Vico is going slow and its community is not very large yet. Vico is a very nice tool, but at the end of the day, I miss the raw power of an actual Vim just as I miss the vibrant community around Textmate. If you are not spoiled by Vim yet or find Vim just a bit too ugly for your taste, you could give Vico a try though.
+  </p>
+
+  <p>
+    Personally, I like it quite a bit and I am hoping very much that it will not be forgotten as a failed attempt to modernize Vim. That said, what with Sublime Text 2 including a limited support for Vim key bindings, I can&rsquo;t really see Vico taking off.
+  </p>
+</div>
+<div id="outline-container-sec-19-5" class="outline-3">
+  <h3 id="sec-19-5"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h3>
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/sublimetext_small.png" alt="sublimetext_small.png" />
+    </p>
+  </div>
+
+  <p>
+    Sublime Text is a fairly recent development. It is a one-man project that has gained a lot of enthusiastic following in the last few months. In many ways, it feels like the next step in text editor development. Much like several other text editors out there, it has adopted Textmate snippets, color themes and syntax definitions as its core feature set. On top of that though, it has built a very powerful and flexible extension system that really sets it apart.
+  </p>
+
+  <p>
+    Do you remember CMD-T from Textmate? To open some file, you would hit CMD-T and start typing a file name. The name would be fuzzy matched to select from all available files. Thus, typing <code>bcc</code> would select <code>BeaconController.cpp</code>. This form of selection is increadibly intuitive and fast. It is also the basis for the extension system of Sublime Text. If there is no keyboard shortcut for a command, hit CMD-Shift-P and start typing to invoke the command.
+  </p>
+
+
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/sublimetext_window_small.png" alt="sublimetext_window_small.png" />
+    </p>
+  </div>
+
+  <p>
+    In very much the same way as M-x in Emacs (though with fuzzy matching), this can invoke arbitrarily complex commands such as <code>install bundle</code> or using some refactoring library. Additionally, the same mechanism can be used to jump to method names or opening files. Really, these features are very efficient implementations of a code browser and file browser.
+  </p>
+
+  <p>
+    The second big thing about Sublime Text is just the ridiculous amount of polish it received. For example, if you have two files with the same name, it will prefix the tab titles with the folder they reside in. Simple, but so useful! If you jump around in a file, there is always a subtle scrolling animation. Even simple text selections have slightly rounded borders and just look amazingly beautiful.
+  </p>
+
+  <p>
+    Also of note is that Sublime Text supports multiple cursors. Want to change then name of all occurrences of a variable? Just select them all (!) and change them all at once. This is another amazingly useful feature.
+    Its plugin system is based in Python, which is a refreshingly non-awkward choice for a text editor and spawned an astonishing amount of very interesting plugins already. Indeed the plugin system is flexible enough to support things like linters, source control integration and even something akin to Emacs&rsquo;s org-mode.
+    And it also supports <a href="http://www.sublimetext.com/docs/2/vintage.html">Vim key bindings</a>. Not very complete, but easily enough to be useful. Oh, and it is available cross-platform on Mac, Windows and Linux, too.
+  </p>
+
+  <p>
+    I think there are three big families of text editors: Emacs, Vim, and shortcut-based text editors. Since I discovered Textmate however, I started believing that it represents a new branch in the big tree of text editors. Sublime Text seems to be the next step in the evolution of the Textmate branch.
+  </p>
+
+  <p>
+    Really, Sublime Text is an amazing achievement. Maybe not quite as hackable as Emacs and not quite as flexible as Vim, but easily beating both in terms of elegance and modernity. If you don&rsquo;t want to learn Emacs or Vim, Sublime Text is what you should use. In fact, it is the first text editor ever that has tempted me to leave Emacs and Vim behind. Nuff said.
+  </p>
+</div>
+<div id="outline-container-sec-19-6" class="outline-3">
+  <h3 id="sec-19-6">What else is out there</h3>
+  <p>
+    Of course, that little list up there is by no means complete. Neither does it list all the amazing features these text editors have to offer, nor does it represent an exhaustive list of them. To the best of my knowledge, this is a short list of other text editors for the Mac platform. Note however, that I have never used any of them extensively and can only tell you stuff from heresay.
+  </p>
+
+  <div id="outline-container-sec-19-6-1" class="outline-4">
+    <h4 id="sec-19-6-1"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/bbedit.png" alt="bbedit.png" />
+      </p>
+    </div>
+
+    <p>
+      BBEdit is the big daddy of Mac text editors. It is currently available in version 10 and has a huge follwing predominantly amongst web developers. As far as I can tell, it includes amazing features for editing HTML. Maybe amongst the best out there.
+      The remainder of its feature set seems rather standard crop though. There is some support for compilation, source code control, snippets, plugins… Though nothing on the level of Vim or Emacs really. Its most important disadvantage is probably its lack of cross-platform availability and extensibility.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-2" class="outline-4">
+    <h4 id="sec-19-6-2"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/textwrangler.png" alt="textwrangler.png" />
+      </p>
+    </div>
+
+    <p>
+      TextWrangler is the free smaller brother of BBEdit. Its feature set is somewhat pared down in comparison with BBEdit. In particular, it is missing BBEdit&rsquo;s famous HTML magic and some advanced external tool integration.
+      Even for free, there are probably more capable candidates available, though maybe not at the same level of platform integration. That said, TextWrangler is not a bad choice and probably just fine for some casual text editing.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-3" class="outline-4">
+    <h4 id="sec-19-6-3"><a href="http://www.jedit.org/">JEdit</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/jedit.png" alt="jedit.png" />
+      </p>
+    </div>
+
+    <p>
+      I really don&rsquo;t know much about JEdit other than that it is written in Java, it has a sizeable following and it is available cross-platform. It seems like it could be about as useful as any shortcut based text editor can ever be, which is no small achievement. Also, it features a rich plugin system, of which I only heard good things.
+      For all I know, this could be a very worthy alternative if you are on a budget (no Sublime Text) and don&rsquo;t want to learn Emacs or Vim.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-4" class="outline-4">
+    <h4 id="sec-19-6-4"><a href="http://chocolatapp.com/">Chocolat</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/chocolat.png" alt="chocolat.png" />
+      </p>
+    </div>
+
+    <p>
+      Chocolat is yet another text editor that came into being in the post-Textmate void. It offers a good range of standard features, though notably missing advanced plugins apparently. Apart from that, it seems to be a solid shortcut based Mac text editor that is relatively cheap and actively developed.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-5" class="outline-4">
+    <h4 id="sec-19-6-5"><a href="http://www.kodapp.com/">Kod</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/kod.png" alt="kod.png" />
+      </p>
+    </div>
+
+    <p>
+      Kod started out as an open source alternative to Textmate. This is quite uncommon for a post-Textmate text editor and worth supporting. After a good start however, the developer found a new job and development has pretty much stalled.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-6" class="outline-4">
+    <h4 id="sec-19-6-6"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/subethaedit.png" alt="subethaedit.png" />
+      </p>
+    </div>
+
+    <p>
+      The great thing about SubEthaEdit is collaborative editing. if you want to edit text collaboratively with several people, SubEthaEdit performs the task seamlessly and elegantly.
+      Beyond that, it is a capable shortcut-based text editor. If you don&rsquo;t need the collaboration feature, you should probably look elsewhere though.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-7" class="outline-4">
+    <h4 id="sec-19-6-7"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/smultron.png" alt="smultron.png" />
+      </p>
+    </div>
+
+    <p>
+      Another venerable veteran on the Mac, Smultron used to be a free open source text editor that had a sizeable following. However, the developer ceased development at some point and later restarted the effort as a paid app in the Mac App Store.
+      Smultron lost most of its following in that transition.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-8" class="outline-4">
+    <h4 id="sec-19-6-8"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/slickedit.png" alt="slickedit.png" />
+      </p>
+    </div>
+
+    <p>
+      SlickEdit is easily the most expensive text editor in this list. A single user license for one platform and one developer costs a scant 300 bucks. That is a lot of money for a text editor and is usually only shelled out only for business critical platform exclusive IDEs. It seems as if SlickEdit tries to be exactly that for general purpose text editing.
+      It&rsquo;s feature list reads very well and checks all mayor boxes. It is available on pretty much any platform out there and is probably only rivalled by Emacs or Vim in that regard. It also supports emulation for Emacs or Vim key bindings.
+      That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I doubt that SlickEdit can live up to that price if you compare it to some of the other examples in this list. It is undoubtedly a well-maintained and powerful text editor though.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-9" class="outline-4">
+    <h4 id="sec-19-6-9"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/komodo.png" alt="komodo.png" />
+      </p>
+    </div>
+
+    <p>
+      Komodo Edit is the free open source offspring of ActiveState&rsquo;s Komodo IDE. It&rsquo;s feature set is very complete and seems to be very worthy for many editing tasks. Being of IDE ancestry provides it with nice plugin support and very helpful deep language integration like sophisticated autocompletion and syntax checking.
+      There are also quite good Vim key bindings and it is available on the three major platforms. However, its language support is limited to Perl, Python, Tcl, PHP, Ruby and Javascript. Probably not a bad choice if you can live with the language selection and are on a budget.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-10" class="outline-4">
+    <h4 id="sec-19-6-10">TextEdit</h4>
+
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/textedit.png" alt="textedit.png" />
+      </p>
+    </div>
+
+    <p>
+      The built-in text editor in OSX. No syntax highlighting, project management or any programming support whatsoever make this a rather poor choice. There are plenty of free alternatives out there.
+      That said, TextEdit does support rich text editing and might be of value for the odd letter to your grandma.
+    </p>
+  </div>
+  <div id="outline-container-sec-19-6-11" class="outline-4">
+    <h4 id="sec-19-6-11">Text editors for web development</h4>
+    <p>
+      Strangely, all the major Mac text editors that cater specifically for web development are not cross platform. If web development is all you are ever doing though, these text editors might be well worth their money.
+    </p>
+
+    <ul class="org-ul"><li><a href="http://www.panic.com/coda/">Coda</a><br  />
+    <div class="figure">
+      <p><img src="http://bastibe.de/static/2012-02/coda.png" alt="coda.png" />
+      </p>
+    </div>
+
+    <p>
+      Combine the SubEthaEdit text editing engine including its collaborative tools with the great FTP program Transmit and you have CODA, the program for &ldquo;one-window web development&rdquo;. It even includes a reference book to HTML in the package. For what it is, probably of great value and nice polish. As a general purpose text editor, there are better alternatives.
+    </p>
+  </li>
+  <li><a href="http://macrabbit.com/espresso/">Espresso</a><br  />
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/espresso.png" alt="espresso.png" />
+    </p>
+  </div>
+
+  <p>
+    Another text editor gearing specifically for web development. Thus, you get powerful HTML and CSS editing features and good support for typical web development languages such as PHP, Ruby or Markdoen, but no support for other languages. There is an extension system though that could improve language support. This might be a slightly less expensive alternative to Coda.
+  </p>
+  </li>
+  <li><a href="http://tacosw.com/">Taco HTML Editor</a><br  />
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/taco.png" alt="taco.png" />
+    </p>
+  </div>
+
+  <p>
+    Another text editor geared exclusively towards web development. This time around though, there is no support for languages other than HTML, CSS and PHP, which makes this program a rather poor choice.
+  </p>
+  </li>
+  <li><a href="http://www.beforedawnsolutions.com/applications/skedit">skEdit</a><br  />
+  <div class="figure">
+    <p><img src="http://bastibe.de/static/2012-02/skedit.png" alt="skedit.png" />
+    </p>
+  </div>
+
+  <p>
+    skEdit supports a nice array of web development languages and offers a good range of features for a web development text editor. Also, it is pretty inexpensive in comparison to its brethren here. Probably a nice choice for web development if you are on a budget.
+  </p>
+    </li></ul>
+  </div>
+</div>
+]]></description>
 </item>
 <item>
   <title>How to make Tagbar work with Objective-C</title>
