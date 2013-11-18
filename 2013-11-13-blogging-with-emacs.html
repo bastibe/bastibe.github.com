@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Blogging with Emacs</title>
-<!-- 2013-11-17 Sun 16:02 -->
+<!-- 2013-11-18 Mon 09:30 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -321,6 +321,25 @@ This should get you started! For completeness, here is my complete configuration
 
 <p>
 All other sources, including the source code to all blog posts, can be found on <a href="https://github.com/bastibe/bastibe.github.com">Github</a> (the <i>master</i> branch contains HTML, the <i>source</i> branch contains Org).
+</p>
+
+<p>
+<b>Addendum:</b> I have since discovered that <code>org-rss-publish-to-rss</code> only handles top-level headlines, but disregards second-level or higher-level headlines. Thus, if you have a post with nested headlines, your RSS feed will only include the text of the top-level one. To fix this, I advised <code>org-rss-publish-to-rss</code> to use <code>org-html-headline</code> for non-top-level headlines like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #718c00;">defadvice</span> <span style="color: #f5871f;">org-rss-headline</span>
+  (around my-rss-headline (headline contents info) activate)
+  <span style="color: #8959a8;">"only use org-rss-headline for top level headlines"</span>
+  (<span style="color: #718c00;">if</span> (&lt; (org-export-get-relative-level headline info) 2)
+      ad-do-it
+    (setq ad-return-value (org-html-headline headline contents info))))
+</pre>
+</div>
+
+<p>
+Now, the RSS feed includes the full text of all articles.
 </p>
 </div>
 <div id="postamble" class="status">

@@ -14,9 +14,9 @@
   <link>http://bastibe.de/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Sun, 17 Nov 2013 16:05:28 +0100</pubDate>
-  <lastBuildDate>Sun, 17 Nov 2013 16:05:28 +0100</lastBuildDate>
-  <generator>Emacs 24.3 Org-mode 8.2.3b</generator>
+  <pubDate>Mon, 18 Nov 2013 09:30:47 +0100</pubDate>
+  <lastBuildDate>Mon, 18 Nov 2013 09:30:47 +0100</lastBuildDate>
+  <generator>Emacs 24.3 Org-mode 8.2.3c</generator>
   <webMaster>bb@randomtask (Bastian Bechtold)</webMaster>
   <image>
     <url>http://bastibe.de/static/favicon.png</url>
@@ -318,6 +318,25 @@
 
 <p>
   All other sources, including the source code to all blog posts, can be found on <a href="https://github.com/bastibe/bastibe.github.com">Github</a> (the <i>master</i> branch contains HTML, the <i>source</i> branch contains Org).
+</p>
+
+<p>
+  <b>Addendum:</b> I have since discovered that <code>org-rss-publish-to-rss</code> only handles top-level headlines, but disregards second-level or higher-level headlines. Thus, if you have a post with nested headlines, your RSS feed will only include the text of the top-level one. To fix this, I advised <code>org-rss-publish-to-rss</code> to use <code>org-html-headline</code> for non-top-level headlines like this:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp">(<span style="color: #718c00;">defadvice</span> <span style="color: #f5871f;">org-rss-headline</span>
+  (around my-rss-headline (headline contents info) activate)
+  <span style="color: #8959a8;">"only use org-rss-headline for top level headlines"</span>
+  (<span style="color: #718c00;">if</span> (&lt; (org-export-get-relative-level headline info) 2)
+  ad-do-it
+  (setq ad-return-value (org-html-headline headline contents info))))
+  </pre>
+</div>
+
+<p>
+  Now, the RSS feed includes the full text of all articles.
 </p>
 ]]></description>
 </item>
