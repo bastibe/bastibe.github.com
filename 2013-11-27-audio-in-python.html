@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Sound in Python</title>
+<!-- 2013-11-27 Wed 18:43 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <link rel="icon" href="static/favicon.ico">
+          <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+          <link rel="msapplication-TitleImage" href="static/favicon-144.png">
+          <link rel="msapplication-TitleColor" href="#0141ff">
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Sound in Python</h1>
+<p>
+Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
+</p>
+
+<p>
+It's not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
+</p>
+
+<p>
+The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http://www.portaudio.com/">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.
+</p>
+
+<p>
+But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!
+</p>
+
+<p>
+So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.
+</p>
+
+<p>
+So, lets read some audio data, shall we?
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile
+<span style="color: #eab700;">data</span> = SoundFile(<span style="color: #3e999f;">'sad_song.wav'</span>)[:]
+</pre>
+</div>
+
+<p>
+done. All the audio data is now available as a NumPy array in <code>data</code>. Just like that.
+</p>
+
+<p>
+Awesome, isn't it?
+</p>
+
+<p>
+OK, that was easy. So let's read only the first and last 100 frames!
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile
+<span style="color: #eab700;">f</span> = SoundFile(<span style="color: #3e999f;">'long_song.flac'</span>)
+<span style="color: #eab700;">first</span> = f[:100]
+<span style="color: #eab700;">last</span> = f[-100:]
+</pre>
+</div>
+
+<p>
+This really only read the first and last bit. Not everything in between!
+</p>
+
+<p>
+Note that at no point I did explicitly open or close a file! This is Python! We can do that! When the <code>SoundFile</code> object is created, it opens the file. When it goes out of scope, it closes the file. It's as simple as that. Or just use <code>SoundFile</code> in a context manager. That works as well.
+</p>
+
+<p>
+Oh, but I want to use the sound card as well! I want to record audio to a file!
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">from</span> pysoundcard <span style="color: #718c00;">import</span> Stream
+<span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile, ogg_file, write_mode
+<span style="color: #718c00;">with</span> Stream() <span style="color: #718c00;">as</span> s: <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">opens your default audio device</span>
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
+    <span style="color: #eab700;">f</span> = SoundFile(<span style="color: #3e999f;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+                  channels=s.channels, <span style="color: #8959a8;">format</span>=ogg_file,
+                  mode=write_mode)
+    f.write(s.read(s.sample_rate)) <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">one second</span>
+</pre>
+</div>
+
+<p>
+Read from the stream, write to a file. It works the other way round, too!
+</p>
+
+<p>
+And that's really all there is to it. Working with audio data in Python is easy now!
+</p>
+
+<p>
+Of course, there is much more you could do. You could create a callback function and be called every four<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>.
+</p>
+
+<p>
+You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+</div>
+</body>
+</html>

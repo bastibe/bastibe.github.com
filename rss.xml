@@ -14,8 +14,8 @@
   <link>http://bastibe.de/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Mon, 18 Nov 2013 09:30:47 +0100</pubDate>
-  <lastBuildDate>Mon, 18 Nov 2013 09:30:47 +0100</lastBuildDate>
+  <pubDate>Wed, 27 Nov 2013 18:50:05 +0100</pubDate>
+  <lastBuildDate>Wed, 27 Nov 2013 18:50:05 +0100</lastBuildDate>
   <generator>Emacs 24.3 Org-mode 8.2.3c</generator>
   <webMaster>bb@randomtask (Bastian Bechtold)</webMaster>
   <image>
@@ -25,295 +25,395 @@
   </image>
 
   <item>
-    <title>Blogging with Emacs</title>
-    <link>http://bastibe.de/2013-11-13-blogging-with-emacs.html</link>
-    <guid isPermaLink="false">http://bastibe.de/2013-11-13-blogging-with-emacs.html</guid>
-    <pubDate>Wed, 13 Nov 2013 00:00:00 +0100</pubDate>
+    <title>Sound in Python</title>
+    <link>http://bastibe.de/2013-11-27-audio-in-python.html</link>
+    <guid isPermaLink="false">http://bastibe.de/2013-11-27-audio-in-python.html</guid>
+    <pubDate>Wed, 27 Nov 2013 00:00:00 +0100</pubDate>
 
     <description><![CDATA[<p>
-    When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
+    Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
   </p>
 
   <p>
-    Thus I switched. Getting my blog posts out of blogger was... Let&rsquo;s just say that I lost anything I didn&rsquo;t have a plain-text backup of. And <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">I switched</a> to <a href="http://pelican.readthedocs.org/en/3.3.0/">Pelican</a>, a static site generator written in Python. It worked beautifully, until I updated something, at which point it resorted to just throwing errors. Now I don&rsquo;t have anything in particular against Python stack traces, but these particular traces traced deep into stuff that was (then?) too complex for me to understand.
+    It&rsquo;s not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
   </p>
 
   <p>
-    Thus I switched again. This time to <a href="https://github.com/redline6561/coleslaw">C()λ∈slaw■</a>, a static site generator written in Common Lisp. Mainly because I was interested in Common Lisp at the time. It worked really well. However, this was supposed to give me a chance to delve into Common Lisp, and I failed to understand C()λ∈slaw■&rsquo;s code. Realistically though, this is probably not C()λ∈slaw■&rsquo;s fault. My knowledge of Common Lisp is far from perfect.
+    The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http://www.portaudio.com/">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.
   </p>
 
   <p>
-    Thus it was time to switch again. Having been enamored with Emacs for the last few years, it made sense to blog with Emacs as well. Besides, I am kind of fed up with the many conflicting flavors of Markdown out there and have switched my personal note-taking to <a href="http://orgmode.org/">Org mode</a> long ago. So let&rsquo;s set up Emacs and Org as a blogging platform!
+    But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!
   </p>
 
   <p>
-    Before we start though, a short disclaimer: This will be a very bare bones blogging engine. It will consist of some articles, a front page, an archive page, and an RSS feed. And you will have to manage the front page and RSS feed semi-manually. No tags, no fancy history. Just what you see here.
+    So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.
   </p>
 
   <p>
-    On the plus side, this will be implemented entirely within Emacs and very simple to understand. Writing a new blog post will be as simple as writing an Org file and hitting a key combination! And you will get all of Org&rsquo;s fancy syntax highlighting and export magic for free!
-  </p>
-
-  <p>
-    Getting the pages to work is rather simple: You have to create a &ldquo;publishing project&rdquo; that specifies a <code>base-directory</code> where your Org files live and a <code>publishing-directory</code>, where the HTML files are going to be stored. Since this is Emacs, you could make your publishing directory any TRAMP path you like and insta-publish your workings!
-  </p>
-
-  <p>
-    (BTW, I am using Org 8.2.2 and I believe you need at least 8.0 for these examples to work)
+    So, lets read some audio data, shall we?
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-elisp">(<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-html</span>)
-    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-rss</span>)
-    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-publish</span>)
-    (setq org-publish-project-alist
-    '((<span style="color: #3e999f;">"blog-content"</span>
-    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
-    <span style="color: #8959a8;">:html-extension</span> <span style="color: #3e999f;">"html"</span>
-    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
-    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
-    <span style="color: #8959a8;">:publishing-function</span> (org-html-publish-to-html)
-    <span style="color: #8959a8;">:recursive</span> t          <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">descend into sub-folders?</span>
-    <span style="color: #8959a8;">:section-numbers</span> nil  <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">don't create numbered sections</span>
-    <span style="color: #8959a8;">:with-toc</span> nil         <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">don't create a table of contents</span>
-    <span style="color: #8959a8;">:with-latex</span> t         <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">do use MathJax for awesome formulas!</span>
-    <span style="color: #8959a8;">:html-head-extra</span> <span style="color: #3e999f;">""</span>   <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">extra &lt;head&gt; entries go here</span>
-    <span style="color: #8959a8;">:html-preamble</span> <span style="color: #3e999f;">""</span>     <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">this stuff is put before your post</span>
-    <span style="color: #8959a8;">:html-postamble</span> <span style="color: #3e999f;">""</span>    <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">this stuff is put after your post</span>
-    )))
+    <pre class="src src-python"><span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile
+    <span style="color: #eab700;">data</span> = SoundFile(<span style="color: #3e999f;">'sad_song.wav'</span>)[:]
     </pre>
   </div>
 
   <p>
-    Now hit <code>M-x org-publish</code>, type in <code>blog-content</code>, and you have a blog! Awesome! We are done here.
+    done. All the audio data is now available as a NumPy array in <code>data</code>. Just like that.
   </p>
 
   <p>
-    Well, how about an archive page that lists all your previous blog entries?
+    Awesome, isn&rsquo;t it?
   </p>
 
   <p>
-    Emacs can auto-generate this for you. Simply add these lines to <code>blog-content</code>:
+    OK, that was easy. So let&rsquo;s read only the first and last 100 frames!
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-elisp"><span style="color: #8959a8;">:auto-sitemap</span> t
-    <span style="color: #8959a8;">:sitemap-filename</span> <span style="color: #3e999f;">"archive.org"</span>
-    <span style="color: #8959a8;">:sitemap-title</span> <span style="color: #3e999f;">"Archive"</span>
-    <span style="color: #8959a8;">:sitemap-sort-files</span> anti-chronologically
-    <span style="color: #8959a8;">:sitemap-style</span> list
-    <span style="color: #8959a8;">:makeindex</span> t
+    <pre class="src src-python"><span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile
+    <span style="color: #eab700;">f</span> = SoundFile(<span style="color: #3e999f;">'long_song.flac'</span>)
+    <span style="color: #eab700;">first</span> = f[:100]
+    <span style="color: #eab700;">last</span> = f[-100:]
     </pre>
   </div>
 
   <p>
-    Also, you can put something like
+    This really only read the first and last bit. Not everything in between!
+  </p>
+
+  <p>
+    Note that at no point I did explicitly open or close a file! This is Python! We can do that! When the <code>SoundFile</code> object is created, it opens the file. When it goes out of scope, it closes the file. It&rsquo;s as simple as that. Or just use <code>SoundFile</code> in a context manager. That works as well.
+  </p>
+
+  <p>
+    Oh, but I want to use the sound card as well! I want to record audio to a file!
   </p>
 
   <div class="org-src-container">
 
-    <pre class="src src-html">&lt;<span style="color: #f5871f;">a</span> <span style="color: #eab700;">href</span>=<span style="color: #3e999f;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #f5871f;">a</span>&gt;
+    <pre class="src src-python"><span style="color: #718c00;">from</span> pysoundcard <span style="color: #718c00;">import</span> Stream
+    <span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile, ogg_file, write_mode
+    <span style="color: #718c00;">with</span> Stream() <span style="color: #718c00;">as</span> s: <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">opens your default audio device</span>
+    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
+    <span style="color: #eab700;">f</span> = SoundFile(<span style="color: #3e999f;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+    channels=s.channels, <span style="color: #8959a8;">format</span>=ogg_file,
+    mode=write_mode)
+    f.write(s.read(s.sample_rate)) <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">one second</span>
     </pre>
   </div>
 
   <p>
-    into your <code>:html-postamble</code> to make every page link to this. You can also add your <a href="https://disqus.com/">Disqus</a> snippet there to enable comments.
+    Read from the stream, write to a file. It works the other way round, too!
   </p>
 
   <p>
-    Adding a front page is simple, too. My front page is simply a normal page called <i>index.org</i>, which contains links and slugs for every article I want to have on the front page. For example:
-  </p>
-
-  <div class="org-src-container">
-
-    <pre class="src src-org"><span style="color: #718c00;">#+TITLE:</span> <span style="color: #f5871f; font-size: 144%; font-weight: bold;">RECENT POSTS</span>
-
-    <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">Speeding up Matplotlib</span>
-    <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
-    <span style="color: #4271ae; text-decoration: underline;">read more...</span>
-    </pre>
-  </div>
-
-  <p>
-    But a blog is more than just text. There are images and CSS, too. I keep all that stuff in a separate directory and use a separate publishing project to copy it over to the publishing directory. Just add to your <code>publishing-alist</code>:
-  </p>
-
-  <div class="org-src-container">
-
-    <pre class="src src-elisp">(<span style="color: #3e999f;">"blog-static"</span>
-    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/static"</span>
-    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"png</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">jpg</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">css"</span>
-    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish/static"</span>
-    <span style="color: #8959a8;">:recursive</span> t
-    <span style="color: #8959a8;">:publishing-function</span> org-publish-attachment)
-    </pre>
-  </div>
-
-  <p>
-    Setting up the RSS feed works similarly. The RSS feed is created from a single Org file. Create a new publishing project and put it into your <code>publishing-alist</code>
-  </p>
-
-  <div class="org-src-container">
-
-    <pre class="src src-elisp">(<span style="color: #3e999f;">"blog-rss"</span>
-    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
-    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
-    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
-    <span style="color: #8959a8;">:publishing-function</span> (org-rss-publish-to-rss)
-    <span style="color: #8959a8;">:html-link-home</span> <span style="color: #3e999f;">"http://bastibe.de/"</span>
-    <span style="color: #8959a8;">:html-link-use-abs-url</span> t
-    <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">".*"</span>
-    <span style="color: #8959a8;">:include</span> (<span style="color: #3e999f;">"rss.org"</span>)
-    <span style="color: #8959a8;">:with-toc</span> nil
-    <span style="color: #8959a8;">:section-numbers</span> nil
-    <span style="color: #8959a8;">:title</span> <span style="color: #3e999f;">"Bastis Scratchpad on the Internet"</span>)
-    </pre>
-  </div>
-
-  <p>
-    Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code> project by adding it&rsquo;s name to the <code>:exclude</code> variable though. This <code>rss.org</code> file should contain headlines for every blog post. Every headline needs a publishing date and a permalink as property and the body of the post as content:
-  </p>
-
-  <div class="org-src-container">
-
-    <pre class="src src-org"><span style="color: #4271ae;">* Speeding up Matplotlib</span>
-    <span style="color: #f5871f;">:PROPERTIES:</span>
-    <span style="color: #f5871f;">:RSS_PERMALINK:</span> "<span style="color: #4271ae; text-decoration: underline;">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</span>"
-    <span style="color: #f5871f;">:PUBDATE:</span> <span style="color: #4271ae; text-decoration: underline;">&lt;2013-05-30&gt;</span>
-    <span style="color: #f5871f;">:END:</span>
-    <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
-    </pre>
-  </div>
-
-  <p>
-    I exclude the first three lines, since they only contain <code>#+title</code>, <code>#+date</code>, and <code>#+tags</code>. You should at least exclude the <code>#+title</code> line. Otherwise, <code>ox-rss</code> will get confused about which title to choose for the feed.
+    And that&rsquo;s really all there is to it. Working with audio data in Python is easy now!
   </p>
 
   <p>
-    You can even create a meta publishing project that executes all three projects in one fell swoop!
+    Of course, there is much more you could do. You could create a callback function and be called every four<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>.
   </p>
-
-  <div class="org-src-container">
-
-    <pre class="src src-elisp">(<span style="color: #3e999f;">"blog"</span>
-    <span style="color: #8959a8;">:components</span> (<span style="color: #3e999f;">"blog-content"</span> <span style="color: #3e999f;">"blog-static"</span> <span style="color: #3e999f;">"blog-rss"</span>))
-    </pre>
-  </div>
 
   <p>
-    There is one more thing that is kind of fiddly though: As I said, I use Disqus for comments, but I don&rsquo;t want to have comment boxes on the front page or the archive. Thankfully though, <code>ox-html</code> allows you to set <code>:html-preamble</code> and <code>:html-postamble</code> to a function, in which case that function can decide what pre/postamble to draw! The function can take an optional argument that contains a <code>plist</code> of article metadata. In this case, I decide on the <code>:title</code> metadata whether to print the archive link and Disqus, only the archive link, or neither:
+    You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven&rsquo;t found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
   </p>
+  ]]></description>
+</item>
+<item>
+  <title>Blogging with Emacs</title>
+  <link>http://bastibe.de/2013-11-13-blogging-with-emacs.html</link>
+  <guid isPermaLink="false">http://bastibe.de/2013-11-13-blogging-with-emacs.html</guid>
+  <pubDate>Wed, 13 Nov 2013 00:00:00 +0100</pubDate>
 
-  <div class="org-src-container">
+  <description><![CDATA[<p>
+  When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
+</p>
 
-    <pre class="src src-elisp"><span style="color: #8959a8;">:html-postamble</span>
-    (<span style="color: #718c00;">lambda</span> (info)
-    <span style="color: #8959a8;">"Do not show disqus for Archive and Recent Posts"</span>
-    (<span style="color: #718c00;">cond</span> ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Archive"</span>)
-    <span style="color: #3e999f;">""</span>)
-    ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Recent Posts"</span>)
-    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
-    (t
-    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-    <span style="color: #3e999f;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-    <span style="color: #3e999f;">     &lt;script type=\"text/javascript\"&gt;</span>
-    <span style="color: #3e999f;">     ..."</span>
-    </pre>
-  </div>
+<p>
+  Thus I switched. Getting my blog posts out of blogger was... Let&rsquo;s just say that I lost anything I didn&rsquo;t have a plain-text backup of. And <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">I switched</a> to <a href="http://pelican.readthedocs.org/en/3.3.0/">Pelican</a>, a static site generator written in Python. It worked beautifully, until I updated something, at which point it resorted to just throwing errors. Now I don&rsquo;t have anything in particular against Python stack traces, but these particular traces traced deep into stuff that was (then?) too complex for me to understand.
+</p>
 
-  <p>
-    This should get you started! For completeness, here is my complete configuration:
-  </p>
+<p>
+  Thus I switched again. This time to <a href="https://github.com/redline6561/coleslaw">C()λ∈slaw■</a>, a static site generator written in Common Lisp. Mainly because I was interested in Common Lisp at the time. It worked really well. However, this was supposed to give me a chance to delve into Common Lisp, and I failed to understand C()λ∈slaw■&rsquo;s code. Realistically though, this is probably not C()λ∈slaw■&rsquo;s fault. My knowledge of Common Lisp is far from perfect.
+</p>
 
-  <div class="org-src-container">
+<p>
+  Thus it was time to switch again. Having been enamored with Emacs for the last few years, it made sense to blog with Emacs as well. Besides, I am kind of fed up with the many conflicting flavors of Markdown out there and have switched my personal note-taking to <a href="http://orgmode.org/">Org mode</a> long ago. So let&rsquo;s set up Emacs and Org as a blogging platform!
+</p>
 
-    <pre class="src src-elisp">(<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-html</span>)
-    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-rss</span>)
-    (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-publish</span>)
-    (setq org-publish-project-alist
-    '((<span style="color: #3e999f;">"blog"</span>
-    <span style="color: #8959a8;">:components</span> (<span style="color: #3e999f;">"blog-content"</span> <span style="color: #3e999f;">"blog-static"</span> <span style="color: #3e999f;">"blog-rss"</span>))
-    (<span style="color: #3e999f;">"blog-content"</span>
-    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
-    <span style="color: #8959a8;">:html-extension</span> <span style="color: #3e999f;">"html"</span>
-    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
-    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
-    <span style="color: #8959a8;">:publishing-function</span> (org-html-publish-to-html)
-    <span style="color: #8959a8;">:auto-sitemap</span> t
-    <span style="color: #8959a8;">:sitemap-filename</span> <span style="color: #3e999f;">"archive.org"</span>
-    <span style="color: #8959a8;">:sitemap-title</span> <span style="color: #3e999f;">"Archive"</span>
-    <span style="color: #8959a8;">:sitemap-sort-files</span> anti-chronologically
-    <span style="color: #8959a8;">:sitemap-style</span> list
-    <span style="color: #8959a8;">:makeindex</span> t
-    <span style="color: #8959a8;">:recursive</span> t
-    <span style="color: #8959a8;">:section-numbers</span> nil
-    <span style="color: #8959a8;">:with-toc</span> nil
-    <span style="color: #8959a8;">:with-latex</span> t
-    <span style="color: #8959a8;">:html-head-include-default-style</span> nil
-    <span style="color: #8959a8;">:html-head-include-scripts</span> nil
-    <span style="color: #8959a8;">:html-head-extra</span>
-    <span style="color: #3e999f;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
-    <span style="color: #3e999f;">                href=\"http://bastibe.de/rss.xml\"</span>
-    <span style="color: #3e999f;">                title=\"RSS feed for bastibe.de\"&gt;</span>
-    <span style="color: #3e999f;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
-    <span style="color: #3e999f;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
-    <span style="color: #3e999f;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
-    <span style="color: #3e999f;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
-    <span style="color: #3e999f;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
-    <span style="color: #3e999f;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
-    <span style="color: #8959a8;">:html-preamble</span>
-    <span style="color: #3e999f;">"&lt;div class=\"header\"&gt;</span>
-    <span style="color: #3e999f;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
-    <span style="color: #3e999f;">              &lt;div class=\"sitelinks\"&gt;</span>
-    <span style="color: #3e999f;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
-    <span style="color: #3e999f;">              &lt;/div&gt;</span>
-    <span style="color: #3e999f;">          &lt;/div&gt;"</span>
-    <span style="color: #8959a8;">:html-postamble</span>
-    (<span style="color: #718c00;">lambda</span> (info)
-    <span style="color: #8959a8;">"Do not show disqus for Archive and Recent Posts"</span>
-    (<span style="color: #718c00;">cond</span> ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Archive"</span>) <span style="color: #3e999f;">""</span>)
-    ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Recent Posts"</span>)
-    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
-    (t
-    <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-    <span style="color: #3e999f;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-    <span style="color: #3e999f;">              &lt;script type=\"text/javascript\"&gt;</span>
-    <span style="color: #3e999f;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
-    <span style="color: #3e999f;">              var disqus_shortname = 'bastibe';</span>
-    <span style="color: #3e999f;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
-    <span style="color: #3e999f;">              (function() {</span>
-    <span style="color: #3e999f;">                var dsq = document.createElement('script');</span>
-    <span style="color: #3e999f;">                dsq.type = 'text/javascript';</span>
-    <span style="color: #3e999f;">                dsq.async = true;</span>
-    <span style="color: #3e999f;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
-    <span style="color: #3e999f;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
-    <span style="color: #3e999f;">                  })();</span>
-    <span style="color: #3e999f;">              &lt;/script&gt;</span>
-    <span style="color: #3e999f;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
-    <span style="color: #3e999f;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
-    <span style="color: #3e999f;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
-    <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">"rss.org</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">archive.org</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">theindex.org"</span>)
-    (<span style="color: #3e999f;">"blog-rss"</span>
-    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
-    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
-    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
-    <span style="color: #8959a8;">:publishing-function</span> (org-rss-publish-to-rss)
-    <span style="color: #8959a8;">:html-link-home</span> <span style="color: #3e999f;">"http://bastibe.de/"</span>
-    <span style="color: #8959a8;">:html-link-use-abs-url</span> t
-    <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">".*"</span>
-    <span style="color: #8959a8;">:include</span> (<span style="color: #3e999f;">"rss.org"</span>)
-    <span style="color: #8959a8;">:with-toc</span> nil
-    <span style="color: #8959a8;">:section-numbers</span> nil
-    <span style="color: #8959a8;">:title</span> <span style="color: #3e999f;">"Bastis Scratchpad on the Internet"</span>)
-    (<span style="color: #3e999f;">"blog-static"</span>
-    <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/static"</span>
-    <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"png</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">jpg</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">css"</span>
-    <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish/static"</span>
-    <span style="color: #8959a8;">:recursive</span> t
-    <span style="color: #8959a8;">:publishing-function</span> org-publish-attachment)))
+<p>
+  Before we start though, a short disclaimer: This will be a very bare bones blogging engine. It will consist of some articles, a front page, an archive page, and an RSS feed. And you will have to manage the front page and RSS feed semi-manually. No tags, no fancy history. Just what you see here.
+</p>
+
+<p>
+  On the plus side, this will be implemented entirely within Emacs and very simple to understand. Writing a new blog post will be as simple as writing an Org file and hitting a key combination! And you will get all of Org&rsquo;s fancy syntax highlighting and export magic for free!
+</p>
+
+<p>
+  Getting the pages to work is rather simple: You have to create a &ldquo;publishing project&rdquo; that specifies a <code>base-directory</code> where your Org files live and a <code>publishing-directory</code>, where the HTML files are going to be stored. Since this is Emacs, you could make your publishing directory any TRAMP path you like and insta-publish your workings!
+</p>
+
+<p>
+  (BTW, I am using Org 8.2.2 and I believe you need at least 8.0 for these examples to work)
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp">(<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-html</span>)
+  (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-rss</span>)
+  (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-publish</span>)
+  (setq org-publish-project-alist
+  '((<span style="color: #3e999f;">"blog-content"</span>
+  <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+  <span style="color: #8959a8;">:html-extension</span> <span style="color: #3e999f;">"html"</span>
+  <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+  <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+  <span style="color: #8959a8;">:publishing-function</span> (org-html-publish-to-html)
+  <span style="color: #8959a8;">:recursive</span> t          <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">descend into sub-folders?</span>
+  <span style="color: #8959a8;">:section-numbers</span> nil  <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">don't create numbered sections</span>
+  <span style="color: #8959a8;">:with-toc</span> nil         <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">don't create a table of contents</span>
+  <span style="color: #8959a8;">:with-latex</span> t         <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">do use MathJax for awesome formulas!</span>
+  <span style="color: #8959a8;">:html-head-extra</span> <span style="color: #3e999f;">""</span>   <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">extra &lt;head&gt; entries go here</span>
+  <span style="color: #8959a8;">:html-preamble</span> <span style="color: #3e999f;">""</span>     <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">this stuff is put before your post</span>
+  <span style="color: #8959a8;">:html-postamble</span> <span style="color: #3e999f;">""</span>    <span style="color: #8e908c; font-style: italic;">; </span><span style="color: #8e908c; font-style: italic;">this stuff is put after your post</span>
+  )))
   </pre>
+</div>
+
+<p>
+  Now hit <code>M-x org-publish</code>, type in <code>blog-content</code>, and you have a blog! Awesome! We are done here.
+</p>
+
+<p>
+  Well, how about an archive page that lists all your previous blog entries?
+</p>
+
+<p>
+  Emacs can auto-generate this for you. Simply add these lines to <code>blog-content</code>:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp"><span style="color: #8959a8;">:auto-sitemap</span> t
+  <span style="color: #8959a8;">:sitemap-filename</span> <span style="color: #3e999f;">"archive.org"</span>
+  <span style="color: #8959a8;">:sitemap-title</span> <span style="color: #3e999f;">"Archive"</span>
+  <span style="color: #8959a8;">:sitemap-sort-files</span> anti-chronologically
+  <span style="color: #8959a8;">:sitemap-style</span> list
+  <span style="color: #8959a8;">:makeindex</span> t
+  </pre>
+</div>
+
+<p>
+  Also, you can put something like
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-html">&lt;<span style="color: #f5871f;">a</span> <span style="color: #eab700;">href</span>=<span style="color: #3e999f;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #f5871f;">a</span>&gt;
+  </pre>
+</div>
+
+<p>
+  into your <code>:html-postamble</code> to make every page link to this. You can also add your <a href="https://disqus.com/">Disqus</a> snippet there to enable comments.
+</p>
+
+<p>
+  Adding a front page is simple, too. My front page is simply a normal page called <i>index.org</i>, which contains links and slugs for every article I want to have on the front page. For example:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-org"><span style="color: #718c00;">#+TITLE:</span> <span style="color: #f5871f; font-size: 144%; font-weight: bold;">RECENT POSTS</span>
+
+  <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][Speeding up Matplotlib]]</span>
+  <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
+  <span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][read more...]]</span>
+  </pre>
+</div>
+
+<p>
+  But a blog is more than just text. There are images and CSS, too. I keep all that stuff in a separate directory and use a separate publishing project to copy it over to the publishing directory. Just add to your <code>publishing-alist</code>:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp">(<span style="color: #3e999f;">"blog-static"</span>
+  <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/static"</span>
+  <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"png</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">jpg</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">css"</span>
+  <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish/static"</span>
+  <span style="color: #8959a8;">:recursive</span> t
+  <span style="color: #8959a8;">:publishing-function</span> org-publish-attachment)
+  </pre>
+</div>
+
+<p>
+  Setting up the RSS feed works similarly. The RSS feed is created from a single Org file. Create a new publishing project and put it into your <code>publishing-alist</code>
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp">(<span style="color: #3e999f;">"blog-rss"</span>
+  <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+  <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+  <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+  <span style="color: #8959a8;">:publishing-function</span> (org-rss-publish-to-rss)
+  <span style="color: #8959a8;">:html-link-home</span> <span style="color: #3e999f;">"http://bastibe.de/"</span>
+  <span style="color: #8959a8;">:html-link-use-abs-url</span> t
+  <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">".*"</span>
+  <span style="color: #8959a8;">:include</span> (<span style="color: #3e999f;">"rss.org"</span>)
+  <span style="color: #8959a8;">:with-toc</span> nil
+  <span style="color: #8959a8;">:section-numbers</span> nil
+  <span style="color: #8959a8;">:title</span> <span style="color: #3e999f;">"Bastis Scratchpad on the Internet"</span>)
+  </pre>
+</div>
+
+<p>
+  Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code> project by adding it&rsquo;s name to the <code>:exclude</code> variable though. This <code>rss.org</code> file should contain headlines for every blog post. Every headline needs a publishing date and a permalink as property and the body of the post as content:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-org"><span style="color: #4271ae;">* Speeding up Matplotlib</span>
+  <span style="color: #f5871f;">:PROPERTIES:</span>
+  <span style="color: #f5871f;">:RSS_PERMALINK:</span> "<span style="color: #4271ae; text-decoration: underline;">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</span>"
+  <span style="color: #f5871f;">:PUBDATE:</span> <span style="color: #4271ae; text-decoration: underline;">&lt;2013-05-30&gt;</span>
+  <span style="color: #f5871f;">:END:</span>
+  <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
+  </pre>
+</div>
+
+<p>
+  I exclude the first three lines, since they only contain <code>#+title</code>, <code>#+date</code>, and <code>#+tags</code>. You should at least exclude the <code>#+title</code> line. Otherwise, <code>ox-rss</code> will get confused about which title to choose for the feed.
+</p>
+
+<p>
+  You can even create a meta publishing project that executes all three projects in one fell swoop!
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp">(<span style="color: #3e999f;">"blog"</span>
+  <span style="color: #8959a8;">:components</span> (<span style="color: #3e999f;">"blog-content"</span> <span style="color: #3e999f;">"blog-static"</span> <span style="color: #3e999f;">"blog-rss"</span>))
+  </pre>
+</div>
+
+<p>
+  There is one more thing that is kind of fiddly though: As I said, I use Disqus for comments, but I don&rsquo;t want to have comment boxes on the front page or the archive. Thankfully though, <code>ox-html</code> allows you to set <code>:html-preamble</code> and <code>:html-postamble</code> to a function, in which case that function can decide what pre/postamble to draw! The function can take an optional argument that contains a <code>plist</code> of article metadata. In this case, I decide on the <code>:title</code> metadata whether to print the archive link and Disqus, only the archive link, or neither:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp"><span style="color: #8959a8;">:html-postamble</span>
+  (<span style="color: #718c00;">lambda</span> (info)
+  <span style="color: #8959a8;">"Do not show disqus for Archive and Recent Posts"</span>
+  (<span style="color: #718c00;">cond</span> ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Archive"</span>)
+  <span style="color: #3e999f;">""</span>)
+  ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Recent Posts"</span>)
+  <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+  (t
+  <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+  <span style="color: #3e999f;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+  <span style="color: #3e999f;">     &lt;script type=\"text/javascript\"&gt;</span>
+  <span style="color: #3e999f;">     ..."</span>
+  </pre>
+</div>
+
+<p>
+  This should get you started! For completeness, here is my complete configuration:
+</p>
+
+<div class="org-src-container">
+
+  <pre class="src src-elisp">(<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-html</span>)
+  (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-rss</span>)
+  (<span style="color: #718c00;">require</span> '<span style="color: #4271ae;">ox-publish</span>)
+  (setq org-publish-project-alist
+  '((<span style="color: #3e999f;">"blog"</span>
+  <span style="color: #8959a8;">:components</span> (<span style="color: #3e999f;">"blog-content"</span> <span style="color: #3e999f;">"blog-static"</span> <span style="color: #3e999f;">"blog-rss"</span>))
+  (<span style="color: #3e999f;">"blog-content"</span>
+  <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+  <span style="color: #8959a8;">:html-extension</span> <span style="color: #3e999f;">"html"</span>
+  <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+  <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+  <span style="color: #8959a8;">:publishing-function</span> (org-html-publish-to-html)
+  <span style="color: #8959a8;">:auto-sitemap</span> t
+  <span style="color: #8959a8;">:sitemap-filename</span> <span style="color: #3e999f;">"archive.org"</span>
+  <span style="color: #8959a8;">:sitemap-title</span> <span style="color: #3e999f;">"Archive"</span>
+  <span style="color: #8959a8;">:sitemap-sort-files</span> anti-chronologically
+  <span style="color: #8959a8;">:sitemap-style</span> list
+  <span style="color: #8959a8;">:makeindex</span> t
+  <span style="color: #8959a8;">:recursive</span> t
+  <span style="color: #8959a8;">:section-numbers</span> nil
+  <span style="color: #8959a8;">:with-toc</span> nil
+  <span style="color: #8959a8;">:with-latex</span> t
+  <span style="color: #8959a8;">:html-head-include-default-style</span> nil
+  <span style="color: #8959a8;">:html-head-include-scripts</span> nil
+  <span style="color: #8959a8;">:html-head-extra</span>
+  <span style="color: #3e999f;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
+  <span style="color: #3e999f;">                href=\"http://bastibe.de/rss.xml\"</span>
+  <span style="color: #3e999f;">                title=\"RSS feed for bastibe.de\"&gt;</span>
+  <span style="color: #3e999f;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
+  <span style="color: #3e999f;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
+  <span style="color: #3e999f;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+  <span style="color: #3e999f;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
+  <span style="color: #3e999f;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
+  <span style="color: #3e999f;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
+  <span style="color: #8959a8;">:html-preamble</span>
+  <span style="color: #3e999f;">"&lt;div class=\"header\"&gt;</span>
+  <span style="color: #3e999f;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
+  <span style="color: #3e999f;">              &lt;div class=\"sitelinks\"&gt;</span>
+  <span style="color: #3e999f;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
+  <span style="color: #3e999f;">              &lt;/div&gt;</span>
+  <span style="color: #3e999f;">          &lt;/div&gt;"</span>
+  <span style="color: #8959a8;">:html-postamble</span>
+  (<span style="color: #718c00;">lambda</span> (info)
+  <span style="color: #8959a8;">"Do not show disqus for Archive and Recent Posts"</span>
+  (<span style="color: #718c00;">cond</span> ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Archive"</span>) <span style="color: #3e999f;">""</span>)
+  ((string= (car (plist-get info <span style="color: #8959a8;">:title</span>)) <span style="color: #3e999f;">"Recent Posts"</span>)
+  <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+  (t
+  <span style="color: #3e999f;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+  <span style="color: #3e999f;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+  <span style="color: #3e999f;">              &lt;script type=\"text/javascript\"&gt;</span>
+  <span style="color: #3e999f;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
+  <span style="color: #3e999f;">              var disqus_shortname = 'bastibe';</span>
+  <span style="color: #3e999f;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
+  <span style="color: #3e999f;">              (function() {</span>
+  <span style="color: #3e999f;">                var dsq = document.createElement('script');</span>
+  <span style="color: #3e999f;">                dsq.type = 'text/javascript';</span>
+  <span style="color: #3e999f;">                dsq.async = true;</span>
+  <span style="color: #3e999f;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
+  <span style="color: #3e999f;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
+  <span style="color: #3e999f;">                  })();</span>
+  <span style="color: #3e999f;">              &lt;/script&gt;</span>
+  <span style="color: #3e999f;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
+  <span style="color: #3e999f;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
+  <span style="color: #3e999f;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
+  <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">"rss.org</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">archive.org</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">theindex.org"</span>)
+  (<span style="color: #3e999f;">"blog-rss"</span>
+  <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/posts"</span>
+  <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"org"</span>
+  <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish"</span>
+  <span style="color: #8959a8;">:publishing-function</span> (org-rss-publish-to-rss)
+  <span style="color: #8959a8;">:html-link-home</span> <span style="color: #3e999f;">"http://bastibe.de/"</span>
+  <span style="color: #8959a8;">:html-link-use-abs-url</span> t
+  <span style="color: #8959a8;">:exclude</span> <span style="color: #3e999f;">".*"</span>
+  <span style="color: #8959a8;">:include</span> (<span style="color: #3e999f;">"rss.org"</span>)
+  <span style="color: #8959a8;">:with-toc</span> nil
+  <span style="color: #8959a8;">:section-numbers</span> nil
+  <span style="color: #8959a8;">:title</span> <span style="color: #3e999f;">"Bastis Scratchpad on the Internet"</span>)
+  (<span style="color: #3e999f;">"blog-static"</span>
+  <span style="color: #8959a8;">:base-directory</span> <span style="color: #3e999f;">"~/Projects/blog/static"</span>
+  <span style="color: #8959a8;">:base-extension</span> <span style="color: #3e999f;">"png</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">jpg</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">|</span><span style="color: #3e999f;">css"</span>
+  <span style="color: #8959a8;">:publishing-directory</span> <span style="color: #3e999f;">"~/Projects/blog/publish/static"</span>
+  <span style="color: #8959a8;">:recursive</span> t
+  <span style="color: #8959a8;">:publishing-function</span> org-publish-attachment)))
+</pre>
 </div>
 
 <p>
@@ -567,8 +667,8 @@
   Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-sec-3-1" class="outline-3">
-  <h3 id="sec-3-1">Python as a Matlab replacement</h3>
+<div id="outline-container-sec-4-1" class="outline-3">
+  <h3 id="sec-4-1">Python as a Matlab replacement</h3>
   <p>
     The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
   </p>
@@ -586,8 +686,8 @@
     You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.
   </p>
 </div>
-<div id="outline-container-sec-3-2" class="outline-3">
-  <h3 id="sec-3-2">A 30,000 foot overview</h3>
+<div id="outline-container-sec-4-2" class="outline-3">
+  <h3 id="sec-4-2">A 30,000 foot overview</h3>
   <p>
     Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
   </p>
@@ -651,8 +751,8 @@
     Unlike Matlab, the source code of Python is readily available. Every detail of Python&rsquo;s inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.
   </p>
 </div>
-<div id="outline-container-sec-3-3" class="outline-3">
-  <h3 id="sec-3-3">Reading Python</h3>
+<div id="outline-container-sec-4-3" class="outline-3">
+  <h3 id="sec-4-3">Reading Python</h3>
   <p>
     When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
   </p>
@@ -781,8 +881,8 @@
     </pre>
   </div>
 </div>
-<div id="outline-container-sec-3-4" class="outline-3">
-  <h3 id="sec-3-4">Common traps</h3>
+<div id="outline-container-sec-4-4" class="outline-3">
+  <h3 id="sec-4-4">Common traps</h3>
   <ul class="org-ul">
     <li>Array slicing does not copy.
     </li>
@@ -814,8 +914,8 @@
   </div>
 </div>
 
-<div id="outline-container-sec-3-5" class="outline-3">
-  <h3 id="sec-3-5">Going further</h3>
+<div id="outline-container-sec-4-5" class="outline-3">
+  <h3 id="sec-4-5">Going further</h3>
   <p>
     Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
   </p>
@@ -852,8 +952,8 @@
   However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let&rsquo;s define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-sec-4-1" class="outline-3">
-  <h3 id="sec-4-1">A Simple Limiter</h3>
+<div id="outline-container-sec-5-1" class="outline-3">
+  <h3 id="sec-5-1">A Simple Limiter</h3>
   <p>
     A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
   </p>
@@ -981,8 +1081,8 @@
     Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\) in terms of the time they take to reach their target and the threshold \(t\) in dB FS.
   </p>
 </div>
-<div id="outline-container-sec-4-2" class="outline-3">
-  <h3 id="sec-4-2">Implementing audio processing in Python</h3>
+<div id="outline-container-sec-5-2" class="outline-3">
+  <h3 id="sec-5-2">Implementing audio processing in Python</h3>
   <p>
     A real-time audio processing framework using PyAudio would look like this:
   </p>
@@ -1046,8 +1146,8 @@
     Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).
   </p>
 </div>
-<div id="outline-container-sec-4-3" class="outline-3">
-  <h3 id="sec-4-3">Speeding up execution using Cython</h3>
+<div id="outline-container-sec-5-3" class="outline-3">
+  <h3 id="sec-5-3">Speeding up execution using Cython</h3>
   <p>
     The limiter defined above could be rewritten in C like this:
   </p>
@@ -1219,8 +1319,8 @@
   With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.
 </p>
 </div>
-<div id="outline-container-sec-4-4" class="outline-3">
-  <h3 id="sec-4-4">Conclusion</h3>
+<div id="outline-container-sec-5-4" class="outline-3">
+  <h3 id="sec-5-4">Conclusion</h3>
   <p>
     In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
   </p>
@@ -1229,8 +1329,8 @@
     You can find all the source code in this article at <a href="https://github.com/bastibe/simple-cython-limiter">https://github.com/bastibe/simple-cython-limiter</a>
   </p>
 </div>
-<div id="outline-container-sec-4-5" class="outline-3">
-  <h3 id="sec-4-5">Disclaimer</h3>
+<div id="outline-container-sec-5-5" class="outline-3">
+  <h3 id="sec-5-5">Disclaimer</h3>
   <ol class="org-ol">
     <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.
     </li>
@@ -1426,8 +1526,8 @@
   Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-sec-8-1" class="outline-3">
-  <h3 id="sec-8-1">When Emacs starts up, make it fit the left half of the screen</h3>
+<div id="outline-container-sec-9-1" class="outline-3">
+  <h3 id="sec-9-1">When Emacs starts up, make it fit the left half of the screen</h3>
   <p>
     First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
   </p>
@@ -1471,8 +1571,8 @@
     </pre>
   </div>
 </div>
-<div id="outline-container-sec-8-2" class="outline-3">
-  <h3 id="sec-8-2">Make shell split windows auto-resize</h3>
+<div id="outline-container-sec-9-2" class="outline-3">
+  <h3 id="sec-9-2">Make shell split windows auto-resize</h3>
   <p>
     Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
   </p>
@@ -1489,8 +1589,8 @@
     </pre>
   </div>
 </div>
-<div id="outline-container-sec-8-3" class="outline-3">
-  <h3 id="sec-8-3">Create a new line above/below the current one</h3>
+<div id="outline-container-sec-9-3" class="outline-3">
+  <h3 id="sec-9-3">Create a new line above/below the current one</h3>
   <p>
     There is one feature of Vim that I really missed: <code>o~/~O</code>, which &lsquo;opens&rsquo; a new line above or below the current one without changing the current line.
   </p>
@@ -1518,8 +1618,8 @@
     </pre>
   </div>
 </div>
-<div id="outline-container-sec-8-4" class="outline-3">
-  <h3 id="sec-8-4">When editing LaTeX, show PDF output in Emacs</h3>
+<div id="outline-container-sec-9-4" class="outline-3">
+  <h3 id="sec-9-4">When editing LaTeX, show PDF output in Emacs</h3>
   <p>
     Emacs provides an awesome mode for editing LaTeX files. But isn&rsquo;t it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
   </p>
@@ -1568,8 +1668,8 @@
   Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!
 </p>
 
-<div id="outline-container-sec-9-1" class="outline-3">
-  <h3 id="sec-9-1">Text editing</h3>
+<div id="outline-container-sec-10-1" class="outline-3">
+  <h3 id="sec-10-1">Text editing</h3>
   <p>
     In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.
   </p>
@@ -1582,8 +1682,8 @@
     This is a theme that goes through all these features: I look for stuff that is fast and precise, because this will enable more powerful applications of seemingly simple techniques.
   </p>
 </div>
-<div id="outline-container-sec-9-2" class="outline-3">
-  <h3 id="sec-9-2">Outlining and task management</h3>
+<div id="outline-container-sec-10-2" class="outline-3">
+  <h3 id="sec-10-2">Outlining and task management</h3>
   <p>
     Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.
   </p>
@@ -1596,8 +1696,8 @@
     Add to that the more advanced task tracking features of org-mode, such as <a href="http://orgmode.org/features.html#clocking">time tracking</a> or <a href="http://orgmode.org/features.html#planning">advanced todo planning</a> and this has become one of the most pivotal tools I use daily.
   </p>
 </div>
-<div id="outline-container-sec-9-3" class="outline-3">
-  <h3 id="sec-9-3">Shell interaction and operating system compatibility</h3>
+<div id="outline-container-sec-10-3" class="outline-3">
+  <h3 id="sec-10-3">Shell interaction and operating system compatibility</h3>
   <p>
     Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.
   </p>
@@ -1610,8 +1710,8 @@
     At more than one point, Eshell probably saved my sanity.
   </p>
 </div>
-<div id="outline-container-sec-9-4" class="outline-3">
-  <h3 id="sec-9-4">Git interaction</h3>
+<div id="outline-container-sec-10-4" class="outline-3">
+  <h3 id="sec-10-4">Git interaction</h3>
   <p>
     Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.
   </p>
@@ -1620,8 +1720,8 @@
     Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.github.com/magit/magit.html#Introduction">magit</a>, which builds an interactive git interaction program within Emacs. With magit, all the major git commands are just a keystroke away and diffs or logs are easily accessible, too. It really is a major feat!
   </p>
 </div>
-<div id="outline-container-sec-9-5" class="outline-3">
-  <h3 id="sec-9-5">Grab bag</h3>
+<div id="outline-container-sec-10-5" class="outline-3">
+  <h3 id="sec-10-5">Grab bag</h3>
   <ul class="org-ul">
     <li>Emacs&rsquo; integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.
     </li>
@@ -1892,8 +1992,8 @@
   This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-sec-14-1" class="outline-3">
-  <h3 id="sec-14-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h3>
+<div id="outline-container-sec-15-1" class="outline-3">
+  <h3 id="sec-15-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h3>
   <p>
     Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
   </p>
@@ -1906,8 +2006,8 @@
     After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi&rsquo;s IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <i>Internet Sharing</i> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.
   </p>
 </div>
-<div id="outline-container-sec-14-2" class="outline-3">
-  <h3 id="sec-14-2">Setting up the hard drive</h3>
+<div id="outline-container-sec-15-2" class="outline-3">
+  <h3 id="sec-15-2">Setting up the hard drive</h3>
   <p>
     First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don&rsquo;t use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
   </p>
@@ -1920,8 +2020,8 @@
     Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won&rsquo;t allow any other network drive as Time Capsules.
   </p>
 </div>
-<div id="outline-container-sec-14-3" class="outline-3">
-  <h3 id="sec-14-3">Setting up the shared folder</h3>
+<div id="outline-container-sec-15-3" class="outline-3">
+  <h3 id="sec-15-3">Setting up the shared folder</h3>
   <p>
     First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
   </p>
@@ -1981,8 +2081,8 @@
     Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>.
   </p>
 </div>
-<div id="outline-container-sec-14-4" class="outline-3">
-  <h3 id="sec-14-4">Setting up the Time Machine</h3>
+<div id="outline-container-sec-15-4" class="outline-3">
+  <h3 id="sec-15-4">Setting up the Time Machine</h3>
   <p>
     <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
   </p>
@@ -2041,8 +2141,8 @@
   So here are some of those problems:
 </p>
 
-<div id="outline-container-sec-15-1" class="outline-3">
-  <h3 id="sec-15-1">Lack of Uninstallers</h3>
+<div id="outline-container-sec-16-1" class="outline-3">
+  <h3 id="sec-16-1">Lack of Uninstallers</h3>
   <p>
     Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
   </p>
@@ -2068,8 +2168,8 @@
     (So as a rule, I will only install <code>*.pkg</code> if there is absolutely no other way. Most of the time, I use or abuse <a href="http://mxcl.github.com/homebrew/">homebrew</a> to mitigate this problem.)
   </p>
 </div>
-<div id="outline-container-sec-15-2" class="outline-3">
-  <h3 id="sec-15-2">Failing Time Machine</h3>
+<div id="outline-container-sec-16-2" class="outline-3">
+  <h3 id="sec-16-2">Failing Time Machine</h3>
   <p>
     So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don&rsquo;t even need to plug in that hard drive any more. Magic!
   </p>
@@ -2082,8 +2182,8 @@
     So, backups that are not backing up. How amazing is that?
   </p>
 </div>
-<div id="outline-container-sec-15-3" class="outline-3">
-  <h3 id="sec-15-3">Living in the Cloud</h3>
+<div id="outline-container-sec-16-3" class="outline-3">
+  <h3 id="sec-16-3">Living in the Cloud</h3>
   <p>
     OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
   </p>
@@ -2100,8 +2200,8 @@
     Things can go wrong, I understand that. But deleting all my contacts? Not cool. Not. Cool.
   </p>
 </div>
-<div id="outline-container-sec-15-4" class="outline-3">
-  <h3 id="sec-15-4">iPhoto</h3>
+<div id="outline-container-sec-16-4" class="outline-3">
+  <h3 id="sec-16-4">iPhoto</h3>
   <p>
     My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
   </p>
@@ -2118,8 +2218,8 @@
     At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftware.com/iplm/">iPhoto Library Manager</a> by Fat Cat Software, which saved both my library and my sanity! Those guys rock!
   </p>
 </div>
-<div id="outline-container-sec-15-5" class="outline-3">
-  <h3 id="sec-15-5">OS X Lion with Auto Save and Versions</h3>
+<div id="outline-container-sec-16-5" class="outline-3">
+  <h3 id="sec-16-5">OS X Lion with Auto Save and Versions</h3>
   <p>
     The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
   </p>
@@ -2144,8 +2244,8 @@
     I could go on. Let&rsquo;s just say that Lion increased my WTF-per-minute rate significantly.
   </p>
 </div>
-<div id="outline-container-sec-15-6" class="outline-3">
-  <h3 id="sec-15-6">Performance, Memory and File System</h3>
+<div id="outline-container-sec-16-6" class="outline-3">
+  <h3 id="sec-16-6">Performance, Memory and File System</h3>
   <p>
     Lets talk performance. I can&rsquo;t really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
   </p>
@@ -2166,10 +2266,10 @@
     And lastly, let&rsquo;s talk HFS+. Did you know that HFS+ has a global lock that prevents any program from accessing the hard drive while another program is doing so? That explains why OS X is so friggin slow on non-SSD drives. And did you ever notice that HFS+ is slowly corrupting your data, even if there are no power failures or anything? I fire up Disk Utility every so often and it will always find some file system corruptions. It rarely breaks stuff, but really, the file system is the very last part of my system I want to see failing randomly.
   </p>
 </div>
-<div id="outline-container-sec-15-7" class="outline-3">
-  <h3 id="sec-15-7">So, what now?</h3>
+<div id="outline-container-sec-16-7" class="outline-3">
+  <h3 id="sec-16-7">So, what now?</h3>
   <p>
-    With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don&rsquo;t.
+    With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. But I don&rsquo;t.
   </p>
 
   <p>
@@ -2429,8 +2529,8 @@
   During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
 </p>
 
-<div id="outline-container-sec-19-1" class="outline-3">
-  <h3 id="sec-19-1"><a href="http://www.vim.org/">Vim</a></h3>
+<div id="outline-container-sec-20-1" class="outline-3">
+  <h3 id="sec-20-1"><a href="http://www.vim.org/">Vim</a></h3>
 
   <div class="figure">
     <p><img src="http://bastibe.de/static/2012-02/vim_small.png" alt="vim_small.png" />
@@ -2470,8 +2570,8 @@
     At the end of the day though, Vim is an amazingly powerful tool, and it is certainly worth it to at least learn the basics of it. Actually, most people I know who tried it have actually stuck with it. Myself, I have some two years of Vimming under my belt, too, and it has proven to be a very important tool for me.
   </p>
 </div>
-<div id="outline-container-sec-19-2" class="outline-3">
-  <h3 id="sec-19-2"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h3>
+<div id="outline-container-sec-20-2" class="outline-3">
+  <h3 id="sec-20-2"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h3>
 
   <div class="figure">
     <p><img src="http://bastibe.de/static/2012-02/emacs_small.png" alt="emacs_small.png" />
@@ -2522,8 +2622,8 @@
     At any rate, I would recommend anyone to give Emacs a shot at least for a short while. The power of Emacs can be an exhilarating experience, really.
   </p>
 </div>
-<div id="outline-container-sec-19-3" class="outline-3">
-  <h3 id="sec-19-3"><a href="http://macromates.com/">Textmate (2)</a></h3>
+<div id="outline-container-sec-20-3" class="outline-3">
+  <h3 id="sec-20-3"><a href="http://macromates.com/">Textmate (2)</a></h3>
 
   <div class="figure">
     <p><img src="http://bastibe.de/static/2012-02/textmate_small.png" alt="textmate_small.png" />
@@ -2569,8 +2669,8 @@
     Recently however, an early alpha version of Textmate 2 has been released that could reinvigorate the community and fix long standing issues. Whether that will actually happen will remain to be seen.
   </p>
 </div>
-<div id="outline-container-sec-19-4" class="outline-3">
-  <h3 id="sec-19-4"><a href="http://www.vicoapp.com/">Vico</a></h3>
+<div id="outline-container-sec-20-4" class="outline-3">
+  <h3 id="sec-20-4"><a href="http://www.vicoapp.com/">Vico</a></h3>
 
   <div class="figure">
     <p><img src="http://bastibe.de/static/2012-02/vico_small.png" alt="vico_small.png" />
@@ -2593,8 +2693,8 @@
     Personally, I like it quite a bit and I am hoping very much that it will not be forgotten as a failed attempt to modernize Vim. That said, what with Sublime Text 2 including a limited support for Vim key bindings, I can&rsquo;t really see Vico taking off.
   </p>
 </div>
-<div id="outline-container-sec-19-5" class="outline-3">
-  <h3 id="sec-19-5"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h3>
+<div id="outline-container-sec-20-5" class="outline-3">
+  <h3 id="sec-20-5"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h3>
 
   <div class="figure">
     <p><img src="http://bastibe.de/static/2012-02/sublimetext_small.png" alt="sublimetext_small.png" />
@@ -2637,14 +2737,14 @@
     Really, Sublime Text is an amazing achievement. Maybe not quite as hackable as Emacs and not quite as flexible as Vim, but easily beating both in terms of elegance and modernity. If you don&rsquo;t want to learn Emacs or Vim, Sublime Text is what you should use. In fact, it is the first text editor ever that has tempted me to leave Emacs and Vim behind. Nuff said.
   </p>
 </div>
-<div id="outline-container-sec-19-6" class="outline-3">
-  <h3 id="sec-19-6">What else is out there</h3>
+<div id="outline-container-sec-20-6" class="outline-3">
+  <h3 id="sec-20-6">What else is out there</h3>
   <p>
     Of course, that little list up there is by no means complete. Neither does it list all the amazing features these text editors have to offer, nor does it represent an exhaustive list of them. To the best of my knowledge, this is a short list of other text editors for the Mac platform. Note however, that I have never used any of them extensively and can only tell you stuff from heresay.
   </p>
 
-  <div id="outline-container-sec-19-6-1" class="outline-4">
-    <h4 id="sec-19-6-1"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h4>
+  <div id="outline-container-sec-20-6-1" class="outline-4">
+    <h4 id="sec-20-6-1"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/bbedit.png" alt="bbedit.png" />
@@ -2656,8 +2756,8 @@
       The remainder of its feature set seems rather standard crop though. There is some support for compilation, source code control, snippets, plugins… Though nothing on the level of Vim or Emacs really. Its most important disadvantage is probably its lack of cross-platform availability and extensibility.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-2" class="outline-4">
-    <h4 id="sec-19-6-2"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h4>
+  <div id="outline-container-sec-20-6-2" class="outline-4">
+    <h4 id="sec-20-6-2"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/textwrangler.png" alt="textwrangler.png" />
@@ -2669,8 +2769,8 @@
       Even for free, there are probably more capable candidates available, though maybe not at the same level of platform integration. That said, TextWrangler is not a bad choice and probably just fine for some casual text editing.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-3" class="outline-4">
-    <h4 id="sec-19-6-3"><a href="http://www.jedit.org/">JEdit</a></h4>
+  <div id="outline-container-sec-20-6-3" class="outline-4">
+    <h4 id="sec-20-6-3"><a href="http://www.jedit.org/">JEdit</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/jedit.png" alt="jedit.png" />
@@ -2682,8 +2782,8 @@
       For all I know, this could be a very worthy alternative if you are on a budget (no Sublime Text) and don&rsquo;t want to learn Emacs or Vim.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-4" class="outline-4">
-    <h4 id="sec-19-6-4"><a href="http://chocolatapp.com/">Chocolat</a></h4>
+  <div id="outline-container-sec-20-6-4" class="outline-4">
+    <h4 id="sec-20-6-4"><a href="http://chocolatapp.com/">Chocolat</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/chocolat.png" alt="chocolat.png" />
@@ -2694,8 +2794,8 @@
       Chocolat is yet another text editor that came into being in the post-Textmate void. It offers a good range of standard features, though notably missing advanced plugins apparently. Apart from that, it seems to be a solid shortcut based Mac text editor that is relatively cheap and actively developed.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-5" class="outline-4">
-    <h4 id="sec-19-6-5"><a href="http://www.kodapp.com/">Kod</a></h4>
+  <div id="outline-container-sec-20-6-5" class="outline-4">
+    <h4 id="sec-20-6-5"><a href="http://www.kodapp.com/">Kod</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/kod.png" alt="kod.png" />
@@ -2706,8 +2806,8 @@
       Kod started out as an open source alternative to Textmate. This is quite uncommon for a post-Textmate text editor and worth supporting. After a good start however, the developer found a new job and development has pretty much stalled.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-6" class="outline-4">
-    <h4 id="sec-19-6-6"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h4>
+  <div id="outline-container-sec-20-6-6" class="outline-4">
+    <h4 id="sec-20-6-6"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/subethaedit.png" alt="subethaedit.png" />
@@ -2719,8 +2819,8 @@
       Beyond that, it is a capable shortcut-based text editor. If you don&rsquo;t need the collaboration feature, you should probably look elsewhere though.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-7" class="outline-4">
-    <h4 id="sec-19-6-7"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h4>
+  <div id="outline-container-sec-20-6-7" class="outline-4">
+    <h4 id="sec-20-6-7"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/smultron.png" alt="smultron.png" />
@@ -2732,8 +2832,8 @@
       Smultron lost most of its following in that transition.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-8" class="outline-4">
-    <h4 id="sec-19-6-8"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h4>
+  <div id="outline-container-sec-20-6-8" class="outline-4">
+    <h4 id="sec-20-6-8"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/slickedit.png" alt="slickedit.png" />
@@ -2746,8 +2846,8 @@
       That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I doubt that SlickEdit can live up to that price if you compare it to some of the other examples in this list. It is undoubtedly a well-maintained and powerful text editor though.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-9" class="outline-4">
-    <h4 id="sec-19-6-9"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h4>
+  <div id="outline-container-sec-20-6-9" class="outline-4">
+    <h4 id="sec-20-6-9"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/komodo.png" alt="komodo.png" />
@@ -2759,8 +2859,8 @@
       There are also quite good Vim key bindings and it is available on the three major platforms. However, its language support is limited to Perl, Python, Tcl, PHP, Ruby and Javascript. Probably not a bad choice if you can live with the language selection and are on a budget.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-10" class="outline-4">
-    <h4 id="sec-19-6-10">TextEdit</h4>
+  <div id="outline-container-sec-20-6-10" class="outline-4">
+    <h4 id="sec-20-6-10">TextEdit</h4>
 
     <div class="figure">
       <p><img src="http://bastibe.de/static/2012-02/textedit.png" alt="textedit.png" />
@@ -2772,8 +2872,8 @@
       That said, TextEdit does support rich text editing and might be of value for the odd letter to your grandma.
     </p>
   </div>
-  <div id="outline-container-sec-19-6-11" class="outline-4">
-    <h4 id="sec-19-6-11">Text editors for web development</h4>
+  <div id="outline-container-sec-20-6-11" class="outline-4">
+    <h4 id="sec-20-6-11">Text editors for web development</h4>
     <p>
       Strangely, all the major Mac text editors that cater specifically for web development are not cross platform. If web development is all you are ever doing though, these text editors might be well worth their money.
     </p>
@@ -3968,6 +4068,18 @@
   <div id="text-footnotes">
 
     <div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+    You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
+    </p></div>
+
+    <div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+    More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
+    </p></div>
+
+    <div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+    More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
+    </p></div>
+
+    <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
     As a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point
     </p></div>
 
