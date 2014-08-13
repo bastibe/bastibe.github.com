@@ -3,8 +3,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Index</title>
-<!-- 2014-08-13 Wed 14:50 -->
+<title>Speeding Up Org Mode Publishing</title>
+<!-- 2014-08-13 Wed 13:49 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -32,8 +32,26 @@
           </div>
 </div>
 <div id="content">
-<h1 class="title">Index</h1>
+<h1 class="title">Speeding Up Org Mode Publishing</h1>
+<p>
+I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
+</p>
 
+<p>
+Since I am on a long train ride today, I decided to have a go at this problem. By the way, train rides and hacking on Emacs are a perfect match: Internet connectivity on trains is usually terrible, but Emacs is self-documenting, so internet access doesn't matter as much. It is sobering to work without an internet connection every once in a while, and Emacs is a perfect target for this kind of work.
+</p>
+
+<p>
+One of the many things I learned on train rides is that Emacs in fact contains its own profiler! So, I ran <code>(progn (profile-start 'cpu) (org-publish "blog") (profile-report))</code> to get a hierarchical list of where <code>org-publish</code> was spending its time. Turns out, most of its total run time was spent in functions relating to version control (starting with <code>vc-</code>).
+</p>
+
+<p>
+Some package in my configuration set up <code>vc-find-file-hook</code> as part of <code>find-file-hook</code>. This means that every time <code>org-publish</code> opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use <code>vc-git</code> at all. All my git interaction is done through <code>magit</code>.
+</p>
+
+<p>
+But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
+</p>
 </div>
 <div id="postamble" class="status">
 <div id="archive"><a href="archive.html">Other posts</a></div>
