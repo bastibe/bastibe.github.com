@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Transplant</title>
+<!-- 2014-08-26 Tue 22:01 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <link rel="icon" href="static/favicon.ico">
+          <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+          <link rel="msapplication-TitleImage" href="static/favicon-144.png">
+          <link rel="msapplication-TitleColor" href="#0141ff">
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Transplant</h1>
+<p>
+In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.
+</p>
+
+<p>
+But I still need to use Matlab code. There are <a href="http://stackoverflow.com/a/23762412/1034">a few ways</a> of interacting with Matlab out there already. Most of them focus on being able to eval strings in Matlab. Boring. The most interesting one is <a href="https://github.com/ewiger/mlab">mlab</a>, a full-fledget bridge between Python and Matlab! Had I found this earlier, I would probably not have written my own.
+</p>
+
+<p>
+But write my own I did: <a href="https://github.com/bastibe/transplant">Transplant</a>. Transplant is a very simple bridge for calling Matlab functions from Python. Here is how you start Matlab from Python:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #718c00;">import</span> transplant
+<span style="color: #eab700;">matlab</span> = transplant.Matlab()
+</pre>
+</div>
+
+<p>
+This <code>matlab</code> object starts a Matlab interpreter in the background and connects to it. You can call Matlab functions on it!
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">matlab.eye(3)
+&gt;&gt;&gt; array([[ 1.,  0.,  0.],
+           [ 0.,  1.,  0.],
+           [ 0.,  0.,  1.]])
+</pre>
+</div>
+
+<p>
+As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #3e999f;">'uint8'</span>)
+&gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
+</pre>
+</div>
+
+<p>
+All matrix data is actually transferred in binary, so both Matlab and Python work on bit-identical data. This is very important if you are working with precise data! Most other bridges do some amount of type conversion at this point.
+</p>
+
+<p>
+This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eab700;">data</span> = matlab.randn(1, 4)
+matlab.<span style="color: #8959a8;">max</span>(data)
+&gt;&gt;&gt; [1.5326, 3] <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Matlab: x, n = max(...)</span>
+matlab.<span style="color: #8959a8;">max</span>(data, nargout=1)
+&gt;&gt;&gt; 1.5326      <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Matlab: x = max(...)</span>
+</pre>
+</div>
+
+<p>
+If no <code>nargout</code> is given, functions behave according to <code>nargout(@function)</code>. If even that fails, they return the content of <code>ans</code> after their execution.
+</p>
+
+<p>
+Calling Matlab functions is the most important feature of Transplant. But there is a more:
+</p>
+
+<ul class="org-ul">
+<li>You can save/retrieve variables in the global workspace:
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eab700;">matlab.value</span> = 5 <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Matlab: value = 5</span>
+<span style="color: #eab700;">x</span> = matlab.value <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">Matlab: x = value</span>
+</pre>
+</div>
+</li>
+
+<li>You van eval some code:
+
+<div class="org-src-container">
+
+<pre class="src src-python">matlab.<span style="color: #8959a8;">eval</span>(<span style="color: #3e999f;">'class(value)'</span>)
+&gt;&gt;&gt; <span style="color: #eab700;">ans</span> =
+&gt;&gt;&gt;
+&gt;&gt;&gt; double
+&gt;&gt;&gt;
+</pre>
+</div>
+</li>
+
+<li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.
+</li>
+</ul>
+
+<p>
+Under the hood, Transplant is using a very simple messaging protocol based on <a href="http://zeromq.org/">0MQ</a>, <a href="https://en.wikipedia.org/wiki/Json">JSON</a>, and some <a href="https://en.wikipedia.org/wiki/Base64">base64</a>-encoded binary data. Sadly, Matlab can deal with none of these technologies by itself. Transplant therefore contains a full-featured JSON <a href="https://github.com/bastibe/transplant/blob/master/parsejson.m">parser</a>/<a href="https://github.com/bastibe/transplant/blob/master/dumpjson.m">serializer</a> and base64 <a href="https://github.com/bastibe/transplant/blob/master/base64encode.m">encoder</a>/<a href="https://github.com/bastibe/transplant/blob/master/base64decode.m">decoder</a> in pure Matlab. It also contains a minimal <a href="https://github.com/bastibe/transplant/blob/master/messenger.c">mex-file</a> for interfacing with 0MQ.
+</p>
+
+<p>
+There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonlab">JSON parsers</a> available for Matlab, but virtually all of them try parse JSON arrays as matrices. This means that these parsers have no way of differentiating between a list of vectors and a matrix (want to call a function with three vectors or a matrix? No can do). Transplant's JSON parser parses JSON arrays as cell arrays and JSON objects as structs. While somewhat less convenient in general, this is a much better fit for transferring data structures between programming languages.
+</p>
+
+<p>
+Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
+</p>
+
+<p>
+All of this has been about Matlab, but my actual goal is bigger: I want transplant to become a library for interacting between more than just Python and Matlab. In particular, Julia and PyPy would be very interesting targets. Also, it would be useful to reverse roles and call Python from Matlab as well! But that will be in the future.
+</p>
+
+<p>
+For now, head over to <a href="https://github.com/bastibe/transplant">Github.com/bastibe/transplant</a> and have fun! Also, if you find any bugs or have any suggestions, please open an issue on Github!
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+Except for integer complex numbers, since those are not supported by Numpy.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+Like the Matlab function <code>nargout</code>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+</div>
+</body>
+</html>
