@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Org Mode Citation Links</title>
-<!-- 2014-09-23 Tue 10:01 -->
+<!-- 2014-09-23 Tue 10:07 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -56,8 +56,8 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
         (<span style="color: #718c00;">save-excursion</span>
           (beginning-of-buffer)
           (<span style="color: #718c00;">save-match-data</span>
-            (<span style="color: #718c00;">if</span> (re-search-forward <span style="color: #3e999f;">"\\\\bibliography{</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">(</span><span style="color: #3e999f;">[</span><span style="color: #4271ae;">^</span><span style="color: #3e999f;">}]+</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">)</span><span style="color: #3e999f;">}"</span>)
-              (concat (match-string 1) <span style="color: #3e999f;">".bib"</span>))))
+            (re-search-forward <span style="color: #3e999f;">"\\\\bibliography{</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">(</span><span style="color: #3e999f;">[</span><span style="color: #4271ae;">^</span><span style="color: #3e999f;">}]+</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">)</span><span style="color: #3e999f;">}"</span>)
+            (concat (match-string 1) <span style="color: #3e999f;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
      (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">export-cite</span> (path desc format)
