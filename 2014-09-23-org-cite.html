@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Index</title>
+<title>Org Mode Citation Links</title>
 <!-- 2014-09-23 Tue 10:01 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
@@ -32,8 +32,46 @@
           </div>
 </div>
 <div id="content">
-<h1 class="title">Index</h1>
+<h1 class="title">Org Mode Citation Links</h1>
+<p>
+I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
+</p>
 
+<p>
+But not everything is perfect. For one thing, citations do not work well. Sure, you can always write <code>\cite{cohen93}</code>, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but <code>\cite{cohen93}</code> is just inline LaTeX.
+</p>
+
+<p>
+But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(org-add-link-type <span style="color: #3e999f;">"cite"</span>
+     (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">follow-cite</span> (name)
+       <span style="color: #8959a8;">"Open bibliography and jump to appropriate entry.</span>
+<span style="color: #8959a8;">        The document must contain \bibliography{filename} somewhere</span>
+<span style="color: #8959a8;">        for this to work"</span>
+       (find-file-other-window
+        (<span style="color: #718c00;">save-excursion</span>
+          (beginning-of-buffer)
+          (<span style="color: #718c00;">save-match-data</span>
+            (<span style="color: #718c00;">if</span> (re-search-forward <span style="color: #3e999f;">"\\\\bibliography{</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">(</span><span style="color: #3e999f;">[</span><span style="color: #4271ae;">^</span><span style="color: #3e999f;">}]+</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">)</span><span style="color: #3e999f;">}"</span>)
+              (concat (match-string 1) <span style="color: #3e999f;">".bib"</span>))))
+       (beginning-of-buffer)
+       (search-forward name))
+     (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">export-cite</span> (path desc format)
+       <span style="color: #8959a8;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       (<span style="color: #718c00;">if</span> (eq format 'latex)
+           (<span style="color: #718c00;">if</span> (or (not desc) (equal 0 (search <span style="color: #3e999f;">"cite:"</span> desc)))
+               (format <span style="color: #3e999f;">"\\cite{%s}"</span> path)
+             (format <span style="color: #3e999f;">"\\cite[%s]{%s}"</span> desc path)))))
+</pre>
+</div>
+
+<p>
+This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
+</p>
 </div>
 <div id="postamble" class="status">
 <div id="archive"><a href="archive.html">Other posts</a></div>
