@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Writing a Thesis in Org Mode</title>
+<!-- 2014-11-19 Wed 19:29 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bastian Bechtold" />
+<link rel="alternate" type="appliation/rss+xml"
+                href="http://bastibe.de/rss.xml"
+                title="RSS feed for bastibe.de">
+          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+          <link href= "static/style.css" rel="stylesheet" type="text/css" />
+          <link rel="icon" href="static/favicon.ico">
+          <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+          <link rel="msapplication-TitleImage" href="static/favicon-144.png">
+          <link rel="msapplication-TitleColor" href="#0141ff">
+          <title>Basti's Scratchpad on the Internet</title>
+          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+              <div class="sitelinks">
+                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
+              </div>
+          </div>
+</div>
+<div id="content">
+<h1 class="title">Writing a Thesis in Org Mode</h1>
+<p>
+Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
+</p>
+
+<p>
+In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
+</p>
+
+<p>
+Org mode was a huge help in this regard, since it combines the document text and the executable pieces of code. Instead of having a bunch of scripts that generate graphs, and a bunch of LaTeX files that include those graphs, I had one big Org file that included both the thesis text and the graphing code.
+</p>
+
+<p>
+As for the thesis text, I used Org's export functionality to convert the Org source to LaTeX, and compiled a PDF from there. This really works very well: It is very nice to use Org headlines instead of <code>\section{...}</code>, and clickable Org links instead of <code>\ref{...}</code>. While this is nice, it is just a change of syntax. I still had to enter the very same things and saving a few characters is not particularly impressive. For example, figures still require a caption, an ID, and a size:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org"><span style="color: #8e908c; font-style: italic;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
+<span style="color: #8e908c; font-style: italic;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
+<span style="color: #8e908c; font-style: italic;">#+NAME: fig:summary_tracks</span>
+<span style="color: #4271ae; text-decoration: underline;">[[file:images/summary_tracks.pdf]]</span>
+</pre>
+</div>
+
+<p>
+In LaTeX, this would be
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-latex"><span style="color: #718c00;">\begin</span>{<span style="color: #f5871f;">figure*</span>}
+<span style="color: #718c00;">\centering</span>
+<span style="color: #7c7c7c;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
+<span style="color: #718c00;">\caption</span>{<span style="color: #718c00;">\label</span><span style="color: #4271ae;">{</span><span style="color: #4271ae;">fig:summary_tracks</span><span style="color: #4271ae;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
+<span style="color: #718c00;">\end</span>{<span style="color: #f5871f;">figure*</span>}
+</pre>
+</div>
+
+<p>
+As you can see, there really is not that much of a difference between these two, and you might even consider the LaTeX example more readable. In some other areas, Org mode is simply lacking features: Org does not have any syntax for page formatting, and thus can't create a perfectly formatted title page. Similarly, it can't do un-numbered sections, and it can't do numbered equations. For all of those, I had to fall back to writing LaTeX. This is not a big deal, but it breaks the abstraction.
+</p>
+
+<p>
+A bigger problem is that Org documents include all the chapters in one big file. While Org can deal with large files no problem, it means that LaTeX compiles take a while. In LaTeX, I would have split my document into a number of smaller files that could be separately compiled in order to keep compilation time down. This is confounded by Org's default behavior of deleting intermediate LaTeX files, which forces a full triple-recompile on each export. At the end of my thesis, a full export took about 15 seconds. Not a deal-breaker, but annoying.
+</p>
+
+<p>
+The one thing where Org really shines, though, is the inclusion of code fragments: Most of my figures were created in Python, and Org mode allowed me to include that Python code right in my document. Hit <code>C-c C-c</code> on any code fragment, and Org ran that code and created a new image file that is automatically included as a figure. This was really tremendously useful!
+</p>
+
+<p>
+At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
+</p>
+</div>
+<div id="postamble" class="status">
+<div id="archive"><a href="archive.html">Other posts</a></div>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              </script>
+              <noscript>Please enable JavaScript to view the
+                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+</div>
+</body>
+</html>
