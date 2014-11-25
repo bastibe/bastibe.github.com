@@ -3,8 +3,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Index</title>
-<!-- 2014-11-25 Tue 18:35 -->
+<title>Org Mode Selective Section Numbering</title>
+<!-- 2014-11-25 Tue 18:29 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Bastian Bechtold" />
@@ -32,8 +32,53 @@
           </div>
 </div>
 <div id="content">
-<h1 class="title">Index</h1>
+<h1 class="title">Org Mode Selective Section Numbering</h1>
+<p>
+If you write in Org mode and export to LaTeX, you might have stumbled upon one major limitation: Org mode can either number all headlines, or none. In scientific writing, this is a non-starter.
+</p>
 
+<p>
+In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered. This is easy to do in LaTeX, but not in Org mode. On the other hand, this is Emacs, so everything is possible:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #8959a8;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #718c00;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #718c00;">if</span> beg (get-text-property beg <span style="color: #8959a8;">:parent</span> data))))
+    (<span style="color: #718c00;">if</span> (and (eq backend 'latex)
+         (string= (org-element-property <span style="color: #8959a8;">:NUMBERS</span> headline) <span style="color: #3e999f;">"no"</span>))
+        (<span style="color: #718c00;">with-temp-buffer</span>
+          (insert data)
+          (beginning-of-buffer)
+          (re-search-forward <span style="color: #3e999f;">"</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(</span><span style="color: #3e999f;">part</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #3e999f;">chapter</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(?:</span><span style="color: #3e999f;">sub</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">*section</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(?:</span><span style="color: #3e999f;">sub</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">?paragraph</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">"</span>)
+          (replace-match <span style="color: #3e999f;">"\\1*"</span>)
+          (buffer-string))
+      data)))
+
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
+</pre>
+</div>
+
+<p>
+This defines a function and registers that function to be called for every headline. If that headline has a property <code>:NUMBERS: no</code>, it will disable numbering in the LaTeX output.
+</p>
+
+<p>
+For example, <code>* HEADLINE</code> will be exported as <code>\section{HEADLINE}</code>, while
+</p>
+
+<pre class="example">
+* HEADLINE
+:PROPERTIES:
+:NUMBERS: no
+:END:
+</pre>
+
+<p>
+will be exported as <code>\section*{HEADLINE}</code>.
+</p>
 </div>
 <div id="postamble" class="status">
 <div id="archive"><a href="archive.html">Other posts</a></div>
