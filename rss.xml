@@ -14,8 +14,8 @@
   <link>http://bastibe.de/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Tue, 25 Nov 2014 18:35:19 +0100</pubDate>
-  <lastBuildDate>Tue, 25 Nov 2014 18:35:19 +0100</lastBuildDate>
+  <pubDate>Wed, 26 Nov 2014 14:01:11 +0100</pubDate>
+  <lastBuildDate>Wed, 26 Nov 2014 14:01:11 +0100</lastBuildDate>
   <generator>Emacs 24.4 Org-mode 8.2.10</generator>
   <webMaster>bb@RandomTask (Bastian Bechtold)</webMaster>
   <image>
@@ -46,12 +46,9 @@
     (headline (<span style="color: #718c00;">if</span> beg (get-text-property beg <span style="color: #8959a8;">:parent</span> data))))
     (<span style="color: #718c00;">if</span> (and (eq backend 'latex)
     (string= (org-element-property <span style="color: #8959a8;">:NUMBERS</span> headline) <span style="color: #3e999f;">"no"</span>))
-    (<span style="color: #718c00;">with-temp-buffer</span>
-    (insert data)
-    (beginning-of-buffer)
-    (re-search-forward <span style="color: #3e999f;">"</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(</span><span style="color: #3e999f;">part</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #3e999f;">chapter</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(?:</span><span style="color: #3e999f;">sub</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">*section</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(?:</span><span style="color: #3e999f;">sub</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">?paragraph</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">"</span>)
-    (replace-match <span style="color: #3e999f;">"\\1*"</span>)
-    (buffer-string))
+    (replace-regexp-in-string
+    <span style="color: #3e999f;">"</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(</span><span style="color: #3e999f;">part</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #3e999f;">chapter</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(?:</span><span style="color: #3e999f;">sub</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">*section</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">|</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">(?:</span><span style="color: #3e999f;">sub</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">?paragraph</span><span style="color: #eab700;">\\</span><span style="color: #8959a8;">)</span><span style="color: #3e999f;">"</span>
+    <span style="color: #3e999f;">"\\1*"</span> data nil nil 1)
     data)))
 
     (setq org-export-filter-headline-functions '(headline-numbering-filter))
@@ -76,70 +73,138 @@
     <p>
     will be exported as <code>\section*{HEADLINE}</code>.
     </p>
-    ]]></description>
-  </item>
 
-  <item>
-    <title>Writing a Thesis in Org Mode</title>
-    <link>http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html</link>
-    <guid isPermaLink="false">http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html</guid>
-    <pubDate>Wed, 19 Nov 2014 00:00:00 +0100</pubDate>
-
-    <description><![CDATA[<p>
-    Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master&rsquo;s thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here&rsquo;s my thoughts on this process and how it compares to the usual LaTeX work flow.
+    <p>
+    <b>EDIT:</b> The above approach has a number of downsides. Most importantly, it only works for the LaTeX export, but not any other backend.
     </p>
 
     <p>
-    In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
-    </p>
-
-    <p>
-    Org mode was a huge help in this regard, since it combines the document text and the executable pieces of code. Instead of having a bunch of scripts that generate graphs, and a bunch of LaTeX files that include those graphs, I had one big Org file that included both the thesis text and the graphing code.
-    </p>
-
-    <p>
-    As for the thesis text, I used Org&rsquo;s export functionality to convert the Org source to LaTeX, and compiled a PDF from there. This really works very well: It is very nice to use Org headlines instead of <code>\section{...}</code>, and clickable Org links instead of <code>\ref{...}</code>. While this is nice, it is just a change of syntax. I still had to enter the very same things and saving a few characters is not particularly impressive. For example, figures still require a caption, an ID, and a size:
+    Instead of using filters to manually transform the output, one can advise the numbering function themself:
     </p>
 
     <div class="org-src-container">
 
-    <pre class="src src-org"><span style="color: #8e908c; font-style: italic;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
-    <span style="color: #8e908c; font-style: italic;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
-    <span style="color: #8e908c; font-style: italic;">#+NAME: fig:summary_tracks</span>
-    <span style="color: #4271ae; text-decoration: underline;">[[file:images/summary_tracks.pdf]]</span>
+    <pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">unnumber-unnumbered-headlines</span> (orig headline info)
+    <span style="color: #8959a8;">"remove headline numbers for headlines that are</span>
+    <span style="color: #8959a8;">marked :numbers: no."</span>
+    (and (funcall orig headline info)
+    (not (string= (org-element-property <span style="color: #8959a8;">:NUMBERS</span> headline) <span style="color: #3e999f;">"no"</span>))))
+
+    (advice-add 'org-export-numbered-headline-p <span style="color: #8959a8;">:around</span> 'unnumber-unnumbered-headlines)
     </pre>
     </div>
 
     <p>
-    In LaTeX, this would be
+    This works for all export types, but won&rsquo;t change the table of contents (except in LaTeX, where the TOC is created by LaTeX itself). In order to exclude unnumbered sections from the TOC, another function can be advised:
     </p>
 
     <div class="org-src-container">
 
-    <pre class="src src-latex"><span style="color: #718c00;">\begin</span>{<span style="color: #f5871f;">figure*</span>}
-    <span style="color: #718c00;">\centering</span>
-    <span style="color: #7c7c7c;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
-    <span style="color: #718c00;">\caption</span>{<span style="color: #718c00;">\label</span><span style="color: #4271ae;">{</span><span style="color: #4271ae;">fig:summary_tracks</span><span style="color: #4271ae;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
-    <span style="color: #718c00;">\end</span>{<span style="color: #f5871f;">figure*</span>}
+    <pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">filter-unnumbered-headlines</span> (headlines)
+    <span style="color: #8959a8;">"suppress headline numbers in toc for headlines that are</span>
+    <span style="color: #8959a8;">marked :numbers: no."</span>
+    (cl-remove-if (<span style="color: #718c00;">lambda</span> (headline) (string= (org-element-property <span style="color: #8959a8;">:NUMBERS</span> headline) <span style="color: #3e999f;">"no"</span>)) headlines))
+
+    (advice-add 'org-export-collect-headlines <span style="color: #8959a8;">:filter-return</span> 'filter-unnumbered-headlines)
     </pre>
     </div>
 
     <p>
-    As you can see, there really is not that much of a difference between these two, and you might even consider the LaTeX example more readable. In some other areas, Org mode is simply lacking features: Org does not have any syntax for page formatting, and thus can&rsquo;t create a perfectly formatted title page. Similarly, it can&rsquo;t do un-numbered sections, and it can&rsquo;t do numbered equations. For all of those, I had to fall back to writing LaTeX. This is not a big deal, but it breaks the abstraction.
+    While this suppresses the numbers, Org will still number headlines as if every headline were numbered. The following advice can be used to correct that. Note that hidden numbers will occur twice in the internal numbers, which might break some links.
     </p>
 
-    <p>
-    A bigger problem is that Org documents include all the chapters in one big file. While Org can deal with large files no problem, it means that LaTeX compiles take a while. In LaTeX, I would have split my document into a number of smaller files that could be separately compiled in order to keep compilation time down. This is confounded by Org&rsquo;s default behavior of deleting intermediate LaTeX files, which forces a full triple-recompile on each export. At the end of my thesis, a full export took about 15 seconds. Not a deal-breaker, but annoying.
-    </p>
+    <div class="org-src-container">
+
+    <pre class="src src-elisp">(<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">skip-unnumbered-headlines</span> (orig headline info)
+    <span style="color: #8959a8;">"decrement headline numbers to skip headlines that are</span>
+    <span style="color: #8959a8;">marked :numbers: no."</span>
+    (<span style="color: #718c00;">let</span> ((unnumbered-headlines 0)
+    (headlines (plist-get info <span style="color: #8959a8;">:headline-numbering</span>))
+    (headline-number (funcall orig headline info)))
+    <span style="color: #8e908c; font-style: italic;">;; </span><span style="color: #8e908c; font-style: italic;">count unnumbered headlines</span>
+    (<span style="color: #718c00;">while</span> (not (eq headline (caar headlines)))
+    (<span style="color: #718c00;">if</span> (and (string= (org-element-property <span style="color: #8959a8;">:NUMBERS</span> (caar headlines)) <span style="color: #3e999f;">"no"</span>)
+    <span style="color: #8e908c; font-style: italic;">;; </span><span style="color: #8e908c; font-style: italic;">only search at the same level as headline</span>
+    (eq (org-element-property <span style="color: #8959a8;">:parent</span> headline)
+    (org-element-property <span style="color: #8959a8;">:parent</span> (caar headlines))))
+    (setq unnumbered-headlines (1+ unnumbered-headlines)))
+    (setq headlines (cdr headlines)))
+    <span style="color: #8e908c; font-style: italic;">;; </span><span style="color: #8e908c; font-style: italic;">create new number</span>
+    (<span style="color: #718c00;">let</span> ((new-number (copy-tree headline-number)))
+    (setcar (last new-number) (- (car (last new-number)) unnumbered-headlines))
+    new-number)))
+
+    (advice-add 'org-export-get-headline-number <span style="color: #8959a8;">:around</span> 'skip-unnumbered-headlines)
+    </pre>
+    </div>
 
     <p>
-    The one thing where Org really shines, though, is the inclusion of code fragments: Most of my figures were created in Python, and Org mode allowed me to include that Python code right in my document. Hit <code>C-c C-c</code> on any code fragment, and Org ran that code and created a new image file that is automatically included as a figure. This was really tremendously useful!
-    </p>
-
-    <p>
-    At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
+    While that is quite a piece of work, it exports correctly in both LaTeX and HTML.
     </p>
     ]]></description>
+</item>
+
+<item>
+  <title>Writing a Thesis in Org Mode</title>
+  <link>http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html</link>
+  <guid isPermaLink="false">http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html</guid>
+  <pubDate>Wed, 19 Nov 2014 00:00:00 +0100</pubDate>
+
+  <description><![CDATA[<p>
+  Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master&rsquo;s thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here&rsquo;s my thoughts on this process and how it compares to the usual LaTeX work flow.
+  </p>
+
+  <p>
+  In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
+  </p>
+
+  <p>
+  Org mode was a huge help in this regard, since it combines the document text and the executable pieces of code. Instead of having a bunch of scripts that generate graphs, and a bunch of LaTeX files that include those graphs, I had one big Org file that included both the thesis text and the graphing code.
+  </p>
+
+  <p>
+  As for the thesis text, I used Org&rsquo;s export functionality to convert the Org source to LaTeX, and compiled a PDF from there. This really works very well: It is very nice to use Org headlines instead of <code>\section{...}</code>, and clickable Org links instead of <code>\ref{...}</code>. While this is nice, it is just a change of syntax. I still had to enter the very same things and saving a few characters is not particularly impressive. For example, figures still require a caption, an ID, and a size:
+  </p>
+
+  <div class="org-src-container">
+
+  <pre class="src src-org"><span style="color: #8e908c; font-style: italic;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
+  <span style="color: #8e908c; font-style: italic;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
+  <span style="color: #8e908c; font-style: italic;">#+NAME: fig:summary_tracks</span>
+  <span style="color: #4271ae; text-decoration: underline;">file:images/summary_tracks.pdf</span>
+  </pre>
+  </div>
+
+  <p>
+  In LaTeX, this would be
+  </p>
+
+  <div class="org-src-container">
+
+  <pre class="src src-latex"><span style="color: #718c00;">\begin</span>{<span style="color: #f5871f;">figure*</span>}
+  <span style="color: #718c00;">\centering</span>
+  <span style="color: #7c7c7c;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
+  <span style="color: #718c00;">\caption</span>{<span style="color: #718c00;">\label</span><span style="color: #4271ae;">{</span><span style="color: #4271ae;">fig:summary_tracks</span><span style="color: #4271ae;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
+  <span style="color: #718c00;">\end</span>{<span style="color: #f5871f;">figure*</span>}
+  </pre>
+  </div>
+
+  <p>
+  As you can see, there really is not that much of a difference between these two, and you might even consider the LaTeX example more readable. In some other areas, Org mode is simply lacking features: Org does not have any syntax for page formatting, and thus can&rsquo;t create a perfectly formatted title page. Similarly, it can&rsquo;t do un-numbered sections, and it can&rsquo;t do numbered equations. For all of those, I had to fall back to writing LaTeX. This is not a big deal, but it breaks the abstraction.
+  </p>
+
+  <p>
+  A bigger problem is that Org documents include all the chapters in one big file. While Org can deal with large files no problem, it means that LaTeX compiles take a while. In LaTeX, I would have split my document into a number of smaller files that could be separately compiled in order to keep compilation time down. This is confounded by Org&rsquo;s default behavior of deleting intermediate LaTeX files, which forces a full triple-recompile on each export. At the end of my thesis, a full export took about 15 seconds. Not a deal-breaker, but annoying.
+  </p>
+
+  <p>
+  The one thing where Org really shines, though, is the inclusion of code fragments: Most of my figures were created in Python, and Org mode allowed me to include that Python code right in my document. Hit <code>C-c C-c</code> on any code fragment, and Org ran that code and created a new image file that is automatically included as a figure. This was really tremendously useful!
+  </p>
+
+  <p>
+  At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
+  </p>
+  ]]></description>
 </item>
 
 <item>
@@ -755,9 +820,9 @@
 
   <pre class="src src-org"><span style="color: #718c00;">#+TITLE:</span> <span style="color: #f5871f; font-size: 144%; font-weight: bold;">RECENT POSTS</span>
 
-  <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][Speeding up Matplotlib]]</span>
+  <span style="color: #4271ae;">* </span><span style="color: #4271ae; text-decoration: underline;">Speeding up Matplotlib</span>
   <span style="color: #8e908c; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
-  <span style="color: #4271ae; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][read more...]]</span>
+  <span style="color: #4271ae; text-decoration: underline;">read more...</span>
   </pre>
   </div>
 
