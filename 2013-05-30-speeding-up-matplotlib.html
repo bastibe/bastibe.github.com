@@ -3,36 +3,31 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Speeding up Matplotlib</title>
-<!-- 2013-11-17 Sun 16:02 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Bastian Bechtold" />
-<link rel="alternate" type="appliation/rss+xml"
-                href="http://bastibe.de/rss.xml"
-                title="RSS feed for bastibe.de">
-          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-          <link href= "static/style.css" rel="stylesheet" type="text/css" />
-          <link rel="icon" href="static/favicon.ico">
-          <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
-          <link rel="msapplication-TitleImage" href="static/favicon-144.png">
-          <link rel="msapplication-TitleColor" href="#0141ff">
-          <title>Basti's Scratchpad on the Internet</title>
-          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
-</head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Speeding up Matplotlib</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
-              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
-              <div class="sitelinks">
-                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
-              </div>
-          </div>
-</div>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
 <div id="content">
-<h1 class="title">Speeding up Matplotlib</h1>
+<div class="post-date">30 May 2013</div>
+<h1 class="post-title">Speeding up Matplotlib</h1>
 <p>
 For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
 </p>
@@ -43,20 +38,20 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #718c00;">import</span> matplotlib.pyplot <span style="color: #718c00;">as</span> plt
-<span style="color: #718c00;">import</span> numpy <span style="color: #718c00;">as</span> np
-<span style="color: #718c00;">import</span> time
+<pre class="src src-python"><span style="color: #1c9af1;">import</span> matplotlib.pyplot <span style="color: #1c9af1;">as</span> plt
+<span style="color: #1c9af1;">import</span> numpy <span style="color: #1c9af1;">as</span> np
+<span style="color: #1c9af1;">import</span> time
 
-<span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+<span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
 
-<span style="color: #eab700;">tstart</span> = time.time()
-<span style="color: #eab700;">num_plots</span> = 0
-<span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+<span style="color: #379a6a;">tstart</span> = time.time()
+<span style="color: #379a6a;">num_plots</span> = 0
+<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
     ax.clear()
     ax.plot(np.random.randn(100))
     plt.pause(0.001)
-    <span style="color: #eab700;">num_plots</span> += 1
-<span style="color: #718c00;">print</span>(num_plots)
+    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
 
@@ -78,16 +73,16 @@ Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effec
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #eab700;">tstart</span> = time.time()
-<span style="color: #eab700;">num_plots</span> = 0
-<span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+<span style="color: #379a6a;">tstart</span> = time.time()
+<span style="color: #379a6a;">num_plots</span> = 0
+<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
     line.set_ydata(np.random.randn(100))
     plt.pause(0.001)
-    <span style="color: #eab700;">num_plots</span> += 1
-<span style="color: #718c00;">print</span>(num_plots)
+    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
 
@@ -150,17 +145,17 @@ Putting this all together now yields:
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #eab700;">tstart</span> = time.time()
-<span style="color: #eab700;">num_plots</span> = 0
-<span style="color: #718c00;">while</span> time.time()-tstart &lt; 1:
+<span style="color: #379a6a;">tstart</span> = time.time()
+<span style="color: #379a6a;">num_plots</span> = 0
+<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
     line.set_ydata(np.random.randn(100))
     fig.canvas.draw()
     fig.canvas.flush_events()
-    <span style="color: #eab700;">num_plots</span> += 1
-<span style="color: #718c00;">print</span>(num_plots)
+    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
 
@@ -189,20 +184,20 @@ What we can do here is to selectively draw only the parts that are actually chan
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #eab700;">fig</span>, <span style="color: #eab700;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
-plt.show(block=<span style="color: #4271ae;">False</span>)
+plt.show(block=<span style="color: #809a4d;">False</span>)
 
-<span style="color: #eab700;">tstart</span> = time.time()
-<span style="color: #eab700;">num_plots</span> = 0
-<span style="color: #718c00;">while</span> time.time()-tstart &lt; 5:
+<span style="color: #379a6a;">tstart</span> = time.time()
+<span style="color: #379a6a;">num_plots</span> = 0
+<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 5:
     line.set_ydata(np.random.randn(100))
     ax.draw_artist(ax.patch)
     ax.draw_artist(line)
     fig.canvas.update()
     fig.canvas.flush_events()
-    <span style="color: #eab700;">num_plots</span> += 1
-<span style="color: #718c00;">print</span>(num_plots/5)
+    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="color: #1c9af1;">print</span>(num_plots/5)
 </pre>
 </div>
 
@@ -230,25 +225,23 @@ In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotl
 <b>EDIT</b>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.
 </p>
 </div>
-<div id="postamble" class="status">
-<div id="archive"><a href="archive.html">Other posts</a></div>
-              <div id="disqus_thread"></div>
-              <script type="text/javascript">
-              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-              var disqus_shortname = 'bastibe';
-              /* * * DON'T EDIT BELOW THIS LINE * * */
-              (function() {
-                var dsq = document.createElement('script');
-                dsq.type = 'text/javascript';
-                dsq.async = true;
-                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                  })();
-              </script>
-              <noscript>Please enable JavaScript to view the
-                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
 </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

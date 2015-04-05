@@ -1,0 +1,91 @@
+#+title: Org Mode Selective Section Numbering
+#+date: <2014-12-03 0:00>
+
+This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
+
+In LaTeX, this is easy to do: ~\section{}~ creates a numbered headline, while ~\section*{}~ creates an unnumbered section. Org mode does not have any facility to control this on a per-headline basis, but it can be taught:
+
+#+begin_src elisp
+(defun headline-numbering-filter (data backend info)
+  "No numbering in headlines that have a property :numbers: no"
+  (let* ((beg (next-property-change 0 data))
+         (headline (if beg (get-text-property beg :parent data))))
+    (if (and (eq backend 'latex)
+         (string= (org-element-property :NUMBERS headline) "no"))
+        (replace-regexp-in-string
+         "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
+         "\\1*" data nil nil 1)
+      data)))
+
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
+#+end_src
+
+This creates a filter (an Org mode convention similar to a hook), which appends the asterisk to LaTeX headlines if the headline has a property ~:NUMBERS: no~. If all you do is export to LaTeX, this works well.
+
+If you need to export to HTML as well, things get more complicated. Since HTML does not have native numbering support, Org is forced to manually create section numbers. But times have changed, and with CSS3, HTML now indeed /does/ support native numbering!
+
+Here is some CSS that uses CSS3 counters to number all headlines and hide Org's numbers:
+
+#+begin_src css
+/* hide Org-mode's section numbers */
+span.section-number-2 { display: none; }
+span.section-number-3 { display: none; }
+span.section-number-4 { display: none; }
+span.section-number-5 { display: none; }
+span.section-number-6 { display: none; }
+
+/* define counters for the different headline levels */
+h1 { counter-reset: section; }
+h2 { counter-reset: subsection; }
+h3 { counter-reset: subsubsection; }
+h4 { counter-reset: paragraph; }
+h5 { counter-reset: subparagraph; }
+
+/* prepend section numbers before headlines */
+h2::before {
+    content: counter(section) " ";
+    counter-increment: section;
+}
+h3::before {
+    content: counter(section) "." counter(subsection) " ";
+    counter-increment: subsection;
+}
+h4::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
+    counter-increment: subsubsection;
+}
+h5::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) " ";
+    counter-increment: paragraph;
+}
+h6::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) "." counter(subparagraph) " ";
+    counter-increment: subparagraph;
+}
+
+/* suppress numbering for headlines with class="nonumber" */
+.nonumber::before { content: none; }
+#+end_src
+
+With this in place, we can extend the previous filter to work for HTML as well as LaTeX:
+
+#+begin_src elisp
+(defun headline-numbering-filter (data backend info)
+  "No numbering in headlines that have a property :numbers: no"
+  (let* ((beg (next-property-change 0 data))
+         (headline (if beg (get-text-property beg :parent data))))
+    (if (string= (org-element-property :NUMBERS headline) "no")
+        (cond ((eq backend 'latex)
+               (replace-regexp-in-string
+                "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
+                "\\1*" data nil nil 1))
+              ((eq backend 'html)
+               (replace-regexp-in-string
+                "\\(<h[1-6]\\)\\([^>]*>\\)"
+                "\\1 class=\"nonumber\"\\2" data nil nil)))
+      data)))
+
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
+#+end_src
+
+Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.

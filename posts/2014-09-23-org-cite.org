@@ -1,0 +1,32 @@
+#+title: Org Mode Citation Links
+#+date: <2014-09-23 0:00>
+
+I am writing my master's thesis in [[http://orgmode.org/][Org Mode]], and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly ~\backslash{curly brace}~ all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
+
+But not everything is perfect. For one thing, citations do not work well. Sure, you can always write ~\cite{cohen93}~, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but ~\cite{cohen93}~ is just inline LaTeX.
+
+But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:
+
+#+begin_src elisp
+(org-add-link-type "cite"
+     (defun follow-cite (name)
+       "Open bibliography and jump to appropriate entry.
+        The document must contain \bibliography{filename} somewhere
+        for this to work"
+       (find-file-other-window
+        (save-excursion
+          (beginning-of-buffer)
+          (save-match-data
+            (re-search-forward "\\\\bibliography{\\([^}]+\\)}")
+            (concat (match-string 1) ".bib"))))
+       (beginning-of-buffer)
+       (search-forward name))
+     (defun export-cite (path desc format)
+       "Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."
+       (if (eq format 'latex)
+           (if (or (not desc) (equal 0 (search "cite:" desc)))
+               (format "\\cite{%s}" path)
+             (format "\\cite[%s]{%s}" desc path)))))
+#+end_src
+
+This registers a new link type in Org Mode: ~[[cite:cohen93]]~, which will jump to the appropriate bibliography entry when clicked, and get exported as ~\cite{cohen93}~ in LaTeX. Awesome!

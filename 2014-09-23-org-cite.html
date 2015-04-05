@@ -3,36 +3,31 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Org Mode Citation Links</title>
-<!-- 2014-09-23 Tue 10:07 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Bastian Bechtold" />
-<link rel="alternate" type="appliation/rss+xml"
-                href="http://bastibe.de/rss.xml"
-                title="RSS feed for bastibe.de">
-          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-          <link href= "static/style.css" rel="stylesheet" type="text/css" />
-          <link rel="icon" href="static/favicon.ico">
-          <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
-          <link rel="msapplication-TitleImage" href="static/favicon-144.png">
-          <link rel="msapplication-TitleColor" href="#0141ff">
-          <title>Basti's Scratchpad on the Internet</title>
-          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
-</head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Org Mode Citation Links</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
-              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
-              <div class="sitelinks">
-                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
-              </div>
-          </div>
-</div>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
 <div id="content">
-<h1 class="title">Org Mode Citation Links</h1>
+<div class="post-date">23 Sep 2014</div>
+<h1 class="post-title">Org Mode Citation Links</h1>
 <p>
 I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
 </p>
@@ -47,25 +42,25 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(org-add-link-type <span style="color: #3e999f;">"cite"</span>
-     (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">follow-cite</span> (name)
-       <span style="color: #8959a8;">"Open bibliography and jump to appropriate entry.</span>
-<span style="color: #8959a8;">        The document must contain \bibliography{filename} somewhere</span>
-<span style="color: #8959a8;">        for this to work"</span>
+<pre class="src src-elisp">(org-add-link-type <span style="color: #9d8567;">"cite"</span>
+     (<span style="color: #1c9af1;">defun</span> <span style="color: #d7a924;">follow-cite</span> (name)
+       <span style="color: #d7974f;">"Open bibliography and jump to appropriate entry.</span>
+<span style="color: #d7974f;">        The document must contain \bibliography{filename} somewhere</span>
+<span style="color: #d7974f;">        for this to work"</span>
        (find-file-other-window
-        (<span style="color: #718c00;">save-excursion</span>
+        (<span style="color: #1c9af1;">save-excursion</span>
           (beginning-of-buffer)
-          (<span style="color: #718c00;">save-match-data</span>
-            (re-search-forward <span style="color: #3e999f;">"\\\\bibliography{</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">(</span><span style="color: #3e999f;">[</span><span style="color: #4271ae;">^</span><span style="color: #3e999f;">}]+</span><span style="color: #eab700; font-weight: bold;">\\</span><span style="color: #8959a8; font-weight: bold;">)</span><span style="color: #3e999f;">}"</span>)
-            (concat (match-string 1) <span style="color: #3e999f;">".bib"</span>))))
+          (<span style="color: #1c9af1;">save-match-data</span>
+            (re-search-forward <span style="color: #9d8567;">"\\\\bibliography{</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(</span><span style="color: #9d8567;">[</span><span style="color: #9d8567;">^</span><span style="color: #9d8567;">}]+</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">}"</span>)
+            (concat (match-string 1) <span style="color: #9d8567;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
-     (<span style="color: #718c00;">defun</span> <span style="color: #f5871f;">export-cite</span> (path desc format)
-       <span style="color: #8959a8;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
-       (<span style="color: #718c00;">if</span> (eq format 'latex)
-           (<span style="color: #718c00;">if</span> (or (not desc) (equal 0 (search <span style="color: #3e999f;">"cite:"</span> desc)))
-               (format <span style="color: #3e999f;">"\\cite{%s}"</span> path)
-             (format <span style="color: #3e999f;">"\\cite[%s]{%s}"</span> desc path)))))
+     (<span style="color: #1c9af1;">defun</span> <span style="color: #d7a924;">export-cite</span> (path desc format)
+       <span style="color: #d7974f;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       (<span style="color: #1c9af1;">if</span> (eq format 'latex)
+           (<span style="color: #1c9af1;">if</span> (or (not desc) (equal 0 (search <span style="color: #9d8567;">"cite:"</span> desc)))
+               (format <span style="color: #9d8567;">"\\cite{%s}"</span> path)
+             (format <span style="color: #9d8567;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
 </div>
 
@@ -73,25 +68,23 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
 </p>
 </div>
-<div id="postamble" class="status">
-<div id="archive"><a href="archive.html">Other posts</a></div>
-              <div id="disqus_thread"></div>
-              <script type="text/javascript">
-              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-              var disqus_shortname = 'bastibe';
-              /* * * DON'T EDIT BELOW THIS LINE * * */
-              (function() {
-                var dsq = document.createElement('script');
-                dsq.type = 'text/javascript';
-                dsq.async = true;
-                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                  })();
-              </script>
-              <noscript>Please enable JavaScript to view the
-                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
 </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

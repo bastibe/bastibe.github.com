@@ -1,0 +1,56 @@
+#+title: How to make Tagbar work with Objective-C
+#+date: <2011-12-04 20:21>
+#+tags: vim, text-editor
+
+For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)
+
+Recently however, ctags finally gained support for Objective-C! Huzzah!
+As of today, Objective-C support is not in the stable branch yet, but thanks to the magic of homebrew, an Obj-C ready ctags is only a ~brew install ctags --HEAD~ away!
+
+With that, tag navigation in Vim works for Objective-C. Awesome!
+However, Tagbar does not work yet. There used to be [[http://stackoverflow.com/a/5790832/1034][a workaround]] that apparently worked for some people, but it did not work for me.
+Things like this drive me nuts. I can see that tags are being generated, but Tagbar won't show them. What is going wrong?
+
+Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:
+
+#+begin_src
+    " add a definition for Objective-C to tagbar
+    let g:tagbar_type_objc = {
+        \ 'ctagstype' : 'ObjectiveC',
+        \ 'kinds'     : [
+            \ 'i:interface',
+            \ 'I:implementation',
+            \ 'p:Protocol',
+            \ 'm:Object_method',
+            \ 'c:Class_method',
+            \ 'v:Global_variable',
+            \ 'F:Object field',
+            \ 'f:function',
+            \ 'p:property',
+            \ 't:type_alias',
+            \ 's:type_structure',
+            \ 'e:enumeration',
+            \ 'M:preprocessor_macro',
+        \ ],
+        \ 'sro'        : ' ',
+        \ 'kind2scope' : {
+            \ 'i' : 'interface',
+            \ 'I' : 'implementation',
+            \ 'p' : 'Protocol',
+            \ 's' : 'type_structure',
+            \ 'e' : 'enumeration'
+        \ },
+        \ 'scope2kind' : {
+            \ 'interface'      : 'i',
+            \ 'implementation' : 'I',
+            \ 'Protocol'       : 'p',
+            \ 'type_structure' : 's',
+            \ 'enumeration'    : 'e'
+        \ }
+    \ }
+#+end_src
+
+With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!
+
+
+Happy Vimming!

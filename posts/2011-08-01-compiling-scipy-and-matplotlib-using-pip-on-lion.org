@@ -1,0 +1,27 @@
+#+title: Compiling Scipy and Matplotlib using pip on Lion
+#+date: <2011-08-01 12:40>
+#+tags: compiling, scipy, matplotlib, pip
+
+So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, ~pip~ stopped working. After a bit of messing around with ~brew~, ~pip~ and ~easy_install~, I found out it was almost entirely my own fault. I messed up my ~PATH~.
+
+In the meantime, I had uninstalled all of ~brew~'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some ~veclib_cabi_c.c~ would report errors. A quick [[http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html][round of googling]] reveals:
+
+In order to get Scipy to compile, you need to insert ~#include <complex.h>~ in
+
+#+begin_src sh
+    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
+    ./scipy/linalg/src/fblaswrap_veclib_c.c
+    ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
+#+end_src
+
+That done, Scipy compiles perfectly fine.
+
+But, that is not enough yet. As [[http://jholewinski.wordpress.com/2011/07/21/installing-matplotlib-on-os-x-10-7-with-homebrew/][this blogpost]] outlines, Matplotlib is not currently compatible with ~libpng~ 1.5, which ships with Lion. Fortunately, this is already fixed in the most recent source on the Matplotlib repo, so you just have to checkout that:
+
+#+begin_src sh
+    pip install -e git+https://github.com/matplotlib/matplotlib.git#egg=matplotlib
+#+end_src
+
+By doing that, Matplotlib should install just fine.
+
+Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, ~brew~, ~rvm~ and ~gem~ can do it just fine. Why is ~pip~ such a horrible mess?

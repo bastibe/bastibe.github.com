@@ -1,0 +1,212 @@
+#+title: Text Editors
+#+date: <2012-02-03 18:22>
+#+tags: text-editor, vim, emacs, sublime-text
+
+As far as I can tell, there has been a resurgence of development in the landscape of text editors of late. Only a few years ago, the text editing scene one the Mac seemed to be dominated by
+
+  * Crazy unix farts using Vim or Emacs
+  * BBEdit users
+  * Textmate users
+
+During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
+
+*** [[http://www.vim.org/][Vim]]
+
+[[http://bastibe.de/static/2012-02/vim_small.png]]
+
+Vim is very old software. It is a more or less direct descendant of ed from the early 1970s. It grew up in text based terminals without any graphical windows or mouses. Hence, all of its functionality is really meant to be used from the keyboard only, even though mousing is supported these days.
+
+[[http://bastibe.de/static/2012-02/vim_window_small.png]]
+
+The terminal inheritance limits its graphical capabilities somewhat. There are no graphical drawers or animations or pixel-precise scrolling. Everything is displayed in terms of rectangular characters, hence scrolling can only ever scroll one line at a time and there are no graphical images anywhere. Since Vim predates graphical displays altogether, it does not adhere to its standards much. In fact, in its normal mode it won't even type out the characters you hit on your keyboard.
+
+This is at really Vim's greatest strength and weakness: In its 'normal mode', all key presses are interpreted like keyboard shortcuts in other programs. And what shortcuts there are! Pretty much every key on the keyboard has some special function, most keys even serve multiple functions depending on what mode you are in at the moment. Thus it should come as no surprise that you can do anything with these shortcuts at astounding speed. Watching a seasoned Vimmer do his keyboard dance is something to behold. Moving the cursor is especially powerful. Usually, any place in the current file is reachable using just a few key strokes. But of course, you are not limited to just viewing one file at a time either: Vim supports arbitrary split views and can even be used for efficient diffing or merging. And when it comes to changing that text, Vim is no slouch, either. There are various registers for saving text or locations, there is an increadibly powerful macro system, amazing searching capabilities, command line integration, there are specialized functions for programming… Really, when it comes to pure text editing chops, nothing beats Vim.
+
+[[http://bastibe.de/static/2012-02/vim_full_window_small.png]]
+
+Vim is also incredibly customizable. Of course, there is no graphical preferences windows to do the customization in. You customize Vim by editing simple text files. Vim even includes its very own scripting language, VimScript, to enable users to extend it. There is a huge wealth of plugins available. These range from file browsers to support for new languages, or even some limited integration with compilers or source control tools. However, VimScript is not exactly a very pleasant language to code in and Vim does not actually like to interface with external tools much. These two issues limit the scope of what is possible with Vim somewhat–deep compiler integration and graphical debugging are fiddly at best, so you will probably just keep a terminal open and do them there. That said, the plugin ecosystem for Vim is probably still leaps and bounds beyond what is possible with most other text editor out there, but it does not quite reach the same breadth or integration as some IDEs or Emacs do.
+All that power comes at a price. Learning Vim is hard. If you start out with Vim, it will probably take at least a week or so until you can approach your old productivity again. Mastering Vim will take years. Even after months and months of diligent learning, you will find some new tricks and features to increase your speed.
+
+At the end of the day though, Vim is an amazingly powerful tool, and it is certainly worth it to at least learn the basics of it. Actually, most people I know who tried it have actually stuck with it. Myself, I have some two years of Vimming under my belt, too, and it has proven to be a very important tool for me.
+
+*** [[http://www.gnu.org/software/emacs/][Emacs 24]]
+
+[[http://bastibe.de/static/2012-02/emacs_small.png]]
+
+The thing you have to realize about Emacs is that… Emacs is powerful. People have called it [[http://www.emacswiki.org/emacs/NealStephenson][the thermonuclear text editor]], and for a reason. Emacs can edit text, of course, but that is really only the most mundane of its features. Really, Emacs is a little world of its own. You can read and write your mail from within Emacs, you can do spreadsheets, calendaring, it can host terminals, debuggers, compilers, there is Tetris, hell, it even includes its very own psychiatrist! Speaking off the record here, I have a suspicion that Emacs might achieve sentience pretty soon.
+
+[[http://bastibe.de/static/2012-02/emacs_window_small.png]]
+
+Similar to Vim, Emacs is old software. It was invented in the late 1970s at MIT and has been growing ever since. Also like Vim, its terminal inheritance shows its teeth sometimes: mouseweel scrolling can be awkward, especially if you like your inertial scrolling, the menu bar seems to not get much love and keyboard shortcuts are not conformant with what you might be used to from other text editors. On the other hand, Emacs has some very modern features like mixing of proportional fonts and fixed-width fonts or inline image display.
+
+The upside of being old is that Emacs is very mature software. There is a ginormous selection of extensions available for Emacs, most of it actually distributed right with Emacs itself and a lot of it is superbly documented. Besides that, there are [[http://tromey.com/elpa/][several]] [[http://marmalade-repo.org/][integrated]] [[http://elpa.gnu.org/][repositories]] for additional tools that can be downloaded and installed from the internet.
+
+The real power of Emacs is in that it is really not so much a text editor but a virtual machine for a programming language called eLisp. Really anything that can possibly be written in Lisp and remotely involves text editing is possible and probably already available in Emacs. As such, Emacs probably has the most diverse feature set of any text editor out there. Most relevant to programmers will be debugger integration, automatic syntax and spell checking, powerful and context-aware autocompletion, refactoring capabilities and much much more. Emacs is the only program in this list which can actually be used as a full fledged IDE on its own.
+
+[[http://bastibe.de/static/2012-02/emacs_full_window_small.png]]
+
+But Emacs is not limited to programming at all. As mentioned before, it includes an Email client, a great calendar with an agenda, several IM clients, RSS readers, an [[http://orgmode.org/][astoundingly powerful outliner]] and spreadsheet editor, it is frequently used for blogging, writing screen plays, books or really anything you can think of.
+
+The only real downside to this is that Emacs is, well, old. There is great power there, but is is only accessible to those willing to learn the myriad key combinations to invoke it. Rellay, mastering Emacs is a task for years, not weeks. But of course, you are not forced to wield all the power Emacs has to offer at once. Getting up to speed with basic text editing in Emacs will only take a few minutes, and the built-in help system and tutorial will guide you further whenever you feel the need to explore.
+
+I have been using Emacs for several months now and I am really enjoying it. It has a few shortcomings, but it is constantly being improved and getting more modern every day. I can see myself giving in to it and just live in Emacs all day long, but for now, I'm happy with it just being my primary text editor. However, I can't quite get beyond the fact that its pure text editing chops are nowhere near Vim. Then again, Emacs does [[http://gitorious.org/evil/pages/Home][support Vim key bindings]], so this might turn out not to bother me in the long run.
+
+At any rate, I would recommend anyone to give Emacs a shot at least for a short while. The power of Emacs can be an exhilarating experience, really.
+
+*** [[http://macromates.com/][Textmate (2)]]
+
+[[http://bastibe.de/static/2012-02/textmate_small.png]]
+
+For the longest time, all GUI text editors could generally be classified as either Vim-based, Emacs-based or shortcut-based. The prevalent crop of shortcut-based GUI text editors mapped all its advanced functions to certain modifier-letter combinations and/or menu bar items.
+
+When Textmate was introduced, it introduced a new concept: snippets. Snippets are short pieces of text which, upon activating a certain trigger, would expand to arbitraryly complex constructs.
+
+Thus, to define a class in some programming language, you would type ~class~, then hit TAB, and it would expand to a complete class declaration with constructor, destructor and documentation. Further yet, the class name would be highlighted immediately, so you could start editing it to your liking. These edits would even automatically percolate to all the relevant places in the class declaration and thus automatically change all scope declarations and the like.
+Or, you could drag some image file into some LaTeX code and it would expand (dragging being the trigger here) to a whole ~\begin{figure}~ complete with ~\caption~, ~\label~, the correct path to the image and everything else you need.
+
+This has proven to be such a popular feature that since Textmate's inception, implementations of snippets have been developed for pretty much every IDE or text editor out there.
+
+[[http://bastibe.de/static/2012-02/textmate_window_small.png]]
+
+Textmate also featured a very flexible and easily extensible regex based syntax parser, beautiful color schemes, a very elegant project management system and a vibrant community extending it in many directions. This was even more fascinating in that most of this functionality was implemented using a convenient shell scripting engine that could utilize any programming language your shell supported.
+
+Sadly though, its main developer got stuck somewhere along the way and development all but dried up for five years. This primarily meant that some issues just would not be fixed and thus, got all the more jarring. Most prominently, Textmate lacked split views, regex incremental search and would only do single character undo/redos. Many people left Textmate because of this lack of progress.
+
+While I was in college, I used Textmate extensively and it proved to be a veritable tool for many editing tasks. It is somewhat limited in its integration with programming tools, though, so don't expect any complex compiler or debugger integration. Ultimately, I left it behind for lack of cross platform compatibility and lack of development. There used to be a Windows program called [[http://e-texteditor.com/][E Text Editor]], which wanted to become a fully compatible Textmate alternative for Windows and Linux, but development never even reached production quality.
+
+Recently however, an early alpha version of Textmate 2 has been released that could reinvigorate the community and fix long standing issues. Whether that will actually happen will remain to be seen.
+
+*** [[http://www.vicoapp.com/][Vico]]
+
+[[http://bastibe.de/static/2012-02/vico_small.png]]
+
+Vico is a very new application that has spung to live only in 2011 and is not finished yet. It aims to be a modern Vim, combining the virtue of the powerful mode-based editing system of Vim with a modern Cocoa interface. It even merges Vim's editing capabilities with Textmate-derived snippets and syntax highlighting.
+
+Really, it tries to be an organic symbiosis of Vim and Textmate. And for most purposes, it very much succeeds in this. Syntax highlighting is very solid, there is a code browser, a nice file browser and full support for Textmate snippets. Vico even includes a powerful scripting environment that enables you to extend it in a language called Nu, which has the interesting aspect of being able to call into every object or method in the Cocoa libraries, thus opening the doors to a boundless world of wonders. Its Vim integration is well on its way, too. The most notable omission at this point are macros. The developer is working on it though and has promised to implement them in the near future. Some other areas are lacking, too, but if development continues I see no reason why it should not become a very nice text editor.
+
+As it stands though, development of Vico is going slow and its community is not very large yet. Vico is a very nice tool, but at the end of the day, I miss the raw power of an actual Vim just as I miss the vibrant community around Textmate. If you are not spoiled by Vim yet or find Vim just a bit too ugly for your taste, you could give Vico a try though.
+
+Personally, I like it quite a bit and I am hoping very much that it will not be forgotten as a failed attempt to modernize Vim. That said, what with Sublime Text 2 including a limited support for Vim key bindings, I can't really see Vico taking off.
+
+*** [[http://www.sublimetext.com/][Sublime Text 2]]
+
+[[http://bastibe.de/static/2012-02/sublimetext_small.png]]
+
+Sublime Text is a fairly recent development. It is a one-man project that has gained a lot of enthusiastic following in the last few months. In many ways, it feels like the next step in text editor development. Much like several other text editors out there, it has adopted Textmate snippets, color themes and syntax definitions as its core feature set. On top of that though, it has built a very powerful and flexible extension system that really sets it apart.
+
+Do you remember CMD-T from Textmate? To open some file, you would hit CMD-T and start typing a file name. The name would be fuzzy matched to select from all available files. Thus, typing ~bcc~ would select ~BeaconController.cpp~. This form of selection is increadibly intuitive and fast. It is also the basis for the extension system of Sublime Text. If there is no keyboard shortcut for a command, hit CMD-Shift-P and start typing to invoke the command.
+
+[[http://bastibe.de/static/2012-02/sublimetext_window_small.png]]
+
+In very much the same way as M-x in Emacs (though with fuzzy matching), this can invoke arbitrarily complex commands such as ~install bundle~ or using some refactoring library. Additionally, the same mechanism can be used to jump to method names or opening files. Really, these features are very efficient implementations of a code browser and file browser.
+
+The second big thing about Sublime Text is just the ridiculous amount of polish it received. For example, if you have two files with the same name, it will prefix the tab titles with the folder they reside in. Simple, but so useful! If you jump around in a file, there is always a subtle scrolling animation. Even simple text selections have slightly rounded borders and just look amazingly beautiful.
+
+Also of note is that Sublime Text supports multiple cursors. Want to change then name of all occurrences of a variable? Just select them all (!) and change them all at once. This is another amazingly useful feature.
+Its plugin system is based in Python, which is a refreshingly non-awkward choice for a text editor and spawned an astonishing amount of very interesting plugins already. Indeed the plugin system is flexible enough to support things like linters, source control integration and even something akin to Emacs's org-mode.
+And it also supports [[http://www.sublimetext.com/docs/2/vintage.html][Vim key bindings]]. Not very complete, but easily enough to be useful. Oh, and it is available cross-platform on Mac, Windows and Linux, too.
+
+I think there are three big families of text editors: Emacs, Vim, and shortcut-based text editors. Since I discovered Textmate however, I started believing that it represents a new branch in the big tree of text editors. Sublime Text seems to be the next step in the evolution of the Textmate branch.
+
+Really, Sublime Text is an amazing achievement. Maybe not quite as hackable as Emacs and not quite as flexible as Vim, but easily beating both in terms of elegance and modernity. If you don't want to learn Emacs or Vim, Sublime Text is what you should use. In fact, it is the first text editor ever that has tempted me to leave Emacs and Vim behind. Nuff said.
+
+*** What else is out there
+
+Of course, that little list up there is by no means complete. Neither does it list all the amazing features these text editors have to offer, nor does it represent an exhaustive list of them. To the best of my knowledge, this is a short list of other text editors for the Mac platform. Note however, that I have never used any of them extensively and can only tell you stuff from heresay.
+
+**** [[http://www.barebones.com/products/bbedit/index.html][BBEdit]]
+
+[[http://bastibe.de/static/2012-02/bbedit.png]]
+
+BBEdit is the big daddy of Mac text editors. It is currently available in version 10 and has a huge follwing predominantly amongst web developers. As far as I can tell, it includes amazing features for editing HTML. Maybe amongst the best out there.
+The remainder of its feature set seems rather standard crop though. There is some support for compilation, source code control, snippets, plugins… Though nothing on the level of Vim or Emacs really. Its most important disadvantage is probably its lack of cross-platform availability and extensibility.
+
+**** [[http://www.barebones.com/products/textwrangler/][TextWrangler]]
+
+[[http://bastibe.de/static/2012-02/textwrangler.png]]
+
+TextWrangler is the free smaller brother of BBEdit. Its feature set is somewhat pared down in comparison with BBEdit. In particular, it is missing BBEdit's famous HTML magic and some advanced external tool integration.
+Even for free, there are probably more capable candidates available, though maybe not at the same level of platform integration. That said, TextWrangler is not a bad choice and probably just fine for some casual text editing.
+
+**** [[http://www.jedit.org/][JEdit]]
+
+[[http://bastibe.de/static/2012-02/jedit.png]]
+
+I really don't know much about JEdit other than that it is written in Java, it has a sizeable following and it is available cross-platform. It seems like it could be about as useful as any shortcut based text editor can ever be, which is no small achievement. Also, it features a rich plugin system, of which I only heard good things.
+For all I know, this could be a very worthy alternative if you are on a budget (no Sublime Text) and don't want to learn Emacs or Vim.
+
+**** [[http://chocolatapp.com/][Chocolat]]
+
+[[http://bastibe.de/static/2012-02/chocolat.png]]
+
+Chocolat is yet another text editor that came into being in the post-Textmate void. It offers a good range of standard features, though notably missing advanced plugins apparently. Apart from that, it seems to be a solid shortcut based Mac text editor that is relatively cheap and actively developed.
+
+**** [[http://www.kodapp.com/][Kod]]
+
+[[http://bastibe.de/static/2012-02/kod.png]]
+
+Kod started out as an open source alternative to Textmate. This is quite uncommon for a post-Textmate text editor and worth supporting. After a good start however, the developer found a new job and development has pretty much stalled.
+
+**** [[http://www.codingmonkeys.de/subethaedit][SubEthaEdit]]
+
+[[http://bastibe.de/static/2012-02/subethaedit.png]]
+
+The great thing about SubEthaEdit is collaborative editing. if you want to edit text collaboratively with several people, SubEthaEdit performs the task seamlessly and elegantly.
+Beyond that, it is a capable shortcut-based text editor. If you don't need the collaboration feature, you should probably look elsewhere though.
+
+**** [[http://www.peterborgapps.com/smultron/][Smultron]]
+
+[[http://bastibe.de/static/2012-02/smultron.png]]
+
+Another venerable veteran on the Mac, Smultron used to be a free open source text editor that had a sizeable following. However, the developer ceased development at some point and later restarted the effort as a paid app in the Mac App Store.
+Smultron lost most of its following in that transition.
+
+**** [[http://www.slickedit.com/products/slickedit][SlickEdit]]
+
+[[http://bastibe.de/static/2012-02/slickedit.png]]
+
+SlickEdit is easily the most expensive text editor in this list. A single user license for one platform and one developer costs a scant 300 bucks. That is a lot of money for a text editor and is usually only shelled out only for business critical platform exclusive IDEs. It seems as if SlickEdit tries to be exactly that for general purpose text editing.
+It's feature list reads very well and checks all mayor boxes. It is available on pretty much any platform out there and is probably only rivalled by Emacs or Vim in that regard. It also supports emulation for Emacs or Vim key bindings.
+That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I doubt that SlickEdit can live up to that price if you compare it to some of the other examples in this list. It is undoubtedly a well-maintained and powerful text editor though.
+
+**** [[http://www.activestate.com/komodo-edit][Komodo Edit]]
+
+[[http://bastibe.de/static/2012-02/komodo.png]]
+
+Komodo Edit is the free open source offspring of ActiveState's Komodo IDE. It's feature set is very complete and seems to be very worthy for many editing tasks. Being of IDE ancestry provides it with nice plugin support and very helpful deep language integration like sophisticated autocompletion and syntax checking.
+There are also quite good Vim key bindings and it is available on the three major platforms. However, its language support is limited to Perl, Python, Tcl, PHP, Ruby and Javascript. Probably not a bad choice if you can live with the language selection and are on a budget.
+
+**** TextEdit
+
+[[http://bastibe.de/static/2012-02/textedit.png]]
+
+The built-in text editor in OSX. No syntax highlighting, project management or any programming support whatsoever make this a rather poor choice. There are plenty of free alternatives out there.
+That said, TextEdit does support rich text editing and might be of value for the odd letter to your grandma.
+
+**** Text editors for web development
+
+Strangely, all the major Mac text editors that cater specifically for web development are not cross platform. If web development is all you are ever doing though, these text editors might be well worth their money.
+
+***** [[http://www.panic.com/coda/][Coda]]
+
+[[http://bastibe.de/static/2012-02/coda.png]]
+
+Combine the SubEthaEdit text editing engine including its collaborative tools with the great FTP program Transmit and you have CODA, the program for "one-window web development". It even includes a reference book to HTML in the package. For what it is, probably of great value and nice polish. As a general purpose text editor, there are better alternatives.
+
+***** [[http://macrabbit.com/espresso/][Espresso]]
+
+[[http://bastibe.de/static/2012-02/espresso.png]]
+
+Another text editor gearing specifically for web development. Thus, you get powerful HTML and CSS editing features and good support for typical web development languages such as PHP, Ruby or Markdoen, but no support for other languages. There is an extension system though that could improve language support. This might be a slightly less expensive alternative to Coda.
+
+***** [[http://tacosw.com/][Taco HTML Editor]]
+
+[[http://bastibe.de/static/2012-02/taco.png]]
+
+Another text editor geared exclusively towards web development. This time around though, there is no support for languages other than HTML, CSS and PHP, which makes this program a rather poor choice.
+
+***** [[http://www.beforedawnsolutions.com/applications/skedit][skEdit]]
+
+[[http://bastibe.de/static/2012-02/skedit.png]]
+
+skEdit supports a nice array of web development languages and offers a good range of features for a web development text editor. Also, it is pretty inexpensive in comparison to its brethren here. Probably a nice choice for web development if you are on a budget.

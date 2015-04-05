@@ -1,0 +1,13 @@
+#+title: Speeding Up Org Mode Publishing
+#+date: <2014-05-07 0:00>
+#+tags: org-mode, emacs
+
+I use ~org-mode~ to write my blog, and ~org-publish~ as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and ~org-publish~ will take upwards of a /minute/ to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
+
+Since I am on a long train ride today, I decided to have a go at this problem. By the way, train rides and hacking on Emacs are a perfect match: Internet connectivity on trains is usually terrible, but Emacs is self-documenting, so internet access doesn't matter as much. It is sobering to work without an internet connection every once in a while, and Emacs is a perfect target for this kind of work.
+
+One of the many things I learned on train rides is that Emacs in fact contains its own profiler! So, I ran ~(progn (profiler-start 'cpu) (org-publish "blog") (profiler-report))~ to get a hierarchical list of where ~org-publish~ was spending its time. Turns out, most of its total run time was spent in functions relating to version control (starting with ~vc-~).
+
+Some package in my configuration set up ~vc-find-file-hook~ as part of ~find-file-hook~. This means that every time ~org-publish~ opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use ~vc-git~ at all. All my git interaction is done through ~magit~.
+
+But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. ~(remove-hook 'find-file-hooks 'vc-find-file-hook)~ will do the trick. This brought the runtime of ~org-publish~ down to 15 seconds. Yay for profiling and yay for Emacs!

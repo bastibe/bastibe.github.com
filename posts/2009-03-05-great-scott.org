@@ -1,0 +1,19 @@
+#+title: Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen
+#+date: <2009-03-05 13:55>
+
+[[http://bastibe.de/static/2009-03/bitte_warten.png]]
+
+Mal wieder: Ich schreibe ein Stück Software für meinen Nebenjob bei meinem Signalverarbeitung-Prof. Diesmal geht es darum, beliebige Audio-Files in Matlab einlesen zu können. Perfekt geeignet ist dafür die selbe Bibliothek, die auch von VLC verwendet wird, libavcodec/libavformat. Das ist eine normale C-Bibliothek, es braucht also nur noch ein kleines mex-File, um ihre Funktionalität für Matlab zur Verfügung zu stellen. Klappt auch wunderbar. Auf dem Mac.
+
+Schritt zwei ist dann, das Ganze auf Windows und Linux zum Laufen zu bringen. Eigentlich kein Problem, denn ich habe keine wilden Dinge getan und die Libraries selbst sind wunderbar Cross-Platform, es gibt sie sogar schon vorkompiliert für praktisch jedes denkbare Betriebssystem.
+
+Also, was brauche ich? Zwei Dinge: Matlab und einen C-Compiler (der mitgelieferte LLC-Compiler macht mein Hirn bluten). Matlab zu installieren ist meiner Erfahrung nach schmerzhaft. Bigtime. Nicht, weil Matlab schwer zu installieren wäre, sondern, weil Mathworks nur zwei Installationen pro Schachtel erlaubt, was für meine drei Betriebssysteme zu gewissen Problemen führt. Außerdem müsste ich meine eine Lizenz erst für die Windows-installation umschreiben lassen, und... ach, Schmerzen. Offenbar habe ich die Jungs dort aber schon derart häufig mit Lizenzanfragen genervt, dass sie mich einfach als hoffnungslos aufgegeben haben, denn dieses Mal musste ich keine neue Lizenz erstellen lassen, sondern einfach installieren, Passwort eingeben, und los. Mein Account meldet jetzt, dass ich fünf gleichzeitige Installationen hätte (von zwei erlaubten). Mir solls Recht sein.
+
+Außerdem: ein aktuelles Linux muss her. VMWare sei Dank, lauert im Linux-Installieren nicht mehr der Schrecken, im Zweifelsfall den kompletten Festplatteninhalt zu verlieren, sondern nur noch, an akuter Progressbar-itis zu ersticken. War ja klar, dass Autoupdate sich diesen Nachmittag aussucht, um meine Ubuntu-VM hoffnungslos zu zerstören. Also, neues Ubuntu heruntergeladen, neu installiert, neu Updates aufgespielt, zwei Stunden Lifetime verloren. Immerhin: es hat fehlerfrei funktioniert, das ist was Neues. Matlab hinterher, VMWare Tools dazu, fertig ist die Development-Kiste. Jetzt fehlt nur noch eine Verbindung zu meinem Development-Verzeichnis, damit ich auf meine Dateien zugreifen kann. Fehlanzeige. Dukommsthiernichrein. Na Toll.
+
+[[http://bastibe.de/static/2009-03/upgradepatch.png]]
+
+Also weiter zu Windows. Frühere Versuche ergaben bereits, dass ich Matlab nicht dazu bewegen kann, (a) GCC als Compiler zu nehmen oder (b) das bereits installierte Microsoft Visual Studio C++ .Net Professional Directors Cut Special Edition 2008 Ultimate zu verwenden. Nähere Nachforschungen zeigen: Zu neu, Kennternich. Geht nur bis MSVC Jahrgang 2005. Also: Neues MSVC deinstallieren, Altes installieren. ich freue mich immer darauf, MSVC zu deinstallieren, denn es besteht lediglich aus kompakten 12 Programmen, die sich zwar alle auf einem Haufen Installieren- jedoch nicht De-Installieren lassen. Immerhin ist es dank MSDNAA-Membership nicht schwer, an die alten Versionen heranzukommen. Und klar, die Systemsteuerung lässt einen auch immer nur ein Programm auf einmal deinstallieren. Multitasking ist nicht. Dank Syncplicity kann Windows die Zwischenzeit immerhin dazu verwenden, all meine Development-Files auf den Rechner zu laden. Yay!
+Das Schöne an Fortschrittsbalken ist ja, sie zeigen Fortschritt. Damit haben sie einen klaren Vorteil gegenüber etwa Dachbalken oder den Bittewartenpunktpunktpunkt-Balken, die die Microsoft SQL Server 2008-Deinstallation stolz herumzeigt. Die fühlt sich wohl sehr wichtig, denn sie rödelt eine starke halbe Stunde im Bitte-Warten-Modus herum. So mag ich Deinstallationen.
+
+To be continued...

@@ -1,0 +1,40 @@
+#+title: Fixing Errors in Epydoc
+#+date: <2012-08-28 12:14>
+#+tags: computers
+
+I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.
+
+If you ever get this error when using [[http://epydoc.sourceforge.net/][epydoc]]:
+
+#+begin_src
+    UNEXPECTED ERROR:
+    'Text' object has no attribute 'data'
+#+end_src
+
+You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.
+
+Luckily, some [[http://www.agapow.net/programming/python/epydoc-go-boom][fine]] [[http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data][folks]] on the internet have figured out how to fix these things.
+
+Short answer: Find your /site-packages/ directory:
+
+#+begin_src python
+    from distutils.sysconfig import get_python_lib
+	print(get_python_lib())
+#+end_src
+
+Go there, navigate to the /epydoc\/markup/ directory and change line 307 of the file /restructuredtext.py/ from
+
+#+begin_src python
+	m = self._SUMMARY_RE.match(child.data)
+#+end_src
+
+to
+
+#+begin_src python
+	try:
+		m = self._SUMMARY_RE.match(child.data)
+	except AttributeError:
+		m = None
+#+end_src
+
+This should fix that problem.

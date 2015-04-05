@@ -1,0 +1,77 @@
+#+title: Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion
+#+date: <2012-10-20 10:12>
+#+tags: computers, matlab
+
+Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.
+
+Because it does not work. So angry.
+
+Basically, ~mex~ does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had ~gcc-4.2~ and your system SDK was stored in /\/Developer\/SDKs\/MacOSX10.6.sdk/. However, as of 10.7 (I think), the /\/Developer/ directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, ~gcc~ has been deprecated in favor of ~clang~. While a ~gcc~ binary is still provided, ~gcc-4.2~ is not. Of course, that is what ~mex~ relies on. Lastly, ~mex~ of course completely disregards common system paths such as, say, /\/usr\/local\/bin/, so compiling against some homebrew library won't work.
+
+At least these things are rather easy to fix, since all these settings are saved in a file called /mexopts.sh/, which is saved to /~\/.matlab\/R2012a\// by default. The relevant section on 64-bit OS X begins after ~maci64)~ and should look like this: (changes are marked by comments)
+
+#+begin_src makefile
+    #----------------------------------------------------------------------------
+                # StorageVersion: 1.0
+                # CkeyName: GNU C
+                # CkeyManufacturer: GNU
+                # CkeyLanguage: C
+                # CkeyVersion:
+                CC='gcc' # used to be 'gcc-4.2'
+
+                # used to be '/Developer/SDKs/MacOSX10.6.sdk'
+                SDKROOT='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'
+                MACOSX_DEPLOYMENT_TARGET='10.8' # used to be '10.5'
+                ARCHS='x86_64'
+                CFLAGS="-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                CFLAGS="$CFLAGS  -fexceptions"
+                CFLAGS="$CFLAGS -I/usr/local/include" # Homebrew include path
+                CLIBS="$MLIBS"
+                COPTIMFLAGS='-O2 -DNDEBUG'
+                CDEBUGFLAGS='-g'
+    #
+                CLIBS="$CLIBS -lstdc++"
+                # C++keyName: GNU C++
+                # C++keyManufacturer: GNU
+                # C++keyLanguage: C++
+                # C++keyVersion:
+                CXX=g++ # used to be 'g++-4.2'
+                CXXFLAGS="-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                CXXLIBS="$MLIBS -lstdc++"
+                CXXOPTIMFLAGS='-O2 -DNDEBUG'
+                CXXDEBUGFLAGS='-g'
+    #
+                # FortrankeyName: GNU Fortran
+                # FortrankeyManufacturer: GNU
+                # FortrankeyLanguage: Fortran
+                # FortrankeyVersion:
+                FC='gfortran'
+                FFLAGS='-fexceptions -m64 -fbackslash'
+                FC_LIBDIR=`$FC -print-file-name=libgfortran.dylib 2>&1 | sed -n '1s/\/*libgfortran\.dylib//p'`
+                FC_LIBDIR2=`$FC -print-file-name=libgfortranbegin.a 2>&1 | sed -n '1s/\/*libgfortranbegin\.a//p'`
+                FLIBS="$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"
+                FOPTIMFLAGS='-O'
+                FDEBUGFLAGS='-g'
+    #
+                LD="$CC"
+                LDEXTENSION='.mexmaci64'
+                LDFLAGS="-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                LDFLAGS="$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"
+                LDFLAGS="$LDFLAGS -L/usr/local/lib" # Homebrew library path
+                LDOPTIMFLAGS='-O'
+                LDDEBUGFLAGS='-g'
+    #
+                POSTLINK_CMDS=':'
+    #----------------------------------------------------------------------------
+#+end_src
+
+To summarize:
+
+- changed ~gcc-4.2~ to ~gcc~
+- changed ~/Developer/SDKs/MacOSX10.6.sdk~ to ~/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk~
+- changed ~10.5~ to ~10.8~
+- added ~CFLAGS="$CFLAGS -I/usr/local/include"~
+- changed ~g++-4.2~ to ~g++~
+- added ~LDFLAGS="$LDFLAGS -L/usr/local/lib"~
+
+With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.

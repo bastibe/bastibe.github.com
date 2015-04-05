@@ -1,0 +1,35 @@
+#+title: Writing a Thesis in Org Mode
+#+date: <2014-11-19 0:00>
+
+Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in [[http://orgmode.org/][Org Mode]] instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
+
+In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
+
+Org mode was a huge help in this regard, since it combines the document text and the executable pieces of code. Instead of having a bunch of scripts that generate graphs, and a bunch of LaTeX files that include those graphs, I had one big Org file that included both the thesis text and the graphing code.
+
+As for the thesis text, I used Org's export functionality to convert the Org source to LaTeX, and compiled a PDF from there. This really works very well: It is very nice to use Org headlines instead of ~\section{...}~, and clickable Org links instead of ~\ref{...}~. While this is nice, it is just a change of syntax. I still had to enter the very same things and saving a few characters is not particularly impressive. For example, figures still require a caption, an ID, and a size:
+
+#+begin_src org
+#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.
+#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn
+#+NAME: fig:summary_tracks
+[[file:images/summary_tracks.pdf]]
+#+end_src
+
+In LaTeX, this would be
+
+#+begin_src latex
+\begin{figure*}
+\centering
+\includegraphics[width=6in,height=2.5in]{images/summary_tracks.pdf}
+\caption{\label{fig:summary_tracks}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.}
+\end{figure*}
+#+end_src
+
+As you can see, there really is not that much of a difference between these two, and you might even consider the LaTeX example more readable. In some other areas, Org mode is simply lacking features: Org does not have any syntax for page formatting, and thus can't create a perfectly formatted title page. Similarly, it can't do un-numbered sections, and it can't do numbered equations. For all of those, I had to fall back to writing LaTeX. This is not a big deal, but it breaks the abstraction.
+
+A bigger problem is that Org documents include all the chapters in one big file. While Org can deal with large files no problem, it means that LaTeX compiles take a while. In LaTeX, I would have split my document into a number of smaller files that could be separately compiled in order to keep compilation time down. This is confounded by Org's default behavior of deleting intermediate LaTeX files, which forces a full triple-recompile on each export. At the end of my thesis, a full export took about 15 seconds. Not a deal-breaker, but annoying.
+
+The one thing where Org really shines, though, is the inclusion of code fragments: Most of my figures were created in Python, and Org mode allowed me to include that Python code right in my document. Hit ~C-c C-c~ on any code fragment, and Org ran that code and created a new image file that is automatically included as a figure. This was really tremendously useful!
+
+At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and [[http://bastibe.de/2014-09-23-org-cite.html][workarounds]], which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.

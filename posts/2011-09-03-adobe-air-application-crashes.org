@@ -1,0 +1,22 @@
+#+title: Adobe AIR Application Crashes
+#+date: <2011-09-03 13:08>
+#+tags: computers
+
+Adobe, oh Adobe. Why?
+
+Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.
+
+Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.
+
+See, Adobe has this library called ~WebKit.dylib~. However, their code actually looks for ~Webkit.dylib~ (note the capitalisation of the K). Well, spelling is hard, I presume.
+
+At least this is an error that can easily be fixed. Fire up your terminal, type
+
+#+begin_src sh
+cd /Library/Frameworks/Adobe\ AIR.framework/Version/Current/Resources/
+sudo ln -s WebKit.dylib Webkit.dylib
+#+end_src
+
+Then enter your password and your AIR applications should work again.
+
+Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!

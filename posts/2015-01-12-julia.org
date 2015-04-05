@@ -1,0 +1,26 @@
+#+title: Julia First Impressions
+#+date: <2015-01-12 0:00>
+
+#+begin_quote
+Julia is a high-level dynamic programming language designed to address the requirements of high-performance numerical and scientific computing while also being effective for general purpose programming. —[[https://en.wikipedia.org/wiki/Julia_%28programming_language%29][Wikipedia]]
+#+end_quote
+
+In other words, it is supposed to be as fast as C, as practical as Python, and as scientific as Matlab. The next step in mainstream scientific computing.
+
+However, Julia is still very young, and still evolving rapidly. But if any of the above is true, I am /very/ interested!
+
+So, over the last few days, I re-implemented an algorithm in Julia. The previous version of the algorithm was written in Python. The algorithm spends most of it's time in FFTs, thus I didn't expect big performance gains.
+
+It is actually nice to have a language that is built for scientific computation. Coming from Python, it is refreshing to have [[http://docs.julialang.org/en/release-0.3/manual/arrays/][array literals]], ranges and [[http://docs.julialang.org/en/release-0.3/stdlib/math/][mathematics]] available without importing anything. Much like Python, Julia also has a proper [[http://docs.julialang.org/en/release-0.3/manual/modules/][module system]], comprehensions, and more than one function per file.
+
+On the other hand, there are a few questionable design decisions as well. Julia uses 1-based, inclusive indexing (~range[1:3] = [1 2 3]~ as opposed to Python's ~range[:3] = [0, 1, 2]~). In practice, my experience is that I rarely need to add ±1 when indexing in Python, but I frequently need it in Julia/Matlab.
+
+Also, Julia has no docstrings, which makes me sad. The whole documentation story is sad, really: Documentation is often incomplete, or missing altogether. Unit testing is not widespread at all, and still crude. 0.4 will apparently add docstrings [[https://github.com/MichaelHatherly/Docile.jl][using macros]]. This is ugly and doesn't work for one's own code, but it's certainly a step in the right direction. Those error messages would need some work, too.
+
+All of that is hopefully just a symptom of Julia being young, and will improve over time. Similarly, signal processing functions are missing entirely, and I had to re-implement some. The community is growing rapidly, though, and a lot of missing functionality can be installed through the [[http://docs.julialang.org/en/release-0.3/manual/packages/][package manager]] already.
+
+When it comes to writing code, there is a lot to like about Julia. Julia's type system does impose a bit of overhead, but it also grants immediate benefits: Many of Python's runtime errors happen at evaluation time and functions can easily document their arguments' types. Also, thinking strictly about types actually improved performance by a good 20% in my algorithm.
+
+And finally, Performance is surprisingly good! Although my algorithm spends almost all of its time doing FFTs, Julia performed about twice as fast as Python. This is pretty much exactly twice as much as I had expected! It also exposed more of the [[http://docs.julialang.org/en/release-0.3/stdlib/math/?highlight=plan_fft#Base.plan_fft][features]] of the underlying libraries, which could be used for another speed-up of some 10%.
+
+At the end of the day, Julia clearly isn't mature yet, but very promising. Documentation and libraries will no doubt grow, and performance is already excellent. I'll definitely keep an eye on it, and will experiment further when the opportunity presents itself.

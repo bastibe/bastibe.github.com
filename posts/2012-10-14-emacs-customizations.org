@@ -1,0 +1,111 @@
+#+title: My Emacs customizations
+#+date: <2012-10-14 09:14>
+#+tags: computers, emacs
+
+I don't host my ~.emacs~ in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
+
+One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes
+
+[[https://bitbucket.org/bastibe/.emacs.d/src/][My /.emacs/]]
+
+Now on to the meat of this post: Some customizations I made that I think are cool.
+
+*** When Emacs starts up, make it fit the left half of the screen
+
+First, I need a function to set the size of a frame in terms of pixels. Emacs only provides ~set-frame-size~, but that works on characters, not pixels.
+
+#+begin_src elisp
+(defun set-frame-pixel-size (frame width height)
+  "Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."
+  (let ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
+		(pixels-per-char-height (/ (frame-pixel-height) (frame-height))))
+	(set-frame-size frame
+					(floor (/ width pixels-per-char-width))
+					(floor (/ height pixels-per-char-height)))))
+#+end_src
+
+Next, a function that uses the above to set the frame size to exactly fit the left half of the screen. Note that the ~excess-...~ variables account for things like the menu bar, the dock or the task bar so you might have to adapt these values to your particular windowing environment. The values given here work for dockless OSX.
+
+#+begin_src elisp
+(defun use-left-half-screen ()
+  (interactive)
+  (let* ((excess-width 32)
+		 (excess-height 48)
+		 (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
+		 (screen-height (- (x-display-pixel-height) excess-height)))
+	(set-frame-pixel-size (selected-frame) half-screen-width screen-height)))
+#+end_src
+
+Finally, when Emacs starts up, make it use half the screen. Just how I like it!
+
+#+begin_src elisp
+(if window-system
+	(use-left-half-screen))
+#+end_src
+
+*** Make shell split windows auto-resize
+
+Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
+
+#+begin_src elisp
+(add-hook 'window-configuration-change-hook
+		  (lambda ()
+			(when (or (string-equal (buffer-name) "*Python*")
+					  (string-equal (buffer-name) "*eshell*")
+					  (string-equal (buffer-name) "*tex-shell*"))
+			  (if (not (eq (window-height) 15))
+				  (enlarge-window (- 15 (window-height)))))))
+#+end_src
+
+*** Create a new line above/below the current one
+
+There is one feature of Vim that I really missed: ~o~/~O~, which 'opens' a new line above or below the current one without changing the current line.
+
+#+begin_src elisp
+(defun vi-open-line-above ()
+  "Insert a newline above the current line and put point at beginning."
+  (interactive)
+  (unless (bolp)
+    (beginning-of-line))
+  (newline)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(defun vi-open-line-below ()
+  "Insert a newline below the current line and put point at beginning."
+  (interactive)
+  (unless (eolp)
+    (end-of-line))
+  (newline-and-indent))
+
+(global-set-key (kbd "C-o") 'vi-open-line-below)
+(global-set-key (kbd "M-o") 'vi-open-line-above)
+#+end_src
+
+*** When editing LaTeX, show PDF output in Emacs
+
+Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
+
+This function will open or refresh a split window with the generated PDF file in it. Thus, when I edit LaTeX, I will hit C-c C-c to compile, then C-c C-v to see the PDF. All that without having to leave the LaTeX file.
+
+#+begin_src elisp
+;; open/show pdf file within Emacs using doc-view-mode
+(defun open-show-pdf ()
+  (interactive)
+  (let ((tex-buffer-name (buffer-name))
+		(pdf-buffer-name (concat (TeX-master-file) ".pdf")))
+	(if (get-buffer pdf-buffer-name)
+		(switch-to-buffer-other-window pdf-buffer-name)
+	  (find-file-other-window pdf-buffer-name))
+	(if (not (eq major-mode 'doc-view-mode))
+		(doc-view-mode))
+	(doc-view-revert-buffer t t)
+	(switch-to-buffer-other-window tex-buffer-name)))
+
+(add-hook 'LaTeX-mode-hook
+		  (lambda ()
+			(define-key LaTeX-mode-map (kbd "C-c C-v") 'open-show-pdf)
+			(visual-line-mode t)
+			(turn-on-reftex))
+		  t)
+#+end_src

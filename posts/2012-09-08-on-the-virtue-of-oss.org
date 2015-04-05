@@ -1,0 +1,25 @@
+#+title: On the Virtue of Contributing to and Using Open Source Software
+#+date: <2012-09-08 08:44>
+#+tags: open-source, pyaudio
+
+I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
+
+About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for [[http://numpy.scipy.org/][numpy]] [[http://scipy.org/][scipy]] and [[http://matplotlib.sourceforge.net/][matplotlib]] that, for my particular purposes, rivals Matlab.
+
+However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used [[http://playrec.co.uk/][Playrec]] for that purpose, which implements [[http://www.portaudio.com/][PortAudio]] bindings for Matlab. Luckily, there was a similar package available for Python, called [[http://people.csail.mit.edu/hubert/pyaudio/][PyAudio]].
+
+But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.
+
+At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!
+
+This was a revelation to me: I could not only /use/ a piece of software, I could also /change/ it and mold it to my special needs!
+
+Thus, I put up my changes on [[https://github.com/bastibe/PyAudio][github]] and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!
+
+This, again, was a revelation to me: Not only could /I/ change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!
+
+Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.
+
+And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.
+
+*By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.*

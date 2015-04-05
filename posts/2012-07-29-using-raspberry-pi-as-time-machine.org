@@ -1,0 +1,89 @@
+#+title: Using a Raspberry Pi as a Time Capsule for Mountain Lion
+#+date: <2012-07-29 21:18>
+#+tags: raspberrypi, computers, mountainlion
+
+A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes ~hdiutil~ would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
+
+This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
+
+** Ingredients: [[http://www.raspberrypi.org/][A Raspberry Pi]], an external hard drive, some patience
+
+Format an SD card as described [[http://elinux.org/RPi_Easy_SD_Card_Setup][in the wiki]]. I just installed the version of Debian that is provided on [[http://www.raspberrypi.org/downloads][the official website]]. Now just boot up.
+
+Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi's HDMI output to the LED display's Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.
+
+After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled /Internet Sharing/ in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using ~arp -a~.
+
+** Setting up the hard drive
+
+First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. ~ls /dev~ showed the hard drive as ~/dev/sda~. Thus, I installed ~parted~ using ~sudo apt-get install parted~ and used it ~sudo parted~. In parted, ~select /dev/sda~ sets it up to modify the external hard drive, ~rm 1~ deleted its main partition, ~q~ to quit parted. Next, creating a new partition: ~sudo fdisk~, then in there ~n~ with ~p~ and ~1~ to create a new primary partition, then ~w~ to apply the changes and exit. Lastly, I created the file system with ~sudo mkfs -t ext4 /dev/sda1~ with the whole partition as its size. Now lastly, I created a mount point for it using ~mkdir ~/TimeMachine~ (don't use ~sudo~!) and auto-mounted it by appending this to //etc/fstab/
+
+#+begin_src
+    /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
+#+end_src
+
+Note: ~sync~ specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.
+
+** Setting up the shared folder
+
+First up, this requires ~netatalk~, so I did ~sudo apt-get update~ and ~sudo apt-get install netatalk~ to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to //etc/netatalk/AppleVolumes.default/:
+
+#+begin_src
+    /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
+#+end_src
+
+Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to //etc/netatalk/afpd.conf/:
+
+#+begin_src
+    - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
+#+end_src
+
++(maybe append ~mdns~ to the hosts in //etc/nsswitch.conf/? Probably not necessary.)+
+
++I am also not quite sure whether I actually had to create a new file //etc/avahi/services/afpd.service/ and write into it:+
+
+#+begin_src xml
+    <?xml version="1.0" standalone='no'?><!--*-nxml-*-->
+    <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+    <service-group>
+		<name replace-wildcards="yes">%h</name>
+		<service>
+			<type>_afpovertcp._tcp</type>
+			<port>548</port>
+		</service>
+		<service>
+			<type>_device-info._tcp</type>
+			<port>0</port>
+			<txt-record>model=Xserve</txt-record>
+		</service>
+	</service-group>
+#+end_src
+
++And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using ~touch ~/TimeMachine/.com.apple.timemachine.supported~.+
+
+*Edit:* Turns out, all these were not necessary. Thank you, reader Philipp, for trying them out!
+
+I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.
+
+Anyway, with all that done, restart both the netatalk and the Bonjour daemon using ~sudo /etc/init.d/netatalk restart~ and ~sudo /etc/init.d/avahi-daemon restart~.
+
+** Setting up the Time Machine
+
++Now, back to the Mac. In order to make Time Machine accept the new network share, run+
+
+    +~defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1~+
+
+
+*Edit:* Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.
+
+Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!
+
+Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.
+
+Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!
+
+This article heavily steals from these fine folks on the internet:
+
+- [[http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/][Matthias Kretschmann]]
+- [[http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/][Steffen L. Norgren]]
+- [[http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/][Mike Palmer]]

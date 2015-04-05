@@ -1,0 +1,27 @@
+#+title: Gedanken zu User Interfaces
+#+date: <2009-04-25 14:15>
+#+tags: ui
+
+Jeder kennt dieses Fenster:
+
+[[http://bastibe.de/static/2009-04/delete_file.png]]
+
+Dieses Fenster ist eine ziemlich schlechte Idee, denn jeder geübte Benutzer hat irgendwann gelernt, dass die Aktion "Dateien Löschen" aus drei Gesten besteht: (1) Dateien auswählen, (2) Die Löschaktion einleiten, (3) Den Löschdialog bestätigen. Leider hat man schon vor mehr als zwanzig Jahren nachgewiesen, dass solche zusammengehörigen Gesten von den Benutzern als einzelne "Datei-Löschen" Geste abstrahiert werden. Man kennt das vom Tippen: Man tippt Worte nicht, indem man einzelne Buchstaben aneinander hängt, sondern man tippt Worte fast immer am Stück; Hat man erst einmal angefangen, ein falsches Wort zu tippen, kann man damit nicht aufhören, bis das gesamte Wort getippt ist. Auf ähnliche Weise ist es dem Benutzer auch nicht möglich, auf den Löschdialog sinnvoll zu reagieren, da das Bestätigen der Sicherheitsfrage vollkommen automatisiert ist und daher nicht einmal verhindert werden könnte, wenn man wollte.
+Die Alternative ist ein alter Bekannter: Undo. Statt den Benutzer im Vorfeld zu fragen, ob er die Datei wirklich löschen möchte (was er durch Einleiten der Löschaktion bereits bejaht hat) gibt man ihm die Möglichkeit, die Aktion im Nachhinein wieder rückgängig zu machen. Das ist wesentlich effektiver und kommt ohne nerviger Dialogbox aus. Übrigens funktioniert Dateiaktion-Undo bereits heute in allen Betriebssystem außer Linux, jedoch ohne Menüicon und zumeist nur für die letzte Aktion. Wäre es nicht schön, wenn dies noch weiter ausgebaut würde?
+
+Noch ein gefährlicher Dialog:
+
+[[http://bastibe.de/static/2009-04/ja_nein_abbrechen.png]]
+
+Das ist ebenfalls ein alter Bekannter, der immer dann erscheint, wenn man ein Programm schließen will, welches noch ungesichte Änderungen enthält: Abgesehen von dem offensichtlichen Problem, dass "Abbrechen" keinen wirklichen Sinn ergibt (Was abbrechen? Das Programm?) erfordert diese Frage jedes Mal das komplette Lesen der Meldung, bis man entschlüsseln kann, was "Ja" und "Nein" in diesem Kontext bedeuten. Um das noch einmal zu verdeutlichen, hier ein besonders schlimmes Beispiel:
+
+[[http://bastibe.de/static/2009-04/bad_gui.png]]
+
+Es leuchtet ein, dass hier ein eindeutigerer Dialog wesentlich sinnvoller wäre, bei dem sofort ersichtlich ist, was welcher Button tun wird: (Merke: Auf Buttons gehören immer Verben)
+
+http://bastibe.de/static/2009-04/speichern_windows.png]]
+[[http://bastibe.de/static/2009-04/speichern_mac.png]]
+
+Aber warum eigentlich überhaupt speichern? Warum muss ich mich persönlich darum kümmern, meine Arbeit zu speichern? Ich dachte, ich würde mit einer Datei arbeiten -- aber wenn diese Datei nicht geändert wird, wenn ich nicht zuerst "Speichern" anklicke, habe ich wohl eigentlich doch nicht mit dieser Datei, sondern mit einer heimlichen Kopie gearbeitet. Wäre es nicht viel sinnvoller, immer automatisch zu speichern, und statt des "Speichern"-Buttons eine "auf Urzustand zurücksetzen"-Funktion bereitzustellen? Ich bin mir auf jeden Fall sicher, dass man den "Undo all changes"-Button wesentlich seltener bräuchte als den "Speichern"-Button, denn wenn der Benutzer nicht vorgehabt hätte, neuen Text in eine Datei zu schreiben, dann hätte er keinen neuen Text in die Datei geschrieben. Hat er dennoch "versehentlich" Text eingegeben, ist das ein klarer "Benutzerfehler", also der logische Einsatzzweck für Undo.
+
+Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll einsetzen könnte, um das Arbeiten am Computer angenehmer zu gestalten. Ich wünschte, mehr Leute würden sich mit diesen Dingen auseinander setzen...

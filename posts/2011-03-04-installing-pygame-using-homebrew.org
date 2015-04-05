@@ -1,0 +1,89 @@
+#+title: Installing Pygame using Homebrew
+#+date: <2011-03-04 14:16>
+#+tags: compiling, numpy, scipy, matplotlib, homebrew, pygame
+
+So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, [[http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html][Numpy, Scipy and Matplotlib]]. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
+
+[[http://www.pygame.org/news.html][Pygame]] is one package that allows this. (I will submit a patch to [[http://people.csail.mit.edu/hubert/pyaudio/][Pyaudio]] soon that will enable it there, too). There are pre-built binaries on the Pygame website that you can install easily. But then there would be no easy way to uninstall them, so what I would rather want is to install Pygame using package managers that allow easy updating and uninstallation. My tool of choice on the Mac is of course [[https://github.com/mxcl/homebrew/][Homebrew]].
+
+Note that although I am mostly interested in audio playback, this post will detail the installation of all modules of Pygame, not just ~pygame.mixer~.
+
+Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.
+
+#+begin_src
+brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
+#+end_src
+
+This will install most packages for you. Note that ~libpng~ is also available as a system library, so it is installed ~keg_only~, that is, without linking it in your path. We will need to compile against it though, so the next step is
+
+#+begin_src
+brew link libpng
+#+end_src
+
+Now there is still one package missing, ~smpeg~. Sadly, ~smpeg~ does not install its headers, so you can't compile against it. To fix that, type
+
+#+begin_src
+brew edit smpeg
+#+end_src
+
+and add the following line just above the two end at the end of the file
+
+#+begin_src
+include.install Dir["*.h"]
+#+end_src
+
+Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install ~smpeg~ with the usual
+
+#+begin_src
+brew install smpeg
+#+end_src
+
+and you will get the headers, too. Isn't Homebrew great?
+
+Now that all the prerequisites are met, lets look at Pygame itself. This is rather more difficult, as it will not build properly against Homebrew libraries on its own. First, download the source package of Pygame from the [official website](http://www.pygame.org/download.shtml). Unpack it to some directory.
+
+Now open a terminal and navigate to that directory. Me, I like [iTerm](http://iterm.sourceforge.net/), but Terminal.app will do just fine, too. In there, run ~python config.py~ to create an initial setup file.
+
+At this point, the setup file is mostly useless since ~config.py~ failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file ~Setup~ (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
+
+#+begin_src
+SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
+#+end_src
+
+Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in ~/usr/local…~. Hence, change this line to
+
+#+begin_src
+SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+#+end_src
+
+The next lines are strangely garbled. They say, for example
+
+#+begin_src
+FONT = -lS -lD -lL -l_ -lt -lt -lf
+#+end_src
+
+Where they actually should say
+
+#+begin_src
+FONT = -lSDL_ttf
+#+end_src
+
+Instead of having one ~-l~ and then the library name ~SDL_ttf~, they put ~-l~ in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for ~FONT~, ~IMAGE~, ~MIXER~ and ~SMPEG~.
+
+Note that I did not tell you to do this for ~PORTTIME~, too. Actually, ~PORTTIME~ is already correctly linked in ~PORTMIDI~, so you don't need that at all any more. Just delete or comment the ~PORTTIME~ line.
+
+Now that all the dependencies are corrected, lets enable the features. A few lines further down, there will be a block of lines, where most lines begin with a ~#~ except for the ones beginning with ~_numericsurfarray…~ and ~_camera…~, These are the different features of Pygame: The ones with the ~#~ are disabled, the other two are enabled.
+
+With all the stuff we installed earlier, you can now enable all features (remove the ~#~ in front of ~imageext…~, ~font…~, ~mixer…~, ~mixer_music…~, ~_minericsndarray…~, ~movie…~, ~scrap…~ and ~pypm…~).
+
+Remember we disabled ~PORTTIME~ a while ago? Right, so we have to remove that dependency: In the line starting with ~pypm…~, delete the part that says ~$(PORTTIME)~. Great. That was easy, right? Now save that file and go back to the Terminal.
+
+We are now going to compile and install Pygame. The nice thing is, even though we are installing it manually, it will go in the right directories and it will be registered with ~pip~ or ~easy_install~, so you can just invoke them if you want to uninstall it later by typing ~pip uninstall pygame~. This is something I love about Python!
+
+Alright, now without further ado, install Pygame by typing
+
+#+begin_src
+python setup.py install
+#+end_src
+
+Great! That's it! Everything should work now!

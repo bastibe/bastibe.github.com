@@ -3,36 +3,31 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Sound in Python</title>
-<!-- 2013-11-27 Wed 18:43 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Bastian Bechtold" />
-<link rel="alternate" type="appliation/rss+xml"
-                href="http://bastibe.de/rss.xml"
-                title="RSS feed for bastibe.de">
-          <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-          <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-          <link href= "static/style.css" rel="stylesheet" type="text/css" />
-          <link rel="icon" href="static/favicon.ico">
-          <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
-          <link rel="msapplication-TitleImage" href="static/favicon-144.png">
-          <link rel="msapplication-TitleColor" href="#0141ff">
-          <title>Basti's Scratchpad on the Internet</title>
-          <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-          <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
-</head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Sound in Python</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
-              <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
-              <div class="sitelinks">
-                  <a href="http://alpha.app.net/bastibe">alpha.app.net</a>  | <a href="http://github.com/bastibe">Github</a>
-              </div>
-          </div>
-</div>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
 <div id="content">
-<h1 class="title">Sound in Python</h1>
+<div class="post-date">27 Nov 2013</div>
+<h1 class="post-title">Sound in Python</h1>
 <p>
 Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
 </p>
@@ -59,8 +54,8 @@ So, lets read some audio data, shall we?
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile
-<span style="color: #eab700;">data</span> = SoundFile(<span style="color: #3e999f;">'sad_song.wav'</span>)[:]
+<pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile
+<span style="color: #379a6a;">data</span> = SoundFile(<span style="color: #9d8567;">'sad_song.wav'</span>)[:]
 </pre>
 </div>
 
@@ -78,10 +73,10 @@ OK, that was easy. So let's read only the first and last 100 frames!
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile
-<span style="color: #eab700;">f</span> = SoundFile(<span style="color: #3e999f;">'long_song.flac'</span>)
-<span style="color: #eab700;">first</span> = f[:100]
-<span style="color: #eab700;">last</span> = f[-100:]
+<pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile
+<span style="color: #379a6a;">f</span> = SoundFile(<span style="color: #9d8567;">'long_song.flac'</span>)
+<span style="color: #379a6a;">first</span> = f[:100]
+<span style="color: #379a6a;">last</span> = f[-100:]
 </pre>
 </div>
 
@@ -99,14 +94,14 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #718c00;">from</span> pysoundcard <span style="color: #718c00;">import</span> Stream
-<span style="color: #718c00;">from</span> pysoundfile <span style="color: #718c00;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #718c00;">with</span> Stream() <span style="color: #718c00;">as</span> s: <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">opens your default audio device</span>
-    <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
-    <span style="color: #eab700;">f</span> = SoundFile(<span style="color: #3e999f;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #8959a8;">format</span>=ogg_file,
+<pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundcard <span style="color: #1c9af1;">import</span> Stream
+<span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile, ogg_file, write_mode
+<span style="color: #1c9af1;">with</span> Stream() <span style="color: #1c9af1;">as</span> s: <span style="color: #919191;"># </span><span style="color: #919191;">opens your default audio device</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">This is supposed to be a new file, so specify it completely</span>
+    <span style="color: #379a6a;">f</span> = SoundFile(<span style="color: #9d8567;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+                  channels=s.channels, <span style="color: #d87a00;">format</span>=ogg_file,
                   mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #8e908c; font-style: italic;"># </span><span style="color: #8e908c; font-style: italic;">one second</span>
+    f.write(s.read(s.sample_rate)) <span style="color: #919191;"># </span><span style="color: #919191;">one second</span>
 </pre>
 </div>
 
@@ -144,25 +139,23 @@ More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">l
 
 </div>
 </div></div>
-<div id="postamble" class="status">
-<div id="archive"><a href="archive.html">Other posts</a></div>
-              <div id="disqus_thread"></div>
-              <script type="text/javascript">
-              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-              var disqus_shortname = 'bastibe';
-              /* * * DON'T EDIT BELOW THIS LINE * * */
-              (function() {
-                var dsq = document.createElement('script');
-                dsq.type = 'text/javascript';
-                dsq.async = true;
-                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                  })();
-              </script>
-              <noscript>Please enable JavaScript to view the
-                  <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-              <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
 </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

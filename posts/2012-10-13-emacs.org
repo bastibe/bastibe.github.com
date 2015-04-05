@@ -1,0 +1,46 @@
+#+title: Text editing with confidence and Emacs
+#+date: <2012-10-13 11:30>
+#+tags: computers, emacs
+
+In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned [[http://www.viemu.com/][Vim key bindings for Visual Studio]] because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of [[https://en.wikipedia.org/wiki/REPL][REPLs]] and [[http://orgmode.org/][outlining]].
+
+Note that this is not supposed to be a comparison between text editors. I have done that [[http://bastibe.de/text-editors.html][already]]. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!
+
+*** Text editing
+
+In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.
+
+Here is one of my pet peeve with many text editors: Whenever I initiate a text search, a modal dialog box pops up where I have to enter the search phrase, then click a button to search for that word. In contrast [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search][great]] [[http://vimdoc.sourceforge.net/htmldoc/usr_03.html#03.8][text]] [[http://docs.sublimetext.info/en/latest/search_and_replace/search_and_replace.html][editors]] allow searching for text without changing to a different window and show the results immediately while entering the search string. This is very fast and precise. In fact, it is so useful that searching is one of the most popular means of text navigation in text editors that have it.
+
+This is a theme that goes through all these features: I look for stuff that is fast and precise, because this will enable more powerful applications of seemingly simple techniques.
+
+*** Outlining and task management
+
+Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple [[http://daringfireball.net/projects/markdown/][Markdown]] files. It worked well enough.
+
+But with Emacs, I found out about [[http://orgmode.org][org-mode]], which is at its heart an outliner with a syntax somewhat like Markdown. It proved to be surprisingly powerful to be able to easily refile entries or whole sub-trees in my todo lists. Also, having trees be collapsible effectively enabled me to consolidate all my todo management into one file without that file becoming unmanageably big.
+
+Add to that the more advanced task tracking features of org-mode, such as [[http://orgmode.org/features.html#clocking][time tracking]] or [[http://orgmode.org/features.html#planning][advanced todo planning]] and this has become one of the most pivotal tools I use daily.
+
+*** Shell interaction and operating system compatibility
+
+Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is [[http://cygwin.com/][Cygwin]], but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.
+
+Again, Emacs came to the rescue though: [[http://www.gnu.org/software/emacs/manual/html_node/eshell/What-is-Eshell_003f.html][Eshell]] is a shell implemented in Emacs with no external dependencies. Thus, it comes installed on all my machines and works the same way on every operating system. Sadly though, Eshell is not quite full-featured and compatibility with some shell programs is kind of rough. In particular, it does not work well with ~less~ like scrolling buffers. However, some of those, like ~man~ or ~info~ are automatically opened in a special mode in Emacs itself, so this is not as bad as it sounds.
+
+At more than one point, Eshell probably saved my sanity.
+
+*** Git interaction
+
+Source control is a crucial tool when working with source code. In college we used [[http://subversion.tigris.org/][SVN]]. Even cooler is [[http://git-scm.com/][Git]], though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using [[http://www.git-tower.com/][Tower]] to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.
+
+Again, enter Emacs: Emacs has this magical mode called [[http://magit.github.com/magit/magit.html#Introduction][magit]], which builds an interactive git interaction program within Emacs. With magit, all the major git commands are just a keystroke away and diffs or logs are easily accessible, too. It really is a major feat!
+
+*** Grab bag
+
+- Emacs' integrated [[http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html][ediff]] is a joy to use.
+- REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.
+- Emacs' [[http://www.gnu.org/software/auctex/][LaTeX mode]] is amazingly powerful. Combine that with Emacs' ability to display PDF files [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html][graphically]] in a buffer and you have an awesome LaTeX environment.
+- Emacs' documentation is wonderful. I learned many a trick just idly leafing through the built in Emacs documentation.
+- Built in package management for extensions is a great time saver. This is available in [[https://github.com/gmarik/vundle#about][Vim]] and [[http://wbond.net/sublime_packages/package_control][Sublime Text]] as an addon, too.
+- Lisp is indeed beautiful and elisp is quite joyful to program. I never really went beyond simple configuration in Vim. My ~.emacs~ file contains some quite sophisticated small programs though.

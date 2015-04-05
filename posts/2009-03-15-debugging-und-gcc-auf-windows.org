@@ -1,0 +1,39 @@
+#+title: Debugging und GCC auf Windows
+#+date: <2009-03-15 15:10>
+#+categories: compiling, computers
+
+[[http://bastibe.de/static/2009-03/code.png]]
+
+So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.
+
+[[http://en.wikipedia.org/wiki/State_of_the_Union][The State of The Union]]: Kleine Dateien einlesen, kein Problem. Exotische Formate einlesen, kein Problem. Metadaten auslesen, kein Problem. Dateigröße, Bitrate und Samplerate auslesen, ein kleines Problem, da diese Parameter bei komprimierten Formaten nicht unbedingt fest stehen. Große Dateien einlösen, auf dem Mac kein Problem, auf Windows… nun ja, es dauert. Eine WAV-Datei von 5:30 min einzulesen, dauert mit Windows momentan ca. eine Stunde. Das kann nicht sein, in der Zeit habe ich die Datei dem Programm vorgelesen, wenn es sein muss.
+
+Also, was ist da faul? Jetzt heißt es debuggen: [[http://de.wikipedia.org/wiki/GNU_Debugger][GDB]] ist mein Freund, aber leider spreche ich seine Sprache nicht, also Oldschool-Debugging mit [[http://www.cplusplus.com/reference/clibrary/cstdio/printf.html][printf()]] (bzw. [[http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexprintf.html][mexPrintf()]]; Aber da `#define printf mexPrintf` ist das das selbe). Blöd nur, dass Matlab selbst entscheidet, wann es meine Printfs auf den Bildschirm schreibt und es sich dazu entschlossen hat, dies immer erst nach dem Ausführen der Datei, also erst nachdem es bereits eine Stunde gearbeitet hat, zu tun. Einiges Hirnen später konnte ich Matlab endlich über eine Kombination aus [[http://de.wikipedia.org/wiki/Typumwandlung][Typecasts]], [[http://www.cplusplus.com/reference/clibrary/cstdio/sprintf.html][sprintf]] und [[http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexwarnmsgtxt.html][mexWarnMsgTxt]] dazu überreden, wenigstens sporadisch ein paar Informationen herauszugeben.
+
+Das Ergebnis:
+
+  1. Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)
+  2. Wer ist schuld? [[http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html][Realloc]] ist schuld!
+
+Das kam überraschend! Offenbar ist realloc auf dem Mac um mehrere Größenordnungen performanter als auf [[http://www.mingw.org/][MinGW]]/Windows, denn die selbe Anwendung, die auf dem Mac ca. eine Sekunde braucht, braucht auf Windows eine Stunde! Und das allein wegen realloc! (Eigentlich: eine halbe Stunde wegen realloc, der Rest ist der Tatsache geschuldet, dass Windows in einer [[http://www.vmware.com/de/products/fusion/][VM]] läuft)
+
+Bei WAV-Dateien werden immer 2048 Samples an einem Stück ausgelesen. Danach verwende ich ein realloc, um meinen haupt-Speicherpuffer um diese Größe zu vergrößern und kopiere die neuen Daten dort hinein. Bei meinen 5:30 min macht das bei einer Samplerate von 44100 kHz und zwei Kanälen ca. 15000 Aufrufe von realloc. Komprimierte Datenformate haben üblicherweise kleinere Frames und damit noch einmal wesentlich mehr realloc-Aufrufe.
+Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, größere Aufrufe zu machen. Zeit für ein paar Experimente:
+
+
+| realloc()-Größe | realloc()-Aufrufe | benötigte   Zeit |
+| 2^11 =    2048  |             15000 | ~1 h             |
+| 2^16 =   65536  |               470 | ~2 min           |
+| 2^17 =  131072  |               240 | ~1 min           |
+| 2^18 =  262144  |               120 | 30 s             |
+| 2^19 =  524288  |                60 | 18 s             |
+| 2^20 = 1048576  |                30 | 10.5 s           |
+| 2^21 = 2097152  |                15 | 7.3 s            |
+| 2^22 = 4194304  |                 7 | 5.1 s            |
+| 2^23 = 8388608  |                 3 | 4.2 s            |
+
+Das Spannende ist: Ich ändere durch meine Methodik praktisch nichts außer der Anzahl und Größe der realloc-Aufrufe, aber man erkennt einen eindeutigen Zusammenhang zwischen Performance und Anzahl der Aufrufe, ergo ist realloc der alleinige Schuldige für mein Performanceproblem auf Windows.
+
+An dieser Stelle fiel mir ein, dass ich bereits an früherer Stelle einmal die gesamte Länge des Audio-Streams anhand der Metadaten geschätzt hatte. Durch eine somit vorgenommene Prä-Allokation des gesamten Speichers lässt sie die Laufzeit weiter auf 2.2 s drücken. Das ist immernoch nicht einmal halb so schnell wie auf OSX (0.9 s), aber das mag auch an der virtuellen Maschine liegen.
+
+Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sicher, dass ich ab jetzt die Finger von inkrementiellen Speichervergrößerungen auf MinGW/Windows lassen werde. Ist das in MSVC ähnlich schlimm, oder habe ich da etwa einen Bug entdeckt?
