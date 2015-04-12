@@ -4,7 +4,7 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Sun, 05 Apr 2015 20:16:32 +0200</lastBuildDate>
+  <lastBuildDate>Sun, 12 Apr 2015 14:49:30 +0200</lastBuildDate>
 <item>
   <title>Julia First Impressions</title>
   <description><![CDATA[<blockquote>
@@ -496,8 +496,8 @@ This <code>matlab</code> object starts a Matlab interpreter in the background an
 
 <pre class="src src-python">matlab.eye(3)
 &gt;&gt;&gt; array([[ 1.,  0.,  0.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.]])
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  [ 0.,  1.,  0.],
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  [ 0.,  0.,  1.]])
 </pre>
 </div>
 
@@ -920,11 +920,11 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 <pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundcard <span style="color: #1c9af1;">import</span> Stream
 <span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile, ogg_file, write_mode
 <span style="color: #1c9af1;">with</span> Stream() <span style="color: #1c9af1;">as</span> s: <span style="color: #919191;"># </span><span style="color: #919191;">opens your default audio device</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">This is supposed to be a new file, so specify it completely</span>
-    <span style="color: #379a6a;">f</span> = SoundFile(<span style="color: #9d8567;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #d87a00;">format</span>=ogg_file,
-                  mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #919191;"># </span><span style="color: #919191;">one second</span>
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #919191;"># </span><span style="color: #919191;">This is supposed to be a new file, so specify it completely</span>
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">f</span> = SoundFile(<span style="color: #9d8567;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span> channels=s.channels, <span style="color: #d87a00;">format</span>=ogg_file,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span> mode=write_mode)
+<span style="background-color: #e2e2e2;"> </span>   f.write(s.read(s.sample_rate)) <span style="color: #919191;"># </span><span style="color: #919191;">one second</span>
 </pre>
 </div>
 
@@ -1300,10 +1300,10 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-    ax.clear()
-    ax.plot(np.random.randn(100))
-    plt.pause(0.001)
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   ax.clear()
+<span style="background-color: #e2e2e2;"> </span>   ax.plot(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   plt.pause(0.001)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
@@ -1332,9 +1332,9 @@ line, = ax.plot(np.random.randn(100))
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-    line.set_ydata(np.random.randn(100))
-    plt.pause(0.001)
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   plt.pause(0.001)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
@@ -1404,10 +1404,10 @@ line, = ax.plot(np.random.randn(100))
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-    line.set_ydata(np.random.randn(100))
-    fig.canvas.draw()
-    fig.canvas.flush_events()
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.draw()
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.flush_events()
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
@@ -1444,12 +1444,12 @@ plt.show(block=<span style="color: #809a4d;">False</span>)
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 5:
-    line.set_ydata(np.random.randn(100))
-    ax.draw_artist(ax.patch)
-    ax.draw_artist(line)
-    fig.canvas.update()
-    fig.canvas.flush_events()
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   ax.draw_artist(ax.patch)
+<span style="background-color: #e2e2e2;"> </span>   ax.draw_artist(line)
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.update()
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.flush_events()
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots/5)
 </pre>
 </div>
@@ -1650,7 +1650,7 @@ In Python, blocks of code are identified by indentation and they always start wi
 
 <pre class="src src-python"><span style="color: #d87a00;">sum</span> = 0
 <span style="color: #1c9af1;">for</span> n <span style="color: #1c9af1;">in</span> [1, 2, 3, 4, 5]:
-    <span style="color: #d87a00;">sum</span> = <span style="color: #d87a00;">sum</span> + n
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">sum</span> = <span style="color: #d87a00;">sum</span> + n
 <span style="color: #1c9af1;">print</span>(<span style="color: #d87a00;">sum</span>)
 </pre>
 </div>
@@ -1666,10 +1666,10 @@ You don't have to name the output variable names in the definition and instead u
 
 <pre class="src src-python"><span style="color: #919191;"># </span><span style="color: #919191;">Python</span>
 <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">abs</span>(number):
-    <span style="color: #1c9af1;">if</span> number &gt; 0:
-        <span style="color: #1c9af1;">return</span> number
-    <span style="color: #1c9af1;">else</span>:
-        <span style="color: #1c9af1;">return</span> -number
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">if</span> number &gt; 0:
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">return</span> number
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">else</span>:
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">return</span> -number
 </pre>
 </div>
 
@@ -1696,8 +1696,8 @@ Since Python only gains a matrix engine by importing Numpy, it does not have a c
 
 <pre class="src src-python"><span style="color: #919191;"># </span><span style="color: #919191;">create a numpy matrix:</span>
 <span style="color: #379a6a;">m</span> = array([[1, 2, 3],
-           [4, 5, 6],
-           [7, 8, 9]])
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  [4, 5, 6],
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  [7, 8, 9]])
 <span style="color: #919191;"># </span><span style="color: #919191;">create a Python list:</span>
 <span style="color: #379a6a;">l</span> = [1 2 3]
 </pre>
@@ -1888,34 +1888,34 @@ In Python, this might look like this:
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #1c9af1;">class</span> <span style="color: #007b9c;">Limiter</span>:
-    <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">__init__</span>(<span style="color: #1c9af1;">self</span>, attack_coeff, release_coeff, delay, dtype=float32):
-        <span style="color: #1c9af1;">self</span>.delay_index = 0
-        <span style="color: #1c9af1;">self</span>.envelope = 0
-        <span style="color: #1c9af1;">self</span>.gain = 1
-        <span style="color: #1c9af1;">self</span>.delay = delay
-        <span style="color: #1c9af1;">self</span>.delay_line = zeros(delay, dtype=dtype)
-        <span style="color: #1c9af1;">self</span>.release_coeff = release_coeff
-        <span style="color: #1c9af1;">self</span>.attack_coeff = attack_coeff
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">__init__</span>(<span style="color: #1c9af1;">self</span>, attack_coeff, release_coeff, delay, dtype=float32):
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.delay_index = 0
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.envelope = 0
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.gain = 1
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.delay = delay
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.delay_line = zeros(delay, dtype=dtype)
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.release_coeff = release_coeff
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.attack_coeff = attack_coeff
 
-    <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">limit</span>(<span style="color: #1c9af1;">self</span>, signal, threshold):
-        <span style="color: #1c9af1;">for</span> i <span style="color: #1c9af1;">in</span> arange(<span style="color: #d87a00;">len</span>(signal)):
-            <span style="color: #1c9af1;">self</span>.delay_line[<span style="color: #1c9af1;">self</span>.delay_index] = signal[i]
-            <span style="color: #1c9af1;">self</span>.delay_index = (<span style="color: #1c9af1;">self</span>.delay_index + 1) % <span style="color: #1c9af1;">self</span>.delay
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">limit</span>(<span style="color: #1c9af1;">self</span>, signal, threshold):
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">for</span> i <span style="color: #1c9af1;">in</span> arange(<span style="color: #d87a00;">len</span>(signal)):
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.delay_line[<span style="color: #1c9af1;">self</span>.delay_index] = signal[i]
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.delay_index = (<span style="color: #1c9af1;">self</span>.delay_index + 1) % <span style="color: #1c9af1;">self</span>.delay
 
-            <span style="color: #919191;"># </span><span style="color: #919191;">calculate an envelope of the signal</span>
-            <span style="color: #1c9af1;">self</span>.envelope *= <span style="color: #1c9af1;">self</span>.release_coeff
-            <span style="color: #1c9af1;">self</span>.envelope  = <span style="color: #d87a00;">max</span>(<span style="color: #d87a00;">abs</span>(signal[i]), <span style="color: #1c9af1;">self</span>.envelope)
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #919191;"># </span><span style="color: #919191;">calculate an envelope of the signal</span>
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.envelope *= <span style="color: #1c9af1;">self</span>.release_coeff
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.envelope  = <span style="color: #d87a00;">max</span>(<span style="color: #d87a00;">abs</span>(signal[i]), <span style="color: #1c9af1;">self</span>.envelope)
 
-            <span style="color: #919191;"># </span><span style="color: #919191;">have self.gain go towards a desired limiter gain</span>
-            <span style="color: #1c9af1;">if</span> <span style="color: #1c9af1;">self</span>.envelope &gt; threshold:
-                <span style="color: #379a6a;">target_gain</span> = (1+threshold-<span style="color: #1c9af1;">self</span>.envelope)
-            <span style="color: #1c9af1;">else</span>:
-                <span style="color: #379a6a;">target_gain</span> = 1.0
-            <span style="color: #1c9af1;">self</span>.gain = ( <span style="color: #1c9af1;">self</span>.gain*<span style="color: #1c9af1;">self</span>.attack_coeff +
-                          target_gain*(1-<span style="color: #1c9af1;">self</span>.attack_coeff) )
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #919191;"># </span><span style="color: #919191;">have self.gain go towards a desired limiter gain</span>
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">if</span> <span style="color: #1c9af1;">self</span>.envelope &gt; threshold:
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">target_gain</span> = (1+threshold-<span style="color: #1c9af1;">self</span>.envelope)
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">else</span>:
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">target_gain</span> = 1.0
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.gain = ( <span style="color: #1c9af1;">self</span>.gain*<span style="color: #1c9af1;">self</span>.attack_coeff +
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span> target_gain*(1-<span style="color: #1c9af1;">self</span>.attack_coeff) )
 
-            <span style="color: #919191;"># </span><span style="color: #919191;">limit the delayed signal</span>
-            <span style="color: #379a6a;">signal</span>[i] = <span style="color: #1c9af1;">self</span>.delay_line[<span style="color: #1c9af1;">self</span>.delay_index] * <span style="color: #1c9af1;">self</span>.gain
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #919191;"># </span><span style="color: #919191;">limit the delayed signal</span>
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">signal</span>[i] = <span style="color: #1c9af1;">self</span>.delay_line[<span style="color: #1c9af1;">self</span>.delay_index] * <span style="color: #1c9af1;">self</span>.gain
 </pre>
 </div>
 
@@ -1947,14 +1947,14 @@ A real-time audio processing framework using PyAudio would look like this:
 <span style="color: #379a6a;">pa</span> = PyAudio()
 
 <span style="color: #379a6a;">stream</span> = pa.<span style="color: #d87a00;">open</span>(<span style="color: #d87a00;">format</span> = paFloat32,
-                 channels = 1,
-                 rate = 44100,
-                 output = <span style="color: #809a4d;">True</span>,
-                 frames_per_buffer = 1024,
-                 stream_callback = callback)
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>channels = 1,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>rate = 44100,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>output = <span style="color: #809a4d;">True</span>,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>frames_per_buffer = 1024,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>stream_callback = callback)
 
 <span style="color: #1c9af1;">while</span> stream.is_active():
-    sleep(0.1)
+<span style="background-color: #e2e2e2;"> </span>   sleep(0.1)
 
 stream.close()
 pa.terminate()
@@ -1978,12 +1978,12 @@ Every time the <code>callback</code> is called, it will have to return 1024 samp
 <pre class="src src-python"><span style="color: #379a6a;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
 
 <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">callback</span>(in_data, frame_count, time_info, flag):
-    <span style="color: #1c9af1;">if</span> flag:
-        <span style="color: #1c9af1;">print</span>(<span style="color: #9d8567;">"Playback Error: %i"</span> % flag)
-    <span style="color: #379a6a;">played_frames</span> = counter
-    <span style="color: #379a6a;">counter</span> += frame_count
-    limiter.limit(signal[played_frames:counter], threshold)
-    <span style="color: #1c9af1;">return</span> signal[played_frames:counter], paContinue
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">if</span> flag:
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">print</span>(<span style="color: #9d8567;">"Playback Error: %i"</span> % flag)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">played_frames</span> = counter
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">counter</span> += frame_count
+<span style="background-color: #e2e2e2;"> </span>   limiter.limit(signal[played_frames:counter], threshold)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">return</span> signal[played_frames:counter], paContinue
 </pre>
 </div>
 
@@ -2067,17 +2067,17 @@ Now in order to plug this code into Python I will use Cython. First of all, a "C
 <div class="org-src-container">
 
 <pre class="src src-python">cdef extern <span style="color: #1c9af1;">from</span> <span style="color: #9d8567;">"limiter.h"</span>:
-    ctypedef struct limiter_state:
-        <span style="color: #d87a00;">int</span> delay_index
-        <span style="color: #d87a00;">int</span> delay_length
-        <span style="color: #d87a00;">float</span> envelope
-        <span style="color: #d87a00;">float</span> current_gain
-        <span style="color: #d87a00;">float</span> attack_coeff
-        <span style="color: #d87a00;">float</span> release_coeff
+<span style="background-color: #e2e2e2;"> </span>   ctypedef struct limiter_state:
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">int</span> delay_index
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">int</span> delay_length
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">float</span> envelope
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">float</span> current_gain
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">float</span> attack_coeff
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #d87a00;">float</span> release_coeff
 
-    limiter_state init_limiter(<span style="color: #d87a00;">float</span> attack_factor, <span style="color: #d87a00;">float</span> release_factor, <span style="color: #d87a00;">int</span> delay_len)
-    void limit(<span style="color: #d87a00;">float</span> *signal, <span style="color: #d87a00;">int</span> block_length, <span style="color: #d87a00;">float</span> threshold,
-               <span style="color: #d87a00;">float</span> *delay_line, limiter_state *state)
+<span style="background-color: #e2e2e2;"> </span>   limiter_state init_limiter(<span style="color: #d87a00;">float</span> attack_factor, <span style="color: #d87a00;">float</span> release_factor, <span style="color: #d87a00;">int</span> delay_len)
+<span style="background-color: #e2e2e2;"> </span>   void limit(<span style="color: #d87a00;">float</span> *signal, <span style="color: #d87a00;">int</span> block_length, <span style="color: #d87a00;">float</span> threshold,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  <span style="color: #d87a00;">float</span> *delay_line, limiter_state *state)
 </pre>
 </div>
 
@@ -2116,18 +2116,18 @@ cimport limiter
 ctypedef np.float32_t DTYPE_t
 
 cdef <span style="color: #1c9af1;">class</span> <span style="color: #007b9c;">Limiter</span>:
-    cdef limiter.limiter_state state
-    cdef np.ndarray delay_line
-    <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">__init__</span>(<span style="color: #1c9af1;">self</span>, <span style="color: #d87a00;">float</span> attack_coeff, <span style="color: #d87a00;">float</span> release_coeff,
-                 <span style="color: #d87a00;">int</span> delay_length):
-        <span style="color: #1c9af1;">self</span>.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
-        <span style="color: #1c9af1;">self</span>.delay_line = np.zeros(delay_length, dtype=DTYPE)
+<span style="background-color: #e2e2e2;"> </span>   cdef limiter.limiter_state state
+<span style="background-color: #e2e2e2;"> </span>   cdef np.ndarray delay_line
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">__init__</span>(<span style="color: #1c9af1;">self</span>, <span style="color: #d87a00;">float</span> attack_coeff, <span style="color: #d87a00;">float</span> release_coeff,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span><span style="color: #d87a00;">int</span> delay_length):
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">self</span>.delay_line = np.zeros(delay_length, dtype=DTYPE)
 
-    <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">limit</span>(<span style="color: #1c9af1;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #d87a00;">float</span> threshold):
-        limiter.limit(&lt;<span style="color: #d87a00;">float</span>*&gt;np.PyArray_DATA(signal),
-                   &lt;<span style="color: #d87a00;">int</span>&gt;<span style="color: #d87a00;">len</span>(signal), threshold,
-                   &lt;<span style="color: #d87a00;">float</span>*&gt;np.PyArray_DATA(<span style="color: #1c9af1;">self</span>.delay_line),
-                   &lt;limiter.limiter_state*&gt;&amp;<span style="color: #1c9af1;">self</span>.state)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">limit</span>(<span style="color: #1c9af1;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #d87a00;">float</span> threshold):
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   limiter.limit(&lt;<span style="color: #d87a00;">float</span>*&gt;np.PyArray_DATA(signal),
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  &lt;<span style="color: #d87a00;">int</span>&gt;<span style="color: #d87a00;">len</span>(signal), threshold,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  &lt;<span style="color: #d87a00;">float</span>*&gt;np.PyArray_DATA(<span style="color: #1c9af1;">self</span>.delay_line),
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>  &lt;limiter.limiter_state*&gt;&amp;<span style="color: #1c9af1;">self</span>.state)
 </pre>
 </div>
 
@@ -2155,15 +2155,15 @@ Finally, we need to build the whole contraption. The easiest way to do this is t
 <span style="color: #1c9af1;">from</span> numpy <span style="color: #1c9af1;">import</span> get_include
 
 <span style="color: #379a6a;">ext_modules</span> = [Extension(<span style="color: #9d8567;">"cython_limiter"</span>,
-                         sources=[<span style="color: #9d8567;">"cython_limiter.pyx"</span>,
-                                  <span style="color: #9d8567;">"limiter.c"</span>],
-                         include_dirs=[<span style="color: #9d8567;">'.'</span>, get_include()])]
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>sources=[<span style="color: #9d8567;">"cython_limiter.pyx"</span>,
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span> <span style="color: #9d8567;">"limiter.c"</span>],
+<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>include_dirs=[<span style="color: #9d8567;">'.'</span>, get_include()])]
 
 setup(
-    name = <span style="color: #9d8567;">"cython_limiter"</span>,
-    cmdclass = {<span style="color: #9d8567;">'build_ext'</span>: build_ext},
-    ext_modules = ext_modules
-    )
+<span style="background-color: #e2e2e2;"> </span>   name = <span style="color: #9d8567;">"cython_limiter"</span>,
+<span style="background-color: #e2e2e2;"> </span>   cmdclass = {<span style="color: #9d8567;">'build_ext'</span>: build_ext},
+<span style="background-color: #e2e2e2;"> </span>   ext_modules = ext_modules
+<span style="background-color: #e2e2e2;"> </span>   )
 </pre>
 </div>
 
@@ -2833,9 +2833,9 @@ to
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #1c9af1;">try</span>:
-    <span style="color: #379a6a;">m</span> = <span style="color: #1c9af1;">self</span>._SUMMARY_RE.match(child.data)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">m</span> = <span style="color: #1c9af1;">self</span>._SUMMARY_RE.match(child.data)
 <span style="color: #1c9af1;">except</span> <span style="color: #007b9c;">AttributeError</span>:
-    <span style="color: #379a6a;">m</span> = <span style="color: #809a4d;">None</span>
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">m</span> = <span style="color: #809a4d;">None</span>
 </pre>
 </div>
 

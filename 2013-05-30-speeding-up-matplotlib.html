@@ -16,6 +16,7 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -47,10 +48,10 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-    ax.clear()
-    ax.plot(np.random.randn(100))
-    plt.pause(0.001)
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   ax.clear()
+<span style="background-color: #e2e2e2;"> </span>   ax.plot(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   plt.pause(0.001)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
@@ -79,9 +80,9 @@ line, = ax.plot(np.random.randn(100))
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-    line.set_ydata(np.random.randn(100))
-    plt.pause(0.001)
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   plt.pause(0.001)
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
@@ -151,10 +152,10 @@ line, = ax.plot(np.random.randn(100))
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-    line.set_ydata(np.random.randn(100))
-    fig.canvas.draw()
-    fig.canvas.flush_events()
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.draw()
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.flush_events()
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots)
 </pre>
 </div>
@@ -191,12 +192,12 @@ plt.show(block=<span style="color: #809a4d;">False</span>)
 <span style="color: #379a6a;">tstart</span> = time.time()
 <span style="color: #379a6a;">num_plots</span> = 0
 <span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 5:
-    line.set_ydata(np.random.randn(100))
-    ax.draw_artist(ax.patch)
-    ax.draw_artist(line)
-    fig.canvas.update()
-    fig.canvas.flush_events()
-    <span style="color: #379a6a;">num_plots</span> += 1
+<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
+<span style="background-color: #e2e2e2;"> </span>   ax.draw_artist(ax.patch)
+<span style="background-color: #e2e2e2;"> </span>   ax.draw_artist(line)
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.update()
+<span style="background-color: #e2e2e2;"> </span>   fig.canvas.flush_events()
+<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
 <span style="color: #1c9af1;">print</span>(num_plots/5)
 </pre>
 </div>
