@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Unicode and Matlab on the command line</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">15 Apr 2015</div>
+<h1 class="post-title">Unicode and Matlab on the command line</h1>
+<p>
+As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
+</p>
+
+<p>
+So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).
+</p>
+
+<p>
+I say "(on OSX)", because on Windows, it does not print a damn thing. Nope, no <code>disp</code> output for Windows users.
+</p>
+
+<p>
+More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as <code>0x1a</code> aka <code>SUB</code> aka <i>substitute character</i>. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with <code>SUB</code>. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.
+</p>
+
+<p>
+To see why Matlab would do such a dastardly deed, you can use <code>feature('locale')</code> to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either <code>ISO-8859-1</code> (when your locale is pure <code>de_DE</code> or <code>en_US</code>) or <code>US-ASCII</code>, if it is something impure. In my case, German dates but English text. Because <code>US-ASCII</code> is obviously the most all-encompassing choice for such mixed-languages environments.
+</p>
+
+<p>
+But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit <code>%MATLABROOT%/bin/lcdata.xml</code>, and look for the entry for your locale. For me, this is one of
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
+&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
+</pre>
+</div>
+
+<p>
+In order to make Matlab's encoding default to UTF-8, change the entry for your locale to
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
+&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
+</pre>
+</div>
+
+<p>
+With that, Matlab will print UTF-8 to the terminal.
+</p>
+
+<p>
+You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily&#x2026;
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

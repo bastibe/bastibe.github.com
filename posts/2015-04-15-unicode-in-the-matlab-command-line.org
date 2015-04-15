@@ -1,0 +1,30 @@
+#+title: Unicode and Matlab on the command line
+#+date: <2015-04-15 0:00>
+
+As per the latest [[http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded][Stackoverflow Developer Survey]], Matlab is one of /the/ most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
+
+So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).
+
+I say "(on OSX)", because on Windows, it does not print a damn thing. Nope, no ~disp~ output for Windows users.
+
+More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as ~0x1a~ aka ~SUB~ aka /substitute character/. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with ~SUB~. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.
+
+To see why Matlab would do such a dastardly deed, you can use ~feature('locale')~ to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either ~ISO-8859-1~ (when your locale is pure ~de_DE~ or ~en_US~) or ~US-ASCII~, if it is something impure. In my case, German dates but English text. Because ~US-ASCII~ is obviously the most all-encompassing choice for such mixed-languages environments.
+
+But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit ~%MATLABROOT%/bin/lcdata.xml~, and look for the entry for your locale. For me, this is one of
+
+#+begin_src xml
+<locale name="de_DE" encoding="ISO-8859-1" xpg_name="de_DE.ISO8859-1"> ...
+<locale name="en_US" encoding="ISO-8859-1" xpg_name="en_US.ISO8859-1"> ...
+#+end_src
+
+In order to make Matlab's encoding default to UTF-8, change the entry for your locale to
+
+#+begin_src xml
+<locale name="de_DE" encoding="UTF-8" xpg_name="de_DE.UTF-8"> ...
+<locale name="en_US" encoding="UTF-8" xpg_name="en_US.UTF-8"> ...
+#+end_src
+
+With that, Matlab will print UTF-8 to the terminal.
+
+You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily...
