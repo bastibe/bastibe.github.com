@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Matlab and Audio Files</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">22 Apr 2015</div>
+<h1 class="post-title">Matlab and Audio Files</h1>
+<p>
+So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
+</p>
+
+<p>
+Of these file formats, only <i>*.au</i> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <i>actually</i> read more data formats than documented: it reads <i>*.w64</i>, <i>*.rf64</i>, and <i>*.caf</i> no problem. And these can store more than 4 Gb as well.
+</p>
+
+<p>
+It's just that, while <code>audioread</code> supports all of these nice file formats, <i><code>audiowrite</code></i> is more limited, and only supports <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, and <i>*.mp4</i>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
+</p>
+
+<p>
+In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

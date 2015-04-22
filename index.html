@@ -26,7 +26,23 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">15 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
+<div id="content"><div class="post-date">22 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h1>
+<p>
+So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
+</p>
+
+<p>
+Of these file formats, only <i>*.au</i> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <i>actually</i> read more data formats than documented: it reads <i>*.w64</i>, <i>*.rf64</i>, and <i>*.caf</i> no problem. And these can store more than 4 Gb as well.
+</p>
+
+<p>
+It's just that, while <code>audioread</code> supports all of these nice file formats, <i><code>audiowrite</code></i> is more limited, and only supports <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, and <i>*.mp4</i>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
+</p>
+
+<p>
+In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
+</p>
+<div class="post-date">15 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
 <p>
 As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
 </p>
@@ -53,8 +69,8 @@ But luckily, there is help. Matlab has a widely documented (not) and easily disc
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
-&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
+<pre class="src src-xml">&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">ISO-8859-1</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE.ISO8859-1</span><span style="color: #8b7355;">"</span>&gt; ...
+&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">ISO-8859-1</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US.ISO8859-1</span><span style="color: #8b7355;">"</span>&gt; ...
 </pre>
 </div>
 
@@ -64,8 +80,8 @@ In order to make Matlab's encoding default to UTF-8, change the entry for your l
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
-&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
+<pre class="src src-xml">&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">UTF-8</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE.UTF-8</span><span style="color: #8b7355;">"</span>&gt; ...
+&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">UTF-8</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US.UTF-8</span><span style="color: #8b7355;">"</span>&gt; ...
 </pre>
 </div>
 
@@ -188,41 +204,6 @@ And this is just the natural thing that happens if you let a bunch of creative p
 <p>
 The Congress is really unique. I can't recommend it enough. If you can free up those four days between Christmas and New Year's Eve at all, go there. You won't regret it!
 </p>
-<div class="post-date">30 Dec 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-12-30-books-of-2014.html">Books of 2014</a></h1>
-
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><a href="http://www.amazon.de/Ancillary-Justice-Imperial-Radch-English-ebook/dp/B00BU1DG1S/ref=sr_1_1?s=books-intl-de&ie=UTF8&qid=1419948379&sr=1-1&keywords=ancillary+justice">Ancillary Justice</a> / <a href="http://www.amazon.de/Ancillary-Sword-Imperial-Radch-English-ebook/dp/B00IA2E5VA/ref=sr_1_2?s=books-intl-de&ie=UTF8&qid=1419948379&sr=1-2&keywords=ancillary+justice">Ancillary Sword</a>, by Ann Leckie</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-<img src="https://upload.wikimedia.org/wikipedia/en/6/6a/Ann_Leckie_-_Ancillary_Justice.jpeg" alt="Ann_Leckie_-_Ancillary_Justice.jpeg" style="float:left;margin:5px;" width="150px" />
-I have been reading a lot of science fiction in the last few years. These books are part one and two of the best space opera I have ever read. The story is written from the perspective of an AI, sometimes inhabiting a lot of bodies, sometimes only one. Interestingly, this makes for a very introspective viewpoint, where politics and actions are expressed as consequences of nuanced human behavior and astute observation, as opposed to arbitrary human decisions. This perspective is extremely compelling, and makes for an extremely <i>human</i> story in a world that is a clever amalgamation of ancient Roman society and post-modern egalitarianism. There is no book I look forward to more fiercely than the conclusion of this series.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><a href="https://en.wikipedia.org/wiki/Scott_Pilgrim">Scott Pilgrim</a>, by Bryan Lee O'Malley</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-<img src="https://upload.wikimedia.org/wikipedia/en/3/39/ScottPilgrim.jpg" alt="ScottPilgrim.jpg" style="float:left;margin:5px;" width="150px" />
-Scott Pilgrim is a twenty-something in the nineties. Scott Pilgrim doesn't have a job, and likes to play video games. Scott Pilgrim is fighting epic Anime battles against his girlfriends' exes. Scott Pilgrim is everyone, living in the real world. Scott Pilgrim is awesome, especially the new color-versions. The last part of the series will be released next year, and I really can't wait! (There's also a movie that is supposedly very good, but I won't watch it until I read all the comic books).
-</p>
-
-<br><br>
-</div>
-</div>
-
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><a href="http://www.amazon.de/Doomsday-Book-Connie-Willis/dp/0553562738/ref=sr_1_sc_2?ie=UTF8&qid=1419948450&sr=8-2-spell&keywords=doomsday+boo">Doomsday Book</a>, by Connie Willis</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-<img src="https://upload.wikimedia.org/wikipedia/en/1/19/DoomsdayBook(1stEd).jpg" alt="DoomsdayBook(1stEd).jpg" style="float:left;margin:5px;" width="150px" />
-This is about time travel from near-future Britain to the fifteenth century. But then, an epidemic breaks loose: Britain is in quarantine and civil order starts breaking. At the same time in the fifteenth century, the plague hits. Disease, and the people trying to deal with it, is a human tragedy beyond belief. Connie Willis manages to write about these things with empathy, and astounding humane love and humor. This story moved me more deeply than I care to acknowledge.
-</p>
-
-<br><br><br>
-</div>
-</div>
 <div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
