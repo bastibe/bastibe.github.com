@@ -13,7 +13,7 @@ Things like this drive me nuts. I can see that tags are being generated, but Tag
 
 Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:
 
-#+begin_src
+#+begin_example
     " add a definition for Objective-C to tagbar
     let g:tagbar_type_objc = {
         \ 'ctagstype' : 'ObjectiveC',
@@ -48,7 +48,7 @@ Some investigation proved: There is simply no template in Tagbar for Objective-C
             \ 'enumeration'    : 'e'
         \ }
     \ }
-#+end_src
+#+end_example
 
 With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!
 

@@ -27,7 +27,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">20 Oct 2012</div>
+<div class="post-date">20 Okt 2012</div>
 <h1 class="post-title">Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</h1>
 <p>
 Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.
@@ -47,58 +47,58 @@ At least these things are rather easy to fix, since all these settings are saved
 
 <div class="org-src-container">
 
-<pre class="src src-makefile"><span style="color: #919191;">#</span><span style="color: #919191;">----------------------------------------------------------------------------</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">StorageVersion: 1.0</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">CkeyName: GNU C</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">CkeyManufacturer: GNU</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">CkeyLanguage: C</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">CkeyVersion:</span>
-            <span style="color: #379a6a;">CC</span>=<span style="color: #9d8567;">'gcc'</span> <span style="color: #919191;"># </span><span style="color: #919191;">used to be 'gcc-4.2'</span>
+<pre class="src src-makefile"><span style="color: #7f7f7f;">#</span><span style="color: #7f7f7f;">----------------------------------------------------------------------------</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">StorageVersion: 1.0</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">CkeyName: GNU C</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">CkeyManufacturer: GNU</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">CkeyLanguage: C</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">CkeyVersion:</span>
+            <span style="color: #2e8b57;">CC</span>=<span style="color: #8b7355;">'gcc'</span> <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">used to be 'gcc-4.2'</span>
 
-            <span style="color: #919191;"># </span><span style="color: #919191;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
-            <span style="color: #379a6a;">SDKROOT</span>=<span style="color: #9d8567;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
-            <span style="color: #379a6a;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #9d8567;">'10.8'</span> <span style="color: #919191;"># </span><span style="color: #919191;">used to be '10.5'</span>
-            <span style="color: #379a6a;">ARCHS</span>=<span style="color: #9d8567;">'x86_64'</span>
-            <span style="color: #379a6a;">CFLAGS</span>=<span style="color: #9d8567;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-            <span style="color: #379a6a;">CFLAGS</span>=<span style="color: #9d8567;">"$CFLAGS  -fexceptions"</span>
-            <span style="color: #379a6a;">CFLAGS</span>=<span style="color: #9d8567;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #919191;"># </span><span style="color: #919191;">Homebrew include path</span>
-            <span style="color: #379a6a;">CLIBS</span>=<span style="color: #9d8567;">"$MLIBS"</span>
-            <span style="color: #379a6a;">COPTIMFLAGS</span>=<span style="color: #9d8567;">'-O2 -DNDEBUG'</span>
-            <span style="color: #379a6a;">CDEBUGFLAGS</span>=<span style="color: #9d8567;">'-g'</span>
-<span style="color: #919191;">#</span>
-            <span style="color: #379a6a;">CLIBS</span>=<span style="color: #9d8567;">"$CLIBS -lstdc++"</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">C++keyName: GNU C++</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">C++keyManufacturer: GNU</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">C++keyLanguage: C++</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">C++keyVersion:</span>
-            <span style="color: #379a6a;">CXX</span>=g++ <span style="color: #919191;"># </span><span style="color: #919191;">used to be 'g++-4.2'</span>
-            <span style="color: #379a6a;">CXXFLAGS</span>=<span style="color: #9d8567;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-            <span style="color: #379a6a;">CXXLIBS</span>=<span style="color: #9d8567;">"$MLIBS -lstdc++"</span>
-            <span style="color: #379a6a;">CXXOPTIMFLAGS</span>=<span style="color: #9d8567;">'-O2 -DNDEBUG'</span>
-            <span style="color: #379a6a;">CXXDEBUGFLAGS</span>=<span style="color: #9d8567;">'-g'</span>
-<span style="color: #919191;">#</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">FortrankeyName: GNU Fortran</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">FortrankeyManufacturer: GNU</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">FortrankeyLanguage: Fortran</span>
-            <span style="color: #919191;"># </span><span style="color: #919191;">FortrankeyVersion:</span>
-            <span style="color: #379a6a;">FC</span>=<span style="color: #9d8567;">'gfortran'</span>
-            <span style="color: #379a6a;">FFLAGS</span>=<span style="color: #9d8567;">'-fexceptions -m64 -fbackslash'</span>
-            <span style="color: #379a6a;">FC_LIBDIR</span>=<span style="color: #9d8567;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
-            <span style="color: #379a6a;">FC_LIBDIR2</span>=<span style="color: #9d8567;">`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`</span>
-            <span style="color: #379a6a;">FLIBS</span>=<span style="color: #9d8567;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
-            <span style="color: #379a6a;">FOPTIMFLAGS</span>=<span style="color: #9d8567;">'-O'</span>
-            <span style="color: #379a6a;">FDEBUGFLAGS</span>=<span style="color: #9d8567;">'-g'</span>
-<span style="color: #919191;">#</span>
-            <span style="color: #379a6a;">LD</span>=<span style="color: #9d8567;">"$CC"</span>
-            <span style="color: #379a6a;">LDEXTENSION</span>=<span style="color: #9d8567;">'.mexmaci64'</span>
-            <span style="color: #379a6a;">LDFLAGS</span>=<span style="color: #9d8567;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-            <span style="color: #379a6a;">LDFLAGS</span>=<span style="color: #9d8567;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
-            <span style="color: #379a6a;">LDFLAGS</span>=<span style="color: #9d8567;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #919191;"># </span><span style="color: #919191;">Homebrew library path</span>
-            <span style="color: #379a6a;">LDOPTIMFLAGS</span>=<span style="color: #9d8567;">'-O'</span>
-            <span style="color: #379a6a;">LDDEBUGFLAGS</span>=<span style="color: #9d8567;">'-g'</span>
-<span style="color: #919191;">#</span>
-            <span style="color: #379a6a;">POSTLINK_CMDS</span>=<span style="color: #9d8567;">':'</span>
-<span style="color: #919191;">#</span><span style="color: #919191;">----------------------------------------------------------------------------</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
+            <span style="color: #2e8b57;">SDKROOT</span>=<span style="color: #8b7355;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
+            <span style="color: #2e8b57;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #8b7355;">'10.8'</span> <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">used to be '10.5'</span>
+            <span style="color: #2e8b57;">ARCHS</span>=<span style="color: #8b7355;">'x86_64'</span>
+            <span style="color: #2e8b57;">CFLAGS</span>=<span style="color: #8b7355;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+            <span style="color: #2e8b57;">CFLAGS</span>=<span style="color: #8b7355;">"$CFLAGS  -fexceptions"</span>
+            <span style="color: #2e8b57;">CFLAGS</span>=<span style="color: #8b7355;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">Homebrew include path</span>
+            <span style="color: #2e8b57;">CLIBS</span>=<span style="color: #8b7355;">"$MLIBS"</span>
+            <span style="color: #2e8b57;">COPTIMFLAGS</span>=<span style="color: #8b7355;">'-O2 -DNDEBUG'</span>
+            <span style="color: #2e8b57;">CDEBUGFLAGS</span>=<span style="color: #8b7355;">'-g'</span>
+<span style="color: #7f7f7f;">#</span>
+            <span style="color: #2e8b57;">CLIBS</span>=<span style="color: #8b7355;">"$CLIBS -lstdc++"</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">C++keyName: GNU C++</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">C++keyManufacturer: GNU</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">C++keyLanguage: C++</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">C++keyVersion:</span>
+            <span style="color: #2e8b57;">CXX</span>=g++ <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">used to be 'g++-4.2'</span>
+            <span style="color: #2e8b57;">CXXFLAGS</span>=<span style="color: #8b7355;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+            <span style="color: #2e8b57;">CXXLIBS</span>=<span style="color: #8b7355;">"$MLIBS -lstdc++"</span>
+            <span style="color: #2e8b57;">CXXOPTIMFLAGS</span>=<span style="color: #8b7355;">'-O2 -DNDEBUG'</span>
+            <span style="color: #2e8b57;">CXXDEBUGFLAGS</span>=<span style="color: #8b7355;">'-g'</span>
+<span style="color: #7f7f7f;">#</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">FortrankeyName: GNU Fortran</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">FortrankeyManufacturer: GNU</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">FortrankeyLanguage: Fortran</span>
+            <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">FortrankeyVersion:</span>
+            <span style="color: #2e8b57;">FC</span>=<span style="color: #8b7355;">'gfortran'</span>
+            <span style="color: #2e8b57;">FFLAGS</span>=<span style="color: #8b7355;">'-fexceptions -m64 -fbackslash'</span>
+            <span style="color: #2e8b57;">FC_LIBDIR</span>=<span style="color: #8b7355;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
+            <span style="color: #2e8b57;">FC_LIBDIR2</span>=<span style="color: #8b7355;">`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`</span>
+            <span style="color: #2e8b57;">FLIBS</span>=<span style="color: #8b7355;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
+            <span style="color: #2e8b57;">FOPTIMFLAGS</span>=<span style="color: #8b7355;">'-O'</span>
+            <span style="color: #2e8b57;">FDEBUGFLAGS</span>=<span style="color: #8b7355;">'-g'</span>
+<span style="color: #7f7f7f;">#</span>
+            <span style="color: #2e8b57;">LD</span>=<span style="color: #8b7355;">"$CC"</span>
+            <span style="color: #2e8b57;">LDEXTENSION</span>=<span style="color: #8b7355;">'.mexmaci64'</span>
+            <span style="color: #2e8b57;">LDFLAGS</span>=<span style="color: #8b7355;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+            <span style="color: #2e8b57;">LDFLAGS</span>=<span style="color: #8b7355;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
+            <span style="color: #2e8b57;">LDFLAGS</span>=<span style="color: #8b7355;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">Homebrew library path</span>
+            <span style="color: #2e8b57;">LDOPTIMFLAGS</span>=<span style="color: #8b7355;">'-O'</span>
+            <span style="color: #2e8b57;">LDDEBUGFLAGS</span>=<span style="color: #8b7355;">'-g'</span>
+<span style="color: #7f7f7f;">#</span>
+            <span style="color: #2e8b57;">POSTLINK_CMDS</span>=<span style="color: #8b7355;">':'</span>
+<span style="color: #7f7f7f;">#</span><span style="color: #7f7f7f;">----------------------------------------------------------------------------</span>
 </pre>
 </div>
 
@@ -107,18 +107,12 @@ To summarize:
 </p>
 
 <ul class="org-ul">
-<li>changed <code>gcc-4.2</code> to <code>gcc</code>
-</li>
-<li>changed <code>/Developer/SDKs/MacOSX10.6.sdk</code> to <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code>
-</li>
-<li>changed <code>10.5</code> to <code>10.8</code>
-</li>
-<li>added <code>CFLAGS="$CFLAGS -I/usr/local/include"</code>
-</li>
-<li>changed <code>g++-4.2</code> to <code>g++</code>
-</li>
-<li>added <code>LDFLAGS="$LDFLAGS -L/usr/local/lib"</code>
-</li>
+<li>changed <code>gcc-4.2</code> to <code>gcc</code></li>
+<li>changed <code>/Developer/SDKs/MacOSX10.6.sdk</code> to <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code></li>
+<li>changed <code>10.5</code> to <code>10.8</code></li>
+<li>added <code>CFLAGS="$CFLAGS -I/usr/local/include"</code></li>
+<li>changed <code>g++-4.2</code> to <code>g++</code></li>
+<li>added <code>LDFLAGS="$LDFLAGS -L/usr/local/lib"</code></li>
 </ul>
 
 <p>

@@ -43,25 +43,25 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(org-add-link-type <span style="color: #9d8567;">"cite"</span>
-     (<span style="color: #1c9af1;">defun</span> <span style="color: #d7a924;">follow-cite</span> (name)
-       <span style="color: #d7974f;">"Open bibliography and jump to appropriate entry.</span>
-<span style="color: #d7974f;">        The document must contain \bibliography{filename} somewhere</span>
-<span style="color: #d7974f;">        for this to work"</span>
+<pre class="src src-elisp">(org-add-link-type <span style="color: #8b7355;">"cite"</span>
+     (<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">follow-cite</span> (name)
+       <span style="color: #cd853f;">"Open bibliography and jump to appropriate entry.</span>
+<span style="color: #cd853f;">        The document must contain \bibliography{filename} somewhere</span>
+<span style="color: #cd853f;">        for this to work"</span>
        (find-file-other-window
-        (<span style="color: #1c9af1;">save-excursion</span>
+        (<span style="color: #1c86ee;">save-excursion</span>
           (beginning-of-buffer)
-          (<span style="color: #1c9af1;">save-match-data</span>
-            (re-search-forward <span style="color: #9d8567;">"\\\\bibliography{</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(</span><span style="color: #9d8567;">[</span><span style="color: #9d8567;">^</span><span style="color: #9d8567;">}]+</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">}"</span>)
-            (concat (match-string 1) <span style="color: #9d8567;">".bib"</span>))))
+          (<span style="color: #1c86ee;">save-match-data</span>
+            (re-search-forward <span style="color: #8b7355;">"\\\\bibliography{</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(</span><span style="color: #8b7355;">[</span><span style="color: #8b7355;">^</span><span style="color: #8b7355;">}]+</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">}"</span>)
+            (concat (match-string 1) <span style="color: #8b7355;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
-     (<span style="color: #1c9af1;">defun</span> <span style="color: #d7a924;">export-cite</span> (path desc format)
-       <span style="color: #d7974f;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
-       (<span style="color: #1c9af1;">if</span> (eq format 'latex)
-           (<span style="color: #1c9af1;">if</span> (or (not desc) (equal 0 (search <span style="color: #9d8567;">"cite:"</span> desc)))
-               (format <span style="color: #9d8567;">"\\cite{%s}"</span> path)
-             (format <span style="color: #9d8567;">"\\cite[%s]{%s}"</span> desc path)))))
+     (<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">export-cite</span> (path desc format)
+       <span style="color: #cd853f;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       (<span style="color: #1c86ee;">if</span> (eq format 'latex)
+           (<span style="color: #1c86ee;">if</span> (or (not desc) (equal 0 (search <span style="color: #8b7355;">"cite:"</span> desc)))
+               (format <span style="color: #8b7355;">"\\cite{%s}"</span> path)
+             (format <span style="color: #8b7355;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
 </div>
 

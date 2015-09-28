@@ -46,7 +46,7 @@ But really, what I want is something different: When I record from the microphon
 </p>
 
 <p>
-So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.
+So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org/">cffi</a>, but that is beside the point.
 </p>
 
 <p>
@@ -55,8 +55,8 @@ So, lets read some audio data, shall we?
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile
-<span style="color: #379a6a;">data</span> = SoundFile(<span style="color: #9d8567;">'sad_song.wav'</span>)[:]
+<pre class="src src-python"><span style="color: #1c86ee;">from</span> pysoundfile <span style="color: #1c86ee;">import</span> SoundFile
+<span style="color: #2e8b57;">data</span> = SoundFile(<span style="color: #8b7355;">'sad_song.wav'</span>)[:]
 </pre>
 </div>
 
@@ -74,10 +74,10 @@ OK, that was easy. So let's read only the first and last 100 frames!
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile
-<span style="color: #379a6a;">f</span> = SoundFile(<span style="color: #9d8567;">'long_song.flac'</span>)
-<span style="color: #379a6a;">first</span> = f[:100]
-<span style="color: #379a6a;">last</span> = f[-100:]
+<pre class="src src-python"><span style="color: #1c86ee;">from</span> pysoundfile <span style="color: #1c86ee;">import</span> SoundFile
+<span style="color: #2e8b57;">f</span> = SoundFile(<span style="color: #8b7355;">'long_song.flac'</span>)
+<span style="color: #2e8b57;">first</span> = f[:100]
+<span style="color: #2e8b57;">last</span> = f[-100:]
 </pre>
 </div>
 
@@ -95,14 +95,14 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pysoundcard <span style="color: #1c9af1;">import</span> Stream
-<span style="color: #1c9af1;">from</span> pysoundfile <span style="color: #1c9af1;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #1c9af1;">with</span> Stream() <span style="color: #1c9af1;">as</span> s: <span style="color: #919191;"># </span><span style="color: #919191;">opens your default audio device</span>
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #919191;"># </span><span style="color: #919191;">This is supposed to be a new file, so specify it completely</span>
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">f</span> = SoundFile(<span style="color: #9d8567;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span> channels=s.channels, <span style="color: #d87a00;">format</span>=ogg_file,
-<span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span>   <span style="background-color: #e2e2e2;"> </span> mode=write_mode)
-<span style="background-color: #e2e2e2;"> </span>   f.write(s.read(s.sample_rate)) <span style="color: #919191;"># </span><span style="color: #919191;">one second</span>
+<pre class="src src-python"><span style="color: #1c86ee;">from</span> pysoundcard <span style="color: #1c86ee;">import</span> Stream
+<span style="color: #1c86ee;">from</span> pysoundfile <span style="color: #1c86ee;">import</span> SoundFile, ogg_file, write_mode
+<span style="color: #1c86ee;">with</span> Stream() <span style="color: #1c86ee;">as</span> s: <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">opens your default audio device</span>
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">This is supposed to be a new file, so specify it completely</span>
+    <span style="color: #2e8b57;">f</span> = SoundFile(<span style="color: #8b7355;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+                  channels=s.channels, <span style="color: #cd6600;">format</span>=ogg_file,
+                  mode=write_mode)
+    f.write(s.read(s.sample_rate)) <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">one second</span>
 </pre>
 </div>
 
@@ -115,7 +115,7 @@ And that's really all there is to it. Working with audio data in Python is easy 
 </p>
 
 <p>
-Of course, there is much more you could do. You could create a callback function and be called every four<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>.
+Of course, there is much more you could do. You could create a callback function and be called every four<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>.
 </p>
 
 <p>
@@ -125,17 +125,17 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
-</p></div>
+</p></div></div>
 
 
 </div>

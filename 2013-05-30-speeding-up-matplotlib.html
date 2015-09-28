@@ -27,10 +27,10 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">30 May 2013</div>
+<div class="post-date">30 Mai 2013</div>
 <h1 class="post-title">Speeding up Matplotlib</h1>
 <p>
-For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
+For the record, <a href="http://matplotlib.org/">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
 </p>
 
 <p>
@@ -39,20 +39,20 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> matplotlib.pyplot <span style="color: #1c9af1;">as</span> plt
-<span style="color: #1c9af1;">import</span> numpy <span style="color: #1c9af1;">as</span> np
-<span style="color: #1c9af1;">import</span> time
+<pre class="src src-python"><span style="color: #1c86ee;">import</span> matplotlib.pyplot <span style="color: #1c86ee;">as</span> plt
+<span style="color: #1c86ee;">import</span> numpy <span style="color: #1c86ee;">as</span> np
+<span style="color: #1c86ee;">import</span> time
 
-<span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
+<span style="color: #2e8b57;">fig</span>, <span style="color: #2e8b57;">ax</span> = plt.subplots()
 
-<span style="color: #379a6a;">tstart</span> = time.time()
-<span style="color: #379a6a;">num_plots</span> = 0
-<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-<span style="background-color: #e2e2e2;"> </span>   ax.clear()
-<span style="background-color: #e2e2e2;"> </span>   ax.plot(np.random.randn(100))
-<span style="background-color: #e2e2e2;"> </span>   plt.pause(0.001)
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
-<span style="color: #1c9af1;">print</span>(num_plots)
+<span style="color: #2e8b57;">tstart</span> = time.time()
+<span style="color: #2e8b57;">num_plots</span> = 0
+<span style="color: #1c86ee;">while</span> time.time()-tstart &lt; 1:
+    ax.clear()
+    ax.plot(np.random.randn(100))
+    plt.pause(0.001)
+    <span style="color: #2e8b57;">num_plots</span> += 1
+<span style="color: #1c86ee;">print</span>(num_plots)
 </pre>
 </div>
 
@@ -74,16 +74,16 @@ Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effec
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #2e8b57;">fig</span>, <span style="color: #2e8b57;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #379a6a;">tstart</span> = time.time()
-<span style="color: #379a6a;">num_plots</span> = 0
-<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
-<span style="background-color: #e2e2e2;"> </span>   plt.pause(0.001)
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
-<span style="color: #1c9af1;">print</span>(num_plots)
+<span style="color: #2e8b57;">tstart</span> = time.time()
+<span style="color: #2e8b57;">num_plots</span> = 0
+<span style="color: #1c86ee;">while</span> time.time()-tstart &lt; 1:
+    line.set_ydata(np.random.randn(100))
+    plt.pause(0.001)
+    <span style="color: #2e8b57;">num_plots</span> += 1
+<span style="color: #1c86ee;">print</span>(num_plots)
 </pre>
 </div>
 
@@ -99,35 +99,35 @@ Profiling this yields some interesting results:
 
 
 <colgroup>
-<col  class="right" />
+<col  class="org-right" />
 
-<col  class="right" />
+<col  class="org-right" />
 
-<col  class="right" />
+<col  class="org-right" />
 
-<col  class="right" />
+<col  class="org-right" />
 
-<col  class="right" />
+<col  class="org-right" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <tbody>
 <tr>
-<td class="right">ncalls</td>
-<td class="right">tottime</td>
-<td class="right">percall</td>
-<td class="right">cumtime</td>
-<td class="right">percall</td>
-<td class="left">filename:lineno(function)</td>
+<td class="org-right">ncalls</td>
+<td class="org-right">tottime</td>
+<td class="org-right">percall</td>
+<td class="org-right">cumtime</td>
+<td class="org-right">percall</td>
+<td class="org-left">filename:lineno(function)</td>
 </tr>
 
 <tr>
-<td class="right">15</td>
-<td class="right">0.167</td>
-<td class="right">0.011</td>
-<td class="right">0.167</td>
-<td class="right">0.011</td>
-<td class="left">{built-in method sleep)</td>
+<td class="org-right">15</td>
+<td class="org-right">0.167</td>
+<td class="org-right">0.011</td>
+<td class="org-right">0.167</td>
+<td class="org-right">0.011</td>
+<td class="org-left">{built-in method sleep)</td>
 </tr>
 </tbody>
 </table>
@@ -146,17 +146,17 @@ Putting this all together now yields:
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #2e8b57;">fig</span>, <span style="color: #2e8b57;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #379a6a;">tstart</span> = time.time()
-<span style="color: #379a6a;">num_plots</span> = 0
-<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 1:
-<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
-<span style="background-color: #e2e2e2;"> </span>   fig.canvas.draw()
-<span style="background-color: #e2e2e2;"> </span>   fig.canvas.flush_events()
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
-<span style="color: #1c9af1;">print</span>(num_plots)
+<span style="color: #2e8b57;">tstart</span> = time.time()
+<span style="color: #2e8b57;">num_plots</span> = 0
+<span style="color: #1c86ee;">while</span> time.time()-tstart &lt; 1:
+    line.set_ydata(np.random.randn(100))
+    fig.canvas.draw()
+    fig.canvas.flush_events()
+    <span style="color: #2e8b57;">num_plots</span> += 1
+<span style="color: #1c86ee;">print</span>(num_plots)
 </pre>
 </div>
 
@@ -169,14 +169,10 @@ The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What
 </p>
 
 <ul class="org-ul">
-<li>the background <code>ax.patch</code>
-</li>
-<li>the line, as returned from the <code>plot()</code> function
-</li>
-<li>the spines <code>ax.spines</code>
-</li>
-<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code>
-</li>
+<li>the background <code>ax.patch</code></li>
+<li>the line, as returned from the <code>plot()</code> function</li>
+<li>the spines <code>ax.spines</code></li>
+<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code></li>
 </ul>
 
 <p>
@@ -185,20 +181,20 @@ What we can do here is to selectively draw only the parts that are actually chan
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #379a6a;">fig</span>, <span style="color: #379a6a;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #2e8b57;">fig</span>, <span style="color: #2e8b57;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
-plt.show(block=<span style="color: #809a4d;">False</span>)
+plt.show(block=<span style="color: #6e8b3d;">False</span>)
 
-<span style="color: #379a6a;">tstart</span> = time.time()
-<span style="color: #379a6a;">num_plots</span> = 0
-<span style="color: #1c9af1;">while</span> time.time()-tstart &lt; 5:
-<span style="background-color: #e2e2e2;"> </span>   line.set_ydata(np.random.randn(100))
-<span style="background-color: #e2e2e2;"> </span>   ax.draw_artist(ax.patch)
-<span style="background-color: #e2e2e2;"> </span>   ax.draw_artist(line)
-<span style="background-color: #e2e2e2;"> </span>   fig.canvas.update()
-<span style="background-color: #e2e2e2;"> </span>   fig.canvas.flush_events()
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">num_plots</span> += 1
-<span style="color: #1c9af1;">print</span>(num_plots/5)
+<span style="color: #2e8b57;">tstart</span> = time.time()
+<span style="color: #2e8b57;">num_plots</span> = 0
+<span style="color: #1c86ee;">while</span> time.time()-tstart &lt; 5:
+    line.set_ydata(np.random.randn(100))
+    ax.draw_artist(ax.patch)
+    ax.draw_artist(line)
+    fig.canvas.update()
+    fig.canvas.flush_events()
+    <span style="color: #2e8b57;">num_plots</span> += 1
+<span style="color: #1c86ee;">print</span>(num_plots/5)
 </pre>
 </div>
 

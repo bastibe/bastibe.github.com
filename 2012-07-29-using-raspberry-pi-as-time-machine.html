@@ -37,9 +37,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -54,9 +54,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -71,9 +71,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -100,20 +100,20 @@ Also, the afp daemon should be configured to use the proper authentification sch
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #1c9af1;">xml</span> <span style="color: #379a6a;">version</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">1.0</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">standalone</span>=<span style="color: #9d8567;">'</span><span style="color: #9d8567;">no</span><span style="color: #9d8567;">'</span>?&gt;<span style="color: #919191;">&lt;!--</span><span style="color: #919191;">*-nxml-*</span><span style="color: #919191;">--&gt;</span>
-&lt;!<span style="color: #1c9af1;">DOCTYPE</span> service-group <span style="color: #1c9af1;">SYSTEM</span> <span style="color: #d7974f;">"</span><span style="color: #d7974f;">avahi-service.dtd</span><span style="color: #d7974f;">"</span>&gt;
-&lt;<span style="color: #d7a924;">service-group</span>&gt;
-    &lt;<span style="color: #d7a924;">name</span> <span style="color: #379a6a;">replace-wildcards</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">yes</span><span style="color: #9d8567;">"</span>&gt;%h&lt;/<span style="color: #d7a924;">name</span>&gt;
-    &lt;<span style="color: #d7a924;">service</span>&gt;
-        &lt;<span style="color: #d7a924;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #d7a924;">type</span>&gt;
-        &lt;<span style="color: #d7a924;">port</span>&gt;548&lt;/<span style="color: #d7a924;">port</span>&gt;
-    &lt;/<span style="color: #d7a924;">service</span>&gt;
-    &lt;<span style="color: #d7a924;">service</span>&gt;
-        &lt;<span style="color: #d7a924;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #d7a924;">type</span>&gt;
-        &lt;<span style="color: #d7a924;">port</span>&gt;0&lt;/<span style="color: #d7a924;">port</span>&gt;
-        &lt;<span style="color: #d7a924;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #d7a924;">txt-record</span>&gt;
-    &lt;/<span style="color: #d7a924;">service</span>&gt;
-&lt;/<span style="color: #d7a924;">service-group</span>&gt;
+<pre class="src src-xml">&lt;?<span style="color: #1c86ee;">xml</span> <span style="color: #2e8b57;">version</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">1.0</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">standalone</span>=<span style="color: #8b7355;">'</span><span style="color: #8b7355;">no</span><span style="color: #8b7355;">'</span>?&gt;<span style="color: #7f7f7f;">&lt;!--</span><span style="color: #7f7f7f;">*-nxml-*</span><span style="color: #7f7f7f;">--&gt;</span>
+&lt;!<span style="color: #1c86ee;">DOCTYPE</span> service-group <span style="color: #1c86ee;">SYSTEM</span> <span style="color: #cd853f;">"</span><span style="color: #cd853f;">avahi-service.dtd</span><span style="color: #cd853f;">"</span>&gt;
+&lt;<span style="color: #cd9b1d;">service-group</span>&gt;
+    &lt;<span style="color: #cd9b1d;">name</span> <span style="color: #2e8b57;">replace-wildcards</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">yes</span><span style="color: #8b7355;">"</span>&gt;%h&lt;/<span style="color: #cd9b1d;">name</span>&gt;
+    &lt;<span style="color: #cd9b1d;">service</span>&gt;
+        &lt;<span style="color: #cd9b1d;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #cd9b1d;">type</span>&gt;
+        &lt;<span style="color: #cd9b1d;">port</span>&gt;548&lt;/<span style="color: #cd9b1d;">port</span>&gt;
+    &lt;/<span style="color: #cd9b1d;">service</span>&gt;
+    &lt;<span style="color: #cd9b1d;">service</span>&gt;
+        &lt;<span style="color: #cd9b1d;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #cd9b1d;">type</span>&gt;
+        &lt;<span style="color: #cd9b1d;">port</span>&gt;0&lt;/<span style="color: #cd9b1d;">port</span>&gt;
+        &lt;<span style="color: #cd9b1d;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #cd9b1d;">txt-record</span>&gt;
+    &lt;/<span style="color: #cd9b1d;">service</span>&gt;
+&lt;/<span style="color: #cd9b1d;">service-group</span>&gt;
 </pre>
 </div>
 
@@ -135,9 +135,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -168,12 +168,9 @@ This article heavily steals from these fine folks on the internet:
 </p>
 
 <ul class="org-ul">
-<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a>
-</li>
-<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>
-</li>
-<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a>
-</li>
+<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a></li>
+<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a></li>
+<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a></li>
 </ul>
 </div>
 </div>

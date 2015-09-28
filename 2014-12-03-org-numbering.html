@@ -27,7 +27,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Dec 2014</div>
+<div class="post-date">03 Dez 2014</div>
 <h1 class="post-title">Org Mode Selective Section Numbering</h1>
 <p>
 This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
@@ -39,15 +39,15 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(<span style="color: #1c9af1;">defun</span> <span style="color: #d7a924;">headline-numbering-filter</span> (data backend info)
-  <span style="color: #d7974f;">"No numbering in headlines that have a property :numbers: no"</span>
-  (<span style="color: #1c9af1;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #1c9af1;">if</span> beg (get-text-property beg <span style="color: #d87a00;">:parent</span> data))))
-    (<span style="color: #1c9af1;">if</span> (and (eq backend 'latex)
-         (string= (org-element-property <span style="color: #d87a00;">:NUMBERS</span> headline) <span style="color: #9d8567;">"no"</span>))
+<pre class="src src-elisp">(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #cd853f;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #1c86ee;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #1c86ee;">if</span> beg (get-text-property beg <span style="color: #cd6600;">:parent</span> data))))
+    (<span style="color: #1c86ee;">if</span> (and (eq backend 'latex)
+         (string= (org-element-property <span style="color: #cd6600;">:NUMBERS</span> headline) <span style="color: #8b7355;">"no"</span>))
         (replace-regexp-in-string
-         <span style="color: #9d8567;">"</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(</span><span style="color: #9d8567;">part</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">|</span><span style="color: #9d8567;">chapter</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">|</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(?:</span><span style="color: #9d8567;">sub</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">*section</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">|</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(?:</span><span style="color: #9d8567;">sub</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">?paragraph</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">"</span>
-         <span style="color: #9d8567;">"\\1*"</span> data nil nil 1)
+         <span style="color: #8b7355;">"</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(</span><span style="color: #8b7355;">part</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">|</span><span style="color: #8b7355;">chapter</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">|</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(?:</span><span style="color: #8b7355;">sub</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">*section</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">|</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(?:</span><span style="color: #8b7355;">sub</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">?paragraph</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">"</span>
+         <span style="color: #8b7355;">"\\1*"</span> data nil nil 1)
       data)))
 
 (setq org-export-filter-headline-functions '(headline-numbering-filter))
@@ -68,44 +68,44 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 
 <div class="org-src-container">
 
-<pre class="src src-css"><span style="color: #919191;">/* </span><span style="color: #919191;">hide Org-mode's section numbers </span><span style="color: #919191;">*/</span>
-<span style="color: #d7a924;">span.section-number-2 </span>{ <span style="color: #379a6a;">display</span>: none; }
-<span style="color: #d7a924;">span.section-number-3 </span>{ <span style="color: #379a6a;">display</span>: none; }
-<span style="color: #d7a924;">span.section-number-4 </span>{ <span style="color: #379a6a;">display</span>: none; }
-<span style="color: #d7a924;">span.section-number-5 </span>{ <span style="color: #379a6a;">display</span>: none; }
-<span style="color: #d7a924;">span.section-number-6 </span>{ <span style="color: #379a6a;">display</span>: none; }
+<pre class="src src-css"><span style="color: #7f7f7f;">/* </span><span style="color: #7f7f7f;">hide Org-mode's section numbers </span><span style="color: #7f7f7f;">*/</span>
+<span style="color: #cd9b1d;">span.section-number-2 </span>{ <span style="color: #2e8b57;">display</span>: none; }
+<span style="color: #cd9b1d;">span.section-number-3 </span>{ <span style="color: #2e8b57;">display</span>: none; }
+<span style="color: #cd9b1d;">span.section-number-4 </span>{ <span style="color: #2e8b57;">display</span>: none; }
+<span style="color: #cd9b1d;">span.section-number-5 </span>{ <span style="color: #2e8b57;">display</span>: none; }
+<span style="color: #cd9b1d;">span.section-number-6 </span>{ <span style="color: #2e8b57;">display</span>: none; }
 
-<span style="color: #919191;">/* </span><span style="color: #919191;">define counters for the different headline levels </span><span style="color: #919191;">*/</span>
-<span style="color: #d7a924;">h1 </span>{ <span style="color: #379a6a;">counter-reset</span>: section; }
-<span style="color: #d7a924;">h2 </span>{ <span style="color: #379a6a;">counter-reset</span>: subsection; }
-<span style="color: #d7a924;">h3 </span>{ <span style="color: #379a6a;">counter-reset</span>: subsubsection; }
-<span style="color: #d7a924;">h4 </span>{ <span style="color: #379a6a;">counter-reset</span>: paragraph; }
-<span style="color: #d7a924;">h5 </span>{ <span style="color: #379a6a;">counter-reset</span>: subparagraph; }
+<span style="color: #7f7f7f;">/* </span><span style="color: #7f7f7f;">define counters for the different headline levels </span><span style="color: #7f7f7f;">*/</span>
+<span style="color: #cd9b1d;">h1 </span>{ <span style="color: #2e8b57;">counter-reset</span>: section; }
+<span style="color: #cd9b1d;">h2 </span>{ <span style="color: #2e8b57;">counter-reset</span>: subsection; }
+<span style="color: #cd9b1d;">h3 </span>{ <span style="color: #2e8b57;">counter-reset</span>: subsubsection; }
+<span style="color: #cd9b1d;">h4 </span>{ <span style="color: #2e8b57;">counter-reset</span>: paragraph; }
+<span style="color: #cd9b1d;">h5 </span>{ <span style="color: #2e8b57;">counter-reset</span>: subparagraph; }
 
-<span style="color: #919191;">/* </span><span style="color: #919191;">prepend section numbers before headlines </span><span style="color: #919191;">*/</span>
-<span style="color: #379a6a;">h2</span>::before {
-    <span style="color: #379a6a;">content</span>: counter(section) <span style="color: #9d8567;">" "</span>;
-    <span style="color: #379a6a;">counter-increment</span>: section;
+<span style="color: #7f7f7f;">/* </span><span style="color: #7f7f7f;">prepend section numbers before headlines </span><span style="color: #7f7f7f;">*/</span>
+<span style="color: #2e8b57;">h2</span>::before {
+    <span style="color: #2e8b57;">content</span>: counter(section) <span style="color: #8b7355;">" "</span>;
+    <span style="color: #2e8b57;">counter-increment</span>: section;
 }
-<span style="color: #379a6a;">h3</span>::before {
-    <span style="color: #379a6a;">content</span>: counter(section) <span style="color: #9d8567;">"."</span> counter(subsection) <span style="color: #9d8567;">" "</span>;
-    <span style="color: #379a6a;">counter-increment</span>: subsection;
+<span style="color: #2e8b57;">h3</span>::before {
+    <span style="color: #2e8b57;">content</span>: counter(section) <span style="color: #8b7355;">"."</span> counter(subsection) <span style="color: #8b7355;">" "</span>;
+    <span style="color: #2e8b57;">counter-increment</span>: subsection;
 }
-<span style="color: #379a6a;">h4</span>::before {
-    <span style="color: #379a6a;">content</span>: counter(section) <span style="color: #9d8567;">"."</span> counter(subsection) <span style="color: #9d8567;">"."</span> counter(subsubsection) <span style="color: #9d8567;">" "</span>;
-    <span style="color: #379a6a;">counter-increment</span>: subsubsection;
+<span style="color: #2e8b57;">h4</span>::before {
+    <span style="color: #2e8b57;">content</span>: counter(section) <span style="color: #8b7355;">"."</span> counter(subsection) <span style="color: #8b7355;">"."</span> counter(subsubsection) <span style="color: #8b7355;">" "</span>;
+    <span style="color: #2e8b57;">counter-increment</span>: subsubsection;
 }
-<span style="color: #379a6a;">h5</span>::before {
-    <span style="color: #379a6a;">content</span>: counter(section) <span style="color: #9d8567;">"."</span> counter(subsection) <span style="color: #9d8567;">"."</span> counter(subsubsection) <span style="color: #9d8567;">"."</span> counter(paragraph) <span style="color: #9d8567;">" "</span>;
-    <span style="color: #379a6a;">counter-increment</span>: paragraph;
+<span style="color: #2e8b57;">h5</span>::before {
+    <span style="color: #2e8b57;">content</span>: counter(section) <span style="color: #8b7355;">"."</span> counter(subsection) <span style="color: #8b7355;">"."</span> counter(subsubsection) <span style="color: #8b7355;">"."</span> counter(paragraph) <span style="color: #8b7355;">" "</span>;
+    <span style="color: #2e8b57;">counter-increment</span>: paragraph;
 }
-<span style="color: #379a6a;">h6</span>::before {
-    <span style="color: #379a6a;">content</span>: counter(section) <span style="color: #9d8567;">"."</span> counter(subsection) <span style="color: #9d8567;">"."</span> counter(subsubsection) <span style="color: #9d8567;">"."</span> counter(paragraph) <span style="color: #9d8567;">"."</span> counter(subparagraph) <span style="color: #9d8567;">" "</span>;
-    <span style="color: #379a6a;">counter-increment</span>: subparagraph;
+<span style="color: #2e8b57;">h6</span>::before {
+    <span style="color: #2e8b57;">content</span>: counter(section) <span style="color: #8b7355;">"."</span> counter(subsection) <span style="color: #8b7355;">"."</span> counter(subsubsection) <span style="color: #8b7355;">"."</span> counter(paragraph) <span style="color: #8b7355;">"."</span> counter(subparagraph) <span style="color: #8b7355;">" "</span>;
+    <span style="color: #2e8b57;">counter-increment</span>: subparagraph;
 }
 
-<span style="color: #919191;">/* </span><span style="color: #919191;">suppress numbering for headlines with class="nonumber" </span><span style="color: #919191;">*/</span>
-.nonumber::before { <span style="color: #379a6a;">content</span>: none; }
+<span style="color: #7f7f7f;">/* </span><span style="color: #7f7f7f;">suppress numbering for headlines with class="nonumber" </span><span style="color: #7f7f7f;">*/</span>
+.nonumber::before { <span style="color: #2e8b57;">content</span>: none; }
 </pre>
 </div>
 
@@ -115,19 +115,19 @@ With this in place, we can extend the previous filter to work for HTML as well a
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(<span style="color: #1c9af1;">defun</span> <span style="color: #d7a924;">headline-numbering-filter</span> (data backend info)
-  <span style="color: #d7974f;">"No numbering in headlines that have a property :numbers: no"</span>
-  (<span style="color: #1c9af1;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #1c9af1;">if</span> beg (get-text-property beg <span style="color: #d87a00;">:parent</span> data))))
-    (<span style="color: #1c9af1;">if</span> (string= (org-element-property <span style="color: #d87a00;">:NUMBERS</span> headline) <span style="color: #9d8567;">"no"</span>)
-        (<span style="color: #1c9af1;">cond</span> ((eq backend 'latex)
+<pre class="src src-elisp">(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #cd853f;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #1c86ee;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #1c86ee;">if</span> beg (get-text-property beg <span style="color: #cd6600;">:parent</span> data))))
+    (<span style="color: #1c86ee;">if</span> (string= (org-element-property <span style="color: #cd6600;">:NUMBERS</span> headline) <span style="color: #8b7355;">"no"</span>)
+        (<span style="color: #1c86ee;">cond</span> ((eq backend 'latex)
                (replace-regexp-in-string
-                <span style="color: #9d8567;">"</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(</span><span style="color: #9d8567;">part</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">|</span><span style="color: #9d8567;">chapter</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">|</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(?:</span><span style="color: #9d8567;">sub</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">*section</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">|</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(?:</span><span style="color: #9d8567;">sub</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">?paragraph</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">"</span>
-                <span style="color: #9d8567;">"\\1*"</span> data nil nil 1))
+                <span style="color: #8b7355;">"</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(</span><span style="color: #8b7355;">part</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">|</span><span style="color: #8b7355;">chapter</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">|</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(?:</span><span style="color: #8b7355;">sub</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">*section</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">|</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(?:</span><span style="color: #8b7355;">sub</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">?paragraph</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">"</span>
+                <span style="color: #8b7355;">"\\1*"</span> data nil nil 1))
               ((eq backend 'html)
                (replace-regexp-in-string
-                <span style="color: #9d8567;">"</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(</span><span style="color: #9d8567;">&lt;h[1-6]</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">(</span><span style="color: #9d8567;">[</span><span style="color: #9d8567;">^</span><span style="color: #9d8567;">&gt;]*&gt;</span><span style="color: #9d8567; font-weight: bold;">\\</span><span style="color: #9d8567; font-weight: bold;">)</span><span style="color: #9d8567;">"</span>
-                <span style="color: #9d8567;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+                <span style="color: #8b7355;">"</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(</span><span style="color: #8b7355;">&lt;h[1-6]</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(</span><span style="color: #8b7355;">[</span><span style="color: #8b7355;">^</span><span style="color: #8b7355;">&gt;]*&gt;</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">"</span>
+                <span style="color: #8b7355;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
       data)))
 
 (setq org-export-filter-headline-functions '(headline-numbering-filter))

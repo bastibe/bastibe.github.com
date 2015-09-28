@@ -6,12 +6,12 @@ So Kindle.app was updated through the App Store and did not start any more. It j
 
 A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with
 
-#+begin_src
+#+begin_example
     Dyld Error Message:
       Library not loaded: @executable_path/../Frameworks/libWEbCoreKRF.dylib
       Referenced from: /Applications/Kindle.app/Contents/Frameworks/libWebCoreViewer.dylib
       Reason: image not found
-#+end_src
+#+end_example
 
 ~libWEbCoreKRF.dylib~? With a capitalized ~E~? That looks very much like a spelling error. So, point your terminal to ~/Applications/Kindle.app/Contents/Frameworks/~, type
 

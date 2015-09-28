@@ -18,9 +18,9 @@ After that, I disconnected the display and immediately was stumped because I now
 
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. ~ls /dev~ showed the hard drive as ~/dev/sda~. Thus, I installed ~parted~ using ~sudo apt-get install parted~ and used it ~sudo parted~. In parted, ~select /dev/sda~ sets it up to modify the external hard drive, ~rm 1~ deleted its main partition, ~q~ to quit parted. Next, creating a new partition: ~sudo fdisk~, then in there ~n~ with ~p~ and ~1~ to create a new primary partition, then ~w~ to apply the changes and exit. Lastly, I created the file system with ~sudo mkfs -t ext4 /dev/sda1~ with the whole partition as its size. Now lastly, I created a mount point for it using ~mkdir ~/TimeMachine~ (don't use ~sudo~!) and auto-mounted it by appending this to //etc/fstab/
 
-#+begin_src
+#+begin_example
     /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
-#+end_src
+#+end_example
 
 Note: ~sync~ specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.
 
@@ -28,15 +28,15 @@ Note: ~sync~ specifies that all file system changes have to be written to disk i
 
 First up, this requires ~netatalk~, so I did ~sudo apt-get update~ and ~sudo apt-get install netatalk~ to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to //etc/netatalk/AppleVolumes.default/:
 
-#+begin_src
+#+begin_example
     /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
-#+end_src
+#+end_example
 
 Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to //etc/netatalk/afpd.conf/:
 
-#+begin_src
+#+begin_example
     - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
-#+end_src
+#+end_example
 
 +(maybe append ~mdns~ to the hosts in //etc/nsswitch.conf/? Probably not necessary.)+
 

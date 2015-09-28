@@ -4,7 +4,170 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Wed, 22 Apr 2015 17:11:54 +0200</lastBuildDate>
+  <lastBuildDate>Mo, 28 Sep 2015 16:49:00 +0200</lastBuildDate>
+<item>
+  <title>Python Numeric Performance</title>
+  <description><![CDATA[<p>
+Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_python</span>(oct_per_sec):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">b</span> = 1.781
+    <span style="color: #2e8b57;">mu</span> = -0.301
+    <span style="color: #1c86ee;">return</span> 1/(2*b)*math.exp(-<span style="color: #cd6600;">abs</span>(oct_per_sec-mu)/b)
+
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_python</span>(y_idx, max_y_factor, height):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+    <span style="color: #2e8b57;">y_lo</span> = <span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)
+    <span style="color: #2e8b57;">y_hi</span> = <span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)
+    <span style="color: #2e8b57;">y_lo_idx</span> = <span style="color: #cd6600;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
+    <span style="color: #2e8b57;">y_hi_idx</span> = <span style="color: #cd6600;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
+    <span style="color: #1c86ee;">return</span> y_lo_idx, y_hi_idx
+
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_python</span>(cost_matrix, delta_x):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
+    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(correlogram.shape)
+
+    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_x)
+    <span style="color: #2e8b57;">height</span> = correlogram.shape[1]
+
+    <span style="color: #2e8b57;">probabilities</span> = np.empty((height, height))
+    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(height):
+        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
+            <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
+            <span style="color: #2e8b57;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
+            <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
+
+    <span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
+        <span style="color: #1c86ee;">if</span> x_idx == 0:
+            <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cost_column
+            <span style="color: #1c86ee;">continue</span>
+        <span style="color: #1c86ee;">for</span> y_idx, cost <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_column):
+            <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
+                <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
+                <span style="color: #1c86ee;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
+                    <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
+                    <span style="color: #2e8b57;">tracks</span>[x_idx, y_idx] = y_pre_idx
+            <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
+
+    <span style="color: #1c86ee;">return</span> tracks, cum_cost
+</pre>
+</div>
+
+<p>
+I'm not going into the details of what this algorithm does, but note that it iterates over every column and row of the matrix <code>cost_matrix</code>, and then iterates over another range <code>previous_y_range</code> for each of the values in <code>cost_matrix</code>. On the way, it does a lot of basic arithmetic and some algebra.
+</p>
+
+<p>
+The problem is, this is very slow. For a \(90 \times 200\) <code>cost_matrix</code>, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for <a href="http://www.numpy.org/">Numpy</a>!
+</p>
+
+<p>
+If you can express your code in terms of linear algebra, Numpy will execute them in highly-optimized C code. The problem is, translating loops into linear algebra is not always easy. In this case, it took some effort:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numpy</span>(doubles_per_x):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">b</span> = 1.781
+    <span style="color: #2e8b57;">mu</span> = -0.301
+    <span style="color: #1c86ee;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #cd6600;">abs</span>(doubles_per_x-mu)/b)
+
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #cd6600;">int</span>)
+    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(cost_matrix.shape)
+
+    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">allow at most 5 octaves per second (3 sigma)</span>
+    <span style="color: #2e8b57;">height</span> = cost_matrix.shape[1]
+
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">will be sparsely filled with positive probability values, and</span>
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">empty values will have minus infinite probability.</span>
+    <span style="color: #2e8b57;">probabilities</span> = -np.ones((height, height))*np.inf
+    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(probabilities.shape[0]):
+        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #2e8b57;">y_pre_idx</span> = np.arange(<span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
+                              <span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
+        <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #2e8b57;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
+        <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
+
+    <span style="color: #2e8b57;">cum_cost</span>[0] = cost_matrix[0]
+    <span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(1, <span style="color: #cd6600;">len</span>(cost_matrix)):
+        <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract cost_column as 2d-vector!</span>
+        <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
+        <span style="color: #2e8b57;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
+        <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
+
+    <span style="color: #1c86ee;">return</span> tracks, cum_corrs
+</pre>
+</div>
+
+<p>
+This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a \(90 \times 200\) <code>cost_matrix</code>, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.
+</p>
+
+<p>
+Another avenue for performance optimization is <a href="http://numba.pydata.org/">Numba</a>. Numba applies dark and powerful magic to compile humble Python functions into blazingly fast machine code. It is proper magic, if you ask me. Simply add an innocuous little decorator to your functions, and let Numba do it's thing. If all goes well, your code will work just as before, except with unheard-of performance:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #00688b;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numba</span>(doubles_per_x):
+    ...
+
+<span style="color: #00688b;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #6e8b3d;">True</span>)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
+    ...
+
+<span style="color: #00688b;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_numba</span>(cost_matrix, delta_t):
+    ...
+</pre>
+</div>
+
+<p>
+However, Numba is no silver bullet, and does not support all of Python yet. In the present case, it is missing support for <code>enumerate</code> for Numpy matrices. Thus, I had to rewrite the first two loops like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">python version</span>
+<span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
+    ...
+
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">numba version</span>
+<span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(<span style="color: #cd6600;">len</span>(cost_matrix)):
+    <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx]
+    ...
+</pre>
+</div>
+
+<p>
+Another area that proved problematic is N-D slice writing. Instead of using expressions like <code>m1[x,y:y+3] = m2</code>, you have to write <code>for idx in range(3): m1[x,y+idx] = m2[idx]</code>. Not a difficult transformation, but it basically forced me to unroll all the nice vectorized code of the Numpy version back to their original pure-Python form. That said, Numba is getting better and better, and many constructs that used to be uncompilable (<code>yield</code>) are not a problem any more.
+</p>
+
+<p>
+Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This is a 120-fold increase in performance, and still seven times faster than Numpy, with minimal code changes. This is proper magic!
+</p>
+
+<p>
+So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code <i>more beautiful</i>. Numba on the other hand often requires you to make your code <i>less beautiful</i> to conform to it's subset of compilable Python.
+</p>
+]]></description>
+  <link>http://bastibe.de/2015-09-28-python-performance.html</link>
+  <pubDate>Mo, 28 Sep 2015 00:00:00 +0200</pubDate>
+</item>
+>>>>>>> 65b6248... many minor bug fixes for latest version of org
 <item>
   <title>Matlab and Audio Files</title>
   <description><![CDATA[<p>

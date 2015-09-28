@@ -27,7 +27,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">04 Mar 2011</div>
+<div class="post-date">04 Mär 2011</div>
 <h1 class="post-title">Installing Pygame using Homebrew</h1>
 <p>
 So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
@@ -45,41 +45,51 @@ Note that although I am mostly interested in audio playback, this post will deta
 Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.
 </p>
 
-<pre class="example">
-brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
+<div class="org-src-container">
+
+<pre class="src src-sh">brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
 </pre>
+</div>
 
 <p>
 This will install most packages for you. Note that <code>libpng</code> is also available as a system library, so it is installed <code>keg_only</code>, that is, without linking it in your path. We will need to compile against it though, so the next step is
 </p>
 
-<pre class="example">
-brew link libpng
+<div class="org-src-container">
+
+<pre class="src src-sh">brew link libpng
 </pre>
+</div>
 
 <p>
 Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</code> does not install its headers, so you can't compile against it. To fix that, type
 </p>
 
-<pre class="example">
-brew edit smpeg
+<div class="org-src-container">
+
+<pre class="src src-sh">brew edit smpeg
 </pre>
+</div>
 
 <p>
 and add the following line just above the two end at the end of the file
 </p>
 
-<pre class="example">
-include.install Dir["*.h"]
+<div class="org-src-container">
+
+<pre class="src src-sh">include.install Dir[<span style="color: #8b7355;">"*.h"</span>]
 </pre>
+</div>
 
 <p>
 Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install <code>smpeg</code> with the usual
 </p>
 
-<pre class="example">
-brew install smpeg
+<div class="org-src-container">
+
+<pre class="src src-sh">brew install smpeg
 </pre>
+</div>
 
 <p>
 and you will get the headers, too. Isn't Homebrew great?
@@ -97,33 +107,41 @@ Now open a terminal and navigate to that directory. Me, I like [iTerm](<a href="
 At this point, the setup file is mostly useless since <code>config.py</code> failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file <code>Setup</code> (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
 </p>
 
-<pre class="example">
-SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
+<div class="org-src-container">
+
+<pre class="src src-sh">SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
 </pre>
+</div>
 
 <p>
 Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in <code>/usr/local…</code>. Hence, change this line to
 </p>
 
-<pre class="example">
-SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+<div class="org-src-container">
+
+<pre class="src src-sh">SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
 </pre>
+</div>
 
 <p>
 The next lines are strangely garbled. They say, for example
 </p>
 
-<pre class="example">
-FONT = -lS -lD -lL -l_ -lt -lt -lf
+<div class="org-src-container">
+
+<pre class="src src-sh">FONT = -lS -lD -lL -l_ -lt -lt -lf
 </pre>
+</div>
 
 <p>
 Where they actually should say
 </p>
 
-<pre class="example">
-FONT = -lSDL_ttf
+<div class="org-src-container">
+
+<pre class="src src-sh">FONT = -lSDL_ttf
 </pre>
+</div>
 
 <p>
 Instead of having one <code>-l</code> and then the library name <code>SDL_ttf</code>, they put <code>-l</code> in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for <code>FONT</code>, <code>IMAGE</code>, <code>MIXER</code> and <code>SMPEG</code>.
@@ -153,9 +171,11 @@ We are now going to compile and install Pygame. The nice thing is, even though w
 Alright, now without further ado, install Pygame by typing
 </p>
 
-<pre class="example">
-python setup.py install
+<div class="org-src-container">
+
+<pre class="src src-sh">python setup.py install
 </pre>
+</div>
 
 <p>
 Great! That's it! Everything should work now!

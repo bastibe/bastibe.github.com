@@ -56,8 +56,8 @@ Short answer: Find your <i>site-packages</i> directory:
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> distutils.sysconfig <span style="color: #1c9af1;">import</span> get_python_lib
-<span style="color: #1c9af1;">print</span>(get_python_lib())
+<pre class="src src-python"><span style="color: #1c86ee;">from</span> distutils.sysconfig <span style="color: #1c86ee;">import</span> get_python_lib
+<span style="color: #1c86ee;">print</span>(get_python_lib())
 </pre>
 </div>
 
@@ -67,7 +67,7 @@ Go there, navigate to the <i>epydoc\/markup</i> directory and change line 307 of
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #379a6a;">m</span> = <span style="color: #1c9af1;">self</span>._SUMMARY_RE.match(child.data)
+<pre class="src src-python"><span style="color: #2e8b57;">m</span> = <span style="color: #1c86ee;">self</span>._SUMMARY_RE.match(child.data)
 </pre>
 </div>
 
@@ -77,10 +77,10 @@ to
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">try</span>:
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">m</span> = <span style="color: #1c9af1;">self</span>._SUMMARY_RE.match(child.data)
-<span style="color: #1c9af1;">except</span> <span style="color: #007b9c;">AttributeError</span>:
-<span style="background-color: #e2e2e2;"> </span>   <span style="color: #379a6a;">m</span> = <span style="color: #809a4d;">None</span>
+<pre class="src src-python"><span style="color: #1c86ee;">try</span>:
+    <span style="color: #2e8b57;">m</span> = <span style="color: #1c86ee;">self</span>._SUMMARY_RE.match(child.data)
+<span style="color: #1c86ee;">except</span> <span style="color: #00688b;">AttributeError</span>:
+    <span style="color: #2e8b57;">m</span> = <span style="color: #6e8b3d;">None</span>
 </pre>
 </div>
 

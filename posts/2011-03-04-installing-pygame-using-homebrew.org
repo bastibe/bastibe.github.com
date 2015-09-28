@@ -10,31 +10,31 @@ Note that although I am mostly interested in audio playback, this post will deta
 
 Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.
 
-#+begin_src
+#+begin_src sh
 brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
 #+end_src
 
 This will install most packages for you. Note that ~libpng~ is also available as a system library, so it is installed ~keg_only~, that is, without linking it in your path. We will need to compile against it though, so the next step is
 
-#+begin_src
+#+begin_src sh
 brew link libpng
 #+end_src
 
 Now there is still one package missing, ~smpeg~. Sadly, ~smpeg~ does not install its headers, so you can't compile against it. To fix that, type
 
-#+begin_src
+#+begin_src sh
 brew edit smpeg
 #+end_src
 
 and add the following line just above the two end at the end of the file
 
-#+begin_src
+#+begin_src sh
 include.install Dir["*.h"]
 #+end_src
 
 Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install ~smpeg~ with the usual
 
-#+begin_src
+#+begin_src sh
 brew install smpeg
 #+end_src
 
@@ -46,25 +46,25 @@ Now open a terminal and navigate to that directory. Me, I like [iTerm](http://it
 
 At this point, the setup file is mostly useless since ~config.py~ failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file ~Setup~ (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
 
-#+begin_src
+#+begin_src sh
 SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
 #+end_src
 
 Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in ~/usr/local…~. Hence, change this line to
 
-#+begin_src
+#+begin_src sh
 SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
 #+end_src
 
 The next lines are strangely garbled. They say, for example
 
-#+begin_src
+#+begin_src sh
 FONT = -lS -lD -lL -l_ -lt -lt -lf
 #+end_src
 
 Where they actually should say
 
-#+begin_src
+#+begin_src sh
 FONT = -lSDL_ttf
 #+end_src
 
@@ -82,7 +82,7 @@ We are now going to compile and install Pygame. The nice thing is, even though w
 
 Alright, now without further ado, install Pygame by typing
 
-#+begin_src
+#+begin_src sh
 python setup.py install
 #+end_src
 

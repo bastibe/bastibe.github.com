@@ -5,6 +5,6 @@ So I wanted to work with audio files in Matlab. In the past, Matlab could only d
 
 Of these file formats, only /*.au/ is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: ~audioread~ can /actually/ read more data formats than documented: it reads /*.w64/, /*.rf64/, and /*.caf/ no problem. And these can store more than 4 Gb as well.
 
-It's just that, while ~audioread~ supports all of these nice file formats, [[mathworks.com/help/matlab/ref/audiowrite.html][~audiowrite~]] is more limited, and only supports /*.wav/, /*.ogg/, /*.flac/, and /*.mp4/. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, ~auwrite~ is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
+It's just that, while ~audioread~ supports all of these nice file formats, [[http://mathworks.com/help/matlab/ref/audiowrite.html][~audiowrite~]] is more limited, and only supports /*.wav/, /*.ogg/, /*.flac/, and /*.mp4/. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, ~auwrite~ is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
 
 In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
