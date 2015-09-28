@@ -8,7 +8,7 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<title>Python Numeric Performance</title><meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -26,7 +26,9 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">28 Sep 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-09-28-python-performance.html">Python Numeric Performance</a></h1>
+<div id="content">
+<div class="post-date">28 Sep 2015</div>
+<h1 class="post-title">Python Numeric Performance</h1>
 <p>
 Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
 </p>
@@ -183,136 +185,24 @@ Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This i
 <p>
 So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code <i>more beautiful</i>. Numba on the other hand often requires you to make your code <i>less beautiful</i> to conform to it's subset of compilable Python.
 </p>
-<div class="post-date">22 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h1>
-<p>
-So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
-</p>
-
-<p>
-Of these file formats, only <i>*.au</i> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <i>actually</i> read more data formats than documented: it reads <i>*.w64</i>, <i>*.rf64</i>, and <i>*.caf</i> no problem. And these can store more than 4 Gb as well.
-</p>
-
-<p>
-It's just that, while <code>audioread</code> supports all of these nice file formats, <a href="http://mathworks.com/help/matlab/ref/audiowrite.html"><code>audiowrite</code></a> is more limited, and only supports <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, and <i>*.mp4</i>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
-</p>
-
-<p>
-In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
-</p>
-<div class="post-date">15 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
-<p>
-As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
-</p>
-
-<p>
-So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).
-</p>
-
-<p>
-I say "(on OSX)", because on Windows, it does not print a damn thing. Nope, no <code>disp</code> output for Windows users.
-</p>
-
-<p>
-More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as <code>0x1a</code> aka <code>SUB</code> aka <i>substitute character</i>. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with <code>SUB</code>. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.
-</p>
-
-<p>
-To see why Matlab would do such a dastardly deed, you can use <code>feature('locale')</code> to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either <code>ISO-8859-1</code> (when your locale is pure <code>de_DE</code> or <code>en_US</code>) or <code>US-ASCII</code>, if it is something impure. In my case, German dates but English text. Because <code>US-ASCII</code> is obviously the most all-encompassing choice for such mixed-languages environments.
-</p>
-
-<p>
-But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit <code>%MATLABROOT%/bin/lcdata.xml</code>, and look for the entry for your locale. For me, this is one of
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">ISO-8859-1</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE.ISO8859-1</span><span style="color: #8b7355;">"</span>&gt; ...
-&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">ISO-8859-1</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US.ISO8859-1</span><span style="color: #8b7355;">"</span>&gt; ...
-</pre>
 </div>
-
-<p>
-In order to make Matlab's encoding default to UTF-8, change the entry for your locale to
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">UTF-8</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE.UTF-8</span><span style="color: #8b7355;">"</span>&gt; ...
-&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">UTF-8</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US.UTF-8</span><span style="color: #8b7355;">"</span>&gt; ...
-</pre>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
 </div>
-
-<p>
-With that, Matlab will print UTF-8 to the terminal.
-</p>
-
-<p>
-You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily&#x2026;
-</p>
-<div class="post-date">12 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-12-decisions-in-poe.html">Decisions in Pillars of Eternity</a></h1>
-<p>
-Early on in <a href="https://en.wikipedia.org/wiki/Pillars_of_Eternity">Pillars of Eternity</a>, you are tasked to kill one of two characters: Either you kill King Rethoric, who executed many innocent people, or you kill Rolsc, the leader of the rebellion. This is an interesting moral choice, but it is also profoundly sad that the game presents killing either of them as the only resolution to this conflict.
-</p>
-
-<p>
-It got me thinking. In the real world, I would not consider killing to be an option, ever. But in the game, you have to play by the game's rules. And furthermore, you can't just walk away and have the two characters duke it out amongst themselves: The whole game is built around the player, and without the player's interaction, the game world doesn't evolve.
-</p>
-
-<p>
-Thus, this conflict won't resolve itself, and the player is forced to kill. I wish there were a diplomatic option, or a way of fixing the underlying problem so the two characters are not at odds any more. I fear how these choices in video games might influence our perceptions of everyday choices, and crave for video games that offer interesting choices that do not revolve around murder.
-</p>
-
-<p>
-From what I hear, Planescape Torment did offer such choices. As did many of <a href="https://en.wikipedia.org/wiki/Gone_Home">my</a> <a href="https://en.wikipedia.org/wiki/The_Stanley_Parable">favorite</a> <a href="https://en.wikipedia.org/wiki/X-Plane_%28simulator%29">games</a> <a href="https://en.wikipedia.org/wiki/Civilization_V">of</a> <a href="https://en.wikipedia.org/wiki/The_Wolf_Among_Us">all</a> <a href="https://en.wikipedia.org/wiki/The_Witcher_%28video_game%29">times</a>.
-</p>
-<div class="post-date">12 Jan 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-01-12-julia.html">Julia First Impressions</a></h1>
-<blockquote>
-<p>
-Julia is a high-level dynamic programming language designed to address the requirements of high-performance numerical and scientific computing while also being effective for general purpose programming. —<a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Wikipedia</a>
-</p>
-</blockquote>
-
-<p>
-In other words, it is supposed to be as fast as C, as practical as Python, and as scientific as Matlab. The next step in mainstream scientific computing.
-</p>
-
-<p>
-However, Julia is still very young, and still evolving rapidly. But if any of the above is true, I am <i>very</i> interested!
-</p>
-
-<p>
-So, over the last few days, I re-implemented an algorithm in Julia. The previous version of the algorithm was written in Python. The algorithm spends most of it's time in FFTs, thus I didn't expect big performance gains.
-</p>
-
-<p>
-It is actually nice to have a language that is built for scientific computation. Coming from Python, it is refreshing to have <a href="http://docs.julialang.org/en/release-0.3/manual/arrays/">array literals</a>, ranges and <a href="http://docs.julialang.org/en/release-0.3/stdlib/math/">mathematics</a> available without importing anything. Much like Python, Julia also has a proper <a href="http://docs.julialang.org/en/release-0.3/manual/modules/">module system</a>, comprehensions, and more than one function per file.
-</p>
-
-<p>
-On the other hand, there are a few questionable design decisions as well. Julia uses 1-based, inclusive indexing (<code>range[1:3] = [1 2 3]</code> as opposed to Python's <code>range[:3] = [0, 1, 2]</code>). In practice, my experience is that I rarely need to add ±1 when indexing in Python, but I frequently need it in Julia/Matlab.
-</p>
-
-<p>
-Also, Julia has no docstrings, which makes me sad. The whole documentation story is sad, really: Documentation is often incomplete, or missing altogether. Unit testing is not widespread at all, and still crude. 0.4 will apparently add docstrings <a href="https://github.com/MichaelHatherly/Docile.jl">using macros</a>. This is ugly and doesn't work for one's own code, but it's certainly a step in the right direction. Those error messages would need some work, too.
-</p>
-
-<p>
-All of that is hopefully just a symptom of Julia being young, and will improve over time. Similarly, signal processing functions are missing entirely, and I had to re-implement some. The community is growing rapidly, though, and a lot of missing functionality can be installed through the <a href="http://docs.julialang.org/en/release-0.3/manual/packages/">package manager</a> already.
-</p>
-
-<p>
-When it comes to writing code, there is a lot to like about Julia. Julia's type system does impose a bit of overhead, but it also grants immediate benefits: Many of Python's runtime errors happen at evaluation time and functions can easily document their arguments' types. Also, thinking strictly about types actually improved performance by a good 20% in my algorithm.
-</p>
-
-<p>
-And finally, Performance is surprisingly good! Although my algorithm spends almost all of its time doing FFTs, Julia performed about twice as fast as Python. This is pretty much exactly twice as much as I had expected! It also exposed more of the <a href="http://docs.julialang.org/en/release-0.3/stdlib/math/?highlight=plan_fft#Base.plan_fft">features</a> of the underlying libraries, which could be used for another speed-up of some 10%.
-</p>
-
-<p>
-At the end of the day, Julia clearly isn't mature yet, but very promising. Documentation and libraries will no doubt grow, and performance is already excellent. I'll definitely keep an eye on it, and will experiment further when the opportunity presents itself.
-</p>
-<div id="archive">
-  <a href="archive.html">Older posts</a>
-</div>
-</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
+</html>

@@ -1,0 +1,131 @@
+#+title: Python Numeric Performance
+#+date: <2015-09-28 0:00>
+
+Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
+
+#+begin_src python
+def y_change_probability_python(oct_per_sec):
+    """ ... """
+    b = 1.781
+    mu = -0.301
+    return 1/(2*b)*math.exp(-abs(oct_per_sec-mu)/b)
+
+def y_idx_range_python(y_idx, max_y_factor, height):
+    """ ... """
+    y = (y_idx/height)*(max_y-min_y)+min_y
+    y_lo = max(y/max_y_factor, min_y)
+    y_hi = min(y*max_y_factor, max_y)
+    y_lo_idx = int((y_lo-min_y)/(max_y-min_y)*height)
+    y_hi_idx = int((y_hi-min_y)/(max_y-min_y)*height)
+    return y_lo_idx, y_hi_idx
+
+def find_tracks_python(cost_matrix, delta_x):
+    """ ... """
+    tracks = np.zeros(correlogram.shape, dtype=np.int64)
+    cum_cost = np.zeros(correlogram.shape)
+
+    max_y_factor = (2**5)**(delta_x)
+    height = correlogram.shape[1]
+
+    probabilities = np.empty((height, height))
+    for y_idx in range(height):
+        y = (y_idx/height)*(max_y-min_y)+min_y
+        for y_pre_idx in range(*y_idx_range_numba(y_idx, max_y_factor, height)):
+            y_pre = (y_pre_idx/height)*(max_y-min_y)+min_y
+            doubles_per_x = math.log2((y/y_pre)**(1/delta_x))
+            probabilities[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
+
+    for x_idx, cost_column in enumerate(cost_matrix):
+        if x_idx == 0:
+            cum_cost[x_idx] = cost_column
+            continue
+        for y_idx, cost in enumerate(cost_column):
+            for y_pre_idx in range(*y_idx_range_numba(y_idx, max_y_factor, height)):
+                weighted_cum_cost = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
+                if weighted_cum_cost > cum_cost[x_idx, y_idx]:
+                    cum_cost[x_idx, y_idx] = weighted_cum_cost
+                    tracks[x_idx, y_idx] = y_pre_idx
+            cum_cost[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
+
+    return tracks, cum_cost
+#+end_src
+
+I'm not going into the details of what this algorithm does, but note that it iterates over every column and row of the matrix ~cost_matrix~, and then iterates over another range ~previous_y_range~ for each of the values in ~cost_matrix~. On the way, it does a lot of basic arithmetic and some algebra.
+
+The problem is, this is very slow. For a \(90 \times 200\) ~cost_matrix~, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for [[http://www.numpy.org/][Numpy]]!
+
+If you can express your code in terms of linear algebra, Numpy will execute them in highly-optimized C code. The problem is, translating loops into linear algebra is not always easy. In this case, it took some effort:
+
+#+begin_src python
+def y_change_probability_numpy(doubles_per_x):
+    """ ... """
+    b = 1.781
+    mu = -0.301
+    return 1/(2*b)*np.exp(-np.abs(doubles_per_x-mu)/b)
+
+def find_frequency_tracks_numpy(cost_matrix, delta_x):
+    """ ... """
+    tracks = np.zeros(cost_matrix.shape, dtype=np.int)
+    cum_cost = np.zeros(cost_matrix.shape)
+
+    max_y_factor = (2**5)**(delta_t) # allow at most 5 octaves per second (3 sigma)
+    height = cost_matrix.shape[1]
+
+    # pre-allocate probabilities matrix as minus infinity. This matrix
+    # will be sparsely filled with positive probability values, and
+    # empty values will have minus infinite probability.
+    probabilities = -np.ones((height, height))*np.inf
+    for y_idx in range(probabilities.shape[0]):
+        y = (y_idx/height)*(max_y-min_y)+min_y
+        y_pre_idx = np.arange(int((max(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
+                              int((min(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
+        y_pre = (y_pre_idx/height)*(max_y-min_y)+min_y
+        doubles_per_x = np.log2((y/y_pre)**(1/delta_x))
+        probabilities[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
+
+    cum_cost[0] = cost_matrix[0]
+    for x_idx in range(1, len(cost_matrix)):
+        cost_column = cost_matrix[x_idx:x_idx+1] # extract cost_column as 2d-vector!
+        weighted_cum_cost = cum_cost[x_idx-1] + cost_column.T*probabilities
+        tracks[x_idx] = np.argmax(weighted_cum_cost, axis=1)
+        cum_cost[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
+
+    return tracks, cum_corrs
+#+end_src
+
+This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a \(90 \times 200\) ~cost_matrix~, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.
+
+Another avenue for performance optimization is [[http://numba.pydata.org/][Numba]]. Numba applies dark and powerful magic to compile humble Python functions into blazingly fast machine code. It is proper magic, if you ask me. Simply add an innocuous little decorator to your functions, and let Numba do it's thing. If all goes well, your code will work just as before, except with unheard-of performance:
+
+#+begin_src python
+@jit(numba.float64(numba.float64), nopython=True)
+def y_change_probability_numba(doubles_per_x):
+    ...
+
+@jit((numba.int64, numba.float64, numba.int64), nopython=True)
+def y_idx_range_numba(y_idx, max_y_factor, height):
+    ...
+
+@jit((numba.float64[:,:], numba.float64), nopython=True)
+def find_tracks_numba(cost_matrix, delta_t):
+    ...
+#+end_src
+
+However, Numba is no silver bullet, and does not support all of Python yet. In the present case, it is missing support for ~enumerate~ for Numpy matrices. Thus, I had to rewrite the first two loops like this:
+
+#+begin_src python
+# python version
+for x_idx, cost_column in enumerate(cost_matrix):
+    ...
+
+# numba version
+for x_idx in range(len(cost_matrix)):
+    cost_column = cost_matrix[x_idx]
+    ...
+#+end_src
+
+Another area that proved problematic is N-D slice writing. Instead of using expressions like ~m1[x,y:y+3] = m2~, you have to write ~for idx in range(3): m1[x,y+idx] = m2[idx]~. Not a difficult transformation, but it basically forced me to unroll all the nice vectorized code of the Numpy version back to their original pure-Python form. That said, Numba is getting better and better, and many constructs that used to be uncompilable (~yield~) are not a problem any more.
+
+Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This is a 120-fold increase in performance, and still seven times faster than Numpy, with minimal code changes. This is proper magic!
+
+So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code /more beautiful/. Numba on the other hand often requires you to make your code /less beautiful/ to conform to it's subset of compilable Python.
