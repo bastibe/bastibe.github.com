@@ -4,6 +4,48 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
+  <lastBuildDate>Di, 29 Sep 2015 09:50:03 +0200</lastBuildDate>
+<item>
+  <title>Numpy Broadcasting Rules</title>
+  <description><![CDATA[<p>
+They say that all arithmetic operations in Numpy behave like their element-wise cousins in Matlab. This is wrong, and seriously tripped me up last week.
+</p>
+
+<p>
+In particular, this is what happens when you multiply an array with a matrix<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> in Numpy:
+</p>
+
+<pre class="example">
+     [[  1],           [[1, 2, 3],       [[ 1,    2,   3],
+      [ 10],       *    [4, 5, 6],   =    [ 40,  50,  60],
+      [100]]            [7, 8, 9]]        [700, 800, 900]]
+
+ [  1,  10, 100]       [[1, 2, 3],       [[  1,  20, 300],
+        OR         *    [4, 5, 6],   =    [  4,  50, 600],
+[[  1,  10, 100]]       [7, 8, 9]]        [  7,  80, 900]]
+</pre>
+
+<p>
+They behave as if each row was evaluated separately, and singular dimensions are repeated where necessary. It helps to think about them as row-wise, instead of element-wise. This is particularly important in the second example, where the <i>whole</i> 1d-array is multiplied with <i>every row</i> of the 2d-array.
+</p>
+
+<p>
+Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as in <code>[a[n]*b[n] for n in range(len(a))]</code>. I guess that's why this is called <i>broadcasting</i>, and not <i>element-wise</i>.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+"matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
+</p></div></div>
+
+
+</div>
+</div>]]></description>
+  <link>http://bastibe.de/2015-09-29-numpy-broadcasting-rules.html</link>
+  <pubDate>Di, 29 Sep 2015 00:00:00 +0200</pubDate>
+</item>
 <item>
   <title>Python Numeric Performance</title>
   <description><![CDATA[<p>
@@ -640,7 +682,7 @@ As for the thesis text, I used Org's export functionality to convert the Org sou
 <pre class="src src-org"><span style="color: #7f7f7f;">#+CAPTION:</span> <span style="color: #7f7f7f;">Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
 <span style="color: #7f7f7f;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
 <span style="color: #7f7f7f;">#+NAME: fig:summary_tracks</span>
-<span style="color: #3a5fcd; text-decoration: underline;">[[file:images/summary_tracks.pdf]]</span>
+<span style="color: #3a5fcd; text-decoration: underline;">file:images/summary_tracks.pdf</span>
 </pre>
 </div>
 
@@ -1323,9 +1365,9 @@ Adding a front page is simple, too. My front page is simply a normal page called
 
 <pre class="src src-org"><span style="color: #7f7f7f;">#+TITLE:</span> <span style="color: #191970; font-weight: bold;">RECENT POSTS</span>
 
-<span style="color: #0000cd;">* </span><span style="color: #3a5fcd; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][Speeding up Matplotlib]]</span>
+<span style="color: #0000cd;">* </span><span style="color: #3a5fcd; text-decoration: underline;">Speeding up Matplotlib</span>
 <span style="color: #7f7f7f;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
-<span style="color: #3a5fcd; text-decoration: underline;">[[file:2013-05-30-speeding-up-matplotlib.org][read more...]]</span>
+<span style="color: #3a5fcd; text-decoration: underline;">read more...</span>
 </pre>
 </div>
 
@@ -2926,14 +2968,12 @@ So Kindle.app was updated through the App Store and did not start any more. It j
 A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-sh">Dyld Error Message:
+<pre class="example">
+Dyld Error Message:
   Library not loaded: @executable_path/../Frameworks/libWEbCoreKRF.dylib
   Referenced from: /Applications/Kindle.app/Contents/Frameworks/libWebCoreViewer.dylib
   Reason: image not found
 </pre>
-</div>
 
 <p>
 <code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type
@@ -3019,12 +3059,10 @@ I ran into this error twice now and wasted an hour both times, so it is time to 
 If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-sh">UNEXPECTED ERROR:
-<span style="color: #8b7355;">'Text'</span> object has no attribute <span style="color: #8b7355;">'data'</span>
+<pre class="example">
+UNEXPECTED ERROR:
+'Text' object has no attribute 'data'
 </pre>
-</div>
 
 <p>
 You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.
@@ -3109,11 +3147,9 @@ After that, I disconnected the display and immediately was stumped because I now
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-sh">/dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
+<pre class="example">
+/dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
 </pre>
-</div>
 
 <p>
 Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.
@@ -3128,21 +3164,17 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-sh">/home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
+<pre class="example">
+/home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
 </pre>
-</div>
 
 <p>
 Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-sh">- -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
+<pre class="example">
+- -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
 </pre>
-</div>
 
 <p>
 <del>(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)</del>
@@ -4138,44 +4170,42 @@ Things like this drive me nuts. I can see that tags are being generated, but Tag
 Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:
 </p>
 
-<div class="org-src-container">
-
-<pre class="src src-sh"><span style="color: #8b7355;">" add a definition for Objective-C to tagbar</span>
-<span style="color: #8b7355;">let g:tagbar_type_objc = {</span>
-<span style="color: #8b7355;">    \ 'ctagstype' : 'ObjectiveC',</span>
-<span style="color: #8b7355;">    \ 'kinds'     : [</span>
-<span style="color: #8b7355;">        \ 'i:interface',</span>
-<span style="color: #8b7355;">        \ 'I:implementation',</span>
-<span style="color: #8b7355;">        \ 'p:Protocol',</span>
-<span style="color: #8b7355;">        \ 'm:Object_method',</span>
-<span style="color: #8b7355;">        \ 'c:Class_method',</span>
-<span style="color: #8b7355;">        \ 'v:Global_variable',</span>
-<span style="color: #8b7355;">        \ 'F:Object field',</span>
-<span style="color: #8b7355;">        \ 'f:function',</span>
-<span style="color: #8b7355;">        \ 'p:property',</span>
-<span style="color: #8b7355;">        \ 't:type_alias',</span>
-<span style="color: #8b7355;">        \ 's:type_structure',</span>
-<span style="color: #8b7355;">        \ 'e:enumeration',</span>
-<span style="color: #8b7355;">        \ 'M:preprocessor_macro',</span>
-<span style="color: #8b7355;">    \ ],</span>
-<span style="color: #8b7355;">    \ 'sro'        : ' ',</span>
-<span style="color: #8b7355;">    \ 'kind2scope' : {</span>
-<span style="color: #8b7355;">        \ 'i' : 'interface',</span>
-<span style="color: #8b7355;">        \ 'I' : 'implementation',</span>
-<span style="color: #8b7355;">        \ 'p' : 'Protocol',</span>
-<span style="color: #8b7355;">        \ 's' : 'type_structure',</span>
-<span style="color: #8b7355;">        \ 'e' : 'enumeration'</span>
-<span style="color: #8b7355;">    \ },</span>
-<span style="color: #8b7355;">    \ 'scope2kind' : {</span>
-<span style="color: #8b7355;">        \ 'interface'      : 'i',</span>
-<span style="color: #8b7355;">        \ 'implementation' : 'I',</span>
-<span style="color: #8b7355;">        \ 'Protocol'       : 'p',</span>
-<span style="color: #8b7355;">        \ 'type_structure' : 's',</span>
-<span style="color: #8b7355;">        \ 'enumeration'    : 'e'</span>
-<span style="color: #8b7355;">    \ }</span>
-<span style="color: #8b7355;">\ }</span>
+<pre class="example">
+" add a definition for Objective-C to tagbar
+let g:tagbar_type_objc = {
+    \ 'ctagstype' : 'ObjectiveC',
+    \ 'kinds'     : [
+        \ 'i:interface',
+        \ 'I:implementation',
+        \ 'p:Protocol',
+        \ 'm:Object_method',
+        \ 'c:Class_method',
+        \ 'v:Global_variable',
+        \ 'F:Object field',
+        \ 'f:function',
+        \ 'p:property',
+        \ 't:type_alias',
+        \ 's:type_structure',
+        \ 'e:enumeration',
+        \ 'M:preprocessor_macro',
+    \ ],
+    \ 'sro'        : ' ',
+    \ 'kind2scope' : {
+        \ 'i' : 'interface',
+        \ 'I' : 'implementation',
+        \ 'p' : 'Protocol',
+        \ 's' : 'type_structure',
+        \ 'e' : 'enumeration'
+    \ },
+    \ 'scope2kind' : {
+        \ 'interface'      : 'i',
+        \ 'implementation' : 'I',
+        \ 'Protocol'       : 'p',
+        \ 'type_structure' : 's',
+        \ 'enumeration'    : 'e'
+    \ }
+\ }
 </pre>
-</div>
 
 <p>
 With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!

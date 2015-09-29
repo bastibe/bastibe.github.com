@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Numpy Broadcasting Rules</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">29 Sep 2015</div>
+<h1 class="post-title">Numpy Broadcasting Rules</h1>
+<p>
+They say that all arithmetic operations in Numpy behave like their element-wise cousins in Matlab. This is wrong, and seriously tripped me up last week.
+</p>
+
+<p>
+In particular, this is what happens when you multiply an array with a matrix<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> in Numpy:
+</p>
+
+<pre class="example">
+     [[  1],           [[1, 2, 3],       [[ 1,    2,   3],
+      [ 10],       *    [4, 5, 6],   =    [ 40,  50,  60],
+      [100]]            [7, 8, 9]]        [700, 800, 900]]
+
+ [  1,  10, 100]       [[1, 2, 3],       [[  1,  20, 300],
+        OR         *    [4, 5, 6],   =    [  4,  50, 600],
+[[  1,  10, 100]]       [7, 8, 9]]        [  7,  80, 900]]
+</pre>
+
+<p>
+They behave as if each row was evaluated separately, and singular dimensions are repeated where necessary. It helps to think about them as row-wise, instead of element-wise. This is particularly important in the second example, where the <i>whole</i> 1d-array is multiplied with <i>every row</i> of the 2d-array.
+</p>
+
+<p>
+Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as in <code>[a[n]*b[n] for n in range(len(a))]</code>. I guess that's why this is called <i>broadcasting</i>, and not <i>element-wise</i>.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+"matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
