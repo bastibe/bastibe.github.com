@@ -26,7 +26,46 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">29 Sep 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-09-29-numpy-broadcasting-rules.html">Numpy Broadcasting Rules</a></h1>
+<div id="content"><div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+<p>
+On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
+</p>
+
+<p>
+For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http://www.sentex.net/~mwandel/jhead/">command</a> <a href="http://owl.phy.queensu.ca/~phil/exiftool/">line</a> <a href="http://www.exiv2.org/#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
+</p>
+
+<p>
+So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
+</p>
+
+<p>
+If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <i>either</i> the file creation date, <i>or</i> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.
+</p>
+
+<p>
+Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c9af1;">import</span> os.path
+<span style="color: #1c9af1;">import</span> os
+<span style="color: #1c9af1;">import</span> datetime
+<span style="color: #919191;"># </span><span style="color: #919191;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #1c9af1;">for</span> index <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(426, 465):
+    <span style="color: #379a6a;">filename</span> = <span style="color: #9d8567;">'GOPR0{}.MP4'</span>.<span style="color: #d87a00;">format</span>(index)
+    <span style="color: #919191;"># </span><span style="color: #919191;">extract old date:</span>
+    <span style="color: #379a6a;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #919191;"># </span><span style="color: #919191;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #379a6a;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #919191;"># </span><span style="color: #919191;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #9d8567;">'SetFile -d "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #919191;"># </span><span style="color: #919191;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #9d8567;">'SetFile -m "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+</pre>
+</div>
+<div class="post-date">29 Sep 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-09-29-numpy-broadcasting-rules.html">Numpy Broadcasting Rules</a></h1>
 <p>
 They say that all arithmetic operations in Numpy behave like their element-wise cousins in Matlab. This is wrong, and seriously tripped me up last week.
 </p>
@@ -69,50 +108,50 @@ Recently, I was working on a dynamic programming algorithm that involves a lot o
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_python</span>(oct_per_sec):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">b</span> = 1.781
-    <span style="color: #2e8b57;">mu</span> = -0.301
-    <span style="color: #1c86ee;">return</span> 1/(2*b)*math.exp(-<span style="color: #cd6600;">abs</span>(oct_per_sec-mu)/b)
+<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_change_probability_python</span>(oct_per_sec):
+    <span style="color: #9d8567;">""" ... """</span>
+    <span style="color: #379a6a;">b</span> = 1.781
+    <span style="color: #379a6a;">mu</span> = -0.301
+    <span style="color: #1c9af1;">return</span> 1/(2*b)*math.exp(-<span style="color: #d87a00;">abs</span>(oct_per_sec-mu)/b)
 
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_python</span>(y_idx, max_y_factor, height):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-    <span style="color: #2e8b57;">y_lo</span> = <span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)
-    <span style="color: #2e8b57;">y_hi</span> = <span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)
-    <span style="color: #2e8b57;">y_lo_idx</span> = <span style="color: #cd6600;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
-    <span style="color: #2e8b57;">y_hi_idx</span> = <span style="color: #cd6600;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
-    <span style="color: #1c86ee;">return</span> y_lo_idx, y_hi_idx
+<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_idx_range_python</span>(y_idx, max_y_factor, height):
+    <span style="color: #9d8567;">""" ... """</span>
+    <span style="color: #379a6a;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+    <span style="color: #379a6a;">y_lo</span> = <span style="color: #d87a00;">max</span>(y/max_y_factor, min_y)
+    <span style="color: #379a6a;">y_hi</span> = <span style="color: #d87a00;">min</span>(y*max_y_factor, max_y)
+    <span style="color: #379a6a;">y_lo_idx</span> = <span style="color: #d87a00;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
+    <span style="color: #379a6a;">y_hi_idx</span> = <span style="color: #d87a00;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
+    <span style="color: #1c9af1;">return</span> y_lo_idx, y_hi_idx
 
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_python</span>(cost_matrix, delta_x):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
-    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(correlogram.shape)
+<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">find_tracks_python</span>(cost_matrix, delta_x):
+    <span style="color: #9d8567;">""" ... """</span>
+    <span style="color: #379a6a;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
+    <span style="color: #379a6a;">cum_cost</span> = np.zeros(correlogram.shape)
 
-    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_x)
-    <span style="color: #2e8b57;">height</span> = correlogram.shape[1]
+    <span style="color: #379a6a;">max_y_factor</span> = (2**5)**(delta_x)
+    <span style="color: #379a6a;">height</span> = correlogram.shape[1]
 
-    <span style="color: #2e8b57;">probabilities</span> = np.empty((height, height))
-    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(height):
-        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-            <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-            <span style="color: #2e8b57;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
-            <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
+    <span style="color: #379a6a;">probabilities</span> = np.empty((height, height))
+    <span style="color: #1c9af1;">for</span> y_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(height):
+        <span style="color: #379a6a;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #1c9af1;">for</span> y_pre_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
+            <span style="color: #379a6a;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
+            <span style="color: #379a6a;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
+            <span style="color: #379a6a;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
 
-    <span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
-        <span style="color: #1c86ee;">if</span> x_idx == 0:
-            <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cost_column
-            <span style="color: #1c86ee;">continue</span>
-        <span style="color: #1c86ee;">for</span> y_idx, cost <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_column):
-            <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-                <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
-                <span style="color: #1c86ee;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
-                    <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
-                    <span style="color: #2e8b57;">tracks</span>[x_idx, y_idx] = y_pre_idx
-            <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
+    <span style="color: #1c9af1;">for</span> x_idx, cost_column <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">enumerate</span>(cost_matrix):
+        <span style="color: #1c9af1;">if</span> x_idx == 0:
+            <span style="color: #379a6a;">cum_cost</span>[x_idx] = cost_column
+            <span style="color: #1c9af1;">continue</span>
+        <span style="color: #1c9af1;">for</span> y_idx, cost <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">enumerate</span>(cost_column):
+            <span style="color: #1c9af1;">for</span> y_pre_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
+                <span style="color: #379a6a;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
+                <span style="color: #1c9af1;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
+                    <span style="color: #379a6a;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
+                    <span style="color: #379a6a;">tracks</span>[x_idx, y_idx] = y_pre_idx
+            <span style="color: #379a6a;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
 
-    <span style="color: #1c86ee;">return</span> tracks, cum_cost
+    <span style="color: #1c9af1;">return</span> tracks, cum_cost
 </pre>
 </div>
 
@@ -130,40 +169,40 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numpy</span>(doubles_per_x):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">b</span> = 1.781
-    <span style="color: #2e8b57;">mu</span> = -0.301
-    <span style="color: #1c86ee;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #cd6600;">abs</span>(doubles_per_x-mu)/b)
+<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_change_probability_numpy</span>(doubles_per_x):
+    <span style="color: #9d8567;">""" ... """</span>
+    <span style="color: #379a6a;">b</span> = 1.781
+    <span style="color: #379a6a;">mu</span> = -0.301
+    <span style="color: #1c9af1;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #d87a00;">abs</span>(doubles_per_x-mu)/b)
 
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #cd6600;">int</span>)
-    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(cost_matrix.shape)
+<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
+    <span style="color: #9d8567;">""" ... """</span>
+    <span style="color: #379a6a;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #d87a00;">int</span>)
+    <span style="color: #379a6a;">cum_cost</span> = np.zeros(cost_matrix.shape)
 
-    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">allow at most 5 octaves per second (3 sigma)</span>
-    <span style="color: #2e8b57;">height</span> = cost_matrix.shape[1]
+    <span style="color: #379a6a;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #919191;"># </span><span style="color: #919191;">allow at most 5 octaves per second (3 sigma)</span>
+    <span style="color: #379a6a;">height</span> = cost_matrix.shape[1]
 
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">will be sparsely filled with positive probability values, and</span>
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">empty values will have minus infinite probability.</span>
-    <span style="color: #2e8b57;">probabilities</span> = -np.ones((height, height))*np.inf
-    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(probabilities.shape[0]):
-        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #2e8b57;">y_pre_idx</span> = np.arange(<span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
-                              <span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
-        <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #2e8b57;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
-        <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
+    <span style="color: #919191;"># </span><span style="color: #919191;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">will be sparsely filled with positive probability values, and</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">empty values will have minus infinite probability.</span>
+    <span style="color: #379a6a;">probabilities</span> = -np.ones((height, height))*np.inf
+    <span style="color: #1c9af1;">for</span> y_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(probabilities.shape[0]):
+        <span style="color: #379a6a;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #379a6a;">y_pre_idx</span> = np.arange(<span style="color: #d87a00;">int</span>((<span style="color: #d87a00;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
+                              <span style="color: #d87a00;">int</span>((<span style="color: #d87a00;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
+        <span style="color: #379a6a;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #379a6a;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
+        <span style="color: #379a6a;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
 
-    <span style="color: #2e8b57;">cum_cost</span>[0] = cost_matrix[0]
-    <span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(1, <span style="color: #cd6600;">len</span>(cost_matrix)):
-        <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract cost_column as 2d-vector!</span>
-        <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
-        <span style="color: #2e8b57;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
-        <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
+    <span style="color: #379a6a;">cum_cost</span>[0] = cost_matrix[0]
+    <span style="color: #1c9af1;">for</span> x_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(1, <span style="color: #d87a00;">len</span>(cost_matrix)):
+        <span style="color: #379a6a;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #919191;"># </span><span style="color: #919191;">extract cost_column as 2d-vector!</span>
+        <span style="color: #379a6a;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
+        <span style="color: #379a6a;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
+        <span style="color: #379a6a;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
 
-    <span style="color: #1c86ee;">return</span> tracks, cum_corrs
+    <span style="color: #1c9af1;">return</span> tracks, cum_corrs
 </pre>
 </div>
 
@@ -177,16 +216,16 @@ Another avenue for performance optimization is <a href="http://numba.pydata.org/
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #00688b;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numba</span>(doubles_per_x):
+<pre class="src src-python"><span style="color: #007b9c;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #809a4d;">True</span>)
+<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_change_probability_numba</span>(doubles_per_x):
     ...
 
-<span style="color: #00688b;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #6e8b3d;">True</span>)
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
+<span style="color: #007b9c;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #809a4d;">True</span>)
+<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
     ...
 
-<span style="color: #00688b;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_numba</span>(cost_matrix, delta_t):
+<span style="color: #007b9c;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #809a4d;">True</span>)
+<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">find_tracks_numba</span>(cost_matrix, delta_t):
     ...
 </pre>
 </div>
@@ -197,13 +236,13 @@ However, Numba is no silver bullet, and does not support all of Python yet. In t
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">python version</span>
-<span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
+<pre class="src src-python"><span style="color: #919191;"># </span><span style="color: #919191;">python version</span>
+<span style="color: #1c9af1;">for</span> x_idx, cost_column <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">enumerate</span>(cost_matrix):
     ...
 
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">numba version</span>
-<span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(<span style="color: #cd6600;">len</span>(cost_matrix)):
-    <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx]
+<span style="color: #919191;"># </span><span style="color: #919191;">numba version</span>
+<span style="color: #1c9af1;">for</span> x_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(<span style="color: #d87a00;">len</span>(cost_matrix)):
+    <span style="color: #379a6a;">cost_column</span> = cost_matrix[x_idx]
     ...
 </pre>
 </div>
@@ -262,8 +301,8 @@ But luckily, there is help. Matlab has a widely documented (not) and easily disc
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">ISO-8859-1</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE.ISO8859-1</span><span style="color: #8b7355;">"</span>&gt; ...
-&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">ISO-8859-1</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US.ISO8859-1</span><span style="color: #8b7355;">"</span>&gt; ...
+<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
+&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
 </pre>
 </div>
 
@@ -273,8 +312,8 @@ In order to make Matlab's encoding default to UTF-8, change the entry for your l
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">UTF-8</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">de_DE.UTF-8</span><span style="color: #8b7355;">"</span>&gt; ...
-&lt;<span style="color: #cd9b1d;">locale</span> <span style="color: #2e8b57;">name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">encoding</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">UTF-8</span><span style="color: #8b7355;">"</span> <span style="color: #2e8b57;">xpg_name</span>=<span style="color: #8b7355;">"</span><span style="color: #8b7355;">en_US.UTF-8</span><span style="color: #8b7355;">"</span>&gt; ...
+<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
+&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
 </pre>
 </div>
 
@@ -284,22 +323,6 @@ With that, Matlab will print UTF-8 to the terminal.
 
 <p>
 You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily&#x2026;
-</p>
-<div class="post-date">12 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-12-decisions-in-poe.html">Decisions in Pillars of Eternity</a></h1>
-<p>
-Early on in <a href="https://en.wikipedia.org/wiki/Pillars_of_Eternity">Pillars of Eternity</a>, you are tasked to kill one of two characters: Either you kill King Rethoric, who executed many innocent people, or you kill Rolsc, the leader of the rebellion. This is an interesting moral choice, but it is also profoundly sad that the game presents killing either of them as the only resolution to this conflict.
-</p>
-
-<p>
-It got me thinking. In the real world, I would not consider killing to be an option, ever. But in the game, you have to play by the game's rules. And furthermore, you can't just walk away and have the two characters duke it out amongst themselves: The whole game is built around the player, and without the player's interaction, the game world doesn't evolve.
-</p>
-
-<p>
-Thus, this conflict won't resolve itself, and the player is forced to kill. I wish there were a diplomatic option, or a way of fixing the underlying problem so the two characters are not at odds any more. I fear how these choices in video games might influence our perceptions of everyday choices, and crave for video games that offer interesting choices that do not revolve around murder.
-</p>
-
-<p>
-From what I hear, Planescape Torment did offer such choices. As did many of <a href="https://en.wikipedia.org/wiki/Gone_Home">my</a> <a href="https://en.wikipedia.org/wiki/The_Stanley_Parable">favorite</a> <a href="https://en.wikipedia.org/wiki/X-Plane_%28simulator%29">games</a> <a href="https://en.wikipedia.org/wiki/Civilization_V">of</a> <a href="https://en.wikipedia.org/wiki/The_Wolf_Among_Us">all</a> <a href="https://en.wikipedia.org/wiki/The_Witcher_%28video_game%29">times</a>.
 </p>
 <div id="archive">
   <a href="archive.html">Older posts</a>

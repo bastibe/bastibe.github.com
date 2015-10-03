@@ -4,7 +4,51 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Di, 29 Sep 2015 09:50:03 +0200</lastBuildDate>
+  <lastBuildDate>Sat, 03 Oct 2015 12:50:25 +0200</lastBuildDate>
+<item>
+  <title>Changing File Creation Dates in OSX</title>
+  <description><![CDATA[<p>
+On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
+</p>
+
+<p>
+For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http://www.sentex.net/~mwandel/jhead/">command</a> <a href="http://owl.phy.queensu.ca/~phil/exiftool/">line</a> <a href="http://www.exiv2.org/#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
+</p>
+
+<p>
+So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
+</p>
+
+<p>
+If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <i>either</i> the file creation date, <i>or</i> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.
+</p>
+
+<p>
+Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c9af1;">import</span> os.path
+<span style="color: #1c9af1;">import</span> os
+<span style="color: #1c9af1;">import</span> datetime
+<span style="color: #919191;"># </span><span style="color: #919191;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #1c9af1;">for</span> index <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(426, 465):
+    <span style="color: #379a6a;">filename</span> = <span style="color: #9d8567;">'GOPR0{}.MP4'</span>.<span style="color: #d87a00;">format</span>(index)
+    <span style="color: #919191;"># </span><span style="color: #919191;">extract old date:</span>
+    <span style="color: #379a6a;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #919191;"># </span><span style="color: #919191;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #379a6a;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #919191;"># </span><span style="color: #919191;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #9d8567;">'SetFile -d "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #919191;"># </span><span style="color: #919191;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #9d8567;">'SetFile -m "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+</pre>
+</div>
+]]></description>
+  <link>http://bastibe.de/2015-10-03-changing-file-creation-dates.html</link>
+  <pubDate>Sat, 03 Oct 2015 00:00:00 +0200</pubDate>
+</item>
 <item>
   <title>Numpy Broadcasting Rules</title>
   <description><![CDATA[<p>
