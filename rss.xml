@@ -4,7 +4,38 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Sat, 03 Oct 2015 12:50:25 +0200</lastBuildDate>
+  <lastBuildDate>Fr, 16 Okt 2015 14:15:23 +0200</lastBuildDate>
+<item>
+  <title>OS X Finder Woes</title>
+  <description><![CDATA[
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png" />
+</p>
+</div>
+
+<p>
+The Mac. It used to be the most streamlined, thought-through general computing device on the market.
+</p>
+
+<p>
+Even it's file management used to be top-notch. There were many cool little touches. One particularly useful feature was the <i>Proxy Icon</i>&#x2013;if a window displayed a file's content, that file's icon would show up in the window's title. And you could drag that icon directly onto a thumb drive or email, without having to use the Finder. But the Finder, too, had many neat little features. I loved the fact that when you renamed a file in an alphabetically sorted file list, Finder would not immediately re-shuffle it to its new location, but would wait half a second before doing so. When renaming multiple files, this was really useful, since you could go through them one by one and rename them, simply by pressing arrow keys and return.
+</p>
+
+<p>
+But as you might have guessed from my use of the past tense, these golden days are gone. The Finder used to know a JPEG from a ZIP regardless of file extension. Now it doesn't any more. The Proxy Icon is still draggable, but it will create an alias instead of a copy&#x2013;perfectly useless on a thumb drive or in an email.
+</p>
+
+<p>
+And with the newest version of OS X, El Capitan, they finally blew it for me. Before, even though the Finder inexplicably never had the ability to cut and paste files, you could always install programs like <a href="http://totalfinder.binaryage.com/">TotalFinder</a> to fix that. Not so with El Capitan. The Finder now is holy land, and can not be touched any more by third parties. So no more cut and paste, no more un-hiding system files. No more side-by-side Finder tabs. And brand new with El Capitan as well: No more waiting after renaming. Now, when you rename a file, it is immediately re-sorted to its new position, thus making renaming multiple files terribly inconvenient.
+</p>
+
+<p>
+So, good bye OS X. I updated my work laptop first, and I regret it. I never regretted an OS X update before. My home machine is not going to get the update. It is honestly sad to see my once-beloved Mac platform becoming worse and worse and worse with every new release.
+</p>
+]]></description>
+  <link>http://bastibe.de/2015-10-16-finder-woes.html</link>
+  <pubDate>Fr, 16 Okt 2015 09:51:00 +0200</pubDate>
+</item>
 <item>
   <title>Changing File Creation Dates in OSX</title>
   <description><![CDATA[<p>
@@ -29,25 +60,25 @@ Anyway, here's a small Python script that changes the file creation date (but no
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> os.path
-<span style="color: #1c9af1;">import</span> os
-<span style="color: #1c9af1;">import</span> datetime
-<span style="color: #919191;"># </span><span style="color: #919191;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #1c9af1;">for</span> index <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(426, 465):
-    <span style="color: #379a6a;">filename</span> = <span style="color: #9d8567;">'GOPR0{}.MP4'</span>.<span style="color: #d87a00;">format</span>(index)
-    <span style="color: #919191;"># </span><span style="color: #919191;">extract old date:</span>
-    <span style="color: #379a6a;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #919191;"># </span><span style="color: #919191;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #379a6a;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #919191;"># </span><span style="color: #919191;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #9d8567;">'SetFile -d "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #919191;"># </span><span style="color: #919191;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #9d8567;">'SetFile -m "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+<pre class="src src-python"><span style="color: #1c86ee;">import</span> os.path
+<span style="color: #1c86ee;">import</span> os
+<span style="color: #1c86ee;">import</span> datetime
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #1c86ee;">for</span> index <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(426, 465):
+    <span style="color: #2e8b57;">filename</span> = <span style="color: #8b7355;">'GOPR0{}.MP4'</span>.<span style="color: #cd6600;">format</span>(index)
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract old date:</span>
+    <span style="color: #2e8b57;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #2e8b57;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #8b7355;">'SetFile -d "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #8b7355;">'SetFile -m "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
 ]]></description>
   <link>http://bastibe.de/2015-10-03-changing-file-creation-dates.html</link>
-  <pubDate>Sat, 03 Oct 2015 00:00:00 +0200</pubDate>
+  <pubDate>Sa, 03 Okt 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
   <title>Numpy Broadcasting Rules</title>

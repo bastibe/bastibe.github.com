@@ -26,7 +26,33 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+<div id="content"><div class="post-date">16 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png" />
+</p>
+</div>
+
+<p>
+The Mac. It used to be the most streamlined, thought-through general computing device on the market.
+</p>
+
+<p>
+Even it's file management used to be top-notch. There were many cool little touches. One particularly useful feature was the <i>Proxy Icon</i>&#x2013;if a window displayed a file's content, that file's icon would show up in the window's title. And you could drag that icon directly onto a thumb drive or email, without having to use the Finder. But the Finder, too, had many neat little features. I loved the fact that when you renamed a file in an alphabetically sorted file list, Finder would not immediately re-shuffle it to its new location, but would wait half a second before doing so. When renaming multiple files, this was really useful, since you could go through them one by one and rename them, simply by pressing arrow keys and return.
+</p>
+
+<p>
+But as you might have guessed from my use of the past tense, these golden days are gone. The Finder used to know a JPEG from a ZIP regardless of file extension. Now it doesn't any more. The Proxy Icon is still draggable, but it will create an alias instead of a copy&#x2013;perfectly useless on a thumb drive or in an email.
+</p>
+
+<p>
+And with the newest version of OS X, El Capitan, they finally blew it for me. Before, even though the Finder inexplicably never had the ability to cut and paste files, you could always install programs like <a href="http://totalfinder.binaryage.com/">TotalFinder</a> to fix that. Not so with El Capitan. The Finder now is holy land, and can not be touched any more by third parties. So no more cut and paste, no more un-hiding system files. No more side-by-side Finder tabs. And brand new with El Capitan as well: No more waiting after renaming. Now, when you rename a file, it is immediately re-sorted to its new position, thus making renaming multiple files terribly inconvenient.
+</p>
+
+<p>
+So, good bye OS X. I updated my work laptop first, and I regret it. I never regretted an OS X update before. My home machine is not going to get the update. It is honestly sad to see my once-beloved Mac platform becoming worse and worse and worse with every new release.
+</p>
+<div class="post-date">03 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
 <p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
 </p>
@@ -49,20 +75,20 @@ Anyway, here's a small Python script that changes the file creation date (but no
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> os.path
-<span style="color: #1c9af1;">import</span> os
-<span style="color: #1c9af1;">import</span> datetime
-<span style="color: #919191;"># </span><span style="color: #919191;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #1c9af1;">for</span> index <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(426, 465):
-    <span style="color: #379a6a;">filename</span> = <span style="color: #9d8567;">'GOPR0{}.MP4'</span>.<span style="color: #d87a00;">format</span>(index)
-    <span style="color: #919191;"># </span><span style="color: #919191;">extract old date:</span>
-    <span style="color: #379a6a;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #919191;"># </span><span style="color: #919191;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #379a6a;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #919191;"># </span><span style="color: #919191;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #9d8567;">'SetFile -d "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #919191;"># </span><span style="color: #919191;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #9d8567;">'SetFile -m "{}" {}'</span>.<span style="color: #d87a00;">format</span>(new_date.strftime(<span style="color: #9d8567;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+<pre class="src src-python"><span style="color: #1c86ee;">import</span> os.path
+<span style="color: #1c86ee;">import</span> os
+<span style="color: #1c86ee;">import</span> datetime
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #1c86ee;">for</span> index <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(426, 465):
+    <span style="color: #2e8b57;">filename</span> = <span style="color: #8b7355;">'GOPR0{}.MP4'</span>.<span style="color: #cd6600;">format</span>(index)
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract old date:</span>
+    <span style="color: #2e8b57;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #2e8b57;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #8b7355;">'SetFile -d "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #8b7355;">'SetFile -m "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
 <div class="post-date">29 Sep 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-09-29-numpy-broadcasting-rules.html">Numpy Broadcasting Rules</a></h1>
@@ -108,50 +134,50 @@ Recently, I was working on a dynamic programming algorithm that involves a lot o
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_change_probability_python</span>(oct_per_sec):
-    <span style="color: #9d8567;">""" ... """</span>
-    <span style="color: #379a6a;">b</span> = 1.781
-    <span style="color: #379a6a;">mu</span> = -0.301
-    <span style="color: #1c9af1;">return</span> 1/(2*b)*math.exp(-<span style="color: #d87a00;">abs</span>(oct_per_sec-mu)/b)
+<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_python</span>(oct_per_sec):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">b</span> = 1.781
+    <span style="color: #2e8b57;">mu</span> = -0.301
+    <span style="color: #1c86ee;">return</span> 1/(2*b)*math.exp(-<span style="color: #cd6600;">abs</span>(oct_per_sec-mu)/b)
 
-<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_idx_range_python</span>(y_idx, max_y_factor, height):
-    <span style="color: #9d8567;">""" ... """</span>
-    <span style="color: #379a6a;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-    <span style="color: #379a6a;">y_lo</span> = <span style="color: #d87a00;">max</span>(y/max_y_factor, min_y)
-    <span style="color: #379a6a;">y_hi</span> = <span style="color: #d87a00;">min</span>(y*max_y_factor, max_y)
-    <span style="color: #379a6a;">y_lo_idx</span> = <span style="color: #d87a00;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
-    <span style="color: #379a6a;">y_hi_idx</span> = <span style="color: #d87a00;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
-    <span style="color: #1c9af1;">return</span> y_lo_idx, y_hi_idx
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_python</span>(y_idx, max_y_factor, height):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+    <span style="color: #2e8b57;">y_lo</span> = <span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)
+    <span style="color: #2e8b57;">y_hi</span> = <span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)
+    <span style="color: #2e8b57;">y_lo_idx</span> = <span style="color: #cd6600;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
+    <span style="color: #2e8b57;">y_hi_idx</span> = <span style="color: #cd6600;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
+    <span style="color: #1c86ee;">return</span> y_lo_idx, y_hi_idx
 
-<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">find_tracks_python</span>(cost_matrix, delta_x):
-    <span style="color: #9d8567;">""" ... """</span>
-    <span style="color: #379a6a;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
-    <span style="color: #379a6a;">cum_cost</span> = np.zeros(correlogram.shape)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_python</span>(cost_matrix, delta_x):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
+    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(correlogram.shape)
 
-    <span style="color: #379a6a;">max_y_factor</span> = (2**5)**(delta_x)
-    <span style="color: #379a6a;">height</span> = correlogram.shape[1]
+    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_x)
+    <span style="color: #2e8b57;">height</span> = correlogram.shape[1]
 
-    <span style="color: #379a6a;">probabilities</span> = np.empty((height, height))
-    <span style="color: #1c9af1;">for</span> y_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(height):
-        <span style="color: #379a6a;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #1c9af1;">for</span> y_pre_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-            <span style="color: #379a6a;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-            <span style="color: #379a6a;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
-            <span style="color: #379a6a;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
+    <span style="color: #2e8b57;">probabilities</span> = np.empty((height, height))
+    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(height):
+        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
+            <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
+            <span style="color: #2e8b57;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
+            <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
 
-    <span style="color: #1c9af1;">for</span> x_idx, cost_column <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">enumerate</span>(cost_matrix):
-        <span style="color: #1c9af1;">if</span> x_idx == 0:
-            <span style="color: #379a6a;">cum_cost</span>[x_idx] = cost_column
-            <span style="color: #1c9af1;">continue</span>
-        <span style="color: #1c9af1;">for</span> y_idx, cost <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">enumerate</span>(cost_column):
-            <span style="color: #1c9af1;">for</span> y_pre_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-                <span style="color: #379a6a;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
-                <span style="color: #1c9af1;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
-                    <span style="color: #379a6a;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
-                    <span style="color: #379a6a;">tracks</span>[x_idx, y_idx] = y_pre_idx
-            <span style="color: #379a6a;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
+    <span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
+        <span style="color: #1c86ee;">if</span> x_idx == 0:
+            <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cost_column
+            <span style="color: #1c86ee;">continue</span>
+        <span style="color: #1c86ee;">for</span> y_idx, cost <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_column):
+            <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
+                <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
+                <span style="color: #1c86ee;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
+                    <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
+                    <span style="color: #2e8b57;">tracks</span>[x_idx, y_idx] = y_pre_idx
+            <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
 
-    <span style="color: #1c9af1;">return</span> tracks, cum_cost
+    <span style="color: #1c86ee;">return</span> tracks, cum_cost
 </pre>
 </div>
 
@@ -169,40 +195,40 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_change_probability_numpy</span>(doubles_per_x):
-    <span style="color: #9d8567;">""" ... """</span>
-    <span style="color: #379a6a;">b</span> = 1.781
-    <span style="color: #379a6a;">mu</span> = -0.301
-    <span style="color: #1c9af1;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #d87a00;">abs</span>(doubles_per_x-mu)/b)
+<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numpy</span>(doubles_per_x):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">b</span> = 1.781
+    <span style="color: #2e8b57;">mu</span> = -0.301
+    <span style="color: #1c86ee;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #cd6600;">abs</span>(doubles_per_x-mu)/b)
 
-<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
-    <span style="color: #9d8567;">""" ... """</span>
-    <span style="color: #379a6a;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #d87a00;">int</span>)
-    <span style="color: #379a6a;">cum_cost</span> = np.zeros(cost_matrix.shape)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
+    <span style="color: #8b7355;">""" ... """</span>
+    <span style="color: #2e8b57;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #cd6600;">int</span>)
+    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(cost_matrix.shape)
 
-    <span style="color: #379a6a;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #919191;"># </span><span style="color: #919191;">allow at most 5 octaves per second (3 sigma)</span>
-    <span style="color: #379a6a;">height</span> = cost_matrix.shape[1]
+    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">allow at most 5 octaves per second (3 sigma)</span>
+    <span style="color: #2e8b57;">height</span> = cost_matrix.shape[1]
 
-    <span style="color: #919191;"># </span><span style="color: #919191;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">will be sparsely filled with positive probability values, and</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">empty values will have minus infinite probability.</span>
-    <span style="color: #379a6a;">probabilities</span> = -np.ones((height, height))*np.inf
-    <span style="color: #1c9af1;">for</span> y_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(probabilities.shape[0]):
-        <span style="color: #379a6a;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #379a6a;">y_pre_idx</span> = np.arange(<span style="color: #d87a00;">int</span>((<span style="color: #d87a00;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
-                              <span style="color: #d87a00;">int</span>((<span style="color: #d87a00;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
-        <span style="color: #379a6a;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #379a6a;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
-        <span style="color: #379a6a;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">will be sparsely filled with positive probability values, and</span>
+    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">empty values will have minus infinite probability.</span>
+    <span style="color: #2e8b57;">probabilities</span> = -np.ones((height, height))*np.inf
+    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(probabilities.shape[0]):
+        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #2e8b57;">y_pre_idx</span> = np.arange(<span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
+                              <span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
+        <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
+        <span style="color: #2e8b57;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
+        <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
 
-    <span style="color: #379a6a;">cum_cost</span>[0] = cost_matrix[0]
-    <span style="color: #1c9af1;">for</span> x_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(1, <span style="color: #d87a00;">len</span>(cost_matrix)):
-        <span style="color: #379a6a;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #919191;"># </span><span style="color: #919191;">extract cost_column as 2d-vector!</span>
-        <span style="color: #379a6a;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
-        <span style="color: #379a6a;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
-        <span style="color: #379a6a;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
+    <span style="color: #2e8b57;">cum_cost</span>[0] = cost_matrix[0]
+    <span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(1, <span style="color: #cd6600;">len</span>(cost_matrix)):
+        <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract cost_column as 2d-vector!</span>
+        <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
+        <span style="color: #2e8b57;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
+        <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
 
-    <span style="color: #1c9af1;">return</span> tracks, cum_corrs
+    <span style="color: #1c86ee;">return</span> tracks, cum_corrs
 </pre>
 </div>
 
@@ -216,16 +242,16 @@ Another avenue for performance optimization is <a href="http://numba.pydata.org/
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #007b9c;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #809a4d;">True</span>)
-<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_change_probability_numba</span>(doubles_per_x):
+<pre class="src src-python"><span style="color: #00688b;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numba</span>(doubles_per_x):
     ...
 
-<span style="color: #007b9c;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #809a4d;">True</span>)
-<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
+<span style="color: #00688b;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #6e8b3d;">True</span>)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
     ...
 
-<span style="color: #007b9c;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #809a4d;">True</span>)
-<span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">find_tracks_numba</span>(cost_matrix, delta_t):
+<span style="color: #00688b;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
+<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_numba</span>(cost_matrix, delta_t):
     ...
 </pre>
 </div>
@@ -236,13 +262,13 @@ However, Numba is no silver bullet, and does not support all of Python yet. In t
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #919191;"># </span><span style="color: #919191;">python version</span>
-<span style="color: #1c9af1;">for</span> x_idx, cost_column <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">enumerate</span>(cost_matrix):
+<pre class="src src-python"><span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">python version</span>
+<span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
     ...
 
-<span style="color: #919191;"># </span><span style="color: #919191;">numba version</span>
-<span style="color: #1c9af1;">for</span> x_idx <span style="color: #1c9af1;">in</span> <span style="color: #d87a00;">range</span>(<span style="color: #d87a00;">len</span>(cost_matrix)):
-    <span style="color: #379a6a;">cost_column</span> = cost_matrix[x_idx]
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">numba version</span>
+<span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(<span style="color: #cd6600;">len</span>(cost_matrix)):
+    <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx]
     ...
 </pre>
 </div>
@@ -273,56 +299,6 @@ It's just that, while <code>audioread</code> supports all of these nice file for
 
 <p>
 In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
-</p>
-<div class="post-date">15 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
-<p>
-As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
-</p>
-
-<p>
-So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).
-</p>
-
-<p>
-I say "(on OSX)", because on Windows, it does not print a damn thing. Nope, no <code>disp</code> output for Windows users.
-</p>
-
-<p>
-More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as <code>0x1a</code> aka <code>SUB</code> aka <i>substitute character</i>. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with <code>SUB</code>. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.
-</p>
-
-<p>
-To see why Matlab would do such a dastardly deed, you can use <code>feature('locale')</code> to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either <code>ISO-8859-1</code> (when your locale is pure <code>de_DE</code> or <code>en_US</code>) or <code>US-ASCII</code>, if it is something impure. In my case, German dates but English text. Because <code>US-ASCII</code> is obviously the most all-encompassing choice for such mixed-languages environments.
-</p>
-
-<p>
-But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit <code>%MATLABROOT%/bin/lcdata.xml</code>, and look for the entry for your locale. For me, this is one of
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
-&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">ISO-8859-1</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.ISO8859-1</span><span style="color: #9d8567;">"</span>&gt; ...
-</pre>
-</div>
-
-<p>
-In order to make Matlab's encoding default to UTF-8, change the entry for your locale to
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">de_DE.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
-&lt;<span style="color: #d7a924;">locale</span> <span style="color: #379a6a;">name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">encoding</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">UTF-8</span><span style="color: #9d8567;">"</span> <span style="color: #379a6a;">xpg_name</span>=<span style="color: #9d8567;">"</span><span style="color: #9d8567;">en_US.UTF-8</span><span style="color: #9d8567;">"</span>&gt; ...
-</pre>
-</div>
-
-<p>
-With that, Matlab will print UTF-8 to the terminal.
-</p>
-
-<p>
-You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily&#x2026;
 </p>
 <div id="archive">
   <a href="archive.html">Older posts</a>
