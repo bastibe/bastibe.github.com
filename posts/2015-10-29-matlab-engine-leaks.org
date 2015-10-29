@@ -65,9 +65,9 @@ objgraph.show_backrefs(all_arrays[0], filename='array.png')
 
 [[http://bastibe.de/static/2015-10/array.png]]
 
-It seems that the ~array.array~ object is part of a ~matlab.double~ instance which is not referenced from anywhere but ~all_objects~. A classical memory leak.
+It seems that the ~array.array~ object is part of a ~matlab.double~ instance which is not referenced from anywhere but ~all_objects~. A memory leak.
 
-After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function ~leak~ passes some data to Matlab, and returns a float. Since the variables are not used outside of ~leak~, they should get deallocated when ~leak~ returns.
+After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function ~leak~ passes some data to Matlab, and calculates a float. Since the variables are not used outside of ~leak~, and the function does not return anything, all variables within the function should get deallocated when ~leak~ returns.
 
 #+begin_src python
 def leak():

@@ -118,11 +118,11 @@ objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #8b7355;">'ar
 </div>
 
 <p>
-It seems that the <code>array.array</code> object is part of a <code>matlab.double</code> instance which is not referenced from anywhere but <code>all_objects</code>. A classical memory leak.
+It seems that the <code>array.array</code> object is part of a <code>matlab.double</code> instance which is not referenced from anywhere but <code>all_objects</code>. A memory leak.
 </p>
 
 <p>
-After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function <code>leak</code> passes some data to Matlab, and returns a float. Since the variables are not used outside of <code>leak</code>, they should get deallocated when <code>leak</code> returns.
+After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function <code>leak</code> passes some data to Matlab, and calculates a float. Since the variables are not used outside of <code>leak</code>, and the function does not return anything, all variables within the function should get deallocated when <code>leak</code> returns.
 </p>
 
 <div class="org-src-container">
