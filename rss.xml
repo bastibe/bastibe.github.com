@@ -4,7 +4,146 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Fr, 16 Okt 2015 14:15:23 +0200</lastBuildDate>
+  <lastBuildDate>Do, 29 Okt 2015 14:37:04 +0100</lastBuildDate>
+<item>
+  <title>Massive Memory Leak in the Matlab Engine for Python</title>
+  <description><![CDATA[<p>
+As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">import</span> numpy
+<span style="color: #1c86ee;">import</span> matlab
+<span style="color: #1c86ee;">import</span> matlab.engine
+
+<span style="color: #2e8b57;">eng</span> = matlab.engine.start_matlab()
+<span style="color: #2e8b57;">random_data</span> = numpy.random.randn(100)
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">convert Numpy data to Matlab:</span>
+<span style="color: #2e8b57;">matlab_data</span> = matlab.double(random_data.tolist())
+<span style="color: #2e8b57;">data_sum</span> = eng.<span style="color: #cd6600;">sum</span>(matlab_data)
+</pre>
+</div>
+
+<p>
+You can call any Matlab function on <code>eng</code>, and you can access any Matlab workspace variable in <code>eng.workspace</code>. As you can see, the Matlab Engine is not Numpy-aware, and you have to convert all your Numpy data to Matlab <code>double</code> before you can call Matlab functions with it. Still, it works pretty well.
+</p>
+
+<p>
+Recently, I ran a rather large experiment set, where I had a set of four functions, two in Matlab, two in Python, and called each of these functions a few thousand times with a bunch of different data to see how they performed.
+</p>
+
+<p>
+While doing that I noticed that my Python processes were growing larger and larger, until they consumed all my memory and a sizeable chunk of my swap as well. I couldn't find any reason for this. None of my Python code cached anything, and the sum total of all global variables did not amount to anything substantial.
+</p>
+
+<p>
+Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory analyzer for Python. Pympler is an amazing library for introspecting your program's memory. Among its many features, it can list the biggest objects in your running program:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">from</span> pympler <span style="color: #1c86ee;">import</span> muppy, summary
+summary.print_(summary.summarize(muppy.get_objects()))
+</pre>
+</div>
+
+<pre class="example">
+                                      types |   # objects |   total size
+=========================================== | =========== | ============
+                        &lt;class 'array.array |        1076 |      2.77 GB
+                                &lt;class 'str |       42839 |      7.65 MB
+                               &lt;class 'dict |        8604 |      5.43 MB
+                      &lt;class 'numpy.ndarray |          48 |      3.16 MB
+                               &lt;class 'code |       14113 |      1.94 MB
+                               &lt;class 'type |        1557 |      1.62 MB
+                               &lt;class 'list |        3158 |      1.38 MB
+                                &lt;class 'set |        1265 |    529.72 KB
+                              &lt;class 'tuple |        5129 |    336.98 KB
+                              &lt;class 'bytes |        2413 |    219.48 KB
+                            &lt;class 'weakref |        2654 |    207.34 KB
+            &lt;class 'collections.OrderedDict |          65 |    149.85 KB
+                 &lt;class 'wrapper_descriptor |        1676 |    130.94 KB
+  &lt;class 'traitlets.traitlets.MetaHasTraits |         107 |    123.55 KB
+                  &lt;class 'getset_descriptor |        1738 |    122.20 KB
+</pre>
+
+<p>
+Now that is interesting. Apparently, I was lugging around close to three gigabytes worth of bare-Python <code>array.array</code>. And these are clearly not Numpy arrays, since those would show up as <code>numpy.ndarray</code>. But I couldn't find any of these objects in my workspace.
+</p>
+
+<p>
+So let's get a reference to one of these objects, and see who they belong to. This can also be done with Pympler, but I prefer the way <a href="http://mg.pov.lt/objgraph/">objgraph</a> does it:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">import</span> array
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">get a list of all objects known to Python:</span>
+<span style="color: #2e8b57;">all_objects</span> = muppy.get_objects()
+<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">sort out only `array.array` instances:</span>
+<span style="color: #2e8b57;">all_arrays</span> = [obj <span style="color: #1c86ee;">for</span> obj <span style="color: #1c86ee;">in</span> all_objects <span style="color: #1c86ee;">if</span> <span style="color: #cd6600;">isinstance</span>(obj, array.array)]
+
+<span style="color: #1c86ee;">import</span> objgraph
+objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #8b7355;">'array.png'</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-10/array.png" alt="array.png" />
+</p>
+</div>
+
+<p>
+It seems that the <code>array.array</code> object is part of a <code>matlab.double</code> instance which is not referenced from anywhere but <code>all_objects</code>. A classical memory leak.
+</p>
+
+<p>
+After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function <code>leak</code> passes some data to Matlab, and returns a float. Since the variables are not used outside of <code>leak</code>, they should get deallocated when <code>leak</code> returns.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">leak</span>():
+    <span style="color: #2e8b57;">test_data</span> = numpy.zeros(1024*1024)
+    <span style="color: #2e8b57;">matlab_data</span> = matlab.double(test_data.tolist())
+    eng.<span style="color: #cd6600;">sum</span>(matlab_data)
+</pre>
+</div>
+
+<p>
+Pympler has another great feature that can track allocations. The <code>SummaryTracker</code> will track and display any allocations between calls to <code>print_diff()</code>. This is very useful to see how much memory was used during the call to <code>leak</code>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c86ee;">from</span> pympler <span style="color: #1c86ee;">import</span> tracker
+<span style="color: #2e8b57;">tr</span> = tracker.SummaryTracker()
+tr.print_diff()
+leak()
+tr.print_diff()
+</pre>
+</div>
+
+<pre class="example">
+                     types |   # objects |   total size
+========================== | =========== | ============
+       &lt;class 'array.array |           1 |      8.00 MB
+...
+</pre>
+
+<p>
+And there you have it. Note that this leak is not the Numpy array <code>test_data</code> and it is not the matlab array <code>matlab_data</code>. Both of these are garbage collected correctly. But <b>the Matlab Engine for Python will leak any data you pass to a Matlab function</b>.
+</p>
+
+<p>
+This data is not referenced from anywhere within Python, and is counted as <i>leaked</i> by <code>objgraph</code>. In other words, the C code inside the Matlab Engine for Python copies all passed data into it's internal memory, but never frees that memory. Not even if you quit the Matlab Engine, or <code>del</code> all Python references to it. Your only option is to restart Python.
+</p>
+]]></description>
+  <link>http://bastibe.de/2015-10-29-matlab-engine-leaks.html</link>
+  <pubDate>Do, 29 Okt 2015 12:18:00 +0100</pubDate>
+</item>
 <item>
   <title>OS X Finder Woes</title>
   <description><![CDATA[
