@@ -162,6 +162,14 @@ And there you have it. Note that this leak is not the Numpy array <code>test_dat
 <p>
 This data is not referenced from anywhere within Python, and is counted as <i>leaked</i> by <code>objgraph</code>. In other words, the C code inside the Matlab Engine for Python copies all passed data into it's internal memory, but never frees that memory. Not even if you quit the Matlab Engine, or <code>del</code> all Python references to it. Your only option is to restart Python.
 </p>
+
+<p>
+<b>Postscriptum</b>
+</p>
+
+<p>
+I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
+</p>
 </div>
 <div id="postamble" class="status"><div id="archive">
   <a href="archive.html">Other posts</a>
