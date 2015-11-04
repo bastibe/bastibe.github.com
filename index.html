@@ -26,7 +26,124 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">29 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
+<div id="content"><div class="post-date">03 Nov 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-11-03-matlab-engine-performance.html">Performance with the Matlab Engine for Python</a></h1>
+<p>
+For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
+</p>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Usage</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<p>
+As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
+</p>
+
+<pre class="example">
+       Matlab Engine for Python        |              Transplant
+---------------------------------------|---------------------------------------
+import numpy                           | import numpy
+import matlab                          | import transplant
+import matlab.engine                   |
+                                       |
+eng = matlab.engine.start_matlab()     | eng = transplant.Matlab()
+numpy_data = numpy.random.randn(100)   | numpy_data = numpy.random.randn(100)
+list_data = numpy_data.tolist()        |
+matlab_data = matlab.double(list_data) |
+data_sum = eng.sum(matlab_data)        | data_sum = eng.sum(numpy_data)
+</pre>
+
+<p>
+Aside from this difference, both libraries work almost identical. Even the handling of the number of output arguments is (accidentally) almost the same:
+</p>
+
+<pre class="example">
+       Matlab Engine for Python        |              Transplant
+---------------------------------------|---------------------------------------
+eng.max(matlab_data)                   | eng.max(numpy_data)
+&gt;&gt;&gt; 4.533                              | &gt;&gt;&gt; [4.533 537635]
+eng.max(matlab_data, nargout=1)        | eng.max(numpy_data, nargout=1)
+&gt;&gt;&gt; 4.533                              | &gt;&gt;&gt; 4.533
+eng.max(matlab_data, nargout=2)        | eng.max(numpy_data, nargout=2)
+&gt;&gt;&gt; (4.533, 537635.0)                  | &gt;&gt;&gt; [4.533 537635]
+</pre>
+
+<p>
+Similarly, both libraries can interact with Matlab objects in Python, although the MEfP can't access object properties:
+</p>
+
+<pre class="example">
+       Matlab Engine for Python        |              Transplant
+---------------------------------------|---------------------------------------
+f = eng.figure()                       | f = eng.figure()
+eng.get(f, 'Position')                 | eng.get(f, 'Position')
+&gt;&gt;&gt; matlab.double([[ ... ]])           | &gt;&gt;&gt; array([[ ... ]])
+f.Position                             | f.Position
+&gt;&gt;&gt; AttributeError                     | &gt;&gt;&gt; array([[ ... ]])
+</pre>
+
+<p>
+There are a few small differences, though:
+</p>
+
+<ul class="org-ul">
+<li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.</li>
+<li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.</li>
+<li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).</li>
+<li>If the MEfP does not know <code>nargout</code>, it assumes <code>nargout=1</code>. Transplant uses <code>nargout(func)</code> or returns whatever the function writes into <code>ans</code>.</li>
+<li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.</li>
+<li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Performance</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<p>
+The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
+</p>
+
+<p>
+More interesting is the time it takes to call a Matlab function from Python. Have a look:
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png" />
+</p>
+</div>
+
+<p>
+This is running <code>sum(randn(n,1))</code> from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.
+</p>
+
+<p>
+There is a gap of about a factor of 10 between Transplant and the MEfP. In practice, this gap is highly significant! In my particular use case, I have <a href="http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/doc/voicebox/fxpefac.html">a function</a> that takes about one second of computation time for an audio signal of ten seconds (half a million values). When I call this function with Transplant, it takes about 1.3 seconds. With MEfP, it takes 4.5 seconds.
+</p>
+
+<p>
+Transplant spends its time serializing the arguments to JSON, sending that JSON over <a href="http://zeromq.org/">ZeroMQ</a> to Matlab, and parsing the JSON there. Well, to be honest, only the parsing part takes any significant time, overall. While it might seem onerous to serialize everything to JSON, this architecture allows Transplant to run over a network connection.
+</p>
+
+<p>
+It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, despite being written in C. Looking at the number of function calls in the profiler, the MEfP calls 25 functions (!) on each value (!!) of the input data. This is a shockingly inefficient way of doing things.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">TL;DR</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<p>
+It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
+</p>
+
+<p>
+If you want to try Transplant, just head over to <a href="https://github.com/bastibe/transplant">Github</a> and use it. If you find any bugs, feature requests, or improvements, please let me know in the Github issues.
+</p>
+</div>
+</div>
+<div class="post-date">29 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
 <p>
 As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
 </p>
@@ -269,164 +386,7 @@ Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as i
 
 
 </div>
-</div><div class="post-date">28 Sep 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-09-28-python-performance.html">Python Numeric Performance</a></h1>
-<p>
-Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_python</span>(oct_per_sec):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">b</span> = 1.781
-    <span style="color: #2e8b57;">mu</span> = -0.301
-    <span style="color: #1c86ee;">return</span> 1/(2*b)*math.exp(-<span style="color: #cd6600;">abs</span>(oct_per_sec-mu)/b)
-
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_python</span>(y_idx, max_y_factor, height):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-    <span style="color: #2e8b57;">y_lo</span> = <span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)
-    <span style="color: #2e8b57;">y_hi</span> = <span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)
-    <span style="color: #2e8b57;">y_lo_idx</span> = <span style="color: #cd6600;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
-    <span style="color: #2e8b57;">y_hi_idx</span> = <span style="color: #cd6600;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
-    <span style="color: #1c86ee;">return</span> y_lo_idx, y_hi_idx
-
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_python</span>(cost_matrix, delta_x):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
-    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(correlogram.shape)
-
-    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_x)
-    <span style="color: #2e8b57;">height</span> = correlogram.shape[1]
-
-    <span style="color: #2e8b57;">probabilities</span> = np.empty((height, height))
-    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(height):
-        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-            <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-            <span style="color: #2e8b57;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
-            <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
-
-    <span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
-        <span style="color: #1c86ee;">if</span> x_idx == 0:
-            <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cost_column
-            <span style="color: #1c86ee;">continue</span>
-        <span style="color: #1c86ee;">for</span> y_idx, cost <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_column):
-            <span style="color: #1c86ee;">for</span> y_pre_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-                <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
-                <span style="color: #1c86ee;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
-                    <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
-                    <span style="color: #2e8b57;">tracks</span>[x_idx, y_idx] = y_pre_idx
-            <span style="color: #2e8b57;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
-
-    <span style="color: #1c86ee;">return</span> tracks, cum_cost
-</pre>
-</div>
-
-<p>
-I'm not going into the details of what this algorithm does, but note that it iterates over every column and row of the matrix <code>cost_matrix</code>, and then iterates over another range <code>previous_y_range</code> for each of the values in <code>cost_matrix</code>. On the way, it does a lot of basic arithmetic and some algebra.
-</p>
-
-<p>
-The problem is, this is very slow. For a \(90 \times 200\) <code>cost_matrix</code>, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for <a href="http://www.numpy.org/">Numpy</a>!
-</p>
-
-<p>
-If you can express your code in terms of linear algebra, Numpy will execute them in highly-optimized C code. The problem is, translating loops into linear algebra is not always easy. In this case, it took some effort:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numpy</span>(doubles_per_x):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">b</span> = 1.781
-    <span style="color: #2e8b57;">mu</span> = -0.301
-    <span style="color: #1c86ee;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #cd6600;">abs</span>(doubles_per_x-mu)/b)
-
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
-    <span style="color: #8b7355;">""" ... """</span>
-    <span style="color: #2e8b57;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #cd6600;">int</span>)
-    <span style="color: #2e8b57;">cum_cost</span> = np.zeros(cost_matrix.shape)
-
-    <span style="color: #2e8b57;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">allow at most 5 octaves per second (3 sigma)</span>
-    <span style="color: #2e8b57;">height</span> = cost_matrix.shape[1]
-
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">will be sparsely filled with positive probability values, and</span>
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">empty values will have minus infinite probability.</span>
-    <span style="color: #2e8b57;">probabilities</span> = -np.ones((height, height))*np.inf
-    <span style="color: #1c86ee;">for</span> y_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(probabilities.shape[0]):
-        <span style="color: #2e8b57;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #2e8b57;">y_pre_idx</span> = np.arange(<span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
-                              <span style="color: #cd6600;">int</span>((<span style="color: #cd6600;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
-        <span style="color: #2e8b57;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #2e8b57;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
-        <span style="color: #2e8b57;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
-
-    <span style="color: #2e8b57;">cum_cost</span>[0] = cost_matrix[0]
-    <span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(1, <span style="color: #cd6600;">len</span>(cost_matrix)):
-        <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract cost_column as 2d-vector!</span>
-        <span style="color: #2e8b57;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
-        <span style="color: #2e8b57;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
-        <span style="color: #2e8b57;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
-
-    <span style="color: #1c86ee;">return</span> tracks, cum_corrs
-</pre>
-</div>
-
-<p>
-This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a \(90 \times 200\) <code>cost_matrix</code>, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.
-</p>
-
-<p>
-Another avenue for performance optimization is <a href="http://numba.pydata.org/">Numba</a>. Numba applies dark and powerful magic to compile humble Python functions into blazingly fast machine code. It is proper magic, if you ask me. Simply add an innocuous little decorator to your functions, and let Numba do it's thing. If all goes well, your code will work just as before, except with unheard-of performance:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #00688b;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_change_probability_numba</span>(doubles_per_x):
-    ...
-
-<span style="color: #00688b;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #6e8b3d;">True</span>)
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
-    ...
-
-<span style="color: #00688b;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #6e8b3d;">True</span>)
-<span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">find_tracks_numba</span>(cost_matrix, delta_t):
-    ...
-</pre>
-</div>
-
-<p>
-However, Numba is no silver bullet, and does not support all of Python yet. In the present case, it is missing support for <code>enumerate</code> for Numpy matrices. Thus, I had to rewrite the first two loops like this:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">python version</span>
-<span style="color: #1c86ee;">for</span> x_idx, cost_column <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">enumerate</span>(cost_matrix):
-    ...
-
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">numba version</span>
-<span style="color: #1c86ee;">for</span> x_idx <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(<span style="color: #cd6600;">len</span>(cost_matrix)):
-    <span style="color: #2e8b57;">cost_column</span> = cost_matrix[x_idx]
-    ...
-</pre>
-</div>
-
-<p>
-Another area that proved problematic is N-D slice writing. Instead of using expressions like <code>m1[x,y:y+3] = m2</code>, you have to write <code>for idx in range(3): m1[x,y+idx] = m2[idx]</code>. Not a difficult transformation, but it basically forced me to unroll all the nice vectorized code of the Numpy version back to their original pure-Python form. That said, Numba is getting better and better, and many constructs that used to be uncompilable (<code>yield</code>) are not a problem any more.
-</p>
-
-<p>
-Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This is a 120-fold increase in performance, and still seven times faster than Numpy, with minimal code changes. This is proper magic!
-</p>
-
-<p>
-So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code <i>more beautiful</i>. Numba on the other hand often requires you to make your code <i>less beautiful</i> to conform to it's subset of compilable Python.
-</p>
-<div id="archive">
+</div><div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
 </div>
