@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>The Style of Scientific Code</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">13 Mar 2016</div>
+<h1 class="post-title">The Style of Scientific Code</h1>
+<p>
+What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
+</p>
+
+<p>
+A few years ago, when I was working mostly on user interaction and data management, all of this made sense to me. What is the overhead of a few function calls and class lookups here and there if it makes the code more readable? In other words: Readability counts, and is usually more important than performance.
+</p>
+
+<p>
+But lately, I have come to struggle with these rules. I am now writing a lot of scientific code, where algorithms are intrinsically complex beyond the syntactic complexity of the code. How do you "Express yourself in code [instead of comments]", when that code only consists of linear algebra and matrix multiplications?
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">rectwin_spectrum</span>(angular_frequency, specsize):
+    <span style="color: #9d8567;">"""The spectrum of a rectangular window. [...]"""</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #1c9af1;">with</span> np.errstate(invalid=<span style="color: #9d8567;">'ignore'</span>):
+        <span style="color: #379a6a;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+                     np.sin(specsize*angular_frequency/2) /
+                     np.sin(angular_frequency/2) )
+    <span style="color: #919191;"># </span><span style="color: #919191;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #379a6a;">spectrum</span>[angular_frequency == 0.0] = specsize
+    <span style="color: #1c9af1;">return</span> spectrum
+</pre>
+</div>
+
+<p>
+A lot of my scientific code ends up quite compact like that. Maybe a hundred lines of dense numeric expressions, plus a few hundred lines of explanations and documentation. The point is, scientific code often does not decompose into easily understood extractable functions.
+</p>
+
+<p>
+On a related issue, how do you avoid long argument lists in heavily parametrized equations? As Clean Code states, "when a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped in a class of their own". However, in Matlab in particular, it is quite unusual to create small one-trick classes to encapsulate a few function arguments:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave"><span style="color: #1c9af1;">classdef</span> SignalBlocks <span style="color: #d87a00;">&lt;</span> handle
+    <span style="color: #1c9af1;">properties</span>
+        data
+        samplerate
+        blocksize
+        hopsize
+    <span style="color: #1c9af1;">end</span>
+    <span style="color: #1c9af1;">properties</span> (Dependent)
+        duration
+    <span style="color: #1c9af1;">end</span>
+    <span style="color: #1c9af1;">methods</span>
+        <span style="color: #1c9af1;">function</span> obj <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">SignalBlock</span>(data<span style="color: #d87a00;">,</span> samplerate<span style="color: #d87a00;">,</span> blocksize<span style="color: #d87a00;">,</span> hopsize)
+            <span style="color: #919191;">% blocksize and hopsize are optional. What a mess.</span>
+            narginchk(2<span style="color: #d87a00;">,</span> 4)<span style="color: #d87a00;">;</span>
+            obj.data <span style="color: #d87a00;">=</span> data<span style="color: #d87a00;">;</span>
+            obj.samplerate <span style="color: #d87a00;">=</span> samplerate<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">&gt;=</span> 3
+                obj.blocksize <span style="color: #d87a00;">=</span> blocksize<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">else</span>
+                obj.blocksize <span style="color: #d87a00;">=</span> 2048<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">end</span>
+            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">==</span> 4
+                obj.hopsize <span style="color: #d87a00;">=</span> hopsize<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">else</span>
+                obj.hopsize <span style="color: #d87a00;">=</span> 1024<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">end</span>
+        <span style="color: #1c9af1;">end</span>
+        <span style="color: #1c9af1;">function</span> time <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">get</span>.duration(obj)
+            time <span style="color: #d87a00;">=</span> length(obj.data)<span style="color: #d87a00;">/</span>obj.samplerate<span style="color: #d87a00;">;</span>
+        <span style="color: #1c9af1;">end</span>
+    <span style="color: #1c9af1;">end</span>
+<span style="color: #1c9af1;">end</span>
+</pre>
+</div>
+
+<p>
+This is not just cumbersome to write and maintain, it is also slower than passing <code>data</code>, <code>samplerate</code>, <code>blocksize</code>, and <code>hopsize</code> to each function call individually (although the overhead has gotten considerably smaller in newer versions of Matlab). Additionally, there is often a large performance benefit of <i>not</i> extracting every function and <i>not</i> keeping intermediate values in variables. Thus, it's not just readability that is hard to maintain in scientific code. Performance is a problem, too.
+</p>
+
+<p>
+The sad thing is, I don't know the answer to these questions. There have been a lot of discussions about coding style and code quality in our department lately, with the clear objective to clean up our code. But common code quality criteria don't seem to apply to scientific code all that well.
+</p>
+
+<p>
+Do you have any idea how to progress from here?
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

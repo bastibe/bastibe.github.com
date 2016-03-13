@@ -1,0 +1,68 @@
+#+title: The Style of Scientific Code
+#+date: <2016-03-13 09:00>
+
+What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from [[https://en.wikipedia.org/wiki/Robert_Cecil_Martin][Clean Code]]: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
+
+A few years ago, when I was working mostly on user interaction and data management, all of this made sense to me. What is the overhead of a few function calls and class lookups here and there if it makes the code more readable? In other words: Readability counts, and is usually more important than performance.
+
+But lately, I have come to struggle with these rules. I am now writing a lot of scientific code, where algorithms are intrinsically complex beyond the syntactic complexity of the code. How do you "Express yourself in code [instead of comments]", when that code only consists of linear algebra and matrix multiplications?
+
+#+begin_src python
+def rectwin_spectrum(angular_frequency, specsize):
+    """The spectrum of a rectangular window. [...]"""
+    # In case of angular_frequency == 0, this will calculate NaN. Since
+    # this will be corrected later, suppress the warning.
+    with np.errstate(invalid='ignore'):
+        spectrum = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+                     np.sin(specsize*angular_frequency/2) /
+                     np.sin(angular_frequency/2) )
+    # since sin(x) == x for small x, the above expression
+    # evaluates to specsize for angular_frequency == 0.
+    spectrum[angular_frequency == 0.0] = specsize
+    return spectrum
+#+end_src
+
+A lot of my scientific code ends up quite compact like that. Maybe a hundred lines of dense numeric expressions, plus a few hundred lines of explanations and documentation. The point is, scientific code often does not decompose into easily understood extractable functions.
+
+On a related issue, how do you avoid long argument lists in heavily parametrized equations? As Clean Code states, "when a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped in a class of their own". However, in Matlab in particular, it is quite unusual to create small one-trick classes to encapsulate a few function arguments:
+
+#+begin_src octave
+classdef SignalBlocks < handle
+    properties
+        data
+        samplerate
+        blocksize
+        hopsize
+    end
+    properties (Dependent)
+        duration
+    end
+    methods
+        function obj = SignalBlock(data, samplerate, blocksize, hopsize)
+            % blocksize and hopsize are optional. What a mess.
+            narginchk(2, 4);
+            obj.data = data;
+            obj.samplerate = samplerate;
+            if nargin >= 3
+                obj.blocksize = blocksize;
+            else
+                obj.blocksize = 2048;
+            end
+            if nargin == 4
+                obj.hopsize = hopsize;
+            else
+                obj.hopsize = 1024;
+            end
+        end
+        function time = get.duration(obj)
+            time = length(obj.data)/obj.samplerate;
+        end
+    end
+end
+#+end_src
+
+This is not just cumbersome to write and maintain, it is also slower than passing ~data~, ~samplerate~, ~blocksize~, and ~hopsize~ to each function call individually (although the overhead has gotten considerably smaller in newer versions of Matlab). Additionally, there is often a large performance benefit of /not/ extracting every function and /not/ keeping intermediate values in variables. Thus, it's not just readability that is hard to maintain in scientific code. Performance is a problem, too.
+
+The sad thing is, I don't know the answer to these questions. There have been a lot of discussions about coding style and code quality in our department lately, with the clear objective to clean up our code. But common code quality criteria don't seem to apply to scientific code all that well.
+
+Do you have any idea how to progress from here?

@@ -26,7 +26,159 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">03 Nov 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-11-03-matlab-engine-performance.html">Calling Matlab from Python</a></h1>
+<div id="content"><div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
+<p>
+What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
+</p>
+
+<p>
+A few years ago, when I was working mostly on user interaction and data management, all of this made sense to me. What is the overhead of a few function calls and class lookups here and there if it makes the code more readable? In other words: Readability counts, and is usually more important than performance.
+</p>
+
+<p>
+But lately, I have come to struggle with these rules. I am now writing a lot of scientific code, where algorithms are intrinsically complex beyond the syntactic complexity of the code. How do you "Express yourself in code [instead of comments]", when that code only consists of linear algebra and matrix multiplications?
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">rectwin_spectrum</span>(angular_frequency, specsize):
+    <span style="color: #9d8567;">"""The spectrum of a rectangular window. [...]"""</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #1c9af1;">with</span> np.errstate(invalid=<span style="color: #9d8567;">'ignore'</span>):
+        <span style="color: #379a6a;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+                     np.sin(specsize*angular_frequency/2) /
+                     np.sin(angular_frequency/2) )
+    <span style="color: #919191;"># </span><span style="color: #919191;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #919191;"># </span><span style="color: #919191;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #379a6a;">spectrum</span>[angular_frequency == 0.0] = specsize
+    <span style="color: #1c9af1;">return</span> spectrum
+</pre>
+</div>
+
+<p>
+A lot of my scientific code ends up quite compact like that. Maybe a hundred lines of dense numeric expressions, plus a few hundred lines of explanations and documentation. The point is, scientific code often does not decompose into easily understood extractable functions.
+</p>
+
+<p>
+On a related issue, how do you avoid long argument lists in heavily parametrized equations? As Clean Code states, "when a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped in a class of their own". However, in Matlab in particular, it is quite unusual to create small one-trick classes to encapsulate a few function arguments:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave"><span style="color: #1c9af1;">classdef</span> SignalBlocks <span style="color: #d87a00;">&lt;</span> handle
+    <span style="color: #1c9af1;">properties</span>
+        data
+        samplerate
+        blocksize
+        hopsize
+    <span style="color: #1c9af1;">end</span>
+    <span style="color: #1c9af1;">properties</span> (Dependent)
+        duration
+    <span style="color: #1c9af1;">end</span>
+    <span style="color: #1c9af1;">methods</span>
+        <span style="color: #1c9af1;">function</span> obj <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">SignalBlock</span>(data<span style="color: #d87a00;">,</span> samplerate<span style="color: #d87a00;">,</span> blocksize<span style="color: #d87a00;">,</span> hopsize)
+            <span style="color: #919191;">% blocksize and hopsize are optional. What a mess.</span>
+            narginchk(2<span style="color: #d87a00;">,</span> 4)<span style="color: #d87a00;">;</span>
+            obj.data <span style="color: #d87a00;">=</span> data<span style="color: #d87a00;">;</span>
+            obj.samplerate <span style="color: #d87a00;">=</span> samplerate<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">&gt;=</span> 3
+                obj.blocksize <span style="color: #d87a00;">=</span> blocksize<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">else</span>
+                obj.blocksize <span style="color: #d87a00;">=</span> 2048<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">end</span>
+            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">==</span> 4
+                obj.hopsize <span style="color: #d87a00;">=</span> hopsize<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">else</span>
+                obj.hopsize <span style="color: #d87a00;">=</span> 1024<span style="color: #d87a00;">;</span>
+            <span style="color: #1c9af1;">end</span>
+        <span style="color: #1c9af1;">end</span>
+        <span style="color: #1c9af1;">function</span> time <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">get</span>.duration(obj)
+            time <span style="color: #d87a00;">=</span> length(obj.data)<span style="color: #d87a00;">/</span>obj.samplerate<span style="color: #d87a00;">;</span>
+        <span style="color: #1c9af1;">end</span>
+    <span style="color: #1c9af1;">end</span>
+<span style="color: #1c9af1;">end</span>
+</pre>
+</div>
+
+<p>
+This is not just cumbersome to write and maintain, it is also slower than passing <code>data</code>, <code>samplerate</code>, <code>blocksize</code>, and <code>hopsize</code> to each function call individually (although the overhead has gotten considerably smaller in newer versions of Matlab). Additionally, there is often a large performance benefit of <i>not</i> extracting every function and <i>not</i> keeping intermediate values in variables. Thus, it's not just readability that is hard to maintain in scientific code. Performance is a problem, too.
+</p>
+
+<p>
+The sad thing is, I don't know the answer to these questions. There have been a lot of discussions about coding style and code quality in our department lately, with the clear objective to clean up our code. But common code quality criteria don't seem to apply to scientific code all that well.
+</p>
+
+<p>
+Do you have any idea how to progress from here?
+</p>
+<div class="post-date">23 Jan 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-01-23-toren.html">Toren</a></h1>
+<p>
+I've been playing a lot of indie games lately. One of them has not been talked about much: <a href="http://toren-game.com/">Toren</a>. Toren is a platformer about a girl that has to climb a tower to defeat a dragon and revive her world. This is probably the least polished game I have played in a long time. Animations are janky, controls are imprecise and clunky, and there are loads of little glitches. Yet, I really enjoyed this.
+</p>
+
+<p>
+There is something about this world that feels honest to me: As you climb the tower, the child grows from a toddler to an adolescent, and is gradually introduced to more and more mature concepts. I didn't understand much of the iconography of this game, but it felt oddly cathartic to climb this tower of life, and overcome it's challenges.
+</p>
+
+<p>
+I particularly liked how death played such an integral role in this story and some of the puzzles. The tower is a monument to a dead people, and yet the story and game mechanics are as much about dying as they are about rebirth and not giving up. This is underlined by the wonderful art style of this game, which contrasts vivid colors with brooding, dark architecture.
+</p>
+
+<p>
+At just about two hours, Toren is not a long game. Instead of exploring one particular game mechanic, it mixes it's game up every few minutes. Every sequence looks different and beautiful, and yet it manages to tell a cohesive and effective story. ★★★★☆
+</p>
+<div class="post-date">06 Jan 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-01-06-books-of-2015.html">Books of 2015</a></h1>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1"><a href="https://www.goodreads.com/book/show/8706185-among-others">Among Others</a>, by Jo Walton</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<p style="float:left;margin:5px;" width="150px">
+<img src="https://upload.wikimedia.org/wikipedia/en/d/d1/Among_Others_(Jo_Walton_novel).jpg" alt="Among_Others_(Jo_Walton_novel).jpg" style="float:left;margin:5px;" width="150px" />
+I don't usually enjoy fantasy novels and their romantic escapism. I much prefer fascinating sci-fi thought experiments. But this book won all the most important awards, so I gave it a shot. What if random chance could be bent a little with creativity, the power of believing in something, and some mysticism? You end up with a world that is richer, more meaningful, and altogether more alive, if you just cared to observe and to appreciate it's beauty. Reading this book left me enchanted and more observant long after I put it down. What a wonderful book!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2"><a href="https://www.goodreads.com/book/show/7073.A_Son_of_the_Circus">A Son of the Circus</a>, by John Irving</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<p style="float:left;margin:5px;" width="150px">
+<img src="https://upload.wikimedia.org/wikipedia/en/e/e7/ASonOfTheCircus.JPG" alt="ASonOfTheCircus.JPG" style="float:left;margin:5px;" width="150px" />
+This is one of those books that was on my to-read list for months. It starts out as quirky and likeable as you would expect from John Irving. This time, we follow the tale of a Canadian/Indian doctor throughout his life, and his summer vacation in India. But this would not be John Irving if there weren't plenty of colourful characters, astute observations of human strangeness, and a meticulously crafted story. There is no scene in this book that does not serve a purpose, and so many moving parts my mind just boggles at the construction of it all. Yet at the same time, I was regularly laughing out loud. I loved every minute of this!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3"><a href="https://www.goodreads.com/book/show/6597651-the-windup-girl">The Windup Girl</a>, by Paolo Bacigalupi</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<p style="float:left;margin:5px;" width="150px">
+<img src="https://upload.wikimedia.org/wikipedia/en/1/1f/Wind_up.jpg" alt="Wind_up.jpg" style="float:left;margin:5px;" width="150px" />
+The whole world changed in the near future, when gasoline is a rare luxury, sea levels have risen and swallowed all the coastal cities, and man-made scourges have devastated most crops. And now it's not just humans that populate our urbanized world, but so too are our inventions, artificial humans called "windups" for their stutter-stop movements. But at the core, both humans and windups struggle for the same security, prosperity as ever. Such an inventive world, so much vivid creativity, social commentary, in this human struggle to not destroy ourselves.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4"><a href="https://www.goodreads.com/book/show/629.Zen_and_the_Art_of_Motorcycle_Maintenance">Zen and the art of motorcycle maintenance</a>, by Robert Pirsig</h2>
+<div class="outline-text-2" id="text-orgheadline4">
+<p style="float:left;margin:5px;" width="150px">
+<img src="https://upload.wikimedia.org/wikipedia/en/8/85/Zen_motorcycle.jpg" alt="Zen_motorcycle.jpg" style="float:left;margin:5px;" width="150px" />
+This is about equal parts a motorcycle journey of a father and his son across the US, and a dive into another man's discoveries of philosophy. To be honest, I liked this book more for it's character descriptions and travelling adventures than it's philosophy. I am really conflicted about putting this book on this list at all, but I kept thinking about this long after I finished reading it, so I guess this had a bigger influence on me than I realized.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">Nexus/Crux/Apex, Rad/Blue/Green Mars, The Martian, The Three-Body Problem</h2>
+<div class="outline-text-2" id="text-orgheadline5">
+<p>
+What happens when you take today's world, and add nanotech brain upgrades (Nexus/Crux/Apex), or strand a lone scientist on Mars (The Martian), or send a large number of people to found a new colony on Mars (Red/Blue/Green Mars), or suddenly make contact with Aliens (The Three-Body Problem)? This what-if is what Science Fiction does best: Take this little what-if, and spin a gripping yarn from that. These books inspired me, made me think, were incredibly thrilling, but they did not have a lasting impact. Still well worth a read if you like Science Fiction, though.
+</p>
+</div>
+</div>
+<div class="post-date">03 Nov 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-11-03-matlab-engine-performance.html">Calling Matlab from Python</a></h1>
 <p>
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
@@ -143,22 +295,22 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
 </p>
 </div>
 </div>
-<div class="post-date">29 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
+<div class="post-date">29 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
 <p>
 As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">import</span> numpy
-<span style="color: #1c86ee;">import</span> matlab
-<span style="color: #1c86ee;">import</span> matlab.engine
+<pre class="src src-python"><span style="color: #1c9af1;">import</span> numpy
+<span style="color: #1c9af1;">import</span> matlab
+<span style="color: #1c9af1;">import</span> matlab.engine
 
-<span style="color: #2e8b57;">eng</span> = matlab.engine.start_matlab()
-<span style="color: #2e8b57;">random_data</span> = numpy.random.randn(100)
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">convert Numpy data to Matlab:</span>
-<span style="color: #2e8b57;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #2e8b57;">data_sum</span> = eng.<span style="color: #cd6600;">sum</span>(matlab_data)
+<span style="color: #379a6a;">eng</span> = matlab.engine.start_matlab()
+<span style="color: #379a6a;">random_data</span> = numpy.random.randn(100)
+<span style="color: #919191;"># </span><span style="color: #919191;">convert Numpy data to Matlab:</span>
+<span style="color: #379a6a;">matlab_data</span> = matlab.double(random_data.tolist())
+<span style="color: #379a6a;">data_sum</span> = eng.<span style="color: #d87a00;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -180,7 +332,7 @@ Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">from</span> pympler <span style="color: #1c86ee;">import</span> muppy, summary
+<pre class="src src-python"><span style="color: #1c9af1;">from</span> pympler <span style="color: #1c9af1;">import</span> muppy, summary
 summary.print_(summary.summarize(muppy.get_objects()))
 </pre>
 </div>
@@ -215,14 +367,14 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">import</span> array
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">get a list of all objects known to Python:</span>
-<span style="color: #2e8b57;">all_objects</span> = muppy.get_objects()
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">sort out only `array.array` instances:</span>
-<span style="color: #2e8b57;">all_arrays</span> = [obj <span style="color: #1c86ee;">for</span> obj <span style="color: #1c86ee;">in</span> all_objects <span style="color: #1c86ee;">if</span> <span style="color: #cd6600;">isinstance</span>(obj, array.array)]
+<pre class="src src-python"><span style="color: #1c9af1;">import</span> array
+<span style="color: #919191;"># </span><span style="color: #919191;">get a list of all objects known to Python:</span>
+<span style="color: #379a6a;">all_objects</span> = muppy.get_objects()
+<span style="color: #919191;"># </span><span style="color: #919191;">sort out only `array.array` instances:</span>
+<span style="color: #379a6a;">all_arrays</span> = [obj <span style="color: #1c9af1;">for</span> obj <span style="color: #1c9af1;">in</span> all_objects <span style="color: #1c9af1;">if</span> <span style="color: #d87a00;">isinstance</span>(obj, array.array)]
 
-<span style="color: #1c86ee;">import</span> objgraph
-objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #8b7355;">'array.png'</span>)
+<span style="color: #1c9af1;">import</span> objgraph
+objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #9d8567;">'array.png'</span>)
 </pre>
 </div>
 
@@ -242,10 +394,10 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">def</span> <span style="color: #cd9b1d;">leak</span>():
-    <span style="color: #2e8b57;">test_data</span> = numpy.zeros(1024*1024)
-    <span style="color: #2e8b57;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #cd6600;">sum</span>(matlab_data)
+<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">leak</span>():
+    <span style="color: #379a6a;">test_data</span> = numpy.zeros(1024*1024)
+    <span style="color: #379a6a;">matlab_data</span> = matlab.double(test_data.tolist())
+    eng.<span style="color: #d87a00;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -255,8 +407,8 @@ Pympler has another great feature that can track allocations. The <code>SummaryT
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">from</span> pympler <span style="color: #1c86ee;">import</span> tracker
-<span style="color: #2e8b57;">tr</span> = tracker.SummaryTracker()
+<pre class="src src-python"><span style="color: #1c9af1;">from</span> pympler <span style="color: #1c9af1;">import</span> tracker
+<span style="color: #379a6a;">tr</span> = tracker.SummaryTracker()
 tr.print_diff()
 leak()
 tr.print_diff()
@@ -285,108 +437,7 @@ This data is not referenced from anywhere within Python, and is counted as <i>le
 <p>
 I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
 </p>
-<div class="post-date">16 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
-
-<div class="figure">
-<p><img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png" />
-</p>
-</div>
-
-<p>
-The Mac. It used to be the most streamlined, thought-through general computing device on the market.
-</p>
-
-<p>
-Even it's file management used to be top-notch. There were many cool little touches. One particularly useful feature was the <i>Proxy Icon</i>&#x2013;if a window displayed a file's content, that file's icon would show up in the window's title. And you could drag that icon directly onto a thumb drive or email, without having to use the Finder. But the Finder, too, had many neat little features. I loved the fact that when you renamed a file in an alphabetically sorted file list, Finder would not immediately re-shuffle it to its new location, but would wait half a second before doing so. When renaming multiple files, this was really useful, since you could go through them one by one and rename them, simply by pressing arrow keys and return.
-</p>
-
-<p>
-But as you might have guessed from my use of the past tense, these golden days are gone. The Finder used to know a JPEG from a ZIP regardless of file extension. Now it doesn't any more. The Proxy Icon is still draggable, but it will create an alias instead of a copy&#x2013;perfectly useless on a thumb drive or in an email.
-</p>
-
-<p>
-And with the newest version of OS X, El Capitan, they finally blew it for me. Before, even though the Finder inexplicably never had the ability to cut and paste files, you could always install programs like <a href="http://totalfinder.binaryage.com/">TotalFinder</a> to fix that. Not so with El Capitan. The Finder now is holy land, and can not be touched any more by third parties. So no more cut and paste, no more un-hiding system files. No more side-by-side Finder tabs. And brand new with El Capitan as well: No more waiting after renaming. Now, when you rename a file, it is immediately re-sorted to its new position, thus making renaming multiple files terribly inconvenient.
-</p>
-
-<p>
-So, good bye OS X. I updated my work laptop first, and I regret it. I never regretted an OS X update before. My home machine is not going to get the update. It is honestly sad to see my once-beloved Mac platform becoming worse and worse and worse with every new release.
-</p>
-<div class="post-date">03 Okt 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
-<p>
-On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
-</p>
-
-<p>
-For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http://www.sentex.net/~mwandel/jhead/">command</a> <a href="http://owl.phy.queensu.ca/~phil/exiftool/">line</a> <a href="http://www.exiv2.org/#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
-</p>
-
-<p>
-So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
-</p>
-
-<p>
-If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <i>either</i> the file creation date, <i>or</i> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.
-</p>
-
-<p>
-Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c86ee;">import</span> os.path
-<span style="color: #1c86ee;">import</span> os
-<span style="color: #1c86ee;">import</span> datetime
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #1c86ee;">for</span> index <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(426, 465):
-    <span style="color: #2e8b57;">filename</span> = <span style="color: #8b7355;">'GOPR0{}.MP4'</span>.<span style="color: #cd6600;">format</span>(index)
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract old date:</span>
-    <span style="color: #2e8b57;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #2e8b57;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #8b7355;">'SetFile -d "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #8b7355;">'SetFile -m "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-</pre>
-</div>
-<div class="post-date">29 Sep 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-09-29-numpy-broadcasting-rules.html">Numpy Broadcasting Rules</a></h1>
-<p>
-They say that all arithmetic operations in Numpy behave like their element-wise cousins in Matlab. This is wrong, and seriously tripped me up last week.
-</p>
-
-<p>
-In particular, this is what happens when you multiply an array with a matrix<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> in Numpy:
-</p>
-
-<pre class="example">
-     [[  1],           [[1, 2, 3],       [[ 1,    2,   3],
-      [ 10],       *    [4, 5, 6],   =    [ 40,  50,  60],
-      [100]]            [7, 8, 9]]        [700, 800, 900]]
-
- [  1,  10, 100]       [[1, 2, 3],       [[  1,  20, 300],
-        OR         *    [4, 5, 6],   =    [  4,  50, 600],
-[[  1,  10, 100]]       [7, 8, 9]]        [  7,  80, 900]]
-</pre>
-
-<p>
-They behave as if each row was evaluated separately, and singular dimensions are repeated where necessary. It helps to think about them as row-wise, instead of element-wise. This is particularly important in the second example, where the <i>whole</i> 1d-array is multiplied with <i>every row</i> of the 2d-array.
-</p>
-
-<p>
-Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as in <code>[a[n]*b[n] for n in range(len(a))]</code>. I guess that's why this is called <i>broadcasting</i>, and not <i>element-wise</i>.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
-"matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
-</p></div></div>
-
-
-</div>
-</div><div id="archive">
+<div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
 </div>
