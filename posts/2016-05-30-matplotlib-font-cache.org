@@ -1,0 +1,22 @@
+#+title: Updating the Matplotlib Font Cache
+#+date: <2016-05-30 16:30>
+
+When publishing papers or articles, I want my plots to integrate with the text surrounding them. I want them to use the correct font size, and the correct font.
+
+This is easy to do with Matplotlib:
+
+#+begin_src python
+import matplotlib
+matplotlib.rcParams['font.size'] = 12
+matplotlib.rcParams['font.family'] = 'Calibri'
+#+end_src
+
+However, sometimes, Matplotlib won't find the correct, even though it is clearly installed. This happens when Matplotlib's internal font cache is out of date.
+
+To refresh the font cache, use
+
+#+begin_src python
+matplotlib.font_manager._rebuild()
+#+end_src
+
+Happy Plotting!

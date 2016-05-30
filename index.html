@@ -26,7 +26,41 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
+<div id="content"><div class="post-date">30 May 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-05-30-matplotlib-font-cache.html">Updating the Matplotlib Font Cache</a></h1>
+<p>
+When publishing papers or articles, I want my plots to integrate with the text surrounding them. I want them to use the correct font size, and the correct font.
+</p>
+
+<p>
+This is easy to do with Matplotlib:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> matplotlib
+<span style="color: #111111;">matplotlib.rcParams</span>[<span style="color: #303030;">'font.size'</span>] = 12
+<span style="color: #111111;">matplotlib.rcParams</span>[<span style="color: #303030;">'font.family'</span>] = <span style="color: #303030;">'Calibri'</span>
+</pre>
+</div>
+
+<p>
+However, sometimes, Matplotlib won't find the correct, even though it is clearly installed. This happens when Matplotlib's internal font cache is out of date.
+</p>
+
+<p>
+To refresh the font cache, use
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">matplotlib.font_manager._rebuild()
+</pre>
+</div>
+
+<p>
+Happy Plotting!
+</p>
+<div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
 <p>
 What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
 </p>
@@ -41,18 +75,18 @@ But lately, I have come to struggle with these rules. I am now writing a lot of 
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">rectwin_spectrum</span>(angular_frequency, specsize):
-    <span style="color: #9d8567;">"""The spectrum of a rectangular window. [...]"""</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">this will be corrected later, suppress the warning.</span>
-    <span style="color: #1c9af1;">with</span> np.errstate(invalid=<span style="color: #9d8567;">'ignore'</span>):
-        <span style="color: #379a6a;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">rectwin_spectrum</span>(angular_frequency, specsize):
+    <span style="color: #303030;">"""The spectrum of a rectangular window. [...]"""</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #303030;">'ignore'</span>):
+        <span style="color: #111111;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
                      np.sin(specsize*angular_frequency/2) /
                      np.sin(angular_frequency/2) )
-    <span style="color: #919191;"># </span><span style="color: #919191;">since sin(x) == x for small x, the above expression</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">evaluates to specsize for angular_frequency == 0.</span>
-    <span style="color: #379a6a;">spectrum</span>[angular_frequency == 0.0] = specsize
-    <span style="color: #1c9af1;">return</span> spectrum
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #111111;">spectrum</span>[angular_frequency == 0.0] = specsize
+    <span style="color: #111111; font-weight: bold;">return</span> spectrum
 </pre>
 </div>
 
@@ -66,38 +100,38 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
 
 <div class="org-src-container">
 
-<pre class="src src-octave"><span style="color: #1c9af1;">classdef</span> SignalBlocks <span style="color: #d87a00;">&lt;</span> handle
-    <span style="color: #1c9af1;">properties</span>
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #111111; background-color: #fffff8;">&lt;</span> handle
+    <span style="color: #111111; font-weight: bold;">properties</span>
         data
         samplerate
         blocksize
         hopsize
-    <span style="color: #1c9af1;">end</span>
-    <span style="color: #1c9af1;">properties</span> (Dependent)
+    <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">properties</span> (Dependent)
         duration
-    <span style="color: #1c9af1;">end</span>
-    <span style="color: #1c9af1;">methods</span>
-        <span style="color: #1c9af1;">function</span> obj <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">SignalBlock</span>(data<span style="color: #d87a00;">,</span> samplerate<span style="color: #d87a00;">,</span> blocksize<span style="color: #d87a00;">,</span> hopsize)
-            <span style="color: #919191;">% blocksize and hopsize are optional. What a mess.</span>
-            narginchk(2<span style="color: #d87a00;">,</span> 4)<span style="color: #d87a00;">;</span>
-            obj.data <span style="color: #d87a00;">=</span> data<span style="color: #d87a00;">;</span>
-            obj.samplerate <span style="color: #d87a00;">=</span> samplerate<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">&gt;=</span> 3
-                obj.blocksize <span style="color: #d87a00;">=</span> blocksize<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">else</span>
-                obj.blocksize <span style="color: #d87a00;">=</span> 2048<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">end</span>
-            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">==</span> 4
-                obj.hopsize <span style="color: #d87a00;">=</span> hopsize<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">else</span>
-                obj.hopsize <span style="color: #d87a00;">=</span> 1024<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">end</span>
-        <span style="color: #1c9af1;">end</span>
-        <span style="color: #1c9af1;">function</span> time <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">get</span>.duration(obj)
-            time <span style="color: #d87a00;">=</span> length(obj.data)<span style="color: #d87a00;">/</span>obj.samplerate<span style="color: #d87a00;">;</span>
-        <span style="color: #1c9af1;">end</span>
-    <span style="color: #1c9af1;">end</span>
-<span style="color: #1c9af1;">end</span>
+    <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">methods</span>
+        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111; background-color: #fffff8;">,</span> samplerate<span style="color: #111111; background-color: #fffff8;">,</span> blocksize<span style="color: #111111; background-color: #fffff8;">,</span> hopsize)
+            <span style="color: #303030; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
+            narginchk(2<span style="color: #111111; background-color: #fffff8;">,</span> 4)<span style="color: #111111; background-color: #fffff8;">;</span>
+            obj.data <span style="color: #111111; background-color: #fffff8;">=</span> data<span style="color: #111111; background-color: #fffff8;">;</span>
+            obj.samplerate <span style="color: #111111; background-color: #fffff8;">=</span> samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111; background-color: #fffff8;">&gt;=</span> 3
+                obj.blocksize <span style="color: #111111; background-color: #fffff8;">=</span> blocksize<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">else</span>
+                obj.blocksize <span style="color: #111111; background-color: #fffff8;">=</span> 2048<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">end</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111; background-color: #fffff8;">==</span> 4
+                obj.hopsize <span style="color: #111111; background-color: #fffff8;">=</span> hopsize<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">else</span>
+                obj.hopsize <span style="color: #111111; background-color: #fffff8;">=</span> 1024<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">end</span>
+        <span style="color: #111111; font-weight: bold;">end</span>
+        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
+            time <span style="color: #111111; background-color: #fffff8;">=</span> length(obj.data)<span style="color: #111111; background-color: #fffff8;">/</span>obj.samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
+        <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">end</span>
+<span style="color: #111111; font-weight: bold;">end</span>
 </pre>
 </div>
 
@@ -295,148 +329,6 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
 </p>
 </div>
 </div>
-<div class="post-date">29 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
-<p>
-As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> numpy
-<span style="color: #1c9af1;">import</span> matlab
-<span style="color: #1c9af1;">import</span> matlab.engine
-
-<span style="color: #379a6a;">eng</span> = matlab.engine.start_matlab()
-<span style="color: #379a6a;">random_data</span> = numpy.random.randn(100)
-<span style="color: #919191;"># </span><span style="color: #919191;">convert Numpy data to Matlab:</span>
-<span style="color: #379a6a;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #379a6a;">data_sum</span> = eng.<span style="color: #d87a00;">sum</span>(matlab_data)
-</pre>
-</div>
-
-<p>
-You can call any Matlab function on <code>eng</code>, and you can access any Matlab workspace variable in <code>eng.workspace</code>. As you can see, the Matlab Engine is not Numpy-aware, and you have to convert all your Numpy data to Matlab <code>double</code> before you can call Matlab functions with it. Still, it works pretty well.
-</p>
-
-<p>
-Recently, I ran a rather large experiment set, where I had a set of four functions, two in Matlab, two in Python, and called each of these functions a few thousand times with a bunch of different data to see how they performed.
-</p>
-
-<p>
-While doing that I noticed that my Python processes were growing larger and larger, until they consumed all my memory and a sizeable chunk of my swap as well. I couldn't find any reason for this. None of my Python code cached anything, and the sum total of all global variables did not amount to anything substantial.
-</p>
-
-<p>
-Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory analyzer for Python. Pympler is an amazing library for introspecting your program's memory. Among its many features, it can list the biggest objects in your running program:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pympler <span style="color: #1c9af1;">import</span> muppy, summary
-summary.print_(summary.summarize(muppy.get_objects()))
-</pre>
-</div>
-
-<pre class="example">
-                                      types |   # objects |   total size
-=========================================== | =========== | ============
-                        &lt;class 'array.array |        1076 |      2.77 GB
-                                &lt;class 'str |       42839 |      7.65 MB
-                               &lt;class 'dict |        8604 |      5.43 MB
-                      &lt;class 'numpy.ndarray |          48 |      3.16 MB
-                               &lt;class 'code |       14113 |      1.94 MB
-                               &lt;class 'type |        1557 |      1.62 MB
-                               &lt;class 'list |        3158 |      1.38 MB
-                                &lt;class 'set |        1265 |    529.72 KB
-                              &lt;class 'tuple |        5129 |    336.98 KB
-                              &lt;class 'bytes |        2413 |    219.48 KB
-                            &lt;class 'weakref |        2654 |    207.34 KB
-            &lt;class 'collections.OrderedDict |          65 |    149.85 KB
-                 &lt;class 'wrapper_descriptor |        1676 |    130.94 KB
-  &lt;class 'traitlets.traitlets.MetaHasTraits |         107 |    123.55 KB
-                  &lt;class 'getset_descriptor |        1738 |    122.20 KB
-</pre>
-
-<p>
-Now that is interesting. Apparently, I was lugging around close to three gigabytes worth of bare-Python <code>array.array</code>. And these are clearly not Numpy arrays, since those would show up as <code>numpy.ndarray</code>. But I couldn't find any of these objects in my workspace.
-</p>
-
-<p>
-So let's get a reference to one of these objects, and see who they belong to. This can also be done with Pympler, but I prefer the way <a href="http://mg.pov.lt/objgraph/">objgraph</a> does it:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> array
-<span style="color: #919191;"># </span><span style="color: #919191;">get a list of all objects known to Python:</span>
-<span style="color: #379a6a;">all_objects</span> = muppy.get_objects()
-<span style="color: #919191;"># </span><span style="color: #919191;">sort out only `array.array` instances:</span>
-<span style="color: #379a6a;">all_arrays</span> = [obj <span style="color: #1c9af1;">for</span> obj <span style="color: #1c9af1;">in</span> all_objects <span style="color: #1c9af1;">if</span> <span style="color: #d87a00;">isinstance</span>(obj, array.array)]
-
-<span style="color: #1c9af1;">import</span> objgraph
-objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #9d8567;">'array.png'</span>)
-</pre>
-</div>
-
-
-<div class="figure">
-<p><img src="http://bastibe.de/static/2015-10/array.png" alt="array.png" />
-</p>
-</div>
-
-<p>
-It seems that the <code>array.array</code> object is part of a <code>matlab.double</code> instance which is not referenced from anywhere but <code>all_objects</code>. A memory leak.
-</p>
-
-<p>
-After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function <code>leak</code> passes some data to Matlab, and calculates a float. Since the variables are not used outside of <code>leak</code>, and the function does not return anything, all variables within the function should get deallocated when <code>leak</code> returns.
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">leak</span>():
-    <span style="color: #379a6a;">test_data</span> = numpy.zeros(1024*1024)
-    <span style="color: #379a6a;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #d87a00;">sum</span>(matlab_data)
-</pre>
-</div>
-
-<p>
-Pympler has another great feature that can track allocations. The <code>SummaryTracker</code> will track and display any allocations between calls to <code>print_diff()</code>. This is very useful to see how much memory was used during the call to <code>leak</code>:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pympler <span style="color: #1c9af1;">import</span> tracker
-<span style="color: #379a6a;">tr</span> = tracker.SummaryTracker()
-tr.print_diff()
-leak()
-tr.print_diff()
-</pre>
-</div>
-
-<pre class="example">
-                     types |   # objects |   total size
-========================== | =========== | ============
-       &lt;class 'array.array |           1 |      8.00 MB
-...
-</pre>
-
-<p>
-And there you have it. Note that this leak is not the Numpy array <code>test_data</code> and it is not the matlab array <code>matlab_data</code>. Both of these are garbage collected correctly. But <b>the Matlab Engine for Python will leak any data you pass to a Matlab function</b>.
-</p>
-
-<p>
-This data is not referenced from anywhere within Python, and is counted as <i>leaked</i> by <code>objgraph</code>. In other words, the C code inside the Matlab Engine for Python copies all passed data into it's internal memory, but never frees that memory. Not even if you quit the Matlab Engine, or <code>del</code> all Python references to it. Your only option is to restart Python.
-</p>
-
-<p>
-<b>Postscriptum</b>
-</p>
-
-<p>
-I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
-</p>
 <div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
