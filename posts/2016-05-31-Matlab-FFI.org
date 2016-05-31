@@ -1,0 +1,79 @@
+#+title: Matlab has an FFI and it is not Mex
+#+date: <2016-05-31 11:00>
+
+Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
+
+So, you grab your towel, you bite the bullet, you strap into your K&R, and get down to it: You start writing a Mex file. And you curse, and you cry, because writing C is hard, and Mex doesn't exactly make it any better. But you know what? /There is a better way!/
+
+Because, unbeknownst to many, Matlab includes a Foreign Function Interface. The technique was probably pioneered by [[https://common-lisp.net/project/cffi/][Common Lisp]], and has since [[http://luajit.org/ext_ffi.html][been]] [[http://cffi.readthedocs.io/en/latest/overview.html][widely]] [[http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html][adopted]] [[https://en.wikipedia.org/wiki/Foreign_function_interface][everywhere]]: calling functions in a C library without writing any C code and without invoking a compiler!
+
+Mind you, there remains a large and essential impedance mismatch between C's statically typed calling conventions and the vagaries of a dynamically typed language such as Matlab, and even the nicest FFI can't completely hide that fact. But anything is better than the abomination that is Mex.
+
+So here goes, a very simple C library that adds two arrays:
+
+#+begin_src C
+// test.c:
+#include test.h
+
+void add_arrays(float *out, float* in, size_t length) {
+    for (size_t n=0; n<length; n++) {
+        out[n] += in[n];
+    }
+}
+
+// test.h:
+#include <stddef.h>
+void add_arrays(float *out, float *in, size_t length);
+#+end_src
+
+Let's compile it! ~gcc -shared -std=c99 -o test.so test.c~ will do the trick.
+
+Now, let's load that library into Matlab with ~loadlibrary~:
+
+#+begin_src octave
+if not(libisloaded('test'))
+    [notfound, warnings] = loadlibrary('test.so', 'test.h');
+    assert(isempty(notfound), 'could not load test library')
+end
+#+end_src
+
+Note that ~loadlibrary~ can't parse many things you would commonly find in header files, so you will likely have to strip them down to the bare essentials. Additionally, ~loadlibrary~ doesn't throw errors if it can't load a library, so we always have to check the ~notfound~ output argument to see if the library was actually loaded successfully.
+
+With that, we can call functions in that library using ~calllib~. But we can't just pass in Matlab vectors, that would be too easy. We first have to convert them to something C can understand: Pointers
+
+#+begin_src octave
+vector1 = [1 2 3 4 5];
+vector2 = [9 8 7 6 5];
+
+vector1ptr = libpointer('singlePointer', vector1);
+vector2ptr = libpointer('singlePointer', vector2);
+#+end_src
+
+What is nice about this is that this automatically converts the vectors from ~double~ to ~float~. What is less nice is that it uses its weird ~singlePtr~ notation instead of the more canonical ~float*~ that you would expect from a self-respecting C header.
+
+Then, finally, let's call our function:
+
+#+begin_src octave
+calllib('test', 'add_arrays', vector1ptr, vector2ptr, length(vector1));
+#+end_src
+
+If you see no errors, everything went smoothly, and you will now have changed the content of vector1ptr, which we can have a look at like this:
+
+#+begin_src octave
+added_vectors = vector1ptr.Value;
+#+end_src
+
+Note that this didn't change the contents of ~vector1~, only of the newly created pointer. So there will always be some memory overhead to this technique in comparison to Mex files. However, runtime overhead seems pretty fine:
+
+#+begin_src octave
+timeit(@() calllib('test', 'add_arrays', vector1ptr, vector2ptr, length(vector1)))
+%   ans = 1.9155e-05
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1), single(vector2)))
+%   ans = 4.6262e-05
+timeit(@() the_same_thing_plus_argument_conversion(vector1, vector2))
+%   ans = 1.2326e-04
+#+end_src
+
+So as you can see, the ~calllib~ is plenty fast. However, if you add the Matlab code for converting the double arrays to pointers and extracting the summed data afterwards, the FFI is noticeably slower than a Mex file.
+
+However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life /not/ spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.

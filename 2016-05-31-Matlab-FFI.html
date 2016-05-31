@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Matlab has an FFI and it is not Mex</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">31 May 2016</div>
+<h1 class="post-title">Matlab has an FFI and it is not Mex</h1>
+<p>
+Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
+</p>
+
+<p>
+So, you grab your towel, you bite the bullet, you strap into your K&amp;R, and get down to it: You start writing a Mex file. And you curse, and you cry, because writing C is hard, and Mex doesn't exactly make it any better. But you know what? <i>There is a better way!</i>
+</p>
+
+<p>
+Because, unbeknownst to many, Matlab includes a Foreign Function Interface. The technique was probably pioneered by <a href="https://common-lisp.net/project/cffi/">Common Lisp</a>, and has since <a href="http://luajit.org/ext_ffi.html">been</a> <a href="http://cffi.readthedocs.io/en/latest/overview.html">widely</a> <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html">adopted</a> <a href="https://en.wikipedia.org/wiki/Foreign_function_interface">everywhere</a>: calling functions in a C library without writing any C code and without invoking a compiler!
+</p>
+
+<p>
+Mind you, there remains a large and essential impedance mismatch between C's statically typed calling conventions and the vagaries of a dynamically typed language such as Matlab, and even the nicest FFI can't completely hide that fact. But anything is better than the abomination that is Mex.
+</p>
+
+<p>
+So here goes, a very simple C library that adds two arrays:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
+<span style="color: #111111;">#include</span> test.h
+
+<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
+    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">n</span>=0; n&lt;length; n++) {
+        out[n] += in[n];
+    }
+}
+
+<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
+<span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
+<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
+</pre>
+</div>
+
+<p>
+Let's compile it! <code>gcc -shared -std=c99 -o test.so test.c</code> will do the trick.
+</p>
+
+<p>
+Now, let's load that library into Matlab with <code>loadlibrary</code>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #303030;">'test'</span>))
+    [notfound<span style="color: #111111; background-color: #fffff8;">,</span> warnings] <span style="color: #111111; background-color: #fffff8;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111; background-color: #fffff8;">;</span>
+    assert(isempty(notfound)<span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'could not load test library'</span>)
+<span style="color: #111111; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Note that <code>loadlibrary</code> can't parse many things you would commonly find in header files, so you will likely have to strip them down to the bare essentials. Additionally, <code>loadlibrary</code> doesn't throw errors if it can't load a library, so we always have to check the <code>notfound</code> output argument to see if the library was actually loaded successfully.
+</p>
+
+<p>
+With that, we can call functions in that library using <code>calllib</code>. But we can't just pass in Matlab vectors, that would be too easy. We first have to convert them to something C can understand: Pointers
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">vector1 <span style="color: #111111; background-color: #fffff8;">=</span> [1 2 3 4 5]<span style="color: #111111; background-color: #fffff8;">;</span>
+vector2 <span style="color: #111111; background-color: #fffff8;">=</span> [9 8 7 6 5]<span style="color: #111111; background-color: #fffff8;">;</span>
+
+vector1ptr <span style="color: #111111; background-color: #fffff8;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1)<span style="color: #111111; background-color: #fffff8;">;</span>
+vector2ptr <span style="color: #111111; background-color: #fffff8;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector2)<span style="color: #111111; background-color: #fffff8;">;</span>
+</pre>
+</div>
+
+<p>
+What is nice about this is that this automatically converts the vectors from <code>double</code> to <code>float</code>. What is less nice is that it uses its weird <code>singlePtr</code> notation instead of the more canonical <code>float*</code> that you would expect from a self-respecting C header.
+</p>
+
+<p>
+Then, finally, let's call our function:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1))<span style="color: #111111; background-color: #fffff8;">;</span>
+</pre>
+</div>
+
+<p>
+If you see no errors, everything went smoothly, and you will now have changed the content of vector1ptr, which we can have a look at like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">added_vectors <span style="color: #111111; background-color: #fffff8;">=</span> vector1ptr.Value<span style="color: #111111; background-color: #fffff8;">;</span>
+</pre>
+</div>
+
+<p>
+Note that this didn't change the contents of <code>vector1</code>, only of the newly created pointer. So there will always be some memory overhead to this technique in comparison to Mex files. However, runtime overhead seems pretty fine:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1)))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111; background-color: #fffff8;">,</span> single(vector2)))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
+timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111; background-color: #fffff8;">,</span> vector2))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
+</pre>
+</div>
+
+<p>
+So as you can see, the <code>calllib</code> is plenty fast. However, if you add the Matlab code for converting the double arrays to pointers and extracting the summed data afterwards, the FFI is noticeably slower than a Mex file.
+</p>
+
+<p>
+However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life <i>not</i> spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
