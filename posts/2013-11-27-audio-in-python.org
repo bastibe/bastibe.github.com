@@ -15,8 +15,8 @@ So one fateful day, I was sufficiently frustrated with the state of things that 
 So, lets read some audio data, shall we?
 
 #+begin_src python
-from pysoundfile import SoundFile
-data = SoundFile('sad_song.wav')[:]
+import soundfile
+data = soundfile.read('sad_song.wav')
 #+end_src
 
 done. All the audio data is now available as a NumPy array in ~data~. Just like that.
@@ -26,10 +26,9 @@ Awesome, isn't it?
 OK, that was easy. So let's read only the first and last 100 frames!
 
 #+begin_src python
-from pysoundfile import SoundFile
-f = SoundFile('long_song.flac')
-first = f[:100]
-last = f[-100:]
+import soundfile
+first = soundfile.read('long_song.flac', stop=100)
+last = soundfile.read(start=-100)
 #+end_src
 
 This really only read the first and last bit. Not everything in between!
@@ -56,6 +55,8 @@ And that's really all there is to it. Working with audio data in Python is easy 
 Of course, there is much more you could do. You could create a callback function and be called every four[1] frames with new audio data to process. You could request your audio data as ~int16~, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[3].
 
 You can download these libraries from [[https://pypi.python.org/pypi][PyPi]], or use the binary Windows installers on Github. Or you can look at the source on Github ([[https://github.com/bastibe/PySoundFile][PySoundFile]], [[https://github.com/bastibe/PySoundCard][PySoundCard]]), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
+
+*UPDATE:* It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
 
 [1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
 [2] More precisely: Everything that [[http://www.portaudio.com/][portaudio]] supports.

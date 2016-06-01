@@ -55,8 +55,8 @@ So, lets read some audio data, shall we?
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">from</span> pysoundfile <span style="color: #1c86ee;">import</span> SoundFile
-<span style="color: #2e8b57;">data</span> = SoundFile(<span style="color: #8b7355;">'sad_song.wav'</span>)[:]
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
+<span style="color: #111111;">data</span> = soundfile.read(<span style="color: #303030;">'sad_song.wav'</span>)
 </pre>
 </div>
 
@@ -74,10 +74,9 @@ OK, that was easy. So let's read only the first and last 100 frames!
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">from</span> pysoundfile <span style="color: #1c86ee;">import</span> SoundFile
-<span style="color: #2e8b57;">f</span> = SoundFile(<span style="color: #8b7355;">'long_song.flac'</span>)
-<span style="color: #2e8b57;">first</span> = f[:100]
-<span style="color: #2e8b57;">last</span> = f[-100:]
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
+<span style="color: #111111;">first</span> = soundfile.read(<span style="color: #303030;">'long_song.flac'</span>, stop=100)
+<span style="color: #111111;">last</span> = soundfile.read(start=-100)
 </pre>
 </div>
 
@@ -95,14 +94,14 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">from</span> pysoundcard <span style="color: #1c86ee;">import</span> Stream
-<span style="color: #1c86ee;">from</span> pysoundfile <span style="color: #1c86ee;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #1c86ee;">with</span> Stream() <span style="color: #1c86ee;">as</span> s: <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">opens your default audio device</span>
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">This is supposed to be a new file, so specify it completely</span>
-    <span style="color: #2e8b57;">f</span> = SoundFile(<span style="color: #8b7355;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #cd6600;">format</span>=ogg_file,
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
+<span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
+<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">opens your default audio device</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
+    <span style="color: #111111;">f</span> = SoundFile(<span style="color: #303030;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+                  channels=s.channels, <span style="color: #111111; background-color: #fffff8;">format</span>=ogg_file,
                   mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">one second</span>
+    f.write(s.read(s.sample_rate)) <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">one second</span>
 </pre>
 </div>
 
@@ -120,6 +119,10 @@ Of course, there is much more you could do. You could create a callback function
 
 <p>
 You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
+</p>
+
+<p>
+<b>UPDATE:</b> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
 </p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
