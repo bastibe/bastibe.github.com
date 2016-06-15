@@ -4,7 +4,59 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Wed, 01 Jun 2016 09:37:25 +0200</lastBuildDate>
+  <lastBuildDate>Wed, 15 Jun 2016 17:00:20 +0200</lastBuildDate>
+<item>
+  <title>Teaching with Matlab Live Scripts</title>
+  <description><![CDATA[<p>
+For a few years now, I have been teaching programming courses using <i>notebooks</i>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:
+</p>
+
+<p>
+You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.
+</p>
+
+<p>
+The first time I saw this was with the <a href="http://jupyter.org/">Jupyter notebook</a> (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
+</p>
+
+<p>
+Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
+</p>
+
+<p>
+Now, with 2016a, Matlab introduced <a href="http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html">Live Scripts</a>, which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
+</p>
+
+<p>
+First off, Live Scripts <i>work</i>. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.
+</p>
+
+<p>
+However, Live Scripts are new, and still contain a number of bugs. You can't customize figure sizes, formatting options are very basic, image rendering is terrible, and math rendering using LaTeX is of poor quality and limited. Also, using Live Scripts on a retina Mac is borderline impossible: Matlab crashes on screen resolution changes (i.e. connecting a projector), Live Scripts render REALLY slowly (type a word, watch the characters crawl onto the screen one by one), and all figures export in twice their intended size (fixed in 2016b). You can work around some of these issues by starting Matlab in <a href="https://support.apple.com/en-us/HT202471">Low Resolution Mode</a>.
+</p>
+
+<p>
+No doubt some of these issues are going to get addressed in future releases. 2016b added script-local functions, which I read mostly as "you can now write functions in Live Scripts", and autocorrection-like text replacements that convert Markdown formatting into formatted text. This is highly appreciated.
+</p>
+
+<p>
+Additionally though, here are a few features I would love to see:
+</p>
+
+<ul class="org-ul">
+<li>Nested lists, and lists entries that contain newlines (i.e. differentiate between line breaks and paragraph breaks).</li>
+<li>Indented text, for quoting things, or to work around the lack of multi-line list entries.</li>
+<li>More headline levels.</li>
+<li>Magics. This is probably a long shot, but line/cell magics in Jupyter notebooks are really useful.</li>
+</ul>
+
+<p>
+Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. They aren't quite as nice as Jupyter notebooks, but they serve their purpose, and are a tremendously useful teaching tool.
+</p>
+]]></description>
+  <link>http://bastibe.de/2016-06-15-matlab-live-scripts.html</link>
+  <pubDate>Wed, 15 Jun 2016 00:00:00 +0200</pubDate>
+</item>
 <item>
   <title>Matlab has an FFI and it is not Mex</title>
   <description><![CDATA[<p>

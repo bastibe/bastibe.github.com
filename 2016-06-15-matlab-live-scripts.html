@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Teaching with Matlab Live Scripts</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">15 Jun 2016</div>
+<h1 class="post-title">Teaching with Matlab Live Scripts</h1>
+<p>
+For a few years now, I have been teaching programming courses using <i>notebooks</i>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:
+</p>
+
+<p>
+You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.
+</p>
+
+<p>
+The first time I saw this was with the <a href="http://jupyter.org/">Jupyter notebook</a> (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
+</p>
+
+<p>
+Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
+</p>
+
+<p>
+Now, with 2016a, Matlab introduced <a href="http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html">Live Scripts</a>, which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
+</p>
+
+<p>
+First off, Live Scripts <i>work</i>. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.
+</p>
+
+<p>
+However, Live Scripts are new, and still contain a number of bugs. You can't customize figure sizes, formatting options are very basic, image rendering is terrible, and math rendering using LaTeX is of poor quality and limited. Also, using Live Scripts on a retina Mac is borderline impossible: Matlab crashes on screen resolution changes (i.e. connecting a projector), Live Scripts render REALLY slowly (type a word, watch the characters crawl onto the screen one by one), and all figures export in twice their intended size (fixed in 2016b). You can work around some of these issues by starting Matlab in <a href="https://support.apple.com/en-us/HT202471">Low Resolution Mode</a>.
+</p>
+
+<p>
+No doubt some of these issues are going to get addressed in future releases. 2016b added script-local functions, which I read mostly as "you can now write functions in Live Scripts", and autocorrection-like text replacements that convert Markdown formatting into formatted text. This is highly appreciated.
+</p>
+
+<p>
+Additionally though, here are a few features I would love to see:
+</p>
+
+<ul class="org-ul">
+<li>Nested lists, and lists entries that contain newlines (i.e. differentiate between line breaks and paragraph breaks).</li>
+<li>Indented text, for quoting things, or to work around the lack of multi-line list entries.</li>
+<li>More headline levels.</li>
+<li>Magics. This is probably a long shot, but line/cell magics in Jupyter notebooks are really useful.</li>
+</ul>
+
+<p>
+Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. They aren't quite as nice as Jupyter notebooks, but they serve their purpose, and are a tremendously useful teaching tool.
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
