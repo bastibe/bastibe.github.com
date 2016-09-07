@@ -1,0 +1,17 @@
+#+title: MATLAB Syntax
+#+date: <2016-09-07 00:00>
+
+In a [[https://github.com/bastibe/MatlabCodeAnalyzer][recent project]], I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few... /unique/ design decisions of the MATLAB language:
+
+** Use of apostrophes (~'~)
+Apostrophes can mean one of two things: If applied as a unary postfix operator, it means /transpose/. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is /never/ used in MATLAB, so this would have been a very easy choice.
+
+** Use of parens (~()~)
+If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a /function call/. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation ~foo(5)~ will execute without knowledge about ~foo~ (which might not be available until runtime). Again, this could have been easily solved by using brackets (~[]~) for indexing, and parens (~()~) for function calls.
+
+** Use of braces (~{}~) and cell arrays
+Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but /braces/. Why? In fact, you /can/ index cell arrays using parens, but this only yields a new, cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior. It is just baffling.
+
+... for line continuations except within literals
+syntax rules for commands
+collection-of-things type
