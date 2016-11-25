@@ -26,7 +26,61 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">07 Sep 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-09-07-matlab-syntax.html">MATLAB Syntax</a></h1>
+<div id="content"><div class="post-date">24 Nov 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-11-24-pip-is-great.html">Pip is great</a></h1>
+<p>
+<a href="http://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing</a> <a href="http://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Python</a> <a href="http://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">packages</a> <a href="http://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html">used</a> to be a pain. Very surprisingly, this is no longer the case. Nowadays, <code>pip install whatever</code> will reliably install pretty much anything without any trouble.
+</p>
+
+<p>
+To recap, the problem is that many Python packages rely on C code, which needs to be compiled before installation. In the past, this burden was mostly on the user. Depending on the user's knowledge of C and compilers, and the user's operating system, this could become almost arbitrarily hairy.
+</p>
+
+<p>
+This problem was solved, to some extent, using pre-compiled packages, first as <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">binary installers</a> on the package websites, then pre-packaged <a href="http://winpython.github.io/">Python</a> <a href="https://www.continuum.io/anaconda-overview">distributions</a>, and later through third-party package managers such as <a href="http://conda.pydata.org/docs/">conda</a>.
+</p>
+
+<p>
+This worked well, but it fractured the ecosystem into several different mostly-compatible package sources. This was no big problem, but users had to decide on a package-by-package basis whether to download an installer, use conda, or use pip.
+</p>
+
+<p>
+But I am happy to announce that these dark days are behind us now. Pip now automatically installs binary Python packages called <a href="http://wheel.readthedocs.io/en/latest/">wheels</a>, and most package developers <a href="http://pythonwheels.com/">do now provide</a> wheels on <a href="https://pypi.python.org/pypi">PyPI</a>. This is so obviously superior to the past that many high-profile packages don't even provide binary installers any more.
+</p>
+
+<p>
+For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+Not because I dislike conda, just to simplify my development environment.
+</p></div>
+
+
+</div>
+</div><div class="post-date">22 Nov 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-11-22-soma.html">Soma</a></h1>
+<p>
+For a long time, I was afraid of picking up Soma, since it came from the developers who did Amnesia. Amnesia was the first game that scared me so thoroughly that I just couldn't bring myself to pick it up again after the first session. I admired it for its amazing world design, interactivity, and story, but it was too scary for me. I don't enjoy being scared.
+</p>
+
+<p>
+I was thus of two minds when I heard about Soma: Soma was supposed to be less scary, and SciFi. But still, let me get this out of the way; This game scared me whitless. I had to use an online game guide to warn me of monsters and tell me how to evade them. I was too scared to figure this stuff out by myself, all alone in this creepy, nasty, underwater space station.
+</p>
+
+<p>
+But at the same time, this game delivered one of the best stories I have ever seen in a video game. The story left me shaken and thoughtful for days, and the story was what dragged me back into the game even though I was really struggling with the monster sections. Even the delivery through conversations, environmental clues, and audio logs, was truly outstanding. I just love grimy Alien-style SciFi, and this is one of the very few video game stories that could fill more than a paragraph or two in a well-written book. I love it.
+</p>
+
+<p>
+Apparently, if you like horror games, this is a very mild one. Boring even, if you can believe my favorite <a href="https://www.youtube.com/watch?v=Y6BPcSYibco">online</a> <a href="https://www.youtube.com/watch?v=J4tbbcWqDyY">critics</a>. But believe me, it was right on the edge of what I was able to take. I still can't quite decide whether I would have preferred this game without the monsters, or whether the monsters were a necessary tool for evoking this intense sense of dread on the lonely SciFi ocean floor. Maybe the monsters lent some much-needed life and interactivity to the walk-em-up formula.
+</p>
+
+<p>
+At any rate, I thoroughly enjoyed this experience, and can't wait for what this developer will create next. I wholeheartedly recommend this, as one of the best SciFi stories of this year, in any medium. ★★★★★
+</p>
+<div class="post-date">07 Sep 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-09-07-matlab-syntax.html">MATLAB Syntax</a></h1>
 <p>
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
@@ -284,176 +338,6 @@ Here is the above data again in tabular form:
 </tr>
 </tbody>
 </table>
-<div class="post-date">15 Jun 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-06-15-matlab-live-scripts.html">Teaching with Matlab Live Scripts</a></h1>
-<p>
-For a few years now, I have been teaching programming courses using <i>notebooks</i>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:
-</p>
-
-<p>
-You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.
-</p>
-
-<p>
-The first time I saw this was with the <a href="http://jupyter.org/">Jupyter notebook</a> (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
-</p>
-
-<p>
-Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
-</p>
-
-<p>
-Now, with 2016a, Matlab introduced <a href="http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html">Live Scripts</a>, which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
-</p>
-
-<p>
-First off, Live Scripts <i>work</i>. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.
-</p>
-
-<p>
-However, Live Scripts are new, and still contain a number of bugs. You can't customize figure sizes, formatting options are very basic, image rendering is terrible, and math rendering using LaTeX is of poor quality and limited. Also, using Live Scripts on a retina Mac is borderline impossible: Matlab crashes on screen resolution changes (i.e. connecting a projector), Live Scripts render REALLY slowly (type a word, watch the characters crawl onto the screen one by one), and all figures export in twice their intended size (fixed in 2016b). You can work around some of these issues by starting Matlab in <a href="https://support.apple.com/en-us/HT202471">Low Resolution Mode</a>.
-</p>
-
-<p>
-No doubt some of these issues are going to get addressed in future releases. 2016b added script-local functions, which I read mostly as "you can now write functions in Live Scripts", and autocorrection-like text replacements that convert Markdown formatting into formatted text. This is highly appreciated.
-</p>
-
-<p>
-Additionally though, here are a few features I would love to see:
-</p>
-
-<ul class="org-ul">
-<li>Nested lists, and lists entries that contain newlines (i.e. differentiate between line breaks and paragraph breaks).
-</li>
-<li>Indented text, for quoting things, or to work around the lack of multi-line list entries.
-</li>
-<li>More headline levels.
-</li>
-<li>Magics. This is probably a long shot, but line/cell magics in Jupyter notebooks are really useful.
-</li>
-</ul>
-
-<p>
-Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. They aren't quite as nice as Jupyter notebooks, but they serve their purpose, and are a tremendously useful teaching tool.
-</p>
-<div class="post-date">31 May 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-05-31-Matlab-FFI.html">Matlab has an FFI and it is not Mex</a></h1>
-<p>
-Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
-</p>
-
-<p>
-So, you grab your towel, you bite the bullet, you strap into your K&amp;R, and get down to it: You start writing a Mex file. And you curse, and you cry, because writing C is hard, and Mex doesn't exactly make it any better. But you know what? <i>There is a better way!</i>
-</p>
-
-<p>
-Because, unbeknownst to many, Matlab includes a Foreign Function Interface. The technique was probably pioneered by <a href="https://common-lisp.net/project/cffi/">Common Lisp</a>, and has since <a href="http://luajit.org/ext_ffi.html">been</a> <a href="http://cffi.readthedocs.io/en/latest/overview.html">widely</a> <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html">adopted</a> <a href="https://en.wikipedia.org/wiki/Foreign_function_interface">everywhere</a>: calling functions in a C library without writing any C code and without invoking a compiler!
-</p>
-
-<p>
-Mind you, there remains a large and essential impedance mismatch between C's statically typed calling conventions and the vagaries of a dynamically typed language such as Matlab, and even the nicest FFI can't completely hide that fact. But anything is better than the abomination that is Mex.
-</p>
-
-<p>
-So here goes, a very simple C library that adds two arrays:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-C"><span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.c:</span>
-<span style="color: #111111;">#include</span> test.h
-
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
-    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">n</span>=0; n&lt;length; n++) {
-        out[n] += in[n];
-    }
-}
-
-<span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.h:</span>
-<span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
-</pre>
-</div>
-
-<p>
-Let's compile it! <code>gcc -shared -std=c99 -o test.so test.c</code> will do the trick.
-</p>
-
-<p>
-Now, let's load that library into Matlab with <code>loadlibrary</code>:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #303030;">'test'</span>))
-    [notfound<span style="color: #111111; background-color: #fffff8;">,</span> warnings] <span style="color: #111111; background-color: #fffff8;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111; background-color: #fffff8;">;</span>
-    assert(isempty(notfound)<span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'could not load test library'</span>)
-<span style="color: #111111; font-weight: bold;">end</span>
-</pre>
-</div>
-
-<p>
-Note that <code>loadlibrary</code> can't parse many things you would commonly find in header files, so you will likely have to strip them down to the bare essentials. Additionally, <code>loadlibrary</code> doesn't throw errors if it can't load a library, so we always have to check the <code>notfound</code> output argument to see if the library was actually loaded successfully.
-</p>
-
-<p>
-With that, we can call functions in that library using <code>calllib</code>. But we can't just pass in Matlab vectors, that would be too easy. We first have to convert them to something C can understand: Pointers
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-octave">vector1 <span style="color: #111111; background-color: #fffff8;">=</span> [1 2 3 4 5]<span style="color: #111111; background-color: #fffff8;">;</span>
-vector2 <span style="color: #111111; background-color: #fffff8;">=</span> [9 8 7 6 5]<span style="color: #111111; background-color: #fffff8;">;</span>
-
-vector1ptr <span style="color: #111111; background-color: #fffff8;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1)<span style="color: #111111; background-color: #fffff8;">;</span>
-vector2ptr <span style="color: #111111; background-color: #fffff8;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector2)<span style="color: #111111; background-color: #fffff8;">;</span>
-</pre>
-</div>
-
-<p>
-What is nice about this is that this automatically converts the vectors from <code>double</code> to <code>float</code>. What is less nice is that it uses its weird <code>singlePtr</code> notation instead of the more canonical <code>float*</code> that you would expect from a self-respecting C header.
-</p>
-
-<p>
-Then, finally, let's call our function:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1))<span style="color: #111111; background-color: #fffff8;">;</span>
-</pre>
-</div>
-
-<p>
-If you see no errors, everything went smoothly, and you will now have changed the content of vector1ptr, which we can have a look at like this:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-octave">added_vectors <span style="color: #111111; background-color: #fffff8;">=</span> vector1ptr.Value<span style="color: #111111; background-color: #fffff8;">;</span>
-</pre>
-</div>
-
-<p>
-Note that this didn't change the contents of <code>vector1</code>, only of the newly created pointer. So there will always be some memory overhead to this technique in comparison to Mex files. However, runtime overhead seems pretty fine:
-</p>
-
-<div class="org-src-container">
-
-<pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1)))
-<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.9155e-05</span>
-timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111; background-color: #fffff8;">,</span> single(vector2)))
-<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 4.6262e-05</span>
-timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111; background-color: #fffff8;">,</span> vector2))
-<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.2326e-04</span>
-</pre>
-</div>
-
-<p>
-So as you can see, the <code>calllib</code> is plenty fast. However, if you add the Matlab code for converting the double arrays to pointers and extracting the summed data afterwards, the FFI is noticeably slower than a Mex file.
-</p>
-
-<p>
-However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life <i>not</i> spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.
-</p>
 <div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
