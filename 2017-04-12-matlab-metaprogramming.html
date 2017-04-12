@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Matlab Metaprogramming</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">12 Apr 2017</div>
+<h1 class="post-title">Matlab Metaprogramming</h1>
+<p>
+Why is it, that I find Matlab to be a fine teaching tool and a fine tool for solving engineering problems, but at the same time, extremely cumbersome for my own work? Recently, the answer struck me: <i>metaprogramming in Matlab sucks</i>.
+</p>
+
+<p>
+Matlab is marketed as a tool for engineers to solve engineering problems. There are convenient data structures for numerical data (arrays, tables), less convenient data structures for non-numeric data (cells, structs, chars), and a host of expensive but powerful functions and methods for working with this kind of data. This is the happy path.
+</p>
+
+<p>
+But don't stray too far from the happy path; horrors lurk where The Mathworks don't dare going. Basic stuff like talking to sockets or interacting with other programs is very cumbersome in Matlab, and sometimes even downright impossible for the lack of threads, pipes, and similar infrastructure. But this is common knowledge, and consistent with Matlab's goals as an engineering tool, not a general purpose programming language. These are first-order problems, and they are rarely insurmountable.
+</p>
+
+<p>
+The more insidious problem is metaprogramming, i.e. when the objects of your code are code objects themselves. The first order use of programming is to solve real-world problems. If these problems are numeric in nature, Matlab has got you covered. But as every programmer discovers at some point, the second order use of programming is to solve programming problems. And by golly, will Matlab let you down when you try that!
+</p>
+
+<p>
+As soon as you climb that ladder of abstraction, and the objects of your code become code objects themselves, you will enter weird country. You think <code>exist</code> will tell you whether a variable name is taken? Try calling it on a method. You think <code>nargout</code> will always give you a number? Again, methods will enlighten you. Quick, how do you capture all output arguments of a function call in a variable? <code>x = cell(nargout(fun), 1); [x{:}] = fun(...)</code>, obviously (this sometimes fails). And don't even think of trying to overload <code>subsref</code> to create something generic. Those <code>subsref</code> semantics are <a href="https://mathworks.com/help/matlab/matlab_oop/code-patterns-for-subsref-and-subsasgn-methods.html">crazy talk</a>!
+</p>
+
+<p>
+I could go on. The real power of code is abstraction. We use programming to repeatedly and reliably solve similar problems. The logical next step is to use those same programming tools to solve similar <i>kinds</i> of problems. This happens to all of us, and Matlab makes it extremely hard to deal with. Thus, it puts a ceiling on the level of abstraction that is reasonably achievable, and limits engineers to first-order solutions. And after a few years of acclimatization, it will put that same ceiling on those engineers' thinking, because you can't reason about what you can't express.
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
