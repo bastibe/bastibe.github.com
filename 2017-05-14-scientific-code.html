@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Scientific Code</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">14 May 2017</div>
+<h1 class="post-title">Scientific Code</h1>
+<p>
+A short while ago, I spent a few weeks collecting and evaluating various implementations of speech analysis algorithms for my current work. TL;DR: the general quality of scientific software is bad, and needs to improve.
+</p>
+
+<p>
+Let me state up front that I am explicitly <i>not</i> talking about the quality of the science itself. This blog post is exclusively focused on the published <i>software</i>. In general, the problems were bad programming, old and unmaintained code, and lack of documentation. While none of these things mean <i>bad science</i>, they are a real challenge to reproducibility. Follow-up work can not quote algorithms they can't run.
+</p>
+
+<p>
+Most scientists are not programmers, and use programming as a tool for doing science. Scientists typically don't conceptualize algorithms as code, and don't reason about their implementation in terms of code. Consequently, executable implementations tend to not read like code, either. And frankly, this is as it should be. In my area of research, programming abstractions are not a great medium for expressing scientific ideas, and programming transformations are weak in comparison to mathematical operations.
+</p>
+
+<p>
+Still, the result is <i>bad code</i>. And <i>bad code is a problem for reproducibility and comparability</i>. Scientists therefore need to produce better code that is readable and portable. Straight-up letter-by-letter translations of the published math is just not enough, with all its single-letter variable names and complex nested expressions. We have to do better.
+</p>
+
+<p>
+<b>Include an Example Script</b>
+</p>
+
+<p>
+I have seen many instances of code that clearly worked at one point on the original author's machine, but doesn't on my computer. Maybe that is because I am running a different version of the programming environment, maybe my data is subtly different, maybe the author forgot to document a dependency. All of these happened to me, and all of these are exactly what you would expect from old, unmaintained code from non-expert programmers.
+</p>
+
+<p>
+The least we can do to improve this situation, is to document how the code was supposed to work. A simple example script <i>with example data and example results</i> lets me verify that the code does what it is supposed to be doing. Without this, I can not diagnose errors. Worse, if no example results are included, I might conclude that the algorithm was bad, when in reality I was simply using an incorrect version of a dependency.
+</p>
+
+<p>
+<b>Document Dependencies</b>
+</p>
+
+<p>
+It is important to document all toolboxes, libraries, and programming languages used, <i>including their exact version and operating system</i>. At one point, I spent several hours debugging some Java code that worked in Java 5, but didn't on any recent Java version. If this had been documented, I could have fixed that error much more quickly. In another case, one piece of C code contained a subtle error if compiled with a 64 bit compiler. Again, this took a long time to track down, and would have been much easier if the original operating system and compiler version had been documented.
+</p>
+
+<p>
+That same piece of C code could only be run by compiling several library dependency from old versions of their source code. In that case, the author helpfully included copies of the original source code for these libraries with his source distribution. Without that, I would never have gotten that piece of code to run!
+</p>
+
+<p>
+Also, if at all possible, published code should use as few dependencies as possible. Not only might I not have access to that fancy Matlab Toolbox, but every step in the installation instructions is another thing that can go wrong. The more contained the code, the more likely it is that it will still be executable many years later.
+</p>
+
+<p>
+<b>Higher Level Languages are better than Lower Level Languages</b>
+</p>
+
+<p>
+In general, I had far less problems with non-compiled, high-level code for Matlab, Python, or R, than with low-level C or Java code. On the one hand, this is a technological problem: It is easier to keep an interpreter compatible with outdated code than it is to keep a more complex tool chains with compilers, linkers, and runtime libraries compatible. On the other hand though, this is a human problem as well: I happen to know Python, Matlab, and C pretty well, but I don't know much R or Java. Still, it is much easier to reason about the runtime behavior of R code (because I can inspect variables like in any other dynamic programming language) than to debug some unknown build tool interaction in Java (because compilation tool chains are typically much more complex and variable than REPLs).
+</p>
+
+<p>
+<b>Keep it Simple</b>
+</p>
+
+<p>
+A particular problem are compiled modules for an interpreted language. Such Mex files and CPython extensions are almost guaranteed to break when programming language versions change, and are often hard to upgrade, since the C APIs often change with the language version as well. Often, these compiled modules are provided for performance reasons. But what was painfully slow on the original author's work laptop a few years ago might not be a problem at all on a future compute cluster. If the code absolutely has to be provided a Mex file or a CPython extension, we should at least provide an interpreted version as well.
+</p>
+
+<p>
+And speaking of compute clusters, I have had a lot of trouble with clever tricks such as massively parallelized code or GPU-optimized code. Not only does this age poorly, it also wreaks havoc when trying to run this code on a compute cluster. Such low-level performance optimizations are rarely a good idea for published scientific code, and should at least be optional and well-documented.
+</p>
+
+<p>
+<b>Document the Code</b>
+</p>
+
+<p>
+Code is never self-documenting. Given enough time, entropy increases inexorably, and times change. Conventions change, and what seemed obvious a few years ago might look like gibberish today. What is perfectly readable to a domain expert is inscrutable even to scientists of closely related areas of research. It is therefore necessary to always document published code, even if the code looks perfectly obvious to the author. In the same vein, we should refrain from using jargon in our code, and clearly declare our variables and invariants (they are bound to be different for different people).
+</p>
+
+<p>
+Importantly, this includes documenting all file formats and data structures. Institutions often have in-house standards for how to represent certain kinds of data, and practitioners don't realize that these conventions are not followed universally. I had to ignore a few apparently high-quality algorithms simply because I could not figure out how to supply data to their code. For many other algorithms, I had to write custom data exporters and data importers. Again, an algorithm won't get quoted if it can't be run.
+</p>
+
+<p>
+<b>Make it Automatable</b>
+</p>
+
+<p>
+Another thing I see frequently are very fancy graphical user interfaces for scientific code. The only thing that breaks faster than compiled language extensions are GUI programs. GUIs are necessarily complex, and therefore hard to debug. And worse yet, if the code can only be run in a GUI, it can't be automated, and I won't be able to compare its performance in a big experiment with hundreds of runs. In effect, GUIs make an algorithm non-reproducible. If a GUI needs to be included in the code, it should at least be made optional.
+</p>
+
+<p>
+<b>Do Release Code</b>
+</p>
+
+<p>
+However, more importantly than anything I said so far: <i>Do</i> release source code for your algorithm. Nothing is more wasteful than reading about an amazing algorithm that I can't try out. If no source code is released, it is not reproducible, it can't be compared to other algorithms in the field, and it might as well not have been published.
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

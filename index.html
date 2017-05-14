@@ -26,7 +26,99 @@
     <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">12 Apr 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-04-12-matlab-metaprogramming.html">Matlab Metaprogramming</a></h1>
+<div id="content"><div class="post-date">14 May 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-05-14-scientific-code.html">Scientific Code</a></h1>
+<p>
+A short while ago, I spent a few weeks collecting and evaluating various implementations of speech analysis algorithms for my current work. TL;DR: the general quality of scientific software is bad, and needs to improve.
+</p>
+
+<p>
+Let me state up front that I am explicitly <i>not</i> talking about the quality of the science itself. This blog post is exclusively focused on the published <i>software</i>. In general, the problems were bad programming, old and unmaintained code, and lack of documentation. While none of these things mean <i>bad science</i>, they are a real challenge to reproducibility. Follow-up work can not quote algorithms they can't run.
+</p>
+
+<p>
+Most scientists are not programmers, and use programming as a tool for doing science. Scientists typically don't conceptualize algorithms as code, and don't reason about their implementation in terms of code. Consequently, executable implementations tend to not read like code, either. And frankly, this is as it should be. In my area of research, programming abstractions are not a great medium for expressing scientific ideas, and programming transformations are weak in comparison to mathematical operations.
+</p>
+
+<p>
+Still, the result is <i>bad code</i>. And <i>bad code is a problem for reproducibility and comparability</i>. Scientists therefore need to produce better code that is readable and portable. Straight-up letter-by-letter translations of the published math is just not enough, with all its single-letter variable names and complex nested expressions. We have to do better.
+</p>
+
+<p>
+<b>Include an Example Script</b>
+</p>
+
+<p>
+I have seen many instances of code that clearly worked at one point on the original author's machine, but doesn't on my computer. Maybe that is because I am running a different version of the programming environment, maybe my data is subtly different, maybe the author forgot to document a dependency. All of these happened to me, and all of these are exactly what you would expect from old, unmaintained code from non-expert programmers.
+</p>
+
+<p>
+The least we can do to improve this situation, is to document how the code was supposed to work. A simple example script <i>with example data and example results</i> lets me verify that the code does what it is supposed to be doing. Without this, I can not diagnose errors. Worse, if no example results are included, I might conclude that the algorithm was bad, when in reality I was simply using an incorrect version of a dependency.
+</p>
+
+<p>
+<b>Document Dependencies</b>
+</p>
+
+<p>
+It is important to document all toolboxes, libraries, and programming languages used, <i>including their exact version and operating system</i>. At one point, I spent several hours debugging some Java code that worked in Java 5, but didn't on any recent Java version. If this had been documented, I could have fixed that error much more quickly. In another case, one piece of C code contained a subtle error if compiled with a 64 bit compiler. Again, this took a long time to track down, and would have been much easier if the original operating system and compiler version had been documented.
+</p>
+
+<p>
+That same piece of C code could only be run by compiling several library dependency from old versions of their source code. In that case, the author helpfully included copies of the original source code for these libraries with his source distribution. Without that, I would never have gotten that piece of code to run!
+</p>
+
+<p>
+Also, if at all possible, published code should use as few dependencies as possible. Not only might I not have access to that fancy Matlab Toolbox, but every step in the installation instructions is another thing that can go wrong. The more contained the code, the more likely it is that it will still be executable many years later.
+</p>
+
+<p>
+<b>Higher Level Languages are better than Lower Level Languages</b>
+</p>
+
+<p>
+In general, I had far less problems with non-compiled, high-level code for Matlab, Python, or R, than with low-level C or Java code. On the one hand, this is a technological problem: It is easier to keep an interpreter compatible with outdated code than it is to keep a more complex tool chains with compilers, linkers, and runtime libraries compatible. On the other hand though, this is a human problem as well: I happen to know Python, Matlab, and C pretty well, but I don't know much R or Java. Still, it is much easier to reason about the runtime behavior of R code (because I can inspect variables like in any other dynamic programming language) than to debug some unknown build tool interaction in Java (because compilation tool chains are typically much more complex and variable than REPLs).
+</p>
+
+<p>
+<b>Keep it Simple</b>
+</p>
+
+<p>
+A particular problem are compiled modules for an interpreted language. Such Mex files and CPython extensions are almost guaranteed to break when programming language versions change, and are often hard to upgrade, since the C APIs often change with the language version as well. Often, these compiled modules are provided for performance reasons. But what was painfully slow on the original author's work laptop a few years ago might not be a problem at all on a future compute cluster. If the code absolutely has to be provided a Mex file or a CPython extension, we should at least provide an interpreted version as well.
+</p>
+
+<p>
+And speaking of compute clusters, I have had a lot of trouble with clever tricks such as massively parallelized code or GPU-optimized code. Not only does this age poorly, it also wreaks havoc when trying to run this code on a compute cluster. Such low-level performance optimizations are rarely a good idea for published scientific code, and should at least be optional and well-documented.
+</p>
+
+<p>
+<b>Document the Code</b>
+</p>
+
+<p>
+Code is never self-documenting. Given enough time, entropy increases inexorably, and times change. Conventions change, and what seemed obvious a few years ago might look like gibberish today. What is perfectly readable to a domain expert is inscrutable even to scientists of closely related areas of research. It is therefore necessary to always document published code, even if the code looks perfectly obvious to the author. In the same vein, we should refrain from using jargon in our code, and clearly declare our variables and invariants (they are bound to be different for different people).
+</p>
+
+<p>
+Importantly, this includes documenting all file formats and data structures. Institutions often have in-house standards for how to represent certain kinds of data, and practitioners don't realize that these conventions are not followed universally. I had to ignore a few apparently high-quality algorithms simply because I could not figure out how to supply data to their code. For many other algorithms, I had to write custom data exporters and data importers. Again, an algorithm won't get quoted if it can't be run.
+</p>
+
+<p>
+<b>Make it Automatable</b>
+</p>
+
+<p>
+Another thing I see frequently are very fancy graphical user interfaces for scientific code. The only thing that breaks faster than compiled language extensions are GUI programs. GUIs are necessarily complex, and therefore hard to debug. And worse yet, if the code can only be run in a GUI, it can't be automated, and I won't be able to compare its performance in a big experiment with hundreds of runs. In effect, GUIs make an algorithm non-reproducible. If a GUI needs to be included in the code, it should at least be made optional.
+</p>
+
+<p>
+<b>Do Release Code</b>
+</p>
+
+<p>
+However, more importantly than anything I said so far: <i>Do</i> release source code for your algorithm. Nothing is more wasteful than reading about an amazing algorithm that I can't try out. If no source code is released, it is not reproducible, it can't be compared to other algorithms in the field, and it might as well not have been published.
+</p>
+<div class="post-date">12 Apr 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-04-12-matlab-metaprogramming.html">Matlab Metaprogramming</a></h1>
 <p>
 Why is it, that I find Matlab to be a fine teaching tool and a fine tool for solving engineering problems, but at the same time, extremely cumbersome for my own work? Recently, the answer struck me: <i>metaprogramming in Matlab sucks</i>.
 </p>
@@ -109,83 +201,59 @@ At any rate, I thoroughly enjoyed this experience, and can't wait for what this 
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
-<div id="outline-container-orgfdc8421" class="outline-2">
-<h2 id="orgfdc8421">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-orgfdc8421">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org75c24ec" class="outline-2">
-<h2 id="org75c24ec">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-org75c24ec">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2491710" class="outline-2">
-<h2 id="org2491710">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-org2491710">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org24e4074" class="outline-2">
-<h2 id="org24e4074">Use of line breaks</h2>
-<div class="outline-text-2" id="text-org24e4074">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Use of line breaks</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <p>
 In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org45cccf6" class="outline-2">
-<h2 id="org45cccf6">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-org45cccf6">
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-orgheadline5">
 <p>
 Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcf8a9ee" class="outline-2">
-<h2 id="orgcf8a9ee">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-orgcf8a9ee">
+<div id="outline-container-orgheadline6" class="outline-2">
+<h2 id="orgheadline6">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-orgheadline6">
 <p>
 If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
 </p>
 </div>
 </div>
-<div class="post-date">26 Jun 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-06-26-pollen.html">P⋅O⋅L⋅L⋅E⋅N and Walk 'em ups</a></h1>
-<p>
-I like boring games. I like games that give me time to think. Like <a href="http://x-plane.org/">flight</a> <a href="http://www.prepar3d.com/">simulators</a>, <a href="http://eurotrucksimulator2.com/">truck</a> <a href="http://www.americantrucksimulator.com/">simulators</a>, <a href="https://en.wikipedia.org/wiki/Civilization_V">history simulators</a>, and (don't call them walking simulators) <a href="https://en.wikipedia.org/wiki/The_Stanley_Parable">walk</a> '<a href="http://gonehome.game/">em</a> <a href="http://www.firewatchgame.com/">ups</a>. And this weekend, this year's Steam Summer Sale started, and thus it was time to get some gaming done!
-</p>
-
-<p>
-First, I played <a href="https://en.wikipedia.org/wiki/Everybody's_Gone_to_the_Rapture">Everybody's Gone to the Rapture</a>, a walk 'em up that got good reviews, and was especially praised for it's story. And it dutifully enraptured me, with its British landscapes, and personal story lines. But somehow it didn't quite connect. Maybe I'm not <a href="http://www.gamesradar.com/how-enjoy-everybodys-gone-rapture-real-englishman-explains/">British</a> enough, and I certainly didn't get all of the story. Still, this is well worth picking up, and visiting a digital Shropshire after just having visited the real one earlier this year was a real treat!
-</p>
-
-<p>
-Second, I played P⋅O⋅L⋅L⋅E⋅N. It did not start well: The download took ages, I had to unplug all that fancy flight simulation gear to get it to recognize my controller, and performance was rather lackluster. Oh, and reviews were rather mediocre, too. (Also, here's a free tip for you if you games developers: putting fancy Unicode characters into your game title does not improve SEO).
-</p>
-
-<p>
-But, I entirely fell in love with P⋅O⋅L⋅L⋅E⋅N! You arrive on <a href="https://en.wikipedia.org/wiki/Titan_(moon)">Titan</a> in your dinky near-future space capsule, take a short walk on the surface of the moon, and then explore the local space station. Of course, something went wrong, and the space station is deserted. Oh, and there is something about space bees.
-</p>
-
-<p>
-What really worked for me here was the environmental story telling. This is a space station much in the tradition of <a href="https://typesetinthefuture.com/2014/01/31/2001-a-space-odyssey/">2001: A Space Odyssey</a> and <a href="https://typesetinthefuture.com/2014/12/01/alien/">Alien</a>. It's that perfect utilitarian and inhumanely sterile work place that human corporation always strive for, and human employees always mess up. The stark industrial bleakness of these <a href="http://scificorridorarchive.com/">space corridors</a> is the perfect backdrop to make those little human irregularities really stand out.
-</p>
-
-<p>
-There is no conflict, only light puzzles, and the story is developed only through voice diaries and environmental clutter. But in contrast to Rapture, it all makes sense. The futurist setting, the deep humanity of the people dealing with it. The creepiness of machines without operators. The struggle of the scientists and engineers against the forces of nature and greedy corporations. The nods —nay— genuflections to everything that has ever been great in Scifi. Even that Kubrick ending. I loved every inch of this! ★★★★★
-</p>
 <div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
