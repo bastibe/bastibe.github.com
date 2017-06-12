@@ -23,7 +23,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
@@ -35,15 +35,15 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> numpy
-<span style="color: #1c9af1;">import</span> matlab
-<span style="color: #1c9af1;">import</span> matlab.engine
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> numpy
+<span style="color: #111111; font-weight: bold;">import</span> matlab
+<span style="color: #111111; font-weight: bold;">import</span> matlab.engine
 
-<span style="color: #379a6a;">eng</span> = matlab.engine.start_matlab()
-<span style="color: #379a6a;">random_data</span> = numpy.random.randn(100)
-<span style="color: #919191;"># </span><span style="color: #919191;">convert Numpy data to Matlab:</span>
-<span style="color: #379a6a;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #379a6a;">data_sum</span> = eng.<span style="color: #d87a00;">sum</span>(matlab_data)
+<span style="color: #111111;">eng</span> = matlab.engine.start_matlab()
+<span style="color: #111111;">random_data</span> = numpy.random.randn(100)
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">convert Numpy data to Matlab:</span>
+<span style="color: #111111;">matlab_data</span> = matlab.double(random_data.tolist())
+<span style="color: #111111;">data_sum</span> = eng.<span style="color: #111111; background-color: #fffff8;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -65,7 +65,7 @@ Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pympler <span style="color: #1c9af1;">import</span> muppy, summary
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> muppy, summary
 summary.print_(summary.summarize(muppy.get_objects()))
 </pre>
 </div>
@@ -100,14 +100,14 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">import</span> array
-<span style="color: #919191;"># </span><span style="color: #919191;">get a list of all objects known to Python:</span>
-<span style="color: #379a6a;">all_objects</span> = muppy.get_objects()
-<span style="color: #919191;"># </span><span style="color: #919191;">sort out only `array.array` instances:</span>
-<span style="color: #379a6a;">all_arrays</span> = [obj <span style="color: #1c9af1;">for</span> obj <span style="color: #1c9af1;">in</span> all_objects <span style="color: #1c9af1;">if</span> <span style="color: #d87a00;">isinstance</span>(obj, array.array)]
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">get a list of all objects known to Python:</span>
+<span style="color: #111111;">all_objects</span> = muppy.get_objects()
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">sort out only `array.array` instances:</span>
+<span style="color: #111111;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111; background-color: #fffff8;">isinstance</span>(obj, array.array)]
 
-<span style="color: #1c9af1;">import</span> objgraph
-objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #9d8567;">'array.png'</span>)
+<span style="color: #111111; font-weight: bold;">import</span> objgraph
+objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #303030;">'array.png'</span>)
 </pre>
 </div>
 
@@ -127,10 +127,10 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">leak</span>():
-    <span style="color: #379a6a;">test_data</span> = numpy.zeros(1024*1024)
-    <span style="color: #379a6a;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #d87a00;">sum</span>(matlab_data)
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
+    <span style="color: #111111;">test_data</span> = numpy.zeros(1024*1024)
+    <span style="color: #111111;">matlab_data</span> = matlab.double(test_data.tolist())
+    eng.<span style="color: #111111; background-color: #fffff8;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -140,8 +140,8 @@ Pympler has another great feature that can track allocations. The <code>SummaryT
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">from</span> pympler <span style="color: #1c9af1;">import</span> tracker
-<span style="color: #379a6a;">tr</span> = tracker.SummaryTracker()
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> tracker
+<span style="color: #111111;">tr</span> = tracker.SummaryTracker()
 tr.print_diff()
 leak()
 tr.print_diff()

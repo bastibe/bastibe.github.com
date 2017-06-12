@@ -23,7 +23,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
@@ -43,8 +43,8 @@ But write my own I did: <a href="https://github.com/bastibe/transplant">Transpla
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">import</span> transplant
-<span style="color: #2e8b57;">matlab</span> = transplant.Matlab()
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> transplant
+<span style="color: #111111;">matlab</span> = transplant.Matlab()
 </pre>
 </div>
 
@@ -62,12 +62,12 @@ This <code>matlab</code> object starts a Matlab interpreter in the background an
 </div>
 
 <p>
-As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #8b7355;">'uint8'</span>)
+<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #303030;">'uint8'</span>)
 &gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
 </pre>
 </div>
@@ -77,16 +77,16 @@ All matrix data is actually transferred in binary, so both Matlab and Python wor
 </p>
 
 <p>
-This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
+This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #2e8b57;">data</span> = matlab.randn(1, 4)
-matlab.<span style="color: #cd6600;">max</span>(data)
-&gt;&gt;&gt; [1.5326, 3] <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">Matlab: x, n = max(...)</span>
-matlab.<span style="color: #cd6600;">max</span>(data, nargout=1)
-&gt;&gt;&gt; 1.5326      <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">Matlab: x = max(...)</span>
+<pre class="src src-python"><span style="color: #111111;">data</span> = matlab.randn(1, 4)
+matlab.<span style="color: #111111; background-color: #fffff8;">max</span>(data)
+&gt;&gt;&gt; [1.5326, 3] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x, n = max(...)</span>
+matlab.<span style="color: #111111; background-color: #fffff8;">max</span>(data, nargout=1)
+&gt;&gt;&gt; 1.5326      <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x = max(...)</span>
 </pre>
 </div>
 
@@ -99,32 +99,31 @@ Calling Matlab functions is the most important feature of Transplant. But there 
 </p>
 
 <ul class="org-ul">
-<li><p>
-You can save/retrieve variables in the global workspace:
-</p>
+<li>You can save/retrieve variables in the global workspace:
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #2e8b57;">matlab.value</span> = 5 <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">Matlab: value = 5</span>
-<span style="color: #2e8b57;">x</span> = matlab.value <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">Matlab: x = value</span>
+<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: value = 5</span>
+<span style="color: #111111;">x</span> = matlab.value <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x = value</span>
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><p>
-You van eval some code:
-</p>
+<li>You van eval some code:
 
 <div class="org-src-container">
 
-<pre class="src src-python">matlab.<span style="color: #cd6600;">eval</span>(<span style="color: #8b7355;">'class(value)'</span>)
-&gt;&gt;&gt; <span style="color: #2e8b57;">ans</span> =
+<pre class="src src-python">matlab.<span style="color: #111111; background-color: #fffff8;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
+&gt;&gt;&gt; <span style="color: #111111;">ans</span> =
 &gt;&gt;&gt;
 &gt;&gt;&gt; double
 &gt;&gt;&gt;
 </pre>
-</div></li>
+</div>
+</li>
 
-<li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.</li>
+<li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.
+</li>
 </ul>
 
 <p>
@@ -136,7 +135,7 @@ There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonl
 </p>
 
 <p>
-Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
+Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
 </p>
 
 <p>
@@ -150,17 +149,17 @@ For now, head over to <a href="https://github.com/bastibe/transplant">Github.com
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
 Except for integer complex numbers, since those are not supported by Numpy.
-</p></div></div>
+</p></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
 Like the Matlab function <code>nargout</code>
-</p></div></div>
+</p></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
 At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
-</p></div></div>
+</p></div>
 
 
 </div>

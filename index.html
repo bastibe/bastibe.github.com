@@ -23,7 +23,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content"><div class="post-date">14 May 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-05-14-scientific-code.html">Scientific Code</a></h1>
@@ -164,15 +164,15 @@ But I am happy to announce that these dark days are behind us now. Pip now autom
 </p>
 
 <p>
-For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!
+For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!
 </p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
 Not because I dislike conda, just to simplify my development environment.
-</p></div></div>
+</p></div>
 
 
 </div>
@@ -201,54 +201,54 @@ At any rate, I thoroughly enjoyed this experience, and can't wait for what this 
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Use of line breaks</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Use of line breaks</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-orgheadline5">
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-5">
 <p>
 Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-orgheadline6">
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-6">
 <p>
 If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
 </p>

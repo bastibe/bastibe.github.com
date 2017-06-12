@@ -23,7 +23,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
@@ -43,18 +43,18 @@ But lately, I have come to struggle with these rules. I am now writing a lot of 
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c9af1;">def</span> <span style="color: #d7a924;">rectwin_spectrum</span>(angular_frequency, specsize):
-    <span style="color: #9d8567;">"""The spectrum of a rectangular window. [...]"""</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">this will be corrected later, suppress the warning.</span>
-    <span style="color: #1c9af1;">with</span> np.errstate(invalid=<span style="color: #9d8567;">'ignore'</span>):
-        <span style="color: #379a6a;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">rectwin_spectrum</span>(angular_frequency, specsize):
+    <span style="color: #111111;">"""The spectrum of a rectangular window. [...]"""</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #303030;">'ignore'</span>):
+        <span style="color: #111111;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
                      np.sin(specsize*angular_frequency/2) /
                      np.sin(angular_frequency/2) )
-    <span style="color: #919191;"># </span><span style="color: #919191;">since sin(x) == x for small x, the above expression</span>
-    <span style="color: #919191;"># </span><span style="color: #919191;">evaluates to specsize for angular_frequency == 0.</span>
-    <span style="color: #379a6a;">spectrum</span>[angular_frequency == 0.0] = specsize
-    <span style="color: #1c9af1;">return</span> spectrum
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #111111;">spectrum</span>[angular_frequency == 0.0] = specsize
+    <span style="color: #111111; font-weight: bold;">return</span> spectrum
 </pre>
 </div>
 
@@ -68,38 +68,38 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
 
 <div class="org-src-container">
 
-<pre class="src src-octave"><span style="color: #1c9af1;">classdef</span> SignalBlocks <span style="color: #d87a00;">&lt;</span> handle
-    <span style="color: #1c9af1;">properties</span>
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #111111; background-color: #fffff8;">&lt;</span> handle
+    <span style="color: #111111; font-weight: bold;">properties</span>
         data
         samplerate
         blocksize
         hopsize
-    <span style="color: #1c9af1;">end</span>
-    <span style="color: #1c9af1;">properties</span> (Dependent)
+    <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">properties</span> (Dependent)
         duration
-    <span style="color: #1c9af1;">end</span>
-    <span style="color: #1c9af1;">methods</span>
-        <span style="color: #1c9af1;">function</span> obj <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">SignalBlock</span>(data<span style="color: #d87a00;">,</span> samplerate<span style="color: #d87a00;">,</span> blocksize<span style="color: #d87a00;">,</span> hopsize)
-            <span style="color: #919191;">% blocksize and hopsize are optional. What a mess.</span>
-            narginchk(2<span style="color: #d87a00;">,</span> 4)<span style="color: #d87a00;">;</span>
-            obj.data <span style="color: #d87a00;">=</span> data<span style="color: #d87a00;">;</span>
-            obj.samplerate <span style="color: #d87a00;">=</span> samplerate<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">&gt;=</span> 3
-                obj.blocksize <span style="color: #d87a00;">=</span> blocksize<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">else</span>
-                obj.blocksize <span style="color: #d87a00;">=</span> 2048<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">end</span>
-            <span style="color: #1c9af1;">if</span> nargin <span style="color: #d87a00;">==</span> 4
-                obj.hopsize <span style="color: #d87a00;">=</span> hopsize<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">else</span>
-                obj.hopsize <span style="color: #d87a00;">=</span> 1024<span style="color: #d87a00;">;</span>
-            <span style="color: #1c9af1;">end</span>
-        <span style="color: #1c9af1;">end</span>
-        <span style="color: #1c9af1;">function</span> time <span style="color: #d87a00;">=</span> <span style="color: #d7a924;">get</span>.duration(obj)
-            time <span style="color: #d87a00;">=</span> length(obj.data)<span style="color: #d87a00;">/</span>obj.samplerate<span style="color: #d87a00;">;</span>
-        <span style="color: #1c9af1;">end</span>
-    <span style="color: #1c9af1;">end</span>
-<span style="color: #1c9af1;">end</span>
+    <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">methods</span>
+        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111; background-color: #fffff8;">,</span> samplerate<span style="color: #111111; background-color: #fffff8;">,</span> blocksize<span style="color: #111111; background-color: #fffff8;">,</span> hopsize)
+            <span style="color: #303030; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
+            narginchk(2<span style="color: #111111; background-color: #fffff8;">,</span> 4)<span style="color: #111111; background-color: #fffff8;">;</span>
+            obj.data <span style="color: #111111; background-color: #fffff8;">=</span> data<span style="color: #111111; background-color: #fffff8;">;</span>
+            obj.samplerate <span style="color: #111111; background-color: #fffff8;">=</span> samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111; background-color: #fffff8;">&gt;=</span> 3
+                obj.blocksize <span style="color: #111111; background-color: #fffff8;">=</span> blocksize<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">else</span>
+                obj.blocksize <span style="color: #111111; background-color: #fffff8;">=</span> 2048<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">end</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111; background-color: #fffff8;">==</span> 4
+                obj.hopsize <span style="color: #111111; background-color: #fffff8;">=</span> hopsize<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">else</span>
+                obj.hopsize <span style="color: #111111; background-color: #fffff8;">=</span> 1024<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">end</span>
+        <span style="color: #111111; font-weight: bold;">end</span>
+        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
+            time <span style="color: #111111; background-color: #fffff8;">=</span> length(obj.data)<span style="color: #111111; background-color: #fffff8;">/</span>obj.samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
+        <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">end</span>
+<span style="color: #111111; font-weight: bold;">end</span>
 </pre>
 </div>
 

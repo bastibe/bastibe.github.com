@@ -23,11 +23,11 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Okt 2015</div>
+<div class="post-date">03 Oct 2015</div>
 <h1 class="post-title">Changing File Creation Dates in OSX</h1>
 <p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
@@ -51,20 +51,20 @@ Anyway, here's a small Python script that changes the file creation date (but no
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #1c86ee;">import</span> os.path
-<span style="color: #1c86ee;">import</span> os
-<span style="color: #1c86ee;">import</span> datetime
-<span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #1c86ee;">for</span> index <span style="color: #1c86ee;">in</span> <span style="color: #cd6600;">range</span>(426, 465):
-    <span style="color: #2e8b57;">filename</span> = <span style="color: #8b7355;">'GOPR0{}.MP4'</span>.<span style="color: #cd6600;">format</span>(index)
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">extract old date:</span>
-    <span style="color: #2e8b57;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #2e8b57;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #8b7355;">'SetFile -d "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #7f7f7f;"># </span><span style="color: #7f7f7f;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #8b7355;">'SetFile -m "{}" {}'</span>.<span style="color: #cd6600;">format</span>(new_date.strftime(<span style="color: #8b7355;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
+<span style="color: #111111; font-weight: bold;">import</span> os
+<span style="color: #111111; font-weight: bold;">import</span> datetime
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">range</span>(426, 465):
+    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(index)
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">extract old date:</span>
+    <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
 </div>

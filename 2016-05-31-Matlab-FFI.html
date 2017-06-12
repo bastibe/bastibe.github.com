@@ -23,7 +23,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
@@ -51,7 +51,7 @@ So here goes, a very simple C library that adds two arrays:
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
+<pre class="src src-C"><span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.c:</span>
 <span style="color: #111111;">#include</span> test.h
 
 <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
@@ -60,7 +60,7 @@ So here goes, a very simple C library that adds two arrays:
     }
 }
 
-<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
+<span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.h:</span>
 <span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
 <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
 </pre>
@@ -132,11 +132,11 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 <div class="org-src-container">
 
 <pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
+<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.9155e-05</span>
 timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111; background-color: #fffff8;">,</span> single(vector2)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
+<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 4.6262e-05</span>
 timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111; background-color: #fffff8;">,</span> vector2))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
+<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.2326e-04</span>
 </pre>
 </div>
 

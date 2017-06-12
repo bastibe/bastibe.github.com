@@ -23,11 +23,11 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">14 Okt 2012</div>
+<div class="post-date">14 Oct 2012</div>
 <h1 class="post-title">My Emacs customizations</h1>
 <p>
 I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
@@ -45,18 +45,18 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">set-frame-pixel-size</span> (frame width height)
-  <span style="color: #cd853f;">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
-  (<span style="color: #1c86ee;">let</span> ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">set-frame-pixel-size</span> (frame width height)
+  <span style="color: #111111;">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
+  (<span style="color: #111111; font-weight: bold;">let</span> ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
         (pixels-per-char-height (/ (frame-pixel-height) (frame-height))))
     (set-frame-size frame
                     (floor (/ width pixels-per-char-width))
@@ -70,9 +70,9 @@ Next, a function that uses the above to set the frame size to exactly fit the le
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">use-left-half-screen</span> ()
-  (interactive)
-  (<span style="color: #1c86ee;">let*</span> ((excess-width 32)
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">use-left-half-screen</span> ()
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">let*</span> ((excess-width 32)
          (excess-height 48)
          (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
          (screen-height (- (x-display-pixel-height) excess-height)))
@@ -86,16 +86,16 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(<span style="color: #1c86ee;">if</span> window-system
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">if</span> window-system
     (use-left-half-screen))
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
@@ -103,52 +103,52 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 <div class="org-src-container">
 
 <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
-          (<span style="color: #1c86ee;">lambda</span> ()
-            (<span style="color: #1c86ee;">when</span> (or (string-equal (buffer-name) <span style="color: #8b7355;">"*Python*"</span>)
-                      (string-equal (buffer-name) <span style="color: #8b7355;">"*eshell*"</span>)
-                      (string-equal (buffer-name) <span style="color: #8b7355;">"*tex-shell*"</span>))
-              (<span style="color: #1c86ee;">if</span> (not (eq (window-height) 15))
+          (<span style="color: #111111; font-weight: bold;">lambda</span> ()
+            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
+                      (string-equal (buffer-name) <span style="color: #303030;">"*eshell*"</span>)
+                      (string-equal (buffer-name) <span style="color: #303030;">"*tex-shell*"</span>))
+              (<span style="color: #111111; font-weight: bold;">if</span> (not (eq (window-height) 15))
                   (enlarge-window (- 15 (window-height)))))))
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">vi-open-line-above</span> ()
-  <span style="color: #cd853f;">"Insert a newline above the current line and put point at beginning."</span>
-  (interactive)
-  (<span style="color: #1c86ee;">unless</span> (bolp)
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-above</span> ()
+  <span style="color: #111111;">"Insert a newline above the current line and put point at beginning."</span>
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">unless</span> (bolp)
     (beginning-of-line))
   (newline)
   (forward-line -1)
   (indent-according-to-mode))
 
-(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">vi-open-line-below</span> ()
-  <span style="color: #cd853f;">"Insert a newline below the current line and put point at beginning."</span>
-  (interactive)
-  (<span style="color: #1c86ee;">unless</span> (eolp)
+(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-below</span> ()
+  <span style="color: #111111;">"Insert a newline below the current line and put point at beginning."</span>
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">unless</span> (eolp)
     (end-of-line))
   (newline-and-indent))
 
-(global-set-key (kbd <span style="color: #8b7355;">"C-o"</span>) 'vi-open-line-below)
-(global-set-key (kbd <span style="color: #8b7355;">"M-o"</span>) 'vi-open-line-above)
+(global-set-key (kbd <span style="color: #303030;">"C-o"</span>) 'vi-open-line-below)
+(global-set-key (kbd <span style="color: #303030;">"M-o"</span>) 'vi-open-line-above)
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>
@@ -159,22 +159,22 @@ This function will open or refresh a split window with the generated PDF file in
 
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #7f7f7f;">;; </span><span style="color: #7f7f7f;">open/show pdf file within Emacs using doc-view-mode</span>
-(<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">open-show-pdf</span> ()
-  (interactive)
-  (<span style="color: #1c86ee;">let</span> ((tex-buffer-name (buffer-name))
-        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #8b7355;">".pdf"</span>)))
-    (<span style="color: #1c86ee;">if</span> (get-buffer pdf-buffer-name)
+<pre class="src src-elisp"><span style="color: #303030; font-style: italic;">;; </span><span style="color: #303030; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
+(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">let</span> ((tex-buffer-name (buffer-name))
+        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #303030;">".pdf"</span>)))
+    (<span style="color: #111111; font-weight: bold;">if</span> (get-buffer pdf-buffer-name)
         (switch-to-buffer-other-window pdf-buffer-name)
       (find-file-other-window pdf-buffer-name))
-    (<span style="color: #1c86ee;">if</span> (not (eq major-mode 'doc-view-mode))
+    (<span style="color: #111111; font-weight: bold;">if</span> (not (eq major-mode 'doc-view-mode))
         (doc-view-mode))
     (doc-view-revert-buffer t t)
     (switch-to-buffer-other-window tex-buffer-name)))
 
 (add-hook 'LaTeX-mode-hook
-          (<span style="color: #1c86ee;">lambda</span> ()
-            (define-key LaTeX-mode-map (kbd <span style="color: #8b7355;">"C-c C-v"</span>) 'open-show-pdf)
+          (<span style="color: #111111; font-weight: bold;">lambda</span> ()
+            (define-key LaTeX-mode-map (kbd <span style="color: #303030;">"C-c C-v"</span>) 'open-show-pdf)
             (visual-line-mode t)
             (turn-on-reftex))
           t)

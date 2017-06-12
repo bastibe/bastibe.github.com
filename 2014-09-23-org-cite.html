@@ -23,7 +23,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="http://alpha.app.net/bastibe">alpha.app.net</a> | <a href="http://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
@@ -43,25 +43,25 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 
 <div class="org-src-container">
 
-<pre class="src src-elisp">(org-add-link-type <span style="color: #8b7355;">"cite"</span>
-     (<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">follow-cite</span> (name)
-       <span style="color: #cd853f;">"Open bibliography and jump to appropriate entry.</span>
-<span style="color: #cd853f;">        The document must contain \bibliography{filename} somewhere</span>
-<span style="color: #cd853f;">        for this to work"</span>
+<pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
+     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
+       <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
+<span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
+<span style="color: #111111;">        for this to work"</span>
        (find-file-other-window
-        (<span style="color: #1c86ee;">save-excursion</span>
+        (<span style="color: #111111; font-weight: bold;">save-excursion</span>
           (beginning-of-buffer)
-          (<span style="color: #1c86ee;">save-match-data</span>
-            (re-search-forward <span style="color: #8b7355;">"\\\\bibliography{</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">(</span><span style="color: #8b7355;">[</span><span style="color: #8b7355;">^</span><span style="color: #8b7355;">}]+</span><span style="color: #8b7355; font-weight: bold;">\\</span><span style="color: #8b7355; font-weight: bold;">)</span><span style="color: #8b7355;">}"</span>)
-            (concat (match-string 1) <span style="color: #8b7355;">".bib"</span>))))
+          (<span style="color: #111111; font-weight: bold;">save-match-data</span>
+            (re-search-forward <span style="color: #303030;">"\\\\bibliography{</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">}]+</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">}"</span>)
+            (concat (match-string 1) <span style="color: #303030;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
-     (<span style="color: #1c86ee;">defun</span> <span style="color: #cd9b1d;">export-cite</span> (path desc format)
-       <span style="color: #cd853f;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
-       (<span style="color: #1c86ee;">if</span> (eq format 'latex)
-           (<span style="color: #1c86ee;">if</span> (or (not desc) (equal 0 (search <span style="color: #8b7355;">"cite:"</span> desc)))
-               (format <span style="color: #8b7355;">"\\cite{%s}"</span> path)
-             (format <span style="color: #8b7355;">"\\cite[%s]{%s}"</span> desc path)))))
+     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
+       <span style="color: #111111;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
+               (format <span style="color: #303030;">"\\cite{%s}"</span> path)
+             (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
 </div>
 
