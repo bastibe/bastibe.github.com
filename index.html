@@ -26,7 +26,80 @@
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">14 May 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-05-14-scientific-code.html">Scientific Code</a></h1>
+<div id="content"><div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
+<p>
+This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
+</p>
+
+<p>
+It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation were a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
+</p>
+
+<p>
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
+</p>
+
+<p>
+This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is playing/recording of short blocks of <code>float</code> data at arbitrary sampling rates and block sizes. All connected sound cards should be listable and selectable, with correct detection of the system default sound card (a feature that is very unreliable in PortAudio).
+</p>
+
+<hr  />
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
+</p>
+
+<p>
+The basic unit of any CoreAudio program is the audio unit. An audio unit can be a source (aka microphone), a sink (aka speaker) or an audio processor (both sink and source). Each audio unit can have several input <i>buses</i>, and several output <i>buses</i>, each of which can have several <i>channels</i>. The meaning of these buses varies wildly and is often underdocumented. Furthermore, every audio unit has several <i>properties</i>, such as a sample rate, block sizes, and a data format, and <i>parameters</i>, which are like properties, but presumably different in some undocumented way.
+</p>
+
+<p>
+In order to use an audio unit, you create an <code>AudioComponentDescription</code> that describes whether you want a source or sink unit, or an effect unit, and what kind of effect you want (AudioComponent is an alternative name for audio unit). With the description, you can create an <code>AudioComponentInstance</code>, which is then an opaque struct pointer to your newly created audio unit. So far so good.
+</p>
+
+<p>
+The next step is then to configure the audio unit using <code>AudioUnitGetProperty</code> and <code>AudioUnitSetProperty</code>. This is surprisingly hard, since every property can be configured for every bus (sometimes called element) of every input or output of every unit, and the documentation is extremely terse on which of these combinations are valid. Some invalid combinations return error codes, while others only lead to errors during playback/recording. Furthermore, the definition of what constitutes an input or output is interpreted quite differently in different places: One place calls a microphone an <i>input</i>, since it records audio; another place will call it an <i>output</i>, since it outputs audio data to the system. In one crazy example, you have to configure a microphone unit by disabling its output bus 0, and enabling its input bus 1, but then read audio data from its ostensibly disabled output bus 0.
+</p>
+
+<p>
+The property interface is untyped, meaning that every property has to be given an identifier, a void pointer that points to a matching data structure, and the size of that data structure. Sometimes the setter allocates additional memory, in which case the documentation does not contain any information on who should free this memory. Most objects are passed around as opaque struct pointers with dedicated constructor and destructor functions. All of this does not strike me as particularly C-like, even though CoreAudio is supposedly a native C library.
+</p>
+
+<p>
+Once your audio unit is configured, you set a render callback function, and start the audio unit. All important interaction now happens within that callback function. In a strange reversal of typical control flow, input data to the callback function needs to be fetched by calling <code>AudioUnitRender</code> (evoked on the unit itself) from within the callback, while output is written to memory provided as callback function arguments. Many times during development, <code>AudioUnitRender</code> would return error codes because of an invalid property setting during initialization. Of course, it won't tell <i>which</i> property is actually at fault, just that it can't fulfill the render request at the moment.
+</p>
+
+<p>
+Error codes in general are a difficult topic in CoreAudio. Most functions return an error code as an <code>OSStatus</code> value (aka <code>uint32</code>), and the header files usually contain a definition of some, but not all, possible error codes. Sometimes these error codes are descriptive and nice, but often they are way too general. My favorite is the frequent <code>kAudioUnitErr_CannotDoInCurrentContext</code>, which is just about as useless an error description as possible. Worse, some error codes are not defined as numeric constants, but as <code>int err = 'abcd'</code>, which makes them un-searchable in the source file. Luckily, this madness can be averted using <a href="https://osstatus.com/">https://osstatus.com/</a>, which is a dedicated database for <code>OSStatus</code> error codes.
+</p>
+
+<p>
+By far the worst part of the CoreAudio API is that some properties are silently ignored. For example, you can set the sample rate or priming information on a microphone unit, and it will accept that property change and it will report that property as changed, but it will still use its default value when recording (aka "rendering" in CoreAudio). A speaker unit, in contrast, will honor the sample rate property, and resample as necessary. If you still need to resample your microphone recordings, you have to use a separate <code>AudioConverter</code> unit, which is its own bag of fun (and only documented in <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">a remark</a> in one overview document).
+</p>
+
+<p>
+Lastly, all the online documentation is written for Swift and Objective-C, while the implementation is C. Worse, the C headers contain vastly more information than the online documentation, and the online documentation often does not even reference the C header file name. Of course header files are spread into the CoreAudio framework, the AudioToolkit framework, and the AudioUnit framework, which makes even grepping a joy.
+</p>
+
+<p>
+All of that said, once you know what to do and how to do it, the resulting code is relatively compact and readable. The API does contain inconsistencies and questionable design choices, but the real problem is the documentation. I spent way too much time reading the header files over and over again, and searching through (often outdated or misleading) <a href="https://developer.apple.com/library/content/samplecode/AVCaptureToAudioUnitOSX/Listings/CaptureSessionController_mm.html#//apple_ref/doc/uid/DTS40012879-CaptureSessionController_mm-DontLinkElementID_4">example projects</a> and <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">vague</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html#//apple_ref/doc/uid/TP40003278-CH7-SW12">high-level</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003278-CH1-SW2">overviews</a> for clues on how to interpret error messages and API documentation. I had somewhat better luck with a few <a href="http://kaniini.dereferenced.org/2014/08/31/CoreAudio-sucks.html">blog</a> <a href="http://subfurther.com/blog/2009/04/28/an-iphone-core-audio-brain-dump/">posts</a> on the subject, but the general consensus seems to be that the main concepts of CoreAudio are woefully under-explained, and documentation about edge cases is almost nonexistent. Needless to say, I did not enjoy my experience with CoreAudio.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+</p></div>
+
+
+</div>
+</div><div class="post-date">14 May 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-05-14-scientific-code.html">Scientific Code</a></h1>
 <p>
 A short while ago, I spent a few weeks collecting and evaluating various implementations of speech analysis algorithms for my current work. TL;DR: the general quality of scientific software is bad, and needs to improve.
 </p>
@@ -196,64 +269,6 @@ Apparently, if you like horror games, this is a very mild one. Boring even, if y
 <p>
 At any rate, I thoroughly enjoyed this experience, and can't wait for what this developer will create next. I wholeheartedly recommend this, as one of the best SciFi stories of this year, in any medium. ★★★★★
 </p>
-<div class="post-date">07 Sep 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-09-07-matlab-syntax.html">MATLAB Syntax</a></h1>
-<p>
-In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
-</p>
-
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Use of line breaks</h2>
-<div class="outline-text-2" id="text-4">
-<p>
-In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-5">
-<p>
-Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-6">
-<p>
-If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
-</p>
-</div>
-</div>
 <div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
