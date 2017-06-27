@@ -1,0 +1,35 @@
+#+title: Audio APIs, Part 2: Pulseaudio / Linux
+#+date: <2017-06-27 14:12>
+
+This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.
+
+It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to [[https://people.csail.mit.edu/hubert/pyaudio/][PyAudio]], a CPython extension that exposes the C library [[http://www.portaudio.com/][PortAudio]] to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write [[https://github.com/bastibe/PySoundCard][PySoundCard]], which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped ~bytes~ buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
+
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in [[https://github.com/bastibe/Python-Audio][PythonAudio]], a new pure-Python package that uses [[http://cffi.readthedocs.io/en/latest/][CFFI]] to talk to [[https://www.freedesktop.org/wiki/Software/PulseAudio/][PulseAudio]] on Linux, [[https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html][Core Audio]] on macOS, and [[https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx][WASAPI]][1] on Windows.
+
+This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of ~float~ data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
+
+[1]: WASAPI is part of the Windows [[https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx][Core Audio]] APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+
+
+------------------------------------------------------------------------------
+
+* PulseAudio
+
+PulseAudio is not the only audio API on Linux. There is the grandfather [[https://en.wikipedia.org/wiki/Open_Sound_System][OSS]], the more modern [[https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture][ALSA]], the more pro-focused [[https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit][JACK]], and the user-focused [[https://en.wikipedia.org/wiki/PulseAudio][PulseAudio]]. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
+
+The very nice thing about PulseAudio is that it is a native C API. It provides several levels of abstraction, the highest of which takes only a handful of lines of C to get audio playing. For the purposes of PythonAudio however, I had to look at the more in-depth [[https://freedesktop.org/software/pulseaudio/doxygen/async.html][asynchronous API]]. Still, the API itself is relatively simple, and compactly defined in one simple header file.
+
+It all starts with a ~mainloop~ and an associated ~context~. While the ~mainloop~ is running, you can query the ~context~ for sources and sinks (aka microphones and speakers). The ~context~ can also create a ~stream~ that can be read or written (aka recorded or played). From a high level, this is all there is to it.
+
+Most PulseAudio functions are asynchronous: Function calls return immediately, and call user-provided callback functions when they are ready to return results. While this may be a good structure for high-performance multithreaded C-code, it is somewhat cumbersome in Python. For PythonAudio, I wrapped this structure in regular Python functions that wait for the callback and return its data as normal return values.
+
+Doing this shows just how old Python really is. Python is old-school in that it still thinks that concurrency is better solved with multiple, communicating processes, than with shared-memory threads. With such a mind set, there is a certain impedance mismatch to overcome when using PulseAudio. Every function call has to lock the main loop, and block while waiting for the callback to be called. After that, clean up by decrementing a reference count. This procedure is cumbersome, but not difficult.
+
+What is difficult however, is the documentation. The API documentation is fine, as far as it goes. It could go into more detail with regards to edge cases and error conditions; But it truly lacks high-level overviews and examples. It took an unnecessarily long time to figure out the code path for audio playback and recording, simply because there is no document anywhere that details the sequence of events needed to get there. In the end, I followed some marginally-related example on the internet to get to that point, because the /two/ examples provided by PulseAudio don't even use the asynchronous API.
+
+Perhaps I am missing something, but it strikes me as strange that an API meant for audio recording and playback would not include an example that plays back and records audio.
+
+On an application level, it can be problematic that PulseAudio seems to only value block sizes and latency requirements approximately. In particular, if computing resources become scarce, PulseAudio would rather increase latency/block sizes in the background than risk skipping. This might be convenient for a desktop application, but it is not ideal for signal processing, where latency can be crucial. It seems that I can work around these issues to an extent, but this is an inconvenience nontheless.
+
+In general, I found PulseAudio reasonably easy to use, though. The documentation could use some work, and I don't particularly /like/ the asynchronous programming style, but the API is simple and functional. Out of the three APIs of WASAPI/Windows, Core Audio/macOS, and PulseAudio/Linux, this one was probably the easiest to get working.
