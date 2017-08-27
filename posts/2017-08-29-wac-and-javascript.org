@@ -1,0 +1,16 @@
+#+title: Web Audio Conference and JavaScript
+#+date: <2017-08-27 00:00>
+
+I am not much of a web programmer. I have written the odd website, I have supervised a few student projects, but I have never worked on any nontrivial JavaScript code base. Nevertheless, last week, I attended the [[http://wac.eecs.qmul.ac.uk/][Web Audio Conference 2017]] in London. To put it succinctly: The web is home to fascinating people, but the technology is full of problems.
+
+Those people sure were amazing, though. I talked to a musician/programmer, who spent the last few years writing his own sequencer web app, and did an amazing live performance in his web browser! I witnessed another guy live coding a synthesizer in a web app on stage as a music piece. We attended a gastronomical concert with smartphone-synchronized distributed olfactory and audible experiences. And we played the piano, with each participant controlling one key from his smartphone. It was all truly inspiring!
+
+All of this was built on JavaScript, however. One musical performance reached its climax when the musician queued too many samples and synthesizers and JavaScript crashed. The crowd cheered, but this still highlights how JavaScript, garbage collection pauses, and heap exhaustion are real problems. And there was not a single talk that did not long for dedicated Audio Workers to fix some of these problems.
+
+But more than that, I learned that most of these apps have to pile frameworks upon frameworks just to get a simple demo app going. This is inescapable, since JavaScript is just not usable as an application platform without these frameworks. I take this as a warning: One should build a project from scratch every now and then, just to keep a realistic feel of how deep one's technology stack really is.
+
+All of these people are using JavaScript as an application platform. I would wager that an application platform is basically something like ①: layout, ②: widgets, ③: data bindings, and ④: event handling. If you think about it, JavaScript without libraries currently covers at most ① (CSS) and maybe ② (using HTML Custom Elements), though not at all at the same level as true GUI frameworks such as Qt or Cocoa. For ③ and ④, you have to add something like Ember, React, or Angular. It is strange to me that the JavaScript ecosystem does not seem to gravitate towards integrated frameworks but seems to prefer this wild west of codependent libraries.
+
+Then again, limitations breed genius, and the limits of the platform no doubt fueled the amazing feats these web audio people pulled off at WAC. It is truly inspiring what miracles dedicated people can pull off if they set their mind on them. And let's not forget that the Web Audio API itself is the work of a single person (per browser) as well.
+
+So, in summary, I learned a lot at WAC. I learned that web technologies are not ideal as an application platform. I learned that deep framework stacks are not desirable, yet often necessary. But above all, I learned that all this does not stop people from writing astonishing applications with those technologies. More power to the crazy ones!
