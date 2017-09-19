@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Multi-Font Themes in Emacs</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">19 Sep 2017</div>
+<h1 class="post-title">Multi-Font Themes in Emacs</h1>
+<p>
+Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
+</p>
+
+<p>
+It all started about a year ago, when I fell in love with a font called <a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a>. One of the coolest features of Pragmata was its native bold and italic letters, and its wide support for unicode symbols. I had to find a use for these features! And so, down the rabbit hole I went. <b>Keywords</b> should be bold! <i># Comments</i> should be italic! And while we're at it, why not add some <span class="underline">underlines</span>? And so on.
+</p>
+
+<p>
+The logical next step was then to get rid of colors altogether. At first, as an experiment. Do I really <i>need</i> colors in code? The very pretty <a href="https://github.com/maio/eink-emacs">eink theme</a> seemed to claim otherwise. After a few months of this lunacy, I realized that while I didn't strictly <i>need</i> colors, the stylistic variations of just one font aren't quite sufficient for source code. In particular, it wasn't always easy to distinguish between italic and roman type in PragmataPro, which lead to some confusion.
+</p>
+
+<p>
+But then, inspiration hit me: Who says that I could only use one single font? No one!
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2017-09/color%20theme.png" alt="color%20theme.png" />
+</p>
+</div>
+
+<p>
+The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> for strings, and oblique<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> Iosevka for comments. <a href="http://font.ubuntu.com/">Ubuntu Mono</a> and <a href="http://input.fontbureau.com/">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
+</p>
+
+<p>
+Still, I love the look of this! (Of it won't work in a terminal, or most other text editors.)
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: I just love the look of the slab-serif characters in Iosevka! Look at the beautiful <code>"}"</code> in the screenshot!
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+: not to be confused with <i>italic</i>, which changes glyphs in addition to slanting.
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
