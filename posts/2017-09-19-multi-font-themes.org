@@ -3,6 +3,8 @@
 
 Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
 
+I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors[fn:editors].
+
 It all started about a year ago, when I fell in love with a font called [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro]]. One of the coolest features of Pragmata was its native bold and italic letters, and its wide support for unicode symbols. I had to find a use for these features! And so, down the rabbit hole I went. *Keywords* should be bold! /# Comments/ should be italic! And while we're at it, why not add some _underlines_? And so on.
 
 The logical next step was then to get rid of colors altogether. At first, as an experiment. Do I really /need/ colors in code? The very pretty [[https://github.com/maio/eink-emacs][eink theme]] seemed to claim otherwise. After a few months of this lunacy, I realized that while I didn't strictly /need/ colors, the stylistic variations of just one font aren't quite sufficient for source code. In particular, it wasn't always easy to distinguish between italic and roman type in PragmataPro, which lead to some confusion.
@@ -13,7 +15,8 @@ But then, inspiration hit me: Who says that I could only use one single font? No
 
 The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, [[https://be5invis.github.io/Iosevka/][Iosevka]] Slab[fn:slab] for strings, and oblique[fn:obl] Iosevka for comments. [[http://font.ubuntu.com/][Ubuntu Mono]] and [[http://input.fontbureau.com/][InputCompressed]] work well, too. You can find my current theme [[https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el][on Github]]. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
 
-Still, I love the look of this! (Of it won't work in a terminal, or most other text editors.)
+Still, I love the look of this! (Of course it won't work in a terminal, or most other text editors.)
 
+[fn:editors]: Can other text editors do this? I honestly have no idea.
 [fn:slab]: I just love the look of the slab-serif characters in Iosevka! Look at the beautiful ~"}"~ in the screenshot!
 [fn:obl]: not to be confused with /italic/, which changes glyphs in addition to slanting.
