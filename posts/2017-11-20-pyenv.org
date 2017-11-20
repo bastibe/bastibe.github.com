@@ -1,0 +1,18 @@
+#+title: PyEnv is the new Conda
+#+date: <2017-11-20 00:00>
+
+How to install Python? If your platform has a package manager, you might be tempted to use that to install Python. But I don't like that. That version is often outdated, and you risk messing with an integral part of your operating system. Instead, I like to install a separate Python in my home directory. I used to use [[https://conda.io/miniconda.html][Anaconda]] (or [[http://winpython.github.io/][WinPython]], or [[https://www.enthought.com/product/enthought-python-distribution][EPD]]) to do this. But now there is a better way: [[https://github.com/pyenv/pyenv][PyEnv]]
+
+The thing is: PyEnv installs (any version of) Python. That's all it does.
+
+So why would I choose PyEnv over the more popular Anaconda? Because Anaconda is a Python distribution, a package manager, an environment manager, and a platform for paid packages. In the past, they once did [[https://stackoverflow.com/questions/38524856/anaconda-3-for-linux-has-no-ensurepip#39114277][break pip]] because they wanted to promote conda instead. Some features of conda [[https://anaconda.org/][require a login]], some require a [[https://www.anaconda.com/enterprise/][paid subscription]]. When you install packages through conda, you get binaries and source code from anaconda's servers, /not/ the official packages from PyPi, which might or might not be up-to-date and feature-complete. For every package you install, you have to make a choice of using pip or conda, and the same goes for specifying your dependencies.
+
+As an aside, many of these complaints are just as true for package-manager-provided Python packages (which often [[https://askubuntu.com/questions/879437/ensurepip-is-disabled-in-debian-ubuntu-for-the-system-python#897004][break pip]], too!). Just like Anaconda, package managers want to be the true and only source of packages, and don't like to interact with Python's own package manager.
+
+In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine [1]. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
+
+I find this process much simpler, and easier to manage, because it relies on small, orthogonal tools (pyenv, venv, pip) instead of one integrated conda that kind of does everything. I also like to use these official tools and packages instead of conda's parallel universe of mostly-open, mostly-free, mostly-standard replacements.
+
+Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became [[https://pythonwheels.com/][ubiquitous and painless]], and virtualenv was [[https://docs.python.org/3/library/venv.html][integrated into Python]], and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
+
+[1] the downside of compilation is: no Windows support.

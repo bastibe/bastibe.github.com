@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>PyEnv is the new Conda</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">20 Nov 2017</div>
+<h1 class="post-title">PyEnv is the new Conda</h1>
+<p>
+How to install Python? If your platform has a package manager, you might be tempted to use that to install Python. But I don't like that. That version is often outdated, and you risk messing with an integral part of your operating system. Instead, I like to install a separate Python in my home directory. I used to use <a href="https://conda.io/miniconda.html">Anaconda</a> (or <a href="http://winpython.github.io/">WinPython</a>, or <a href="https://www.enthought.com/product/enthought-python-distribution">EPD</a>) to do this. But now there is a better way: <a href="https://github.com/pyenv/pyenv">PyEnv</a>
+</p>
+
+<p>
+The thing is: PyEnv installs (any version of) Python. That's all it does.
+</p>
+
+<p>
+So why would I choose PyEnv over the more popular Anaconda? Because Anaconda is a Python distribution, a package manager, an environment manager, and a platform for paid packages. In the past, they once did <a href="https://stackoverflow.com/questions/38524856/anaconda-3-for-linux-has-no-ensurepip#39114277">break pip</a> because they wanted to promote conda instead. Some features of conda <a href="https://anaconda.org/">require a login</a>, some require a <a href="https://www.anaconda.com/enterprise/">paid subscription</a>. When you install packages through conda, you get binaries and source code from anaconda's servers, <i>not</i> the official packages from PyPi, which might or might not be up-to-date and feature-complete. For every package you install, you have to make a choice of using pip or conda, and the same goes for specifying your dependencies.
+</p>
+
+<p>
+As an aside, many of these complaints are just as true for package-manager-provided Python packages (which often <a href="https://askubuntu.com/questions/879437/ensurepip-is-disabled-in-debian-ubuntu-for-the-system-python#897004">break pip</a>, too!). Just like Anaconda, package managers want to be the true and only source of packages, and don't like to interact with Python's own package manager.
+</p>
+
+<p>
+In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
+</p>
+
+<p>
+I find this process much simpler, and easier to manage, because it relies on small, orthogonal tools (pyenv, venv, pip) instead of one integrated conda that kind of does everything. I also like to use these official tools and packages instead of conda's parallel universe of mostly-open, mostly-free, mostly-standard replacements.
+</p>
+
+<p>
+Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became <a href="https://pythonwheels.com/">ubiquitous and painless</a>, and virtualenv was <a href="https://docs.python.org/3/library/venv.html">integrated into Python</a>, and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+the downside of compilation is: no Windows support.
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

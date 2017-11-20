@@ -8,7 +8,7 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Snow Crash</title><meta  name="author" content="Bastian Bechtold" />
+<title>Installing Emacs on Windows</title><meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -27,32 +27,18 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 May 2014</div>
-<h1 class="post-title">Snow Crash</h1>
-
-<div class="figure">
-<p><img src="http://bastibe.de/static/2014-05/snow-crash.jpg" alt="snow-crash.jpg" />
-</p>
-</div>
-
+<div class="post-date">19 Nov 2017</div>
+<h1 class="post-title">Installing Emacs on Windows</h1>
 <p>
-This is probably the one book that made me who I am. I bought this book in the English section of a Norwegian bookstore while on a bike trip there. I was just out of school and I had not decided yet what to do with my life. My English was just barely good enough to understand Snow Crash.
+The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
 </p>
 
 <p>
-At its essence, Snow Crash introduced me to the idea of hacking. That is, hacking in the abstract sense of <i>using knowledge about the inner workings of things to influence the world</i>. At the time, I didn't know anything about software yet. Even though the main hero of the book is a master hacker and part of the book plays out in cyber space, it never really talks about the act of writing code. I would learn about that later.
+However, I have found that this does not work any more: As of Emacs 25, Emacs is available in 64 bit, but ezwinport only supplies 32 bit binaries. I had to search a bit, but the (in retrospect, obvious) solution is to download the required binaries from <a href="https://gnutls.org/download.html">GnuTLS's website</a>, directly. Then unpack all <code>*.dll</code> from the <code>bin</code> directory to your Emacs's <code>bin</code> directory, and you are good to go.
 </p>
 
 <p>
-Snow Crash was my red pill. Re-reading it today, after having been a professional software engineer for a few years, I can't overstate how influential this book has been in my life. It instilled in me the desire to understand the deep structures of things. And with that, the ability to influence and create the world around me. It set me on the path to becoming who I am today.
-</p>
-
-<p>
-Snow Crash also served as my introduction to modern utopian cyberpunk. Even though I spent my youth playing video games and reading bad sci-fi, I still remember Snow Crash as my formal introduction to cyber space, virtual avatars, megacorporations, and light cycle races. And it told of the awesome power of reason.
-</p>
-
-<p>
-If you haven't already, go read this book!
+This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
 </p>
 </div>
 <div id="postamble" class="status"><div id="archive">

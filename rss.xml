@@ -4,7 +4,67 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Tue, 24 Oct 2017 16:41:07 +0200</lastBuildDate>
+  <lastBuildDate>Mon, 20 Nov 2017 13:44:10 +0100</lastBuildDate>
+<item>
+  <title>PyEnv is the new Conda</title>
+  <description><![CDATA[<p>
+How to install Python? If your platform has a package manager, you might be tempted to use that to install Python. But I don't like that. That version is often outdated, and you risk messing with an integral part of your operating system. Instead, I like to install a separate Python in my home directory. I used to use <a href="https://conda.io/miniconda.html">Anaconda</a> (or <a href="http://winpython.github.io/">WinPython</a>, or <a href="https://www.enthought.com/product/enthought-python-distribution">EPD</a>) to do this. But now there is a better way: <a href="https://github.com/pyenv/pyenv">PyEnv</a>
+</p>
+
+<p>
+The thing is: PyEnv installs (any version of) Python. That's all it does.
+</p>
+
+<p>
+So why would I choose PyEnv over the more popular Anaconda? Because Anaconda is a Python distribution, a package manager, an environment manager, and a platform for paid packages. In the past, they once did <a href="https://stackoverflow.com/questions/38524856/anaconda-3-for-linux-has-no-ensurepip#39114277">break pip</a> because they wanted to promote conda instead. Some features of conda <a href="https://anaconda.org/">require a login</a>, some require a <a href="https://www.anaconda.com/enterprise/">paid subscription</a>. When you install packages through conda, you get binaries and source code from anaconda's servers, <i>not</i> the official packages from PyPi, which might or might not be up-to-date and feature-complete. For every package you install, you have to make a choice of using pip or conda, and the same goes for specifying your dependencies.
+</p>
+
+<p>
+As an aside, many of these complaints are just as true for package-manager-provided Python packages (which often <a href="https://askubuntu.com/questions/879437/ensurepip-is-disabled-in-debian-ubuntu-for-the-system-python#897004">break pip</a>, too!). Just like Anaconda, package managers want to be the true and only source of packages, and don't like to interact with Python's own package manager.
+</p>
+
+<p>
+In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
+</p>
+
+<p>
+I find this process much simpler, and easier to manage, because it relies on small, orthogonal tools (pyenv, venv, pip) instead of one integrated conda that kind of does everything. I also like to use these official tools and packages instead of conda's parallel universe of mostly-open, mostly-free, mostly-standard replacements.
+</p>
+
+<p>
+Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became <a href="https://pythonwheels.com/">ubiquitous and painless</a>, and virtualenv was <a href="https://docs.python.org/3/library/venv.html">integrated into Python</a>, and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+the downside of compilation is: no Windows support.
+</p></div>
+
+
+</div>
+</div>]]></description>
+  <link>http://bastibe.de/2017-11-20-pyenv.html</link>
+  <pubDate>Mon, 20 Nov 2017 00:00:00 +0100</pubDate>
+</item>
+<item>
+  <title>Installing Emacs on Windows</title>
+  <description><![CDATA[<p>
+The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
+</p>
+
+<p>
+However, I have found that this does not work any more: As of Emacs 25, Emacs is available in 64 bit, but ezwinport only supplies 32 bit binaries. I had to search a bit, but the (in retrospect, obvious) solution is to download the required binaries from <a href="https://gnutls.org/download.html">GnuTLS's website</a>, directly. Then unpack all <code>*.dll</code> from the <code>bin</code> directory to your Emacs's <code>bin</code> directory, and you are good to go.
+</p>
+
+<p>
+This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
+</p>
+]]></description>
+  <link>http://bastibe.de/2017-11-19-emacs-on-windows.html</link>
+  <pubDate>Sun, 19 Nov 2017 00:00:00 +0100</pubDate>
+</item>
 <item>
   <title>The Long Game</title>
   <description><![CDATA[<p>

@@ -26,7 +26,57 @@
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">24 Oct 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-10-24-the-long-game.html">The Long Game</a></h1>
+<div id="content"><div class="post-date">20 Nov 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-11-20-pyenv.html">PyEnv is the new Conda</a></h1>
+<p>
+How to install Python? If your platform has a package manager, you might be tempted to use that to install Python. But I don't like that. That version is often outdated, and you risk messing with an integral part of your operating system. Instead, I like to install a separate Python in my home directory. I used to use <a href="https://conda.io/miniconda.html">Anaconda</a> (or <a href="http://winpython.github.io/">WinPython</a>, or <a href="https://www.enthought.com/product/enthought-python-distribution">EPD</a>) to do this. But now there is a better way: <a href="https://github.com/pyenv/pyenv">PyEnv</a>
+</p>
+
+<p>
+The thing is: PyEnv installs (any version of) Python. That's all it does.
+</p>
+
+<p>
+So why would I choose PyEnv over the more popular Anaconda? Because Anaconda is a Python distribution, a package manager, an environment manager, and a platform for paid packages. In the past, they once did <a href="https://stackoverflow.com/questions/38524856/anaconda-3-for-linux-has-no-ensurepip#39114277">break pip</a> because they wanted to promote conda instead. Some features of conda <a href="https://anaconda.org/">require a login</a>, some require a <a href="https://www.anaconda.com/enterprise/">paid subscription</a>. When you install packages through conda, you get binaries and source code from anaconda's servers, <i>not</i> the official packages from PyPi, which might or might not be up-to-date and feature-complete. For every package you install, you have to make a choice of using pip or conda, and the same goes for specifying your dependencies.
+</p>
+
+<p>
+As an aside, many of these complaints are just as true for package-manager-provided Python packages (which often <a href="https://askubuntu.com/questions/879437/ensurepip-is-disabled-in-debian-ubuntu-for-the-system-python#897004">break pip</a>, too!). Just like Anaconda, package managers want to be the true and only source of packages, and don't like to interact with Python's own package manager.
+</p>
+
+<p>
+In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
+</p>
+
+<p>
+I find this process much simpler, and easier to manage, because it relies on small, orthogonal tools (pyenv, venv, pip) instead of one integrated conda that kind of does everything. I also like to use these official tools and packages instead of conda's parallel universe of mostly-open, mostly-free, mostly-standard replacements.
+</p>
+
+<p>
+Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became <a href="https://pythonwheels.com/">ubiquitous and painless</a>, and virtualenv was <a href="https://docs.python.org/3/library/venv.html">integrated into Python</a>, and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+the downside of compilation is: no Windows support.
+</p></div>
+
+
+</div>
+</div><div class="post-date">19 Nov 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h1>
+<p>
+The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
+</p>
+
+<p>
+However, I have found that this does not work any more: As of Emacs 25, Emacs is available in 64 bit, but ezwinport only supplies 32 bit binaries. I had to search a bit, but the (in retrospect, obvious) solution is to download the required binaries from <a href="https://gnutls.org/download.html">GnuTLS's website</a>, directly. Then unpack all <code>*.dll</code> from the <code>bin</code> directory to your Emacs's <code>bin</code> directory, and you are good to go.
+</p>
+
+<p>
+This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
+</p>
+<div class="post-date">24 Oct 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-10-24-the-long-game.html">The Long Game</a></h1>
 <p>
 Here's a thing I do: I write open source libraries that solve my problems. <i>Bad</i> libraries. And then, over the course of a year or two, I slowly improve them, until they are not so bad any more.
 </p>
@@ -138,108 +188,7 @@ Finally, there was a lot of talk about “the reproducibility crisis” in scien
 <p>
 In conclusion, EuroScipy 2017 was a ton of fun, and educational in many ways that I did not expect. If you are a scientific programmer, or if you maintain a scientific Python module, or if you are plain interested in scientific Python, I can highly recommend going to EuroScipy next year.
 </p>
-<div class="post-date">27 Aug 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-08-29-wac-and-javascript.html">Web Audio Conference and JavaScript</a></h1>
-<p>
-I am not much of a web programmer. I have written the odd website, I have supervised a few student projects, but I have never worked on any nontrivial JavaScript code base. Nevertheless, last week, I attended the <a href="http://wac.eecs.qmul.ac.uk/">Web Audio Conference 2017</a> in London. To put it succinctly: The web is home to fascinating people, but the technology is full of problems.
-</p>
-
-<p>
-Those people sure were amazing, though. I talked to a musician/programmer, who spent the last few years writing his own sequencer web app, and did an amazing live performance in his web browser! I witnessed another guy live coding a synthesizer in a web app on stage as a music piece. We attended a gastronomical concert with smartphone-synchronized distributed olfactory and audible experiences. And we played the piano, with each participant controlling one key from his smartphone. It was all truly inspiring!
-</p>
-
-<p>
-All of this was built on JavaScript, however. One musical performance reached its climax when the musician queued too many samples and synthesizers and JavaScript crashed. The crowd cheered, but this still highlights how JavaScript, garbage collection pauses, and heap exhaustion are real problems. And there was not a single talk that did not long for dedicated Audio Workers to fix some of these problems.
-</p>
-
-<p>
-But more than that, I learned that most of these apps have to pile frameworks upon frameworks just to get a simple demo app going. This is inescapable, since JavaScript is just not usable as an application platform without these frameworks. I take this as a warning: One should build a project from scratch every now and then, just to keep a realistic feel of how deep one's technology stack really is.
-</p>
-
-<p>
-All of these people are using JavaScript as an application platform. I would wager that an application platform is basically something like ①: layout, ②: widgets, ③: data bindings, and ④: event handling. If you think about it, JavaScript without libraries currently covers at most ① (CSS) and maybe ② (using HTML Custom Elements), though not at all at the same level as true GUI frameworks such as Qt or Cocoa. For ③ and ④, you have to add something like Ember, React, or Angular. It is strange to me that the JavaScript ecosystem does not seem to gravitate towards integrated frameworks but seems to prefer this wild west of codependent libraries.
-</p>
-
-<p>
-Then again, limitations breed genius, and the limits of the platform no doubt fueled the amazing feats these web audio people pulled off at WAC. It is truly inspiring what miracles dedicated people can pull off if they set their mind on them. And let's not forget that the Web Audio API itself is the work of a single person (per browser) as well.
-</p>
-
-<p>
-So, in summary, I learned a lot at WAC. I learned that web technologies are not ideal as an application platform. I learned that deep framework stacks are not desirable, yet often necessary. But above all, I learned that all this does not stop people from writing astonishing applications with those technologies. More power to the crazy ones!
-</p>
-<div class="post-date">10 Jul 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-07-10-audio-apis-wasapi.html">Audio APIs, Part 3: WASAPI / Windows</a></h1>
-<p>
-This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.
-</p>
-
-<p>
-It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio's C API a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
-</p>
-
-<p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
-</p>
-
-<p>
-This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
-</p>
-
-<hr  />
-
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">WASAPI</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
-</p>
-
-<p>
-In other words, audio on Windows has a long and troubled history, and has had a lot of opportunity for experimentation. It should then be no surprise that WASAPI is a clean and well-documented audio API that avoids many of the pitfalls of its predecessors and brethren. After having experienced the audio APIs of Windows, Linux, and macOS, I am beginning to understand why some programmers love Windows.
-</p>
-
-<p>
-But let's take a step back, and give an overview over the API. First of all, this is a cross-language API that is meant to be used from C#, with a solid bridge for C++, and a somewhat funky bridge for C. This is crucial to understand. The whole API is designed for a high-level, object-oriented runtime, but I am accessing it from a low-level language that has no concept of objects, methods, or exceptions.
-</p>
-
-<p>
-Objects are implemented as pointers to opaque structs, with an associated list of function pointers to methods. Every method accepts the object pointer as its first argument, and returns an error value if an exception occurred. Both inputs and outputs are function arguments, with outputs being implemented as pointer-to-pointer values. While this looks convoluted to a C programmer, it is actually a very clean mapping of object oriented concepts to C that never gave me any headaches.
-</p>
-
-<p>
-However, there are a few edge cases that did take me a while to understand: Since the C API is inherently not polymorphic, you sometimes have to manually specify types as cryptic UUID structs. Figuring out how to convert the UUID strings from the header files to such structs was not easy.  Similarly, it took me a while to reverse-engineer that strings in Windows are actually <code>uint16</code>, despite being declared <code>char</code>. But issues such as these are to be expected in a cross-language API.
-</p>
-
-<p>
-In general, I did not find a good overview on how to interpret high-level C#-concepts in C. For example, it took a long time until I learned that objects in C# are reference counted, and that I would have to manage reference counts manually. Similarly, I had one rather thorny issue with memory allocations: in rare occasions (<code>PROPVARIANT</code>), C# is expected to re-allocate memory of an object if the object does not have enough memory when passed into a method. This does not work as intended if you don't use C#'s memory allocator to create the memory. <i>This</i> was really painful to figure out.
-</p>
-
-<p>
-Another result of the API's cross-language heritage are its headers: There are <i>hundreds</i>. And they all contain both the C API and the C++ API, separated by the occasional <code>#ifdef __cplusplus</code> and <code>extern C</code>. Worse yet, pretty much every data type and declaration is wrapped in multiple levels of preprocessor macros and <code>typedef</code>. There are no doubt good reasons and a rich history for this, but it took me many hours to assemble all the necessary symbols from dozens of header files to even begin to call WASAPI functions.
-</p>
-
-<p>
-Nevertheless, once these hurdles are overcome, the actual WASAPI API itself is well-structured and reasonably simple. You acquire an <code>IMMDeviceEnumerator</code>, which returns <code>IMMDeviceCollections</code> for microphones and speakers. These contain <code>IMMDevices</code>, which represent sound cards and their properties. You activate an <code>IMMDevice</code> with a desired data format to get an <code>IAudioClient</code>, which in turns produces an <code>IAudioRenderClient</code> or <code>IAudioCaptureClient</code> for playback or recording, respectively. Playback and recording themselves are done by requesting a buffer, and reading or writing raw data to that buffer. This is about as straight-forward as APIs get.
-</p>
-
-<p>
-The documentation deserves even more praise: I have rarely seen such a well-documented API. There are high-level overview articles, there is commented example code, every object is described abstractly, and every method is described in detail and in reference to related methods and example code. There is no corner case that is left undescribed, and no error code without a detailed explanation. Truly, this is <i>exceptional</i> documentation that is a joy to work with!
-</p>
-
-<p>
-In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praising Windows. There is a non-trivial impedance mismatch between C and C# that has to be overcome to <i>use</i> WASAPI from C. But once I understood this, the API itself and its documentation were easy to use and understand. Impressive!
-</p>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p></div>
-
-
-</div>
-</div><div id="archive">
+<div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
 </div>
