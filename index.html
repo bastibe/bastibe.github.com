@@ -26,7 +26,23 @@
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">20 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-20-books-of-2017.html">Books of 2017</a></h1>
+<div id="content"><div class="post-date">28 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">Dropbox deleted my pictures and Time Machine didn't backup</a></h1>
+<p>
+Dropbox deleted some of my favorite pictures. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies that it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
+</p>
+
+<p>
+So, what have I learned? Dropbox loses your data, and Time Machine can't restore it. These programs are obviously no good for backups. Let me repeat this: <b>Dropbox and Time Machine are not a backup!</b> A true backup needs to be reliable, keep an infinite history, and <i>never</i>, <i>never</i>, <i>never</i> accidentally delete files.
+</p>
+
+<p>
+From now on, I will use <a href="http://rsnapshot.org/">rsnapshot</a> for backups. <a href="https://rayed.com/wordpress/?p=1693">Here</a>'s a tutorial on how to set it up on a Mac. I have used rsnapshot for years at work, and it has never let me down. For syncronizing things between computers, I now use <a href="https://syncthing.net/">syncthing</a>. both of these programs are not as user-friendly as Dropbox or Time Machine, but that is a small price to pay for a working backup.
+</p>
+
+<p>
+A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get-a-mac.html">Apple</a> and <a href="http://bastibe.de/2009-03-28-synchronisieren-von-google.html">Dropbox</a> and Google and Amazon would lead us to a bright future of computers that "just work", and could solve our daily chores ever more conveniently and reliably. But I was proven wrong. <a href="http://bastibe.de/2012-07-09-apple-is-failing-me.html">So</a>. <a href="http://bastibe.de/2012-11-01-apple-tv.html">Many</a>. <a href="http://bastibe.de/2015-10-16-finder-woes.html">Times</a>. It seems that for-profit software inevitably becomes less dependable as it adds ever more features to attract ever new users. In contrast, free software can focus on <a href="http://bastibe.de/2017-10-24-the-long-game.html">incremental improvements and steadily increasing reliability</a>.
+</p>
+<div class="post-date">20 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-20-books-of-2017.html">Books of 2017</a></h1>
 <p>
 In late 2016, I took a short ferry flight to a small island in the area, and rekindled my love for aviation. Shortly afterwards, I started training for a pilot's license, and reading about aviation. From a literary perspective, aviation exists in the perfect goldilocks time frame of being just old enough to be thoroughly romanticized, but young enough for first-hand reports and thorough documentation to be available. What is more, powered flight has provided human observers with an unprecedented view of our world and our struggles, and is often as philosophical as it is exhilarating.
 </p>
@@ -193,59 +209,7 @@ At this point, my Github lists a bunch of open source projects. Some of them hav
 <p>
 That's a thing I do: I write open source libraries. <i>Good</i> libraries, but as a <a href="https://en.wikiquote.org/wiki/Piet_Hein">wise man</a> once said "When you feel how depressingly / slowly you climb, / it's well to remember that / Things Take Time". Working on open source grants you this freedom, and is joyful for it.
 </p>
-<div class="post-date">19 Sep 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
-<p>
-Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
-</p>
-
-<p>
-I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>.
-</p>
-
-<p>
-It all started about a year ago, when I fell in love with a font called <a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a>. One of the coolest features of Pragmata was its native bold and italic letters, and its wide support for unicode symbols. I had to find a use for these features! And so, down the rabbit hole I went. <b>Keywords</b> should be bold! <i># Comments</i> should be italic! And while we're at it, why not add some <span class="underline">underlines</span>? And so on.
-</p>
-
-<p>
-The logical next step was then to get rid of colors altogether. At first, as an experiment. Do I really <i>need</i> colors in code? The very pretty <a href="https://github.com/maio/eink-emacs">eink theme</a> seemed to claim otherwise. After a few months of this lunacy, I realized that while I didn't strictly <i>need</i> colors, the stylistic variations of just one font aren't quite sufficient for source code. In particular, it wasn't always easy to distinguish between italic and roman type in PragmataPro, which lead to some confusion.
-</p>
-
-<p>
-But then, inspiration hit me: Who says that I could only use one single font? No one!
-</p>
-
-
-<div class="figure">
-<p><img src="http://bastibe.de/static/2017-09/color%20theme.png" alt="color%20theme.png" />
-</p>
-</div>
-
-<p>
-The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> for strings, and oblique<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> Iosevka for comments. <a href="http://font.ubuntu.com/">Ubuntu Mono</a> and <a href="http://input.fontbureau.com/">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
-</p>
-
-<p>
-Still, I love the look of this! (Of course it won't work in a terminal, or most other text editors.)
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-: Can other text editors do this? I honestly have no idea.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-: I just love the look of the slab-serif characters in Iosevka! Look at the beautiful <code>"}"</code> in the screenshot!
-</p></div>
-
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-: not to be confused with <i>italic</i>, which changes glyphs in addition to slanting.
-</p></div>
-
-
-</div>
-</div><div id="archive">
+<div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
 </div>
