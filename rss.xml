@@ -4,7 +4,225 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Thu, 28 Dec 2017 14:32:24 +0100</lastBuildDate>
+  <lastBuildDate>Sun, 31 Dec 2017 15:14:33 +0100</lastBuildDate>
+<item>
+  <title>How to set up rsnapshot instead of Time Machine</title>
+  <description><![CDATA[<p>
+Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
+</p>
+
+<p>
+Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>, a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and I couldn't find a great guide online. So, without further ado, here's how to configure rsnapshot on macOS:
+</p>
+
+
+<ul class="org-ul">
+<li>Install rsnapshot
+<pre class="example">
+brew install rsnapshot
+</pre>
+</li>
+
+<li>Write the config file
+You can copy a template from homebrew:
+<pre class="example">
+cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
+</pre>
+<p>
+And then configure the new configuration file to your liking (preserve the tabs!):
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-config">config_version	1.2 # default
+verbose		2   # default
+loglevel	3   # default
+
+# this is where your backups are stored:
+snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
+# do NOT set a lockfile! Otherwise, missed dailies will be blocked by missed hourlies
+# lockfile	/Users/bb/.rsnapshot.pid
+# use this if you back up to an external drive:
+no_create_root	1   # don't back up if the external drive is not connected
+
+# configure how many tiers of backups are created:
+retain	hourly	10
+retain	daily	7   # dailies will only be created once 10 hourlies exist
+retain	weekly	4   # weeklies will only be created once 7 dailies exist
+retain	monthly	100 # monthlies will only be created once 4 weeklies exist
+
+# the list of directories you want to back up:
+backup	/Users/bb/Documents		localhost/
+backup	/Users/bb/eBooks		localhost/
+backup	/Users/bb/Movies		localhost/
+backup	/Users/bb/Music		localhost/
+backup	/Users/bb/Pictures		localhost/
+backup	/Users/bb/Projects		localhost/
+backup	/Users/bb/Projects-Archive		localhost/
+</pre>
+</div>
+
+<p>
+Instead of <code>localhost</code>, you can use remote machines as well. Check  <a href="https://download.samba.org/pub/rsync/rsync.html"><code>man rsync</code></a> for details
+</p>
+</li>
+
+<li>Make sure it works and create initial backup
+<pre class="example">
+rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
+</pre>
+<p>
+The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
+</p>
+</li>
+
+<li>Write launchd Agent
+Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>, which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
+
+<p>
+Here is my hourly launchd agent:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span>?&gt;
+&lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> plist <span style="color: #111111; font-weight: bold;">PUBLIC</span> <span style="color: #111111;">"</span><span style="color: #111111;">-//Apple//DTD PLIST 1.0//EN</span><span style="color: #111111;">"</span> <span style="color: #111111;">"</span><span style="color: #111111;">http://www.apple.com/DTDs/PropertyList-1.0.dtd</span><span style="color: #111111;">"</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/usr/local/bin/rsnapshot&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/usr/local/etc/rsnapshot.conf&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+&lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+&lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+</pre>
+</div>
+
+<p>
+For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code>, and change the <code>&lt;dict&gt;</code> portion at the end to
+</p>
+
+<ul class="org-ul">
+<li>daily:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;15&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+<li>weekly:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;30&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+<li>monthly:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;45&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+</ul>
+<p>
+Notice that the <code>Minute</code> is different for each tier of backups, so that different tiers of backups are run at different times.
+</p>
+
+<p>
+From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more elegant than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
+</p>
+</li>
+
+<li>Load launchd agents
+<pre class="example">
+launchctl load ~/Library/LaunchAgents/rsnapshot.*
+</pre>
+</li>
+
+<li>Test launchd agent
+<pre class="example">
+launchctl start rsnapshot.hourly
+</pre>
+<p>
+If it doesn't work, Console.app might show a relevant error message.
+</p>
+</li>
+
+<li>Remove backup directory from Spotlight
+Go to System Preferences → Spotlight → Privacy → Add your <code>snapshot_root</code> directory from earlier
+</li>
+
+<li>Disable TimeMachine and delete your existing backup (if you want)
+Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
+</li>
+</ul>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Caveats</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
+</p>
+
+<p>
+On the other hand, only the hourly task will actually create a new backup. All higher-level backup tiers merely copy existing backups around, so <i>in theory</i>, they shouldn't step on each other's toes when run concurrently. I have opened <a href="https://github.com/rsnapshot/rsnapshot/issues/200">an issue</a> asking about this.
+</p>
+
+<p>
+There are other possible solutions: ① You could modify the launchd entry such that backups only trigger after a few minutes or, better yet, only once all other instances of rsnapshot have finished. I am not sure if launchd supports this, though. ② You could schedule the hourly task using cron instead of launchd, since cron will <i>not</i> reschedule missed tasks. This would only work for two tiers of backups, though. ③ You could just ignore the issue and hope for the best. After all, if a daily or hourly backup gets corrupted every now and then, you still have enough working backups&#x2026;
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep. However, I don't know how this will interact when launchd tries to start the hourly, daily, and possibly weekly or monthly backup at the same time.
+</p></div>
+
+
+</div>
+</div>]]></description>
+  <link>http://bastibe.de/2017-12-29-rsnapshot-on-macos.html</link>
+  <pubDate>Fri, 29 Dec 2017 00:00:00 +0100</pubDate>
+</item>
 <item>
   <title>Dropbox deleted my pictures and Time Machine didn't backup</title>
   <description><![CDATA[<p>
