@@ -9,9 +9,11 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 
 - Install rsnapshot
+
   : brew install rsnapshot
 
 - Write the config file
+
   You can copy a template from homebrew:
   : cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
   And then configure the new configuration file to your liking (preserve the tabs!):
@@ -47,10 +49,12 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
   Instead of ~localhost~, you can use remote machines as well. Check  [[https://download.samba.org/pub/rsync/rsync.html][~man rsync~]] for details
 
 - Make sure it works and create initial backup
+
   : rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
   The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
 
 - Write launchd Agent
+
   Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script[3], which tells launchd when and how to run your backups. In my case, I create four files in ~/Users/bb/Library/LaunchAgents/~, called ~rsnapshot.{hourly,daily,weekly,monthly}.plist~. Apple's [[https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html][documentation]] for these files is only mildly useful (as usual), but [[https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html][~man launchd.plist~]] and [[https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist][~man plist~]] should give you an idea how this works.
 
   Here is my hourly launchd agent:
@@ -111,16 +115,20 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
   From the documentation, you might think that ~<key>Program</key>~ would be more elegant than supplying the binary as the first argument of ~<key>ProgramArguments</key>~, but this apparently uses a different syntax and does not in fact work as expected.
 
 - Load launchd agents
+
   : launchctl load ~/Library/LaunchAgents/rsnapshot.*
 
 - Test launchd agent
+
   : launchctl start rsnapshot.hourly
   If it doesn't work, Console.app might show a relevant error message.
 
 - Remove backup directory from Spotlight
+
   Go to System Preferences → Spotlight → Privacy → Add your ~snapshot_root~ directory from earlier
 
 - Disable TimeMachine and delete your existing backup (if you want)
+
   Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
 
 [1] rsync is one of those reliable tools [[http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html][I talked about]]. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!

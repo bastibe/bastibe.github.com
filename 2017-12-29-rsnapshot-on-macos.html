@@ -44,13 +44,17 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 <ul class="org-ul">
 <li>Install rsnapshot
+
 <pre class="example">
 brew install rsnapshot
 </pre>
 </li>
 
 <li>Write the config file
+
+<p>
 You can copy a template from homebrew:
+</p>
 <pre class="example">
 cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
 </pre>
@@ -94,6 +98,7 @@ Instead of <code>localhost</code>, you can use remote machines as well. Check  <
 </li>
 
 <li>Make sure it works and create initial backup
+
 <pre class="example">
 rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
 </pre>
@@ -103,7 +108,10 @@ The first backup will take a while, but subsequent backups will be fast. A norma
 </li>
 
 <li>Write launchd Agent
+
+<p>
 Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>, which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
+</p>
 
 <p>
 Here is my hourly launchd agent:
@@ -184,12 +192,14 @@ From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt
 </li>
 
 <li>Load launchd agents
+
 <pre class="example">
 launchctl load ~/Library/LaunchAgents/rsnapshot.*
 </pre>
 </li>
 
 <li>Test launchd agent
+
 <pre class="example">
 launchctl start rsnapshot.hourly
 </pre>
@@ -199,11 +209,17 @@ If it doesn't work, Console.app might show a relevant error message.
 </li>
 
 <li>Remove backup directory from Spotlight
+
+<p>
 Go to System Preferences → Spotlight → Privacy → Add your <code>snapshot_root</code> directory from earlier
+</p>
 </li>
 
 <li>Disable TimeMachine and delete your existing backup (if you want)
+
+<p>
 Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
+</p>
 </li>
 </ul>
 
