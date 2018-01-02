@@ -30,6 +30,10 @@
 <div class="post-date">29 Dec 2017</div>
 <h1 class="post-title">How to set up rsnapshot instead of Time Machine</h1>
 <p>
+(This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
+</p>
+
+<p>
 Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
 </p>
 
@@ -70,8 +74,8 @@ loglevel	3   # default
 
 # this is where your backups are stored:
 snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
-# do NOT set a lockfile! Otherwise, missed dailies will be blocked by missed hourlies
-# lockfile	/Users/bb/.rsnapshot.pid
+# prevent accidental backup corruption:
+lockfile	/Users/bb/.rsnapshot.pid
 # use this if you back up to an external drive:
 no_create_root	1   # don't back up if the external drive is not connected
 
@@ -114,7 +118,7 @@ Next, we have to tell macOS to run the backups in regular intervals. Conceptuall
 </p>
 
 <p>
-Here is my hourly launchd agent:
+Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
@@ -127,10 +131,9 @@ Here is my hourly launchd agent:
     &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/usr/local/bin/rsnapshot&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
         &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/usr/local/etc/rsnapshot.conf&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
     &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
@@ -143,7 +146,7 @@ Here is my hourly launchd agent:
 </div>
 
 <p>
-For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code>, and change the <code>&lt;dict&gt;</code> portion at the end to
+For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code> and change the <code>&lt;dict&gt;</code> portion at the end to
 </p>
 
 <ul class="org-ul">
@@ -151,7 +154,7 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;15&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
@@ -161,7 +164,7 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;30&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
@@ -173,7 +176,7 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;45&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
@@ -183,11 +186,15 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 </li>
 </ul>
 <p>
-Notice that the <code>Minute</code> is different for each tier of backups, so that different tiers of backups are run at different times.
+However, <code>rsnapshot</code> can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
 </p>
 
 <p>
-From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more elegant than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
+To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It seems that there should be a more elegant solution than this, but I haven't found one.
+</p>
+
+<p>
+From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more succinct than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
 </p>
 </li>
 
@@ -252,7 +259,11 @@ This works great for local backups. If you need encrypted backups or compressed 
 </p></div>
 
 <div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep. However, I don't know how this will interact when launchd tries to start the hourly, daily, and possibly weekly or monthly backup at the same time.
+I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p></div>
 
 

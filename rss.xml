@@ -4,10 +4,14 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Sun, 31 Dec 2017 15:14:33 +0100</lastBuildDate>
+  <lastBuildDate>Tue, 02 Jan 2018 22:14:20 +0100</lastBuildDate>
 <item>
   <title>How to set up rsnapshot instead of Time Machine</title>
   <description><![CDATA[<p>
+(This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
+</p>
+
+<p>
 Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
 </p>
 
@@ -48,8 +52,8 @@ loglevel	3   # default
 
 # this is where your backups are stored:
 snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
-# do NOT set a lockfile! Otherwise, missed dailies will be blocked by missed hourlies
-# lockfile	/Users/bb/.rsnapshot.pid
+# prevent accidental backup corruption:
+lockfile	/Users/bb/.rsnapshot.pid
 # use this if you back up to an external drive:
 no_create_root	1   # don't back up if the external drive is not connected
 
@@ -92,7 +96,7 @@ Next, we have to tell macOS to run the backups in regular intervals. Conceptuall
 </p>
 
 <p>
-Here is my hourly launchd agent:
+Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">

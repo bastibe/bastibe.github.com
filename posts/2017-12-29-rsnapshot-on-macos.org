@@ -1,6 +1,8 @@
 #+title: How to set up rsnapshot instead of Time Machine
 #+date: <2017-12-29 00:00>
 
+(This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
+
 Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
 
 Luckily, there are alternatives. Probably the easiest is [[https://rsync.samba.org/][rsync]][1], a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. [[http://rsnapshot.org/][rsnapshot]] automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand [2].
@@ -25,8 +27,8 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
   # this is where your backups are stored:
   snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
-  # do NOT set a lockfile! Otherwise, missed dailies will be blocked by missed hourlies
-  # lockfile	/Users/bb/.rsnapshot.pid
+  # prevent accidental backup corruption:
+  lockfile	/Users/bb/.rsnapshot.pid
   # use this if you back up to an external drive:
   no_create_root	1   # don't back up if the external drive is not connected
 
@@ -57,7 +59,7 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
   Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script[3], which tells launchd when and how to run your backups. In my case, I create four files in ~/Users/bb/Library/LaunchAgents/~, called ~rsnapshot.{hourly,daily,weekly,monthly}.plist~. Apple's [[https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html][documentation]] for these files is only mildly useful (as usual), but [[https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html][~man launchd.plist~]] and [[https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist][~man plist~]] should give you an idea how this works.
 
-  Here is my hourly launchd agent:
+  Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 
   #+begin_src xml
   <?xml version="1.0" encoding="UTF-8"?>
@@ -68,10 +70,9 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
       <string>rsnapshot.hourly</string>
       <key>ProgramArguments</key>
       <array>
-          <string>/usr/local/bin/rsnapshot</string>
+          <string>/bin/bash</string>
           <string>-c</string>
-          <string>/usr/local/etc/rsnapshot.conf</string>
-          <string>hourly</string>
+          <string>sleep 0 && /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly</string>
       </array>
       <key>StartCalendarInterval</key>
       <dict>
@@ -82,19 +83,19 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
   </plist>
   #+end_src
 
-  For the other four scripts, change the two occurrences of ~hourly~ to ~{daily,weekly,monthly}~, and change the ~<dict>~ portion at the end to
+  For the other four scripts, change the two occurrences of ~hourly~ to ~{daily,weekly,monthly}~ and change the ~<dict>~ portion at the end to
 
   - daily:
     #+begin_src xml
     <key>Minute</key>
-    <integer>15</integer>
+    <integer>0</integer>
     <key>Hour</key>
     <integer>0</integer>
     #+end_src
   - weekly:
     #+begin_src xml
     <key>Minute</key>
-    <integer>30</integer>
+    <integer>0</integer>
     <key>Hour</key>
     <integer>0</integer>
     <key>Weekday</key>
@@ -103,16 +104,18 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
   - monthly:
     #+begin_src xml
     <key>Minute</key>
-    <integer>45</integer>
+    <integer>0</integer>
     <key>Hour</key>
     <integer>0</integer>
     <key>Day</key>
     <integer>1</integer>
     #+end_src
 
-  Notice that the ~Minute~ is different for each tier of backups, so that different tiers of backups are run at different times.
+  However, ~rsnapshot~ can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
 
-  From the documentation, you might think that ~<key>Program</key>~ would be more elegant than supplying the binary as the first argument of ~<key>ProgramArguments</key>~, but this apparently uses a different syntax and does not in fact work as expected.
+  To fix this, I delay the later backup tiers using the ~sleep 0~ directive. I use ~sleep 900~ (15 minutes later) for daily, ~sleep 1800~ (30 minutes), and ~sleep 2700~ (45 minutes) for the lower tiers[4]. It seems that there should be a more elegant solution than this, but I haven't found one.
+
+  From the documentation, you might think that ~<key>Program</key>~ would be more succinct than supplying the binary as the first argument of ~<key>ProgramArguments</key>~, but this apparently uses a different syntax and does not in fact work as expected.
 
 - Load launchd agents
 
@@ -135,7 +138,9 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 [2] This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), [[https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/][this post]] recommends [[https://www.borgbackup.org/][Borg]] instead of rsnapshot, but you will lose the simplicity of simple directories.
 
-[3] I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep. However, I don't know how this will interact when launchd tries to start the hourly, daily, and possibly weekly or monthly backup at the same time.
+[3] I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+
+[4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 
 *** Caveats
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
