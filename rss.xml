@@ -4,7 +4,40 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Tue, 02 Jan 2018 22:14:20 +0100</lastBuildDate>
+  <lastBuildDate>Wed, 24 Jan 2018 14:42:57 +0100</lastBuildDate>
+<item>
+  <title>Files and Processes</title>
+  <description><![CDATA[<p>
+In the last few months, I have created three notable programming projects: <a href="https://github.com/bastibe/RunForrest">RunForrest</a> saves function call graphs to disk and runs them in parallel processes; <a href="https://github.com/bastibe/timeup">TimeUp</a> creates backups using rsync and keeps different numbers of hourly, daily, and weekly backups; and <a href="https://github.com/bastibe/jbof">JBOF</a>, which organizes large collections of data and metadata as structured, on-disk datasets.
+</p>
+
+<p>
+These projects have one thing in common: They use Python to interact with external <i>things</i>, such as files, libraries, or processes. It surprised me that none of these projects were particularly hard to build, even though they accomplish "hard" tasks. This prompted some soul-searching about why I thought these tasks to be hard, and I have come up with two observations:
+</p>
+
+<ol class="org-ol">
+<li>Files and processes are considered "not part of the language", and are therefore not taught. Most programming classes and programming tutorials I have seen focus on the internals of a programming language, i.e. its data structures, and built-in functions and libraries. Files and processes are not part of this, and are often only mentioned in passing, as a thing that a particularly library can do. Worse, many curricula never formally explain files or processes, or their use in building programs.
+
+<p>
+I now believe that this is unfortunate and misguided, since the interaction with the computer's resources is the central benefit of programming, and you can not make much use of those resources without a thorough understanding of files and processes. In a way, the "inside" of a programming language is a mere sandbox, a safe place for toying with imaginary castles. But it is the "outside", that is, external programs, libraries, and files, that unlocks the true power of making the computer do work. And in Python in particular, using these building blocks to build useful programs is surprisingly simple.
+</p>
+</li>
+
+<li>However, such small and simple programs are much less popular than bloated behemoths. I built RunForrest explicitly because <a href="http://dask.pydata.org">Dask</a> was too confusing and unpredictable for the job. I build JBOF because <a href="http://www.h5py.org/">h5py</a> was too complex and slow. And this is surprising, since these tools certainly are vastly more mature than anything I can whip up. But they were developed by large organizations to solve large-organization problems. But I am not a large organization, and my needs are different as well.
+
+<p>
+I now believe that such small-scale solutions are often preferable to high-profile tools, but they lack the visibility and publicity of tools such as Dask and HDF. And even worse, seeing these big tools solve such mundane problems, we form the belief that these problems must be incredibly complex, and beyond our abilities. Thus forms a vicious cycle. Of course, this is not to say that these big tools do not serve a purpose. Dask and HDF were built to solve particular problems, but we should be aware that most big tools were built for big problems, and our own problems are often not big enough to warrant their use.
+</p>
+</li>
+</ol>
+
+<p>
+In summary, we should teach people about files and processes, and empower them to tackle "hard" tasks without resorting to monolithic libraries. Not only is this incredibly satisfying, it also leads to better programs and better programmers.
+</p>
+]]></description>
+  <link>http://bastibe.de/2018-01-24-files-and-processes.html</link>
+  <pubDate>Wed, 24 Jan 2018 00:00:00 +0100</pubDate>
+</item>
 <item>
   <title>How to set up rsnapshot instead of Time Machine</title>
   <description><![CDATA[<p>

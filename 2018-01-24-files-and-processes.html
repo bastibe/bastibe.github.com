@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Files and Processes</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">24 Jan 2018</div>
+<h1 class="post-title">Files and Processes</h1>
+<p>
+In the last few months, I have created three notable programming projects: <a href="https://github.com/bastibe/RunForrest">RunForrest</a> saves function call graphs to disk and runs them in parallel processes; <a href="https://github.com/bastibe/timeup">TimeUp</a> creates backups using rsync and keeps different numbers of hourly, daily, and weekly backups; and <a href="https://github.com/bastibe/jbof">JBOF</a>, which organizes large collections of data and metadata as structured, on-disk datasets.
+</p>
+
+<p>
+These projects have one thing in common: They use Python to interact with external <i>things</i>, such as files, libraries, or processes. It surprised me that none of these projects were particularly hard to build, even though they accomplish "hard" tasks. This prompted some soul-searching about why I thought these tasks to be hard, and I have come up with two observations:
+</p>
+
+<ol class="org-ol">
+<li>Files and processes are considered "not part of the language", and are therefore not taught. Most programming classes and programming tutorials I have seen focus on the internals of a programming language, i.e. its data structures, and built-in functions and libraries. Files and processes are not part of this, and are often only mentioned in passing, as a thing that a particularly library can do. Worse, many curricula never formally explain files or processes, or their use in building programs.
+
+<p>
+I now believe that this is unfortunate and misguided, since the interaction with the computer's resources is the central benefit of programming, and you can not make much use of those resources without a thorough understanding of files and processes. In a way, the "inside" of a programming language is a mere sandbox, a safe place for toying with imaginary castles. But it is the "outside", that is, external programs, libraries, and files, that unlocks the true power of making the computer do work. And in Python in particular, using these building blocks to build useful programs is surprisingly simple.
+</p>
+</li>
+
+<li>However, such small and simple programs are much less popular than bloated behemoths. I built RunForrest explicitly because <a href="http://dask.pydata.org">Dask</a> was too confusing and unpredictable for the job. I build JBOF because <a href="http://www.h5py.org/">h5py</a> was too complex and slow. And this is surprising, since these tools certainly are vastly more mature than anything I can whip up. But they were developed by large organizations to solve large-organization problems. But I am not a large organization, and my needs are different as well.
+
+<p>
+I now believe that such small-scale solutions are often preferable to high-profile tools, but they lack the visibility and publicity of tools such as Dask and HDF. And even worse, seeing these big tools solve such mundane problems, we form the belief that these problems must be incredibly complex, and beyond our abilities. Thus forms a vicious cycle. Of course, this is not to say that these big tools do not serve a purpose. Dask and HDF were built to solve particular problems, but we should be aware that most big tools were built for big problems, and our own problems are often not big enough to warrant their use.
+</p>
+</li>
+</ol>
+
+<p>
+In summary, we should teach people about files and processes, and empower them to tackle "hard" tasks without resorting to monolithic libraries. Not only is this incredibly satisfying, it also leads to better programs and better programmers.
+</p>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="archive.html">Other posts</a>
+</div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'bastibe';
+  (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the
+<a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<center><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
