@@ -4,10 +4,33 @@
   <title>Bastibe.de</title>
   <description>Bastibe.de</description>
   <link>http://bastibe.de/</link>
-  <lastBuildDate>Wed, 24 Jan 2018 14:42:57 +0100</lastBuildDate>
+  <lastBuildDate>Sat, 17 Mar 2018 21:01:15 +0100</lastBuildDate>
+<item>
+  <title>Speeding up org-static-bloc</title>
+  <description><![CDATA[
+<p>
+Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
+</p>
+
+<p>
+However, simple can also mean inefficient. Most glaringly, org-static-blog exports every single blog post three times every time you publish: Once to render the HTML, then once to render the RSS feed, then once to render the Index and Archive pages.
+</p>
+
+<p>
+Today, I finally tackled this problem: Now, org-static-blog only exports each post once, when the *.org file changes. The RSS feed, the Index page, and the Archive page simply read the already-rendered HTML instead of exporting again.
+</p>
+
+<p>
+Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s.
+</p>
+]]></description>
+  <link>http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html</link>
+  <pubDate>Sat, 17 Mar 2018 00:00:00 +0100</pubDate>
+</item>
 <item>
   <title>Files and Processes</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 In the last few months, I have created three notable programming projects: <a href="https://github.com/bastibe/RunForrest">RunForrest</a> saves function call graphs to disk and runs them in parallel processes; <a href="https://github.com/bastibe/timeup">TimeUp</a> creates backups using rsync and keeps different numbers of hourly, daily, and weekly backups; and <a href="https://github.com/bastibe/jbof">JBOF</a>, which organizes large collections of data and metadata as structured, on-disk datasets.
 </p>
 
@@ -40,7 +63,8 @@ In summary, we should teach people about files and processes, and empower them t
 </item>
 <item>
   <title>How to set up rsnapshot instead of Time Machine</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 (This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
 </p>
 
@@ -142,10 +166,9 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
     &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/usr/local/bin/rsnapshot&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
         &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/usr/local/etc/rsnapshot.conf&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
     &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
@@ -158,7 +181,7 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </div>
 
 <p>
-For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code>, and change the <code>&lt;dict&gt;</code> portion at the end to
+For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code> and change the <code>&lt;dict&gt;</code> portion at the end to
 </p>
 
 <ul class="org-ul">
@@ -166,7 +189,7 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;15&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
@@ -176,7 +199,7 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;30&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
@@ -188,7 +211,7 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;45&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
@@ -198,11 +221,15 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 </li>
 </ul>
 <p>
-Notice that the <code>Minute</code> is different for each tier of backups, so that different tiers of backups are run at different times.
+However, <code>rsnapshot</code> can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
 </p>
 
 <p>
-From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more elegant than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
+To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It seems that there should be a more elegant solution than this, but I haven't found one.
+</p>
+
+<p>
+From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more succinct than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
 </p>
 </li>
 
@@ -267,7 +294,11 @@ This works great for local backups. If you need encrypted backups or compressed 
 </p></div>
 
 <div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep. However, I don't know how this will interact when launchd tries to start the hourly, daily, and possibly weekly or monthly backup at the same time.
+I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p></div>
 
 
@@ -278,7 +309,8 @@ I use launchd instead of cron since launchd will re-schedule missed backups if t
 </item>
 <item>
   <title>Dropbox deleted my pictures and Time Machine didn't backup</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
 </p>
 
@@ -299,7 +331,8 @@ A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get
 </item>
 <item>
   <title>Books of 2017</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 In late 2016, I took a short ferry flight to a small island in the area, and rekindled my love for aviation. Shortly afterwards, I started training for a pilot's license, and reading about aviation. From a literary perspective, aviation exists in the perfect goldilocks time frame of being just old enough to be thoroughly romanticized, but young enough for first-hand reports and thorough documentation to be available. What is more, powered flight has provided human observers with an unprecedented view of our world and our struggles, and is often as philosophical as it is exhilarating.
 </p>
 
@@ -385,7 +418,8 @@ But as much as I love aviation, my first love is still Science Fiction. We live 
 </item>
 <item>
   <title>PyEnv is the new Conda</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 How to install Python? If your platform has a package manager, you might be tempted to use that to install Python. But I don't like that. That version is often outdated, and you risk messing with an integral part of your operating system. Instead, I like to install a separate Python in my home directory. I used to use <a href="https://conda.io/miniconda.html">Anaconda</a> (or <a href="http://winpython.github.io/">WinPython</a>, or <a href="https://www.enthought.com/product/enthought-python-distribution">EPD</a>) to do this. But now there is a better way: <a href="https://github.com/pyenv/pyenv">PyEnv</a>
 </p>
 
@@ -428,7 +462,8 @@ the downside of compilation is: no Windows support.
 </item>
 <item>
   <title>Installing Emacs on Windows</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
 </p>
 
@@ -445,7 +480,8 @@ This situation is really a bit sad. Installing Emacs should not be this hard. Bu
 </item>
 <item>
   <title>The Long Game</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Here's a thing I do: I write open source libraries that solve my problems. <i>Bad</i> libraries. And then, over the course of a year or two, I slowly improve them, until they are not so bad any more.
 </p>
 
@@ -486,7 +522,8 @@ That's a thing I do: I write open source libraries. <i>Good</i> libraries, but a
 </item>
 <item>
   <title>Multi-Font Themes in Emacs</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
 </p>
 
@@ -543,7 +580,8 @@ Still, I love the look of this! (Of course it won't work in a terminal, or most 
 </item>
 <item>
   <title>EuroScipy 2017</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 The second conference I attended this year was the <a href="https://www.euroscipy.org/2017/">EuroScipy 2017</a> in Erlangen. I gave a <a href="https://www.youtube.com/watch?v=mc8ru37dwf8">Talk about Audio in Python</a> and a <a href="https://youtu.be/qTgk2DUM6G0?t=10m15s">Lightning Talk about my Python/Matlab bridge</a>.
 </p>
 
@@ -572,7 +610,8 @@ In conclusion, EuroScipy 2017 was a ton of fun, and educational in many ways tha
 </item>
 <item>
   <title>Web Audio Conference and JavaScript</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I am not much of a web programmer. I have written the odd website, I have supervised a few student projects, but I have never worked on any nontrivial JavaScript code base. Nevertheless, last week, I attended the <a href="http://wac.eecs.qmul.ac.uk/">Web Audio Conference 2017</a> in London. To put it succinctly: The web is home to fascinating people, but the technology is full of problems.
 </p>
 
@@ -605,7 +644,8 @@ So, in summary, I learned a lot at WAC. I learned that web technologies are not 
 </item>
 <item>
   <title>Audio APIs, Part 3: WASAPI / Windows</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.
 </p>
 
@@ -683,7 +723,8 @@ In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praisi
 </item>
 <item>
   <title>Audio APIs, Part 2: Pulseaudio / Linux</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.
 </p>
 
@@ -757,7 +798,8 @@ In general, I found PulseAudio reasonably easy to use, though. The documentation
 </item>
 <item>
   <title>Audio APIs, Part 1: Core Audio / macOS</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
 </p>
 
@@ -835,7 +877,8 @@ All of that said, once you know what to do and how to do it, the resulting code 
 </item>
 <item>
   <title>Scientific Code</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 A short while ago, I spent a few weeks collecting and evaluating various implementations of speech analysis algorithms for my current work. TL;DR: the general quality of scientific software is bad, and needs to improve.
 </p>
 
@@ -932,7 +975,8 @@ However, more importantly than anything I said so far: <i>Do</i> release source 
 </item>
 <item>
   <title>Matlab Metaprogramming</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Why is it, that I find Matlab to be a fine teaching tool and a fine tool for solving engineering problems, but at the same time, extremely cumbersome for my own work? Recently, the answer struck me: <i>metaprogramming in Matlab sucks</i>.
 </p>
 
@@ -961,7 +1005,8 @@ I could go on. The real power of code is abstraction. We use programming to repe
 </item>
 <item>
   <title>Pip is great</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 <a href="http://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing</a> <a href="http://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Python</a> <a href="http://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">packages</a> <a href="http://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html">used</a> to be a pain. Very surprisingly, this is no longer the case. Nowadays, <code>pip install whatever</code> will reliably install pretty much anything without any trouble.
 </p>
 
@@ -1000,7 +1045,8 @@ Not because I dislike conda, just to simplify my development environment.
 </item>
 <item>
   <title>Soma</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For a long time, I was afraid of picking up Soma, since it came from the developers who did Amnesia. Amnesia was the first game that scared me so thoroughly that I just couldn't bring myself to pick it up again after the first session. I admired it for its amazing world design, interactivity, and story, but it was too scary for me. I don't enjoy being scared.
 </p>
 
@@ -1025,7 +1071,8 @@ At any rate, I thoroughly enjoyed this experience, and can't wait for what this 
 </item>
 <item>
   <title>MATLAB Syntax</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
@@ -1088,7 +1135,8 @@ If you want to save more than one value in a variable, you can use a collection 
 </item>
 <item>
   <title>P⋅O⋅L⋅L⋅E⋅N and Walk 'em ups</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I like boring games. I like games that give me time to think. Like <a href="http://x-plane.org/">flight</a> <a href="http://www.prepar3d.com/">simulators</a>, <a href="http://eurotrucksimulator2.com/">truck</a> <a href="http://www.americantrucksimulator.com/">simulators</a>, <a href="https://en.wikipedia.org/wiki/Civilization_V">history simulators</a>, and (don't call them walking simulators) <a href="https://en.wikipedia.org/wiki/The_Stanley_Parable">walk</a> '<a href="http://gonehome.game/">em</a> <a href="http://www.firewatchgame.com/">ups</a>. And this weekend, this year's Steam Summer Sale started, and thus it was time to get some gaming done!
 </p>
 
@@ -1117,7 +1165,8 @@ There is no conflict, only light puzzles, and the story is developed only throug
 </item>
 <item>
   <title>Transplant, revisited</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 A few months ago, I <a href="http://bastibe.de/2015-11-03-matlab-engine-performance.html">talked about</a> the performance of calling Matlab from Python. Since then, I implemented a few optimizations that make working with Transplant a lot faster:
 </p>
 
@@ -1298,7 +1347,8 @@ Here is the above data again in tabular form:
 </item>
 <item>
   <title>Teaching with Matlab Live Scripts</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For a few years now, I have been teaching programming courses using <i>notebooks</i>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:
 </p>
 
@@ -1354,7 +1404,8 @@ Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. The
 </item>
 <item>
   <title>Matlab has an FFI and it is not Mex</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
 </p>
 
@@ -1376,7 +1427,7 @@ So here goes, a very simple C library that adds two arrays:
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
+<pre class="src src-C"><span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.c:</span>
 <span style="color: #111111;">#include</span> test.h
 
 <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
@@ -1385,7 +1436,7 @@ So here goes, a very simple C library that adds two arrays:
     }
 }
 
-<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
+<span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.h:</span>
 <span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
 <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
 </pre>
@@ -1457,11 +1508,11 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 <div class="org-src-container">
 
 <pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
+<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.9155e-05</span>
 timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111; background-color: #fffff8;">,</span> single(vector2)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
+<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 4.6262e-05</span>
 timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111; background-color: #fffff8;">,</span> vector2))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
+<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.2326e-04</span>
 </pre>
 </div>
 
@@ -1478,7 +1529,8 @@ However, If I ask myself whether I would sacrifice 0.00007 seconds of computatio
 </item>
 <item>
   <title>Updating the Matplotlib Font Cache</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 When publishing papers or articles, I want my plots to integrate with the text surrounding them. I want them to use the correct font size, and the correct font.
 </p>
 
@@ -1517,7 +1569,8 @@ Happy Plotting!
 </item>
 <item>
   <title>The Style of Scientific Code</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
 </p>
 
@@ -1532,15 +1585,15 @@ But lately, I have come to struggle with these rules. I am now writing a lot of 
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">rectwin_spectrum</span>(angular_frequency, specsize):
-    <span style="color: #303030;">"""The spectrum of a rectangular window. [...]"""</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #111111;">"""The spectrum of a rectangular window. [...]"""</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">this will be corrected later, suppress the warning.</span>
     <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #303030;">'ignore'</span>):
         <span style="color: #111111;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
                      np.sin(specsize*angular_frequency/2) /
                      np.sin(angular_frequency/2) )
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">since sin(x) == x for small x, the above expression</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
     <span style="color: #111111;">spectrum</span>[angular_frequency == 0.0] = specsize
     <span style="color: #111111; font-weight: bold;">return</span> spectrum
 </pre>
@@ -1568,7 +1621,7 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
     <span style="color: #111111; font-weight: bold;">end</span>
     <span style="color: #111111; font-weight: bold;">methods</span>
         <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111; background-color: #fffff8;">,</span> samplerate<span style="color: #111111; background-color: #fffff8;">,</span> blocksize<span style="color: #111111; background-color: #fffff8;">,</span> hopsize)
-            <span style="color: #111111; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
+            <span style="color: #303030; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
             narginchk(2<span style="color: #111111; background-color: #fffff8;">,</span> 4)<span style="color: #111111; background-color: #fffff8;">;</span>
             obj.data <span style="color: #111111; background-color: #fffff8;">=</span> data<span style="color: #111111; background-color: #fffff8;">;</span>
             obj.samplerate <span style="color: #111111; background-color: #fffff8;">=</span> samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
@@ -1608,7 +1661,8 @@ Do you have any idea how to progress from here?
 </item>
 <item>
   <title>Toren</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I've been playing a lot of indie games lately. One of them has not been talked about much: <a href="http://toren-game.com/">Toren</a>. Toren is a platformer about a girl that has to climb a tower to defeat a dragon and revive her world. This is probably the least polished game I have played in a long time. Animations are janky, controls are imprecise and clunky, and there are loads of little glitches. Yet, I really enjoyed this.
 </p>
 
@@ -1630,6 +1684,7 @@ At just about two hours, Toren is not a long game. Instead of exploring one part
 <item>
   <title>Books of 2015</title>
   <description><![CDATA[
+
 <div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><a href="https://www.goodreads.com/book/show/8706185-among-others">Among Others</a>, by Jo Walton</h2>
 <div class="outline-text-2" id="text-1">
@@ -1684,7 +1739,8 @@ What happens when you take today's world, and add nanotech brain upgrades (Nexus
 </item>
 <item>
   <title>Calling Matlab from Python</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
@@ -1812,7 +1868,8 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
 </item>
 <item>
   <title>Massive Memory Leak in the Matlab Engine for Python</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
 </p>
 
@@ -1824,7 +1881,7 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 
 <span style="color: #111111;">eng</span> = matlab.engine.start_matlab()
 <span style="color: #111111;">random_data</span> = numpy.random.randn(100)
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">convert Numpy data to Matlab:</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">convert Numpy data to Matlab:</span>
 <span style="color: #111111;">matlab_data</span> = matlab.double(random_data.tolist())
 <span style="color: #111111;">data_sum</span> = eng.<span style="color: #111111; background-color: #fffff8;">sum</span>(matlab_data)
 </pre>
@@ -1884,9 +1941,9 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">get a list of all objects known to Python:</span>
 <span style="color: #111111;">all_objects</span> = muppy.get_objects()
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">sort out only `array.array` instances:</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">sort out only `array.array` instances:</span>
 <span style="color: #111111;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111; background-color: #fffff8;">isinstance</span>(obj, array.array)]
 
 <span style="color: #111111; font-weight: bold;">import</span> objgraph
@@ -1960,6 +2017,7 @@ I since posted a bug report on Mathworks, and received a patch that fixes the pr
 <item>
   <title>OS X Finder Woes</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png" />
 </p>
@@ -1990,7 +2048,8 @@ So, good bye OS X. I updated my work laptop first, and I regret it. I never regr
 </item>
 <item>
   <title>Changing File Creation Dates in OSX</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
 </p>
 
@@ -2015,16 +2074,16 @@ Anyway, here's a small Python script that changes the file creation date (but no
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
 <span style="color: #111111; font-weight: bold;">import</span> os
 <span style="color: #111111; font-weight: bold;">import</span> datetime
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
 <span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">range</span>(426, 465):
     <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(index)
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">extract old date:</span>
     <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
     <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
     os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">set the file modification date with the "-m" switch</span>
     os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
@@ -2034,7 +2093,8 @@ Anyway, here's a small Python script that changes the file creation date (but no
 </item>
 <item>
   <title>Numpy Broadcasting Rules</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 They say that all arithmetic operations in Numpy behave like their element-wise cousins in Matlab. This is wrong, and seriously tripped me up last week.
 </p>
 
@@ -2075,20 +2135,21 @@ Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as i
 </item>
 <item>
   <title>Python Numeric Performance</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
 </p>
 
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_python</span>(oct_per_sec):
-    <span style="color: #303030;">""" ... """</span>
+    <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">b</span> = 1.781
     <span style="color: #111111;">mu</span> = -0.301
     <span style="color: #111111; font-weight: bold;">return</span> 1/(2*b)*math.exp(-<span style="color: #111111; background-color: #fffff8;">abs</span>(oct_per_sec-mu)/b)
 
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_idx_range_python</span>(y_idx, max_y_factor, height):
-    <span style="color: #303030;">""" ... """</span>
+    <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
     <span style="color: #111111;">y_lo</span> = <span style="color: #111111; background-color: #fffff8;">max</span>(y/max_y_factor, min_y)
     <span style="color: #111111;">y_hi</span> = <span style="color: #111111; background-color: #fffff8;">min</span>(y*max_y_factor, max_y)
@@ -2097,7 +2158,7 @@ Recently, I was working on a dynamic programming algorithm that involves a lot o
     <span style="color: #111111; font-weight: bold;">return</span> y_lo_idx, y_hi_idx
 
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">find_tracks_python</span>(cost_matrix, delta_x):
-    <span style="color: #303030;">""" ... """</span>
+    <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
     <span style="color: #111111;">cum_cost</span> = np.zeros(correlogram.shape)
 
@@ -2143,22 +2204,22 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numpy</span>(doubles_per_x):
-    <span style="color: #303030;">""" ... """</span>
+    <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">b</span> = 1.781
     <span style="color: #111111;">mu</span> = -0.301
     <span style="color: #111111; font-weight: bold;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #111111; background-color: #fffff8;">abs</span>(doubles_per_x-mu)/b)
 
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
-    <span style="color: #303030;">""" ... """</span>
+    <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #111111; background-color: #fffff8;">int</span>)
     <span style="color: #111111;">cum_cost</span> = np.zeros(cost_matrix.shape)
 
-    <span style="color: #111111;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">allow at most 5 octaves per second (3 sigma)</span>
+    <span style="color: #111111;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">allow at most 5 octaves per second (3 sigma)</span>
     <span style="color: #111111;">height</span> = cost_matrix.shape[1]
 
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">will be sparsely filled with positive probability values, and</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">empty values will have minus infinite probability.</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">will be sparsely filled with positive probability values, and</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">empty values will have minus infinite probability.</span>
     <span style="color: #111111;">probabilities</span> = -np.ones((height, height))*np.inf
     <span style="color: #111111; font-weight: bold;">for</span> y_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">range</span>(probabilities.shape[0]):
         <span style="color: #111111;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
@@ -2170,7 +2231,7 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 
     <span style="color: #111111;">cum_cost</span>[0] = cost_matrix[0]
     <span style="color: #111111; font-weight: bold;">for</span> x_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">range</span>(1, <span style="color: #111111; background-color: #fffff8;">len</span>(cost_matrix)):
-        <span style="color: #111111;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract cost_column as 2d-vector!</span>
+        <span style="color: #111111;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">extract cost_column as 2d-vector!</span>
         <span style="color: #111111;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
         <span style="color: #111111;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
         <span style="color: #111111;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
@@ -2209,11 +2270,11 @@ However, Numba is no silver bullet, and does not support all of Python yet. In t
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">python version</span>
+<pre class="src src-python"><span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">python version</span>
 <span style="color: #111111; font-weight: bold;">for</span> x_idx, cost_column <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">enumerate</span>(cost_matrix):
     ...
 
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">numba version</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">numba version</span>
 <span style="color: #111111; font-weight: bold;">for</span> x_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">range</span>(<span style="color: #111111; background-color: #fffff8;">len</span>(cost_matrix)):
     <span style="color: #111111;">cost_column</span> = cost_matrix[x_idx]
     ...
@@ -2237,7 +2298,8 @@ So why wouldn't you just always use Numba? After all, when it comes down to raw 
 </item>
 <item>
   <title>Matlab and Audio Files</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
 </p>
 
@@ -2258,7 +2320,8 @@ In other words, Matlab is incapable of writing audio files larger than 4 Gb. It 
 </item>
 <item>
   <title>Unicode and Matlab on the command line</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
 </p>
 
@@ -2313,7 +2376,8 @@ You still can't type unicode characters to the command prompt, of course. But wh
 </item>
 <item>
   <title>Decisions in Pillars of Eternity</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Early on in <a href="https://en.wikipedia.org/wiki/Pillars_of_Eternity">Pillars of Eternity</a>, you are tasked to kill one of two characters: Either you kill King Rethoric, who executed many innocent people, or you kill Rolsc, the leader of the rebellion. This is an interesting moral choice, but it is also profoundly sad that the game presents killing either of them as the only resolution to this conflict.
 </p>
 
@@ -2334,7 +2398,8 @@ From what I hear, Planescape Torment did offer such choices. As did many of <a h
 </item>
 <item>
   <title>Julia First Impressions</title>
-  <description><![CDATA[<blockquote>
+  <description><![CDATA[
+<blockquote>
 <p>
 Julia is a high-level dynamic programming language designed to address the requirements of high-performance numerical and scientific computing while also being effective for general purpose programming. —<a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Wikipedia</a>
 </p>
@@ -2385,7 +2450,8 @@ At the end of the day, Julia clearly isn't mature yet, but very promising. Docum
 </item>
 <item>
   <title>The 31. Chaos Communication Congress</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Every year, between Christmas and New Year's Eve, a very special convention is held: The Chaos Computer Club hosts the Chaos Communication Congress. Among my peers, this is just "The Congress", the real highlight at the end of our year.
 </p>
 
@@ -2441,6 +2507,7 @@ The Congress is really unique. I can't recommend it enough. If you can free up t
 <item>
   <title>Books of 2014</title>
   <description><![CDATA[
+
 <div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1"><a href="http://www.amazon.de/Ancillary-Justice-Imperial-Radch-English-ebook/dp/B00BU1DG1S/ref=sr_1_1?s=books-intl-de&ie=UTF8&qid=1419948379&sr=1-1&keywords=ancillary+justice">Ancillary Justice</a> / <a href="http://www.amazon.de/Ancillary-Sword-Imperial-Radch-English-ebook/dp/B00IA2E5VA/ref=sr_1_2?s=books-intl-de&ie=UTF8&qid=1419948379&sr=1-2&keywords=ancillary+justice">Ancillary Sword</a>, by Ann Leckie</h2>
 <div class="outline-text-2" id="text-1">
@@ -2480,7 +2547,8 @@ This is about time travel from near-future Britain to the fifteenth century. But
 </item>
 <item>
   <title>A Digital Thank You</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 This is the time of the year when we reflect on our lives, and be thankful. We write Christmas cards to people we like, and celebrate with our loved ones. At my job, I am sitting in front of a screen all day, and I interacted not only with people, but also their software. So this is a column where I want to thank people I don't know for their delightful software:
 </p>
 
@@ -2534,7 +2602,8 @@ This year, I got back into an old hobby of mine: Flight Simulation. In particula
 </item>
 <item>
   <title>Choosing a German Email Provider</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Why not just use Gmail<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>? Because if you're not paying for the service, you <i>are</i> the service. Google gives you Gmail for free, and in return they analyze and market your data. That's a fair deal, as far as I am concerned. But not a deal I want to make.
 </p>
 
@@ -2577,7 +2646,8 @@ For the record, <a href="http://arstechnica.com/tech-policy/2014/09/judge-mulls-
 </item>
 <item>
   <title>Org Mode Selective Section Numbering</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
 </p>
 
@@ -2591,14 +2661,14 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
          (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111; background-color: #fffff8;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (and (eq backend 'latex)
+    (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
          (string= (org-element-property <span style="color: #111111; background-color: #fffff8;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
         (replace-regexp-in-string
          <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
          <span style="color: #303030;">"\\1*"</span> data nil nil 1)
       data)))
 
-(setq org-export-filter-headline-functions '(headline-numbering-filter))
+(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
 </pre>
 </div>
 
@@ -2616,44 +2686,44 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 
 <div class="org-src-container">
 
-<pre class="src src-css"><span style="color: #111111; font-style: italic; text-decoration: underline;">/* </span><span style="color: #111111; font-style: italic; text-decoration: underline;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic; text-decoration: underline;">*/</span>
+<pre class="src src-css"><span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #303030; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111;">display</span>: none; }
 
-<span style="color: #111111; font-style: italic; text-decoration: underline;">/* </span><span style="color: #111111; font-style: italic; text-decoration: underline;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic; text-decoration: underline;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">define counters for the different headline levels </span><span style="color: #303030; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111;">counter-reset</span>: section; }
 <span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111;">counter-reset</span>: subsection; }
 <span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111;">counter-reset</span>: subsubsection; }
 <span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111;">counter-reset</span>: paragraph; }
 <span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111;">counter-reset</span>: subparagraph; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111;">h2</span>::before {
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">prepend section numbers before headlines </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">h2::before </span>{
     <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
     <span style="color: #111111;">counter-increment</span>: section;
 }
-<span style="color: #111111;">h3</span>::before {
+<span style="color: #111111; text-decoration: underline;">h3::before </span>{
     <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
     <span style="color: #111111;">counter-increment</span>: subsection;
 }
-<span style="color: #111111;">h4</span>::before {
+<span style="color: #111111; text-decoration: underline;">h4::before </span>{
     <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
     <span style="color: #111111;">counter-increment</span>: subsubsection;
 }
-<span style="color: #111111;">h5</span>::before {
+<span style="color: #111111; text-decoration: underline;">h5::before </span>{
     <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
     <span style="color: #111111;">counter-increment</span>: paragraph;
 }
-<span style="color: #111111;">h6</span>::before {
+<span style="color: #111111; text-decoration: underline;">h6::before </span>{
     <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
     <span style="color: #111111;">counter-increment</span>: subparagraph;
 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
-.nonumber::before { <span style="color: #111111;">content</span>: none; }
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111;">content</span>: none; }
 </pre>
 </div>
 
@@ -2678,7 +2748,7 @@ With this in place, we can extend the previous filter to work for HTML as well a
                 <span style="color: #303030;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
       data)))
 
-(setq org-export-filter-headline-functions '(headline-numbering-filter))
+(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
 </pre>
 </div>
 
@@ -2691,7 +2761,8 @@ Previously, I implemented this in Org mode only (no CSS). While that worked as w
 </item>
 <item>
   <title>Writing a Thesis in Org Mode</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
 </p>
 
@@ -2709,10 +2780,10 @@ As for the thesis text, I used Org's export functionality to convert the Org sou
 
 <div class="org-src-container">
 
-<pre class="src src-org"><span style="color: #111111; font-style: italic;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
-<span style="color: #111111; font-style: italic;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
-<span style="color: #111111; font-style: italic;">#+NAME: fig:summary_tracks</span>
-<span style="color: #111111; text-decoration: underline;">file:images/summary_tracks.pdf</span>
+<pre class="src src-org"><span style="color: #303030; font-style: italic;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
+<span style="color: #303030; font-style: italic;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
+<span style="color: #303030; font-style: italic;">#+NAME: fig:summary_tracks</span>
+<span style="color: #111111; text-decoration: underline;"><a href="file:images/summary_tracks.pdf">file:images/summary_tracks.pdf</a></span>
 </pre>
 </div>
 
@@ -2724,7 +2795,7 @@ In LaTeX, this would be
 
 <pre class="src src-latex"><span style="color: #111111; font-weight: bold;">\begin</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
 <span style="color: #111111; font-weight: bold;">\centering</span>
-<span style="color: #696969;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
+<span style="color: #111111; font-weight: bold;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
 <span style="color: #111111; font-weight: bold;">\caption</span>{<span style="color: #111111; font-weight: bold; text-decoration: underline;">\label</span><span style="color: #111111; text-decoration: underline;">{</span><span style="color: #111111; text-decoration: underline;">fig:summary_tracks</span><span style="color: #111111; text-decoration: underline;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
 <span style="color: #111111; font-weight: bold;">\end</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
 </pre>
@@ -2751,7 +2822,8 @@ At the end of the day, I am not sure whether Org mode is the right tool for writ
 </item>
 <item>
   <title>Org Mode Citation Links</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
 </p>
 
@@ -2781,7 +2853,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
        <span style="color: #111111;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
        (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
-           (<span style="color: #111111; font-weight: bold;">if</span> (or (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
                (format <span style="color: #303030;">"\\cite{%s}"</span> path)
              (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
@@ -2796,7 +2868,8 @@ This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which
 </item>
 <item>
   <title>Transplant</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.
 </p>
 
@@ -2851,9 +2924,9 @@ This alone accounts for a large percentage of Matlab code out there. But not eve
 
 <pre class="src src-python"><span style="color: #111111;">data</span> = matlab.randn(1, 4)
 matlab.<span style="color: #111111; background-color: #fffff8;">max</span>(data)
-&gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
+&gt;&gt;&gt; [1.5326, 3] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x, n = max(...)</span>
 matlab.<span style="color: #111111; background-color: #fffff8;">max</span>(data, nargout=1)
-&gt;&gt;&gt; 1.5326      <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = max(...)</span>
+&gt;&gt;&gt; 1.5326      <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x = max(...)</span>
 </pre>
 </div>
 
@@ -2870,8 +2943,8 @@ Calling Matlab functions is the most important feature of Transplant. But there 
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
-<span style="color: #111111;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
+<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: value = 5</span>
+<span style="color: #111111;">x</span> = matlab.value <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x = value</span>
 </pre>
 </div>
 </li>
@@ -2936,7 +3009,8 @@ At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I d
 </item>
 <item>
   <title>Working and Learning</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 At the university, I have a big advantage: I can program. So many of my fellow students are programming as their main means of doing science, yet clearly never learned how to program efficiently. It is saddening to see them "fight Matlab" for days, for things that would take a programmer hours.
 </p>
 
@@ -3122,7 +3196,8 @@ For the moment, I have no desire for being beholden to some company dictating my
 </item>
 <item>
   <title>Speeding Up Org Mode Publishing</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
 </p>
 
@@ -3148,6 +3223,7 @@ But Emacs wouldn't be Emacs if this could not be fixed with a line or two of eli
 <item>
   <title>Snow Crash</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2014-05/snow-crash.jpg" alt="snow-crash.jpg" />
 </p>
@@ -3174,11 +3250,12 @@ If you haven't already, go read this book!
 </p>
 ]]></description>
   <link>http://bastibe.de/2014-05-03-snow-crash.html</link>
-  <pubDate>Tue, 30 Nov -001 00:00:00 +0053</pubDate>
+  <pubDate>Sat, 03 May 2014 00:00:00 +0200</pubDate>
 </item>
 <item>
   <title>Sound in Python</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
 </p>
 
@@ -3245,12 +3322,12 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
 <span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
+<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">opens your default audio device</span>
+    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
     <span style="color: #111111;">f</span> = SoundFile(<span style="color: #303030;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
                   channels=s.channels, <span style="color: #111111; background-color: #fffff8;">format</span>=ogg_file,
                   mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">one second</span>
+    f.write(s.read(s.sample_rate)) <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">one second</span>
 </pre>
 </div>
 
@@ -3297,7 +3374,8 @@ More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">l
 </item>
 <item>
   <title>Blogging with Emacs</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
 </p>
 
@@ -3334,20 +3412,20 @@ Getting the pages to work is rather simple: You have to create a "publishing pro
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-html</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
-(setq org-publish-project-alist
+(<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
       '((<span style="color: #303030;">"blog-content"</span>
          <span style="color: #111111; background-color: #fffff8;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
          <span style="color: #111111; background-color: #fffff8;">:html-extension</span> <span style="color: #303030;">"html"</span>
          <span style="color: #111111; background-color: #fffff8;">:base-extension</span> <span style="color: #303030;">"org"</span>
          <span style="color: #111111; background-color: #fffff8;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
          <span style="color: #111111; background-color: #fffff8;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #111111; background-color: #fffff8;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
-         <span style="color: #111111; background-color: #fffff8;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
-         <span style="color: #111111; background-color: #fffff8;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
-         <span style="color: #111111; background-color: #fffff8;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
-         <span style="color: #111111; background-color: #fffff8;">:html-head-extra</span> <span style="color: #303030;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
-         <span style="color: #111111; background-color: #fffff8;">:html-preamble</span> <span style="color: #303030;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
-         <span style="color: #111111; background-color: #fffff8;">:html-postamble</span> <span style="color: #303030;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
+         <span style="color: #111111; background-color: #fffff8;">:recursive</span> t          <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">descend into sub-folders?</span>
+         <span style="color: #111111; background-color: #fffff8;">:section-numbers</span> nil  <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">don't create numbered sections</span>
+         <span style="color: #111111; background-color: #fffff8;">:with-toc</span> nil         <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">don't create a table of contents</span>
+         <span style="color: #111111; background-color: #fffff8;">:with-latex</span> t         <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">do use MathJax for awesome formulas!</span>
+         <span style="color: #111111; background-color: #fffff8;">:html-head-extra</span> <span style="color: #303030;">""</span>   <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">extra &lt;head&gt; entries go here</span>
+         <span style="color: #111111; background-color: #fffff8;">:html-preamble</span> <span style="color: #303030;">""</span>     <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">this stuff is put before your post</span>
+         <span style="color: #111111; background-color: #fffff8;">:html-postamble</span> <span style="color: #303030;">""</span>    <span style="color: #303030; font-style: italic;">; </span><span style="color: #303030; font-style: italic;">this stuff is put after your post</span>
 )))
 </pre>
 </div>
@@ -3397,9 +3475,9 @@ Adding a front page is simple, too. My front page is simply a normal page called
 
 <pre class="src src-org"><span style="color: #7f7f7f;">#+TITLE:</span> <span style="color: #111111; font-size: 150%; text-decoration: underline;">RECENT POSTS</span>
 
-<span style="color: #111111;">* </span><span style="color: #111111; text-decoration: underline;">Speeding up Matplotlib</span>
-<span style="color: #111111; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
-<span style="color: #111111; text-decoration: underline;">read more...</span>
+<span style="color: #111111;">* </span><span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">Speeding up Matplotlib</a></span>
+<span style="color: #303030; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
+<span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">read more...</a></span>
 </pre>
 </div>
 
@@ -3447,10 +3525,10 @@ Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code
 
 <pre class="src src-org"><span style="color: #111111;">* Speeding up Matplotlib</span>
 <span style="color: #111111;">:PROPERTIES:</span>
-<span style="color: #111111;">:RSS_PERMALINK:</span> "<span style="color: #111111; text-decoration: underline;">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</span>"
+<span style="color: #111111;">:RSS_PERMALINK:</span> "<span style="color: #111111; text-decoration: underline;"><a href="http://bastibe.de/2013-05-30-speeding-up-matplotlib.html">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</a></span>"
 <span style="color: #111111;">:PUBDATE:</span> &lt;2013-05-30&gt;
 <span style="color: #111111;">:END:</span>
-<span style="color: #111111; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
+<span style="color: #303030; font-style: italic;">#+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
 </pre>
 </div>
 
@@ -3499,7 +3577,7 @@ This should get you started! For completeness, here is my complete configuration
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-html</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
-(setq org-publish-project-alist
+(<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
       '((<span style="color: #303030;">"blog"</span>
          <span style="color: #111111; background-color: #fffff8;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
         (<span style="color: #303030;">"blog-content"</span>
@@ -3598,7 +3676,7 @@ All other sources, including the source code to all blog posts, can be found on 
   <span style="color: #111111;">"only use org-rss-headline for top level headlines"</span>
   (<span style="color: #111111; font-weight: bold;">if</span> (&lt; (org-export-get-relative-level headline info) 2)
       ad-do-it
-    (setq ad-return-value (org-html-headline headline contents info))))
+    (<span style="color: #111111; font-weight: bold;">setq</span> ad-return-value (org-html-headline headline contents info))))
 </pre>
 </div>
 
@@ -3611,7 +3689,8 @@ Now, the RSS feed includes the full text of all articles.
 </item>
 <item>
   <title>Speeding up Matplotlib</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
 </p>
 
@@ -3813,7 +3892,8 @@ In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotl
 </item>
 <item>
   <title>A Python Primer for Matlab Users</title>
-  <description><![CDATA[<blockquote>
+  <description><![CDATA[
+<blockquote>
 <p>
 Why would you want to use Python over Matlab?
 </p>
@@ -3865,10 +3945,10 @@ Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hol
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-<span style="color: #111111;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
-<span style="color: #111111;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
-<span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a string</span>
+<pre class="src src-python"><span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Python</span>
+<span style="color: #111111;">a</span> = 5         <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">a number</span>
+<span style="color: #111111;">a</span> = [1, 2, 3] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">a list</span>
+<span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">a string</span>
 </pre>
 </div>
 
@@ -3878,7 +3958,7 @@ Contrast this with C, where you can not assign different data types to the same 
 
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">C</span>
+<pre class="src src-c"><span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">C</span>
 <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">a</span> = 5;
 <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">b</span>[3] = {1.0, 2.0, 3.0};
 <span style="color: #111111; text-decoration: underline;">char</span> <span style="color: #111111;">c</span>[] = <span style="color: #303030;">"text"</span>;
@@ -3892,17 +3972,17 @@ In Matlab, adding a single number to a string will convert that string into an a
 
 <div class="org-src-container">
 
-<pre class="src src-octave"><span style="color: #111111; font-style: italic;">% </span><span style="color: #111111; font-style: italic;">Matlab</span>
+<pre class="src src-octave"><span style="color: #303030; font-style: italic;">% </span><span style="color: #303030; font-style: italic;">Matlab</span>
 a <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #303030;">'text'</span>
-b <span style="color: #111111; background-color: #fffff8;">=</span> a <span style="color: #111111; background-color: #fffff8;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
+b <span style="color: #111111; background-color: #fffff8;">=</span> a <span style="color: #111111; background-color: #fffff8;">+</span> 5 <span style="color: #303030; font-style: italic;">% [121 106 125 121]</span>
 </pre>
 </div>
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
+<pre class="src src-python"><span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Python</span>
 <span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>
-<span style="color: #111111;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
+<span style="color: #111111;">b</span> = a + 5 <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
 </pre>
 </div>
 
@@ -3994,7 +4074,7 @@ You don't have to name the output variable names in the definition and instead u
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
+<pre class="src src-python"><span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Python</span>
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number):
     <span style="color: #111111; font-weight: bold;">if</span> number &gt; 0:
         <span style="color: #111111; font-weight: bold;">return</span> number
@@ -4005,7 +4085,7 @@ You don't have to name the output variable names in the definition and instead u
 
 <div class="org-src-container">
 
-<pre class="src src-octave"><span style="color: #111111; font-style: italic;">% </span><span style="color: #111111; font-style: italic;">Matlab</span>
+<pre class="src src-octave"><span style="color: #303030; font-style: italic;">% </span><span style="color: #303030; font-style: italic;">Matlab</span>
 <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
     <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #111111; background-color: #fffff8;">&gt;</span> 0
         out <span style="color: #111111; background-color: #fffff8;">=</span> number
@@ -4024,11 +4104,11 @@ Since Python only gains a matrix engine by importing Numpy, it does not have a c
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a numpy matrix:</span>
+<pre class="src src-python"><span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">create a numpy matrix:</span>
 <span style="color: #111111;">m</span> = array([[1, 2, 3],
            [4, 5, 6],
            [7, 8, 9]])
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a Python list:</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">create a Python list:</span>
 <span style="color: #111111;">l</span> = [1 2 3]
 </pre>
 </div>
@@ -4046,8 +4126,8 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 <span style="color: #111111;">one</span> = a[0]
 <span style="color: #111111;">two</span> = a[1]
 
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">"6:8" is a range of two elements:</span>
-<span style="color: #111111;">a</span>[6:8] = [70, 80] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">&lt;-- a Python list!</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">"6:8" is a range of two elements:</span>
+<span style="color: #111111;">a</span>[6:8] = [70, 80] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">&lt;-- a Python list!</span>
 </pre>
 </div>
 </div>
@@ -4064,11 +4144,11 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111;">a</span> = array([1 2 3 4 5])
-<span style="color: #111111;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
-<span style="color: #111111;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">make a copy like this:</span>
-<span style="color: #111111;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">copy=True can be omitted</span>
-<span style="color: #111111;">c</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">changes only c</span>
+<span style="color: #111111;">b</span> = a[1:4] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">[2 3 4]</span>
+<span style="color: #111111;">b</span>[1] = rand() <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">this will change a and b!</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">make a copy like this:</span>
+<span style="color: #111111;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">copy=True can be omitted</span>
+<span style="color: #111111;">c</span>[1] = rand() <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">changes only c</span>
 </pre>
 </div>
 <ul class="org-ul">
@@ -4079,10 +4159,10 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pretend this came from a wave file:</span>
+<pre class="src src-python"><span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">pretend this came from a wave file:</span>
 <span style="color: #111111;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
-<span style="color: #111111;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
+<span style="color: #111111;">a</span> = a * 10 <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">int16 only goes to 32768!</span>
+<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
 </pre>
 </div>
 </div>
@@ -4115,7 +4195,8 @@ A great way to get to know any programming language is to solve the first few pr
 </item>
 <item>
   <title>Real Time Signal Processing in Python</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.
 </p>
 
@@ -4232,11 +4313,11 @@ In Python, this might look like this:
             <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] = signal[i]
             <span style="color: #111111; font-weight: bold;">self</span>.delay_index = (<span style="color: #111111; font-weight: bold;">self</span>.delay_index + 1) % <span style="color: #111111; font-weight: bold;">self</span>.delay
 
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">calculate an envelope of the signal</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">calculate an envelope of the signal</span>
             <span style="color: #111111; font-weight: bold;">self</span>.envelope *= <span style="color: #111111; font-weight: bold;">self</span>.release_coeff
             <span style="color: #111111; font-weight: bold;">self</span>.envelope  = <span style="color: #111111; background-color: #fffff8;">max</span>(<span style="color: #111111; background-color: #fffff8;">abs</span>(signal[i]), <span style="color: #111111; font-weight: bold;">self</span>.envelope)
 
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">have self.gain go towards a desired limiter gain</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">have self.gain go towards a desired limiter gain</span>
             <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111; font-weight: bold;">self</span>.envelope &gt; threshold:
                 <span style="color: #111111;">target_gain</span> = (1+threshold-<span style="color: #111111; font-weight: bold;">self</span>.envelope)
             <span style="color: #111111; font-weight: bold;">else</span>:
@@ -4244,7 +4325,7 @@ In Python, this might look like this:
             <span style="color: #111111; font-weight: bold;">self</span>.gain = ( <span style="color: #111111; font-weight: bold;">self</span>.gain*<span style="color: #111111; font-weight: bold;">self</span>.attack_coeff +
                           target_gain*(1-<span style="color: #111111; font-weight: bold;">self</span>.attack_coeff) )
 
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">limit the delayed signal</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">limit the delayed signal</span>
             <span style="color: #111111;">signal</span>[i] = <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] * <span style="color: #111111; font-weight: bold;">self</span>.gain
 </pre>
 </div>
@@ -4336,7 +4417,7 @@ The limiter defined above could be rewritten in C like this:
 
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python Limiter class.</span>
+<pre class="src src-c"><span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">this corresponds to the Python Limiter class.</span>
 <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
     <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_index</span>;
     <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_length</span>;
@@ -4348,7 +4429,7 @@ The limiter defined above could be rewritten in C like this:
 
 <span style="color: #111111;">#define</span> <span style="color: #111111; text-decoration: underline;">MAX</span>(<span style="color: #111111;">x</span>,<span style="color: #111111;">y</span>) ((x)&gt;(y)?(x):(y))
 
-<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python __init__ function.</span>
+<span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">this corresponds to the Python __init__ function.</span>
 <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">attack_coeff</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">release_coeff</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_len</span>) {
     <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111;">state</span>;
     state.attack_coeff = attack_coeff;
@@ -4366,11 +4447,11 @@ The limiter defined above could be rewritten in C like this:
         delay_line[state-&gt;delay_index] = signal[i];
         state-&gt;delay_index = (state-&gt;delay_index + 1) % state-&gt;delay_length;
 
-        <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">calculate an envelope of the signal</span>
+        <span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">calculate an envelope of the signal</span>
         state-&gt;envelope *= state-&gt;release_coeff;
         state-&gt;envelope = MAX(fabs(signal[i]), state-&gt;envelope);
 
-        <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">have current_gain go towards a desired limiter target_gain</span>
+        <span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">have current_gain go towards a desired limiter target_gain</span>
         <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">target_gain</span>;
         <span style="color: #111111; font-weight: bold;">if</span> (state-&gt;envelope &gt; threshold)
             target_gain = (1+threshold-state-&gt;envelope);
@@ -4379,7 +4460,7 @@ The limiter defined above could be rewritten in C like this:
         state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
             target_gain*(1-state-&gt;attack_coeff);
 
-        <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">limit the delayed signal</span>
+        <span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">limit the delayed signal</span>
         signal[i] = delay_line[state-&gt;delay_index] * state-&gt;current_gain;
     }
 }
@@ -4535,7 +4616,8 @@ You can find all the source code in this article at <a href="https://github.com/
 </item>
 <item>
   <title>An error occurred loading this content. Try again later.</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Since we moved, our Apple TV has been giving us trouble: we would rent a movie on the Apple TV, and instead of playing it, the Apple TV would just display
 </p>
 
@@ -4559,7 +4641,8 @@ Finally, some forum or other pointed me to the correct solution: For some reason
 </item>
 <item>
   <title>Names</title>
-  <description><![CDATA[<blockquote>
+  <description><![CDATA[
+<blockquote>
 <p>
 Names are everywhere in software. We name our variables, our functions, our arguments, classes, and packages. We name our source files and the directories that contain them. We name our jar files and war files and ear files. We name and name and name. Because we do so much of it, we'd better do it well.
 </p>
@@ -4590,7 +4673,8 @@ If you like programming at all, I implore you to <a href="http://mitpress.mit.ed
 </item>
 <item>
   <title>Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.
 </p>
 
@@ -4608,40 +4692,40 @@ At least these things are rather easy to fix, since all these settings are saved
 
 <div class="org-src-container">
 
-<pre class="src src-makefile"><span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">StorageVersion: 1.0</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyName: GNU C</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyManufacturer: GNU</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyLanguage: C</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyVersion:</span>
-            <span style="color: #111111;">CC</span>=<span style="color: #303030;">'gcc'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'gcc-4.2'</span>
+<pre class="src src-makefile"><span style="color: #303030; font-style: italic;">#</span><span style="color: #303030; font-style: italic;">----------------------------------------------------------------------------</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">StorageVersion: 1.0</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">CkeyName: GNU C</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">CkeyManufacturer: GNU</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">CkeyLanguage: C</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">CkeyVersion:</span>
+            <span style="color: #111111;">CC</span>=<span style="color: #303030;">'gcc'</span> <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">used to be 'gcc-4.2'</span>
 
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
             <span style="color: #111111;">SDKROOT</span>=<span style="color: #303030;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
-            <span style="color: #111111;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #303030;">'10.8'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '10.5'</span>
+            <span style="color: #111111;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #303030;">'10.8'</span> <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">used to be '10.5'</span>
             <span style="color: #111111;">ARCHS</span>=<span style="color: #303030;">'x86_64'</span>
             <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
             <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"$CFLAGS  -fexceptions"</span>
-            <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew include path</span>
+            <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Homebrew include path</span>
             <span style="color: #111111;">CLIBS</span>=<span style="color: #303030;">"$MLIBS"</span>
             <span style="color: #111111;">COPTIMFLAGS</span>=<span style="color: #303030;">'-O2 -DNDEBUG'</span>
             <span style="color: #111111;">CDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
-<span style="color: #111111; font-style: italic;">#</span>
+<span style="color: #303030; font-style: italic;">#</span>
             <span style="color: #111111;">CLIBS</span>=<span style="color: #303030;">"$CLIBS -lstdc++"</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyName: GNU C++</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyManufacturer: GNU</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyLanguage: C++</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyVersion:</span>
-            <span style="color: #111111;">CXX</span>=g++ <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'g++-4.2'</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">C++keyName: GNU C++</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">C++keyManufacturer: GNU</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">C++keyLanguage: C++</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">C++keyVersion:</span>
+            <span style="color: #111111;">CXX</span>=g++ <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">used to be 'g++-4.2'</span>
             <span style="color: #111111;">CXXFLAGS</span>=<span style="color: #303030;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
             <span style="color: #111111;">CXXLIBS</span>=<span style="color: #303030;">"$MLIBS -lstdc++"</span>
             <span style="color: #111111;">CXXOPTIMFLAGS</span>=<span style="color: #303030;">'-O2 -DNDEBUG'</span>
             <span style="color: #111111;">CXXDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
-<span style="color: #111111; font-style: italic;">#</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyName: GNU Fortran</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyManufacturer: GNU</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyLanguage: Fortran</span>
-            <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyVersion:</span>
+<span style="color: #303030; font-style: italic;">#</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">FortrankeyName: GNU Fortran</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">FortrankeyManufacturer: GNU</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">FortrankeyLanguage: Fortran</span>
+            <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">FortrankeyVersion:</span>
             <span style="color: #111111;">FC</span>=<span style="color: #303030;">'gfortran'</span>
             <span style="color: #111111;">FFLAGS</span>=<span style="color: #303030;">'-fexceptions -m64 -fbackslash'</span>
             <span style="color: #111111;">FC_LIBDIR</span>=<span style="color: #303030;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
@@ -4649,17 +4733,17 @@ At least these things are rather easy to fix, since all these settings are saved
             <span style="color: #111111;">FLIBS</span>=<span style="color: #303030;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
             <span style="color: #111111;">FOPTIMFLAGS</span>=<span style="color: #303030;">'-O'</span>
             <span style="color: #111111;">FDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
-<span style="color: #111111; font-style: italic;">#</span>
+<span style="color: #303030; font-style: italic;">#</span>
             <span style="color: #111111;">LD</span>=<span style="color: #303030;">"$CC"</span>
             <span style="color: #111111;">LDEXTENSION</span>=<span style="color: #303030;">'.mexmaci64'</span>
             <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
             <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
-            <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew library path</span>
+            <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Homebrew library path</span>
             <span style="color: #111111;">LDOPTIMFLAGS</span>=<span style="color: #303030;">'-O'</span>
             <span style="color: #111111;">LDDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
-<span style="color: #111111; font-style: italic;">#</span>
+<span style="color: #303030; font-style: italic;">#</span>
             <span style="color: #111111;">POSTLINK_CMDS</span>=<span style="color: #303030;">':'</span>
-<span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
+<span style="color: #303030; font-style: italic;">#</span><span style="color: #303030; font-style: italic;">----------------------------------------------------------------------------</span>
 </pre>
 </div>
 
@@ -4691,7 +4775,8 @@ With those settings, the mex compiler should work and it should pick up any libr
 </item>
 <item>
   <title>My Emacs customizations</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
 </p>
 
@@ -4733,7 +4818,7 @@ Next, a function that uses the above to set the frame size to exactly fit the le
 <div class="org-src-container">
 
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">use-left-half-screen</span> ()
-  (interactive)
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">let*</span> ((excess-width 32)
          (excess-height 48)
          (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
@@ -4766,7 +4851,7 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 
 <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
           (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (<span style="color: #111111; font-weight: bold;">when</span> (or (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
+            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
                       (string-equal (buffer-name) <span style="color: #303030;">"*eshell*"</span>)
                       (string-equal (buffer-name) <span style="color: #303030;">"*tex-shell*"</span>))
               (<span style="color: #111111; font-weight: bold;">if</span> (not (eq (window-height) 15))
@@ -4787,7 +4872,7 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-above</span> ()
   <span style="color: #111111;">"Insert a newline above the current line and put point at beginning."</span>
-  (interactive)
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">unless</span> (bolp)
     (beginning-of-line))
   (newline)
@@ -4796,7 +4881,7 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 
 (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-below</span> ()
   <span style="color: #111111;">"Insert a newline below the current line and put point at beginning."</span>
-  (interactive)
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">unless</span> (eolp)
     (end-of-line))
   (newline-and-indent))
@@ -4821,9 +4906,9 @@ This function will open or refresh a split window with the generated PDF file in
 
 <div class="org-src-container">
 
-<pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
+<pre class="src src-elisp"><span style="color: #303030; font-style: italic;">;; </span><span style="color: #303030; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
 (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
-  (interactive)
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">let</span> ((tex-buffer-name (buffer-name))
         (pdf-buffer-name (concat (TeX-master-file) <span style="color: #303030;">".pdf"</span>)))
     (<span style="color: #111111; font-weight: bold;">if</span> (get-buffer pdf-buffer-name)
@@ -4850,7 +4935,8 @@ This function will open or refresh a split window with the generated PDF file in
 </item>
 <item>
   <title>Text editing with confidence and Emacs</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>.
 </p>
 
@@ -4947,7 +5033,8 @@ Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.git
 </item>
 <item>
   <title>A Story about Schemes</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 <b>Disclaimer:</b> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)
 </p>
 
@@ -5023,7 +5110,8 @@ Difficult decision. Frankly, I don't have an answer. That said, I found <code>pl
 </item>
 <item>
   <title>Kindle.app not starting on a case-sensitive file system</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.
 </p>
 
@@ -5065,7 +5153,8 @@ Spelling is hard, it seems.
 </item>
 <item>
   <title>On the Virtue of Contributing to and Using Open Source Software</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
 </p>
 
@@ -5114,7 +5203,8 @@ And during those weeks, I had my third, and biggest, revelation about Open Sourc
 </item>
 <item>
   <title>Fixing Errors in Epydoc</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.
 </p>
 
@@ -5178,7 +5268,8 @@ This should fix that problem.
 </item>
 <item>
   <title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
 </p>
 
@@ -5249,7 +5340,7 @@ Also, the afp daemon should be configured to use the proper authentification sch
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">standalone</span>=<span style="color: #303030;">'</span><span style="color: #303030;">no</span><span style="color: #303030;">'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">standalone</span>=<span style="color: #303030;">'</span><span style="color: #303030;">no</span><span style="color: #303030;">'</span>?&gt;<span style="color: #303030; font-style: italic;">&lt;!--</span><span style="color: #303030; font-style: italic;">*-nxml-*</span><span style="color: #303030; font-style: italic;">--&gt;</span>
 &lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> service-group <span style="color: #111111; font-weight: bold;">SYSTEM</span> <span style="color: #111111;">"</span><span style="color: #111111;">avahi-service.dtd</span><span style="color: #111111;">"</span>&gt;
 &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"</span><span style="color: #303030;">yes</span><span style="color: #303030;">"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
@@ -5332,7 +5423,8 @@ This article heavily steals from these fine folks on the internet:
 </item>
 <item>
   <title>How Apple is Failing Me</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 I bought my first Apple computer in 2007 after a long time of gaming on Windows and a few years of Linux. In the beginning, I was just amazed at the consistency, practicality and sanity of the whole experience. I think I had a bad case of tinkeritis and neophilia in my Linux days, so this was probably to be expected.
 </p>
 
@@ -5519,7 +5611,8 @@ As a matter of fact, I would love to see well enough to see Retina at all, but t
 </item>
 <item>
   <title>Blogging with Pelican (and not Octopress)</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For a while now, I have been moving more and more services I use off Google. The reasons for that are manyfold, and few of them have anything to do with Google being evil or not&#x2013;just to get that out of the way.
 </p>
 
@@ -5564,108 +5657,109 @@ If you want to see my blog as a repo on Github, just <a href="https://github.com
 </item>
 <item>
   <title>How to get solarized syntax highlighting on your blog</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Yesterday, I spent a few hours creating a solarized like CSS file for use with my new blogging tool. You could just scrape the settings from this very website, but for convenience, here they are:
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Text </span><span style="color: #111111; font-style: italic;">*/</span>
+<pre class="src src-c"><span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Text </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .t   { <span style="color: #111111;">color</span>: #586e75 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Whitespace </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Whitespace </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .w   { <span style="color: #111111;">color</span>: #073642 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Error </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Error </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .err { <span style="color: #111111;">color</span>: #cb4b16; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .k   { <span style="color: #111111;">color</span>: #859900 }
-.codehilite .kc  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Constant </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .kd  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Declaration </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .kn  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Namespace </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .kp  { <span style="color: #111111;">color</span>: #859900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Pseudo </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .kr  { <span style="color: #111111;">color</span>: #073642 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Reserved </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .kt  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Type </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .kc  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Constant </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .kd  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Declaration </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .kn  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Namespace </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .kp  { <span style="color: #111111;">color</span>: #859900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Pseudo </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .kr  { <span style="color: #111111;">color</span>: #073642 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Reserved </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .kt  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Type </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .n   { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .na  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Attribute </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nb  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Builtin </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nc  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Class </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .ne  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Error </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .no  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Constant </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nd  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Decorator </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .ni  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Entity </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nf  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Function </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nn  { <span style="color: #111111;">color</span>: #586e75; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Namespace </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nt  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Tag </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .nv  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .na  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Attribute </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nb  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Builtin </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nc  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Class </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .ne  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Error </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .no  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Constant </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nd  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Decorator </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .ni  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Entity </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nf  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Function </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nn  { <span style="color: #111111;">color</span>: #586e75; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Namespace </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nt  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Tag </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .nv  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Builtin </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Builtin </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .b   { <span style="color: #111111;">color</span>: #859900 }
-.codehilite .bp  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Builtin.Pseudo </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .bp  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Builtin.Pseudo </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Variable </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Variable </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .v   { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .vc  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Class </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .vg  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Global </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .vi  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Instance </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .vc  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable.Class </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .vg  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable.Global </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .vi  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable.Instance </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .m { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .mf { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Float </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .mh { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Hex </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .mi { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Integer </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .mo { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Oct </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .m { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .mf { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Float </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .mh { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Hex </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .mi { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Integer </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .mo { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Oct </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .s { <span style="color: #111111;">color</span>: #2aa198 }
-.codehilite .sb { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Backtick </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .sc { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Char </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .sd { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Doc </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .s2 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Double </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .se { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Escape </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .sh { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Heredoc </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .si { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Interpol </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .sx { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Other </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .sr { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Regex </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .s1 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Single </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .ss { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Symbol </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .sb { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Backtick </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .sc { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Char </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .sd { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Doc </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .s2 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Double </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .se { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Escape </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .sh { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Heredoc </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .si { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Interpol </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .sx { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Other </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .sr { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Regex </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .s1 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Single </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .ss { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Symbol </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Integer </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .il { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Integer.Long </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Integer </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .il { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Integer.Long </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Operator </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Operator </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .o  { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .ow { <span style="color: #111111;">color</span>: #859900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Operator.Word </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .ow { <span style="color: #111111;">color</span>: #859900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Operator.Word </span><span style="color: #303030; font-style: italic;">*/</span>
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Punctuation </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Punctuation </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .p  { <span style="color: #111111;">color</span>: #586e75 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .c { <span style="color: #111111;">color</span>: #93a1a1; font-style: italic }
-.codehilite .cm { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Multiline </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .cp { <span style="color: #111111;">color</span>: #93a1a1 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Preproc </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .c1 { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Single </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .cs { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Special </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .cm { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Multiline </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .cp { <span style="color: #111111;">color</span>: #93a1a1 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Preproc </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .c1 { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Single </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .cs { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Special </span><span style="color: #303030; font-style: italic;">*/</span>
 
 .codehilite .hll { background-color: #dc322f }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic </span><span style="color: #303030; font-style: italic;">*/</span>
 .codehilite .g { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .gd { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Deleted </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .ge { font-style: italic } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Emph </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gr { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Error </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gh { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Heading </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gi { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Inserted </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .go { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Output </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gp { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Prompt </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gs { font-weight: 586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Strong </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gu { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Subheading </span><span style="color: #111111; font-style: italic;">*/</span>
-.codehilite .gt { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Traceback </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gd { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Deleted </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .ge { font-style: italic } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Emph </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gr { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Error </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gh { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Heading </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gi { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Inserted </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .go { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Output </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gp { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Prompt </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gs { font-weight: 586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Strong </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gu { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Subheading </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gt { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Traceback </span><span style="color: #303030; font-style: italic;">*/</span>
 </pre>
 </div>
 
@@ -5699,7 +5793,8 @@ Keep in mind though that I have no formal knowledge of CSS whatsoever beyond wha
 </item>
 <item>
   <title>How to gem install rlua on OSX/homebrew</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using
 </p>
 
@@ -5741,7 +5836,8 @@ Not exactly a beautiful solution, but it works.
 </item>
 <item>
   <title>Text Editors</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 As far as I can tell, there has been a resurgence of development in the landscape of text editors of late. Only a few years ago, the text editing scene one the Mac seemed to be dominated by
 </p>
 
@@ -6223,7 +6319,8 @@ skEdit supports a nice array of web development languages and offers a good rang
 </item>
 <item>
   <title>How to make Tagbar work with Objective-C</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)
 </p>
 
@@ -6293,7 +6390,8 @@ Happy Vimming!
 </item>
 <item>
   <title>Compiling Scipy and Matplotlib again</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Well, it's compile time again. Once again, I need to install scipy and matplotlib using homebrew and pip on Lion.
 It seems things have improved since I tried to compile last time! Well, it still does not work out of the box, but at least now it can be done without compiling by hand:
 (remember to <code>brew install pkg-config gfortran</code> first)
@@ -6315,7 +6413,8 @@ I must say, this is still a mess. But at least, it is getting less bad.
 </item>
 <item>
   <title>Adobe AIR Application Crashes</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Adobe, oh Adobe. Why?
 </p>
 
@@ -6355,7 +6454,8 @@ Dear Adobe, is it too much to ask to pretty please make your software work on a 
 </item>
 <item>
   <title>Compiling Scipy and Matplotlib using pip on Lion</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.
 </p>
 
@@ -6402,7 +6502,8 @@ Seriously though, these PyPi repos are in a very sorry state. Every time I insta
 </item>
 <item>
   <title>Installing Pygame using Homebrew</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
 </p>
 
@@ -6559,7 +6660,8 @@ Great! That's it! Everything should work now!
 </item>
 <item>
   <title>Installing Python/Numpy/Scipy/Matplotlib on OSX</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.
 </p>
 
@@ -6700,7 +6802,8 @@ Thank you for reading.
 </item>
 <item>
   <title>The strangeness of widescreen displays in modern operating systems</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 So today, pretty much everyone has widescreen displays. That is, displays that are far more wide than high. This was not always so. In ye olden days, computers were mainly used for displaying text, hence displays tended to have a similar layout as books or magazines. Today, they are more like movies (which might be worrying in itself).
 </p>
 
@@ -6743,7 +6846,8 @@ So if you are like me and appreciate every added line of text, do yourself a fav
 </item>
 <item>
   <title>Gedanken zu User Interfaces</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Jeder kennt dieses Fenster:
 </p>
 
@@ -6800,7 +6904,8 @@ Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll eins
 </item>
 <item>
   <title>Tagged File System</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff "Ordner" wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen "Verzeichnis" wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für "Verzeichnis"&#x2026;)
 </p>
 
@@ -6849,7 +6954,8 @@ Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfache
 </item>
 <item>
   <title>Es geht um Tabs</title>
-  <description><![CDATA[<p>
+  <description><![CDATA[
+<p>
 Tabs sind kaputt. Tabs waren noch nie eine gute Idee. Tabs werden dafür benutzt, um in einem Programm mehrere Fensterflächen voll Inhalt in nur einem Fenster darzustellen. Speziell zu diesem Zweck entwarf man in grauer Vorzeit eine neue Klasse von Programmen namens Fenstermanager. Fenstermanager erlauben es, mehrere Fenster gleichzeitig darzustellen, gerne auch nebeneinander, hintereinander oder übereinander. Kennt jeder. Und Tabs sind eine Krücke, die genau dieses Prinzip unterlaufen, denn sie organisieren Fenster ineinander.
 </p>
 
@@ -6949,6 +7055,7 @@ Fazit: Es gibt noch viel zu tun, aber anscheinend ergibt sich langsam aber siche
 <item>
   <title>Mirrors Edge</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="static/2009-03/mirrors_edge.png" alt="mirrors_edge.png" />
 </p>
@@ -6997,6 +7104,7 @@ Und was bleibt unterm Strich? Ich sage: Das Spiel ist es Wert. Es mag seine Män
 <item>
   <title>Synchronisieren von Google, Äpfeln, Fenstern und Telefonen</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/cloud.jpg" alt="cloud.jpg" />
 </p>
@@ -7029,6 +7137,7 @@ Perfektioniert wird das alles aber erst durch Beihilfe von Google, welches durch
 <item>
   <title>E Text Editor goes Open Source</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/e_text_editor.png" alt="e_text_editor.png" />
 </p>
@@ -7080,6 +7189,7 @@ Selbst ich, als eingefleischter Textmate-Benutzer halte E als meinen heimlichen 
 <item>
   <title>Western Digital Festplatten-Umtausch mit Überraschungen</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/festplatte.jpg" alt="festplatte.jpg" />
 </p>
@@ -7115,6 +7225,7 @@ Faszinierend, so wünsche ich mir Kundenservice. Der einzige Wermutstropfen ist,
 <item>
   <title>Debugging und GCC auf Windows</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/code.png" alt="code.png" />
 </p>
@@ -7244,6 +7355,7 @@ Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sic
 <item>
   <title>Get a Mac</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/osx.png" alt="osx.png" />
 </p>
@@ -7276,6 +7388,7 @@ Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll
 <item>
   <title>Kompilieren auf Windows</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png" />
 </p>
@@ -7307,6 +7420,7 @@ Eine Fortsetzung kommt noch&#x2026;
 <item>
   <title>Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</title>
   <description><![CDATA[
+
 <div class="figure">
 <p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png" />
 </p>

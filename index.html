@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="alternate"
@@ -26,7 +26,25 @@
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
-<div id="content"><div class="post-date">24 Jan 2018</div><h1 class="post-title"><a href="http://bastibe.de/2018-01-24-files-and-processes.html">Files and Processes</a></h1>
+<div id="content"><div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-bloc</a></h1>
+
+<p>
+Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
+</p>
+
+<p>
+However, simple can also mean inefficient. Most glaringly, org-static-blog exports every single blog post three times every time you publish: Once to render the HTML, then once to render the RSS feed, then once to render the Index and Archive pages.
+</p>
+
+<p>
+Today, I finally tackled this problem: Now, org-static-blog only exports each post once, when the *.org file changes. The RSS feed, the Index page, and the Archive page simply read the already-rendered HTML instead of exporting again.
+</p>
+
+<p>
+Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s.
+</p>
+<div class="post-date">24 Jan 2018</div><h1 class="post-title"><a href="http://bastibe.de/2018-01-24-files-and-processes.html">Files and Processes</a></h1>
+
 <p>
 In the last few months, I have created three notable programming projects: <a href="https://github.com/bastibe/RunForrest">RunForrest</a> saves function call graphs to disk and runs them in parallel processes; <a href="https://github.com/bastibe/timeup">TimeUp</a> creates backups using rsync and keeps different numbers of hourly, daily, and weekly backups; and <a href="https://github.com/bastibe/jbof">JBOF</a>, which organizes large collections of data and metadata as structured, on-disk datasets.
 </p>
@@ -55,6 +73,7 @@ I now believe that such small-scale solutions are often preferable to high-profi
 In summary, we should teach people about files and processes, and empower them to tackle "hard" tasks without resorting to monolithic libraries. Not only is this incredibly satisfying, it also leads to better programs and better programmers.
 </p>
 <div class="post-date">29 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-29-rsnapshot-on-macos.html">How to set up rsnapshot instead of Time Machine</a></h1>
+
 <p>
 (This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
 </p>
@@ -295,6 +314,7 @@ This will fail if the hourly backup takes longer than 15 minutes. This is rather
 
 </div>
 </div><div class="post-date">28 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">Dropbox deleted my pictures and Time Machine didn't backup</a></h1>
+
 <p>
 Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
 </p>
@@ -311,6 +331,7 @@ From now on, I will use <a href="http://rsnapshot.org/">rsnapshot</a> for backup
 A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get-a-mac.html">Apple</a> and <a href="http://bastibe.de/2009-03-28-synchronisieren-von-google.html">Dropbox</a> and Google and Amazon would lead us to a bright future of computers that "just work", and could solve our daily chores ever more conveniently and reliably. But I was proven wrong. <a href="http://bastibe.de/2012-07-09-apple-is-failing-me.html">So</a>. <a href="http://bastibe.de/2012-11-01-apple-tv.html">Many</a>. <a href="http://bastibe.de/2015-10-16-finder-woes.html">Times</a>. It seems that for-profit software inevitably becomes less dependable as it adds ever more features to attract ever more users. In contrast, free software can focus on <a href="http://bastibe.de/2017-10-24-the-long-game.html">incremental improvements and steadily increasing reliability</a>.
 </p>
 <div class="post-date">20 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-20-books-of-2017.html">Books of 2017</a></h1>
+
 <p>
 In late 2016, I took a short ferry flight to a small island in the area, and rekindled my love for aviation. Shortly afterwards, I started training for a pilot's license, and reading about aviation. From a literary perspective, aviation exists in the perfect goldilocks time frame of being just old enough to be thoroughly romanticized, but young enough for first-hand reports and thorough documentation to be available. What is more, powered flight has provided human observers with an unprecedented view of our world and our struggles, and is often as philosophical as it is exhilarating.
 </p>
@@ -391,45 +412,7 @@ But as much as I love aviation, my first love is still Science Fiction. We live 
 </ul>
 </div>
 </div>
-<div class="post-date">20 Nov 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-11-20-pyenv.html">PyEnv is the new Conda</a></h1>
-<p>
-How to install Python? If your platform has a package manager, you might be tempted to use that to install Python. But I don't like that. That version is often outdated, and you risk messing with an integral part of your operating system. Instead, I like to install a separate Python in my home directory. I used to use <a href="https://conda.io/miniconda.html">Anaconda</a> (or <a href="http://winpython.github.io/">WinPython</a>, or <a href="https://www.enthought.com/product/enthought-python-distribution">EPD</a>) to do this. But now there is a better way: <a href="https://github.com/pyenv/pyenv">PyEnv</a>
-</p>
-
-<p>
-The thing is: PyEnv installs (any version of) Python. That's all it does.
-</p>
-
-<p>
-So why would I choose PyEnv over the more popular Anaconda? Because Anaconda is a Python distribution, a package manager, an environment manager, and a platform for paid packages. In the past, they once did <a href="https://stackoverflow.com/questions/38524856/anaconda-3-for-linux-has-no-ensurepip#39114277">break pip</a> because they wanted to promote conda instead. Some features of conda <a href="https://anaconda.org/">require a login</a>, some require a <a href="https://www.anaconda.com/enterprise/">paid subscription</a>. When you install packages through conda, you get binaries and source code from anaconda's servers, <i>not</i> the official packages from PyPi, which might or might not be up-to-date and feature-complete. For every package you install, you have to make a choice of using pip or conda, and the same goes for specifying your dependencies.
-</p>
-
-<p>
-As an aside, many of these complaints are just as true for package-manager-provided Python packages (which often <a href="https://askubuntu.com/questions/879437/ensurepip-is-disabled-in-debian-ubuntu-for-the-system-python#897004">break pip</a>, too!). Just like Anaconda, package managers want to be the true and only source of packages, and don't like to interact with Python's own package manager.
-</p>
-
-<p>
-In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
-</p>
-
-<p>
-I find this process much simpler, and easier to manage, because it relies on small, orthogonal tools (pyenv, venv, pip) instead of one integrated conda that kind of does everything. I also like to use these official tools and packages instead of conda's parallel universe of mostly-open, mostly-free, mostly-standard replacements.
-</p>
-
-<p>
-Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became <a href="https://pythonwheels.com/">ubiquitous and painless</a>, and virtualenv was <a href="https://docs.python.org/3/library/venv.html">integrated into Python</a>, and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-the downside of compilation is: no Windows support.
-</p></div>
-
-
-</div>
-</div><div id="archive">
+<div id="archive">
   <a href="archive.html">Older posts</a>
 </div>
 </div>
