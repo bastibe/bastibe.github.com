@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "org-mode":</h1><div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-bloc</a></h1>
+
+<p>
+Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
+</p>
+
+<p>
+However, simple can also mean inefficient. Most glaringly, org-static-blog exports every single blog post three times every time you publish: Once to render the HTML, then once to render the RSS feed, then once to render the Index and Archive pages.
+</p>
+
+<p>
+Today, I finally tackled this problem: Now, org-static-blog only exports each post once, when the *.org file changes. The RSS feed, the Index page, and the Archive page simply read the already-rendered HTML instead of exporting again.
+</p>
+
+<p>
+Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> <a href="tags/blog.html">blog</a> </div><div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
+
+<p>
+This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
+</p>
+
+<p>
+In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headline, while <code>\section*{}</code> creates an unnumbered section. Org mode does not have any facility to control this on a per-headline basis, but it can be taught:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
+         (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
+        (replace-regexp-in-string
+         <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
+         <span style="color: #303030;">"\\1*"</span> data nil nil 1)
+      data)))
+
+(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+</pre>
+</div>
+
+<p>
+This creates a filter (an Org mode convention similar to a hook), which appends the asterisk to LaTeX headlines if the headline has a property <code>:NUMBERS: no</code>. If all you do is export to LaTeX, this works well.
+</p>
+
+<p>
+If you need to export to HTML as well, things get more complicated. Since HTML does not have native numbering support, Org is forced to manually create section numbers. But times have changed, and with CSS3, HTML now indeed <i>does</i> support native numbering!
+</p>
+
+<p>
+Here is some CSS that uses CSS3 counters to number all headlines and hide Org's numbers:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-css"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111;">display</span>: none; }
+
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111;">counter-reset</span>: section; }
+<span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111;">counter-reset</span>: subsection; }
+<span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111;">counter-reset</span>: subsubsection; }
+<span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111;">counter-reset</span>: paragraph; }
+<span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111;">counter-reset</span>: subparagraph; }
+
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">h2::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: section;
+}
+<span style="color: #111111; text-decoration: underline;">h3::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: subsection;
+}
+<span style="color: #111111; text-decoration: underline;">h4::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: subsubsection;
+}
+<span style="color: #111111; text-decoration: underline;">h5::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: paragraph;
+}
+<span style="color: #111111; text-decoration: underline;">h6::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: subparagraph;
+}
+
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111;">content</span>: none; }
+</pre>
+</div>
+
+<p>
+With this in place, we can extend the previous filter to work for HTML as well as LaTeX:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>)
+        (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
+               (replace-regexp-in-string
+                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
+                <span style="color: #303030;">"\\1*"</span> data nil nil 1))
+              ((eq backend 'html)
+               (replace-regexp-in-string
+                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">&lt;h[1-6]</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">&gt;]*&gt;</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
+                <span style="color: #303030;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+      data)))
+
+(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+</pre>
+</div>
+
+<p>
+Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
+
+<p>
+Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
+</p>
+
+<p>
+In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
+</p>
+
+<p>
+Org mode was a huge help in this regard, since it combines the document text and the executable pieces of code. Instead of having a bunch of scripts that generate graphs, and a bunch of LaTeX files that include those graphs, I had one big Org file that included both the thesis text and the graphing code.
+</p>
+
+<p>
+As for the thesis text, I used Org's export functionality to convert the Org source to LaTeX, and compiled a PDF from there. This really works very well: It is very nice to use Org headlines instead of <code>\section{...}</code>, and clickable Org links instead of <code>\ref{...}</code>. While this is nice, it is just a change of syntax. I still had to enter the very same things and saving a few characters is not particularly impressive. For example, figures still require a caption, an ID, and a size:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org"><span style="color: #111111; background-color: #f4f4f0;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
+<span style="color: #111111; background-color: #f4f4f0;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
+<span style="color: #111111; background-color: #f4f4f0;">#+NAME: fig:summary_tracks</span>
+<span style="color: #111111; text-decoration: underline;"><a href="file:images/summary_tracks.pdf">file:images/summary_tracks.pdf</a></span>
+</pre>
+</div>
+
+<p>
+In LaTeX, this would be
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-latex"><span style="color: #111111; font-weight: bold;">\begin</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
+<span style="color: #111111; font-weight: bold;">\centering</span>
+<span style="color: #111111; font-weight: bold;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
+<span style="color: #111111; font-weight: bold;">\caption</span>{<span style="color: #111111; font-weight: bold; text-decoration: underline;">\label</span><span style="color: #111111; text-decoration: underline;">{</span><span style="color: #111111; text-decoration: underline;">fig:summary_tracks</span><span style="color: #111111; text-decoration: underline;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
+<span style="color: #111111; font-weight: bold;">\end</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
+</pre>
+</div>
+
+<p>
+As you can see, there really is not that much of a difference between these two, and you might even consider the LaTeX example more readable. In some other areas, Org mode is simply lacking features: Org does not have any syntax for page formatting, and thus can't create a perfectly formatted title page. Similarly, it can't do un-numbered sections, and it can't do numbered equations. For all of those, I had to fall back to writing LaTeX. This is not a big deal, but it breaks the abstraction.
+</p>
+
+<p>
+A bigger problem is that Org documents include all the chapters in one big file. While Org can deal with large files no problem, it means that LaTeX compiles take a while. In LaTeX, I would have split my document into a number of smaller files that could be separately compiled in order to keep compilation time down. This is confounded by Org's default behavior of deleting intermediate LaTeX files, which forces a full triple-recompile on each export. At the end of my thesis, a full export took about 15 seconds. Not a deal-breaker, but annoying.
+</p>
+
+<p>
+The one thing where Org really shines, though, is the inclusion of code fragments: Most of my figures were created in Python, and Org mode allowed me to include that Python code right in my document. Hit <code>C-c C-c</code> on any code fragment, and Org ran that code and created a new image file that is automatically included as a figure. This was really tremendously useful!
+</p>
+
+<p>
+At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
+
+<p>
+I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
+</p>
+
+<p>
+But not everything is perfect. For one thing, citations do not work well. Sure, you can always write <code>\cite{cohen93}</code>, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but <code>\cite{cohen93}</code> is just inline LaTeX.
+</p>
+
+<p>
+But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
+     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
+       <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
+<span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
+<span style="color: #111111;">        for this to work"</span>
+       (find-file-other-window
+        (<span style="color: #111111; font-weight: bold;">save-excursion</span>
+          (beginning-of-buffer)
+          (<span style="color: #111111; font-weight: bold;">save-match-data</span>
+            (re-search-forward <span style="color: #303030;">"\\\\bibliography{</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">}]+</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">}"</span>)
+            (concat (match-string 1) <span style="color: #303030;">".bib"</span>))))
+       (beginning-of-buffer)
+       (search-forward name))
+     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
+       <span style="color: #111111;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
+               (format <span style="color: #303030;">"\\cite{%s}"</span> path)
+             (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
+</pre>
+</div>
+
+<p>
+This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">07 May 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
+
+<p>
+I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
+</p>
+
+<p>
+Since I am on a long train ride today, I decided to have a go at this problem. By the way, train rides and hacking on Emacs are a perfect match: Internet connectivity on trains is usually terrible, but Emacs is self-documenting, so internet access doesn't matter as much. It is sobering to work without an internet connection every once in a while, and Emacs is a perfect target for this kind of work.
+</p>
+
+<p>
+One of the many things I learned on train rides is that Emacs in fact contains its own profiler! So, I ran <code>(progn (profiler-start 'cpu) (org-publish "blog") (profiler-report))</code> to get a hierarchical list of where <code>org-publish</code> was spending its time. Turns out, most of its total run time was spent in functions relating to version control (starting with <code>vc-</code>).
+</p>
+
+<p>
+Some package in my configuration set up <code>vc-find-file-hook</code> as part of <code>find-file-hook</code>. This means that every time <code>org-publish</code> opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use <code>vc-git</code> at all. All my git interaction is done through <code>magit</code>.
+</p>
+
+<p>
+But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

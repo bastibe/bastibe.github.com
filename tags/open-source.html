@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "open-source":</h1><div class="post-date">08 Sep 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-09-08-on-the-virtue-of-oss.html">On the Virtue of Contributing to and Using Open Source Software</a></h1>
+
+<p>
+I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
+</p>
+
+<p>
+About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/">numpy</a> <a href="http://scipy.org/">scipy</a> and <a href="http://matplotlib.sourceforge.net/">matplotlib</a> that, for my particular purposes, rivals Matlab.
+</p>
+
+<p>
+However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used <a href="http://playrec.co.uk/">Playrec</a> for that purpose, which implements <a href="http://www.portaudio.com/">PortAudio</a> bindings for Matlab. Luckily, there was a similar package available for Python, called <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>.
+</p>
+
+<p>
+But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.
+</p>
+
+<p>
+At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!
+</p>
+
+<p>
+This was a revelation to me: I could not only <i>use</i> a piece of software, I could also <i>change</i> it and mold it to my special needs!
+</p>
+
+<p>
+Thus, I put up my changes on <a href="https://github.com/bastibe/PyAudio">github</a> and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!
+</p>
+
+<p>
+This, again, was a revelation to me: Not only could <i>I</i> change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!
+</p>
+
+<p>
+Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.
+</p>
+
+<p>
+And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.
+</p>
+
+<p>
+<b>By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.</b>
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/open-source.html">open-source</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

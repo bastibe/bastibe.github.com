@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "backup":</h1><div class="post-date">29 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-29-rsnapshot-on-macos.html">How to set up rsnapshot instead of Time Machine</a></h1>
+
+<p>
+(This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
+</p>
+
+<p>
+Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
+</p>
+
+<p>
+Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>, a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and I couldn't find a great guide online. So, without further ado, here's how to configure rsnapshot on macOS:
+</p>
+
+
+<ul class="org-ul">
+<li>Install rsnapshot
+
+<pre class="example">
+brew install rsnapshot
+</pre>
+</li>
+
+<li>Write the config file
+
+<p>
+You can copy a template from homebrew:
+</p>
+<pre class="example">
+cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
+</pre>
+<p>
+And then configure the new configuration file to your liking (preserve the tabs!):
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-config">config_version	1.2 # default
+verbose		2   # default
+loglevel	3   # default
+
+# this is where your backups are stored:
+snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
+# prevent accidental backup corruption:
+lockfile	/Users/bb/.rsnapshot.pid
+# use this if you back up to an external drive:
+no_create_root	1   # don't back up if the external drive is not connected
+
+# configure how many tiers of backups are created:
+retain	hourly	10
+retain	daily	7   # dailies will only be created once 10 hourlies exist
+retain	weekly	4   # weeklies will only be created once 7 dailies exist
+retain	monthly	100 # monthlies will only be created once 4 weeklies exist
+
+# the list of directories you want to back up:
+backup	/Users/bb/Documents		localhost/
+backup	/Users/bb/eBooks		localhost/
+backup	/Users/bb/Movies		localhost/
+backup	/Users/bb/Music		localhost/
+backup	/Users/bb/Pictures		localhost/
+backup	/Users/bb/Projects		localhost/
+backup	/Users/bb/Projects-Archive		localhost/
+</pre>
+</div>
+
+<p>
+Instead of <code>localhost</code>, you can use remote machines as well. Check  <a href="https://download.samba.org/pub/rsync/rsync.html"><code>man rsync</code></a> for details
+</p>
+</li>
+
+<li>Make sure it works and create initial backup
+
+<pre class="example">
+rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
+</pre>
+<p>
+The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
+</p>
+</li>
+
+<li>Write launchd Agent
+
+<p>
+Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>, which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
+</p>
+
+<p>
+Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span>?&gt;
+&lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> plist <span style="color: #111111; font-weight: bold;">PUBLIC</span> <span style="color: #111111;">"</span><span style="color: #111111;">-//Apple//DTD PLIST 1.0//EN</span><span style="color: #111111;">"</span> <span style="color: #111111;">"</span><span style="color: #111111;">http://www.apple.com/DTDs/PropertyList-1.0.dtd</span><span style="color: #111111;">"</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+&lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+&lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+</pre>
+</div>
+
+<p>
+For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code> and change the <code>&lt;dict&gt;</code> portion at the end to
+</p>
+
+<ul class="org-ul">
+<li>daily:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+<li>weekly:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+<li>monthly:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+</ul>
+<p>
+However, <code>rsnapshot</code> can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
+</p>
+
+<p>
+To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It seems that there should be a more elegant solution than this, but I haven't found one.
+</p>
+
+<p>
+From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more succinct than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
+</p>
+</li>
+
+<li>Load launchd agents
+
+<pre class="example">
+launchctl load ~/Library/LaunchAgents/rsnapshot.*
+</pre>
+</li>
+
+<li>Test launchd agent
+
+<pre class="example">
+launchctl start rsnapshot.hourly
+</pre>
+<p>
+If it doesn't work, Console.app might show a relevant error message.
+</p>
+</li>
+
+<li>Remove backup directory from Spotlight
+
+<p>
+Go to System Preferences → Spotlight → Privacy → Add your <code>snapshot_root</code> directory from earlier
+</p>
+</li>
+
+<li>Disable TimeMachine and delete your existing backup (if you want)
+
+<p>
+Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
+</p>
+</li>
+</ul>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Caveats</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
+</p>
+
+<p>
+On the other hand, only the hourly task will actually create a new backup. All higher-level backup tiers merely copy existing backups around, so <i>in theory</i>, they shouldn't step on each other's toes when run concurrently. I have opened <a href="https://github.com/rsnapshot/rsnapshot/issues/200">an issue</a> asking about this.
+</p>
+
+<p>
+There are other possible solutions: ① You could modify the launchd entry such that backups only trigger after a few minutes or, better yet, only once all other instances of rsnapshot have finished. I am not sure if launchd supports this, though. ② You could schedule the hourly task using cron instead of launchd, since cron will <i>not</i> reschedule missed tasks. This would only work for two tiers of backups, though. ③ You could just ignore the issue and hope for the best. After all, if a daily or hourly backup gets corrupted every now and then, you still have enough working backups&#x2026;
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/backup.html">backup</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">28 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">Dropbox deleted my pictures and Time Machine didn't backup</a></h1>
+
+<p>
+Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
+</p>
+
+<p>
+So, what have I learned? Dropbox loses your data, and Time Machine can't restore it. These programs are obviously no good for backups. Let me repeat this: <b>Dropbox and Time Machine are not a backup!</b> A true backup needs to be reliable, keep an infinite history, and <i>never</i>, <i>never</i>, <i>never</i> accidentally delete files.
+</p>
+
+<p>
+From now on, I will use <a href="http://rsnapshot.org/">rsnapshot</a> for backups. <a href="https://rayed.com/wordpress/?p=1693">Here</a>'s a tutorial on how to set it up on a Mac. I have used rsnapshot for years at work, and it has never let me down. For syncronizing things between computers, I now use <a href="https://syncthing.net/">syncthing</a>. Both of these programs are not as user-friendly as Dropbox or Time Machine, but that is a small price to pay for a working backup.
+</p>
+
+<p>
+A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get-a-mac.html">Apple</a> and <a href="http://bastibe.de/2009-03-28-synchronisieren-von-google.html">Dropbox</a> and Google and Amazon would lead us to a bright future of computers that "just work", and could solve our daily chores ever more conveniently and reliably. But I was proven wrong. <a href="http://bastibe.de/2012-07-09-apple-is-failing-me.html">So</a>. <a href="http://bastibe.de/2012-11-01-apple-tv.html">Many</a>. <a href="http://bastibe.de/2015-10-16-finder-woes.html">Times</a>. It seems that for-profit software inevitably becomes less dependable as it adds ever more features to attract ever more users. In contrast, free software can focus on <a href="http://bastibe.de/2017-10-24-the-long-game.html">incremental improvements and steadily increasing reliability</a>.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/backup.html">backup</a> </div><div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
+
+<p>
+A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
+</p>
+
+<p>
+This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
+</p>
+
+<p>
+Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi's HDMI output to the LED display's Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.
+</p>
+
+<p>
+After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <i>Internet Sharing</i> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
+</p>
+
+<pre class="example">
+    /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
+</pre>
+
+<p>
+Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
+</p>
+
+<pre class="example">
+    /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
+</pre>
+
+<p>
+Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
+</p>
+
+<pre class="example">
+    - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
+</pre>
+
+<p>
+<del>(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)</del>
+</p>
+
+<p>
+<del>I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:</del>
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+    &lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> service-group <span style="color: #111111; font-weight: bold;">SYSTEM</span> <span style="color: #111111;">"</span><span style="color: #111111;">avahi-service.dtd</span><span style="color: #111111;">"</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"</span><span style="color: #303030;">yes</span><span style="color: #303030;">"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
+        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;
+        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
+</pre>
+</div>
+
+<p>
+<del>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.</del>
+</p>
+
+<p>
+<b>Edit:</b> Turns out, all these were not necessary. Thank you, reader Philipp, for trying them out!
+</p>
+
+<p>
+I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.
+</p>
+
+<p>
+Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
+</p>
+
+<p>
+<del><code>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1</code></del>
+</p>
+
+
+<p>
+<b>Edit:</b> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.
+</p>
+
+<p>
+Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!
+</p>
+
+<p>
+Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.
+</p>
+
+<p>
+Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!
+</p>
+
+<p>
+This article heavily steals from these fine folks on the internet:
+</p>
+
+<ul class="org-ul">
+<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a>
+</li>
+<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>
+</li>
+<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> <a href="tags/backup.html">backup</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

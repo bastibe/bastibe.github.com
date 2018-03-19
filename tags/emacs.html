@@ -1,0 +1,1380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "emacs":</h1><div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-bloc</a></h1>
+
+<p>
+Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
+</p>
+
+<p>
+However, simple can also mean inefficient. Most glaringly, org-static-blog exports every single blog post three times every time you publish: Once to render the HTML, then once to render the RSS feed, then once to render the Index and Archive pages.
+</p>
+
+<p>
+Today, I finally tackled this problem: Now, org-static-blog only exports each post once, when the *.org file changes. The RSS feed, the Index page, and the Archive page simply read the already-rendered HTML instead of exporting again.
+</p>
+
+<p>
+Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> <a href="tags/blog.html">blog</a> </div><div class="post-date">19 Nov 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h1>
+
+<p>
+The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
+</p>
+
+<p>
+However, I have found that this does not work any more: As of Emacs 25, Emacs is available in 64 bit, but ezwinport only supplies 32 bit binaries. I had to search a bit, but the (in retrospect, obvious) solution is to download the required binaries from <a href="https://gnutls.org/download.html">GnuTLS's website</a>, directly. Then unpack all <code>*.dll</code> from the <code>bin</code> directory to your Emacs's <code>bin</code> directory, and you are good to go.
+</p>
+
+<p>
+This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/emacs.html">emacs</a> <a href="tags/windows.html">windows</a> </div><div class="post-date">19 Sep 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
+
+<p>
+Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
+</p>
+
+<p>
+I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>.
+</p>
+
+<p>
+It all started about a year ago, when I fell in love with a font called <a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a>. One of the coolest features of Pragmata was its native bold and italic letters, and its wide support for unicode symbols. I had to find a use for these features! And so, down the rabbit hole I went. <b>Keywords</b> should be bold! <i># Comments</i> should be italic! And while we're at it, why not add some <span class="underline">underlines</span>? And so on.
+</p>
+
+<p>
+The logical next step was then to get rid of colors altogether. At first, as an experiment. Do I really <i>need</i> colors in code? The very pretty <a href="https://github.com/maio/eink-emacs">eink theme</a> seemed to claim otherwise. After a few months of this lunacy, I realized that while I didn't strictly <i>need</i> colors, the stylistic variations of just one font aren't quite sufficient for source code. In particular, it wasn't always easy to distinguish between italic and roman type in PragmataPro, which lead to some confusion.
+</p>
+
+<p>
+But then, inspiration hit me: Who says that I could only use one single font? No one!
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2017-09/color%20theme.png" alt="color%20theme.png" />
+</p>
+</div>
+
+<p>
+The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> for strings, and oblique<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> Iosevka for comments. <a href="http://font.ubuntu.com/">Ubuntu Mono</a> and <a href="http://input.fontbureau.com/">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
+</p>
+
+<p>
+Still, I love the look of this! (Of course it won't work in a terminal, or most other text editors.)
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: Can other text editors do this? I honestly have no idea.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+: I just love the look of the slab-serif characters in Iosevka! Look at the beautiful <code>"}"</code> in the screenshot!
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+: not to be confused with <i>italic</i>, which changes glyphs in addition to slanting.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
+
+<p>
+This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
+</p>
+
+<p>
+In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headline, while <code>\section*{}</code> creates an unnumbered section. Org mode does not have any facility to control this on a per-headline basis, but it can be taught:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
+         (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
+        (replace-regexp-in-string
+         <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
+         <span style="color: #303030;">"\\1*"</span> data nil nil 1)
+      data)))
+
+(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+</pre>
+</div>
+
+<p>
+This creates a filter (an Org mode convention similar to a hook), which appends the asterisk to LaTeX headlines if the headline has a property <code>:NUMBERS: no</code>. If all you do is export to LaTeX, this works well.
+</p>
+
+<p>
+If you need to export to HTML as well, things get more complicated. Since HTML does not have native numbering support, Org is forced to manually create section numbers. But times have changed, and with CSS3, HTML now indeed <i>does</i> support native numbering!
+</p>
+
+<p>
+Here is some CSS that uses CSS3 counters to number all headlines and hide Org's numbers:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-css"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111;">display</span>: none; }
+
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111;">counter-reset</span>: section; }
+<span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111;">counter-reset</span>: subsection; }
+<span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111;">counter-reset</span>: subsubsection; }
+<span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111;">counter-reset</span>: paragraph; }
+<span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111;">counter-reset</span>: subparagraph; }
+
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">h2::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: section;
+}
+<span style="color: #111111; text-decoration: underline;">h3::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: subsection;
+}
+<span style="color: #111111; text-decoration: underline;">h4::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: subsubsection;
+}
+<span style="color: #111111; text-decoration: underline;">h5::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: paragraph;
+}
+<span style="color: #111111; text-decoration: underline;">h6::before </span>{
+    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111;">counter-increment</span>: subparagraph;
+}
+
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
+<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111;">content</span>: none; }
+</pre>
+</div>
+
+<p>
+With this in place, we can extend the previous filter to work for HTML as well as LaTeX:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
+  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
+  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>)
+        (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
+               (replace-regexp-in-string
+                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
+                <span style="color: #303030;">"\\1*"</span> data nil nil 1))
+              ((eq backend 'html)
+               (replace-regexp-in-string
+                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">&lt;h[1-6]</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">&gt;]*&gt;</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
+                <span style="color: #303030;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+      data)))
+
+(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+</pre>
+</div>
+
+<p>
+Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
+
+<p>
+Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
+</p>
+
+<p>
+In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
+</p>
+
+<p>
+Org mode was a huge help in this regard, since it combines the document text and the executable pieces of code. Instead of having a bunch of scripts that generate graphs, and a bunch of LaTeX files that include those graphs, I had one big Org file that included both the thesis text and the graphing code.
+</p>
+
+<p>
+As for the thesis text, I used Org's export functionality to convert the Org source to LaTeX, and compiled a PDF from there. This really works very well: It is very nice to use Org headlines instead of <code>\section{...}</code>, and clickable Org links instead of <code>\ref{...}</code>. While this is nice, it is just a change of syntax. I still had to enter the very same things and saving a few characters is not particularly impressive. For example, figures still require a caption, an ID, and a size:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org"><span style="color: #111111; background-color: #f4f4f0;">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
+<span style="color: #111111; background-color: #f4f4f0;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
+<span style="color: #111111; background-color: #f4f4f0;">#+NAME: fig:summary_tracks</span>
+<span style="color: #111111; text-decoration: underline;"><a href="file:images/summary_tracks.pdf">file:images/summary_tracks.pdf</a></span>
+</pre>
+</div>
+
+<p>
+In LaTeX, this would be
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-latex"><span style="color: #111111; font-weight: bold;">\begin</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
+<span style="color: #111111; font-weight: bold;">\centering</span>
+<span style="color: #111111; font-weight: bold;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
+<span style="color: #111111; font-weight: bold;">\caption</span>{<span style="color: #111111; font-weight: bold; text-decoration: underline;">\label</span><span style="color: #111111; text-decoration: underline;">{</span><span style="color: #111111; text-decoration: underline;">fig:summary_tracks</span><span style="color: #111111; text-decoration: underline;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
+<span style="color: #111111; font-weight: bold;">\end</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
+</pre>
+</div>
+
+<p>
+As you can see, there really is not that much of a difference between these two, and you might even consider the LaTeX example more readable. In some other areas, Org mode is simply lacking features: Org does not have any syntax for page formatting, and thus can't create a perfectly formatted title page. Similarly, it can't do un-numbered sections, and it can't do numbered equations. For all of those, I had to fall back to writing LaTeX. This is not a big deal, but it breaks the abstraction.
+</p>
+
+<p>
+A bigger problem is that Org documents include all the chapters in one big file. While Org can deal with large files no problem, it means that LaTeX compiles take a while. In LaTeX, I would have split my document into a number of smaller files that could be separately compiled in order to keep compilation time down. This is confounded by Org's default behavior of deleting intermediate LaTeX files, which forces a full triple-recompile on each export. At the end of my thesis, a full export took about 15 seconds. Not a deal-breaker, but annoying.
+</p>
+
+<p>
+The one thing where Org really shines, though, is the inclusion of code fragments: Most of my figures were created in Python, and Org mode allowed me to include that Python code right in my document. Hit <code>C-c C-c</code> on any code fragment, and Org ran that code and created a new image file that is automatically included as a figure. This was really tremendously useful!
+</p>
+
+<p>
+At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
+
+<p>
+I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
+</p>
+
+<p>
+But not everything is perfect. For one thing, citations do not work well. Sure, you can always write <code>\cite{cohen93}</code>, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but <code>\cite{cohen93}</code> is just inline LaTeX.
+</p>
+
+<p>
+But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
+     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
+       <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
+<span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
+<span style="color: #111111;">        for this to work"</span>
+       (find-file-other-window
+        (<span style="color: #111111; font-weight: bold;">save-excursion</span>
+          (beginning-of-buffer)
+          (<span style="color: #111111; font-weight: bold;">save-match-data</span>
+            (re-search-forward <span style="color: #303030;">"\\\\bibliography{</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">}]+</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">}"</span>)
+            (concat (match-string 1) <span style="color: #303030;">".bib"</span>))))
+       (beginning-of-buffer)
+       (search-forward name))
+     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
+       <span style="color: #111111;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
+               (format <span style="color: #303030;">"\\cite{%s}"</span> path)
+             (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
+</pre>
+</div>
+
+<p>
+This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">07 May 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
+
+<p>
+I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
+</p>
+
+<p>
+Since I am on a long train ride today, I decided to have a go at this problem. By the way, train rides and hacking on Emacs are a perfect match: Internet connectivity on trains is usually terrible, but Emacs is self-documenting, so internet access doesn't matter as much. It is sobering to work without an internet connection every once in a while, and Emacs is a perfect target for this kind of work.
+</p>
+
+<p>
+One of the many things I learned on train rides is that Emacs in fact contains its own profiler! So, I ran <code>(progn (profiler-start 'cpu) (org-publish "blog") (profiler-report))</code> to get a hierarchical list of where <code>org-publish</code> was spending its time. Turns out, most of its total run time was spent in functions relating to version control (starting with <code>vc-</code>).
+</p>
+
+<p>
+Some package in my configuration set up <code>vc-find-file-hook</code> as part of <code>find-file-hook</code>. This means that every time <code>org-publish</code> opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use <code>vc-git</code> at all. All my git interaction is done through <code>magit</code>.
+</p>
+
+<p>
+But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/org-mode.html">org-mode</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">13 Nov 2013</div><h1 class="post-title"><a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Blogging with Emacs</a></h1>
+
+<p>
+When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
+</p>
+
+<p>
+Thus I switched. Getting my blog posts out of blogger was&#x2026; Let's just say that I lost anything I didn't have a plain-text backup of. And <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">I switched</a> to <a href="http://pelican.readthedocs.org/en/3.3.0/">Pelican</a>, a static site generator written in Python. It worked beautifully, until I updated something, at which point it resorted to just throwing errors. Now I don't have anything in particular against Python stack traces, but these particular traces traced deep into stuff that was (then?) too complex for me to understand.
+</p>
+
+<p>
+Thus I switched again. This time to <a href="https://github.com/redline6561/coleslaw">C()λ∈slaw■</a>, a static site generator written in Common Lisp. Mainly because I was interested in Common Lisp at the time. It worked really well. However, this was supposed to give me a chance to delve into Common Lisp, and I failed to understand C()λ∈slaw■'s code. Realistically though, this is probably not C()λ∈slaw■'s fault. My knowledge of Common Lisp is far from perfect.
+</p>
+
+<p>
+Thus it was time to switch again. Having been enamored with Emacs for the last few years, it made sense to blog with Emacs as well. Besides, I am kind of fed up with the many conflicting flavors of Markdown out there and have switched my personal note-taking to <a href="http://orgmode.org/">Org mode</a> long ago. So let's set up Emacs and Org as a blogging platform!
+</p>
+
+<p>
+Before we start though, a short disclaimer: This will be a very bare bones blogging engine. It will consist of some articles, a front page, an archive page, and an RSS feed. And you will have to manage the front page and RSS feed semi-manually. No tags, no fancy history. Just what you see here.
+</p>
+
+<p>
+On the plus side, this will be implemented entirely within Emacs and very simple to understand. Writing a new blog post will be as simple as writing an Org file and hitting a key combination! And you will get all of Org's fancy syntax highlighting and export magic for free!
+</p>
+
+<p>
+Getting the pages to work is rather simple: You have to create a "publishing project" that specifies a <code>base-directory</code> where your Org files live and a <code>publishing-directory</code>, where the HTML files are going to be stored. Since this is Emacs, you could make your publishing directory any TRAMP path you like and insta-publish your workings!
+</p>
+
+<p>
+(BTW, I am using Org 8.2.2 and I believe you need at least 8.0 for these examples to work)
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-html</span>)
+(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
+(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
+(<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
+      '((<span style="color: #303030;">"blog-content"</span>
+         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
+         <span style="color: #111111;">:html-extension</span> <span style="color: #303030;">"html"</span>
+         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
+         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
+         <span style="color: #111111;">:publishing-function</span> (org-html-publish-to-html)
+         <span style="color: #111111;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
+         <span style="color: #111111;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
+         <span style="color: #111111;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
+         <span style="color: #111111;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
+         <span style="color: #111111;">:html-head-extra</span> <span style="color: #303030;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
+         <span style="color: #111111;">:html-preamble</span> <span style="color: #303030;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
+         <span style="color: #111111;">:html-postamble</span> <span style="color: #303030;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
+)))
+</pre>
+</div>
+
+<p>
+Now hit <code>M-x org-publish</code>, type in <code>blog-content</code>, and you have a blog! Awesome! We are done here.
+</p>
+
+<p>
+Well, how about an archive page that lists all your previous blog entries?
+</p>
+
+<p>
+Emacs can auto-generate this for you. Simply add these lines to <code>blog-content</code>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">         <span style="color: #111111;">:auto-sitemap</span> t
+         <span style="color: #111111;">:sitemap-filename</span> <span style="color: #303030;">"archive.org"</span>
+         <span style="color: #111111;">:sitemap-title</span> <span style="color: #303030;">"Archive"</span>
+         <span style="color: #111111;">:sitemap-sort-files</span> anti-chronologically
+         <span style="color: #111111;">:sitemap-style</span> list
+         <span style="color: #111111;">:makeindex</span> t
+</pre>
+</div>
+
+<p>
+Also, you can put something like
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-html">&lt;<span style="color: #111111; text-decoration: underline;">a</span> <span style="color: #111111;">href</span>=<span style="color: #303030;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #111111; text-decoration: underline;">a</span>&gt;
+</pre>
+</div>
+
+<p>
+into your <code>:html-postamble</code> to make every page link to this. You can also add your <a href="https://disqus.com/">Disqus</a> snippet there to enable comments.
+</p>
+
+<p>
+Adding a front page is simple, too. My front page is simply a normal page called <i>index.org</i>, which contains links and slugs for every article I want to have on the front page. For example:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org"><span style="color: #aaaaa8;"> #+TITLE:</span> <span style="color: #111111; font-size: 140%; text-decoration: overline;">RECENT POSTS</span>
+
+ * <span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">Speeding up Matplotlib</a></span>
+ #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"
+ <span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">read more...</a></span>
+</pre>
+</div>
+
+<p>
+But a blog is more than just text. There are images and CSS, too. I keep all that stuff in a separate directory and use a separate publishing project to copy it over to the publishing directory. Just add to your <code>publishing-alist</code>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #303030;">"blog-static"</span>
+ <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/static"</span>
+ <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"png</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">jpg</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">css"</span>
+ <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish/static"</span>
+ <span style="color: #111111;">:recursive</span> t
+ <span style="color: #111111;">:publishing-function</span> org-publish-attachment)
+</pre>
+</div>
+
+<p>
+Setting up the RSS feed works similarly. The RSS feed is created from a single Org file. Create a new publishing project and put it into your <code>publishing-alist</code>
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #303030;">"blog-rss"</span>
+ <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
+ <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
+ <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
+ <span style="color: #111111;">:publishing-function</span> (org-rss-publish-to-rss)
+ <span style="color: #111111;">:html-link-home</span> <span style="color: #303030;">"http://bastibe.de/"</span>
+ <span style="color: #111111;">:html-link-use-abs-url</span> t
+ <span style="color: #111111;">:exclude</span> <span style="color: #303030;">".*"</span>
+ <span style="color: #111111;">:include</span> (<span style="color: #303030;">"rss.org"</span>)
+ <span style="color: #111111;">:with-toc</span> nil
+ <span style="color: #111111;">:section-numbers</span> nil
+ <span style="color: #111111;">:title</span> <span style="color: #303030;">"Bastis Scratchpad on the Internet"</span>)
+</pre>
+</div>
+
+<p>
+Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code> project by adding it's name to the <code>:exclude</code> variable though. This <code>rss.org</code> file should contain headlines for every blog post. Every headline needs a publishing date and a permalink as property and the body of the post as content:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org"> * Speeding up Matplotlib
+<span style="color: #111111;"> :PROPERTIES:</span>
+ <span style="color: #111111;">:RSS_PERMALINK:</span> "<span style="color: #111111; text-decoration: underline;"><a href="http://bastibe.de/2013-05-30-speeding-up-matplotlib.html">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</a></span>"
+ <span style="color: #111111;">:PUBDATE:</span> &lt;2013-05-30&gt;
+<span style="color: #111111;"> :END:</span>
+ #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"
+</pre>
+</div>
+
+<p>
+I exclude the first three lines, since they only contain <code>#+title</code>, <code>#+date</code>, and <code>#+tags</code>. You should at least exclude the <code>#+title</code> line. Otherwise, <code>ox-rss</code> will get confused about which title to choose for the feed.
+</p>
+
+<p>
+You can even create a meta publishing project that executes all three projects in one fell swoop!
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #303030;">"blog"</span>
+ <span style="color: #111111;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
+</pre>
+</div>
+
+<p>
+There is one more thing that is kind of fiddly though: As I said, I use Disqus for comments, but I don't want to have comment boxes on the front page or the archive. Thankfully though, <code>ox-html</code> allows you to set <code>:html-preamble</code> and <code>:html-postamble</code> to a function, in which case that function can decide what pre/postamble to draw! The function can take an optional argument that contains a <code>plist</code> of article metadata. In this case, I decide on the <code>:title</code> metadata whether to print the archive link and Disqus, only the archive link, or neither:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #111111;">:html-postamble</span>
+(<span style="color: #111111; font-weight: bold;">lambda</span> (info)
+  <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
+  (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Archive"</span>)
+         <span style="color: #303030;">""</span>)
+        ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Recent Posts"</span>)
+         <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+        (t
+    <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+<span style="color: #303030;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+<span style="color: #303030;">     &lt;script type=\"text/javascript\"&gt;</span>
+<span style="color: #303030;">     ..."</span>
+</pre>
+</div>
+
+<p>
+This should get you started! For completeness, here is my complete configuration:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-html</span>)
+(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
+(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
+(<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
+      '((<span style="color: #303030;">"blog"</span>
+         <span style="color: #111111;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
+        (<span style="color: #303030;">"blog-content"</span>
+         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
+         <span style="color: #111111;">:html-extension</span> <span style="color: #303030;">"html"</span>
+         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
+         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
+         <span style="color: #111111;">:publishing-function</span> (org-html-publish-to-html)
+         <span style="color: #111111;">:auto-sitemap</span> t
+         <span style="color: #111111;">:sitemap-filename</span> <span style="color: #303030;">"archive.org"</span>
+         <span style="color: #111111;">:sitemap-title</span> <span style="color: #303030;">"Archive"</span>
+         <span style="color: #111111;">:sitemap-sort-files</span> anti-chronologically
+         <span style="color: #111111;">:sitemap-style</span> list
+         <span style="color: #111111;">:makeindex</span> t
+         <span style="color: #111111;">:recursive</span> t
+         <span style="color: #111111;">:section-numbers</span> nil
+         <span style="color: #111111;">:with-toc</span> nil
+         <span style="color: #111111;">:with-latex</span> t
+         <span style="color: #111111;">:html-head-include-default-style</span> nil
+         <span style="color: #111111;">:html-head-include-scripts</span> nil
+         <span style="color: #111111;">:html-head-extra</span>
+         <span style="color: #303030;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
+<span style="color: #303030;">                href=\"http://bastibe.de/rss.xml\"</span>
+<span style="color: #303030;">                title=\"RSS feed for bastibe.de\"&gt;</span>
+<span style="color: #303030;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
+<span style="color: #303030;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
+<span style="color: #303030;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+<span style="color: #303030;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
+<span style="color: #303030;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
+<span style="color: #303030;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
+         <span style="color: #111111;">:html-preamble</span>
+         <span style="color: #303030;">"&lt;div class=\"header\"&gt;</span>
+<span style="color: #303030;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
+<span style="color: #303030;">              &lt;div class=\"sitelinks\"&gt;</span>
+<span style="color: #303030;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
+<span style="color: #303030;">              &lt;/div&gt;</span>
+<span style="color: #303030;">          &lt;/div&gt;"</span>
+         <span style="color: #111111;">:html-postamble</span>
+         (<span style="color: #111111; font-weight: bold;">lambda</span> (info)
+           <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
+           (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Archive"</span>) <span style="color: #303030;">""</span>)
+                 ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Recent Posts"</span>)
+                  <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+                 (t
+             <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+<span style="color: #303030;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+<span style="color: #303030;">              &lt;script type=\"text/javascript\"&gt;</span>
+<span style="color: #303030;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
+<span style="color: #303030;">              var disqus_shortname = 'bastibe';</span>
+<span style="color: #303030;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
+<span style="color: #303030;">              (function() {</span>
+<span style="color: #303030;">                var dsq = document.createElement('script');</span>
+<span style="color: #303030;">                dsq.type = 'text/javascript';</span>
+<span style="color: #303030;">                dsq.async = true;</span>
+<span style="color: #303030;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
+<span style="color: #303030;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
+<span style="color: #303030;">                  })();</span>
+<span style="color: #303030;">              &lt;/script&gt;</span>
+<span style="color: #303030;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
+<span style="color: #303030;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
+<span style="color: #303030;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
+         <span style="color: #111111;">:exclude</span> <span style="color: #303030;">"rss.org</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">archive.org</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">theindex.org"</span>)
+        (<span style="color: #303030;">"blog-rss"</span>
+         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
+         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
+         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
+         <span style="color: #111111;">:publishing-function</span> (org-rss-publish-to-rss)
+         <span style="color: #111111;">:html-link-home</span> <span style="color: #303030;">"http://bastibe.de/"</span>
+         <span style="color: #111111;">:html-link-use-abs-url</span> t
+         <span style="color: #111111;">:exclude</span> <span style="color: #303030;">".*"</span>
+         <span style="color: #111111;">:include</span> (<span style="color: #303030;">"rss.org"</span>)
+         <span style="color: #111111;">:with-toc</span> nil
+         <span style="color: #111111;">:section-numbers</span> nil
+         <span style="color: #111111;">:title</span> <span style="color: #303030;">"Bastis Scratchpad on the Internet"</span>)
+        (<span style="color: #303030;">"blog-static"</span>
+         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/static"</span>
+         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"png</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">jpg</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">css"</span>
+         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish/static"</span>
+         <span style="color: #111111;">:recursive</span> t
+         <span style="color: #111111;">:publishing-function</span> org-publish-attachment)))
+</pre>
+</div>
+
+<p>
+All other sources, including the source code to all blog posts, can be found on <a href="https://github.com/bastibe/bastibe.github.com">Github</a> (the <i>master</i> branch contains HTML, the <i>source</i> branch contains Org).
+</p>
+
+<p>
+<b>Addendum:</b> I have since discovered that <code>org-rss-publish-to-rss</code> only handles top-level headlines, but disregards second-level or higher-level headlines. Thus, if you have a post with nested headlines, your RSS feed will only include the text of the top-level one. To fix this, I advised <code>org-rss-publish-to-rss</code> to use <code>org-html-headline</code> for non-top-level headlines like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defadvice</span> <span style="color: #111111; text-decoration: underline;">org-rss-headline</span>
+  (around my-rss-headline (headline contents info) activate)
+  <span style="color: #111111;">"only use org-rss-headline for top level headlines"</span>
+  (<span style="color: #111111; font-weight: bold;">if</span> (&lt; (org-export-get-relative-level headline info) 2)
+      ad-do-it
+    (<span style="color: #111111; font-weight: bold;">setq</span> ad-return-value (org-html-headline headline contents info))))
+</pre>
+</div>
+
+<p>
+Now, the RSS feed includes the full text of all articles.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/emacs.html">emacs</a> <a href="tags/blog.html">blog</a> </div><div class="post-date">14 Oct 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-10-14-emacs-customizations.html">My Emacs customizations</a></h1>
+
+<p>
+I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
+</p>
+
+<p>
+One downside of that is that it is not as easy to provide a public link to my dotfiles. Or maybe it is. Here goes
+</p>
+
+<p>
+<a href="https://bitbucket.org/bastibe/.emacs.d/src/">My <i>.emacs</i></a>
+</p>
+
+<p>
+Now on to the meat of this post: Some customizations I made that I think are cool.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">set-frame-pixel-size</span> (frame width height)
+  <span style="color: #111111;">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
+  (<span style="color: #111111; font-weight: bold;">let</span> ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
+        (pixels-per-char-height (/ (frame-pixel-height) (frame-height))))
+    (set-frame-size frame
+                    (floor (/ width pixels-per-char-width))
+                    (floor (/ height pixels-per-char-height)))))
+</pre>
+</div>
+
+<p>
+Next, a function that uses the above to set the frame size to exactly fit the left half of the screen. Note that the <code>excess-...</code> variables account for things like the menu bar, the dock or the task bar so you might have to adapt these values to your particular windowing environment. The values given here work for dockless OSX.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">use-left-half-screen</span> ()
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">let*</span> ((excess-width 32)
+         (excess-height 48)
+         (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
+         (screen-height (- (x-display-pixel-height) excess-height)))
+    (set-frame-pixel-size (selected-frame) half-screen-width screen-height)))
+</pre>
+</div>
+
+<p>
+Finally, when Emacs starts up, make it use half the screen. Just how I like it!
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">if</span> window-system
+    (use-left-half-screen))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(add-hook 'window-configuration-change-hook
+          (<span style="color: #111111; font-weight: bold;">lambda</span> ()
+            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
+                      (string-equal (buffer-name) <span style="color: #303030;">"*eshell*"</span>)
+                      (string-equal (buffer-name) <span style="color: #303030;">"*tex-shell*"</span>))
+              (<span style="color: #111111; font-weight: bold;">if</span> (not (eq (window-height) 15))
+                  (enlarge-window (- 15 (window-height)))))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-above</span> ()
+  <span style="color: #111111;">"Insert a newline above the current line and put point at beginning."</span>
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">unless</span> (bolp)
+    (beginning-of-line))
+  (newline)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-below</span> ()
+  <span style="color: #111111;">"Insert a newline below the current line and put point at beginning."</span>
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">unless</span> (eolp)
+    (end-of-line))
+  (newline-and-indent))
+
+(global-set-key (kbd <span style="color: #303030;">"C-o"</span>) 'vi-open-line-below)
+(global-set-key (kbd <span style="color: #303030;">"M-o"</span>) 'vi-open-line-above)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
+</p>
+
+<p>
+This function will open or refresh a split window with the generated PDF file in it. Thus, when I edit LaTeX, I will hit C-c C-c to compile, then C-c C-v to see the PDF. All that without having to leave the LaTeX file.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
+(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
+  (<span style="color: #111111; font-weight: bold;">interactive</span>)
+  (<span style="color: #111111; font-weight: bold;">let</span> ((tex-buffer-name (buffer-name))
+        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #303030;">".pdf"</span>)))
+    (<span style="color: #111111; font-weight: bold;">if</span> (get-buffer pdf-buffer-name)
+        (switch-to-buffer-other-window pdf-buffer-name)
+      (find-file-other-window pdf-buffer-name))
+    (<span style="color: #111111; font-weight: bold;">if</span> (not (eq major-mode 'doc-view-mode))
+        (doc-view-mode))
+    (doc-view-revert-buffer t t)
+    (switch-to-buffer-other-window tex-buffer-name)))
+
+(add-hook 'LaTeX-mode-hook
+          (<span style="color: #111111; font-weight: bold;">lambda</span> ()
+            (define-key LaTeX-mode-map (kbd <span style="color: #303030;">"C-c C-v"</span>) 'open-show-pdf)
+            (visual-line-mode t)
+            (turn-on-reftex))
+          t)
+</pre>
+</div>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">13 Oct 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-10-13-emacs.html">Text editing with confidence and Emacs</a></h1>
+
+<p>
+In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>.
+</p>
+
+<p>
+Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Text editing</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.
+</p>
+
+<p>
+Here is one of my pet peeve with many text editors: Whenever I initiate a text search, a modal dialog box pops up where I have to enter the search phrase, then click a button to search for that word. In contrast <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Incremental-Search.html#Incremental-Search">great</a> <a href="http://vimdoc.sourceforge.net/htmldoc/usr_03.html#03.8">text</a> <a href="http://docs.sublimetext.info/en/latest/search_and_replace/search_and_replace.html">editors</a> allow searching for text without changing to a different window and show the results immediately while entering the search string. This is very fast and precise. In fact, it is so useful that searching is one of the most popular means of text navigation in text editors that have it.
+</p>
+
+<p>
+This is a theme that goes through all these features: I look for stuff that is fast and precise, because this will enable more powerful applications of seemingly simple techniques.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Outlining and task management</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.
+</p>
+
+<p>
+But with Emacs, I found out about <a href="http://orgmode.org">org-mode</a>, which is at its heart an outliner with a syntax somewhat like Markdown. It proved to be surprisingly powerful to be able to easily refile entries or whole sub-trees in my todo lists. Also, having trees be collapsible effectively enabled me to consolidate all my todo management into one file without that file becoming unmanageably big.
+</p>
+
+<p>
+Add to that the more advanced task tracking features of org-mode, such as <a href="http://orgmode.org/features.html#clocking">time tracking</a> or <a href="http://orgmode.org/features.html#planning">advanced todo planning</a> and this has become one of the most pivotal tools I use daily.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Shell interaction and operating system compatibility</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.
+</p>
+
+<p>
+Again, Emacs came to the rescue though: <a href="http://www.gnu.org/software/emacs/manual/html_node/eshell/What-is-Eshell_003f.html">Eshell</a> is a shell implemented in Emacs with no external dependencies. Thus, it comes installed on all my machines and works the same way on every operating system. Sadly though, Eshell is not quite full-featured and compatibility with some shell programs is kind of rough. In particular, it does not work well with <code>less</code> like scrolling buffers. However, some of those, like <code>man</code> or <code>info</code> are automatically opened in a special mode in Emacs itself, so this is not as bad as it sounds.
+</p>
+
+<p>
+At more than one point, Eshell probably saved my sanity.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Git interaction</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.
+</p>
+
+<p>
+Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.github.com/magit/magit.html#Introduction">magit</a>, which builds an interactive git interaction program within Emacs. With magit, all the major git commands are just a keystroke away and diffs or logs are easily accessible, too. It really is a major feat!
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Grab bag</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Emacs' integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.
+</li>
+<li>REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.
+</li>
+<li>Emacs' <a href="http://www.gnu.org/software/auctex/">LaTeX mode</a> is amazingly powerful. Combine that with Emacs' ability to display PDF files <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html">graphically</a> in a buffer and you have an awesome LaTeX environment.
+</li>
+<li>Emacs' documentation is wonderful. I learned many a trick just idly leafing through the built in Emacs documentation.
+</li>
+<li>Built in package management for extensions is a great time saver. This is available in <a href="https://github.com/gmarik/vundle#about">Vim</a> and <a href="http://wbond.net/sublime_packages/package_control">Sublime Text</a> as an addon, too.
+</li>
+<li>Lisp is indeed beautiful and elisp is quite joyful to program. I never really went beyond simple configuration in Vim. My <code>.emacs</code> file contains some quite sophisticated small programs though.
+</li>
+</ul>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/emacs.html">emacs</a> </div><div class="post-date">03 Feb 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-02-03-text-editors.html">Text Editors</a></h1>
+
+<p>
+As far as I can tell, there has been a resurgence of development in the landscape of text editors of late. Only a few years ago, the text editing scene one the Mac seemed to be dominated by
+</p>
+
+<ul class="org-ul">
+<li>Crazy unix farts using Vim or Emacs
+</li>
+<li>BBEdit users
+</li>
+<li>Textmate users
+</li>
+</ul>
+
+<p>
+During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><a href="http://www.vim.org/">Vim</a></h2>
+<div class="outline-text-2" id="text-1">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/vim_small.png" alt="vim_small.png" />
+</p>
+</div>
+
+<p>
+Vim is very old software. It is a more or less direct descendant of ed from the early 1970s. It grew up in text based terminals without any graphical windows or mouses. Hence, all of its functionality is really meant to be used from the keyboard only, even though mousing is supported these days.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/vim_window_small.png" alt="vim_window_small.png" />
+</p>
+</div>
+
+<p>
+The terminal inheritance limits its graphical capabilities somewhat. There are no graphical drawers or animations or pixel-precise scrolling. Everything is displayed in terms of rectangular characters, hence scrolling can only ever scroll one line at a time and there are no graphical images anywhere. Since Vim predates graphical displays altogether, it does not adhere to its standards much. In fact, in its normal mode it won't even type out the characters you hit on your keyboard.
+</p>
+
+<p>
+This is at really Vim's greatest strength and weakness: In its 'normal mode', all key presses are interpreted like keyboard shortcuts in other programs. And what shortcuts there are! Pretty much every key on the keyboard has some special function, most keys even serve multiple functions depending on what mode you are in at the moment. Thus it should come as no surprise that you can do anything with these shortcuts at astounding speed. Watching a seasoned Vimmer do his keyboard dance is something to behold. Moving the cursor is especially powerful. Usually, any place in the current file is reachable using just a few key strokes. But of course, you are not limited to just viewing one file at a time either: Vim supports arbitrary split views and can even be used for efficient diffing or merging. And when it comes to changing that text, Vim is no slouch, either. There are various registers for saving text or locations, there is an increadibly powerful macro system, amazing searching capabilities, command line integration, there are specialized functions for programming… Really, when it comes to pure text editing chops, nothing beats Vim.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/vim_full_window_small.png" alt="vim_full_window_small.png" />
+</p>
+</div>
+
+<p>
+Vim is also incredibly customizable. Of course, there is no graphical preferences windows to do the customization in. You customize Vim by editing simple text files. Vim even includes its very own scripting language, VimScript, to enable users to extend it. There is a huge wealth of plugins available. These range from file browsers to support for new languages, or even some limited integration with compilers or source control tools. However, VimScript is not exactly a very pleasant language to code in and Vim does not actually like to interface with external tools much. These two issues limit the scope of what is possible with Vim somewhat–deep compiler integration and graphical debugging are fiddly at best, so you will probably just keep a terminal open and do them there. That said, the plugin ecosystem for Vim is probably still leaps and bounds beyond what is possible with most other text editor out there, but it does not quite reach the same breadth or integration as some IDEs or Emacs do.
+All that power comes at a price. Learning Vim is hard. If you start out with Vim, it will probably take at least a week or so until you can approach your old productivity again. Mastering Vim will take years. Even after months and months of diligent learning, you will find some new tricks and features to increase your speed.
+</p>
+
+<p>
+At the end of the day though, Vim is an amazingly powerful tool, and it is certainly worth it to at least learn the basics of it. Actually, most people I know who tried it have actually stuck with it. Myself, I have some two years of Vimming under my belt, too, and it has proven to be a very important tool for me.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h2>
+<div class="outline-text-2" id="text-2">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/emacs_small.png" alt="emacs_small.png" />
+</p>
+</div>
+
+<p>
+The thing you have to realize about Emacs is that… Emacs is powerful. People have called it <a href="http://www.emacswiki.org/emacs/NealStephenson">the thermonuclear text editor</a>, and for a reason. Emacs can edit text, of course, but that is really only the most mundane of its features. Really, Emacs is a little world of its own. You can read and write your mail from within Emacs, you can do spreadsheets, calendaring, it can host terminals, debuggers, compilers, there is Tetris, hell, it even includes its very own psychiatrist! Speaking off the record here, I have a suspicion that Emacs might achieve sentience pretty soon.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/emacs_window_small.png" alt="emacs_window_small.png" />
+</p>
+</div>
+
+<p>
+Similar to Vim, Emacs is old software. It was invented in the late 1970s at MIT and has been growing ever since. Also like Vim, its terminal inheritance shows its teeth sometimes: mouseweel scrolling can be awkward, especially if you like your inertial scrolling, the menu bar seems to not get much love and keyboard shortcuts are not conformant with what you might be used to from other text editors. On the other hand, Emacs has some very modern features like mixing of proportional fonts and fixed-width fonts or inline image display.
+</p>
+
+<p>
+The upside of being old is that Emacs is very mature software. There is a ginormous selection of extensions available for Emacs, most of it actually distributed right with Emacs itself and a lot of it is superbly documented. Besides that, there are <a href="http://tromey.com/elpa/">several</a> <a href="http://marmalade-repo.org/">integrated</a> <a href="http://elpa.gnu.org/">repositories</a> for additional tools that can be downloaded and installed from the internet.
+</p>
+
+<p>
+The real power of Emacs is in that it is really not so much a text editor but a virtual machine for a programming language called eLisp. Really anything that can possibly be written in Lisp and remotely involves text editing is possible and probably already available in Emacs. As such, Emacs probably has the most diverse feature set of any text editor out there. Most relevant to programmers will be debugger integration, automatic syntax and spell checking, powerful and context-aware autocompletion, refactoring capabilities and much much more. Emacs is the only program in this list which can actually be used as a full fledged IDE on its own.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/emacs_full_window_small.png" alt="emacs_full_window_small.png" />
+</p>
+</div>
+
+<p>
+But Emacs is not limited to programming at all. As mentioned before, it includes an Email client, a great calendar with an agenda, several IM clients, RSS readers, an <a href="http://orgmode.org/">astoundingly powerful outliner</a> and spreadsheet editor, it is frequently used for blogging, writing screen plays, books or really anything you can think of.
+</p>
+
+<p>
+The only real downside to this is that Emacs is, well, old. There is great power there, but is is only accessible to those willing to learn the myriad key combinations to invoke it. Rellay, mastering Emacs is a task for years, not weeks. But of course, you are not forced to wield all the power Emacs has to offer at once. Getting up to speed with basic text editing in Emacs will only take a few minutes, and the built-in help system and tutorial will guide you further whenever you feel the need to explore.
+</p>
+
+<p>
+I have been using Emacs for several months now and I am really enjoying it. It has a few shortcomings, but it is constantly being improved and getting more modern every day. I can see myself giving in to it and just live in Emacs all day long, but for now, I'm happy with it just being my primary text editor. However, I can't quite get beyond the fact that its pure text editing chops are nowhere near Vim. Then again, Emacs does <a href="http://gitorious.org/evil/pages/Home">support Vim key bindings</a>, so this might turn out not to bother me in the long run.
+</p>
+
+<p>
+At any rate, I would recommend anyone to give Emacs a shot at least for a short while. The power of Emacs can be an exhilarating experience, really.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><a href="http://macromates.com/">Textmate (2)</a></h2>
+<div class="outline-text-2" id="text-3">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/textmate_small.png" alt="textmate_small.png" />
+</p>
+</div>
+
+<p>
+For the longest time, all GUI text editors could generally be classified as either Vim-based, Emacs-based or shortcut-based. The prevalent crop of shortcut-based GUI text editors mapped all its advanced functions to certain modifier-letter combinations and/or menu bar items.
+</p>
+
+<p>
+When Textmate was introduced, it introduced a new concept: snippets. Snippets are short pieces of text which, upon activating a certain trigger, would expand to arbitraryly complex constructs.
+</p>
+
+<p>
+Thus, to define a class in some programming language, you would type <code>class</code>, then hit TAB, and it would expand to a complete class declaration with constructor, destructor and documentation. Further yet, the class name would be highlighted immediately, so you could start editing it to your liking. These edits would even automatically percolate to all the relevant places in the class declaration and thus automatically change all scope declarations and the like.
+Or, you could drag some image file into some LaTeX code and it would expand (dragging being the trigger here) to a whole <code>\begin{figure}</code> complete with <code>\caption</code>, <code>\label</code>, the correct path to the image and everything else you need.
+</p>
+
+<p>
+This has proven to be such a popular feature that since Textmate's inception, implementations of snippets have been developed for pretty much every IDE or text editor out there.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/textmate_window_small.png" alt="textmate_window_small.png" />
+</p>
+</div>
+
+<p>
+Textmate also featured a very flexible and easily extensible regex based syntax parser, beautiful color schemes, a very elegant project management system and a vibrant community extending it in many directions. This was even more fascinating in that most of this functionality was implemented using a convenient shell scripting engine that could utilize any programming language your shell supported.
+</p>
+
+<p>
+Sadly though, its main developer got stuck somewhere along the way and development all but dried up for five years. This primarily meant that some issues just would not be fixed and thus, got all the more jarring. Most prominently, Textmate lacked split views, regex incremental search and would only do single character undo/redos. Many people left Textmate because of this lack of progress.
+</p>
+
+<p>
+While I was in college, I used Textmate extensively and it proved to be a veritable tool for many editing tasks. It is somewhat limited in its integration with programming tools, though, so don't expect any complex compiler or debugger integration. Ultimately, I left it behind for lack of cross platform compatibility and lack of development. There used to be a Windows program called <a href="http://e-texteditor.com/">E Text Editor</a>, which wanted to become a fully compatible Textmate alternative for Windows and Linux, but development never even reached production quality.
+</p>
+
+<p>
+Recently however, an early alpha version of Textmate 2 has been released that could reinvigorate the community and fix long standing issues. Whether that will actually happen will remain to be seen.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><a href="http://www.vicoapp.com/">Vico</a></h2>
+<div class="outline-text-2" id="text-4">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/vico_small.png" alt="vico_small.png" />
+</p>
+</div>
+
+<p>
+Vico is a very new application that has spung to live only in 2011 and is not finished yet. It aims to be a modern Vim, combining the virtue of the powerful mode-based editing system of Vim with a modern Cocoa interface. It even merges Vim's editing capabilities with Textmate-derived snippets and syntax highlighting.
+</p>
+
+<p>
+Really, it tries to be an organic symbiosis of Vim and Textmate. And for most purposes, it very much succeeds in this. Syntax highlighting is very solid, there is a code browser, a nice file browser and full support for Textmate snippets. Vico even includes a powerful scripting environment that enables you to extend it in a language called Nu, which has the interesting aspect of being able to call into every object or method in the Cocoa libraries, thus opening the doors to a boundless world of wonders. Its Vim integration is well on its way, too. The most notable omission at this point are macros. The developer is working on it though and has promised to implement them in the near future. Some other areas are lacking, too, but if development continues I see no reason why it should not become a very nice text editor.
+</p>
+
+<p>
+As it stands though, development of Vico is going slow and its community is not very large yet. Vico is a very nice tool, but at the end of the day, I miss the raw power of an actual Vim just as I miss the vibrant community around Textmate. If you are not spoiled by Vim yet or find Vim just a bit too ugly for your taste, you could give Vico a try though.
+</p>
+
+<p>
+Personally, I like it quite a bit and I am hoping very much that it will not be forgotten as a failed attempt to modernize Vim. That said, what with Sublime Text 2 including a limited support for Vim key bindings, I can't really see Vico taking off.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h2>
+<div class="outline-text-2" id="text-5">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/sublimetext_small.png" alt="sublimetext_small.png" />
+</p>
+</div>
+
+<p>
+Sublime Text is a fairly recent development. It is a one-man project that has gained a lot of enthusiastic following in the last few months. In many ways, it feels like the next step in text editor development. Much like several other text editors out there, it has adopted Textmate snippets, color themes and syntax definitions as its core feature set. On top of that though, it has built a very powerful and flexible extension system that really sets it apart.
+</p>
+
+<p>
+Do you remember CMD-T from Textmate? To open some file, you would hit CMD-T and start typing a file name. The name would be fuzzy matched to select from all available files. Thus, typing <code>bcc</code> would select <code>BeaconController.cpp</code>. This form of selection is increadibly intuitive and fast. It is also the basis for the extension system of Sublime Text. If there is no keyboard shortcut for a command, hit CMD-Shift-P and start typing to invoke the command.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/sublimetext_window_small.png" alt="sublimetext_window_small.png" />
+</p>
+</div>
+
+<p>
+In very much the same way as M-x in Emacs (though with fuzzy matching), this can invoke arbitrarily complex commands such as <code>install bundle</code> or using some refactoring library. Additionally, the same mechanism can be used to jump to method names or opening files. Really, these features are very efficient implementations of a code browser and file browser.
+</p>
+
+<p>
+The second big thing about Sublime Text is just the ridiculous amount of polish it received. For example, if you have two files with the same name, it will prefix the tab titles with the folder they reside in. Simple, but so useful! If you jump around in a file, there is always a subtle scrolling animation. Even simple text selections have slightly rounded borders and just look amazingly beautiful.
+</p>
+
+<p>
+Also of note is that Sublime Text supports multiple cursors. Want to change then name of all occurrences of a variable? Just select them all (!) and change them all at once. This is another amazingly useful feature.
+Its plugin system is based in Python, which is a refreshingly non-awkward choice for a text editor and spawned an astonishing amount of very interesting plugins already. Indeed the plugin system is flexible enough to support things like linters, source control integration and even something akin to Emacs's org-mode.
+And it also supports <a href="http://www.sublimetext.com/docs/2/vintage.html">Vim key bindings</a>. Not very complete, but easily enough to be useful. Oh, and it is available cross-platform on Mac, Windows and Linux, too.
+</p>
+
+<p>
+I think there are three big families of text editors: Emacs, Vim, and shortcut-based text editors. Since I discovered Textmate however, I started believing that it represents a new branch in the big tree of text editors. Sublime Text seems to be the next step in the evolution of the Textmate branch.
+</p>
+
+<p>
+Really, Sublime Text is an amazing achievement. Maybe not quite as hackable as Emacs and not quite as flexible as Vim, but easily beating both in terms of elegance and modernity. If you don't want to learn Emacs or Vim, Sublime Text is what you should use. In fact, it is the first text editor ever that has tempted me to leave Emacs and Vim behind. Nuff said.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">What else is out there</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Of course, that little list up there is by no means complete. Neither does it list all the amazing features these text editors have to offer, nor does it represent an exhaustive list of them. To the best of my knowledge, this is a short list of other text editors for the Mac platform. Note however, that I have never used any of them extensively and can only tell you stuff from heresay.
+</p>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h3>
+<div class="outline-text-3" id="text-6-1">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/bbedit.png" alt="bbedit.png" />
+</p>
+</div>
+
+<p>
+BBEdit is the big daddy of Mac text editors. It is currently available in version 10 and has a huge follwing predominantly amongst web developers. As far as I can tell, it includes amazing features for editing HTML. Maybe amongst the best out there.
+The remainder of its feature set seems rather standard crop though. There is some support for compilation, source code control, snippets, plugins… Though nothing on the level of Vim or Emacs really. Its most important disadvantage is probably its lack of cross-platform availability and extensibility.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h3>
+<div class="outline-text-3" id="text-6-2">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/textwrangler.png" alt="textwrangler.png" />
+</p>
+</div>
+
+<p>
+TextWrangler is the free smaller brother of BBEdit. Its feature set is somewhat pared down in comparison with BBEdit. In particular, it is missing BBEdit's famous HTML magic and some advanced external tool integration.
+Even for free, there are probably more capable candidates available, though maybe not at the same level of platform integration. That said, TextWrangler is not a bad choice and probably just fine for some casual text editing.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3"><a href="http://www.jedit.org/">JEdit</a></h3>
+<div class="outline-text-3" id="text-6-3">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/jedit.png" alt="jedit.png" />
+</p>
+</div>
+
+<p>
+I really don't know much about JEdit other than that it is written in Java, it has a sizeable following and it is available cross-platform. It seems like it could be about as useful as any shortcut based text editor can ever be, which is no small achievement. Also, it features a rich plugin system, of which I only heard good things.
+For all I know, this could be a very worthy alternative if you are on a budget (no Sublime Text) and don't want to learn Emacs or Vim.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4"><a href="http://chocolatapp.com/">Chocolat</a></h3>
+<div class="outline-text-3" id="text-6-4">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/chocolat.png" alt="chocolat.png" />
+</p>
+</div>
+
+<p>
+Chocolat is yet another text editor that came into being in the post-Textmate void. It offers a good range of standard features, though notably missing advanced plugins apparently. Apart from that, it seems to be a solid shortcut based Mac text editor that is relatively cheap and actively developed.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5"><a href="http://www.kodapp.com/">Kod</a></h3>
+<div class="outline-text-3" id="text-6-5">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/kod.png" alt="kod.png" />
+</p>
+</div>
+
+<p>
+Kod started out as an open source alternative to Textmate. This is quite uncommon for a post-Textmate text editor and worth supporting. After a good start however, the developer found a new job and development has pretty much stalled.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h3>
+<div class="outline-text-3" id="text-6-6">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/subethaedit.png" alt="subethaedit.png" />
+</p>
+</div>
+
+<p>
+The great thing about SubEthaEdit is collaborative editing. if you want to edit text collaboratively with several people, SubEthaEdit performs the task seamlessly and elegantly.
+Beyond that, it is a capable shortcut-based text editor. If you don't need the collaboration feature, you should probably look elsewhere though.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-7" class="outline-3">
+<h3 id="sec-6-7"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h3>
+<div class="outline-text-3" id="text-6-7">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/smultron.png" alt="smultron.png" />
+</p>
+</div>
+
+<p>
+Another venerable veteran on the Mac, Smultron used to be a free open source text editor that had a sizeable following. However, the developer ceased development at some point and later restarted the effort as a paid app in the Mac App Store.
+Smultron lost most of its following in that transition.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-8" class="outline-3">
+<h3 id="sec-6-8"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h3>
+<div class="outline-text-3" id="text-6-8">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/slickedit.png" alt="slickedit.png" />
+</p>
+</div>
+
+<p>
+SlickEdit is easily the most expensive text editor in this list. A single user license for one platform and one developer costs a scant 300 bucks. That is a lot of money for a text editor and is usually only shelled out only for business critical platform exclusive IDEs. It seems as if SlickEdit tries to be exactly that for general purpose text editing.
+It's feature list reads very well and checks all mayor boxes. It is available on pretty much any platform out there and is probably only rivalled by Emacs or Vim in that regard. It also supports emulation for Emacs or Vim key bindings.
+That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I doubt that SlickEdit can live up to that price if you compare it to some of the other examples in this list. It is undoubtedly a well-maintained and powerful text editor though.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-9" class="outline-3">
+<h3 id="sec-6-9"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h3>
+<div class="outline-text-3" id="text-6-9">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/komodo.png" alt="komodo.png" />
+</p>
+</div>
+
+<p>
+Komodo Edit is the free open source offspring of ActiveState's Komodo IDE. It's feature set is very complete and seems to be very worthy for many editing tasks. Being of IDE ancestry provides it with nice plugin support and very helpful deep language integration like sophisticated autocompletion and syntax checking.
+There are also quite good Vim key bindings and it is available on the three major platforms. However, its language support is limited to Perl, Python, Tcl, PHP, Ruby and Javascript. Probably not a bad choice if you can live with the language selection and are on a budget.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-10" class="outline-3">
+<h3 id="sec-6-10">TextEdit</h3>
+<div class="outline-text-3" id="text-6-10">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/textedit.png" alt="textedit.png" />
+</p>
+</div>
+
+<p>
+The built-in text editor in OSX. No syntax highlighting, project management or any programming support whatsoever make this a rather poor choice. There are plenty of free alternatives out there.
+That said, TextEdit does support rich text editing and might be of value for the odd letter to your grandma.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-11" class="outline-3">
+<h3 id="sec-6-11">Text editors for web development</h3>
+<div class="outline-text-3" id="text-6-11">
+<p>
+Strangely, all the major Mac text editors that cater specifically for web development are not cross platform. If web development is all you are ever doing though, these text editors might be well worth their money.
+</p>
+</div>
+
+<div id="outline-container-sec-6-11-1" class="outline-4">
+<h4 id="sec-6-11-1"><a href="http://www.panic.com/coda/">Coda</a></h4>
+<div class="outline-text-4" id="text-6-11-1">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/coda.png" alt="coda.png" />
+</p>
+</div>
+
+<p>
+Combine the SubEthaEdit text editing engine including its collaborative tools with the great FTP program Transmit and you have CODA, the program for "one-window web development". It even includes a reference book to HTML in the package. For what it is, probably of great value and nice polish. As a general purpose text editor, there are better alternatives.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-11-2" class="outline-4">
+<h4 id="sec-6-11-2"><a href="http://macrabbit.com/espresso/">Espresso</a></h4>
+<div class="outline-text-4" id="text-6-11-2">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/espresso.png" alt="espresso.png" />
+</p>
+</div>
+
+<p>
+Another text editor gearing specifically for web development. Thus, you get powerful HTML and CSS editing features and good support for typical web development languages such as PHP, Ruby or Markdoen, but no support for other languages. There is an extension system though that could improve language support. This might be a slightly less expensive alternative to Coda.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-11-3" class="outline-4">
+<h4 id="sec-6-11-3"><a href="http://tacosw.com/">Taco HTML Editor</a></h4>
+<div class="outline-text-4" id="text-6-11-3">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/taco.png" alt="taco.png" />
+</p>
+</div>
+
+<p>
+Another text editor geared exclusively towards web development. This time around though, there is no support for languages other than HTML, CSS and PHP, which makes this program a rather poor choice.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-11-4" class="outline-4">
+<h4 id="sec-6-11-4"><a href="http://www.beforedawnsolutions.com/applications/skedit">skEdit</a></h4>
+<div class="outline-text-4" id="text-6-11-4">
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2012-02/skedit.png" alt="skedit.png" />
+</p>
+</div>
+
+<p>
+skEdit supports a nice array of web development languages and offers a good range of features for a web development text editor. Also, it is pretty inexpensive in comparison to its brethren here. Probably a nice choice for web development if you are on a budget.
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/text-editor.html">text-editor</a> <a href="tags/vim.html">vim</a> <a href="tags/emacs.html">emacs</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

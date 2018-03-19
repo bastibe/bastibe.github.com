@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "programming":</h1><div class="post-date">24 Jan 2018</div><h1 class="post-title"><a href="http://bastibe.de/2018-01-24-files-and-processes.html">Files and Processes</a></h1>
+
+<p>
+In the last few months, I have created three notable programming projects: <a href="https://github.com/bastibe/RunForrest">RunForrest</a> saves function call graphs to disk and runs them in parallel processes; <a href="https://github.com/bastibe/timeup">TimeUp</a> creates backups using rsync and keeps different numbers of hourly, daily, and weekly backups; and <a href="https://github.com/bastibe/jbof">JBOF</a>, which organizes large collections of data and metadata as structured, on-disk datasets.
+</p>
+
+<p>
+These projects have one thing in common: They use Python to interact with external <i>things</i>, such as files, libraries, or processes. It surprised me that none of these projects were particularly hard to build, even though they accomplish "hard" tasks. This prompted some soul-searching about why I thought these tasks to be hard, and I have come up with two observations:
+</p>
+
+<ol class="org-ol">
+<li>Files and processes are considered "not part of the language", and are therefore not taught. Most programming classes and programming tutorials I have seen focus on the internals of a programming language, i.e. its data structures, and built-in functions and libraries. Files and processes are not part of this, and are often only mentioned in passing, as a thing that a particularly library can do. Worse, many curricula never formally explain files or processes, or their use in building programs.
+
+<p>
+I now believe that this is unfortunate and misguided, since the interaction with the computer's resources is the central benefit of programming, and you can not make much use of those resources without a thorough understanding of files and processes. In a way, the "inside" of a programming language is a mere sandbox, a safe place for toying with imaginary castles. But it is the "outside", that is, external programs, libraries, and files, that unlocks the true power of making the computer do work. And in Python in particular, using these building blocks to build useful programs is surprisingly simple.
+</p>
+</li>
+
+<li>However, such small and simple programs are much less popular than bloated behemoths. I built RunForrest explicitly because <a href="http://dask.pydata.org">Dask</a> was too confusing and unpredictable for the job. I build JBOF because <a href="http://www.h5py.org/">h5py</a> was too complex and slow. And this is surprising, since these tools certainly are vastly more mature than anything I can whip up. But they were developed by large organizations to solve large-organization problems. But I am not a large organization, and my needs are different as well.
+
+<p>
+I now believe that such small-scale solutions are often preferable to high-profile tools, but they lack the visibility and publicity of tools such as Dask and HDF. And even worse, seeing these big tools solve such mundane problems, we form the belief that these problems must be incredibly complex, and beyond our abilities. Thus forms a vicious cycle. Of course, this is not to say that these big tools do not serve a purpose. Dask and HDF were built to solve particular problems, but we should be aware that most big tools were built for big problems, and our own problems are often not big enough to warrant their use.
+</p>
+</li>
+</ol>
+
+<p>
+In summary, we should teach people about files and processes, and empower them to tackle "hard" tasks without resorting to monolithic libraries. Not only is this incredibly satisfying, it also leads to better programs and better programmers.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div class="post-date">24 Oct 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-10-24-the-long-game.html">The Long Game</a></h1>
+
+<p>
+Here's a thing I do: I write open source libraries that solve my problems. <i>Bad</i> libraries. And then, over the course of a year or two, I slowly improve them, until they are not so bad any more.
+</p>
+
+<p>
+I have gone through this pattern a few times now. <a href="https://github.com/bastibe/PySoundFile">SoundFile</a> started out buggy and slow. <a href="https://github.com/bastibe/transplant">Transplant</a> crashed and froze very often. <a href="https://github.com/bastibe/org-journal">Org-Journal</a> deleted journal entries every now and then. But then users found errors, and errors were fixed. And slowly, over time, these libraries transformed from buggy prototypes into dependable tools. After a year or so, I saw Github Issues gradually drying up, and feedback changing from "X is broken" to "How can I do X?". It is an oddly gratifying process.
+</p>
+
+<p>
+Interestingly though, I rarely hear people talking about this, that building a thing is only the beginning, and the meat of open source development is sticking with it for a long time, and gradually, slowly, weeding out the bugs. All great open source libraries I know evolved this way, yet it is rarely written about.
+</p>
+
+<p>
+Playing the long game means anticipating and managing the amount of maintenance I am going to do on a project. When releasing a new library, the first few months and users will shake out bugs, and create work for the maintainers. This can be a dangerous source of stress and anxiety. I've had my brush with burnout in the past, and my only defense to this is to be honest about my availability. Often, this means stating outright that I probably won't have the time to work on a thing.
+</p>
+
+<p>
+However, I have also learned that it is OK to defer issues to the future. There have been many problems that I didn't have the time to address when they first came up, but <i>did</i> address a few months later, probably in response to a separate bug report. Important problems have a way of getting fixed eventually. Other times, a solution just takes a long time to mature. There have been multiple issues that lay dormant for months until I stumbled upon a good solution.
+</p>
+
+<p>
+And good solutions are important for open source software: If a bug fix adds too much complexity, it will inevitably lead to <i>more</i> bugs. This can easily snowball into a situation where each hour I invest into a project creates <i>more hours</i> of future maintenance burden. A situation like this feels hopeless and terrible. It feels like work. It is therefore important for my sanity to control the complexity of my projects, even if that means not adding features or not addressing problems. Open source development is not beholden to the dollar sign, and gives you the freedom to do it <i>right</i>.
+</p>
+
+<p>
+This is not universally understood by programmers or users. And it doesn't just involve technical questions: Some users have expected me to provide commercial-grade support, and got surprisingly unpleasant when I didn't. But it is crucial to realize that publishing open source software <i>does not imply an obligation to fix every issue right now</i>. Quite on the contrary, many open source developers necessarily work on their own schedule, and part of the enjoyment of open source development is derived from this exact freedom!
+</p>
+
+<p>
+At this point, my Github lists a bunch of open source projects. Some of them have gotten attention, which lead to bug reports, and, over time, let them grow to maturity. Some turned out to be <a href="https://github.com/bastibe/annotate.el">useful</a> <a href="https://github.com/bastibe/twilight">to</a> <a href="https://github.com/bastibe/org-static-blog">me</a>, but not to others. Some are useful <a href="https://github.com/bastibe/Violinplot-Matlab">to</a> <a href="https://github.com/bastibe/lunatic-python">others</a>, but not to me. Some turned out to be not useful <a href="https://github.com/bastibe/MatlabCodeAnalyzer">at all</a>, and are now largely abandoned. And some of them, like <a href="https://github.com/bastibe/RunForrest">RunForrest</a> and <a href="https://github.com/bastibe/SoundCard">SoundCard</a>, are still new and raw and terrible, but will mature over time.
+</p>
+
+<p>
+That's a thing I do: I write open source libraries. <i>Good</i> libraries, but as a <a href="https://en.wikiquote.org/wiki/Piet_Hein">wise man</a> once said "When you feel how depressingly / slowly you climb, / it's well to remember that / Things Take Time". Working on open source grants you this freedom, and is joyful for it.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div class="post-date">10 Jul 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-07-10-audio-apis-wasapi.html">Audio APIs, Part 3: WASAPI / Windows</a></h1>
+
+<p>
+This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.
+</p>
+
+<p>
+It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio's C API a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
+</p>
+
+<p>
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
+</p>
+
+<p>
+This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
+</p>
+
+<hr  />
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">WASAPI</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
+</p>
+
+<p>
+In other words, audio on Windows has a long and troubled history, and has had a lot of opportunity for experimentation. It should then be no surprise that WASAPI is a clean and well-documented audio API that avoids many of the pitfalls of its predecessors and brethren. After having experienced the audio APIs of Windows, Linux, and macOS, I am beginning to understand why some programmers love Windows.
+</p>
+
+<p>
+But let's take a step back, and give an overview over the API. First of all, this is a cross-language API that is meant to be used from C#, with a solid bridge for C++, and a somewhat funky bridge for C. This is crucial to understand. The whole API is designed for a high-level, object-oriented runtime, but I am accessing it from a low-level language that has no concept of objects, methods, or exceptions.
+</p>
+
+<p>
+Objects are implemented as pointers to opaque structs, with an associated list of function pointers to methods. Every method accepts the object pointer as its first argument, and returns an error value if an exception occurred. Both inputs and outputs are function arguments, with outputs being implemented as pointer-to-pointer values. While this looks convoluted to a C programmer, it is actually a very clean mapping of object oriented concepts to C that never gave me any headaches.
+</p>
+
+<p>
+However, there are a few edge cases that did take me a while to understand: Since the C API is inherently not polymorphic, you sometimes have to manually specify types as cryptic UUID structs. Figuring out how to convert the UUID strings from the header files to such structs was not easy.  Similarly, it took me a while to reverse-engineer that strings in Windows are actually <code>uint16</code>, despite being declared <code>char</code>. But issues such as these are to be expected in a cross-language API.
+</p>
+
+<p>
+In general, I did not find a good overview on how to interpret high-level C#-concepts in C. For example, it took a long time until I learned that objects in C# are reference counted, and that I would have to manage reference counts manually. Similarly, I had one rather thorny issue with memory allocations: in rare occasions (<code>PROPVARIANT</code>), C# is expected to re-allocate memory of an object if the object does not have enough memory when passed into a method. This does not work as intended if you don't use C#'s memory allocator to create the memory. <i>This</i> was really painful to figure out.
+</p>
+
+<p>
+Another result of the API's cross-language heritage are its headers: There are <i>hundreds</i>. And they all contain both the C API and the C++ API, separated by the occasional <code>#ifdef __cplusplus</code> and <code>extern C</code>. Worse yet, pretty much every data type and declaration is wrapped in multiple levels of preprocessor macros and <code>typedef</code>. There are no doubt good reasons and a rich history for this, but it took me many hours to assemble all the necessary symbols from dozens of header files to even begin to call WASAPI functions.
+</p>
+
+<p>
+Nevertheless, once these hurdles are overcome, the actual WASAPI API itself is well-structured and reasonably simple. You acquire an <code>IMMDeviceEnumerator</code>, which returns <code>IMMDeviceCollections</code> for microphones and speakers. These contain <code>IMMDevices</code>, which represent sound cards and their properties. You activate an <code>IMMDevice</code> with a desired data format to get an <code>IAudioClient</code>, which in turns produces an <code>IAudioRenderClient</code> or <code>IAudioCaptureClient</code> for playback or recording, respectively. Playback and recording themselves are done by requesting a buffer, and reading or writing raw data to that buffer. This is about as straight-forward as APIs get.
+</p>
+
+<p>
+The documentation deserves even more praise: I have rarely seen such a well-documented API. There are high-level overview articles, there is commented example code, every object is described abstractly, and every method is described in detail and in reference to related methods and example code. There is no corner case that is left undescribed, and no error code without a detailed explanation. Truly, this is <i>exceptional</i> documentation that is a joy to work with!
+</p>
+
+<p>
+In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praising Windows. There is a non-trivial impedance mismatch between C and C# that has to be overcome to <i>use</i> WASAPI from C. But once I understood this, the API itself and its documentation were easy to use and understand. Impressive!
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/audio.html">audio</a> <a href="tags/programming.html">programming</a> <a href="tags/windows.html">windows</a> </div><div class="post-date">27 Jun 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-06-27-audio-apis-pulseaudio.html">Audio APIs, Part 2: Pulseaudio / Linux</a></h1>
+
+<p>
+This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.
+</p>
+
+<p>
+It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
+</p>
+
+<p>
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
+</p>
+
+<p>
+This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
+</p>
+
+<hr  />
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">PulseAudio</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
+</p>
+
+<p>
+The very nice thing about PulseAudio is that it is a native C API. It provides several levels of abstraction, the highest of which takes only a handful of lines of C to get audio playing. For the purposes of PythonAudio however, I had to look at the more in-depth <a href="https://freedesktop.org/software/pulseaudio/doxygen/async.html">asynchronous API</a>. Still, the API itself is relatively simple, and compactly defined in one simple header file.
+</p>
+
+<p>
+It all starts with a <code>mainloop</code> and an associated <code>context</code>. While the <code>mainloop</code> is running, you can query the <code>context</code> for sources and sinks (aka microphones and speakers). The <code>context</code> can also create a <code>stream</code> that can be read or written (aka recorded or played). From a high level, this is all there is to it.
+</p>
+
+<p>
+Most PulseAudio functions are asynchronous: Function calls return immediately, and call user-provided callback functions when they are ready to return results. While this may be a good structure for high-performance multithreaded C-code, it is somewhat cumbersome in Python. For PythonAudio, I wrapped this structure in regular Python functions that wait for the callback and return its data as normal return values.
+</p>
+
+<p>
+Doing this shows just how old Python really is. Python is old-school in that it still thinks that concurrency is better solved with multiple, communicating processes, than with shared-memory threads. With such a mind set, there is a certain impedance mismatch to overcome when using PulseAudio. Every function call has to lock the main loop, and block while waiting for the callback to be called. After that, clean up by decrementing a reference count. This procedure is cumbersome, but not difficult.
+</p>
+
+<p>
+What is difficult however, is the documentation. The API documentation is fine, as far as it goes. It could go into more detail with regards to edge cases and error conditions; But it truly lacks high-level overviews and examples. It took an unnecessarily long time to figure out the code path for audio playback and recording, simply because there is no document anywhere that details the sequence of events needed to get there. In the end, I followed some marginally-related example on the internet to get to that point, because the <i>two</i> examples provided by PulseAudio don't even use the asynchronous API.
+</p>
+
+<p>
+Perhaps I am missing something, but it strikes me as strange that an API meant for audio recording and playback would not include an example that plays back and records audio.
+</p>
+
+<p>
+On an application level, it can be problematic that PulseAudio seems to only value block sizes and latency requirements approximately. In particular, if computing resources become scarce, PulseAudio would rather increase latency/block sizes in the background than risk skipping. This might be convenient for a desktop application, but it is not ideal for signal processing, where latency can be crucial. It seems that I can work around these issues to an extent, but this is an inconvenience nontheless.
+</p>
+
+<p>
+In general, I found PulseAudio reasonably easy to use, though. The documentation could use some work, and I don't particularly <i>like</i> the asynchronous programming style, but the API is simple and functional. Out of the three APIs of WASAPI/Windows, Core Audio/macOS, and PulseAudio/Linux, this one was probably the easiest to get working.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/audio.html">audio</a> <a href="tags/programming.html">programming</a> <a href="tags/linux.html">linux</a> </div><div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
+
+<p>
+This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
+</p>
+
+<p>
+It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation were a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
+</p>
+
+<p>
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
+</p>
+
+<p>
+This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is playing/recording of short blocks of <code>float</code> data at arbitrary sampling rates and block sizes. All connected sound cards should be listable and selectable, with correct detection of the system default sound card (a feature that is very unreliable in PortAudio).
+</p>
+
+<hr  />
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
+</p>
+
+<p>
+The basic unit of any CoreAudio program is the audio unit. An audio unit can be a source (aka microphone), a sink (aka speaker) or an audio processor (both sink and source). Each audio unit can have several input <i>buses</i>, and several output <i>buses</i>, each of which can have several <i>channels</i>. The meaning of these buses varies wildly and is often underdocumented. Furthermore, every audio unit has several <i>properties</i>, such as a sample rate, block sizes, and a data format, and <i>parameters</i>, which are like properties, but presumably different in some undocumented way.
+</p>
+
+<p>
+In order to use an audio unit, you create an <code>AudioComponentDescription</code> that describes whether you want a source or sink unit, or an effect unit, and what kind of effect you want (AudioComponent is an alternative name for audio unit). With the description, you can create an <code>AudioComponentInstance</code>, which is then an opaque struct pointer to your newly created audio unit. So far so good.
+</p>
+
+<p>
+The next step is then to configure the audio unit using <code>AudioUnitGetProperty</code> and <code>AudioUnitSetProperty</code>. This is surprisingly hard, since every property can be configured for every bus (sometimes called element) of every input or output of every unit, and the documentation is extremely terse on which of these combinations are valid. Some invalid combinations return error codes, while others only lead to errors during playback/recording. Furthermore, the definition of what constitutes an input or output is interpreted quite differently in different places: One place calls a microphone an <i>input</i>, since it records audio; another place will call it an <i>output</i>, since it outputs audio data to the system. In one crazy example, you have to configure a microphone unit by disabling its output bus 0, and enabling its input bus 1, but then read audio data from its ostensibly disabled output bus 0.
+</p>
+
+<p>
+The property interface is untyped, meaning that every property has to be given an identifier, a void pointer that points to a matching data structure, and the size of that data structure. Sometimes the setter allocates additional memory, in which case the documentation does not contain any information on who should free this memory. Most objects are passed around as opaque struct pointers with dedicated constructor and destructor functions. All of this does not strike me as particularly C-like, even though CoreAudio is supposedly a native C library.
+</p>
+
+<p>
+Once your audio unit is configured, you set a render callback function, and start the audio unit. All important interaction now happens within that callback function. In a strange reversal of typical control flow, input data to the callback function needs to be fetched by calling <code>AudioUnitRender</code> (evoked on the unit itself) from within the callback, while output is written to memory provided as callback function arguments. Many times during development, <code>AudioUnitRender</code> would return error codes because of an invalid property setting during initialization. Of course, it won't tell <i>which</i> property is actually at fault, just that it can't fulfill the render request at the moment.
+</p>
+
+<p>
+Error codes in general are a difficult topic in CoreAudio. Most functions return an error code as an <code>OSStatus</code> value (aka <code>uint32</code>), and the header files usually contain a definition of some, but not all, possible error codes. Sometimes these error codes are descriptive and nice, but often they are way too general. My favorite is the frequent <code>kAudioUnitErr_CannotDoInCurrentContext</code>, which is just about as useless an error description as possible. Worse, some error codes are not defined as numeric constants, but as <code>int err = 'abcd'</code>, which makes them un-searchable in the source file. Luckily, this madness can be averted using <a href="https://osstatus.com/">https://osstatus.com/</a>, which is a dedicated database for <code>OSStatus</code> error codes.
+</p>
+
+<p>
+By far the worst part of the CoreAudio API is that some properties are silently ignored. For example, you can set the sample rate or priming information on a microphone unit, and it will accept that property change and it will report that property as changed, but it will still use its default value when recording (aka "rendering" in CoreAudio). A speaker unit, in contrast, will honor the sample rate property, and resample as necessary. If you still need to resample your microphone recordings, you have to use a separate <code>AudioConverter</code> unit, which is its own bag of fun (and only documented in <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">a remark</a> in one overview document).
+</p>
+
+<p>
+Lastly, all the online documentation is written for Swift and Objective-C, while the implementation is C. Worse, the C headers contain vastly more information than the online documentation, and the online documentation often does not even reference the C header file name. Of course header files are spread into the CoreAudio framework, the AudioToolkit framework, and the AudioUnit framework, which makes even grepping a joy.
+</p>
+
+<p>
+All of that said, once you know what to do and how to do it, the resulting code is relatively compact and readable. The API does contain inconsistencies and questionable design choices, but the real problem is the documentation. I spent way too much time reading the header files over and over again, and searching through (often outdated or misleading) <a href="https://developer.apple.com/library/content/samplecode/AVCaptureToAudioUnitOSX/Listings/CaptureSessionController_mm.html#//apple_ref/doc/uid/DTS40012879-CaptureSessionController_mm-DontLinkElementID_4">example projects</a> and <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">vague</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html#//apple_ref/doc/uid/TP40003278-CH7-SW12">high-level</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003278-CH1-SW2">overviews</a> for clues on how to interpret error messages and API documentation. I had somewhat better luck with a few <a href="http://kaniini.dereferenced.org/2014/08/31/CoreAudio-sucks.html">blog</a> <a href="http://subfurther.com/blog/2009/04/28/an-iphone-core-audio-brain-dump/">posts</a> on the subject, but the general consensus seems to be that the main concepts of CoreAudio are woefully under-explained, and documentation about edge cases is almost nonexistent. Needless to say, I did not enjoy my experience with CoreAudio.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/audio.html">audio</a> <a href="tags/programming.html">programming</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">14 May 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-05-14-scientific-code.html">Scientific Code</a></h1>
+
+<p>
+A short while ago, I spent a few weeks collecting and evaluating various implementations of speech analysis algorithms for my current work. TL;DR: the general quality of scientific software is bad, and needs to improve.
+</p>
+
+<p>
+Let me state up front that I am explicitly <i>not</i> talking about the quality of the science itself. This blog post is exclusively focused on the published <i>software</i>. In general, the problems were bad programming, old and unmaintained code, and lack of documentation. While none of these things mean <i>bad science</i>, they are a real challenge to reproducibility. Follow-up work can not quote algorithms they can't run.
+</p>
+
+<p>
+Most scientists are not programmers, and use programming as a tool for doing science. Scientists typically don't conceptualize algorithms as code, and don't reason about their implementation in terms of code. Consequently, executable implementations tend to not read like code, either. And frankly, this is as it should be. In my area of research, programming abstractions are not a great medium for expressing scientific ideas, and programming transformations are weak in comparison to mathematical operations.
+</p>
+
+<p>
+Still, the result is <i>bad code</i>. And <i>bad code is a problem for reproducibility and comparability</i>. Scientists therefore need to produce better code that is readable and portable. Straight-up letter-by-letter translations of the published math is just not enough, with all its single-letter variable names and complex nested expressions. We have to do better.
+</p>
+
+<p>
+<b>Include an Example Script</b>
+</p>
+
+<p>
+I have seen many instances of code that clearly worked at one point on the original author's machine, but doesn't on my computer. Maybe that is because I am running a different version of the programming environment, maybe my data is subtly different, maybe the author forgot to document a dependency. All of these happened to me, and all of these are exactly what you would expect from old, unmaintained code from non-expert programmers.
+</p>
+
+<p>
+The least we can do to improve this situation, is to document how the code was supposed to work. A simple example script <i>with example data and example results</i> lets me verify that the code does what it is supposed to be doing. Without this, I can not diagnose errors. Worse, if no example results are included, I might conclude that the algorithm was bad, when in reality I was simply using an incorrect version of a dependency.
+</p>
+
+<p>
+<b>Document Dependencies</b>
+</p>
+
+<p>
+It is important to document all toolboxes, libraries, and programming languages used, <i>including their exact version and operating system</i>. At one point, I spent several hours debugging some Java code that worked in Java 5, but didn't on any recent Java version. If this had been documented, I could have fixed that error much more quickly. In another case, one piece of C code contained a subtle error if compiled with a 64 bit compiler. Again, this took a long time to track down, and would have been much easier if the original operating system and compiler version had been documented.
+</p>
+
+<p>
+That same piece of C code could only be run by compiling several library dependency from old versions of their source code. In that case, the author helpfully included copies of the original source code for these libraries with his source distribution. Without that, I would never have gotten that piece of code to run!
+</p>
+
+<p>
+Also, if at all possible, published code should use as few dependencies as possible. Not only might I not have access to that fancy Matlab Toolbox, but every step in the installation instructions is another thing that can go wrong. The more contained the code, the more likely it is that it will still be executable many years later.
+</p>
+
+<p>
+<b>Higher Level Languages are better than Lower Level Languages</b>
+</p>
+
+<p>
+In general, I had far less problems with non-compiled, high-level code for Matlab, Python, or R, than with low-level C or Java code. On the one hand, this is a technological problem: It is easier to keep an interpreter compatible with outdated code than it is to keep a more complex tool chains with compilers, linkers, and runtime libraries compatible. On the other hand though, this is a human problem as well: I happen to know Python, Matlab, and C pretty well, but I don't know much R or Java. Still, it is much easier to reason about the runtime behavior of R code (because I can inspect variables like in any other dynamic programming language) than to debug some unknown build tool interaction in Java (because compilation tool chains are typically much more complex and variable than REPLs).
+</p>
+
+<p>
+<b>Keep it Simple</b>
+</p>
+
+<p>
+A particular problem are compiled modules for an interpreted language. Such Mex files and CPython extensions are almost guaranteed to break when programming language versions change, and are often hard to upgrade, since the C APIs often change with the language version as well. Often, these compiled modules are provided for performance reasons. But what was painfully slow on the original author's work laptop a few years ago might not be a problem at all on a future compute cluster. If the code absolutely has to be provided a Mex file or a CPython extension, we should at least provide an interpreted version as well.
+</p>
+
+<p>
+And speaking of compute clusters, I have had a lot of trouble with clever tricks such as massively parallelized code or GPU-optimized code. Not only does this age poorly, it also wreaks havoc when trying to run this code on a compute cluster. Such low-level performance optimizations are rarely a good idea for published scientific code, and should at least be optional and well-documented.
+</p>
+
+<p>
+<b>Document the Code</b>
+</p>
+
+<p>
+Code is never self-documenting. Given enough time, entropy increases inexorably, and times change. Conventions change, and what seemed obvious a few years ago might look like gibberish today. What is perfectly readable to a domain expert is inscrutable even to scientists of closely related areas of research. It is therefore necessary to always document published code, even if the code looks perfectly obvious to the author. In the same vein, we should refrain from using jargon in our code, and clearly declare our variables and invariants (they are bound to be different for different people).
+</p>
+
+<p>
+Importantly, this includes documenting all file formats and data structures. Institutions often have in-house standards for how to represent certain kinds of data, and practitioners don't realize that these conventions are not followed universally. I had to ignore a few apparently high-quality algorithms simply because I could not figure out how to supply data to their code. For many other algorithms, I had to write custom data exporters and data importers. Again, an algorithm won't get quoted if it can't be run.
+</p>
+
+<p>
+<b>Make it Automatable</b>
+</p>
+
+<p>
+Another thing I see frequently are very fancy graphical user interfaces for scientific code. The only thing that breaks faster than compiled language extensions are GUI programs. GUIs are necessarily complex, and therefore hard to debug. And worse yet, if the code can only be run in a GUI, it can't be automated, and I won't be able to compare its performance in a big experiment with hundreds of runs. In effect, GUIs make an algorithm non-reproducible. If a GUI needs to be included in the code, it should at least be made optional.
+</p>
+
+<p>
+<b>Do Release Code</b>
+</p>
+
+<p>
+However, more importantly than anything I said so far: <i>Do</i> release source code for your algorithm. Nothing is more wasteful than reading about an amazing algorithm that I can't try out. If no source code is released, it is not reproducible, it can't be compared to other algorithms in the field, and it might as well not have been published.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
+
+<p>
+What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
+</p>
+
+<p>
+A few years ago, when I was working mostly on user interaction and data management, all of this made sense to me. What is the overhead of a few function calls and class lookups here and there if it makes the code more readable? In other words: Readability counts, and is usually more important than performance.
+</p>
+
+<p>
+But lately, I have come to struggle with these rules. I am now writing a lot of scientific code, where algorithms are intrinsically complex beyond the syntactic complexity of the code. How do you "Express yourself in code [instead of comments]", when that code only consists of linear algebra and matrix multiplications?
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">rectwin_spectrum</span>(angular_frequency, specsize):
+    <span style="color: #111111;">"""The spectrum of a rectangular window. [...]"""</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #303030;">'ignore'</span>):
+        <span style="color: #111111;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+                     np.sin(specsize*angular_frequency/2) /
+                     np.sin(angular_frequency/2) )
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #111111;">spectrum</span>[angular_frequency == 0.0] = specsize
+    <span style="color: #111111; font-weight: bold;">return</span> spectrum
+</pre>
+</div>
+
+<p>
+A lot of my scientific code ends up quite compact like that. Maybe a hundred lines of dense numeric expressions, plus a few hundred lines of explanations and documentation. The point is, scientific code often does not decompose into easily understood extractable functions.
+</p>
+
+<p>
+On a related issue, how do you avoid long argument lists in heavily parametrized equations? As Clean Code states, "when a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped in a class of their own". However, in Matlab in particular, it is quite unusual to create small one-trick classes to encapsulate a few function arguments:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #111111;">&lt;</span> handle
+    <span style="color: #111111; font-weight: bold;">properties</span>
+        data
+        samplerate
+        blocksize
+        hopsize
+    <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">properties</span> (Dependent)
+        duration
+    <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">methods</span>
+        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111;">,</span> samplerate<span style="color: #111111;">,</span> blocksize<span style="color: #111111;">,</span> hopsize)
+            <span style="color: #111111; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
+            narginchk(2<span style="color: #111111;">,</span> 4)<span style="color: #111111;">;</span>
+            obj.data <span style="color: #111111;">=</span> data<span style="color: #111111;">;</span>
+            obj.samplerate <span style="color: #111111;">=</span> samplerate<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111;">&gt;=</span> 3
+                obj.blocksize <span style="color: #111111;">=</span> blocksize<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">else</span>
+                obj.blocksize <span style="color: #111111;">=</span> 2048<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">end</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111;">==</span> 4
+                obj.hopsize <span style="color: #111111;">=</span> hopsize<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">else</span>
+                obj.hopsize <span style="color: #111111;">=</span> 1024<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">end</span>
+        <span style="color: #111111; font-weight: bold;">end</span>
+        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
+            time <span style="color: #111111;">=</span> length(obj.data)<span style="color: #111111;">/</span>obj.samplerate<span style="color: #111111;">;</span>
+        <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">end</span>
+<span style="color: #111111; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+This is not just cumbersome to write and maintain, it is also slower than passing <code>data</code>, <code>samplerate</code>, <code>blocksize</code>, and <code>hopsize</code> to each function call individually (although the overhead has gotten considerably smaller in newer versions of Matlab). Additionally, there is often a large performance benefit of <i>not</i> extracting every function and <i>not</i> keeping intermediate values in variables. Thus, it's not just readability that is hard to maintain in scientific code. Performance is a problem, too.
+</p>
+
+<p>
+The sad thing is, I don't know the answer to these questions. There have been a lot of discussions about coding style and code quality in our department lately, with the clear objective to clean up our code. But common code quality criteria don't seem to apply to scientific code all that well.
+</p>
+
+<p>
+Do you have any idea how to progress from here?
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+
+<p>
+On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
+</p>
+
+<p>
+For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http://www.sentex.net/~mwandel/jhead/">command</a> <a href="http://owl.phy.queensu.ca/~phil/exiftool/">line</a> <a href="http://www.exiv2.org/#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
+</p>
+
+<p>
+So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
+</p>
+
+<p>
+If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <i>either</i> the file creation date, <i>or</i> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.
+</p>
+
+<p>
+Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
+<span style="color: #111111; font-weight: bold;">import</span> os
+<span style="color: #111111; font-weight: bold;">import</span> datetime
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">range</span>(426, 465):
+    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111;">format</span>(index)
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
+    <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+</pre>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">12 Jan 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-01-12-julia.html">Julia First Impressions</a></h1>
+
+<blockquote>
+<p>
+Julia is a high-level dynamic programming language designed to address the requirements of high-performance numerical and scientific computing while also being effective for general purpose programming. —<a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Wikipedia</a>
+</p>
+</blockquote>
+
+<p>
+In other words, it is supposed to be as fast as C, as practical as Python, and as scientific as Matlab. The next step in mainstream scientific computing.
+</p>
+
+<p>
+However, Julia is still very young, and still evolving rapidly. But if any of the above is true, I am <i>very</i> interested!
+</p>
+
+<p>
+So, over the last few days, I re-implemented an algorithm in Julia. The previous version of the algorithm was written in Python. The algorithm spends most of it's time in FFTs, thus I didn't expect big performance gains.
+</p>
+
+<p>
+It is actually nice to have a language that is built for scientific computation. Coming from Python, it is refreshing to have <a href="http://docs.julialang.org/en/release-0.3/manual/arrays/">array literals</a>, ranges and <a href="http://docs.julialang.org/en/release-0.3/stdlib/math/">mathematics</a> available without importing anything. Much like Python, Julia also has a proper <a href="http://docs.julialang.org/en/release-0.3/manual/modules/">module system</a>, comprehensions, and more than one function per file.
+</p>
+
+<p>
+On the other hand, there are a few questionable design decisions as well. Julia uses 1-based, inclusive indexing (<code>range[1:3] = [1 2 3]</code> as opposed to Python's <code>range[:3] = [0, 1, 2]</code>). In practice, my experience is that I rarely need to add ±1 when indexing in Python, but I frequently need it in Julia/Matlab.
+</p>
+
+<p>
+Also, Julia has no docstrings, which makes me sad. The whole documentation story is sad, really: Documentation is often incomplete, or missing altogether. Unit testing is not widespread at all, and still crude. 0.4 will apparently add docstrings <a href="https://github.com/MichaelHatherly/Docile.jl">using macros</a>. This is ugly and doesn't work for one's own code, but it's certainly a step in the right direction. Those error messages would need some work, too.
+</p>
+
+<p>
+All of that is hopefully just a symptom of Julia being young, and will improve over time. Similarly, signal processing functions are missing entirely, and I had to re-implement some. The community is growing rapidly, though, and a lot of missing functionality can be installed through the <a href="http://docs.julialang.org/en/release-0.3/manual/packages/">package manager</a> already.
+</p>
+
+<p>
+When it comes to writing code, there is a lot to like about Julia. Julia's type system does impose a bit of overhead, but it also grants immediate benefits: Many of Python's runtime errors happen at evaluation time and functions can easily document their arguments' types. Also, thinking strictly about types actually improved performance by a good 20% in my algorithm.
+</p>
+
+<p>
+And finally, Performance is surprisingly good! Although my algorithm spends almost all of its time doing FFTs, Julia performed about twice as fast as Python. This is pretty much exactly twice as much as I had expected! It also exposed more of the <a href="http://docs.julialang.org/en/release-0.3/stdlib/math/?highlight=plan_fft#Base.plan_fft">features</a> of the underlying libraries, which could be used for another speed-up of some 10%.
+</p>
+
+<p>
+At the end of the day, Julia clearly isn't mature yet, but very promising. Documentation and libraries will no doubt grow, and performance is already excellent. I'll definitely keep an eye on it, and will experiment further when the opportunity presents itself.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div class="post-date">20 Jul 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-07-20-working-and-learning.html">Working and Learning</a></h1>
+
+<p>
+At the university, I have a big advantage: I can program. So many of my fellow students are programming as their main means of doing science, yet clearly never learned how to program efficiently. It is saddening to see them "fight Matlab" for days, for things that would take a programmer hours.
+</p>
+
+<p>
+So how did I get to this point? After all, I went to the same university and studied the same topics they did. My first introduction to programming was our <i>Introduction to Programming</i> in the first semester. We learned how to write simple text-based programs in C.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">My own blogging engine</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+At the time, my fellow students and I wanted to organize our lecture notes, copied exams, and assignments on our own website. Not knowing any better, I picked up PHP and set out to write a little website for this. It turned into a little CMS, all hand-written in PHP, HTML and (almost no) CSS.
+</p>
+
+<p>
+This happened about four weeks into the introductory programming course, so I only knew a few bits of C and didn't appreciate the differences between programming languages yet. Many bad things have been said about PHP, but it allowed me to hack together a blog, file browser, gallery, and calendar with knowing little more about programming than branches and loops.
+</p>
+
+<p>
+It scares me to look at the ease with which I picked up PHP at the time. With more experience, I seem to become more reluctant to try out new things. This might be a very bad thing.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">C programming at the university</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+In my third semester, a professor offered me a job as an undergraduate research assistant. As my first assignment, he wanted me to program a MIDI interface for Matlab. The idea was to use the Matlab-C interface <a href="http://www.mathworks.de/de/help/matlab/call-mex-files-1.html">Mex</a> to connect <a href="http://portmedia.sourceforge.net/">portmidi</a> to Matlab. At this point, I had had two programming courses (C and C++/Matlab), and had read <a href="http://pragprog.com/book/tpp/the-pragmatic-programmer"><i>The Pragmatic Programmer</i></a>.
+</p>
+
+<p>
+I remember the professor telling me to stop obsessing about that piece of code. He said "You are an engineer, 95% is good enough for engineers". Yet, reading through this code now, it is <a href="http://tgm.jade-hs.de/web/files/Institut_fr_Hrtechnik_und_Audiologie/Software.php">some fine C code</a>. Everything is well-commented, the implementation is clearly split into one Matlab-related part and one portmidi-related part, and there even is an (informal) test suite! To my mind, those extra 5% make an incredible difference! It is astonishing how much my early career has been influenced by <i>The Pragmatic Programmer</i>.
+</p>
+
+<p>
+Another project concerned extending a C program that simulated small-room acoustics. It took me eight months to admit defeat. Every week, I would spend ten hours staring at my screen, trying to understand that program. Every week, I would fail in frustration. After eight months, I told the professor that I couldn't do it. A few months later, I told the professor that I would have another go at the project. This time, I read <a href="http://www.trueaudio.com/array/downloads/Image%20Method-Allen%20and%20Berkley%201978.pdf">the research paper</a> associated with the program first. After that, the project was completed in one afternoon. Sometimes, just reading the code is not enough. (This is probably more true in academia than anywhere else).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Qt and Cocoa and OpenGL</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+I wrote my bachelor's thesis for a small company in southern Germany. At my university, the thesis was supposed to take half a year, and should be written at some company, so students would get some first-hand experience of the real world outside the university.
+</p>
+
+<p>
+The basic algorithm for the thesis was working after a few weeks. Since my boss was more interested in a commercial result than in more research, he proposed that I write a desktop application for it. This is how I was introduced to Qt. Qt is an incredibly complex framework. Luckily for me, it is also an incredibly well-documented framework! As a newcomer to programming, API docs can be a very daunting thing, filled with jargon and implementation detail. This was the first time I learned something mostly from reading the API docs, and I am grateful that I happened to pick Qt for that.
+</p>
+
+<p>
+After finishing my thesis, I worked remotely for the same company, writing another GUI application. This time, the program was to be written in Objective-C/Cocoa. In contrast to Qt, I needed <a href="http://www.bignerdranch.com/we-write/cocoa-programming">the book</a> to learn Cocoa. Working through the book was a very different experience than learning Qt from API docs. The book not only described the API, but also things like best practices and programming patterns. As a result, my final program was much easier to understand and extend than the Qt program I wrote earlier.
+</p>
+
+<p>
+Cocoa and Qt show two very different styles of documentation. The Qt documentation is very complete, and very well-written. It is a rare feat for a framework this complex to be learnable from the documentation alone! Doing the same thing with the Cocoa documentation instead of the book would have been painful. The book really went much further than pure API documentation can reasonably go, and my experience was better for it! (By the way, I also learned and used OpenGL during that time. The less said about the OpenGL documentation, the better).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Why Software is paid for</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+In the meantime, the company had been bought by a foreign investor. While this meant that my program would never see actual users, it also meant that they could offer me a proper job. And like every good engineering student, I needed Matlab, Photoshop, and Microsoft Office. And like every cliché foreign investor, they replied with "This is too expensive, here is a link to the Pirate Bay".
+</p>
+
+<p>
+This did not sit well with me. After a bit of soul-searching, and my most interesting and obviously <a href="http://stackoverflow.com/questions/3907076/my-boss-asks-me-to-pirate-software-what-should-i-do">soon-deleted Stack Overflow question</a>, I realized that I could not pirate software any longer. My own livelihood depended on people paying for the code I wrote. There was no way I would use other people's code without paying for it.
+</p>
+
+<p>
+And thus we used <a href="http://www.inkscape.org/">Inkscape</a> instead of Illustrator, and <a href="http://scipy.org/">Python</a> instead of Matlab. Mere weeks later, I discovered that Inkscape produces (mostly) standard-compatible SVG files that could be opened with any regular text editor, and manipulated with any regular XML parser! It soon became apparent that the open nature of this file format enabled us to use Inkscape for so much more than mere vector graphics! While in retrospect, it was not such a bright idea to use a vector graphics program as a GUI layout editor, it really drove home the value of open file formats and reusability! A lot of the later work on the project would have been impossible had we used Illustrator and Matlab.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Automation</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+We were working with a British company on a new <a href="http://www.cadac-sound.com/i/digital/cdc-four/12/">digital mixing console</a> at the time. Our team was mostly responsible for the software side of the project, while the British company was mostly concerned with the hardware. One big issue was that in order to get a testable system going, one had to compile some software, run some converter scripts on some files, zip some other files, set up the prototype hardware correctly, then send all the files to the prototype in the right order. Forget one step, or take an outdated version of something, and the system would not work.
+</p>
+
+<p>
+It was a disaster. We would lose days debugging nonexistent issues, only because we had forgotten to update such-and-such library, or renaming some debugging file. It would be easy to blame this on my colleagues. But the reality is, no-one had ever done a project this large before, and our tools were utterly incapable of build automation of this kind.
+</p>
+
+<p>
+In the end, I wrote some crazy Rube Goldberg Machine that integrated GNU make with Visual Studio, and delegated all the packaging and converting to makefiles. It would even download a large set of Unix tools and a full installation of Ruby if need be. I can't say I'm proud of this wild contraption, but anything is better than wasting days debugging non-issues. To its credit, there have been zero issues with wrongly packaged files with this system in place. I can not tell you how much stress and conflict this simple act of automation relieved. Never have a human do a machine's work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Lua and DSLs</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+When I started on the job, a colleague of mine handed me a copy of "Programming for Windows 95", and told me to read it since he had modeled the internal GUI library after it. This was 2010. I was very unhappy about this. In the following years, I would rework many a subsystem within this library. But the more I changed, the more I had to take responsibility for the library. Before long, I had taken official ownership of the library, and I had to answer to questions and feature requests.
+</p>
+
+<p>
+This turned out to be both a blessing and a curse. On the one hand, it gave me a great deal of freedom and authority in my own little world. On the other hand, I didn't really care for responsibility for this much legacy code in an application domain I was not particularly interested in. Thus being motivated to change things had its upsides though, and I learned a lot when implementing a font rendering engine, a bitmap caching and memory allocation system, and various configuration mechanisms on an embedded platform.
+</p>
+
+<p>
+But, at the end of the day, there is only so much you can do with a bad code base in a bad subset of C++ (largely due to compilers, not people). In another slow-going week when GUI work was not particularly important, I <a href="http://stackoverflow.com/questions/4448835/alternatives-to-lua-as-an-embedded-language">investigated implementing</a> a scripting layer for our framework. We were not very optimistic about this, since the scripting engine had to run on a <a href="https://en.wikipedia.org/wiki/Black_fin">terribly slow embedded processor</a> that was already running almost at capacity.
+</p>
+
+<p>
+We chose the scripting language Lua for the job, since it was tiny, and easy to embed (in both meanings of the word). Lua turned out to be a stellar choice! As scripting systems often go, the Lua code took over most of the frontend work in the application. Before long, all the GUI layout was done in a Lua DSL instead of XML. Imagine creating 200 buttons in a two-line <code>for</code> loop instead of 200 lines of XML. Also, I consider the book <a href="http://www.lua.org/pil/">Programming in Lua</a> one of the pivotal books in my programming career!
+</p>
+
+<p>
+All the GUI and hardware interaction was done in Lua. The mixing console had some 40000 parameters, and a terrifying number of hardware states. I daresay that it would have been all but impossible to implement the complex interplay between all of these states in a less dynamic environment than Lua. Years later, one of the later maintainers of the product told me how this system had saved his sanity many times. This was one of the proudest moments in my career!
+</p>
+
+<p>
+I vividly remember the feeling of liberation when I transitioned from C++ to Lua. I don't think we would have managed to ship the mixing console in time without Lua. In fact, there was one feature from the old analogue mixing consoles that they never managed to implement in the newer digital consoles, because it was just too hard. With Lua, it was a giant headache, but it worked. Never underestimate the power of a different language when problems seem impossibly hard.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">The role of boredom in my job</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+The Lua experiment started in a time when work was slow, and idle thoughts had the time to mature into ideas. The system automation was started in a similar time. I was lucky to have had a few of those weeks. Some of them amounted to cool projects in the company, others I spent on improving myself.
+</p>
+
+<p>
+I always had a bit of a fetish for text editing. I just love the act of feeding thoughts to the computer through a keyboard. To me, it is a much more satisfying experience than using a pencil and a sheet of paper. At the university, I used Vim on Linux, then Textmate on OS X, then XCode. On the job, I was then forced to use Visual Studio, which still holds a special place in my heart, as one of the most miserable editing experience I ever had (though Lotus Notes and Microsoft Word only rank lower because I used them less).
+</p>
+
+<p>
+It should come as no surprise then, that I was overjoyed when I discovered <a href="http://www.viemu.com/">ViEmu</a>. It really transformed my work at the time &#x2013; what was previously a chore was now made enjoyable by the feeling of power conveyed through the Vim key bindings in Visual Studio! And this improved even further when I used another spare week to finally learn how to properly touch-type. These days, I am typing in Emacs, but enough has been written about that already.
+</p>
+
+<p>
+I had one colleague who only used his two index fingers for typing. Seeing him type was maddening. But the worst thing was not his typing, but what he was <i>not</i> typing. Naturally, variable names were short, documentation was sparse, and code was optimized for brevity. He even resorted to some graphical code editing <a href="http://www.easycode.de/en/products/easycode-cc/structure-diagrams.html">monstrosity</a>, just to save himself some typing. I have written a Visual Studio tool that automatically filtered out some of the junk this tool produced, and wrote wrappers around his libraries to make them usable for other people. Seriously, don't be that guy. Typing is a core competency for any developer.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">Open Source</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+Besides all of the GUI work I did for the company, I was actually hired for audio algorithm development. Since we didn't get a license for Matlab, I quickly grew to love Python instead. At the time, Python was right in the middle of the transition from Python 2 to Python 3, and <a href="http://people.csail.mit.edu/hubert/pyaudio/">one of the libraries</a> I needed was Python 2 only. In another one of those fateful slow weeks, I set out to translate it to Python 3.
+</p>
+
+<p>
+I didn't know much Python at the time, so the result was not exactly perfect. The maintainer of the library however was really nice about this, and helped me figuring out the problems with my code. This was the first time I ever talked to any programmer outside my company! And even better, this programmer seemed to be a professor at MIT, or something, and likely a lot more experienced and intelligent than I was! I was incredibly lucky that this first contact with the open source world was such a kind and positive one.
+</p>
+
+<p>
+Not too long after that, I started writing my own <a href="https://github.com/bastibe/">open source libraries</a>, and publishing them on the web. And before too long, people began using those projects! And then they started contributing to them as well! In a way, one of my main griefs with working for a company has always been that there are so few people with which you can talk about the things you do all day. And now, suddenly, random people from all over the world are showing interest and help for the things I do in my spare time! I really can't emphasize enough how much this involvement with the open source community and other people has improved my view of the world, and my understanding of the work I do!
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">My next adventure</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+This has been a summary of the things I did so far. It has been an incredible journey, and one that never stopped to surprise me. Now I am finishing my master's thesis, and getting ready for a doctorate after that. All the work I did and do is based on the incredible work of people before me. At least for the time being, I want this to be the goal of my further work: To advance the sum total knowledge of the world, if only by a tiny bit.
+</p>
+
+<p>
+For this, my most important tool is still programming. Learning how to program is an immensely valuable skill, and <a href="http://learnpythonthehardway.org/book/advice.html">doubly so</a> if your job title is not "developer" or "programmer". Programming is not just a tool to talk to the computer and earn a living. We should not forget that programming is also a rich thinking tool for trying out new ideas, and sharing them with other people.
+</p>
+
+<p>
+For the moment, I have no desire for being beholden to some company dictating my goals and hiding my achievements. Writing this up has proven to be a very liberating and insightful experience for myself, just the way my <a href="https://github.com/bastibe/org-journal">research journal</a> is for my day-to-day work. Putting ideas and algorithms in writing is an incredibly useful tool for finding one's place in the world and contributing to its betterment!
+</p>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div class="post-date">28 Oct 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-10-28-names.html">Names</a></h1>
+
+<blockquote>
+<p>
+Names are everywhere in software. We name our variables, our functions, our arguments, classes, and packages. We name our source files and the directories that contain them. We name our jar files and war files and ear files. We name and name and name. Because we do so much of it, we'd better do it well.
+</p>
+</blockquote>
+
+<p>
+&#x2013; from the Introduction to chapter 2 "Meaningful Names" of "Clean Code" by Robert C. Martin.
+</p>
+
+<p>
+Indeed we name a lot of things in software. As The Structure and Interpretation of Computer Programs points out, the primary purpose of a function (lambda) is to provide names for its arguments that are independent of names elsewhere. A function provides a closure in which stuff has defined names. The closure itself can then be embedded into other closures to form composite structures. Take any complex program structure and decompose its names through all its lambdas and you will only find more names right until you reach turtles.
+</p>
+
+<p>
+At its heart, programming is about naming things. If I squint my eyes a little, I can nearly convince myself that naming is really all there is. All the rest is just playing games with syntax.
+</p>
+
+<p>
+It's situations like this that I realize that The Structure and Interpretation of Computer Programs really changed how I view programming.
+</p>
+
+<p>
+If you like programming at all, I implore you to <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">read it</a>, or <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video-lectures/">watch it</a>, or <a href="http://mitpress.mit.edu/books/structure-and-interpretation-computer-programs">buy it</a>. It really blew my mind.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

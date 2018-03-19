@@ -1,0 +1,1397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "matlab":</h1><div class="post-date">12 Apr 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-04-12-matlab-metaprogramming.html">Matlab Metaprogramming</a></h1>
+
+<p>
+Why is it, that I find Matlab to be a fine teaching tool and a fine tool for solving engineering problems, but at the same time, extremely cumbersome for my own work? Recently, the answer struck me: <i>metaprogramming in Matlab sucks</i>.
+</p>
+
+<p>
+Matlab is marketed as a tool for engineers to solve engineering problems. There are convenient data structures for numerical data (arrays, tables), less convenient data structures for non-numeric data (cells, structs, chars), and a host of expensive but powerful functions and methods for working with this kind of data. This is the happy path.
+</p>
+
+<p>
+But don't stray too far from the happy path; horrors lurk where The Mathworks don't dare going. Basic stuff like talking to sockets or interacting with other programs is very cumbersome in Matlab, and sometimes even downright impossible for the lack of threads, pipes, and similar infrastructure. But this is common knowledge, and consistent with Matlab's goals as an engineering tool, not a general purpose programming language. These are first-order problems, and they are rarely insurmountable.
+</p>
+
+<p>
+The more insidious problem is metaprogramming, i.e. when the objects of your code are code objects themselves. The first order use of programming is to solve real-world problems. If these problems are numeric in nature, Matlab has got you covered. But as every programmer discovers at some point, the second order use of programming is to solve programming problems. And by golly, will Matlab let you down when you try that!
+</p>
+
+<p>
+As soon as you climb that ladder of abstraction, and the objects of your code become code objects themselves, you will enter weird country. You think <code>exist</code> will tell you whether a variable name is taken? Try calling it on a method. You think <code>nargout</code> will always give you a number? Again, methods will enlighten you. Quick, how do you capture all output arguments of a function call in a variable? <code>x = cell(nargout(fun), 1); [x{:}] = fun(...)</code>, obviously (this sometimes fails). And don't even think of trying to overload <code>subsref</code> to create something generic. Those <code>subsref</code> semantics are <a href="https://mathworks.com/help/matlab/matlab_oop/code-patterns-for-subsref-and-subsasgn-methods.html">crazy talk</a>!
+</p>
+
+<p>
+I could go on. The real power of code is abstraction. We use programming to repeatedly and reliably solve similar problems. The logical next step is to use those same programming tools to solve similar <i>kinds</i> of problems. This happens to all of us, and Matlab makes it extremely hard to deal with. Thus, it puts a ceiling on the level of abstraction that is reasonably achievable, and limits engineers to first-order solutions. And after a few years of acclimatization, it will put that same ceiling on those engineers' thinking, because you can't reason about what you can't express.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">07 Sep 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-09-07-matlab-syntax.html">MATLAB Syntax</a></h1>
+
+<p>
+In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Use of line breaks</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
+</p>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">21 Jun 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-06-21-transplant-revisited.html">Transplant, revisited</a></h1>
+
+<p>
+A few months ago, I <a href="http://bastibe.de/2015-11-03-matlab-engine-performance.html">talked about</a> the performance of calling Matlab from Python. Since then, I implemented a few optimizations that make working with Transplant a lot faster:
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2016-06/timings.png" alt="timings.png" />
+</p>
+</div>
+
+<p>
+The workload consisted of generating a bunch of random numbers (not included in the times), and sending them to Matlab for computation. This task is entirely dominated by the time it takes to transfer the data to Matlab (see table at the end for intra-language benchmarks of the same task).
+</p>
+
+<p>
+As you can see, the new Transplant is significantly faster <del>for small workloads, and still a factor of two faster for larger amounts of data</del>. It is now almost always a faster solution than the Matlab Engine for Python (MEfP) and Oct2Py. <del>For very large datasets, Oct2Py might be preferable, though.</del>
+</p>
+
+<p>
+This improvement comes from three major changes: Matlab functions are now returned as callable objects instead of ad-hoc functions, Transplant now uses MsgPack instead of JSON, and <code>loadlibrary</code> instead of a Mex file to call into <code>libzmq</code>. All of these changes are entirely under the hood, though, and the public API remains unchanged.
+</p>
+
+<p>
+The callable object thing is the big one for small workloads. The advantage is that the objects will only fetch documentation if <code>__doc__</code> is actually asked for. As it turns out, running <code>help('funcname')</code> for every function call is kind of a big overhead.
+</p>
+
+<p>
+Bigger workloads however are dominated by the time it takes Matlab to decode the data. String parsing is very slow in Matlab, which is a bad thing indeed if you're planning to read a couple hundred megabytes of JSON. Thus, I replaced JSON with MsgPack, which eliminates the parsing overhead almost entirely. JSON messaging is still available, though, if you pass <code>msgformat='json'</code> to the constructor. <b>Edit:</b> Additionally, binary data is no longer encoded as base64 strings, but passed directly through MsgPack. This yields about a ten-fold performance improvement, especially for larger data sets.
+</p>
+
+<p>
+Lastly, I rewrote the ZeroMQ interaction to use <code>loadlibrary</code> instead of a Mex file. This has no impact on processing speed at all, but you don't have to <a href="http://bastibe.de/2016-05-31-Matlab-FFI.html">worry about</a> compiling that C code any more.
+</p>
+
+<p>
+Oh, and Transplant now works on Windows!
+</p>
+
+<p>
+Here is the above data again in tabular form:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Task</th>
+<th scope="col" class="left">New Transplant</th>
+<th scope="col" class="left">Old Transplant</th>
+<th scope="col" class="left">Oct2Py</th>
+<th scope="col" class="left">MEfP</th>
+<th scope="col" class="left">Matlab</th>
+<th scope="col" class="left">Numpy</th>
+<th scope="col" class="left">Octave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">startup</td>
+<td class="left">4.8 s</td>
+<td class="left">5.8 s</td>
+<td class="left">11 ms</td>
+<td class="left">4.6 s</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,1))</td>
+<td class="left">3.36 ms</td>
+<td class="left">34.2 ms</td>
+<td class="left">29.6 ms</td>
+<td class="left">1.8 ms</td>
+<td class="left">9.6 μs</td>
+<td class="left">1.8 μs</td>
+<td class="left">6 μs</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,10))</td>
+<td class="left">3.71 ms</td>
+<td class="left">35.8 ms</td>
+<td class="left">30.5 ms</td>
+<td class="left">1.8 ms</td>
+<td class="left">1.8 μs</td>
+<td class="left">1.8 μs</td>
+<td class="left">9 μs</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,100))</td>
+<td class="left">3.27 ms</td>
+<td class="left">33.9 ms</td>
+<td class="left">29.5 ms</td>
+<td class="left">2.06 ms</td>
+<td class="left">2.2 μs</td>
+<td class="left">1.8 μs</td>
+<td class="left">9 μs</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,1000))</td>
+<td class="left">4.26 ms</td>
+<td class="left">32.7 ms</td>
+<td class="left">30.6 ms</td>
+<td class="left">9.1 ms</td>
+<td class="left">4.1 μs</td>
+<td class="left">2.3 μs</td>
+<td class="left">12 μs</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,1e4))</td>
+<td class="left">4.35 ms</td>
+<td class="left">34.5 ms</td>
+<td class="left">30 ms</td>
+<td class="left">72.2 ms</td>
+<td class="left">25 μs</td>
+<td class="left">5.8 μs</td>
+<td class="left">38 μs</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,1e5))</td>
+<td class="left">5.45 ms</td>
+<td class="left">86.1 ms</td>
+<td class="left">31.2 ms</td>
+<td class="left">712 ms</td>
+<td class="left">55 μs</td>
+<td class="left">38.6 μs</td>
+<td class="left">280 μs</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,1e6))</td>
+<td class="left">44.1 ms</td>
+<td class="left">874 ms</td>
+<td class="left">45.7 ms</td>
+<td class="left">7.21 s</td>
+<td class="left">430 μs</td>
+<td class="left">355 μs</td>
+<td class="left">2.2 ms</td>
+</tr>
+
+<tr>
+<td class="left">sum(randn(1,1e7))</td>
+<td class="left">285 ms</td>
+<td class="left">10.6 s</td>
+<td class="left">643 ms</td>
+<td class="left">72 s</td>
+<td class="left">3.5 ms</td>
+<td class="left">5.04 ms</td>
+<td class="left">22 ms</td>
+</tr>
+</tbody>
+</table>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> <a href="tags/python.html">python</a> </div><div class="post-date">15 Jun 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-06-15-matlab-live-scripts.html">Teaching with Matlab Live Scripts</a></h1>
+
+<p>
+For a few years now, I have been teaching programming courses using <i>notebooks</i>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:
+</p>
+
+<p>
+You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.
+</p>
+
+<p>
+The first time I saw this was with the <a href="http://jupyter.org/">Jupyter notebook</a> (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
+</p>
+
+<p>
+Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
+</p>
+
+<p>
+Now, with 2016a, Matlab introduced <a href="http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html">Live Scripts</a>, which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
+</p>
+
+<p>
+First off, Live Scripts <i>work</i>. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.
+</p>
+
+<p>
+However, Live Scripts are new, and still contain a number of bugs. You can't customize figure sizes, formatting options are very basic, image rendering is terrible, and math rendering using LaTeX is of poor quality and limited. Also, using Live Scripts on a retina Mac is borderline impossible: Matlab crashes on screen resolution changes (i.e. connecting a projector), Live Scripts render REALLY slowly (type a word, watch the characters crawl onto the screen one by one), and all figures export in twice their intended size (fixed in 2016b). You can work around some of these issues by starting Matlab in <a href="https://support.apple.com/en-us/HT202471">Low Resolution Mode</a>.
+</p>
+
+<p>
+No doubt some of these issues are going to get addressed in future releases. 2016b added script-local functions, which I read mostly as "you can now write functions in Live Scripts", and autocorrection-like text replacements that convert Markdown formatting into formatted text. This is highly appreciated.
+</p>
+
+<p>
+Additionally though, here are a few features I would love to see:
+</p>
+
+<ul class="org-ul">
+<li>Nested lists, and lists entries that contain newlines (i.e. differentiate between line breaks and paragraph breaks).
+</li>
+<li>Indented text, for quoting things, or to work around the lack of multi-line list entries.
+</li>
+<li>More headline levels.
+</li>
+<li>Magics. This is probably a long shot, but line/cell magics in Jupyter notebooks are really useful.
+</li>
+</ul>
+
+<p>
+Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. They aren't quite as nice as Jupyter notebooks, but they serve their purpose, and are a tremendously useful teaching tool.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">31 May 2016</div><h1 class="post-title"><a href="http://bastibe.de/2016-05-31-Matlab-FFI.html">Matlab has an FFI and it is not Mex</a></h1>
+
+<p>
+Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
+</p>
+
+<p>
+So, you grab your towel, you bite the bullet, you strap into your K&amp;R, and get down to it: You start writing a Mex file. And you curse, and you cry, because writing C is hard, and Mex doesn't exactly make it any better. But you know what? <i>There is a better way!</i>
+</p>
+
+<p>
+Because, unbeknownst to many, Matlab includes a Foreign Function Interface. The technique was probably pioneered by <a href="https://common-lisp.net/project/cffi/">Common Lisp</a>, and has since <a href="http://luajit.org/ext_ffi.html">been</a> <a href="http://cffi.readthedocs.io/en/latest/overview.html">widely</a> <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html">adopted</a> <a href="https://en.wikipedia.org/wiki/Foreign_function_interface">everywhere</a>: calling functions in a C library without writing any C code and without invoking a compiler!
+</p>
+
+<p>
+Mind you, there remains a large and essential impedance mismatch between C's statically typed calling conventions and the vagaries of a dynamically typed language such as Matlab, and even the nicest FFI can't completely hide that fact. But anything is better than the abomination that is Mex.
+</p>
+
+<p>
+So here goes, a very simple C library that adds two arrays:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
+<span style="color: #111111;">#include</span> test.h
+
+<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
+    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">n</span>=0; n&lt;length; n++) {
+        out[n] += in[n];
+    }
+}
+
+<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
+<span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
+<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
+</pre>
+</div>
+
+<p>
+Let's compile it! <code>gcc -shared -std=c99 -o test.so test.c</code> will do the trick.
+</p>
+
+<p>
+Now, let's load that library into Matlab with <code>loadlibrary</code>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #303030;">'test'</span>))
+    [notfound<span style="color: #111111;">,</span> warnings] <span style="color: #111111;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111;">;</span>
+    assert(isempty(notfound)<span style="color: #111111;">,</span> <span style="color: #303030;">'could not load test library'</span>)
+<span style="color: #111111; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Note that <code>loadlibrary</code> can't parse many things you would commonly find in header files, so you will likely have to strip them down to the bare essentials. Additionally, <code>loadlibrary</code> doesn't throw errors if it can't load a library, so we always have to check the <code>notfound</code> output argument to see if the library was actually loaded successfully.
+</p>
+
+<p>
+With that, we can call functions in that library using <code>calllib</code>. But we can't just pass in Matlab vectors, that would be too easy. We first have to convert them to something C can understand: Pointers
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">vector1 <span style="color: #111111;">=</span> [1 2 3 4 5]<span style="color: #111111;">;</span>
+vector2 <span style="color: #111111;">=</span> [9 8 7 6 5]<span style="color: #111111;">;</span>
+
+vector1ptr <span style="color: #111111;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111;">,</span> vector1)<span style="color: #111111;">;</span>
+vector2ptr <span style="color: #111111;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111;">,</span> vector2)<span style="color: #111111;">;</span>
+</pre>
+</div>
+
+<p>
+What is nice about this is that this automatically converts the vectors from <code>double</code> to <code>float</code>. What is less nice is that it uses its weird <code>singlePtr</code> notation instead of the more canonical <code>float*</code> that you would expect from a self-respecting C header.
+</p>
+
+<p>
+Then, finally, let's call our function:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1))<span style="color: #111111;">;</span>
+</pre>
+</div>
+
+<p>
+If you see no errors, everything went smoothly, and you will now have changed the content of vector1ptr, which we can have a look at like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">added_vectors <span style="color: #111111;">=</span> vector1ptr.Value<span style="color: #111111;">;</span>
+</pre>
+</div>
+
+<p>
+Note that this didn't change the contents of <code>vector1</code>, only of the newly created pointer. So there will always be some memory overhead to this technique in comparison to Mex files. However, runtime overhead seems pretty fine:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1)))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111;">,</span> single(vector2)))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
+timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111;">,</span> vector2))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
+</pre>
+</div>
+
+<p>
+So as you can see, the <code>calllib</code> is plenty fast. However, if you add the Matlab code for converting the double arrays to pointers and extracting the summed data afterwards, the FFI is noticeably slower than a Mex file.
+</p>
+
+<p>
+However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life <i>not</i> spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">03 Nov 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-11-03-matlab-engine-performance.html">Calling Matlab from Python</a></h1>
+
+<p>
+For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Usage</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
+</p>
+
+<pre class="example">
+       Matlab Engine for Python        |              Transplant
+---------------------------------------|---------------------------------------
+import numpy                           | import numpy
+import matlab                          | import transplant
+import matlab.engine                   |
+                                       |
+eng = matlab.engine.start_matlab()     | eng = transplant.Matlab()
+numpy_data = numpy.random.randn(100)   | numpy_data = numpy.random.randn(100)
+list_data = numpy_data.tolist()        |
+matlab_data = matlab.double(list_data) |
+data_sum = eng.sum(matlab_data)        | data_sum = eng.sum(numpy_data)
+</pre>
+
+<p>
+Aside from this difference, both libraries work almost identical. Even the handling of the number of output arguments is (accidentally) almost the same:
+</p>
+
+<pre class="example">
+       Matlab Engine for Python        |              Transplant
+---------------------------------------|---------------------------------------
+eng.max(matlab_data)                   | eng.max(numpy_data)
+&gt;&gt;&gt; 4.533                              | &gt;&gt;&gt; [4.533 537635]
+eng.max(matlab_data, nargout=1)        | eng.max(numpy_data, nargout=1)
+&gt;&gt;&gt; 4.533                              | &gt;&gt;&gt; 4.533
+eng.max(matlab_data, nargout=2)        | eng.max(numpy_data, nargout=2)
+&gt;&gt;&gt; (4.533, 537635.0)                  | &gt;&gt;&gt; [4.533 537635]
+</pre>
+
+<p>
+Similarly, both libraries can interact with Matlab objects in Python, although the MEfP can't access object properties:
+</p>
+
+<pre class="example">
+       Matlab Engine for Python        |              Transplant
+---------------------------------------|---------------------------------------
+f = eng.figure()                       | f = eng.figure()
+eng.get(f, 'Position')                 | eng.get(f, 'Position')
+&gt;&gt;&gt; matlab.double([[ ... ]])           | &gt;&gt;&gt; array([[ ... ]])
+f.Position                             | f.Position
+&gt;&gt;&gt; AttributeError                     | &gt;&gt;&gt; array([[ ... ]])
+</pre>
+
+<p>
+There are a few small differences, though:
+</p>
+
+<ul class="org-ul">
+<li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.
+</li>
+<li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.
+</li>
+<li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).
+</li>
+<li>If the MEfP does not know <code>nargout</code>, it assumes <code>nargout=1</code>. Transplant uses <code>nargout(func)</code> or returns whatever the function writes into <code>ans</code>.
+</li>
+<li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.
+</li>
+<li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Performance</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
+</p>
+
+<p>
+More interesting is the time it takes to call a Matlab function from Python. Have a look:
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png" />
+</p>
+</div>
+
+<p>
+This is running <code>sum(randn(n,1))</code> from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.
+</p>
+
+<p>
+There is a gap of about a factor of 10 between Transplant and the MEfP. In practice, this gap is highly significant! In my particular use case, I have <a href="http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/doc/voicebox/fxpefac.html">a function</a> that takes about one second of computation time for an audio signal of ten seconds (half a million values). When I call this function with Transplant, it takes about 1.3 seconds. With MEfP, it takes 4.5 seconds.
+</p>
+
+<p>
+Transplant spends its time serializing the arguments to JSON, sending that JSON over <a href="http://zeromq.org/">ZeroMQ</a> to Matlab, and parsing the JSON there. Well, to be honest, only the parsing part takes any significant time, overall. While it might seem onerous to serialize everything to JSON, this architecture allows Transplant to run over a network connection.
+</p>
+
+<p>
+It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, despite being written in C. Looking at the number of function calls in the profiler, the MEfP calls 25 functions (!) on each value (!!) of the input data. This is a shockingly inefficient way of doing things.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">TL;DR</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
+</p>
+
+<p>
+If you want to try Transplant, just head over to <a href="https://github.com/bastibe/transplant">Github</a> and use it. If you find any bugs, feature requests, or improvements, please let me know in the Github issues.
+</p>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> <a href="tags/python.html">python</a> </div><div class="post-date">29 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
+
+<p>
+As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> numpy
+<span style="color: #111111; font-weight: bold;">import</span> matlab
+<span style="color: #111111; font-weight: bold;">import</span> matlab.engine
+
+<span style="color: #111111;">eng</span> = matlab.engine.start_matlab()
+<span style="color: #111111;">random_data</span> = numpy.random.randn(100)
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">convert Numpy data to Matlab:</span>
+<span style="color: #111111;">matlab_data</span> = matlab.double(random_data.tolist())
+<span style="color: #111111;">data_sum</span> = eng.<span style="color: #111111;">sum</span>(matlab_data)
+</pre>
+</div>
+
+<p>
+You can call any Matlab function on <code>eng</code>, and you can access any Matlab workspace variable in <code>eng.workspace</code>. As you can see, the Matlab Engine is not Numpy-aware, and you have to convert all your Numpy data to Matlab <code>double</code> before you can call Matlab functions with it. Still, it works pretty well.
+</p>
+
+<p>
+Recently, I ran a rather large experiment set, where I had a set of four functions, two in Matlab, two in Python, and called each of these functions a few thousand times with a bunch of different data to see how they performed.
+</p>
+
+<p>
+While doing that I noticed that my Python processes were growing larger and larger, until they consumed all my memory and a sizeable chunk of my swap as well. I couldn't find any reason for this. None of my Python code cached anything, and the sum total of all global variables did not amount to anything substantial.
+</p>
+
+<p>
+Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory analyzer for Python. Pympler is an amazing library for introspecting your program's memory. Among its many features, it can list the biggest objects in your running program:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> muppy, summary
+summary.print_(summary.summarize(muppy.get_objects()))
+</pre>
+</div>
+
+<pre class="example">
+                                      types |   # objects |   total size
+=========================================== | =========== | ============
+                        &lt;class 'array.array |        1076 |      2.77 GB
+                                &lt;class 'str |       42839 |      7.65 MB
+                               &lt;class 'dict |        8604 |      5.43 MB
+                      &lt;class 'numpy.ndarray |          48 |      3.16 MB
+                               &lt;class 'code |       14113 |      1.94 MB
+                               &lt;class 'type |        1557 |      1.62 MB
+                               &lt;class 'list |        3158 |      1.38 MB
+                                &lt;class 'set |        1265 |    529.72 KB
+                              &lt;class 'tuple |        5129 |    336.98 KB
+                              &lt;class 'bytes |        2413 |    219.48 KB
+                            &lt;class 'weakref |        2654 |    207.34 KB
+            &lt;class 'collections.OrderedDict |          65 |    149.85 KB
+                 &lt;class 'wrapper_descriptor |        1676 |    130.94 KB
+  &lt;class 'traitlets.traitlets.MetaHasTraits |         107 |    123.55 KB
+                  &lt;class 'getset_descriptor |        1738 |    122.20 KB
+</pre>
+
+<p>
+Now that is interesting. Apparently, I was lugging around close to three gigabytes worth of bare-Python <code>array.array</code>. And these are clearly not Numpy arrays, since those would show up as <code>numpy.ndarray</code>. But I couldn't find any of these objects in my workspace.
+</p>
+
+<p>
+So let's get a reference to one of these objects, and see who they belong to. This can also be done with Pympler, but I prefer the way <a href="http://mg.pov.lt/objgraph/">objgraph</a> does it:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
+<span style="color: #111111;">all_objects</span> = muppy.get_objects()
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">sort out only `array.array` instances:</span>
+<span style="color: #111111;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111;">isinstance</span>(obj, array.array)]
+
+<span style="color: #111111; font-weight: bold;">import</span> objgraph
+objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #303030;">'array.png'</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-10/array.png" alt="array.png" />
+</p>
+</div>
+
+<p>
+It seems that the <code>array.array</code> object is part of a <code>matlab.double</code> instance which is not referenced from anywhere but <code>all_objects</code>. A memory leak.
+</p>
+
+<p>
+After a bit of experimentation, I found the culprit. To illustrate, here's an example: The function <code>leak</code> passes some data to Matlab, and calculates a float. Since the variables are not used outside of <code>leak</code>, and the function does not return anything, all variables within the function should get deallocated when <code>leak</code> returns.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
+    <span style="color: #111111;">test_data</span> = numpy.zeros(1024*1024)
+    <span style="color: #111111;">matlab_data</span> = matlab.double(test_data.tolist())
+    eng.<span style="color: #111111;">sum</span>(matlab_data)
+</pre>
+</div>
+
+<p>
+Pympler has another great feature that can track allocations. The <code>SummaryTracker</code> will track and display any allocations between calls to <code>print_diff()</code>. This is very useful to see how much memory was used during the call to <code>leak</code>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> tracker
+<span style="color: #111111;">tr</span> = tracker.SummaryTracker()
+tr.print_diff()
+leak()
+tr.print_diff()
+</pre>
+</div>
+
+<pre class="example">
+                     types |   # objects |   total size
+========================== | =========== | ============
+       &lt;class 'array.array |           1 |      8.00 MB
+...
+</pre>
+
+<p>
+And there you have it. Note that this leak is not the Numpy array <code>test_data</code> and it is not the matlab array <code>matlab_data</code>. Both of these are garbage collected correctly. But <b>the Matlab Engine for Python will leak any data you pass to a Matlab function</b>.
+</p>
+
+<p>
+This data is not referenced from anywhere within Python, and is counted as <i>leaked</i> by <code>objgraph</code>. In other words, the C code inside the Matlab Engine for Python copies all passed data into it's internal memory, but never frees that memory. Not even if you quit the Matlab Engine, or <code>del</code> all Python references to it. Your only option is to restart Python.
+</p>
+
+<p>
+<b>Postscriptum</b>
+</p>
+
+<p>
+I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">22 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h1>
+
+<p>
+So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
+</p>
+
+<p>
+Of these file formats, only <i>*.au</i> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <i>actually</i> read more data formats than documented: it reads <i>*.w64</i>, <i>*.rf64</i>, and <i>*.caf</i> no problem. And these can store more than 4 Gb as well.
+</p>
+
+<p>
+It's just that, while <code>audioread</code> supports all of these nice file formats, <a href="http://mathworks.com/help/matlab/ref/audiowrite.html"><code>audiowrite</code></a> is more limited, and only supports <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, and <i>*.mp4</i>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
+</p>
+
+<p>
+In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> <a href="tags/audio.html">audio</a> </div><div class="post-date">15 Apr 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
+
+<p>
+As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
+</p>
+
+<p>
+So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).
+</p>
+
+<p>
+I say "(on OSX)", because on Windows, it does not print a damn thing. Nope, no <code>disp</code> output for Windows users.
+</p>
+
+<p>
+More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as <code>0x1a</code> aka <code>SUB</code> aka <i>substitute character</i>. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with <code>SUB</code>. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.
+</p>
+
+<p>
+To see why Matlab would do such a dastardly deed, you can use <code>feature('locale')</code> to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either <code>ISO-8859-1</code> (when your locale is pure <code>de_DE</code> or <code>en_US</code>) or <code>US-ASCII</code>, if it is something impure. In my case, German dates but English text. Because <code>US-ASCII</code> is obviously the most all-encompassing choice for such mixed-languages environments.
+</p>
+
+<p>
+But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit <code>%MATLABROOT%/bin/lcdata.xml</code>, and look for the entry for your locale. For me, this is one of
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #111111;">name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">de_DE</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">ISO-8859-1</span><span style="color: #303030;">"</span> <span style="color: #111111;">xpg_name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">de_DE.ISO8859-1</span><span style="color: #303030;">"</span>&gt; ...
+&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #111111;">name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">en_US</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">ISO-8859-1</span><span style="color: #303030;">"</span> <span style="color: #111111;">xpg_name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">en_US.ISO8859-1</span><span style="color: #303030;">"</span>&gt; ...
+</pre>
+</div>
+
+<p>
+In order to make Matlab's encoding default to UTF-8, change the entry for your locale to
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #111111;">name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">de_DE</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span> <span style="color: #111111;">xpg_name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">de_DE.UTF-8</span><span style="color: #303030;">"</span>&gt; ...
+&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #111111;">name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">en_US</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span> <span style="color: #111111;">xpg_name</span>=<span style="color: #303030;">"</span><span style="color: #303030;">en_US.UTF-8</span><span style="color: #303030;">"</span>&gt; ...
+</pre>
+</div>
+
+<p>
+With that, Matlab will print UTF-8 to the terminal.
+</p>
+
+<p>
+You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily&#x2026;
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">19 Aug 2014</div><h1 class="post-title"><a href="http://bastibe.de/2014-08-19-transplant.html">Transplant</a></h1>
+
+<p>
+In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.
+</p>
+
+<p>
+But I still need to use Matlab code. There are <a href="http://stackoverflow.com/a/23762412/1034">a few ways</a> of interacting with Matlab out there already. Most of them focus on being able to eval strings in Matlab. Boring. The most interesting one is <a href="https://github.com/ewiger/mlab">mlab</a>, a full-fledget bridge between Python and Matlab! Had I found this earlier, I would probably not have written my own.
+</p>
+
+<p>
+But write my own I did: <a href="https://github.com/bastibe/transplant">Transplant</a>. Transplant is a very simple bridge for calling Matlab functions from Python. Here is how you start Matlab from Python:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> transplant
+<span style="color: #111111;">matlab</span> = transplant.Matlab()
+</pre>
+</div>
+
+<p>
+This <code>matlab</code> object starts a Matlab interpreter in the background and connects to it. You can call Matlab functions on it!
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">matlab.eye(3)
+&gt;&gt;&gt; array([[ 1.,  0.,  0.],
+           [ 0.,  1.,  0.],
+           [ 0.,  0.,  1.]])
+</pre>
+</div>
+
+<p>
+As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #303030;">'uint8'</span>)
+&gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
+</pre>
+</div>
+
+<p>
+All matrix data is actually transferred in binary, so both Matlab and Python work on bit-identical data. This is very important if you are working with precise data! Most other bridges do some amount of type conversion at this point.
+</p>
+
+<p>
+This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111;">data</span> = matlab.randn(1, 4)
+matlab.<span style="color: #111111;">max</span>(data)
+&gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
+matlab.<span style="color: #111111;">max</span>(data, nargout=1)
+&gt;&gt;&gt; 1.5326      <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = max(...)</span>
+</pre>
+</div>
+
+<p>
+If no <code>nargout</code> is given, functions behave according to <code>nargout(@function)</code>. If even that fails, they return the content of <code>ans</code> after their execution.
+</p>
+
+<p>
+Calling Matlab functions is the most important feature of Transplant. But there is a more:
+</p>
+
+<ul class="org-ul">
+<li>You can save/retrieve variables in the global workspace:
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
+<span style="color: #111111;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
+</pre>
+</div>
+</li>
+
+<li>You van eval some code:
+
+<div class="org-src-container">
+
+<pre class="src src-python">matlab.<span style="color: #111111;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
+&gt;&gt;&gt; <span style="color: #111111;">ans</span> =
+&gt;&gt;&gt;
+&gt;&gt;&gt; double
+&gt;&gt;&gt;
+</pre>
+</div>
+</li>
+
+<li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.
+</li>
+</ul>
+
+<p>
+Under the hood, Transplant is using a very simple messaging protocol based on <a href="http://zeromq.org/">0MQ</a>, <a href="https://en.wikipedia.org/wiki/Json">JSON</a>, and some <a href="https://en.wikipedia.org/wiki/Base64">base64</a>-encoded binary data. Sadly, Matlab can deal with none of these technologies by itself. Transplant therefore contains a full-featured JSON <a href="https://github.com/bastibe/transplant/blob/master/parsejson.m">parser</a>/<a href="https://github.com/bastibe/transplant/blob/master/dumpjson.m">serializer</a> and base64 <a href="https://github.com/bastibe/transplant/blob/master/base64encode.m">encoder</a>/<a href="https://github.com/bastibe/transplant/blob/master/base64decode.m">decoder</a> in pure Matlab. It also contains a minimal <a href="https://github.com/bastibe/transplant/blob/master/messenger.c">mex-file</a> for interfacing with 0MQ.
+</p>
+
+<p>
+There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonlab">JSON parsers</a> available for Matlab, but virtually all of them try parse JSON arrays as matrices. This means that these parsers have no way of differentiating between a list of vectors and a matrix (want to call a function with three vectors or a matrix? No can do). Transplant's JSON parser parses JSON arrays as cell arrays and JSON objects as structs. While somewhat less convenient in general, this is a much better fit for transferring data structures between programming languages.
+</p>
+
+<p>
+Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
+</p>
+
+<p>
+All of this has been about Matlab, but my actual goal is bigger: I want transplant to become a library for interacting between more than just Python and Matlab. In particular, Julia and PyPy would be very interesting targets. Also, it would be useful to reverse roles and call Python from Matlab as well! But that will be in the future.
+</p>
+
+<p>
+For now, head over to <a href="https://github.com/bastibe/transplant">Github.com/bastibe/transplant</a> and have fun! Also, if you find any bugs or have any suggestions, please open an issue on Github!
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+Except for integer complex numbers, since those are not supported by Numpy.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+Like the Matlab function <code>nargout</code>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/python.html">python</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">20 Jan 2013</div><h1 class="post-title"><a href="http://bastibe.de/2013-01-20-a-python-primer-for-matlab-users.html">A Python Primer for Matlab Users</a></h1>
+
+<blockquote>
+<p>
+Why would you want to use Python over Matlab?
+</p>
+</blockquote>
+
+<ul class="org-ul">
+<li>Because Python is free and Matlab is not.
+</li>
+<li>Because Python is a general purpose programming language and Matlab is not.
+</li>
+</ul>
+
+<p>
+Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
+</p>
+
+<ul class="org-ul">
+<li>Numpy (the matrix engine)
+</li>
+<li>Scipy (matrix manipulation)
+</li>
+<li>Matplotlib (plotting)
+</li>
+</ul>
+
+<p>
+You can either grab the individual installers for <a href="http://python.org">Python</a>, <a href="http://numpy.org">Numpy</a>, <a href="http://scipy.org">Scipy</a> and <a href="http://matplotlib.org">Matplotlib</a> from their respective websites, or get them pre-packaged from <a href="https://code.google.com/p/pythonxy/">pythonxy()</a> or <a href="http://www.enthought.com/products/epd.php">EPD</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
+</p>
+
+<p>
+Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hold data of any type, as in:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
+    <span style="color: #111111;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
+    <span style="color: #111111;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
+    <span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a string</span>
+</pre>
+</div>
+
+<p>
+Contrast this with C, where you can not assign different data types to the same variable:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">C</span>
+    <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">a</span> = 5;
+    <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">b</span>[3] = {1.0, 2.0, 3.0};
+    <span style="color: #111111; text-decoration: underline;">char</span> <span style="color: #111111;">c</span>[] = <span style="color: #303030;">"text"</span>;
+</pre>
+</div>
+
+<p>
+Unlike Matlab, Python is <i>strongly typed</i>, that is, you can not add a number to a string.
+In Matlab, adding a single number to a string will convert that string into an array of numbers, then add the single number to each of the numbers in the array. Python will simply throw an error.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
+    a <span style="color: #111111;">=</span> <span style="color: #303030;">'text'</span>
+    b <span style="color: #111111;">=</span> a <span style="color: #111111;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
+    <span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>
+    <span style="color: #111111;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
+</pre>
+</div>
+
+<p>
+Unlike Matlab, every Python file can contain as many functions as you like. Basically, you can organize your code in as many files as you want. To access functions from other files, use <code>import filename</code>.
+</p>
+
+<p>
+Unlike Matlab, Python is very quick to start. In fact, most operating systems automatically start a new Python process whenever you run a Python program and quit that process once the program has finished. Thus, every Python program behaves as if it indeed were an independent program. There is no need to wait for that big Matlab mother ship to start before writing or executing code.
+</p>
+
+<p>
+Unlike Matlab, the source code of Python is readily available. Every detail of Python's inner workings is available to everyone. It is thus feasible and encouraged to actively participate in the development of Python itself or some add-on package. Furthermore, there is no dependence on some company deciding where to go next with Python.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Reading Python</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy
+    <span style="color: #111111;">a</span> = numpy.zeros(10, 1)
+</pre>
+</div>
+
+<p>
+This is clearly cumbersome if you are planning to use Numpy all the time. So instead, you can import all of Numpy into the global environment like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> *
+    <span style="color: #111111;">a</span> = ones(30, 1)
+</pre>
+</div>
+
+<p>
+Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scipy-Matplotlib stack in one piece:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pylab <span style="color: #111111; font-weight: bold;">import</span> *
+    <span style="color: #111111;">a</span> = randn(100, 1)
+    plot(a)
+    show()
+</pre>
+</div>
+
+<p>
+Note that Python does not plot immediately when you type <code>plot()</code>. Instead, it will collect all plotting information and only show it on the screen once you type <code>show()</code>.
+</p>
+
+<p>
+So far, the code you have seen should look pretty familiar. A few differences:
+</p>
+
+<ul class="org-ul">
+<li>No semicolons at the end of lines;
+In order to print stuff to the console, use the <code>print()</code> function instead.
+</li>
+
+<li>No <code>end</code> anywhere.
+In Python, blocks of code are identified by indentation and they always start with a colon like so:
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111;">sum</span> = 0
+    <span style="color: #111111; font-weight: bold;">for</span> n <span style="color: #111111; font-weight: bold;">in</span> [1, 2, 3, 4, 5]:
+        <span style="color: #111111;">sum</span> = <span style="color: #111111;">sum</span> + n
+    <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #111111;">sum</span>)
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Function definitions are different.
+They use the <code>def</code> keyword instead of <code>function</code>.
+You don't have to name the output variable names in the definition and instead use <code>return()</code>.
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
+    <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number):
+        <span style="color: #111111; font-weight: bold;">if</span> number &gt; 0:
+            <span style="color: #111111; font-weight: bold;">return</span> number
+        <span style="color: #111111; font-weight: bold;">else</span>:
+            <span style="color: #111111; font-weight: bold;">return</span> -number
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
+    <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
+        <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #111111;">&gt;</span> 0
+            out <span style="color: #111111;">=</span> number
+        <span style="color: #111111; font-weight: bold;">else</span>
+            out <span style="color: #111111;">=</span> <span style="color: #111111;">-</span>number
+        <span style="color: #111111; font-weight: bold;">end</span>
+    <span style="color: #111111; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>There is no easy way to write out a list or matrix.
+Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <i>must</i> use commas to separate items and can not use semicolons to separate lines.
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a numpy matrix:</span>
+    <span style="color: #111111;">m</span> = array([[1, 2, 3],
+               [4, 5, 6],
+               [7, 8, 9]])
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a Python list:</span>
+    <span style="color: #111111;">l</span> = [1 2 3]
+</pre>
+</div>
+
+<ul class="org-ul">
+<li>Arrays access uses brackets and is numbered from 0.
+Thus, ranges <i>exclude</i> the last number (see below).
+Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111;">a</span> = linspace(1, 10, 10)
+    <span style="color: #111111;">one</span> = a[0]
+    <span style="color: #111111;">two</span> = a[1]
+
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">"6:8" is a range of two elements:</span>
+    <span style="color: #111111;">a</span>[6:8] = [70, 80] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">&lt;-- a Python list!</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Common traps</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>Array slicing does not copy.
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111;">a</span> = array([1 2 3 4 5])
+    <span style="color: #111111;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
+    <span style="color: #111111;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">make a copy like this:</span>
+    <span style="color: #111111;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">copy=True can be omitted</span>
+    <span style="color: #111111;">c</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">changes only c</span>
+</pre>
+</div>
+<ul class="org-ul">
+<li>Arrays retain their data type.
+You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pretend this came from a wave file:</span>
+    <span style="color: #111111;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
+    <span style="color: #111111;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Going further</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
+</p>
+
+<p>
+However, since Python is a general purpose programming language, it offers some more tools. To begin with, there are a few more data types like associative arrays, tuples (unchangeable lists), proper strings and a full-featured object system. Then, there is a plethora of add-on packages, most of which actually come with your standard installation of Python. For example, there are <a href="http://docs.python.org/3/library/internet.html">internet protocols</a>, <a href="http://www.riverbankcomputing.com/software/pyqt/intro">GUI programming frameworks</a>, <a href="https://people.csail.mit.edu/hubert/pyaudio/">real-time audio interfaces</a>, <a href="https://www.djangoproject.com/">web frameworks</a> and <a href="http://www.pygame.org/">game development libraries</a>. Even <a href="https://github.com/bastibe/bastibe.github.com/tree/source">this very blog</a> is created using a Python <a href="http://pelican.readthedocs.org">static site generator</a>.
+</p>
+
+<p>
+Lastly, Python has a great <a href="http://docs.python.org/3/">online documentation site</a> including a <a href="http://docs.python.org/3.3/tutorial/">tutorial</a>, there are <a href="http://wiki.python.org/moin/PythonBooks">many books</a> <a href="http://www.learnpythonthehardway.org/">on Python</a> and there is a helpful <a href="http://wiki.python.org/moin/BeginnersGuide">Wiki on Python</a>. There is also a <a href="http://scipy.org/Cookbook">tutorial</a> and <a href="http://scipy.org/Getting_Started">documentation</a> for Numpy, Scipy and <a href="http://matplotlib.org/contents.html">Matplotlib</a>.
+</p>
+
+<p>
+A great way to get to know any programming language is to solve the first few problems on <a href="https://projecteuler.net/">project euler</a>.
+</p>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/python.html">python</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">20 Oct 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-10-20-matlab-mex-and-osx.html">Matlab, Mex, Homebrew and OS X 10.8 Mountain Lion</a></h1>
+
+<p>
+Now that I am a student again, I have to use Matlab again. Among the many joys of Matlab is the compilation of mex files.
+</p>
+
+<p>
+Because it does not work. So angry.
+</p>
+
+<p>
+Basically, <code>mex</code> does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had <code>gcc-4.2</code> and your system SDK was stored in <i>\/Developer\/SDKs\/MacOSX10.6.sdk</i>. However, as of 10.7 (I think), the <i>\/Developer</i> directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, <code>gcc</code> has been deprecated in favor of <code>clang</code>. While a <code>gcc</code> binary is still provided, <code>gcc-4.2</code> is not. Of course, that is what <code>mex</code> relies on. Lastly, <code>mex</code> of course completely disregards common system paths such as, say, <i>\/usr\/local\/bin</i>, so compiling against some homebrew library won't work.
+</p>
+
+<p>
+At least these things are rather easy to fix, since all these settings are saved in a file called <i>mexopts.sh</i>, which is saved to <i>~\</i>.matlab\/R2012a\// by default. The relevant section on 64-bit OS X begins after <code>maci64)</code> and should look like this: (changes are marked by comments)
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-makefile">    <span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">StorageVersion: 1.0</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyName: GNU C</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyManufacturer: GNU</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyLanguage: C</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyVersion:</span>
+                <span style="color: #111111;">CC</span>=<span style="color: #303030;">'gcc'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'gcc-4.2'</span>
+
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
+                <span style="color: #111111;">SDKROOT</span>=<span style="color: #303030;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
+                <span style="color: #111111;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #303030;">'10.8'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '10.5'</span>
+                <span style="color: #111111;">ARCHS</span>=<span style="color: #303030;">'x86_64'</span>
+                <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+                <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"$CFLAGS  -fexceptions"</span>
+                <span style="color: #111111;">CFLAGS</span>=<span style="color: #303030;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew include path</span>
+                <span style="color: #111111;">CLIBS</span>=<span style="color: #303030;">"$MLIBS"</span>
+                <span style="color: #111111;">COPTIMFLAGS</span>=<span style="color: #303030;">'-O2 -DNDEBUG'</span>
+                <span style="color: #111111;">CDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
+    <span style="color: #111111; font-style: italic;">#</span>
+                <span style="color: #111111;">CLIBS</span>=<span style="color: #303030;">"$CLIBS -lstdc++"</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyName: GNU C++</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyManufacturer: GNU</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyLanguage: C++</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyVersion:</span>
+                <span style="color: #111111;">CXX</span>=g++ <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'g++-4.2'</span>
+                <span style="color: #111111;">CXXFLAGS</span>=<span style="color: #303030;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+                <span style="color: #111111;">CXXLIBS</span>=<span style="color: #303030;">"$MLIBS -lstdc++"</span>
+                <span style="color: #111111;">CXXOPTIMFLAGS</span>=<span style="color: #303030;">'-O2 -DNDEBUG'</span>
+                <span style="color: #111111;">CXXDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
+    <span style="color: #111111; font-style: italic;">#</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyName: GNU Fortran</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyManufacturer: GNU</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyLanguage: Fortran</span>
+                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyVersion:</span>
+                <span style="color: #111111;">FC</span>=<span style="color: #303030;">'gfortran'</span>
+                <span style="color: #111111;">FFLAGS</span>=<span style="color: #303030;">'-fexceptions -m64 -fbackslash'</span>
+                <span style="color: #111111;">FC_LIBDIR</span>=<span style="color: #303030;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
+                <span style="color: #111111;">FC_LIBDIR2</span>=<span style="color: #303030;">`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`</span>
+                <span style="color: #111111;">FLIBS</span>=<span style="color: #303030;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
+                <span style="color: #111111;">FOPTIMFLAGS</span>=<span style="color: #303030;">'-O'</span>
+                <span style="color: #111111;">FDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
+    <span style="color: #111111; font-style: italic;">#</span>
+                <span style="color: #111111;">LD</span>=<span style="color: #303030;">"$CC"</span>
+                <span style="color: #111111;">LDEXTENSION</span>=<span style="color: #303030;">'.mexmaci64'</span>
+                <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
+                <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
+                <span style="color: #111111;">LDFLAGS</span>=<span style="color: #303030;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew library path</span>
+                <span style="color: #111111;">LDOPTIMFLAGS</span>=<span style="color: #303030;">'-O'</span>
+                <span style="color: #111111;">LDDEBUGFLAGS</span>=<span style="color: #303030;">'-g'</span>
+    <span style="color: #111111; font-style: italic;">#</span>
+                <span style="color: #111111;">POSTLINK_CMDS</span>=<span style="color: #303030;">':'</span>
+    <span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
+</pre>
+</div>
+
+<p>
+To summarize:
+</p>
+
+<ul class="org-ul">
+<li>changed <code>gcc-4.2</code> to <code>gcc</code>
+</li>
+<li>changed <code>/Developer/SDKs/MacOSX10.6.sdk</code> to <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code>
+</li>
+<li>changed <code>10.5</code> to <code>10.8</code>
+</li>
+<li>added <code>CFLAGS="$CFLAGS -I/usr/local/include"</code>
+</li>
+<li>changed <code>g++-4.2</code> to <code>g++</code>
+</li>
+<li>added <code>LDFLAGS="$LDFLAGS -L/usr/local/lib"</code>
+</li>
+</ul>
+
+<p>
+With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> </div><div class="post-date">12 Mar 2009</div><h1 class="post-title"><a href="http://bastibe.de/2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h1>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png" />
+</p>
+</div>
+
+<p>
+Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.
+</p>
+
+<p>
+Und da FFmpeg freie Software ist, kann man sie auch für andere Dinge verwenden, etwa, um mit Matlab Audiodateien zu öffnen. Fehlt noch eine Verbindung zwischen Matlab und den FFmpeg-C-Bibliotheken, und die gibt es in Form von <a href="http://www.mathworks.com/support/tech-notes/1600/1605.html#intro">Mex</a>, der C-Schnittstelle von Matlab. Feine Sache, zwar hat es eine Weile gedauert, bis ich mich in libavformat und libavcodec eingearbeitet hatte (die beiden wichtigsten FFmpeg-Bibliotheken), aber im Endeffekt lief das alles sehr schmerzfrei &#x2013; und das, obwohl ich bisher Mex-Kompilieren mit Matlab immer als eine grausige Beschäftigung in Erinnerung hatte, gespickt von kryptischen Kompiler-Fehlern und hässlichen Notlösungen.
+</p>
+
+<p>
+Bumms, Zack, kaum hatte ich mich versehen, hatte ich ein lauffähiges, tadellos funktionierendes <a href="http://en.wikipedia.org/wiki/MATLAB#Calling_C_and_Fortran_functions">Mex-File</a> auf meinem Mac liegen. Damit hatte ich nicht gerechnet. Also sofort die momentane Euphorie ausnutzen und weiter zu Schritt 2, das Ganze nochmal auf Windows. Meine Probleme, Windows so einzurichten, dass ich endlich Kompilieren kann, <a href="http://www.daskrachen.com/2009/03/great-scott.html">hatte ich ja schon berichtet</a>. Ich hatte also Visual Studio 2005 installiert, um Matlab zufrieden zu stellen und einen anständigen Kompiler auf dem System zu haben. Aber war ja klar, MSVC macht wieder sein eigenes Ding und nichts ist mit Standardkonformität und Trallalla: Keine <a href="http://de.wikipedia.org/wiki/C99#C99">C99</a>-Unterstützung, also keine Variablendeklarationen mitten im Code und keine stdint.h oder inttype.h. Ein Glück, es gibt wieder ein wenig mehr Free Software, die wenigstens <a href="http://code.google.com/p/msinttypes/">letztere Lücke schließt</a>. Dennoch; Ich bekomme mein mex-File nicht zum Laufen. Es ist wie verflucht, kaum setze ich mich an eine Windows-Maschine zum Programmieren, fällt meine Produktivität auf das Niveau eines Backsteins.
+</p>
+
+<p>
+Enter <a href="http://sourceforge.net/projects/gnumex">gnumex</a>, noch ein weiteres Stück FOSS, das es ermöglicht, GCC als Mex-Kompiler zu verwenden, AUF WINDOWS. Um die Dinge zu vereinfachen, verwendete ich die <a href="http://www.mingw.org/">MinGW</a>-Variante und kaum war diese Hürde genommen&#x2026; lief alles. Einfach so. Wahrscheinlich bin ich ein Dickschädel und habe einfach nicht die Geistesschärfe, mit Windows-Kompilern zu arbeiten, aber mir scheint, alles was ich diesbezüglich anfasse und das nicht GCC heißt ist zum Scheitern verurteilt. Ein Glück, dass es die vielen klugen Jungen und Mädchen gibt, die so wunderbare freie Software schreiben, die mir das Leben so viel einfacher macht!
+</p>
+
+<p>
+Eine Fortsetzung kommt noch&#x2026;
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/compiling.html">compiling</a> <a href="tags/matlab.html">matlab</a> <a href="tags/windows.html">windows</a> </div><div class="post-date">05 Mar 2009</div><h1 class="post-title"><a href="http://bastibe.de/2009-03-05-great-scott.html">Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</a></h1>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png" />
+</p>
+</div>
+
+<p>
+Mal wieder: Ich schreibe ein Stück Software für meinen Nebenjob bei meinem Signalverarbeitung-Prof. Diesmal geht es darum, beliebige Audio-Files in Matlab einlesen zu können. Perfekt geeignet ist dafür die selbe Bibliothek, die auch von VLC verwendet wird, libavcodec/libavformat. Das ist eine normale C-Bibliothek, es braucht also nur noch ein kleines mex-File, um ihre Funktionalität für Matlab zur Verfügung zu stellen. Klappt auch wunderbar. Auf dem Mac.
+</p>
+
+<p>
+Schritt zwei ist dann, das Ganze auf Windows und Linux zum Laufen zu bringen. Eigentlich kein Problem, denn ich habe keine wilden Dinge getan und die Libraries selbst sind wunderbar Cross-Platform, es gibt sie sogar schon vorkompiliert für praktisch jedes denkbare Betriebssystem.
+</p>
+
+<p>
+Also, was brauche ich? Zwei Dinge: Matlab und einen C-Compiler (der mitgelieferte LLC-Compiler macht mein Hirn bluten). Matlab zu installieren ist meiner Erfahrung nach schmerzhaft. Bigtime. Nicht, weil Matlab schwer zu installieren wäre, sondern, weil Mathworks nur zwei Installationen pro Schachtel erlaubt, was für meine drei Betriebssysteme zu gewissen Problemen führt. Außerdem müsste ich meine eine Lizenz erst für die Windows-installation umschreiben lassen, und&#x2026; ach, Schmerzen. Offenbar habe ich die Jungs dort aber schon derart häufig mit Lizenzanfragen genervt, dass sie mich einfach als hoffnungslos aufgegeben haben, denn dieses Mal musste ich keine neue Lizenz erstellen lassen, sondern einfach installieren, Passwort eingeben, und los. Mein Account meldet jetzt, dass ich fünf gleichzeitige Installationen hätte (von zwei erlaubten). Mir solls Recht sein.
+</p>
+
+<p>
+Außerdem: ein aktuelles Linux muss her. VMWare sei Dank, lauert im Linux-Installieren nicht mehr der Schrecken, im Zweifelsfall den kompletten Festplatteninhalt zu verlieren, sondern nur noch, an akuter Progressbar-itis zu ersticken. War ja klar, dass Autoupdate sich diesen Nachmittag aussucht, um meine Ubuntu-VM hoffnungslos zu zerstören. Also, neues Ubuntu heruntergeladen, neu installiert, neu Updates aufgespielt, zwei Stunden Lifetime verloren. Immerhin: es hat fehlerfrei funktioniert, das ist was Neues. Matlab hinterher, VMWare Tools dazu, fertig ist die Development-Kiste. Jetzt fehlt nur noch eine Verbindung zu meinem Development-Verzeichnis, damit ich auf meine Dateien zugreifen kann. Fehlanzeige. Dukommsthiernichrein. Na Toll.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png" />
+</p>
+</div>
+
+<p>
+Also weiter zu Windows. Frühere Versuche ergaben bereits, dass ich Matlab nicht dazu bewegen kann, (a) GCC als Compiler zu nehmen oder (b) das bereits installierte Microsoft Visual Studio C++ .Net Professional Directors Cut Special Edition 2008 Ultimate zu verwenden. Nähere Nachforschungen zeigen: Zu neu, Kennternich. Geht nur bis MSVC Jahrgang 2005. Also: Neues MSVC deinstallieren, Altes installieren. ich freue mich immer darauf, MSVC zu deinstallieren, denn es besteht lediglich aus kompakten 12 Programmen, die sich zwar alle auf einem Haufen Installieren- jedoch nicht De-Installieren lassen. Immerhin ist es dank MSDNAA-Membership nicht schwer, an die alten Versionen heranzukommen. Und klar, die Systemsteuerung lässt einen auch immer nur ein Programm auf einmal deinstallieren. Multitasking ist nicht. Dank Syncplicity kann Windows die Zwischenzeit immerhin dazu verwenden, all meine Development-Files auf den Rechner zu laden. Yay!
+Das Schöne an Fortschrittsbalken ist ja, sie zeigen Fortschritt. Damit haben sie einen klaren Vorteil gegenüber etwa Dachbalken oder den Bittewartenpunktpunktpunkt-Balken, die die Microsoft SQL Server 2008-Deinstallation stolz herumzeigt. Die fühlt sich wohl sehr wichtig, denn sie rödelt eine starke halbe Stunde im Bitte-Warten-Modus herum. So mag ich Deinstallationen.
+</p>
+
+<p>
+To be continued&#x2026;
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/matlab.html">matlab</a> <a href="tags/compiling.html">compiling</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

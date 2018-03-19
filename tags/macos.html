@@ -1,0 +1,1221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "macos":</h1><div class="post-date">29 Dec 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-12-29-rsnapshot-on-macos.html">How to set up rsnapshot instead of Time Machine</a></h1>
+
+<p>
+(This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
+</p>
+
+<p>
+Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
+</p>
+
+<p>
+Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>, a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and I couldn't find a great guide online. So, without further ado, here's how to configure rsnapshot on macOS:
+</p>
+
+
+<ul class="org-ul">
+<li>Install rsnapshot
+
+<pre class="example">
+brew install rsnapshot
+</pre>
+</li>
+
+<li>Write the config file
+
+<p>
+You can copy a template from homebrew:
+</p>
+<pre class="example">
+cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
+</pre>
+<p>
+And then configure the new configuration file to your liking (preserve the tabs!):
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-config">config_version	1.2 # default
+verbose		2   # default
+loglevel	3   # default
+
+# this is where your backups are stored:
+snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
+# prevent accidental backup corruption:
+lockfile	/Users/bb/.rsnapshot.pid
+# use this if you back up to an external drive:
+no_create_root	1   # don't back up if the external drive is not connected
+
+# configure how many tiers of backups are created:
+retain	hourly	10
+retain	daily	7   # dailies will only be created once 10 hourlies exist
+retain	weekly	4   # weeklies will only be created once 7 dailies exist
+retain	monthly	100 # monthlies will only be created once 4 weeklies exist
+
+# the list of directories you want to back up:
+backup	/Users/bb/Documents		localhost/
+backup	/Users/bb/eBooks		localhost/
+backup	/Users/bb/Movies		localhost/
+backup	/Users/bb/Music		localhost/
+backup	/Users/bb/Pictures		localhost/
+backup	/Users/bb/Projects		localhost/
+backup	/Users/bb/Projects-Archive		localhost/
+</pre>
+</div>
+
+<p>
+Instead of <code>localhost</code>, you can use remote machines as well. Check  <a href="https://download.samba.org/pub/rsync/rsync.html"><code>man rsync</code></a> for details
+</p>
+</li>
+
+<li>Make sure it works and create initial backup
+
+<pre class="example">
+rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
+</pre>
+<p>
+The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
+</p>
+</li>
+
+<li>Write launchd Agent
+
+<p>
+Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>, which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
+</p>
+
+<p>
+Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span>?&gt;
+&lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> plist <span style="color: #111111; font-weight: bold;">PUBLIC</span> <span style="color: #111111;">"</span><span style="color: #111111;">-//Apple//DTD PLIST 1.0//EN</span><span style="color: #111111;">"</span> <span style="color: #111111;">"</span><span style="color: #111111;">http://www.apple.com/DTDs/PropertyList-1.0.dtd</span><span style="color: #111111;">"</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+&lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+&lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+</pre>
+</div>
+
+<p>
+For the other four scripts, change the two occurrences of <code>hourly</code> to <code>{daily,weekly,monthly}</code> and change the <code>&lt;dict&gt;</code> portion at the end to
+</p>
+
+<ul class="org-ul">
+<li>daily:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+<li>weekly:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+<li>monthly:
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+</pre>
+</div>
+</li>
+</ul>
+<p>
+However, <code>rsnapshot</code> can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
+</p>
+
+<p>
+To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It seems that there should be a more elegant solution than this, but I haven't found one.
+</p>
+
+<p>
+From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more succinct than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
+</p>
+</li>
+
+<li>Load launchd agents
+
+<pre class="example">
+launchctl load ~/Library/LaunchAgents/rsnapshot.*
+</pre>
+</li>
+
+<li>Test launchd agent
+
+<pre class="example">
+launchctl start rsnapshot.hourly
+</pre>
+<p>
+If it doesn't work, Console.app might show a relevant error message.
+</p>
+</li>
+
+<li>Remove backup directory from Spotlight
+
+<p>
+Go to System Preferences → Spotlight → Privacy → Add your <code>snapshot_root</code> directory from earlier
+</p>
+</li>
+
+<li>Disable TimeMachine and delete your existing backup (if you want)
+
+<p>
+Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
+</p>
+</li>
+</ul>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Caveats</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
+</p>
+
+<p>
+On the other hand, only the hourly task will actually create a new backup. All higher-level backup tiers merely copy existing backups around, so <i>in theory</i>, they shouldn't step on each other's toes when run concurrently. I have opened <a href="https://github.com/rsnapshot/rsnapshot/issues/200">an issue</a> asking about this.
+</p>
+
+<p>
+There are other possible solutions: ① You could modify the launchd entry such that backups only trigger after a few minutes or, better yet, only once all other instances of rsnapshot have finished. I am not sure if launchd supports this, though. ② You could schedule the hourly task using cron instead of launchd, since cron will <i>not</i> reschedule missed tasks. This would only work for two tiers of backups, though. ③ You could just ignore the issue and hope for the best. After all, if a daily or hourly backup gets corrupted every now and then, you still have enough working backups&#x2026;
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/backup.html">backup</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
+
+<p>
+This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
+</p>
+
+<p>
+It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation were a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
+</p>
+
+<p>
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
+</p>
+
+<p>
+This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is playing/recording of short blocks of <code>float</code> data at arbitrary sampling rates and block sizes. All connected sound cards should be listable and selectable, with correct detection of the system default sound card (a feature that is very unreliable in PortAudio).
+</p>
+
+<hr  />
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
+</p>
+
+<p>
+The basic unit of any CoreAudio program is the audio unit. An audio unit can be a source (aka microphone), a sink (aka speaker) or an audio processor (both sink and source). Each audio unit can have several input <i>buses</i>, and several output <i>buses</i>, each of which can have several <i>channels</i>. The meaning of these buses varies wildly and is often underdocumented. Furthermore, every audio unit has several <i>properties</i>, such as a sample rate, block sizes, and a data format, and <i>parameters</i>, which are like properties, but presumably different in some undocumented way.
+</p>
+
+<p>
+In order to use an audio unit, you create an <code>AudioComponentDescription</code> that describes whether you want a source or sink unit, or an effect unit, and what kind of effect you want (AudioComponent is an alternative name for audio unit). With the description, you can create an <code>AudioComponentInstance</code>, which is then an opaque struct pointer to your newly created audio unit. So far so good.
+</p>
+
+<p>
+The next step is then to configure the audio unit using <code>AudioUnitGetProperty</code> and <code>AudioUnitSetProperty</code>. This is surprisingly hard, since every property can be configured for every bus (sometimes called element) of every input or output of every unit, and the documentation is extremely terse on which of these combinations are valid. Some invalid combinations return error codes, while others only lead to errors during playback/recording. Furthermore, the definition of what constitutes an input or output is interpreted quite differently in different places: One place calls a microphone an <i>input</i>, since it records audio; another place will call it an <i>output</i>, since it outputs audio data to the system. In one crazy example, you have to configure a microphone unit by disabling its output bus 0, and enabling its input bus 1, but then read audio data from its ostensibly disabled output bus 0.
+</p>
+
+<p>
+The property interface is untyped, meaning that every property has to be given an identifier, a void pointer that points to a matching data structure, and the size of that data structure. Sometimes the setter allocates additional memory, in which case the documentation does not contain any information on who should free this memory. Most objects are passed around as opaque struct pointers with dedicated constructor and destructor functions. All of this does not strike me as particularly C-like, even though CoreAudio is supposedly a native C library.
+</p>
+
+<p>
+Once your audio unit is configured, you set a render callback function, and start the audio unit. All important interaction now happens within that callback function. In a strange reversal of typical control flow, input data to the callback function needs to be fetched by calling <code>AudioUnitRender</code> (evoked on the unit itself) from within the callback, while output is written to memory provided as callback function arguments. Many times during development, <code>AudioUnitRender</code> would return error codes because of an invalid property setting during initialization. Of course, it won't tell <i>which</i> property is actually at fault, just that it can't fulfill the render request at the moment.
+</p>
+
+<p>
+Error codes in general are a difficult topic in CoreAudio. Most functions return an error code as an <code>OSStatus</code> value (aka <code>uint32</code>), and the header files usually contain a definition of some, but not all, possible error codes. Sometimes these error codes are descriptive and nice, but often they are way too general. My favorite is the frequent <code>kAudioUnitErr_CannotDoInCurrentContext</code>, which is just about as useless an error description as possible. Worse, some error codes are not defined as numeric constants, but as <code>int err = 'abcd'</code>, which makes them un-searchable in the source file. Luckily, this madness can be averted using <a href="https://osstatus.com/">https://osstatus.com/</a>, which is a dedicated database for <code>OSStatus</code> error codes.
+</p>
+
+<p>
+By far the worst part of the CoreAudio API is that some properties are silently ignored. For example, you can set the sample rate or priming information on a microphone unit, and it will accept that property change and it will report that property as changed, but it will still use its default value when recording (aka "rendering" in CoreAudio). A speaker unit, in contrast, will honor the sample rate property, and resample as necessary. If you still need to resample your microphone recordings, you have to use a separate <code>AudioConverter</code> unit, which is its own bag of fun (and only documented in <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">a remark</a> in one overview document).
+</p>
+
+<p>
+Lastly, all the online documentation is written for Swift and Objective-C, while the implementation is C. Worse, the C headers contain vastly more information than the online documentation, and the online documentation often does not even reference the C header file name. Of course header files are spread into the CoreAudio framework, the AudioToolkit framework, and the AudioUnit framework, which makes even grepping a joy.
+</p>
+
+<p>
+All of that said, once you know what to do and how to do it, the resulting code is relatively compact and readable. The API does contain inconsistencies and questionable design choices, but the real problem is the documentation. I spent way too much time reading the header files over and over again, and searching through (often outdated or misleading) <a href="https://developer.apple.com/library/content/samplecode/AVCaptureToAudioUnitOSX/Listings/CaptureSessionController_mm.html#//apple_ref/doc/uid/DTS40012879-CaptureSessionController_mm-DontLinkElementID_4">example projects</a> and <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">vague</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html#//apple_ref/doc/uid/TP40003278-CH7-SW12">high-level</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003278-CH1-SW2">overviews</a> for clues on how to interpret error messages and API documentation. I had somewhat better luck with a few <a href="http://kaniini.dereferenced.org/2014/08/31/CoreAudio-sucks.html">blog</a> <a href="http://subfurther.com/blog/2009/04/28/an-iphone-core-audio-brain-dump/">posts</a> on the subject, but the general consensus seems to be that the main concepts of CoreAudio are woefully under-explained, and documentation about edge cases is almost nonexistent. Needless to say, I did not enjoy my experience with CoreAudio.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/audio.html">audio</a> <a href="tags/programming.html">programming</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">16 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png" />
+</p>
+</div>
+
+<p>
+The Mac. It used to be the most streamlined, thought-through general computing device on the market.
+</p>
+
+<p>
+Even it's file management used to be top-notch. There were many cool little touches. One particularly useful feature was the <i>Proxy Icon</i>&#x2013;if a window displayed a file's content, that file's icon would show up in the window's title. And you could drag that icon directly onto a thumb drive or email, without having to use the Finder. But the Finder, too, had many neat little features. I loved the fact that when you renamed a file in an alphabetically sorted file list, Finder would not immediately re-shuffle it to its new location, but would wait half a second before doing so. When renaming multiple files, this was really useful, since you could go through them one by one and rename them, simply by pressing arrow keys and return.
+</p>
+
+<p>
+But as you might have guessed from my use of the past tense, these golden days are gone. The Finder used to know a JPEG from a ZIP regardless of file extension. Now it doesn't any more. The Proxy Icon is still draggable, but it will create an alias instead of a copy&#x2013;perfectly useless on a thumb drive or in an email.
+</p>
+
+<p>
+And with the newest version of OS X, El Capitan, they finally blew it for me. Before, even though the Finder inexplicably never had the ability to cut and paste files, you could always install programs like <a href="http://totalfinder.binaryage.com/">TotalFinder</a> to fix that. Not so with El Capitan. The Finder now is holy land, and can not be touched any more by third parties. So no more cut and paste, no more un-hiding system files. No more side-by-side Finder tabs. And brand new with El Capitan as well: No more waiting after renaming. Now, when you rename a file, it is immediately re-sorted to its new position, thus making renaming multiple files terribly inconvenient.
+</p>
+
+<p>
+So, good bye OS X. I updated my work laptop first, and I regret it. I never regretted an OS X update before. My home machine is not going to get the update. It is honestly sad to see my once-beloved Mac platform becoming worse and worse and worse with every new release.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> <a href="tags/ui.html">ui</a> </div><div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+
+<p>
+On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
+</p>
+
+<p>
+For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http://www.sentex.net/~mwandel/jhead/">command</a> <a href="http://owl.phy.queensu.ca/~phil/exiftool/">line</a> <a href="http://www.exiv2.org/#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
+</p>
+
+<p>
+So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
+</p>
+
+<p>
+If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <i>either</i> the file creation date, <i>or</i> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.
+</p>
+
+<p>
+Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
+<span style="color: #111111; font-weight: bold;">import</span> os
+<span style="color: #111111; font-weight: bold;">import</span> datetime
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">range</span>(426, 465):
+    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111;">format</span>(index)
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
+    <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+</pre>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/programming.html">programming</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">13 Sep 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-09-13-Kindle-app-does-not-start.html">Kindle.app not starting on a case-sensitive file system</a></h1>
+
+<p>
+So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.
+</p>
+
+<p>
+A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with
+</p>
+
+<pre class="example">
+    Dyld Error Message:
+      Library not loaded: @executable_path/../Frameworks/libWEbCoreKRF.dylib
+      Referenced from: /Applications/Kindle.app/Contents/Frameworks/libWebCoreViewer.dylib
+      Reason: image not found
+</pre>
+
+<p>
+<code>libWEbCoreKRF.dylib</code>? With a capitalized <code>E</code>? That looks very much like a spelling error. So, point your terminal to <code>/Applications/Kindle.app/Contents/Frameworks/</code>, type
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    sudo ln -s libWebCoreKRF.dylib libWEbCoreKRF.dylib
+</pre>
+</div>
+
+<p>
+to create a symlink with the misspelled name. Done.
+</p>
+
+<p>
+Kindle works again.
+</p>
+
+<p>
+Spelling is hard, it seems.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
+
+<p>
+A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
+</p>
+
+<p>
+This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
+</p>
+
+<p>
+Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi's HDMI output to the LED display's Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.
+</p>
+
+<p>
+After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <i>Internet Sharing</i> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
+</p>
+
+<pre class="example">
+    /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
+</pre>
+
+<p>
+Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
+</p>
+
+<pre class="example">
+    /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
+</pre>
+
+<p>
+Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
+</p>
+
+<pre class="example">
+    - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
+</pre>
+
+<p>
+<del>(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)</del>
+</p>
+
+<p>
+<del>I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:</del>
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+    &lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> service-group <span style="color: #111111; font-weight: bold;">SYSTEM</span> <span style="color: #111111;">"</span><span style="color: #111111;">avahi-service.dtd</span><span style="color: #111111;">"</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"</span><span style="color: #303030;">yes</span><span style="color: #303030;">"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
+        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
+            &lt;<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;
+        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
+    &lt;/<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
+</pre>
+</div>
+
+<p>
+<del>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.</del>
+</p>
+
+<p>
+<b>Edit:</b> Turns out, all these were not necessary. Thank you, reader Philipp, for trying them out!
+</p>
+
+<p>
+I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.
+</p>
+
+<p>
+Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
+</p>
+
+<p>
+<del><code>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1</code></del>
+</p>
+
+
+<p>
+<b>Edit:</b> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.
+</p>
+
+<p>
+Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!
+</p>
+
+<p>
+Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.
+</p>
+
+<p>
+Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!
+</p>
+
+<p>
+This article heavily steals from these fine folks on the internet:
+</p>
+
+<ul class="org-ul">
+<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a>
+</li>
+<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>
+</li>
+<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> <a href="tags/backup.html">backup</a> </div><div class="post-date">19 Jul 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-07-09-apple-is-failing-me.html">How Apple is Failing Me</a></h1>
+
+<p>
+I bought my first Apple computer in 2007 after a long time of gaming on Windows and a few years of Linux. In the beginning, I was just amazed at the consistency, practicality and sanity of the whole experience. I think I had a bad case of tinkeritis and neophilia in my Linux days, so this was probably to be expected.
+</p>
+
+<p>
+Later, I marveled at the level of polish in the third party software ecosystem around Macs. Then I was just glad to have a slick GUI with actual Unix underpinnings. For reference, this happened in the time span from OS X 10.5 Leopard until 10.7 Lion. However, in that same time frame, I also noticed a gradual increase in problems. The computer seems to crash slightly more often, programs seemed to become more buggy, behavior less logical. At first, I marked this up as mostly a matter of my own increasing knowledge of the system, but as time went on, I became more and more convinced that it was actually the system getting worse, not myself becoming more sensitive.
+</p>
+
+<p>
+So here are some of those problems:
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Lack of Uninstallers</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
+</p>
+
+<p>
+At the moment, there are three ways of getting software on your Mac.
+</p>
+
+<ol class="org-ol">
+<li>Install from the App Store. Installation and un-installation work through the App Store.
+</li>
+<li>Install by dragging n <code>*.app</code> bundle onto your computer. Uninstall by deleting the bundle. Works fine unless the app installed some stuff outside the bundle.
+</li>
+<li>Install by executing a <code>*.pkg</code> file. No way to uninstall whatsoever unless the developer provides a separate uninstall mechanism.
+</li>
+</ol>
+
+<p>
+Really, this is beyond ridiculous. There is no way of uninstalling software that has been installed from a <code>*.pkg</code>. How the heck am I supposed to use my computer without uninstalling software? Seriously, Apple? Is this a joke?
+</p>
+
+<p>
+(So as a rule, I will only install <code>*.pkg</code> if there is absolutely no other way. Most of the time, I use or abuse <a href="http://mxcl.github.com/homebrew/">homebrew</a> to mitigate this problem.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Failing Time Machine</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don't even need to plug in that hard drive any more. Magic!
+</p>
+
+<p>
+Except, every few weeks the Time Machine icon in the menu bar will have a small exclamation point, which indicates that something went wrong. Usually, it means that Time Machine somehow lost track of what it was doing and silently corrupted all backups beyond repair. This happens across several computers and Time Machines. The only solution is to delete all backups and start anew.
+</p>
+
+<p>
+So, backups that are not backing up. How amazing is that?
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Living in the Cloud</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
+</p>
+
+<p>
+Synchronization is cool. I used to live within the Googleverse, and all my contacts, calendars and email accounts would sync through Google to all my Apple devices. Life was good! Until things started to go bad. At some point, Mail.app lost an email or two. Not a big deal. Then iCal would not connect any more, and would need to be restarted every other day. And finally, Address Book deleted all my contacts from Google. Actually, it did not delete the whole contacts, just all the information inside them, and leave empty husks with only a name and maybe a partial email address.
+</p>
+
+<p>
+I wish I was making this up. I tested this quite thoroughly. Whenever Contacts was set up to sync with Google, after a few days or weeks it would delete all my contacts. Of course, this being cloud backed, it would delete them everywhere on all my devices, without any backup or anything. Thankfully, Address Book on iOS seems to not have this problem.
+</p>
+
+<p>
+Things can go wrong, I understand that. But deleting all my contacts? Not cool. Not. Cool.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">iPhoto</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
+</p>
+
+<p>
+But to do that, we had to convert his old library from iPhoto 1876 to iPhoto 2008. iPhoto itself claims to be able to do that, and lo and behold, it magically imported the old library, started an update program, then another, then another, then another, then another, and updated the old library through the ages up to the most recent version. And everything seemed to work fine, all the albums were there, all the thumbnails looked right, just perfect. Except if you opened any image, it would only show black. I mean, I can understand that an import of a library that old does not work. But at least tell me so. Don't silently corrupt everything!
+</p>
+
+<p>
+And then there was my own library, started in late 2007 and handed through different revisions of iPhoto to today. It countains about 25 Gb worth of photos. Funny enough, its size on disk is actually 65 Gb. What. The. Heck?
+</p>
+
+<p>
+At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftware.com/iplm/">iPhoto Library Manager</a> by Fat Cat Software, which saved both my library and my sanity! Those guys rock!
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">OS X Lion with Auto Save and Versions</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
+</p>
+
+<p>
+Now normally, I would applaud this. Just save everything automatically and give me a sensible undo mechanism instead. Great!
+</p>
+
+<p>
+However, in a stroke of genius, they also got rid of the possibility of <i>save as&#x2026;</i>, which is just an easy way of duplicating a document. Say, because you received it in an email and want to file it somewhere else on your hard drive. Or because the document is saved on a thumb drive and you want to copy it over to your hard drive. No sir, you have to navigate to the document in the finder and copy it by hand from there. Thank you for your patience.
+</p>
+
+<p>
+But the worst offender is Preview. Every program on the Mac has this very handy <i>proxy icon</i> in the window title. Whenever a window is representing a file on your computer, it will show that very file in the title, so you can drag and drop it somewhere else. Except preview won't give you the actual document. Instead, it will give you an alias to that document. Which is worth <i>nothing at all</i> if you drag it into an email, your Dropbox or a thumb drive.
+</p>
+
+<p>
+Or try to enable File sharing on your local network, which works <i>sometimes</i>, but not all the time. Or Internet Sharing, which might share your internet connection, or break your DNS settings. Or take Bluetooth, which for the life of me, I can not make work for tethering with my iPhone, even though the same works just fine with the iPad and other Macs. Or take networking in general, which every once in a while just completely breaks down on my company's network and just refuses to send or receive any data over the Ethernet cable until I reboot my computer.
+</p>
+
+<p>
+I could go on. Let's just say that Lion increased my WTF-per-minute rate significantly.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Performance, Memory and File System</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Lets talk performance. I can't really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
+</p>
+
+<p>
+I mean, you don't feel the pain of starting applications much on OS X, because in general, you simply keep your programs running all the time. But even so, Firefox starts up on Windows in, like, no time at all, but takes noticeable time on OS X (same configuration and plugins). I have an SSD, so I mostly don't care, but still.
+</p>
+
+<p>
+Or take boot times. Even in a virtual machine, both Windows 7 and 8 and Ubuntu 12.04 and Fedora 17 boot up in less than half a minute. In comparison, OS X Lion takes significantly longer, sometimes minutes. Again, you usually don't feel that pain too much because you don't reboot your Mac all that often (unless you run Bootcamp for gaming regularly). Still, OS X boot and shutdown times are downright shameful these days.
+</p>
+
+<p>
+Lets run a few virtual machines. I have eight Gb of memory. Lets boot up a Windows VM and give it two Gb. Do anything you want, run Eclipse <i>and</i> Visual Studio <i>and</i> Firefox with loads of tabs <i>and</i> Steam. Windows will do just fine. Those two Gb are plenty for anything except gaming and photo/video editing. Do the same thing with Linux, same result. In fact, Linux will work just fine with even less memory. But OS X? Don't even <i>think</i> of running it with less than two Gb. Four Gb will give you a workable system if you don't run too many memory intensive applications. But start up XCode and Eclipse and you are done for. This is a huge waste.
+</p>
+
+<p>
+And lastly, let's talk HFS+. Did you know that HFS+ has a global lock that prevents any program from accessing the hard drive while another program is doing so? That explains why OS X is so friggin slow on non-SSD drives. And did you ever notice that HFS+ is slowly corrupting your data, even if there are no power failures or anything? I fire up Disk Utility every so often and it will always find some file system corruptions. It rarely breaks stuff, but really, the file system is the very last part of my system I want to see failing randomly.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">So, what now?</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don't.
+</p>
+
+<p>
+And then there is software. Where is <a href="http://www.git-tower.com/">Tower</a> for Windows or Linux? Or <a href="http://www.sparrowmailapp.com/">Sparrow</a> or <a href="http://tapbots.com/blog/tweetbot/tweetbot-for-mac">Tweetbot</a> or <a href="http://reederapp.com/mac/">Reeder</a> or <a href="http://www.pixelmator.com/">Pixelmator</a> or iPhoto? I'm not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.
+</p>
+
+<p>
+That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and Fedora 17 and I must say, I am quite taken with them. All of them. As for the next computer I am going to buy, I am doubtful if it will be an Apple computer again.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+As a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point
+</p></div>
+
+
+</div>
+</div><div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">22 Feb 2012</div><h1 class="post-title"><a href="http://bastibe.de/2012-02-22-how-to-gem-install-rlua-on-osx-slash-homebrew.html">How to gem install rlua on OSX/homebrew</a></h1>
+
+<p>
+If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using
+</p>
+
+<p>
+#+begin src sh
+    brew install lua
+#end<sub>src</sub>
+</p>
+
+<p>
+Oh, would it be nice if everyone agreed on how to install stuff like this. Case in point, homebrew installs liblua (quite reasonable) in <code>/usr/local/lib/liblua.[5.1[.4]].dylib</code>
+</p>
+
+<p>
+rlua however expects it to be called <code>liblua5.1.dylib</code> (notice the missing <code>.</code>).
+</p>
+
+<p>
+Similarly, the headers are installed plainly into <code>/usr/local/include</code>, whereas rlua expects them to be in a folder called <code>lua5.1</code>.
+</p>
+
+<p>
+Hence, here is how you get rlua to install:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    ln -s /usr/local/Cellar/lua/5.1.4/lib/liblua.5.1.4.dylib /usr/local/lib/liblua5.1.dylib
+    ln -s /usr/local/Cellar/lua/5.1.4/include/ /usr/local/include/lua5.1
+</pre>
+</div>
+
+<p>
+Not exactly a beautiful solution, but it works.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/compiling.html">compiling</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">03 Sep 2011</div><h1 class="post-title"><a href="http://bastibe.de/2011-09-03-adobe-air-application-crashes.html">Adobe AIR Application Crashes</a></h1>
+
+<p>
+Adobe, oh Adobe. Why?
+</p>
+
+<p>
+Your updater pops open. Adobe AIR 2.5, if I remember correctly. It runs, and after that, all AIR applications stop working. They boot, then crash and barf up a crash report.
+</p>
+
+<p>
+Turns out, this is a problem with case sensitive file systems. If your file system is not case sensitive, you are experiencing some other problem and this fix is not for you.
+</p>
+
+<p>
+See, Adobe has this library called <code>WebKit.dylib</code>. However, their code actually looks for <code>Webkit.dylib</code> (note the capitalisation of the K). Well, spelling is hard, I presume.
+</p>
+
+<p>
+At least this is an error that can easily be fixed. Fire up your terminal, type
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="color: #111111;">cd</span> /Library/Frameworks/Adobe<span style="color: #303030;">\ </span>AIR.framework/Version/Current/Resources/
+sudo ln -s WebKit.dylib Webkit.dylib
+</pre>
+</div>
+
+<p>
+Then enter your password and your AIR applications should work again.
+</p>
+
+<p>
+Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">01 Aug 2011</div><h1 class="post-title"><a href="http://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">Compiling Scipy and Matplotlib using pip on Lion</a></h1>
+
+<p>
+So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.
+</p>
+
+<p>
+In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html">round of googling</a> reveals:
+</p>
+
+<p>
+In order to get Scipy to compile, you need to insert <code>#include &lt;complex.h&gt;</code> in
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
+    ./scipy/linalg/src/fblaswrap_veclib_c.c
+    ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
+</pre>
+</div>
+
+<p>
+That done, Scipy compiles perfectly fine.
+</p>
+
+<p>
+But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/07/21/installing-matplotlib-on-os-x-10-7-with-homebrew/">this blogpost</a> outlines, Matplotlib is not currently compatible with <code>libpng</code> 1.5, which ships with Lion. Fortunately, this is already fixed in the most recent source on the Matplotlib repo, so you just have to checkout that:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #111111;">egg</span>=matplotlib
+</pre>
+</div>
+
+<p>
+By doing that, Matplotlib should install just fine.
+</p>
+
+<p>
+Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/compiling.html">compiling</a> <a href="tags/python.html">python</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">04 Mar 2011</div><h1 class="post-title"><a href="http://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Installing Pygame using Homebrew</a></h1>
+
+<p>
+So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
+</p>
+
+<p>
+<a href="http://www.pygame.org/news.html">Pygame</a> is one package that allows this. (I will submit a patch to <a href="http://people.csail.mit.edu/hubert/pyaudio/">Pyaudio</a> soon that will enable it there, too). There are pre-built binaries on the Pygame website that you can install easily. But then there would be no easy way to uninstall them, so what I would rather want is to install Pygame using package managers that allow easy updating and uninstallation. My tool of choice on the Mac is of course <a href="https://github.com/mxcl/homebrew/">Homebrew</a>.
+</p>
+
+<p>
+Note that although I am mostly interested in audio playback, this post will detail the installation of all modules of Pygame, not just <code>pygame.mixer</code>.
+</p>
+
+<p>
+Homebrew won't install Pygame, but it will install all the prerequisites for Pygame. So, let's do that.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
+</pre>
+</div>
+
+<p>
+This will install most packages for you. Note that <code>libpng</code> is also available as a system library, so it is installed <code>keg_only</code>, that is, without linking it in your path. We will need to compile against it though, so the next step is
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">brew link libpng
+</pre>
+</div>
+
+<p>
+Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</code> does not install its headers, so you can't compile against it. To fix that, type
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">brew edit smpeg
+</pre>
+</div>
+
+<p>
+and add the following line just above the two end at the end of the file
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">include.install Dir[<span style="color: #303030;">"*.h"</span>]
+</pre>
+</div>
+
+<p>
+Then save the file. (I submitted a bug to have this fixed, so you might not need to do this when you read this). Now you can install <code>smpeg</code> with the usual
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">brew install smpeg
+</pre>
+</div>
+
+<p>
+and you will get the headers, too. Isn't Homebrew great?
+</p>
+
+<p>
+Now that all the prerequisites are met, lets look at Pygame itself. This is rather more difficult, as it will not build properly against Homebrew libraries on its own. First, download the source package of Pygame from the [official website](<a href="http://www.pygame.org/download.shtml">http://www.pygame.org/download.shtml</a>). Unpack it to some directory.
+</p>
+
+<p>
+Now open a terminal and navigate to that directory. Me, I like [iTerm](<a href="http://iterm.sourceforge.net/">http://iterm.sourceforge.net/</a>), but Terminal.app will do just fine, too. In there, run <code>python config.py</code> to create an initial setup file.
+</p>
+
+<p>
+At this point, the setup file is mostly useless since <code>config.py</code> failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file <code>Setup</code> (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
+</pre>
+</div>
+
+<p>
+Obviously, this is lacking the paths to the SDL library. If you installed Homebrew to its default directory, this will be in <code>/usr/local…</code>. Hence, change this line to
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
+</pre>
+</div>
+
+<p>
+The next lines are strangely garbled. They say, for example
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">FONT = -lS -lD -lL -l_ -lt -lt -lf
+</pre>
+</div>
+
+<p>
+Where they actually should say
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">FONT = -lSDL_ttf
+</pre>
+</div>
+
+<p>
+Instead of having one <code>-l</code> and then the library name <code>SDL_ttf</code>, they put <code>-l</code> in front of every single letter of the name. This is strange, and certainly wrong. So, correct it for <code>FONT</code>, <code>IMAGE</code>, <code>MIXER</code> and <code>SMPEG</code>.
+</p>
+
+<p>
+Note that I did not tell you to do this for <code>PORTTIME</code>, too. Actually, <code>PORTTIME</code> is already correctly linked in <code>PORTMIDI</code>, so you don't need that at all any more. Just delete or comment the <code>PORTTIME</code> line.
+</p>
+
+<p>
+Now that all the dependencies are corrected, lets enable the features. A few lines further down, there will be a block of lines, where most lines begin with a <code>#</code> except for the ones beginning with <code>_numericsurfarray…</code> and <code>_camera…</code>, These are the different features of Pygame: The ones with the <code>#</code> are disabled, the other two are enabled.
+</p>
+
+<p>
+With all the stuff we installed earlier, you can now enable all features (remove the <code>#</code> in front of <code>imageext…</code>, <code>font…</code>, <code>mixer…</code>, <code>mixer_music…</code>, <code>_minericsndarray…</code>, <code>movie…</code>, <code>scrap…</code> and <code>pypm…</code>).
+</p>
+
+<p>
+Remember we disabled <code>PORTTIME</code> a while ago? Right, so we have to remove that dependency: In the line starting with <code>pypm…</code>, delete the part that says <code>$(PORTTIME)</code>. Great. That was easy, right? Now save that file and go back to the Terminal.
+</p>
+
+<p>
+We are now going to compile and install Pygame. The nice thing is, even though we are installing it manually, it will go in the right directories and it will be registered with <code>pip</code> or <code>easy_install</code>, so you can just invoke them if you want to uninstall it later by typing <code>pip uninstall pygame</code>. This is something I love about Python!
+</p>
+
+<p>
+Alright, now without further ado, install Pygame by typing
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">python setup.py install
+</pre>
+</div>
+
+<p>
+Great! That's it! Everything should work now!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/compiling.html">compiling</a> <a href="tags/python.html">python</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">03 Feb 2011</div><h1 class="post-title"><a href="http://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a></h1>
+
+<p>
+For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.
+</p>
+
+<p>
+So, you look for alternatives. You could take <a href="http://www.gnu.org/software/octave/">Octave</a>, which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.
+</p>
+
+<p>
+Then, you stumble upon that Python package called <a href="http://numpy.scipy.org/">Numpy</a>, which seems to be nearly as fast as Matlab when it comes to matrix processing and linear algebra. You then discover <a href="http://www.scipy.org/">SciPy</a>, which would add all that signal processing prowess of Matlab (do quick transformations, random numbers, statistics) to your toolbox. Last but not least, you need plotting. That would be <a href="http://matplotlib.sourceforge.net/">Matplotlib</a> then, which provides quick plotting facilities in Python.
+</p>
+
+<p>
+And the best thing is, these three systems work really well together. They seem to be the perfect replacement for Matlab that could even be superiour to it in many regards.
+</p>
+
+<p>
+Next up, you need to install all that stuff. If you are like me, you naturally want to do all that on a Mac. Also, you kind of dislike all these installer-thingies, which install stuff to unknown places and are nigh impossible to uninstall or update cleanly. Even though, you could of course just go to the individual websites, download Python, Numpy, SciPy and Matplotlib, run them installers, and be done. You would save yourself a lot of trouble that way.
+</p>
+
+<p>
+But since you allegedly are like me, you instead fire up <a href="http://mxcl.github.com/homebrew"><code>brew</code></a> and try to install all that stuff using that. Again, you could use <a href="http://www.macports.org/">MacPorts</a> or <a href="http://www.finkproject.org/">Fink</a> instead, but you probably had some bad experiences with them and you generally love the hackishness of Homebrew, so this is your natural first try.
+</p>
+
+<p>
+So you set about this, you believe in packet managers and trust them to take care of every obstacle that might be lying in your way. First of all, install the latest developer tools from <a href="http://developer.apple.com/">developer.apple.com</a>. You might need to register (for free) to get them. Also, you need to install <a href="http://mxcl.github.com/homebrew">Homebrew</a>.
+</p>
+
+<p>
+To cut this short, here is what you need to get that Python running:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    brew install python
+</pre>
+</div>
+
+<p>
+This one should be obvious. At the time of writing, it will install Python 2.7.1. You could take Python 3, but matplotlib is not compatible to it, so you kind of have to stick with 2.7.1 instead.
+</p>
+
+<p>
+You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code> in the beginning of your path to make sure the new Python gets loaded instead of the pre-installed one. You do that by writing
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    <span style="color: #111111;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
+</pre>
+</div>
+
+<p>
+in your <code>\~/.bash_profile</code>. (Create it if its not there&#x2013;it is just a simple text file).
+</p>
+
+<p>
+Now, if you type <code>python --version</code>, you should get <code>Python 2.7.1</code> as a response.
+</p>
+
+<p>
+Alright, next up, install the python package manager:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    brew install distribute
+    brew install pip
+</pre>
+</div>
+
+<p>
+This will come preconfigured for your newly installed Python. In an ideal world, this should be all. The world being as it is, the pip package of Matplotlib is severely broken and has one other unstated dependency:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    brew install pkg-config
+</pre>
+</div>
+
+<p>
+Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    brew install gfortran
+</pre>
+</div>
+
+<p>
+Alright. That was enough. Now on to pip. With all these dependencies cleared, pip should be able to download Numpy and Scipy without trouble:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    pip install numpy
+    pip install scipy
+</pre>
+</div>
+
+<p>
+Matplotlib, on the other hand, is more difficult to install. You see, pip is looking at the Python package repository <a href="http://pypi.python.org/">PyPi</a> for each package. PyPi then provides a URL. Pip then scans that website for links to suitable package files. But, <a href="http://sourceforge.net/">Sourceforge</a> changed its links a while ago, so pip gets confused and will download an outdated version. Sourceforge says, its new links are way better and no way we will change them back; Pip says, well, if Sourceforge can't provide proper links, that's not our problem. Oh My. Silly children.
+</p>
+
+<p>
+So we have to do this manually:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">    pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
+</pre>
+</div>
+
+<p>
+That URL comes straight from Sourceforge. Look for the latest version of Matplotlib, search for the download link to the source distribution (<code>*.tar.gz</code>), copy that link and strip any trailing '/download'.
+</p>
+
+<p>
+UPDATE:
+</p>
+
+<p>
+It seems the matplotlib package was updated in the meantime, so you can just run <code>pip install matplotlib</code> now.
+</p>
+
+<p>
+This should now download and install matplotlib.
+</p>
+
+<p>
+Thank you for reading.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/compiling.html">compiling</a> <a href="tags/python.html">python</a> <a href="tags/macos.html">macos</a> </div><div class="post-date">14 Mar 2009</div><h1 class="post-title"><a href="http://bastibe.de/2009-03-14-get-a-mac.html">Get a Mac</a></h1>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2009-03/osx.png" alt="osx.png" />
+</p>
+</div>
+
+<p>
+Bei meinem üblichen, Samstagmorgendlichen, bettlägrigen Web-Rundgang habe ich heute drei sehr nette Artikel von David Alison gefunden, einem Windows-Programmierer und selbsternanntem Microsoft-Fanboy, der sich einen Mac zulegt und unverhofft glücklich damit wird. So glücklich sogar, dass er inzwischen mehr oder weniger ein Mac-only-User geworden ist.
+</p>
+
+<p>
+Ziemlich genau wie ihm ging es mir auch.
+</p>
+
+<ul class="org-ul">
+<li>Teil 1: <a href="http://www.davidalison.com/2008/02/hardcore-windows-guy-switches-to-mac.html">A hardcore Windows guy gets a Mac</a>
+</li>
+<li>Teil 2: <a href="http://www.davidalison.com/2008/04/mac-after-two-months-of-mac-heres-why-i.html">After two months of Mac, here's why I switched</a>
+</li>
+<li>Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-mac-one-year.html">Switching from Windows to Mac - One Year Later</a>
+</li>
+</ul>
+
+<p>
+Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll sind. Viel besser als alles, was ich dazu schreiben würde oder <a href="http://www.meinstudi.de/basti/?p=49">bereits</a> <a href="http://www.meinstudi.de/basti/?p=4">getan</a> <a href="http://www.meinstudi.de/basti/?p=24">habe</a>.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/macos.html">macos</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>

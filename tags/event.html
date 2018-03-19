@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title><meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="http://bastibe.de/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content"><h1 class="title">Posts tagged "event":</h1><div class="post-date">01 Sep 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-09-01-euroscipy.html">EuroScipy 2017</a></h1>
+
+<p>
+The second conference I attended this year was the <a href="https://www.euroscipy.org/2017/">EuroScipy 2017</a> in Erlangen. I gave a <a href="https://www.youtube.com/watch?v=mc8ru37dwf8">Talk about Audio in Python</a> and a <a href="https://youtu.be/qTgk2DUM6G0?t=10m15s">Lightning Talk about my Python/Matlab bridge</a>.
+</p>
+
+<p>
+My most striking impression of EuroScipy is that every person I talked to was working on something interesting, and could talk about his/her topic clearly and with enthusiasm. This mirrors my feelings from last year's Chaos Communication Congress, where the short scientific section stood out for its clarity and passion. I also enjoyed the fact that attendees were international and diverse, and exuded a heart-warming sense of community.
+</p>
+
+<p>
+Even though each scientific discipline has their own data sets, features, and models, everyone seemed to use a common set of methods (statistics, signal processing, machine learning) for working with that data. And, absolutely everybody used <a href="http://jupyter.org/">Jupyter Notebooks</a> for tutorials and teaching, and almost all data analyses were done in <a href="http://pandas.pydata.org/">Pandas</a>. This is particularly heartening since these technologies are geared towards reproducible research and open data.
+</p>
+
+<p>
+The hot topic of the conference clearly was machine learning and neural networks. However, the current confusion of competing frameworks and network architectures does not seem to be a good long-term solution. I hope that this ecosystem will eventually reach its NumPy moment, and collapse into a single, unified package. Then, neural networks might find their place as just another machine learning method with a few reusable parametrized prototype implementations in scikit-learn. Tools like <a href="https://keras.io/">Keras</a> look like good steps towards this goal.
+</p>
+
+<p>
+Finally, there was a lot of talk about “the reproducibility crisis” in science, and possible steps to improve the scientific process. In particular, I learned that it is absolutely necessary to not look at your test data before the final evaluation, to avoid overfitting your brain. You need to split your data into a development set for training, a validation set for parameter tuning, and a totally separate evaluation set for the final evaluation. In a similar way, it is important to state your hypotheses <i>in writing</i> before you test them, to avoid “HARKing” (Hypothesis After the Results are Known; aka “Noise Mining”, “P-Hacking”, or “Procedural Overfitting”). I dearly hope that <a href="https://cos.io/rr/">Registered Reports</a> will catch on, and absolve us from these all too human biases.
+</p>
+
+<p>
+In conclusion, EuroScipy 2017 was a ton of fun, and educational in many ways that I did not expect. If you are a scientific programmer, or if you maintain a scientific Python module, or if you are plain interested in scientific Python, I can highly recommend going to EuroScipy next year.
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/event.html">event</a> </div><div class="post-date">27 Aug 2017</div><h1 class="post-title"><a href="http://bastibe.de/2017-08-29-wac-and-javascript.html">Web Audio Conference and JavaScript</a></h1>
+
+<p>
+I am not much of a web programmer. I have written the odd website, I have supervised a few student projects, but I have never worked on any nontrivial JavaScript code base. Nevertheless, last week, I attended the <a href="http://wac.eecs.qmul.ac.uk/">Web Audio Conference 2017</a> in London. To put it succinctly: The web is home to fascinating people, but the technology is full of problems.
+</p>
+
+<p>
+Those people sure were amazing, though. I talked to a musician/programmer, who spent the last few years writing his own sequencer web app, and did an amazing live performance in his web browser! I witnessed another guy live coding a synthesizer in a web app on stage as a music piece. We attended a gastronomical concert with smartphone-synchronized distributed olfactory and audible experiences. And we played the piano, with each participant controlling one key from his smartphone. It was all truly inspiring!
+</p>
+
+<p>
+All of this was built on JavaScript, however. One musical performance reached its climax when the musician queued too many samples and synthesizers and JavaScript crashed. The crowd cheered, but this still highlights how JavaScript, garbage collection pauses, and heap exhaustion are real problems. And there was not a single talk that did not long for dedicated Audio Workers to fix some of these problems.
+</p>
+
+<p>
+But more than that, I learned that most of these apps have to pile frameworks upon frameworks just to get a simple demo app going. This is inescapable, since JavaScript is just not usable as an application platform without these frameworks. I take this as a warning: One should build a project from scratch every now and then, just to keep a realistic feel of how deep one's technology stack really is.
+</p>
+
+<p>
+All of these people are using JavaScript as an application platform. I would wager that an application platform is basically something like ①: layout, ②: widgets, ③: data bindings, and ④: event handling. If you think about it, JavaScript without libraries currently covers at most ① (CSS) and maybe ② (using HTML Custom Elements), though not at all at the same level as true GUI frameworks such as Qt or Cocoa. For ③ and ④, you have to add something like Ember, React, or Angular. It is strange to me that the JavaScript ecosystem does not seem to gravitate towards integrated frameworks but seems to prefer this wild west of codependent libraries.
+</p>
+
+<p>
+Then again, limitations breed genius, and the limits of the platform no doubt fueled the amazing feats these web audio people pulled off at WAC. It is truly inspiring what miracles dedicated people can pull off if they set their mind on them. And let's not forget that the Web Audio API itself is the work of a single person (per browser) as well.
+</p>
+
+<p>
+So, in summary, I learned a lot at WAC. I learned that web technologies are not ideal as an application platform. I learned that deep framework stacks are not desirable, yet often necessary. But above all, I learned that all this does not stop people from writing astonishing applications with those technologies. More power to the crazy ones!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/event.html">event</a> </div><div class="post-date">01 Jan 2015</div><h1 class="post-title"><a href="http://bastibe.de/2015-01-01-31c3.html">The 31. Chaos Communication Congress</a></h1>
+
+<p>
+Every year, between Christmas and New Year's Eve, a very special convention is held: The Chaos Computer Club hosts the Chaos Communication Congress. Among my peers, this is just "The Congress", the real highlight at the end of our year.
+</p>
+
+<p>
+Don't be fooled by the name though, The Congress is not just some conference, with talks and meetings and business cards. The Congress is where every internet citizen, technologist, hacker, DIYer, net-politician, programmer, computer scientist, or geek convenes to exchange ideas. It is a place of levity, amazement and enlightening.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2014-12/CCH.jpg" alt="CCH.jpg" />
+</p>
+</div>
+
+<p>
+The Congress lasts four days, and every day is packed full of exciting talks. My favorites:
+</p>
+<ul class="org-ul">
+<li><a href="http://31c3.mirror.speedpartner.de/congress/2014/h264-hd/31c3-6450-de-en-Ich_sehe_also_bin_ich_Du_hd.mp4">Ich sehe, also bin ich … Du</a> (German)
+As it turns out, you don't need special hardware to defeat defeat biometric scanners or passwords. A digital camera and some ingenuity is often enough.
+</li>
+<li><a href="http://31c3.mirror.speedpartner.de/congress/2014/h264-hd/31c3-6573-en-de-From_Computation_to_Consciousness_hd.mp4">From Computation to Consciousness</a> (English)
+This really resonated with me: What is consciousness? (Why) are animals or computers conscious or not? What does it all mean? Really, this is a computationally motivated introduction to constructivism. Highly recommended.
+</li>
+<li><a href="http://31c3.mirror.speedpartner.de/congress/2014/h264-hd/31c3-6558-de-en-Traue_keinem_Scan_den_du_nicht_selbst_gefaelscht_hast_hd.mp4">Traue keinem Scan, den du nicht selbst gefälscht hast</a> (German)
+The story of an entertaining person discovering that a scanned PDF does not necessarily contain the same text that was scanned if your scanner was built by Xerox.
+</li>
+</ul>
+<p>
+All of these talks and <i>many</i> more are also <a href="http://31c3.mirror.speedpartner.de/congress/2014/h264-hd/">available online</a>, and I highly recommend you watch some of them. But The Congress is not just talks; this is where all the German hackspaces and user groups meet and present their projects. Walking through the halls, there are laser shows, quadrocopters, 3D printers, stitching machines, automatic cocktail mixers, mechanical and human musicians, and so much more.
+</p>
+
+
+<div class="figure">
+<p><img src="http://bastibe.de/static/2014-12/hand.jpg" alt="hand.jpg" />
+</p>
+</div>
+
+<p>
+At its core though, this is a place where a bunch of like-minded people meet and take over a convention center. The Congress happens in the CCH, the Hamburg Convention Center. Over the course of the four days of The Congress, this building transforms from a sterile business location to a colorful geek-party. Within a day, all the lights in the building are somehow turned colorful, a pneumatic tube network sends messages across the building, there are lounges and coffee rooms, and strange and beautiful sculptures of light and electronics show up all over the place. Just walking across this cornucopia of light and sound is a treat for the senses.
+</p>
+
+<p>
+And this is just the natural thing that happens if you let a bunch of creative people do their thing. It is really a crowd like no other: Nowhere else have I seen such an open-minded and approachable crowd. There are no unpleasant drunk people, no fights, no harassment. All over the place, people talk to strangers, adults and children build things together, and men and women interact as equals.
+</p>
+
+<p>
+The Congress is really unique. I can't recommend it enough. If you can free up those four days between Christmas and New Year's Eve at all, go there. You won't regret it!
+</p>
+<div id="taglist"><p><a href="tags.html">Tags:</a> <a href="tags/event.html">event</a> </div><div id="archive">
+  <a href="archive.html">Older posts</a>
+</div>
+</div>
+</body>
