@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Sound in Python</title><meta  name="author" content="Bastian Bechtold" />
+<title>Sound in Python</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">27 Nov 2013</div>
-<h1 class="post-title">Sound in Python</h1>
+<div class="post-date">27 Nov 2013</div><h1 class="post-title"><a href="2013-11-27-audio-in-python.html">Sound in Python</a></h1>
 <p>
 Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
 </p>
@@ -96,12 +96,12 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
 <span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">opens your default audio device</span>
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
+<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
     <span style="color: #111111;">f</span> = SoundFile(<span style="color: #303030;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #111111; background-color: #fffff8;">format</span>=ogg_file,
+                  channels=s.channels, <span style="color: #111111;">format</span>=ogg_file,
                   mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">one second</span>
+    f.write(s.read(s.sample_rate)) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">one second</span>
 </pre>
 </div>
 
@@ -142,9 +142,9 @@ More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">l
 
 
 </div>
-</div><div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/python.html">python</a> <a href="http://bastibe.de/tags/audio.html">audio</a> </div></div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

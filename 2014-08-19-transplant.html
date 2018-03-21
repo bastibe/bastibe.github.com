@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Transplant</title><meta  name="author" content="Bastian Bechtold" />
+<title>Transplant</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">19 Aug 2014</div>
-<h1 class="post-title">Transplant</h1>
+<div class="post-date">19 Aug 2014</div><h1 class="post-title"><a href="2014-08-19-transplant.html">Transplant</a></h1>
 <p>
 In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.
 </p>
@@ -83,10 +83,10 @@ This alone accounts for a large percentage of Matlab code out there. But not eve
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111;">data</span> = matlab.randn(1, 4)
-matlab.<span style="color: #111111; background-color: #fffff8;">max</span>(data)
-&gt;&gt;&gt; [1.5326, 3] <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x, n = max(...)</span>
-matlab.<span style="color: #111111; background-color: #fffff8;">max</span>(data, nargout=1)
-&gt;&gt;&gt; 1.5326      <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x = max(...)</span>
+matlab.<span style="color: #111111;">max</span>(data)
+&gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
+matlab.<span style="color: #111111;">max</span>(data, nargout=1)
+&gt;&gt;&gt; 1.5326      <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = max(...)</span>
 </pre>
 </div>
 
@@ -103,8 +103,8 @@ Calling Matlab functions is the most important feature of Transplant. But there 
 
 <div class="org-src-container">
 
-<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: value = 5</span>
-<span style="color: #111111;">x</span> = matlab.value <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">Matlab: x = value</span>
+<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
+<span style="color: #111111;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
 </pre>
 </div>
 </li>
@@ -113,7 +113,7 @@ Calling Matlab functions is the most important feature of Transplant. But there 
 
 <div class="org-src-container">
 
-<pre class="src src-python">matlab.<span style="color: #111111; background-color: #fffff8;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
+<pre class="src src-python">matlab.<span style="color: #111111;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
 &gt;&gt;&gt; <span style="color: #111111;">ans</span> =
 &gt;&gt;&gt;
 &gt;&gt;&gt; double
@@ -163,9 +163,9 @@ At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I d
 
 
 </div>
-</div><div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/python.html">python</a> <a href="http://bastibe.de/tags/matlab.html">matlab</a> </div></div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

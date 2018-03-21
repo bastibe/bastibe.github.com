@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Changing File Creation Dates in OSX</title><meta  name="author" content="Bastian Bechtold" />
+<title>Changing File Creation Dates in OSX</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Oct 2015</div>
-<h1 class="post-title">Changing File Creation Dates in OSX</h1>
+<div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
 <p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
 </p>
@@ -54,22 +54,22 @@ Anyway, here's a small Python script that changes the file creation date (but no
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
 <span style="color: #111111; font-weight: bold;">import</span> os
 <span style="color: #111111; font-weight: bold;">import</span> datetime
-<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111; background-color: #fffff8;">range</span>(426, 465):
-    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(index)
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">extract old date:</span>
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">range</span>(426, 465):
+    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111;">format</span>(index)
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
     <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
     <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111; background-color: #fffff8;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
+    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
+    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/programming.html">programming</a> <a href="http://bastibe.de/tags/macos.html">macos</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-macos.html">macos</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

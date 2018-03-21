@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,129 +7,130 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>How to get solarized syntax highlighting on your blog</title><meta  name="author" content="Bastian Bechtold" />
+<title>How to get solarized syntax highlighting on your blog</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">15 Jul 2012</div>
-<h1 class="post-title">How to get solarized syntax highlighting on your blog</h1>
+<div class="post-date">15 Jul 2012</div><h1 class="post-title"><a href="2012-07-15-solarized-for-pygments.html">How to get solarized syntax highlighting on your blog</a></h1>
 <p>
 Yesterday, I spent a few hours creating a solarized like CSS file for use with my new blogging tool. You could just scrape the settings from this very website, but for convenience, here they are:
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Text </span><span style="color: #303030; font-style: italic;">*/</span>
+<pre class="src src-c"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Text </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .t   { <span style="color: #111111;">color</span>: #586e75 }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Whitespace </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Whitespace </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .w   { <span style="color: #111111;">color</span>: #073642 }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Error </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Error </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .err { <span style="color: #111111;">color</span>: #cb4b16; }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .k   { <span style="color: #111111;">color</span>: #859900 }
-.codehilite .kc  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Constant </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .kd  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Declaration </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .kn  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Namespace </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .kp  { <span style="color: #111111;">color</span>: #859900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Pseudo </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .kr  { <span style="color: #111111;">color</span>: #073642 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Reserved </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .kt  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Keyword.Type </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .kc  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Constant </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .kd  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Declaration </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .kn  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Namespace </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .kp  { <span style="color: #111111;">color</span>: #859900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Pseudo </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .kr  { <span style="color: #111111;">color</span>: #073642 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Reserved </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .kt  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Type </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .n   { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .na  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Attribute </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nb  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Builtin </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nc  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Class </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .ne  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Error </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .no  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Constant </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nd  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Decorator </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .ni  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Entity </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nf  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Function </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nn  { <span style="color: #111111;">color</span>: #586e75; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Namespace </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nt  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Tag </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .nv  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .na  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Attribute </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nb  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Builtin </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nc  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Class </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .ne  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Error </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .no  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Constant </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nd  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Decorator </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .ni  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Entity </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nf  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Function </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nn  { <span style="color: #111111;">color</span>: #586e75; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Namespace </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nt  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Tag </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .nv  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Builtin </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Builtin </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .b   { <span style="color: #111111;">color</span>: #859900 }
-.codehilite .bp  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Builtin.Pseudo </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .bp  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Builtin.Pseudo </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Variable </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Variable </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .v   { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .vc  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable.Class </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .vg  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable.Global </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .vi  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Name.Variable.Instance </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .vc  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Class </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .vg  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Global </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .vi  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Instance </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .m { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .mf { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Float </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .mh { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Hex </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .mi { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Integer </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .mo { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Oct </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .m { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .mf { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Float </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .mh { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Hex </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .mi { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Integer </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .mo { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Oct </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .s { <span style="color: #111111;">color</span>: #2aa198 }
-.codehilite .sb { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Backtick </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .sc { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Char </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .sd { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Doc </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .s2 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Double </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .se { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Escape </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .sh { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Heredoc </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .si { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Interpol </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .sx { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Other </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .sr { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Regex </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .s1 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Single </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .ss { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.String.Symbol </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .sb { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Backtick </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .sc { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Char </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .sd { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Doc </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .s2 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Double </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .se { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Escape </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .sh { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Heredoc </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .si { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Interpol </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .sx { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Other </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .sr { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Regex </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .s1 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Single </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .ss { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Symbol </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Integer </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .il { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Literal.Number.Integer.Long </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Integer </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .il { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Integer.Long </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Operator </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Operator </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .o  { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .ow { <span style="color: #111111;">color</span>: #859900 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Operator.Word </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .ow { <span style="color: #111111;">color</span>: #859900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Operator.Word </span><span style="color: #111111; font-style: italic;">*/</span>
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Punctuation </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Punctuation </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .p  { <span style="color: #111111;">color</span>: #586e75 }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .c { <span style="color: #111111;">color</span>: #93a1a1; font-style: italic }
-.codehilite .cm { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Multiline </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .cp { <span style="color: #111111;">color</span>: #93a1a1 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Preproc </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .c1 { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Single </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .cs { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Comment.Special </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .cm { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Multiline </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .cp { <span style="color: #111111;">color</span>: #93a1a1 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Preproc </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .c1 { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Single </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .cs { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Special </span><span style="color: #111111; font-style: italic;">*/</span>
 
 .codehilite .hll { background-color: #dc322f }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic </span><span style="color: #111111; font-style: italic;">*/</span>
 .codehilite .g { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .gd { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Deleted </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .ge { font-style: italic } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Emph </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gr { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Error </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gh { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Heading </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gi { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Inserted </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .go { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Output </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gp { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Prompt </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gs { font-weight: 586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Strong </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gu { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Subheading </span><span style="color: #303030; font-style: italic;">*/</span>
-.codehilite .gt { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">Generic.Traceback </span><span style="color: #303030; font-style: italic;">*/</span>
+.codehilite .gd { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Deleted </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .ge { font-style: italic } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Emph </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gr { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Error </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gh { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Heading </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gi { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Inserted </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .go { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Output </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gp { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Prompt </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gs { font-weight: 586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Strong </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gu { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Subheading </span><span style="color: #111111; font-style: italic;">*/</span>
+.codehilite .gt { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Traceback </span><span style="color: #111111; font-style: italic;">*/</span>
 </pre>
 </div>
 
@@ -158,9 +158,9 @@ Yesterday, I spent a few hours creating a solarized like CSS file for use with m
 <p>
 Keep in mind though that I have no formal knowledge of CSS whatsoever beyond what I could gather from these very files.
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/blog.html">blog</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-blog.html">blog</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

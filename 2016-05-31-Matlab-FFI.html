@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Matlab has an FFI and it is not Mex</title><meta  name="author" content="Bastian Bechtold" />
+<title>Matlab has an FFI and it is not Mex</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">31 May 2016</div>
-<h1 class="post-title">Matlab has an FFI and it is not Mex</h1>
+<div class="post-date">31 May 2016</div><h1 class="post-title"><a href="2016-05-31-Matlab-FFI.html">Matlab has an FFI and it is not Mex</a></h1>
 <p>
 Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
 </p>
@@ -51,7 +51,7 @@ So here goes, a very simple C library that adds two arrays:
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.c:</span>
+<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
 <span style="color: #111111;">#include</span> test.h
 
 <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
@@ -60,7 +60,7 @@ So here goes, a very simple C library that adds two arrays:
     }
 }
 
-<span style="color: #303030; font-style: italic;">// </span><span style="color: #303030; font-style: italic;">test.h:</span>
+<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
 <span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
 <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
 </pre>
@@ -77,8 +77,8 @@ Now, let's load that library into Matlab with <code>loadlibrary</code>:
 <div class="org-src-container">
 
 <pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #303030;">'test'</span>))
-    [notfound<span style="color: #111111; background-color: #fffff8;">,</span> warnings] <span style="color: #111111; background-color: #fffff8;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111; background-color: #fffff8;">;</span>
-    assert(isempty(notfound)<span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'could not load test library'</span>)
+    [notfound<span style="color: #111111;">,</span> warnings] <span style="color: #111111;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111;">;</span>
+    assert(isempty(notfound)<span style="color: #111111;">,</span> <span style="color: #303030;">'could not load test library'</span>)
 <span style="color: #111111; font-weight: bold;">end</span>
 </pre>
 </div>
@@ -93,11 +93,11 @@ With that, we can call functions in that library using <code>calllib</code>. But
 
 <div class="org-src-container">
 
-<pre class="src src-octave">vector1 <span style="color: #111111; background-color: #fffff8;">=</span> [1 2 3 4 5]<span style="color: #111111; background-color: #fffff8;">;</span>
-vector2 <span style="color: #111111; background-color: #fffff8;">=</span> [9 8 7 6 5]<span style="color: #111111; background-color: #fffff8;">;</span>
+<pre class="src src-octave">vector1 <span style="color: #111111;">=</span> [1 2 3 4 5]<span style="color: #111111;">;</span>
+vector2 <span style="color: #111111;">=</span> [9 8 7 6 5]<span style="color: #111111;">;</span>
 
-vector1ptr <span style="color: #111111; background-color: #fffff8;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1)<span style="color: #111111; background-color: #fffff8;">;</span>
-vector2ptr <span style="color: #111111; background-color: #fffff8;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector2)<span style="color: #111111; background-color: #fffff8;">;</span>
+vector1ptr <span style="color: #111111;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111;">,</span> vector1)<span style="color: #111111;">;</span>
+vector2ptr <span style="color: #111111;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111;">,</span> vector2)<span style="color: #111111;">;</span>
 </pre>
 </div>
 
@@ -111,7 +111,7 @@ Then, finally, let's call our function:
 
 <div class="org-src-container">
 
-<pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1))<span style="color: #111111; background-color: #fffff8;">;</span>
+<pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1))<span style="color: #111111;">;</span>
 </pre>
 </div>
 
@@ -121,7 +121,7 @@ If you see no errors, everything went smoothly, and you will now have changed th
 
 <div class="org-src-container">
 
-<pre class="src src-octave">added_vectors <span style="color: #111111; background-color: #fffff8;">=</span> vector1ptr.Value<span style="color: #111111; background-color: #fffff8;">;</span>
+<pre class="src src-octave">added_vectors <span style="color: #111111;">=</span> vector1ptr.Value<span style="color: #111111;">;</span>
 </pre>
 </div>
 
@@ -131,12 +131,12 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 
 <div class="org-src-container">
 
-<pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111; background-color: #fffff8;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111; background-color: #fffff8;">,</span> vector1ptr<span style="color: #111111; background-color: #fffff8;">,</span> vector2ptr<span style="color: #111111; background-color: #fffff8;">,</span> length(vector1)))
-<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.9155e-05</span>
-timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111; background-color: #fffff8;">,</span> single(vector2)))
-<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 4.6262e-05</span>
-timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111; background-color: #fffff8;">,</span> vector2))
-<span style="color: #303030; font-style: italic;">%   </span><span style="color: #303030; font-style: italic;">ans = 1.2326e-04</span>
+<pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1)))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111;">,</span> single(vector2)))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
+timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111;">,</span> vector2))
+<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
 </pre>
 </div>
 
@@ -147,9 +147,9 @@ So as you can see, the <code>calllib</code> is plenty fast. However, if you add 
 <p>
 However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life <i>not</i> spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/matlab.html">matlab</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

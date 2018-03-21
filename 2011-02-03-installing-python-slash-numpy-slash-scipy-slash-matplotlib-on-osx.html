@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Installing Python/Numpy/Scipy/Matplotlib on OSX</title><meta  name="author" content="Bastian Bechtold" />
+<title>Installing Python/Numpy/Scipy/Matplotlib on OSX</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Feb 2011</div>
-<h1 class="post-title">Installing Python/Numpy/Scipy/Matplotlib on OSX</h1>
+<div class="post-date">03 Feb 2011</div><h1 class="post-title"><a href="2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a></h1>
 <p>
 For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.
 </p>
@@ -63,7 +63,7 @@ To cut this short, here is what you need to get that Python running:
 
 <div class="org-src-container">
 
-<pre class="src src-sh">brew install python
+<pre class="src src-sh">    brew install python
 </pre>
 </div>
 
@@ -77,7 +77,7 @@ You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code
 
 <div class="org-src-container">
 
-<pre class="src src-sh"><span style="color: #111111; background-color: #fffff8;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
+<pre class="src src-sh">    <span style="color: #111111;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
 </pre>
 </div>
 
@@ -95,8 +95,8 @@ Alright, next up, install the python package manager:
 
 <div class="org-src-container">
 
-<pre class="src src-sh">brew install distribute
-brew install pip
+<pre class="src src-sh">    brew install distribute
+    brew install pip
 </pre>
 </div>
 
@@ -106,7 +106,7 @@ This will come preconfigured for your newly installed Python. In an ideal world,
 
 <div class="org-src-container">
 
-<pre class="src src-sh">brew install pkg-config
+<pre class="src src-sh">    brew install pkg-config
 </pre>
 </div>
 
@@ -116,7 +116,7 @@ Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:
 
 <div class="org-src-container">
 
-<pre class="src src-sh">brew install gfortran
+<pre class="src src-sh">    brew install gfortran
 </pre>
 </div>
 
@@ -126,8 +126,8 @@ Alright. That was enough. Now on to pip. With all these dependencies cleared, pi
 
 <div class="org-src-container">
 
-<pre class="src src-sh">pip install numpy
-pip install scipy
+<pre class="src src-sh">    pip install numpy
+    pip install scipy
 </pre>
 </div>
 
@@ -141,7 +141,7 @@ So we have to do this manually:
 
 <div class="org-src-container">
 
-<pre class="src src-sh">pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
+<pre class="src src-sh">    pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
 </pre>
 </div>
 
@@ -164,9 +164,9 @@ This should now download and install matplotlib.
 <p>
 Thank you for reading.
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/compiling.html">compiling</a> <a href="http://bastibe.de/tags/python.html">python</a> <a href="http://bastibe.de/tags/macos.html">macos</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-python.html">python</a> <a href="tag-macos.html">macos</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

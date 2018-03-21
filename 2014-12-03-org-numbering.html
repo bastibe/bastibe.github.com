@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Org Mode Selective Section Numbering</title><meta  name="author" content="Bastian Bechtold" />
+<title>Org Mode Selective Section Numbering</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Dec 2014</div>
-<h1 class="post-title">Org Mode Selective Section Numbering</h1>
+<div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
 <p>
 This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
 </p>
@@ -42,9 +42,9 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111; background-color: #fffff8;">:parent</span> data))))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
     (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
-         (string= (org-element-property <span style="color: #111111; background-color: #fffff8;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
+         (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
         (replace-regexp-in-string
          <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
          <span style="color: #303030;">"\\1*"</span> data nil nil 1)
@@ -68,21 +68,21 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 
 <div class="org-src-container">
 
-<pre class="src src-css"><span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #303030; font-style: italic;">*/</span>
+<pre class="src src-css"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111;">display</span>: none; }
 <span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111;">display</span>: none; }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">define counters for the different headline levels </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111;">counter-reset</span>: section; }
 <span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111;">counter-reset</span>: subsection; }
 <span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111;">counter-reset</span>: subsubsection; }
 <span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111;">counter-reset</span>: paragraph; }
 <span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111;">counter-reset</span>: subparagraph; }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">prepend section numbers before headlines </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">h2::before </span>{
     <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
     <span style="color: #111111;">counter-increment</span>: section;
@@ -104,7 +104,7 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
     <span style="color: #111111;">counter-increment</span>: subparagraph;
 }
 
-<span style="color: #303030; font-style: italic;">/* </span><span style="color: #303030; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #303030; font-style: italic;">*/</span>
+<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111;">content</span>: none; }
 </pre>
 </div>
@@ -118,8 +118,8 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111; background-color: #fffff8;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #111111; background-color: #fffff8;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>)
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>)
         (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
                (replace-regexp-in-string
                 <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
@@ -137,9 +137,9 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <p>
 Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/org-mode.html">org-mode</a> <a href="http://bastibe.de/tags/emacs.html">emacs</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

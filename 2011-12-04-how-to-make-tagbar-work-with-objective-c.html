@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>How to make Tagbar work with Objective-C</title><meta  name="author" content="Bastian Bechtold" />
+<title>How to make Tagbar work with Objective-C</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">04 Dec 2011</div>
-<h1 class="post-title">How to make Tagbar work with Objective-C</h1>
+<div class="post-date">04 Dec 2011</div><h1 class="post-title"><a href="2011-12-04-how-to-make-tagbar-work-with-objective-c.html">How to make Tagbar work with Objective-C</a></h1>
 <p>
 For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)
 </p>
@@ -49,40 +49,40 @@ Some investigation proved: There is simply no template in Tagbar for Objective-C
 </p>
 
 <pre class="example">
-" add a definition for Objective-C to tagbar
-let g:tagbar_type_objc = {
-    \ 'ctagstype' : 'ObjectiveC',
-    \ 'kinds'     : [
-        \ 'i:interface',
-        \ 'I:implementation',
-        \ 'p:Protocol',
-        \ 'm:Object_method',
-        \ 'c:Class_method',
-        \ 'v:Global_variable',
-        \ 'F:Object field',
-        \ 'f:function',
-        \ 'p:property',
-        \ 't:type_alias',
-        \ 's:type_structure',
-        \ 'e:enumeration',
-        \ 'M:preprocessor_macro',
-    \ ],
-    \ 'sro'        : ' ',
-    \ 'kind2scope' : {
-        \ 'i' : 'interface',
-        \ 'I' : 'implementation',
-        \ 'p' : 'Protocol',
-        \ 's' : 'type_structure',
-        \ 'e' : 'enumeration'
-    \ },
-    \ 'scope2kind' : {
-        \ 'interface'      : 'i',
-        \ 'implementation' : 'I',
-        \ 'Protocol'       : 'p',
-        \ 'type_structure' : 's',
-        \ 'enumeration'    : 'e'
+    " add a definition for Objective-C to tagbar
+    let g:tagbar_type_objc = {
+        \ 'ctagstype' : 'ObjectiveC',
+        \ 'kinds'     : [
+            \ 'i:interface',
+            \ 'I:implementation',
+            \ 'p:Protocol',
+            \ 'm:Object_method',
+            \ 'c:Class_method',
+            \ 'v:Global_variable',
+            \ 'F:Object field',
+            \ 'f:function',
+            \ 'p:property',
+            \ 't:type_alias',
+            \ 's:type_structure',
+            \ 'e:enumeration',
+            \ 'M:preprocessor_macro',
+        \ ],
+        \ 'sro'        : ' ',
+        \ 'kind2scope' : {
+            \ 'i' : 'interface',
+            \ 'I' : 'implementation',
+            \ 'p' : 'Protocol',
+            \ 's' : 'type_structure',
+            \ 'e' : 'enumeration'
+        \ },
+        \ 'scope2kind' : {
+            \ 'interface'      : 'i',
+            \ 'implementation' : 'I',
+            \ 'Protocol'       : 'p',
+            \ 'type_structure' : 's',
+            \ 'enumeration'    : 'e'
+        \ }
     \ }
-\ }
 </pre>
 
 <p>
@@ -93,9 +93,9 @@ With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class de
 <p>
 Happy Vimming!
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/vim.html">vim</a> <a href="http://bastibe.de/tags/text-editor.html">text-editor</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-vim.html">vim</a> <a href="tag-text-editor.html">text-editor</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

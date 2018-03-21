@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>The Style of Scientific Code</title><meta  name="author" content="Bastian Bechtold" />
+<title>The Style of Scientific Code</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">13 Mar 2016</div>
-<h1 class="post-title">The Style of Scientific Code</h1>
+<div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
 <p>
 What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
 </p>
@@ -45,14 +45,14 @@ But lately, I have come to struggle with these rules. I am now writing a lot of 
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">rectwin_spectrum</span>(angular_frequency, specsize):
     <span style="color: #111111;">"""The spectrum of a rectangular window. [...]"""</span>
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">this will be corrected later, suppress the warning.</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will be corrected later, suppress the warning.</span>
     <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #303030;">'ignore'</span>):
         <span style="color: #111111;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
                      np.sin(specsize*angular_frequency/2) /
                      np.sin(angular_frequency/2) )
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">since sin(x) == x for small x, the above expression</span>
-    <span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">since sin(x) == x for small x, the above expression</span>
+    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
     <span style="color: #111111;">spectrum</span>[angular_frequency == 0.0] = specsize
     <span style="color: #111111; font-weight: bold;">return</span> spectrum
 </pre>
@@ -68,7 +68,7 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
 
 <div class="org-src-container">
 
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #111111; background-color: #fffff8;">&lt;</span> handle
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #111111;">&lt;</span> handle
     <span style="color: #111111; font-weight: bold;">properties</span>
         data
         samplerate
@@ -79,24 +79,24 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
         duration
     <span style="color: #111111; font-weight: bold;">end</span>
     <span style="color: #111111; font-weight: bold;">methods</span>
-        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111; background-color: #fffff8;">,</span> samplerate<span style="color: #111111; background-color: #fffff8;">,</span> blocksize<span style="color: #111111; background-color: #fffff8;">,</span> hopsize)
-            <span style="color: #303030; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
-            narginchk(2<span style="color: #111111; background-color: #fffff8;">,</span> 4)<span style="color: #111111; background-color: #fffff8;">;</span>
-            obj.data <span style="color: #111111; background-color: #fffff8;">=</span> data<span style="color: #111111; background-color: #fffff8;">;</span>
-            obj.samplerate <span style="color: #111111; background-color: #fffff8;">=</span> samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
-            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111; background-color: #fffff8;">&gt;=</span> 3
-                obj.blocksize <span style="color: #111111; background-color: #fffff8;">=</span> blocksize<span style="color: #111111; background-color: #fffff8;">;</span>
+        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111;">,</span> samplerate<span style="color: #111111;">,</span> blocksize<span style="color: #111111;">,</span> hopsize)
+            <span style="color: #111111; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
+            narginchk(2<span style="color: #111111;">,</span> 4)<span style="color: #111111;">;</span>
+            obj.data <span style="color: #111111;">=</span> data<span style="color: #111111;">;</span>
+            obj.samplerate <span style="color: #111111;">=</span> samplerate<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111;">&gt;=</span> 3
+                obj.blocksize <span style="color: #111111;">=</span> blocksize<span style="color: #111111;">;</span>
             <span style="color: #111111; font-weight: bold;">else</span>
-                obj.blocksize <span style="color: #111111; background-color: #fffff8;">=</span> 2048<span style="color: #111111; background-color: #fffff8;">;</span>
+                obj.blocksize <span style="color: #111111;">=</span> 2048<span style="color: #111111;">;</span>
             <span style="color: #111111; font-weight: bold;">end</span>
-            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111; background-color: #fffff8;">==</span> 4
-                obj.hopsize <span style="color: #111111; background-color: #fffff8;">=</span> hopsize<span style="color: #111111; background-color: #fffff8;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111;">==</span> 4
+                obj.hopsize <span style="color: #111111;">=</span> hopsize<span style="color: #111111;">;</span>
             <span style="color: #111111; font-weight: bold;">else</span>
-                obj.hopsize <span style="color: #111111; background-color: #fffff8;">=</span> 1024<span style="color: #111111; background-color: #fffff8;">;</span>
+                obj.hopsize <span style="color: #111111;">=</span> 1024<span style="color: #111111;">;</span>
             <span style="color: #111111; font-weight: bold;">end</span>
         <span style="color: #111111; font-weight: bold;">end</span>
-        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #111111; background-color: #fffff8;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
-            time <span style="color: #111111; background-color: #fffff8;">=</span> length(obj.data)<span style="color: #111111; background-color: #fffff8;">/</span>obj.samplerate<span style="color: #111111; background-color: #fffff8;">;</span>
+        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
+            time <span style="color: #111111;">=</span> length(obj.data)<span style="color: #111111;">/</span>obj.samplerate<span style="color: #111111;">;</span>
         <span style="color: #111111; font-weight: bold;">end</span>
     <span style="color: #111111; font-weight: bold;">end</span>
 <span style="color: #111111; font-weight: bold;">end</span>
@@ -114,9 +114,9 @@ The sad thing is, I don't know the answer to these questions. There have been a 
 <p>
 Do you have any idea how to progress from here?
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/programming.html">programming</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">

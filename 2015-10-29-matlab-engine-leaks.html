@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -8,27 +7,28 @@
       type="appliation/rss+xml"
       href="http://bastibe.de/rss.xml"
       title="RSS feed for http://bastibe.de/">
-<title>Massive Memory Leak in the Matlab Engine for Python</title><meta  name="author" content="Bastian Bechtold" />
+<title>Massive Memory Leak in the Matlab Engine for Python</title>
+<meta  name="author" content="Bastian Bechtold" />
 <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-<link href= "http://bastibe.de/static/style.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="http://bastibe.de/static/favicon.ico">
-<link rel="apple-touch-icon-precomposed" href="http://bastibe.de/static/favicon-152.png">
-<link rel="msapplication-TitleImage" href="http://bastibe.de/static/favicon-144.png">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">29 Oct 2015</div>
-<h1 class="post-title">Massive Memory Leak in the Matlab Engine for Python</h1>
+<div class="post-date">29 Oct 2015</div><h1 class="post-title"><a href="2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
 <p>
 As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
 </p>
@@ -41,9 +41,9 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 
 <span style="color: #111111;">eng</span> = matlab.engine.start_matlab()
 <span style="color: #111111;">random_data</span> = numpy.random.randn(100)
-<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">convert Numpy data to Matlab:</span>
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">convert Numpy data to Matlab:</span>
 <span style="color: #111111;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #111111;">data_sum</span> = eng.<span style="color: #111111; background-color: #fffff8;">sum</span>(matlab_data)
+<span style="color: #111111;">data_sum</span> = eng.<span style="color: #111111;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -101,10 +101,10 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 <div class="org-src-container">
 
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
-<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">get a list of all objects known to Python:</span>
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
 <span style="color: #111111;">all_objects</span> = muppy.get_objects()
-<span style="color: #303030; font-style: italic;"># </span><span style="color: #303030; font-style: italic;">sort out only `array.array` instances:</span>
-<span style="color: #111111;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111; background-color: #fffff8;">isinstance</span>(obj, array.array)]
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">sort out only `array.array` instances:</span>
+<span style="color: #111111;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111;">isinstance</span>(obj, array.array)]
 
 <span style="color: #111111; font-weight: bold;">import</span> objgraph
 objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #303030;">'array.png'</span>)
@@ -130,7 +130,7 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
     <span style="color: #111111;">test_data</span> = numpy.zeros(1024*1024)
     <span style="color: #111111;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #111111; background-color: #fffff8;">sum</span>(matlab_data)
+    eng.<span style="color: #111111;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -170,9 +170,9 @@ This data is not referenced from anywhere within Python, and is counted as <i>le
 <p>
 I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
 </p>
-<div id="taglist"><p><a href="http://bastibe.de/tags.html">Tags:</a> <a href="http://bastibe.de/tags/matlab.html">matlab</a> </div></div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
-  <a href="http://bastibe.de/archive.html">Other posts</a>
+  <a href="archive.html">Other posts</a>
 </div>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
