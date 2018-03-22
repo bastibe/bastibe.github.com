@@ -28,6 +28,15 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "blog":</h1>
+<div class="post-date">22 Mar 2018</div><h1 class="post-title"><a href="2018-03-22-org-static-blog-gets-tags.html">Blogging with org-static-blog</a></h1>
+<p>
+A while ago, I scratched an old itch and wrote my own static site generator, called <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. It is a simple thing: You hand it a directory full of *.org files with a <code>#+title:</code> and <code>#+date:</code>, and it assembles a bunch of HTML pages and an RSS feed from them. There are no external dependencies beyond Emacs.
+</p>
+
+<p>
+Today, I <a href="http://melpa-stable.milkbox.net/#/org-static-blog">released</a> version 1.1.0 of org-static-blog, which introduces two new features: <a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">speed</a>, and tags. You can now—optionally—add <code>#+tags:</code> to your *.org files, <code>(setq org-static-blog-enable-tags t)</code>, and org-static-blog will add tag links to every blog post, create tag indices, and add <code>&lt;category&gt;</code> tags to the RSS feed.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-blog.html">blog</a> </div>
 <div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
 <p>
 Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
