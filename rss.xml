@@ -4,16 +4,24 @@
 <title>Bastibe.de</title>
 <description>Bastibe.de</description>
 <link>http://bastibe.de/</link>
-<lastBuildDate>Thu, 22 Mar 2018 10:04:19 +0100</lastBuildDate>
+<lastBuildDate>Fri, 23 Mar 2018 09:33:43 +0100</lastBuildDate>
 <item>
-  <title>Blogging with org-static-blog</title>
+  <title>Blogging with org-static-blog (Updated)</title>
   <description><![CDATA[
 <p>
 A while ago, I scratched an old itch and wrote my own static site generator, called <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. It is a simple thing: You hand it a directory full of *.org files with a <code>#+title:</code> and <code>#+date:</code>, and it assembles a bunch of HTML pages and an RSS feed from them. There are no external dependencies beyond Emacs.
 </p>
 
 <p>
-Today, I <a href="http://melpa-stable.milkbox.net/#/org-static-blog">released</a> version 1.1.0 of org-static-blog, which introduces two new features: <a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">speed</a>, and tags. You can now—optionally—add <code>#+tags:</code> to your *.org files, <code>(setq org-static-blog-enable-tags t)</code>, and org-static-blog will add tag links to every blog post, create tag indices, and add <code>&lt;category&gt;</code> tags to the RSS feed.
+Today, I <a href="http://melpa-stable.milkbox.net/#/org-static-blog">released</a> version 1.1.0 of org-static-blog, which introduces two new features: <a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">speed</a>, and tags. You can now—optionally—add <code>#+filetags:</code> to your *.org files, <code>(setq org-static-blog-enable-tags t)</code>, and org-static-blog will add tag links to every blog post, create tag indices, and add <code>&lt;category&gt;</code> tags to the RSS feed.
+</p>
+
+<p>
+<b>Update:</b>
+</p>
+
+<p>
+As <a href="https://github.com/kaushalmodi">Kaushal Modi</a> pointed out in the comments, org-mode uses <code>#+filetags:</code> to set tags for entire files. My first implementation used <code>#+tags:</code>. This is now deprecated. <code>#+tags:</code> still works, but issues a warning, and will be removed in the future. Sorry for the inconvenience.
 </p>
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-blog.html">blog</a> </div>]]></description>
   <category>blog</category>
