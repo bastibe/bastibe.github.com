@@ -28,6 +28,52 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">02 Apr 2018</div><h1 class="post-title"><a href="2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h1>
+<p>
+I keep a simple journal in <a href="https://github.com/bastibe/org-journal">org-journal</a>: One text file per day, in <a href="https://orgmode.org/">org-mode</a>. But over the years, org-journal has grown somewhat beyond this simple use case. <a href="https://github.com/bastibe/org-journal/releases/tag/1.7.1">About three years ago</a>, a gentleman named <a href="https://github.com/vkazanov">Vladimir Kazanov</a> implemented a very fast text search. Thus, my journal became an information archive. <a href="https://github.com/bastibe/org-journal/releases/tag/1.11.0">About two years ago</a>, org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And <a href="https://github.com/bastibe/org-journal/releases/tag/1.13.1">today</a>, org-journal gained the ability to work with future journal entries, thus becoming a calendar.
+</p>
+
+<p>
+Despite all of these features however, org-journal remains one org file per day, with fancy functions to do fancy things if you want them—or ignore them, if the journal is all you need.
+</p>
+
+<p>
+Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+</p>
+
+<pre>
+<span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>
+<span style="color: #111111; font-weight: bold; font-style: italic;">Monday     2 April 2018 W14</span>
+<span style="color: #111111;">  2018-04-02: Easter Monday </span>
+<span style="color: #111111; font-weight: bold;">Tuesday    3 April 2018</span>
+<span style="color: #111111; font-weight: bold;">Wednesday  4 April 2018</span>
+<span style="color: #111111; font-weight: bold;">Thursday   5 April 2018</span>
+<span style="color: #111111;">  2018-04-05: Scheduled:  Give Lecture 4 on Applied Programming</span>             <span style="color: #111111;"><span style="font-weight: bold;">:BB:</span></span>
+<span style="color: #111111; font-weight: bold;">Friday     6 April 2018</span>
+<span style="color: #111111;">  2018-04-06: Scheduled:  Release of new Eels record</span>
+<span style="color: #111111; font-weight: bold;">Saturday   7 April 2018</span>
+<span style="color: #111111; font-weight: bold;">Sunday     8 April 2018</span>
+<span style="color: #111111;">  2018-04-08: Scheduled:  </span><span style="color: #111111;">TODO</span><span style="color: #111111;"> Celebrate Sunday</span>
+</pre>
+
+<p>
+And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing <code>i j</code> in <code>M-x calendar</code> or by calling <code>org-journal-new-scheduled-entry</code>, and org-journal will create an entry with a <code>SCHEDULED</code> property of the appropriate date (prefix to suppress <code>TODO</code>). When the current day reaches that entry, it will incorporate it into the daily journal.
+</p>
+
+<p>
+Future journal entries are highlighted in <code>M-x calendar</code>, and you can get an overview of them with <code>org-journal-schedule-view</code>, or, if you enable <code>org-journal-enable-agenda-integration</code>, through the ordinary <code>org-agenda</code>, as shown above. The agenda integration does not include past journal entries in the agenda, since agenda searches tend to become very slow if they have to traverse the hundreds of files in my journal.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: This is of course not <i>his</i> calendar, but mine.
+</p></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div>
 <div class="post-date">22 Mar 2018</div><h1 class="post-title"><a href="2018-03-22-org-static-blog-gets-tags.html">Blogging with org-static-blog (Updated)</a></h1>
 <p>
 A while ago, I scratched an old itch and wrote my own static site generator, called <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. It is a simple thing: You hand it a directory full of *.org files with a <code>#+title:</code> and <code>#+date:</code>, and it assembles a bunch of HTML pages and an RSS feed from them. There are no external dependencies beyond Emacs.
@@ -331,24 +377,7 @@ This will fail if the hourly backup takes longer than 15 minutes. This is rather
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">28 Dec 2017</div><h1 class="post-title"><a href="2017-12-28-dropbox-timemachine-is-useless.html">Dropbox deleted my pictures and Time Machine didn't backup</a></h1>
-<p>
-Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
-</p>
-
-<p>
-So, what have I learned? Dropbox loses your data, and Time Machine can't restore it. These programs are obviously no good for backups. Let me repeat this: <b>Dropbox and Time Machine are not a backup!</b> A true backup needs to be reliable, keep an infinite history, and <i>never</i>, <i>never</i>, <i>never</i> accidentally delete files.
-</p>
-
-<p>
-From now on, I will use <a href="http://rsnapshot.org/">rsnapshot</a> for backups. <a href="https://rayed.com/wordpress/?p=1693">Here</a>'s a tutorial on how to set it up on a Mac. I have used rsnapshot for years at work, and it has never let me down. For syncronizing things between computers, I now use <a href="https://syncthing.net/">syncthing</a>. Both of these programs are not as user-friendly as Dropbox or Time Machine, but that is a small price to pay for a working backup.
-</p>
-
-<p>
-A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get-a-mac.html">Apple</a> and <a href="http://bastibe.de/2009-03-28-synchronisieren-von-google.html">Dropbox</a> and Google and Amazon would lead us to a bright future of computers that "just work", and could solve our daily chores ever more conveniently and reliably. But I was proven wrong. <a href="http://bastibe.de/2012-07-09-apple-is-failing-me.html">So</a>. <a href="http://bastibe.de/2012-11-01-apple-tv.html">Many</a>. <a href="http://bastibe.de/2015-10-16-finder-woes.html">Times</a>. It seems that for-profit software inevitably becomes less dependable as it adds ever more features to attract ever more users. In contrast, free software can focus on <a href="http://bastibe.de/2017-10-24-the-long-game.html">incremental improvements and steadily increasing reliability</a>.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> </div><div id="archive">
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

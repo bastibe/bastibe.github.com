@@ -28,6 +28,52 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "org-mode":</h1>
+<div class="post-date">02 Apr 2018</div><h1 class="post-title"><a href="2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h1>
+<p>
+I keep a simple journal in <a href="https://github.com/bastibe/org-journal">org-journal</a>: One text file per day, in <a href="https://orgmode.org/">org-mode</a>. But over the years, org-journal has grown somewhat beyond this simple use case. <a href="https://github.com/bastibe/org-journal/releases/tag/1.7.1">About three years ago</a>, a gentleman named <a href="https://github.com/vkazanov">Vladimir Kazanov</a> implemented a very fast text search. Thus, my journal became an information archive. <a href="https://github.com/bastibe/org-journal/releases/tag/1.11.0">About two years ago</a>, org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And <a href="https://github.com/bastibe/org-journal/releases/tag/1.13.1">today</a>, org-journal gained the ability to work with future journal entries, thus becoming a calendar.
+</p>
+
+<p>
+Despite all of these features however, org-journal remains one org file per day, with fancy functions to do fancy things if you want them—or ignore them, if the journal is all you need.
+</p>
+
+<p>
+Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+</p>
+
+<pre>
+<span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>
+<span style="color: #111111; font-weight: bold; font-style: italic;">Monday     2 April 2018 W14</span>
+<span style="color: #111111;">  2018-04-02: Easter Monday </span>
+<span style="color: #111111; font-weight: bold;">Tuesday    3 April 2018</span>
+<span style="color: #111111; font-weight: bold;">Wednesday  4 April 2018</span>
+<span style="color: #111111; font-weight: bold;">Thursday   5 April 2018</span>
+<span style="color: #111111;">  2018-04-05: Scheduled:  Give Lecture 4 on Applied Programming</span>             <span style="color: #111111;"><span style="font-weight: bold;">:BB:</span></span>
+<span style="color: #111111; font-weight: bold;">Friday     6 April 2018</span>
+<span style="color: #111111;">  2018-04-06: Scheduled:  Release of new Eels record</span>
+<span style="color: #111111; font-weight: bold;">Saturday   7 April 2018</span>
+<span style="color: #111111; font-weight: bold;">Sunday     8 April 2018</span>
+<span style="color: #111111;">  2018-04-08: Scheduled:  </span><span style="color: #111111;">TODO</span><span style="color: #111111;"> Celebrate Sunday</span>
+</pre>
+
+<p>
+And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing <code>i j</code> in <code>M-x calendar</code> or by calling <code>org-journal-new-scheduled-entry</code>, and org-journal will create an entry with a <code>SCHEDULED</code> property of the appropriate date (prefix to suppress <code>TODO</code>). When the current day reaches that entry, it will incorporate it into the daily journal.
+</p>
+
+<p>
+Future journal entries are highlighted in <code>M-x calendar</code>, and you can get an overview of them with <code>org-journal-schedule-view</code>, or, if you enable <code>org-journal-enable-agenda-integration</code>, through the ordinary <code>org-agenda</code>, as shown above. The agenda integration does not include past journal entries in the agenda, since agenda searches tend to become very slow if they have to traverse the hundreds of files in my journal.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+: This is of course not <i>his</i> calendar, but mine.
+</p></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div>
 <div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
 <p>
 Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
