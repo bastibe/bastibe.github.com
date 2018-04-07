@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="alternate"
+      type="appliation/rss+xml"
+      href="http://bastibe.de/rss.xml"
+      title="RSS feed for http://bastibe.de/">
+<title>Bastibe.de</title>
+<meta  name="author" content="Bastian Bechtold" />
+<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"> </script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="http://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="http://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<h1 class="title">Posts tagged "workflow":</h1>
+<div class="post-date">07 Apr 2018</div><h1 class="post-title"><a href="2018-04-07-defeating-news-addiction.html">Defeating News Addiction</a></h1>
+<p>
+I want to consume the news, both because it is genuinely relevant for my work, and because conversations about news are part of my social life. But I do not want to be consumed by news, and end up scanning news websites over and over for new content, even though you know that the likelihood of finding anything interesting is small.
+</p>
+
+<p>
+Over the last few months, I have tried hard to find all instances of this repeated-scanning behavior, and eliminate it. The key is to automate the scanning such that I am only ever presented with new content, but do not get hooked on the addictive variable-reward cycle of checking websites for changes over and over again.
+</p>
+
+<p>
+And it all works thank to the magic of RSS:
+</p>
+
+<ul class="org-ul">
+<li><b>News Sources:</b>
+  I read several blogs, newspapers, and webcomics. All of them have RSS feeds. Easy.
+</li>
+
+<li><b>Hacker News:</b>
+  The brilliant service <a href="https://hnrss.org/">hnrss.org</a> provides RSS feeds for Hacker News, and filters them to for example only include posts that made it to the front page, and have accumulated <a href="https://hnrss.org/frontpage?points=100">at least 100 points</a>.
+</li>
+
+<li><b>Reddit:</b>
+  Every subreddit has its own feed, at <a href="https://www.reddit.com/r/emacs.rss">reddit.com/r/subreddit.rss</a>. Sadly there is no way to filter for a minimum number of upvotes.
+</li>
+
+<li><b>YouTube:</b>
+  Again, every YouTube channel has its own RSS feed, but Google is trying very hard to make it as cumbersome as possible to get at those feeds. You need to go to your <a href="https://www.youtube.com/subscription_manager">Subscription Manager</a>, then scroll all the way down, and "Export Subscriptions". The resulting file helpfully does not have a file extension, which you will have to add before you can import it into your RSS reader. I honestly can't reconstruct how I found that subscription manager, either, but presumably there is some series of clicks that would take you there.
+</li>
+</ul>
+
+<p>
+With all this settled, I have a veritable firehose of news every day. I estimate that only 1 % of this is actually worth reading. So in the next step, I filter this list for spam. For this purpose, I use <a href="https://feedbin.com/">Feedbin</a>, which aggegates all these feeds, and remembers whether I have read an article. The remaining ham I either read immediately, or forward it to <a href="http://pinboard.in/">Pinboard</a> for later consumption.
+</p>
+
+<p>
+With this system, I never miss anything, but once I consume all the news in my feed reader, I know I am done, and there is no point in checking and re-checking various websites over and over again.
+</p>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="422" height="70">
+  <!-- grey achievement box: -->
+  <rect x="0" y="1" rx="32" ry="32" width="422" height="64" fill="#3A3E3F" />
+  <!-- black background circle: -->
+  <circle cx="33" cy="33" r="28" fill="#15150D" />
+  <!-- top left sector (green): -->
+  <path d="M 9 30
+           A 24 24 0 0 1 30 9
+           L 30 15
+           A 18 18 0 0 0 15 30"
+        fill="#69B168" />
+  <!-- top right sector (grey): -->
+  <path d="M 36 9
+           A 24 24 0 0 1 57 30
+           L 51 30
+           A 18 18 0 0 0 36 15"
+        fill="#595B5A" />
+  <!-- bottom right sector (grey): -->
+  <path d="M 57 36
+           A 24 24 0 0 1 36 57
+           L 36 51
+           A 18 18 0 0 0 51 36"
+        fill="#595B5A" />
+  <!-- bottom left sector (grey): -->
+  <path d="M 30 57
+           A 24 24 0 0 1 9 36
+           L 15 36
+           A 18 18 0 0 0 30 51"
+        fill="#595B5A" />
+  <!-- XBox image (source unknown): -->
+  <image xlink:href="static/2018-04/xbox.png" x="18" y="18" width="30px" height="30px" />
+  <!-- text labels: -->
+  <text x="76" y="27" font-family="Verdana" font-size="13px" fill="#E1E6E7">ACHIEVEMENT UNLOCKED</text>
+  <text x="76" y="48" font-family="Verdana" font-size="13px" fill="#E1E6E7">Defeated News Addiction!</text>
+</svg>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-workflow.html">workflow</a> </div><div id="archive">
+<a href="archive.html">Other posts</a>
+</div>
+</div>
+</body>
