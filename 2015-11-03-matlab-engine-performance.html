@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta charset="UTF-8">
 <link rel="alternate"
-      type="appliation/rss+xml"
+      type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de/"/>
 <title>Calling Matlab from Python</title>
 <meta  name="author" content="Bastian Bechtold" />
 <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
@@ -116,10 +115,10 @@ More interesting is the time it takes to call a Matlab function from Python. Hav
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
 </p>
-</div>
+</figure>
 
 <p>
 This is running <code>sum(randn(n,1))</code> from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.

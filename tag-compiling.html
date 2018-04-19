@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta charset="UTF-8">
 <link rel="alternate"
       type="appliation/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta  name="author" content="Bastian Bechtold" />
 <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
@@ -419,10 +418,10 @@ Thank you for reading.
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-python.html">python</a> <a href="tag-macos.html">macos</a> </div>
 <div class="post-date">15 Mar 2009</div><h1 class="post-title"><a href="2009-03-15-debugging-und-gcc-auf-windows.html">Debugging und GCC auf Windows</a></h1>
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/code.png" alt="code.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/code.png" alt="code.png">
 </p>
-</div>
+</figure>
 
 <p>
 So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.
@@ -457,15 +456,15 @@ Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, gr
 </p>
 
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table>
 
 
 <colgroup>
-<col  class="left" />
+<col  class="left">
 
-<col  class="right" />
+<col  class="right">
 
-<col  class="left" />
+<col  class="left">
 </colgroup>
 <tbody>
 <tr>
@@ -544,10 +543,10 @@ Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sic
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-windows.html">windows</a> </div>
 <div class="post-date">12 Mar 2009</div><h1 class="post-title"><a href="2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h1>
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png">
 </p>
-</div>
+</figure>
 
 <p>
 Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.
@@ -571,10 +570,10 @@ Eine Fortsetzung kommt noch&#x2026;
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-matlab.html">matlab</a> <a href="tag-windows.html">windows</a> </div>
 <div class="post-date">05 Mar 2009</div><h1 class="post-title"><a href="2009-03-05-great-scott.html">Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</a></h1>
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png">
 </p>
-</div>
+</figure>
 
 <p>
 Mal wieder: Ich schreibe ein Stück Software für meinen Nebenjob bei meinem Signalverarbeitung-Prof. Diesmal geht es darum, beliebige Audio-Files in Matlab einlesen zu können. Perfekt geeignet ist dafür die selbe Bibliothek, die auch von VLC verwendet wird, libavcodec/libavformat. Das ist eine normale C-Bibliothek, es braucht also nur noch ein kleines mex-File, um ihre Funktionalität für Matlab zur Verfügung zu stellen. Klappt auch wunderbar. Auf dem Mac.
@@ -593,10 +592,10 @@ Außerdem: ein aktuelles Linux muss her. VMWare sei Dank, lauert im Linux-Instal
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png">
 </p>
-</div>
+</figure>
 
 <p>
 Also weiter zu Windows. Frühere Versuche ergaben bereits, dass ich Matlab nicht dazu bewegen kann, (a) GCC als Compiler zu nehmen oder (b) das bereits installierte Microsoft Visual Studio C++ .Net Professional Directors Cut Special Edition 2008 Ultimate zu verwenden. Nähere Nachforschungen zeigen: Zu neu, Kennternich. Geht nur bis MSVC Jahrgang 2005. Also: Neues MSVC deinstallieren, Altes installieren. ich freue mich immer darauf, MSVC zu deinstallieren, denn es besteht lediglich aus kompakten 12 Programmen, die sich zwar alle auf einem Haufen Installieren- jedoch nicht De-Installieren lassen. Immerhin ist es dank MSDNAA-Membership nicht schwer, an die alten Versionen heranzukommen. Und klar, die Systemsteuerung lässt einen auch immer nur ein Programm auf einmal deinstallieren. Multitasking ist nicht. Dank Syncplicity kann Windows die Zwischenzeit immerhin dazu verwenden, all meine Development-Files auf den Rechner zu laden. Yay!
@@ -611,3 +610,4 @@ To be continued&#x2026;
 </div>
 </div>
 </body>
+</html>

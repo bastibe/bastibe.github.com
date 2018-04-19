@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta charset="UTF-8">
 <link rel="alternate"
-      type="appliation/rss+xml"
+      type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de/"/>
 <title>Real Time Signal Processing in Python</title>
 <meta  name="author" content="Bastian Bechtold" />
 <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
@@ -71,10 +70,10 @@ If this is applied to a signal, it will create an envelope like this:
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png">
 </p>
-</div>
+</figure>
 
 <p>
 Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain \(g_t[n]\) can be calculated using
@@ -106,20 +105,20 @@ Here you can see how that would look in practice:
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png">
 </p>
-</div>
+</figure>
 
 <p>
 Zooming in on one of the limited section reveals that the gain is actually moving smoothly.
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png">
 </p>
-</div>
+</figure>
 
 <p>
 This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.

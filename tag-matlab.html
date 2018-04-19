@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta charset="UTF-8">
 <link rel="alternate"
       type="appliation/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta  name="author" content="Bastian Bechtold" />
 <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
@@ -62,10 +61,10 @@ Which variant do you think is fastest?
 </p>
 
 
-<div class="figure">
-<p><img src="./static/2018-04/array_performance.png" alt="array_performance.png" />
+<figure>
+<p><img src="./static/2018-04/array_performance.png" alt="array_performance.png">
 </p>
-</div>
+</figure>
 
 <p>
 Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is</i> surprising is that it is faster by a constant factor of about 2 instead of scaling with the array length. Only appending by <code>x = [x {42}]</code> actually becomes slower for larger arrays. (The same thing happens for numerical arrays, struct arrays, and object arrays.)
@@ -165,10 +164,10 @@ A few months ago, I <a href="http://bastibe.de/2015-11-03-matlab-engine-performa
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2016-06/timings.png" alt="timings.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2016-06/timings.png" alt="timings.png">
 </p>
-</div>
+</figure>
 
 <p>
 The workload consisted of generating a bunch of random numbers (not included in the times), and sending them to Matlab for computation. This task is entirely dominated by the time it takes to transfer the data to Matlab (see table at the end for intra-language benchmarks of the same task).
@@ -202,25 +201,25 @@ Oh, and Transplant now works on Windows!
 Here is the above data again in tabular form:
 </p>
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table>
 
 
 <colgroup>
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 
-<col  class="left" />
+<col  class="left">
 </colgroup>
 <thead>
 <tr>
@@ -596,10 +595,10 @@ More interesting is the time it takes to call a Matlab function from Python. Hav
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
 </p>
-</div>
+</figure>
 
 <p>
 This is running <code>sum(randn(n,1))</code> from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.
@@ -716,10 +715,10 @@ objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #303030;">'ar
 </div>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2015-10/array.png" alt="array.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2015-10/array.png" alt="array.png">
 </p>
-</div>
+</figure>
 
 <p>
 It seems that the <code>array.array</code> object is part of a <code>matlab.double</code> instance which is not referenced from anywhere but <code>all_objects</code>. A memory leak.
@@ -1376,10 +1375,10 @@ With those settings, the mex compiler should work and it should pick up any libr
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div>
 <div class="post-date">12 Mar 2009</div><h1 class="post-title"><a href="2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h1>
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png">
 </p>
-</div>
+</figure>
 
 <p>
 Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.
@@ -1403,10 +1402,10 @@ Eine Fortsetzung kommt noch&#x2026;
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-matlab.html">matlab</a> <a href="tag-windows.html">windows</a> </div>
 <div class="post-date">05 Mar 2009</div><h1 class="post-title"><a href="2009-03-05-great-scott.html">Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</a></h1>
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png">
 </p>
-</div>
+</figure>
 
 <p>
 Mal wieder: Ich schreibe ein Stück Software für meinen Nebenjob bei meinem Signalverarbeitung-Prof. Diesmal geht es darum, beliebige Audio-Files in Matlab einlesen zu können. Perfekt geeignet ist dafür die selbe Bibliothek, die auch von VLC verwendet wird, libavcodec/libavformat. Das ist eine normale C-Bibliothek, es braucht also nur noch ein kleines mex-File, um ihre Funktionalität für Matlab zur Verfügung zu stellen. Klappt auch wunderbar. Auf dem Mac.
@@ -1425,10 +1424,10 @@ Außerdem: ein aktuelles Linux muss her. VMWare sei Dank, lauert im Linux-Instal
 </p>
 
 
-<div class="figure">
-<p><img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png" />
+<figure>
+<p><img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png">
 </p>
-</div>
+</figure>
 
 <p>
 Also weiter zu Windows. Frühere Versuche ergaben bereits, dass ich Matlab nicht dazu bewegen kann, (a) GCC als Compiler zu nehmen oder (b) das bereits installierte Microsoft Visual Studio C++ .Net Professional Directors Cut Special Edition 2008 Ultimate zu verwenden. Nähere Nachforschungen zeigen: Zu neu, Kennternich. Geht nur bis MSVC Jahrgang 2005. Also: Neues MSVC deinstallieren, Altes installieren. ich freue mich immer darauf, MSVC zu deinstallieren, denn es besteht lediglich aus kompakten 12 Programmen, die sich zwar alle auf einem Haufen Installieren- jedoch nicht De-Installieren lassen. Immerhin ist es dank MSDNAA-Membership nicht schwer, an die alten Versionen heranzukommen. Und klar, die Systemsteuerung lässt einen auch immer nur ein Programm auf einmal deinstallieren. Multitasking ist nicht. Dank Syncplicity kann Windows die Zwischenzeit immerhin dazu verwenden, all meine Development-Files auf den Rechner zu laden. Yay!
@@ -1443,3 +1442,4 @@ To be continued&#x2026;
 </div>
 </div>
 </body>
+</html>

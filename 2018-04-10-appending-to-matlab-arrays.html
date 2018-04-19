@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="https://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta charset="UTF-8">
 <link rel="alternate"
-      type="appliation/rss+xml"
+      type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de/"/>
 <title>Appending to Matlab Arrays</title>
 <meta  name="author" content="Bastian Bechtold" />
 <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
@@ -62,10 +61,10 @@ Which variant do you think is fastest?
 </p>
 
 
-<div class="figure">
-<p><img src="./static/2018-04/array_performance.png" alt="array_performance.png" />
+<figure>
+<p><img src="./static/2018-04/array_performance.png" alt="array_performance.png">
 </p>
-</div>
+</figure>
 
 <p>
 Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is</i> surprising is that it is faster by a constant factor of about 2 instead of scaling with the array length. Only appending by <code>x = [x {42}]</code> actually becomes slower for larger arrays. (The same thing happens for numerical arrays, struct arrays, and object arrays.)
