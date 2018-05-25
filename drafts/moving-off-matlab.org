@@ -1,0 +1,69 @@
+#+title: Moving off Matlab
+#+date: <2018-04-23 18:52>
+#+filetags: matlab python
+
+Today I was asked to give a short introduction on how to migrate from Matlab to Python, without abandoning existing Matlab code. In other words, how to make Matlab and Python /cooperate/ instead of compete.
+
+The answer is, unsurprisingly, [[https://github.com/bastibe/transplant][Transplant]], my bridge between Matlab and Python. To be fair, it's a one-way bridge, which allows Python to call Matlab, but not vice versa.
+
+When I talk about a /bridge/, I mean a piece of Python code that can call Matlab functions, translate any function arguments from Python/Numpy to Matlab, and translate any errors or return values back to Python/Numpy. Additionally, it can interact with objects, access documentation, and have Python survive Matlab crashes[fn:1].
+
+And frankly, this stuff should be easy. There are bridges between many languages, and typically they are not particularly complicated. But we are talking about Matlab here, and while Matlab has a C API, it is not powerful enough for our purposes. So how about we just use sockets instead? Well, sockets are only included with the [[https://www.mathworks.com/help/instrument/communicate-using-tcpip-server-sockets.html][Instrument Control Toolbox]]. And let's just not talk about how some Matlab errors can't be caught with ~try/catch~.
+
+But these are technical problems, and technical problems can be solved. Particularly, Transplant uses [[http://zeromq.org/][ZeroMQ]] sockets for communications[fn:ZMQ], and just re-starts its main loop in ~atexit~ if an uncatchable error slipped by.
+
+But with all that said and done, calling any old Matlab function is as simple as
+
+#+begin_src python
+>>> import transplant
+>>> m = transplant.Matlab()
+>>> m.eye(3)
+array([[1., 0., 0.],
+       [0., 1., 0.],
+       [0., 0., 1.]])
+#+end_src
+
+As you know, Matlab likes to get creative with its functions depending on the number of return values[fn:2]. To emulate this, you can supply the keyword argument ~nargout~ in Python:
+
+#+begin_src python
+>>> m.max(m.randn(100, 1))
+[3.5783969397257605, 9.0]
+>>> m.max(m.randn(100, 1), nargout=1)
+2.908008030729362
+#+end_src
+
+Of course, Matlab's documentation is available as ~__doc__~ just as you would expect in Python[fn:3], and output is displayed just like normal[fn:4].
+
+All standard types are converted as you would expect (~int → (u)int{8,16,32,64}~, ~float → double~, ~boolean → logical~, ~list → cell~, ~numpy.ndarray → matrix~, ~dict → containers.Map~, ~transplant.MatlabStruct(dict) → struct~).
+
+However, Matlab-specific types such as functions and objects are not transferred to Python, but are represented as /proxies/, that is, Python objects that forward all calls/methods/properties to Matlab, and evaluate back to their original objects when passed back to Matlab:
+
+#+begin_src python
+>>> m.feval(m.plus, 1., 2.)
+3
+>>> line = m.plot(m.randn(100, 1))
+>>> line.Color = 'r'
+[a red squiggly line]
+#+end_src
+
+There are two problems to be aware of, though: Transplant will translate ~int~ to honest-to-god integers in Matlab, which are very unusual in Matlab and will break many functions. If you encounter this, use ~float~ instead. Second, >2-dimensional matrices are displayed differently in Matlab and Python. But rest assured that accessing, e.g. ~data[0, 1, 2]~ in Python will return the same value as ~data(1, 2, 3)~ in Matlab.
+
+Also, in a neat turn of events, keyword arguments such as ~m.struct(name='John Doe')~ are transparently converted to the key-value pairs ~struct('name', 'John Doe')~ in Matlab.
+
+It's pretty fast, too, at about five seconds per Gigabyte transferred between Matlab/Python—most of which is spent in Matlab decoding/encoding MsgPack to Matlab data structures and back.
+
+Finally, the ~transplant.Matlab~ constructor has many a neat argument such as ~jvm=False~ to speed up startup by not loading the JVM, ~executable='...'~ to start a non-standard version of Matlab, or ~print_to_stdout=False~ to suppress output.
+
+Oh, and you can use ~transplant.Matlab~ as a context manager, and crashing Matlab doesn't crash Python.
+
+All in all, I believe that Transplant solves the impedance mismatch between Matlab and Python, and single-handedly enables peaceful coexistance, or successful migration.
+
+[fn:1] Most likely because scientific code is often littered with badly-written mex files.
+
+[fn:ZMQ] Oh, and it manually has to locate the ZeroMQ binary because Matlab's ~loadlibrary~ doesn't even try to be standard-compliant.
+
+[fn:2] It is however surprisingly hard to figure out the right number of return values before calling the function. Transplant uses the function ~nargout~ as a first guess, or simply returns whatever is in ~ans~ after the call if ~nargout~ does not give anything useful.
+
+[fn:3] Actually, as ~__doc__~ on both the object itself and the object's class, since ~help~ displays ~type(obj).__doc__~.
+
+[fn:4] Unless you are using Windows, where Matlab doesn't write to stdout. And sometimes Matlab writes to stdout /after/ returning, which looks weird.
