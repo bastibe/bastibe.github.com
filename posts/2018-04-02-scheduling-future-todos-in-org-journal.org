@@ -8,7 +8,7 @@ Despite all of these features however, org-journal remains one org file per day,
 
 Back to scheduling: This work was prompted by [[https://zngguvnf.org/][my colleague]], who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:
 
-#+begin_html
+#+begin_export html
 <pre>
 <span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>
 <span style="color: #111111; font-weight: bold; font-style: italic;">Monday     2 April 2018 W14</span>
@@ -23,7 +23,7 @@ Back to scheduling: This work was prompted by [[https://zngguvnf.org/][my collea
 <span style="color: #111111; font-weight: bold;">Sunday     8 April 2018</span>
 <span style="color: #111111;">  2018-04-08: Scheduled:  </span><span style="color: #111111;">TODO</span><span style="color: #111111;"> Celebrate Sunday</span>
 </pre>
-#+end_html
+#+end_export
 
 And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing ~i j~ in ~M-x calendar~ or by calling ~org-journal-new-scheduled-entry~, and org-journal will create an entry with a ~SCHEDULED~ property of the appropriate date (prefix to suppress ~TODO~). When the current day reaches that entry, it will incorporate it into the daily journal.
 
