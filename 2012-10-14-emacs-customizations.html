@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>My Emacs customizations</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -44,15 +42,14 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org21f2340" class="outline-2">
+<h2 id="org21f2340">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-org21f2340">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">set-frame-pixel-size</span> (frame width height)
   <span style="color: #111111;">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
   (<span style="color: #111111; font-weight: bold;">let</span> ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
@@ -68,7 +65,6 @@ Next, a function that uses the above to set the frame size to exactly fit the le
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">use-left-half-screen</span> ()
   (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">let*</span> ((excess-width 32)
@@ -84,7 +80,6 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">if</span> window-system
     (use-left-half-screen))
 </pre>
@@ -92,15 +87,14 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgdf79d59" class="outline-2">
+<h2 id="orgdf79d59">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-orgdf79d59">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
           (<span style="color: #111111; font-weight: bold;">lambda</span> ()
             (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
@@ -113,15 +107,14 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org5947277" class="outline-2">
+<h2 id="org5947277">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-org5947277">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-above</span> ()
   <span style="color: #111111;">"Insert a newline above the current line and put point at beginning."</span>
   (<span style="color: #111111; font-weight: bold;">interactive</span>)
@@ -145,9 +138,9 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org4ef7d2e" class="outline-2">
+<h2 id="org4ef7d2e">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-org4ef7d2e">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>
@@ -157,7 +150,6 @@ This function will open or refresh a split window with the generated PDF file in
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
 (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
   (<span style="color: #111111; font-weight: bold;">interactive</span>)

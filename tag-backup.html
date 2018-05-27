@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -37,7 +35,7 @@ Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regu
 </p>
 
 <p>
-Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>, a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a>[1], a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand [2].
 </p>
 
 <p>
@@ -46,74 +44,81 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 
 <ul class="org-ul">
-<li>Install rsnapshot
+<li><p>
+Install rsnapshot
+</p>
 
 <pre class="example">
 brew install rsnapshot
-</pre>
-</li>
 
-<li>Write the config file
+</pre></li>
+
+<li><p>
+Write the config file
+</p>
 
 <p>
 You can copy a template from homebrew:
 </p>
 <pre class="example">
 cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
+
 </pre>
 <p>
 And then configure the new configuration file to your liking (preserve the tabs!):
 </p>
 
 <div class="org-src-container">
+<pre class="src src-config">  config_version	1.2 # default
+  verbose		2   # default
+  loglevel	3   # default
 
-<pre class="src src-config">config_version	1.2 # default
-verbose		2   # default
-loglevel	3   # default
+  # this is where your backups are stored:
+  snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
+  # prevent accidental backup corruption:
+  lockfile	/Users/bb/.rsnapshot.pid
+  # use this if you back up to an external drive:
+  no_create_root	1   # don't back up if the external drive is not connected
 
-# this is where your backups are stored:
-snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
-# prevent accidental backup corruption:
-lockfile	/Users/bb/.rsnapshot.pid
-# use this if you back up to an external drive:
-no_create_root	1   # don't back up if the external drive is not connected
+  # configure how many tiers of backups are created:
+  retain	hourly	10
+  retain	daily	7   # dailies will only be created once 10 hourlies exist
+  retain	weekly	4   # weeklies will only be created once 7 dailies exist
+  retain	monthly	100 # monthlies will only be created once 4 weeklies exist
 
-# configure how many tiers of backups are created:
-retain	hourly	10
-retain	daily	7   # dailies will only be created once 10 hourlies exist
-retain	weekly	4   # weeklies will only be created once 7 dailies exist
-retain	monthly	100 # monthlies will only be created once 4 weeklies exist
-
-# the list of directories you want to back up:
-backup	/Users/bb/Documents		localhost/
-backup	/Users/bb/eBooks		localhost/
-backup	/Users/bb/Movies		localhost/
-backup	/Users/bb/Music		localhost/
-backup	/Users/bb/Pictures		localhost/
-backup	/Users/bb/Projects		localhost/
-backup	/Users/bb/Projects-Archive		localhost/
+  # the list of directories you want to back up:
+  backup	/Users/bb/Documents		localhost/
+  backup	/Users/bb/eBooks		localhost/
+  backup	/Users/bb/Movies		localhost/
+  backup	/Users/bb/Music		localhost/
+  backup	/Users/bb/Pictures		localhost/
+  backup	/Users/bb/Projects		localhost/
+  backup	/Users/bb/Projects-Archive		localhost/
 </pre>
 </div>
 
 <p>
 Instead of <code>localhost</code>, you can use remote machines as well. Check  <a href="https://download.samba.org/pub/rsync/rsync.html"><code>man rsync</code></a> for details
-</p>
-</li>
+</p></li>
 
-<li>Make sure it works and create initial backup
+<li><p>
+Make sure it works and create initial backup
+</p>
 
 <pre class="example">
 rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
+
 </pre>
 <p>
 The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
-</p>
-</li>
+</p></li>
 
-<li>Write launchd Agent
+<li><p>
+Write launchd Agent
+</p>
 
 <p>
-Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>, which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
+Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script[3], which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
 </p>
 
 <p>
@@ -121,26 +126,25 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span>?&gt;
-&lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> plist <span style="color: #111111; font-weight: bold;">PUBLIC</span> <span style="color: #111111;">"</span><span style="color: #111111;">-//Apple//DTD PLIST 1.0//EN</span><span style="color: #111111;">"</span> <span style="color: #111111;">"</span><span style="color: #111111;">http://www.apple.com/DTDs/PropertyList-1.0.dtd</span><span style="color: #111111;">"</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-    &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-&lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-&lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+<pre class="src src-xml">  <span style="color: #303030;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #303030;"> </span><span style="color: #111111;">version="1.0" encoding="UTF-8"</span><span style="color: #303030;">?&gt;</span>
+  <span style="color: #303030;">&lt;!</span><span style="color: #303030;">DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+  &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"1.0"</span>&gt;
+  &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+      &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+      &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+  &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+  &lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
 </pre>
 </div>
 
@@ -149,89 +153,111 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 </p>
 
 <ul class="org-ul">
-<li>daily:
+<li><p>
+daily:
+</p>
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
-</div>
-</li>
-<li>weekly:
+</div></li>
+<li><p>
+weekly:
+</p>
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
-</div>
-</li>
-<li>monthly:
+</div></li>
+<li><p>
+monthly:
+</p>
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
-</div>
-</li>
+</div></li>
 </ul>
+
 <p>
 However, <code>rsnapshot</code> can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
 </p>
 
 <p>
-To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It seems that there should be a more elegant solution than this, but I haven't found one.
+To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers[4]. It seems that there should be a more elegant solution than this, but I haven't found one.
 </p>
 
 <p>
 From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more succinct than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
-</p>
-</li>
+</p></li>
 
-<li>Load launchd agents
+<li><p>
+Load launchd agents
+</p>
 
 <pre class="example">
 launchctl load ~/Library/LaunchAgents/rsnapshot.*
-</pre>
-</li>
 
-<li>Test launchd agent
+</pre></li>
+
+<li><p>
+Test launchd agent
+</p>
 
 <pre class="example">
 launchctl start rsnapshot.hourly
+
 </pre>
 <p>
 If it doesn't work, Console.app might show a relevant error message.
-</p>
-</li>
+</p></li>
 
-<li>Remove backup directory from Spotlight
+<li><p>
+Remove backup directory from Spotlight
+</p>
 
 <p>
 Go to System Preferences → Spotlight → Privacy → Add your <code>snapshot_root</code> directory from earlier
-</p>
-</li>
+</p></li>
 
-<li>Disable TimeMachine and delete your existing backup (if you want)
+<li><p>
+Disable TimeMachine and delete your existing backup (if you want)
+</p>
 
 <p>
 Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
-</p>
-</li>
+</p></li>
 </ul>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Caveats</h2>
-<div class="outline-text-2" id="text-1">
+<p>
+[1] rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
+</p>
+
+<p>
+[2] This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
+</p>
+
+<p>
+[3] I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+</p>
+
+<p>
+[4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
+</p>
+
+<div id="outline-container-orgb9d0608" class="outline-2">
+<h2 id="orgb9d0608">Caveats</h2>
+<div class="outline-text-2" id="text-orgb9d0608">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -245,29 +271,7 @@ There are other possible solutions: ① You could modify the launchd entry such 
 </p>
 </div>
 </div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
-</p></div>
-
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
-This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div>
 <div class="post-date">28 Dec 2017</div><h1 class="post-title"><a href="2017-12-28-dropbox-timemachine-is-useless.html">Dropbox deleted my pictures and Time Machine didn't backup</a></h1>
 <p>
 Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
@@ -294,9 +298,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orga38924e" class="outline-2">
+<h2 id="orga38924e">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-orga38924e">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -311,9 +315,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org8cbcff8" class="outline-2">
+<h2 id="org8cbcff8">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-org8cbcff8">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -328,9 +332,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org65cd7d6" class="outline-2">
+<h2 id="org65cd7d6">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org65cd7d6">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -356,11 +360,10 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </p>
 
 <div class="org-src-container">
-
-<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
-    &lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> service-group <span style="color: #111111; font-weight: bold;">SYSTEM</span> <span style="color: #111111;">"</span><span style="color: #111111;">avahi-service.dtd</span><span style="color: #111111;">"</span>&gt;
+<pre class="src src-xml">    <span style="color: #303030;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #303030;"> </span><span style="color: #111111;">version="1.0" standalone='no'</span><span style="color: #303030;">?&gt;</span><span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+    <span style="color: #303030;">&lt;!</span><span style="color: #303030;">DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;</span>
     &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"</span><span style="color: #303030;">yes</span><span style="color: #303030;">"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"yes"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
         &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
             &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
             &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
@@ -392,9 +395,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org68d1582" class="outline-2">
+<h2 id="org68d1582">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-org68d1582">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -425,12 +428,9 @@ This article heavily steals from these fine folks on the internet:
 </p>
 
 <ul class="org-ul">
-<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a>
-</li>
-<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>
-</li>
-<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a>
-</li>
+<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a></li>
+<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a></li>
+<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a></li>
 </ul>
 </div>
 </div>

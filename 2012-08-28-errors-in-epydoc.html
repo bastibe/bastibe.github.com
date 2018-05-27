@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Fixing Errors in Epydoc</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -54,7 +52,6 @@ Short answer: Find your <i>site-packages</i> directory:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> distutils.sysconfig <span style="color: #111111; font-weight: bold;">import</span> get_python_lib
         <span style="color: #111111; font-weight: bold;">print</span>(get_python_lib())
 </pre>
@@ -65,7 +62,6 @@ Go there, navigate to the <i>epydoc\/markup</i> directory and change line 307 of
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">        <span style="color: #111111;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
 </pre>
 </div>
@@ -75,7 +71,6 @@ to
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">        <span style="color: #111111; font-weight: bold;">try</span>:
                 <span style="color: #111111;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
         <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">AttributeError</span>:

@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -37,7 +35,7 @@ Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regu
 </p>
 
 <p>
-Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>, a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+Luckily, there are alternatives. Probably the easiest is <a href="https://rsync.samba.org/">rsync</a>[1], a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. <a href="http://rsnapshot.org/">rsnapshot</a> automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand [2].
 </p>
 
 <p>
@@ -46,74 +44,81 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 
 <ul class="org-ul">
-<li>Install rsnapshot
+<li><p>
+Install rsnapshot
+</p>
 
 <pre class="example">
 brew install rsnapshot
-</pre>
-</li>
 
-<li>Write the config file
+</pre></li>
+
+<li><p>
+Write the config file
+</p>
 
 <p>
 You can copy a template from homebrew:
 </p>
 <pre class="example">
 cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
+
 </pre>
 <p>
 And then configure the new configuration file to your liking (preserve the tabs!):
 </p>
 
 <div class="org-src-container">
+<pre class="src src-config">  config_version	1.2 # default
+  verbose		2   # default
+  loglevel	3   # default
 
-<pre class="src src-config">config_version	1.2 # default
-verbose		2   # default
-loglevel	3   # default
+  # this is where your backups are stored:
+  snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
+  # prevent accidental backup corruption:
+  lockfile	/Users/bb/.rsnapshot.pid
+  # use this if you back up to an external drive:
+  no_create_root	1   # don't back up if the external drive is not connected
 
-# this is where your backups are stored:
-snapshot_root	/Volumes/BBackup/Backups.rsnapshot/ # make sure this is writeable
-# prevent accidental backup corruption:
-lockfile	/Users/bb/.rsnapshot.pid
-# use this if you back up to an external drive:
-no_create_root	1   # don't back up if the external drive is not connected
+  # configure how many tiers of backups are created:
+  retain	hourly	10
+  retain	daily	7   # dailies will only be created once 10 hourlies exist
+  retain	weekly	4   # weeklies will only be created once 7 dailies exist
+  retain	monthly	100 # monthlies will only be created once 4 weeklies exist
 
-# configure how many tiers of backups are created:
-retain	hourly	10
-retain	daily	7   # dailies will only be created once 10 hourlies exist
-retain	weekly	4   # weeklies will only be created once 7 dailies exist
-retain	monthly	100 # monthlies will only be created once 4 weeklies exist
-
-# the list of directories you want to back up:
-backup	/Users/bb/Documents		localhost/
-backup	/Users/bb/eBooks		localhost/
-backup	/Users/bb/Movies		localhost/
-backup	/Users/bb/Music		localhost/
-backup	/Users/bb/Pictures		localhost/
-backup	/Users/bb/Projects		localhost/
-backup	/Users/bb/Projects-Archive		localhost/
+  # the list of directories you want to back up:
+  backup	/Users/bb/Documents		localhost/
+  backup	/Users/bb/eBooks		localhost/
+  backup	/Users/bb/Movies		localhost/
+  backup	/Users/bb/Music		localhost/
+  backup	/Users/bb/Pictures		localhost/
+  backup	/Users/bb/Projects		localhost/
+  backup	/Users/bb/Projects-Archive		localhost/
 </pre>
 </div>
 
 <p>
 Instead of <code>localhost</code>, you can use remote machines as well. Check  <a href="https://download.samba.org/pub/rsync/rsync.html"><code>man rsync</code></a> for details
-</p>
-</li>
+</p></li>
 
-<li>Make sure it works and create initial backup
+<li><p>
+Make sure it works and create initial backup
+</p>
 
 <pre class="example">
 rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
+
 </pre>
 <p>
 The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
-</p>
-</li>
+</p></li>
 
-<li>Write launchd Agent
+<li><p>
+Write launchd Agent
+</p>
 
 <p>
-Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>, which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
+Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script[3], which tells launchd when and how to run your backups. In my case, I create four files in <code>/Users/bb/Library/LaunchAgents/</code>, called <code>rsnapshot.{hourly,daily,weekly,monthly}.plist</code>. Apple's <a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html">documentation</a> for these files is only mildly useful (as usual), but <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html"><code>man launchd.plist</code></a> and <a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist"><code>man plist</code></a> should give you an idea how this works.
 </p>
 
 <p>
@@ -121,26 +126,25 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span> <span style="color: #111111;">encoding</span>=<span style="color: #303030;">"</span><span style="color: #303030;">UTF-8</span><span style="color: #303030;">"</span>?&gt;
-&lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> plist <span style="color: #111111; font-weight: bold;">PUBLIC</span> <span style="color: #111111;">"</span><span style="color: #111111;">-//Apple//DTD PLIST 1.0//EN</span><span style="color: #111111;">"</span> <span style="color: #111111;">"</span><span style="color: #111111;">http://www.apple.com/DTDs/PropertyList-1.0.dtd</span><span style="color: #111111;">"</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"</span><span style="color: #303030;">1.0</span><span style="color: #303030;">"</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-    &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-&lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-&lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+<pre class="src src-xml">  <span style="color: #303030;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #303030;"> </span><span style="color: #111111;">version="1.0" encoding="UTF-8"</span><span style="color: #303030;">?&gt;</span>
+  <span style="color: #303030;">&lt;!</span><span style="color: #303030;">DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+  &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"1.0"</span>&gt;
+  &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
+      &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+      &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+          &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+      &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+  &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
+  &lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
 </pre>
 </div>
 
@@ -149,89 +153,111 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 </p>
 
 <ul class="org-ul">
-<li>daily:
+<li><p>
+daily:
+</p>
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
-</div>
-</li>
-<li>weekly:
+</div></li>
+<li><p>
+weekly:
+</p>
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
-</div>
-</li>
-<li>monthly:
+</div></li>
+<li><p>
+monthly:
+</p>
 <div class="org-src-container">
-
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-&lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
+    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
 </pre>
-</div>
-</li>
+</div></li>
 </ul>
+
 <p>
 However, <code>rsnapshot</code> can only ever run one backup at a time without stepping on its own toes. This is a problem when the computer wakes up, and more than one backup was scheduled during its sleep, since launchd will then happily launch all missed backups at the same time. But only one of them will succeed.
 </p>
 
 <p>
-To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It seems that there should be a more elegant solution than this, but I haven't found one.
+To fix this, I delay the later backup tiers using the <code>sleep 0</code> directive. I use <code>sleep 900</code> (15 minutes later) for daily, <code>sleep 1800</code> (30 minutes), and <code>sleep 2700</code> (45 minutes) for the lower tiers[4]. It seems that there should be a more elegant solution than this, but I haven't found one.
 </p>
 
 <p>
 From the documentation, you might think that <code>&lt;key&gt;Program&lt;/key&gt;</code> would be more succinct than supplying the binary as the first argument of <code>&lt;key&gt;ProgramArguments&lt;/key&gt;</code>, but this apparently uses a different syntax and does not in fact work as expected.
-</p>
-</li>
+</p></li>
 
-<li>Load launchd agents
+<li><p>
+Load launchd agents
+</p>
 
 <pre class="example">
 launchctl load ~/Library/LaunchAgents/rsnapshot.*
-</pre>
-</li>
 
-<li>Test launchd agent
+</pre></li>
+
+<li><p>
+Test launchd agent
+</p>
 
 <pre class="example">
 launchctl start rsnapshot.hourly
+
 </pre>
 <p>
 If it doesn't work, Console.app might show a relevant error message.
-</p>
-</li>
+</p></li>
 
-<li>Remove backup directory from Spotlight
+<li><p>
+Remove backup directory from Spotlight
+</p>
 
 <p>
 Go to System Preferences → Spotlight → Privacy → Add your <code>snapshot_root</code> directory from earlier
-</p>
-</li>
+</p></li>
 
-<li>Disable TimeMachine and delete your existing backup (if you want)
+<li><p>
+Disable TimeMachine and delete your existing backup (if you want)
+</p>
 
 <p>
 Start Time Machine, right-click any directory you want to delete, and select "delete all backups of $dir"
-</p>
-</li>
+</p></li>
 </ul>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Caveats</h2>
-<div class="outline-text-2" id="text-1">
+<p>
+[1] rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
+</p>
+
+<p>
+[2] This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
+</p>
+
+<p>
+[3] I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
+</p>
+
+<p>
+[4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
+</p>
+
+<div id="outline-container-orgb9d0608" class="outline-2">
+<h2 id="orgb9d0608">Caveats</h2>
+<div class="outline-text-2" id="text-orgb9d0608">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -245,29 +271,7 @@ There are other possible solutions: ① You could modify the launchd entry such 
 </p>
 </div>
 </div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-rsync is one of those reliable tools <a href="http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">I talked about</a>. It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
-</p></div>
-
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), <a href="https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/">this post</a> recommends <a href="https://www.borgbackup.org/">Borg</a> instead of rsnapshot, but you will lose the simplicity of simple directories.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
-This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div>
 <div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
 <p>
 This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
@@ -278,18 +282,23 @@ It has long been a major frustration for my work that Python does not have a gre
 </p>
 
 <p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a><sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> on Windows.
+Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a>[1] on Windows.
 </p>
 
 <p>
 This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is playing/recording of short blocks of <code>float</code> data at arbitrary sampling rates and block sizes. All connected sound cards should be listable and selectable, with correct detection of the system default sound card (a feature that is very unreliable in PortAudio).
 </p>
 
-<hr >
+<p>
+[1]: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
+</p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-1">
+
+<hr>
+
+<div id="outline-container-org6e0e111" class="outline-2">
+<h2 id="org6e0e111">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-org6e0e111">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -331,22 +340,12 @@ All of that said, once you know what to do and how to do it, the resulting code 
 </p>
 </div>
 </div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-audio.html">audio</a> <a href="tag-programming.html">programming</a> <a href="tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-audio.html">audio</a> <a href="tag-programming.html">programming</a> <a href="tag-macos.html">macos</a> </div>
 <div class="post-date">16 Oct 2015</div><h1 class="post-title"><a href="2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
 
 <figure>
-<p><img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png">
-</p>
+<img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png">
+
 </figure>
 
 <p>
@@ -391,7 +390,6 @@ Anyway, here's a small Python script that changes the file creation date (but no
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
 <span style="color: #111111; font-weight: bold;">import</span> os
 <span style="color: #111111; font-weight: bold;">import</span> datetime
@@ -430,7 +428,6 @@ A quick look at Console.app turns up a link to the actual crash report. And the 
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    sudo ln -s libWebCoreKRF.dylib libWEbCoreKRF.dylib
 </pre>
 </div>
@@ -456,9 +453,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orga38924e" class="outline-2">
+<h2 id="orga38924e">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-orga38924e">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -473,9 +470,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org8cbcff8" class="outline-2">
+<h2 id="org8cbcff8">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-org8cbcff8">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -490,9 +487,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org65cd7d6" class="outline-2">
+<h2 id="org65cd7d6">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org65cd7d6">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -518,11 +515,10 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </p>
 
 <div class="org-src-container">
-
-<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
-    &lt;!<span style="color: #111111; font-weight: bold;">DOCTYPE</span> service-group <span style="color: #111111; font-weight: bold;">SYSTEM</span> <span style="color: #111111;">"</span><span style="color: #111111;">avahi-service.dtd</span><span style="color: #111111;">"</span>&gt;
+<pre class="src src-xml">    <span style="color: #303030;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #303030;"> </span><span style="color: #111111;">version="1.0" standalone='no'</span><span style="color: #303030;">?&gt;</span><span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+    <span style="color: #303030;">&lt;!</span><span style="color: #303030;">DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;</span>
     &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"</span><span style="color: #303030;">yes</span><span style="color: #303030;">"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"yes"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
         &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
             &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
             &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
@@ -554,9 +550,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org68d1582" class="outline-2">
+<h2 id="org68d1582">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-org68d1582">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -587,12 +583,9 @@ This article heavily steals from these fine folks on the internet:
 </p>
 
 <ul class="org-ul">
-<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a>
-</li>
-<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>
-</li>
-<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a>
-</li>
+<li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a></li>
+<li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a></li>
+<li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a></li>
 </ul>
 </div>
 </div>
@@ -610,9 +603,9 @@ Later, I marveled at the level of polish in the third party software ecosystem a
 So here are some of those problems:
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Lack of Uninstallers</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orga75819a" class="outline-2">
+<h2 id="orga75819a">Lack of Uninstallers</h2>
+<div class="outline-text-2" id="text-orga75819a">
 <p>
 Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
 </p>
@@ -622,12 +615,9 @@ At the moment, there are three ways of getting software on your Mac.
 </p>
 
 <ol class="org-ol">
-<li>Install from the App Store. Installation and un-installation work through the App Store.
-</li>
-<li>Install by dragging n <code>*.app</code> bundle onto your computer. Uninstall by deleting the bundle. Works fine unless the app installed some stuff outside the bundle.
-</li>
-<li>Install by executing a <code>*.pkg</code> file. No way to uninstall whatsoever unless the developer provides a separate uninstall mechanism.
-</li>
+<li>Install from the App Store. Installation and un-installation work through the App Store.</li>
+<li>Install by dragging n <code>*.app</code> bundle onto your computer. Uninstall by deleting the bundle. Works fine unless the app installed some stuff outside the bundle.</li>
+<li>Install by executing a <code>*.pkg</code> file. No way to uninstall whatsoever unless the developer provides a separate uninstall mechanism.</li>
 </ol>
 
 <p>
@@ -640,9 +630,9 @@ Really, this is beyond ridiculous. There is no way of uninstalling software that
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Failing Time Machine</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org3975ba8" class="outline-2">
+<h2 id="org3975ba8">Failing Time Machine</h2>
+<div class="outline-text-2" id="text-org3975ba8">
 <p>
 So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don't even need to plug in that hard drive any more. Magic!
 </p>
@@ -657,9 +647,9 @@ So, backups that are not backing up. How amazing is that?
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Living in the Cloud</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org2b18d7c" class="outline-2">
+<h2 id="org2b18d7c">Living in the Cloud</h2>
+<div class="outline-text-2" id="text-org2b18d7c">
 <p>
 OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
 </p>
@@ -678,9 +668,9 @@ Things can go wrong, I understand that. But deleting all my contacts? Not cool. 
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">iPhoto</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org6e24143" class="outline-2">
+<h2 id="org6e24143">iPhoto</h2>
+<div class="outline-text-2" id="text-org6e24143">
 <p>
 My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
 </p>
@@ -699,9 +689,9 @@ At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftwar
 </div>
 </div>
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">OS X Lion with Auto Save and Versions</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orgbef1a8d" class="outline-2">
+<h2 id="orgbef1a8d">OS X Lion with Auto Save and Versions</h2>
+<div class="outline-text-2" id="text-orgbef1a8d">
 <p>
 The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
 </p>
@@ -728,9 +718,9 @@ I could go on. Let's just say that Lion increased my WTF-per-minute rate signifi
 </div>
 </div>
 
-<div id="outline-container-sec-6" class="outline-2">
-<h2 id="sec-6">Performance, Memory and File System</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-org2577584" class="outline-2">
+<h2 id="org2577584">Performance, Memory and File System</h2>
+<div class="outline-text-2" id="text-org2577584">
 <p>
 Lets talk performance. I can't really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
 </p>
@@ -753,11 +743,11 @@ And lastly, let's talk HFS+. Did you know that HFS+ has a global lock that preve
 </div>
 </div>
 
-<div id="outline-container-sec-7" class="outline-2">
-<h2 id="sec-7">So, what now?</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-org23f1b25" class="outline-2">
+<h2 id="org23f1b25">So, what now?</h2>
+<div class="outline-text-2" id="text-org23f1b25">
 <p>
-With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don't.
+With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don't.
 </p>
 
 <p>
@@ -773,9 +763,9 @@ That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and 
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 As a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point
-</p></div>
+</p></div></div>
 
 
 </div>
@@ -808,7 +798,6 @@ Hence, here is how you get rlua to install:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    ln -s /usr/local/Cellar/lua/5.1.4/lib/liblua.5.1.4.dylib /usr/local/lib/liblua5.1.dylib
     ln -s /usr/local/Cellar/lua/5.1.4/include/ /usr/local/include/lua5.1
 </pre>
@@ -840,7 +829,6 @@ At least this is an error that can easily be fixed. Fire up your terminal, type
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh"><span style="color: #111111;">cd</span> /Library/Frameworks/Adobe<span style="color: #303030;">\ </span>AIR.framework/Version/Current/Resources/
 sudo ln -s WebKit.dylib Webkit.dylib
 </pre>
@@ -868,7 +856,6 @@ In order to get Scipy to compile, you need to insert <code>#include &lt;complex.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
     ./scipy/linalg/src/fblaswrap_veclib_c.c
     ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
@@ -884,7 +871,6 @@ But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/0
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #111111;">egg</span>=matplotlib
 </pre>
 </div>
@@ -915,7 +901,6 @@ Homebrew won't install Pygame, but it will install all the prerequisites for Pyg
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
 </pre>
 </div>
@@ -925,7 +910,6 @@ This will install most packages for you. Note that <code>libpng</code> is also a
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew link libpng
 </pre>
 </div>
@@ -935,7 +919,6 @@ Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew edit smpeg
 </pre>
 </div>
@@ -945,7 +928,6 @@ and add the following line just above the two end at the end of the file
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">include.install Dir[<span style="color: #303030;">"*.h"</span>]
 </pre>
 </div>
@@ -955,7 +937,6 @@ Then save the file. (I submitted a bug to have this fixed, so you might not need
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install smpeg
 </pre>
 </div>
@@ -977,7 +958,6 @@ At this point, the setup file is mostly useless since <code>config.py</code> fai
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
 </pre>
 </div>
@@ -987,7 +967,6 @@ Obviously, this is lacking the paths to the SDL library. If you installed Homebr
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
 </pre>
 </div>
@@ -997,7 +976,6 @@ The next lines are strangely garbled. They say, for example
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lS -lD -lL -l_ -lt -lt -lf
 </pre>
 </div>
@@ -1007,7 +985,6 @@ Where they actually should say
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lSDL_ttf
 </pre>
 </div>
@@ -1041,7 +1018,6 @@ Alright, now without further ado, install Pygame by typing
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">python setup.py install
 </pre>
 </div>
@@ -1084,7 +1060,6 @@ To cut this short, here is what you need to get that Python running:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install python
 </pre>
 </div>
@@ -1098,7 +1073,6 @@ You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    <span style="color: #111111;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
 </pre>
 </div>
@@ -1116,7 +1090,6 @@ Alright, next up, install the python package manager:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install distribute
     brew install pip
 </pre>
@@ -1127,7 +1100,6 @@ This will come preconfigured for your newly installed Python. In an ideal world,
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install pkg-config
 </pre>
 </div>
@@ -1137,7 +1109,6 @@ Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install gfortran
 </pre>
 </div>
@@ -1147,7 +1118,6 @@ Alright. That was enough. Now on to pip. With all these dependencies cleared, pi
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install numpy
     pip install scipy
 </pre>
@@ -1162,7 +1132,6 @@ So we have to do this manually:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
 </pre>
 </div>
@@ -1190,8 +1159,8 @@ Thank you for reading.
 <div class="post-date">14 Mar 2009</div><h1 class="post-title"><a href="2009-03-14-get-a-mac.html">Get a Mac</a></h1>
 
 <figure>
-<p><img src="http://bastibe.de/static/2009-03/osx.png" alt="osx.png">
-</p>
+<img src="http://bastibe.de/static/2009-03/osx.png" alt="osx.png">
+
 </figure>
 
 <p>
@@ -1203,12 +1172,9 @@ Ziemlich genau wie ihm ging es mir auch.
 </p>
 
 <ul class="org-ul">
-<li>Teil 1: <a href="http://www.davidalison.com/2008/02/hardcore-windows-guy-switches-to-mac.html">A hardcore Windows guy gets a Mac</a>
-</li>
-<li>Teil 2: <a href="http://www.davidalison.com/2008/04/mac-after-two-months-of-mac-heres-why-i.html">After two months of Mac, here's why I switched</a>
-</li>
-<li>Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-mac-one-year.html">Switching from Windows to Mac - One Year Later</a>
-</li>
+<li>Teil 1: <a href="http://www.davidalison.com/2008/02/hardcore-windows-guy-switches-to-mac.html">A hardcore Windows guy gets a Mac</a></li>
+<li>Teil 2: <a href="http://www.davidalison.com/2008/04/mac-after-two-months-of-mac-heres-why-i.html">After two months of Mac, here's why I switched</a></li>
+<li>Teil 3: <a href="http://www.davidalison.com/2009/03/switching-from-windows-to-mac-one-year.html">Switching from Windows to Mac - One Year Later</a></li>
 </ul>
 
 <p>

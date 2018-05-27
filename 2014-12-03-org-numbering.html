@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Org Mode Selective Section Numbering</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -37,7 +35,6 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
@@ -66,45 +63,44 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-css"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
+<span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
 
 <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111;">counter-reset</span>: section; }
-<span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111;">counter-reset</span>: subsection; }
-<span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111;">counter-reset</span>: subsubsection; }
-<span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111;">counter-reset</span>: paragraph; }
-<span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111;">counter-reset</span>: subparagraph; }
+<span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: section; }
+<span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subsection; }
+<span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subsubsection; }
+<span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: paragraph; }
+<span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subparagraph; }
 
 <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">h2::before </span>{
-    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
-    <span style="color: #111111;">counter-increment</span>: section;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">counter-increment</span>: section;
 }
 <span style="color: #111111; text-decoration: underline;">h3::before </span>{
-    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
-    <span style="color: #111111;">counter-increment</span>: subsection;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsection;
 }
 <span style="color: #111111; text-decoration: underline;">h4::before </span>{
-    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
-    <span style="color: #111111;">counter-increment</span>: subsubsection;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsubsection;
 }
 <span style="color: #111111; text-decoration: underline;">h5::before </span>{
-    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
-    <span style="color: #111111;">counter-increment</span>: paragraph;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">counter-increment</span>: paragraph;
 }
 <span style="color: #111111; text-decoration: underline;">h6::before </span>{
-    <span style="color: #111111;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
-    <span style="color: #111111;">counter-increment</span>: subparagraph;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subparagraph;
 }
 
 <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111;">content</span>: none; }
+<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111; font-weight: bold;">content</span>: none; }
 </pre>
 </div>
 
@@ -113,7 +109,6 @@ With this in place, we can extend the previous filter to work for HTML as well a
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))

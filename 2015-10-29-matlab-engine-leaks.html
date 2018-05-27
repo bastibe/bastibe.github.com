@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Massive Memory Leak in the Matlab Engine for Python</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -33,7 +31,6 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> numpy
 <span style="color: #111111; font-weight: bold;">import</span> matlab
 <span style="color: #111111; font-weight: bold;">import</span> matlab.engine
@@ -63,7 +60,6 @@ Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> muppy, summary
 summary.print_(summary.summarize(muppy.get_objects()))
 </pre>
@@ -98,7 +94,6 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
 <span style="color: #111111;">all_objects</span> = muppy.get_objects()
@@ -112,8 +107,8 @@ objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #303030;">'ar
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2015-10/array.png" alt="array.png">
-</p>
+<img src="http://bastibe.de/static/2015-10/array.png" alt="array.png">
+
 </figure>
 
 <p>
@@ -125,7 +120,6 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
     <span style="color: #111111;">test_data</span> = numpy.zeros(1024*1024)
     <span style="color: #111111;">matlab_data</span> = matlab.double(test_data.tolist())
@@ -138,7 +132,6 @@ Pympler has another great feature that can track allocations. The <code>SummaryT
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> tracker
 <span style="color: #111111;">tr</span> = tracker.SummaryTracker()
 tr.print_diff()

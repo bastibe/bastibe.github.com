@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Calling Matlab from Python</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -32,9 +30,9 @@
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Usage</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org8bfe80e" class="outline-2">
+<h2 id="org8bfe80e">Usage</h2>
+<div class="outline-text-2" id="text-org8bfe80e">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -87,25 +85,19 @@ There are a few small differences, though:
 </p>
 
 <ul class="org-ul">
-<li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.
-</li>
-<li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.
-</li>
-<li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).
-</li>
-<li>If the MEfP does not know <code>nargout</code>, it assumes <code>nargout=1</code>. Transplant uses <code>nargout(func)</code> or returns whatever the function writes into <code>ans</code>.
-</li>
-<li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.
-</li>
-<li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.
-</li>
+<li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.</li>
+<li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.</li>
+<li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).</li>
+<li>If the MEfP does not know <code>nargout</code>, it assumes <code>nargout=1</code>. Transplant uses <code>nargout(func)</code> or returns whatever the function writes into <code>ans</code>.</li>
+<li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.</li>
+<li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Performance</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orga472e99" class="outline-2">
+<h2 id="orga472e99">Performance</h2>
+<div class="outline-text-2" id="text-orga472e99">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -116,8 +108,8 @@ More interesting is the time it takes to call a Matlab function from Python. Hav
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
-</p>
+<img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
+
 </figure>
 
 <p>
@@ -138,9 +130,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">TL;DR</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org80d03ab" class="outline-2">
+<h2 id="org80d03ab">TL;DR</h2>
+<div class="outline-text-2" id="text-org80d03ab">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>

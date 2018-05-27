@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Compiling Scipy and Matplotlib using pip on Lion</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -41,7 +39,6 @@ In order to get Scipy to compile, you need to insert <code>#include &lt;complex.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
     ./scipy/linalg/src/fblaswrap_veclib_c.c
     ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
@@ -57,7 +54,6 @@ But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/0
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #111111;">egg</span>=matplotlib
 </pre>
 </div>

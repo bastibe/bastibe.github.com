@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Speeding up Matplotlib</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -37,7 +35,6 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #111111; font-weight: bold;">as</span> plt
 <span style="color: #111111; font-weight: bold;">import</span> numpy <span style="color: #111111; font-weight: bold;">as</span> np
 <span style="color: #111111; font-weight: bold;">import</span> time
@@ -72,7 +69,6 @@ Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effec
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
@@ -98,35 +94,35 @@ Profiling this yields some interesting results:
 
 
 <colgroup>
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="left">
+<col  class="org-left">
 </colgroup>
 <tbody>
 <tr>
-<td class="right">ncalls</td>
-<td class="right">tottime</td>
-<td class="right">percall</td>
-<td class="right">cumtime</td>
-<td class="right">percall</td>
-<td class="left">filename:lineno(function)</td>
+<td class="org-right">ncalls</td>
+<td class="org-right">tottime</td>
+<td class="org-right">percall</td>
+<td class="org-right">cumtime</td>
+<td class="org-right">percall</td>
+<td class="org-left">filename:lineno(function)</td>
 </tr>
 
 <tr>
-<td class="right">15</td>
-<td class="right">0.167</td>
-<td class="right">0.011</td>
-<td class="right">0.167</td>
-<td class="right">0.011</td>
-<td class="left">{built-in method sleep)</td>
+<td class="org-right">15</td>
+<td class="org-right">0.167</td>
+<td class="org-right">0.011</td>
+<td class="org-right">0.167</td>
+<td class="org-right">0.011</td>
+<td class="org-left">{built-in method sleep)</td>
 </tr>
 </tbody>
 </table>
@@ -144,7 +140,6 @@ Putting this all together now yields:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
@@ -168,14 +163,10 @@ The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What
 </p>
 
 <ul class="org-ul">
-<li>the background <code>ax.patch</code>
-</li>
-<li>the line, as returned from the <code>plot()</code> function
-</li>
-<li>the spines <code>ax.spines</code>
-</li>
-<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code>
-</li>
+<li>the background <code>ax.patch</code></li>
+<li>the line, as returned from the <code>plot()</code> function</li>
+<li>the spines <code>ax.spines</code></li>
+<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code></li>
 </ul>
 
 <p>
@@ -183,7 +174,6 @@ What we can do here is to selectively draw only the parts that are actually chan
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 plt.show(block=<span style="color: #111111;">False</span>)

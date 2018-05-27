@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -55,7 +53,6 @@ Hence, here is how you get rlua to install:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    ln -s /usr/local/Cellar/lua/5.1.4/lib/liblua.5.1.4.dylib /usr/local/lib/liblua5.1.dylib
     ln -s /usr/local/Cellar/lua/5.1.4/include/ /usr/local/include/lua5.1
 </pre>
@@ -73,7 +70,6 @@ It seems things have improved since I tried to compile last time! Well, it still
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">pip install -e git+https://github.com/scipy/scipy#<span style="color: #111111;">egg</span>=scipy-dev
 pip install -e git+https://github.com/matplotlib/matplotlib#<span style="color: #111111;">egg</span>=matplotlib
 </pre>
@@ -97,7 +93,6 @@ In order to get Scipy to compile, you need to insert <code>#include &lt;complex.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
     ./scipy/linalg/src/fblaswrap_veclib_c.c
     ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
@@ -113,7 +108,6 @@ But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/0
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #111111;">egg</span>=matplotlib
 </pre>
 </div>
@@ -144,7 +138,6 @@ Homebrew won't install Pygame, but it will install all the prerequisites for Pyg
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
 </pre>
 </div>
@@ -154,7 +147,6 @@ This will install most packages for you. Note that <code>libpng</code> is also a
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew link libpng
 </pre>
 </div>
@@ -164,7 +156,6 @@ Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew edit smpeg
 </pre>
 </div>
@@ -174,7 +165,6 @@ and add the following line just above the two end at the end of the file
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">include.install Dir[<span style="color: #303030;">"*.h"</span>]
 </pre>
 </div>
@@ -184,7 +174,6 @@ Then save the file. (I submitted a bug to have this fixed, so you might not need
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install smpeg
 </pre>
 </div>
@@ -206,7 +195,6 @@ At this point, the setup file is mostly useless since <code>config.py</code> fai
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
 </pre>
 </div>
@@ -216,7 +204,6 @@ Obviously, this is lacking the paths to the SDL library. If you installed Homebr
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
 </pre>
 </div>
@@ -226,7 +213,6 @@ The next lines are strangely garbled. They say, for example
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lS -lD -lL -l_ -lt -lt -lf
 </pre>
 </div>
@@ -236,7 +222,6 @@ Where they actually should say
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lSDL_ttf
 </pre>
 </div>
@@ -270,7 +255,6 @@ Alright, now without further ado, install Pygame by typing
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">python setup.py install
 </pre>
 </div>
@@ -313,7 +297,6 @@ To cut this short, here is what you need to get that Python running:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install python
 </pre>
 </div>
@@ -327,7 +310,6 @@ You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    <span style="color: #111111;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
 </pre>
 </div>
@@ -345,7 +327,6 @@ Alright, next up, install the python package manager:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install distribute
     brew install pip
 </pre>
@@ -356,7 +337,6 @@ This will come preconfigured for your newly installed Python. In an ideal world,
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install pkg-config
 </pre>
 </div>
@@ -366,7 +346,6 @@ Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install gfortran
 </pre>
 </div>
@@ -376,7 +355,6 @@ Alright. That was enough. Now on to pip. With all these dependencies cleared, pi
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install numpy
     pip install scipy
 </pre>
@@ -391,7 +369,6 @@ So we have to do this manually:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
 </pre>
 </div>
@@ -419,8 +396,8 @@ Thank you for reading.
 <div class="post-date">15 Mar 2009</div><h1 class="post-title"><a href="2009-03-15-debugging-und-gcc-auf-windows.html">Debugging und GCC auf Windows</a></h1>
 
 <figure>
-<p><img src="http://bastibe.de/static/2009-03/code.png" alt="code.png">
-</p>
+<img src="http://bastibe.de/static/2009-03/code.png" alt="code.png">
+
 </figure>
 
 <p>
@@ -440,10 +417,8 @@ Das Ergebnis:
 </p>
 
 <ol class="org-ol">
-<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)
-</li>
-<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html">Realloc</a> ist schuld!
-</li>
+<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)</li>
+<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html">Realloc</a> ist schuld!</li>
 </ol>
 
 <p>
@@ -460,71 +435,71 @@ Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, gr
 
 
 <colgroup>
-<col  class="left">
+<col  class="org-left">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="left">
+<col  class="org-left">
 </colgroup>
 <tbody>
 <tr>
-<td class="left">realloc()-Größe</td>
-<td class="right">realloc()-Aufrufe</td>
-<td class="left">benötigte   Zeit</td>
+<td class="org-left">realloc()-Größe</td>
+<td class="org-right">realloc()-Aufrufe</td>
+<td class="org-left">benötigte   Zeit</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>11</sup> =    2048</td>
-<td class="right">15000</td>
-<td class="left">~1 h</td>
+<td class="org-left">2<sup>11</sup> =    2048</td>
+<td class="org-right">15000</td>
+<td class="org-left">~1 h</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>16</sup> =   65536</td>
-<td class="right">470</td>
-<td class="left">~2 min</td>
+<td class="org-left">2<sup>16</sup> =   65536</td>
+<td class="org-right">470</td>
+<td class="org-left">~2 min</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>17</sup> =  131072</td>
-<td class="right">240</td>
-<td class="left">~1 min</td>
+<td class="org-left">2<sup>17</sup> =  131072</td>
+<td class="org-right">240</td>
+<td class="org-left">~1 min</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>18</sup> =  262144</td>
-<td class="right">120</td>
-<td class="left">30 s</td>
+<td class="org-left">2<sup>18</sup> =  262144</td>
+<td class="org-right">120</td>
+<td class="org-left">30 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>19</sup> =  524288</td>
-<td class="right">60</td>
-<td class="left">18 s</td>
+<td class="org-left">2<sup>19</sup> =  524288</td>
+<td class="org-right">60</td>
+<td class="org-left">18 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>20</sup> = 1048576</td>
-<td class="right">30</td>
-<td class="left">10.5 s</td>
+<td class="org-left">2<sup>20</sup> = 1048576</td>
+<td class="org-right">30</td>
+<td class="org-left">10.5 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>21</sup> = 2097152</td>
-<td class="right">15</td>
-<td class="left">7.3 s</td>
+<td class="org-left">2<sup>21</sup> = 2097152</td>
+<td class="org-right">15</td>
+<td class="org-left">7.3 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>22</sup> = 4194304</td>
-<td class="right">7</td>
-<td class="left">5.1 s</td>
+<td class="org-left">2<sup>22</sup> = 4194304</td>
+<td class="org-right">7</td>
+<td class="org-left">5.1 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>23</sup> = 8388608</td>
-<td class="right">3</td>
-<td class="left">4.2 s</td>
+<td class="org-left">2<sup>23</sup> = 8388608</td>
+<td class="org-right">3</td>
+<td class="org-left">4.2 s</td>
 </tr>
 </tbody>
 </table>
@@ -544,8 +519,8 @@ Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sic
 <div class="post-date">12 Mar 2009</div><h1 class="post-title"><a href="2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h1>
 
 <figure>
-<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png">
-</p>
+<img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png">
+
 </figure>
 
 <p>
@@ -571,8 +546,8 @@ Eine Fortsetzung kommt noch&#x2026;
 <div class="post-date">05 Mar 2009</div><h1 class="post-title"><a href="2009-03-05-great-scott.html">Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</a></h1>
 
 <figure>
-<p><img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png">
-</p>
+<img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png">
+
 </figure>
 
 <p>
@@ -593,8 +568,8 @@ Außerdem: ein aktuelles Linux muss her. VMWare sei Dank, lauert im Linux-Instal
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png">
-</p>
+<img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png">
+
 </figure>
 
 <p>

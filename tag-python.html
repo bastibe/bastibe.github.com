@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -45,7 +43,7 @@ As an aside, many of these complaints are just as true for package-manager-provi
 </p>
 
 <p>
-In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
+In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine [1]. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
 </p>
 
 <p>
@@ -55,17 +53,11 @@ I find this process much simpler, and easier to manage, because it relies on sma
 <p>
 Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became <a href="https://pythonwheels.com/">ubiquitous and painless</a>, and virtualenv was <a href="https://docs.python.org/3/library/venv.html">integrated into Python</a>, and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-the downside of compilation is: no Windows support.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>
+<p>
+[1] the downside of compilation is: no Windows support.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>
 <div class="post-date">24 Nov 2016</div><h1 class="post-title"><a href="2016-11-24-pip-is-great.html">Pip is great</a></h1>
 <p>
 <a href="http://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing</a> <a href="http://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Python</a> <a href="http://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">packages</a> <a href="http://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html">used</a> to be a pain. Very surprisingly, this is no longer the case. Nowadays, <code>pip install whatever</code> will reliably install pretty much anything without any trouble.
@@ -88,15 +80,15 @@ But I am happy to announce that these dark days are behind us now. Pip now autom
 </p>
 
 <p>
-For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!
+For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!
 </p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 Not because I dislike conda, just to simplify my development environment.
-</p></div>
+</p></div></div>
 
 
 </div>
@@ -108,8 +100,8 @@ A few months ago, I <a href="http://bastibe.de/2015-11-03-matlab-engine-performa
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2016-06/timings.png" alt="timings.png">
-</p>
+<img src="http://bastibe.de/static/2016-06/timings.png" alt="timings.png">
+
 </figure>
 
 <p>
@@ -148,132 +140,132 @@ Here is the above data again in tabular form:
 
 
 <colgroup>
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="left">Task</th>
-<th scope="col" class="left">New Transplant</th>
-<th scope="col" class="left">Old Transplant</th>
-<th scope="col" class="left">Oct2Py</th>
-<th scope="col" class="left">MEfP</th>
-<th scope="col" class="left">Matlab</th>
-<th scope="col" class="left">Numpy</th>
-<th scope="col" class="left">Octave</th>
+<th scope="col" class="org-left">Task</th>
+<th scope="col" class="org-left">New Transplant</th>
+<th scope="col" class="org-left">Old Transplant</th>
+<th scope="col" class="org-left">Oct2Py</th>
+<th scope="col" class="org-left">MEfP</th>
+<th scope="col" class="org-left">Matlab</th>
+<th scope="col" class="org-left">Numpy</th>
+<th scope="col" class="org-left">Octave</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="left">startup</td>
-<td class="left">4.8 s</td>
-<td class="left">5.8 s</td>
-<td class="left">11 ms</td>
-<td class="left">4.6 s</td>
-<td class="left">&#xa0;</td>
-<td class="left">&#xa0;</td>
-<td class="left">&#xa0;</td>
+<td class="org-left">startup</td>
+<td class="org-left">4.8 s</td>
+<td class="org-left">5.8 s</td>
+<td class="org-left">11 ms</td>
+<td class="org-left">4.6 s</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,1))</td>
-<td class="left">3.36 ms</td>
-<td class="left">34.2 ms</td>
-<td class="left">29.6 ms</td>
-<td class="left">1.8 ms</td>
-<td class="left">9.6 μs</td>
-<td class="left">1.8 μs</td>
-<td class="left">6 μs</td>
+<td class="org-left">sum(randn(1,1))</td>
+<td class="org-left">3.36 ms</td>
+<td class="org-left">34.2 ms</td>
+<td class="org-left">29.6 ms</td>
+<td class="org-left">1.8 ms</td>
+<td class="org-left">9.6 μs</td>
+<td class="org-left">1.8 μs</td>
+<td class="org-left">6 μs</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,10))</td>
-<td class="left">3.71 ms</td>
-<td class="left">35.8 ms</td>
-<td class="left">30.5 ms</td>
-<td class="left">1.8 ms</td>
-<td class="left">1.8 μs</td>
-<td class="left">1.8 μs</td>
-<td class="left">9 μs</td>
+<td class="org-left">sum(randn(1,10))</td>
+<td class="org-left">3.71 ms</td>
+<td class="org-left">35.8 ms</td>
+<td class="org-left">30.5 ms</td>
+<td class="org-left">1.8 ms</td>
+<td class="org-left">1.8 μs</td>
+<td class="org-left">1.8 μs</td>
+<td class="org-left">9 μs</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,100))</td>
-<td class="left">3.27 ms</td>
-<td class="left">33.9 ms</td>
-<td class="left">29.5 ms</td>
-<td class="left">2.06 ms</td>
-<td class="left">2.2 μs</td>
-<td class="left">1.8 μs</td>
-<td class="left">9 μs</td>
+<td class="org-left">sum(randn(1,100))</td>
+<td class="org-left">3.27 ms</td>
+<td class="org-left">33.9 ms</td>
+<td class="org-left">29.5 ms</td>
+<td class="org-left">2.06 ms</td>
+<td class="org-left">2.2 μs</td>
+<td class="org-left">1.8 μs</td>
+<td class="org-left">9 μs</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,1000))</td>
-<td class="left">4.26 ms</td>
-<td class="left">32.7 ms</td>
-<td class="left">30.6 ms</td>
-<td class="left">9.1 ms</td>
-<td class="left">4.1 μs</td>
-<td class="left">2.3 μs</td>
-<td class="left">12 μs</td>
+<td class="org-left">sum(randn(1,1000))</td>
+<td class="org-left">4.26 ms</td>
+<td class="org-left">32.7 ms</td>
+<td class="org-left">30.6 ms</td>
+<td class="org-left">9.1 ms</td>
+<td class="org-left">4.1 μs</td>
+<td class="org-left">2.3 μs</td>
+<td class="org-left">12 μs</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,1e4))</td>
-<td class="left">4.35 ms</td>
-<td class="left">34.5 ms</td>
-<td class="left">30 ms</td>
-<td class="left">72.2 ms</td>
-<td class="left">25 μs</td>
-<td class="left">5.8 μs</td>
-<td class="left">38 μs</td>
+<td class="org-left">sum(randn(1,1e4))</td>
+<td class="org-left">4.35 ms</td>
+<td class="org-left">34.5 ms</td>
+<td class="org-left">30 ms</td>
+<td class="org-left">72.2 ms</td>
+<td class="org-left">25 μs</td>
+<td class="org-left">5.8 μs</td>
+<td class="org-left">38 μs</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,1e5))</td>
-<td class="left">5.45 ms</td>
-<td class="left">86.1 ms</td>
-<td class="left">31.2 ms</td>
-<td class="left">712 ms</td>
-<td class="left">55 μs</td>
-<td class="left">38.6 μs</td>
-<td class="left">280 μs</td>
+<td class="org-left">sum(randn(1,1e5))</td>
+<td class="org-left">5.45 ms</td>
+<td class="org-left">86.1 ms</td>
+<td class="org-left">31.2 ms</td>
+<td class="org-left">712 ms</td>
+<td class="org-left">55 μs</td>
+<td class="org-left">38.6 μs</td>
+<td class="org-left">280 μs</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,1e6))</td>
-<td class="left">44.1 ms</td>
-<td class="left">874 ms</td>
-<td class="left">45.7 ms</td>
-<td class="left">7.21 s</td>
-<td class="left">430 μs</td>
-<td class="left">355 μs</td>
-<td class="left">2.2 ms</td>
+<td class="org-left">sum(randn(1,1e6))</td>
+<td class="org-left">44.1 ms</td>
+<td class="org-left">874 ms</td>
+<td class="org-left">45.7 ms</td>
+<td class="org-left">7.21 s</td>
+<td class="org-left">430 μs</td>
+<td class="org-left">355 μs</td>
+<td class="org-left">2.2 ms</td>
 </tr>
 
 <tr>
-<td class="left">sum(randn(1,1e7))</td>
-<td class="left">285 ms</td>
-<td class="left">10.6 s</td>
-<td class="left">643 ms</td>
-<td class="left">72 s</td>
-<td class="left">3.5 ms</td>
-<td class="left">5.04 ms</td>
-<td class="left">22 ms</td>
+<td class="org-left">sum(randn(1,1e7))</td>
+<td class="org-left">285 ms</td>
+<td class="org-left">10.6 s</td>
+<td class="org-left">643 ms</td>
+<td class="org-left">72 s</td>
+<td class="org-left">3.5 ms</td>
+<td class="org-left">5.04 ms</td>
+<td class="org-left">22 ms</td>
 </tr>
 </tbody>
 </table>
@@ -288,7 +280,6 @@ This is easy to do with Matplotlib:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> matplotlib
 <span style="color: #111111;">matplotlib.rcParams</span>[<span style="color: #303030;">'font.size'</span>] = 12
 <span style="color: #111111;">matplotlib.rcParams</span>[<span style="color: #303030;">'font.family'</span>] = <span style="color: #303030;">'Calibri'</span>
@@ -304,7 +295,6 @@ To refresh the font cache, use
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">matplotlib.font_manager._rebuild()
 </pre>
 </div>
@@ -318,9 +308,9 @@ Happy Plotting!
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Usage</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org8bfe80e" class="outline-2">
+<h2 id="org8bfe80e">Usage</h2>
+<div class="outline-text-2" id="text-org8bfe80e">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -373,25 +363,19 @@ There are a few small differences, though:
 </p>
 
 <ul class="org-ul">
-<li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.
-</li>
-<li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.
-</li>
-<li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).
-</li>
-<li>If the MEfP does not know <code>nargout</code>, it assumes <code>nargout=1</code>. Transplant uses <code>nargout(func)</code> or returns whatever the function writes into <code>ans</code>.
-</li>
-<li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.
-</li>
-<li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.
-</li>
+<li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.</li>
+<li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.</li>
+<li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).</li>
+<li>If the MEfP does not know <code>nargout</code>, it assumes <code>nargout=1</code>. Transplant uses <code>nargout(func)</code> or returns whatever the function writes into <code>ans</code>.</li>
+<li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.</li>
+<li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Performance</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orga472e99" class="outline-2">
+<h2 id="orga472e99">Performance</h2>
+<div class="outline-text-2" id="text-orga472e99">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -402,8 +386,8 @@ More interesting is the time it takes to call a Matlab function from Python. Hav
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
-</p>
+<img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
+
 </figure>
 
 <p>
@@ -424,9 +408,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">TL;DR</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org80d03ab" class="outline-2">
+<h2 id="org80d03ab">TL;DR</h2>
+<div class="outline-text-2" id="text-org80d03ab">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -443,7 +427,7 @@ They say that all arithmetic operations in Numpy behave like their element-wise 
 </p>
 
 <p>
-In particular, this is what happens when you multiply an array with a matrix<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> in Numpy:
+In particular, this is what happens when you multiply an array with a matrix[1] in Numpy:
 </p>
 
 <pre class="example">
@@ -463,24 +447,17 @@ They behave as if each row was evaluated separately, and singular dimensions are
 <p>
 Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as in <code>[a[n]*b[n] for n in range(len(a))]</code>. I guess that's why this is called <i>broadcasting</i>, and not <i>element-wise</i>.
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-"matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>
+<p>
+[1] "matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>
 <div class="post-date">28 Sep 2015</div><h1 class="post-title"><a href="2015-09-28-python-performance.html">Python Numeric Performance</a></h1>
 <p>
 Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_python</span>(oct_per_sec):
     <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">b</span> = 1.781
@@ -541,7 +518,6 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numpy</span>(doubles_per_x):
     <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">b</span> = 1.781
@@ -588,7 +564,6 @@ Another avenue for performance optimization is <a href="http://numba.pydata.org/
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; text-decoration: underline;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #111111;">True</span>)
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numba</span>(doubles_per_x):
     ...
@@ -608,7 +583,6 @@ However, Numba is no silver bullet, and does not support all of Python yet. In t
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">python version</span>
 <span style="color: #111111; font-weight: bold;">for</span> x_idx, cost_column <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">enumerate</span>(cost_matrix):
     ...
@@ -646,7 +620,6 @@ But write my own I did: <a href="https://github.com/bastibe/transplant">Transpla
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> transplant
 <span style="color: #111111;">matlab</span> = transplant.Matlab()
 </pre>
@@ -657,7 +630,6 @@ This <code>matlab</code> object starts a Matlab interpreter in the background an
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">matlab.eye(3)
 &gt;&gt;&gt; array([[ 1.,  0.,  0.],
            [ 0.,  1.,  0.],
@@ -666,11 +638,10 @@ This <code>matlab</code> object starts a Matlab interpreter in the background an
 </div>
 
 <p>
-As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #303030;">'uint8'</span>)
 &gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
 </pre>
@@ -681,11 +652,10 @@ All matrix data is actually transferred in binary, so both Matlab and Python wor
 </p>
 
 <p>
-This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
+This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">data</span> = matlab.randn(1, 4)
 matlab.<span style="color: #111111;">max</span>(data)
 &gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
@@ -703,31 +673,30 @@ Calling Matlab functions is the most important feature of Transplant. But there 
 </p>
 
 <ul class="org-ul">
-<li>You can save/retrieve variables in the global workspace:
+<li><p>
+You can save/retrieve variables in the global workspace:
+</p>
 
 <div class="org-src-container">
-
-<pre class="src src-python"><span style="color: #111111;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
-<span style="color: #111111;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
+<pre class="src src-python">  <span style="color: #111111;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
+  <span style="color: #111111;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
 </pre>
-</div>
-</li>
+</div></li>
 
-<li>You van eval some code:
+<li><p>
+You van eval some code:
+</p>
 
 <div class="org-src-container">
-
-<pre class="src src-python">matlab.<span style="color: #111111;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
-&gt;&gt;&gt; <span style="color: #111111;">ans</span> =
-&gt;&gt;&gt;
-&gt;&gt;&gt; double
-&gt;&gt;&gt;
+<pre class="src src-python">  matlab.<span style="color: #111111;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
+  &gt;&gt;&gt; <span style="color: #111111;">ans</span> =
+  &gt;&gt;&gt;
+  &gt;&gt;&gt; double
+  &gt;&gt;&gt;
 </pre>
-</div>
-</li>
+</div></li>
 
-<li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.
-</li>
+<li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.</li>
 </ul>
 
 <p>
@@ -739,7 +708,7 @@ There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonl
 </p>
 
 <p>
-Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
+Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
 </p>
 
 <p>
@@ -753,17 +722,17 @@ For now, head over to <a href="https://github.com/bastibe/transplant">Github.com
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 Except for integer complex numbers, since those are not supported by Numpy.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 Like the Matlab function <code>nargout</code>
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
-</p></div>
+</p></div></div>
 
 
 </div>
@@ -794,7 +763,6 @@ So, lets read some audio data, shall we?
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
 <span style="color: #111111;">data</span> = soundfile.read(<span style="color: #303030;">'sad_song.wav'</span>)
 </pre>
@@ -813,7 +781,6 @@ OK, that was easy. So let's read only the first and last 100 frames!
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
 <span style="color: #111111;">first</span> = soundfile.read(<span style="color: #303030;">'long_song.flac'</span>, stop=100)
 <span style="color: #111111;">last</span> = soundfile.read(start=-100)
@@ -833,7 +800,6 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
 <span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
 <span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
@@ -854,7 +820,7 @@ And that's really all there is to it. Working with audio data in Python is easy 
 </p>
 
 <p>
-Of course, there is much more you could do. You could create a callback function and be called every four<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>.
+Of course, there is much more you could do. You could create a callback function and be called every four[1] frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[3].
 </p>
 
 <p>
@@ -864,25 +830,13 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
 <p>
 <b>UPDATE:</b> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div>
+<p>
+[1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
+[2] More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
+[3] More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div>
 <div class="post-date">30 May 2013</div><h1 class="post-title"><a href="2013-05-30-speeding-up-matplotlib.html">Speeding up Matplotlib</a></h1>
 <p>
 For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
@@ -893,7 +847,6 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #111111; font-weight: bold;">as</span> plt
 <span style="color: #111111; font-weight: bold;">import</span> numpy <span style="color: #111111; font-weight: bold;">as</span> np
 <span style="color: #111111; font-weight: bold;">import</span> time
@@ -928,7 +881,6 @@ Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effec
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
@@ -954,35 +906,35 @@ Profiling this yields some interesting results:
 
 
 <colgroup>
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="left">
+<col  class="org-left">
 </colgroup>
 <tbody>
 <tr>
-<td class="right">ncalls</td>
-<td class="right">tottime</td>
-<td class="right">percall</td>
-<td class="right">cumtime</td>
-<td class="right">percall</td>
-<td class="left">filename:lineno(function)</td>
+<td class="org-right">ncalls</td>
+<td class="org-right">tottime</td>
+<td class="org-right">percall</td>
+<td class="org-right">cumtime</td>
+<td class="org-right">percall</td>
+<td class="org-left">filename:lineno(function)</td>
 </tr>
 
 <tr>
-<td class="right">15</td>
-<td class="right">0.167</td>
-<td class="right">0.011</td>
-<td class="right">0.167</td>
-<td class="right">0.011</td>
-<td class="left">{built-in method sleep)</td>
+<td class="org-right">15</td>
+<td class="org-right">0.167</td>
+<td class="org-right">0.011</td>
+<td class="org-right">0.167</td>
+<td class="org-right">0.011</td>
+<td class="org-left">{built-in method sleep)</td>
 </tr>
 </tbody>
 </table>
@@ -1000,7 +952,6 @@ Putting this all together now yields:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
@@ -1024,14 +975,10 @@ The only thing left to optimize now is thus <code>fig.canvas.draw()</code>. What
 </p>
 
 <ul class="org-ul">
-<li>the background <code>ax.patch</code>
-</li>
-<li>the line, as returned from the <code>plot()</code> function
-</li>
-<li>the spines <code>ax.spines</code>
-</li>
-<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code>
-</li>
+<li>the background <code>ax.patch</code></li>
+<li>the line, as returned from the <code>plot()</code> function</li>
+<li>the spines <code>ax.spines</code></li>
+<li>the axes <code>ax.xaxis</code> and <code>ax.yaxis</code></li>
 </ul>
 
 <p>
@@ -1039,7 +986,6 @@ What we can do here is to selectively draw only the parts that are actually chan
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 plt.show(block=<span style="color: #111111;">False</span>)
@@ -1089,30 +1035,25 @@ Why would you want to use Python over Matlab?
 </blockquote>
 
 <ul class="org-ul">
-<li>Because Python is free and Matlab is not.
-</li>
-<li>Because Python is a general purpose programming language and Matlab is not.
-</li>
+<li>Because Python is free and Matlab is not.</li>
+<li>Because Python is a general purpose programming language and Matlab is not.</li>
 </ul>
 
 <p>
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org53ecb55" class="outline-2">
+<h2 id="org53ecb55">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org53ecb55">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
 
 <ul class="org-ul">
-<li>Numpy (the matrix engine)
-</li>
-<li>Scipy (matrix manipulation)
-</li>
-<li>Matplotlib (plotting)
-</li>
+<li>Numpy (the matrix engine)</li>
+<li>Scipy (matrix manipulation)</li>
+<li>Matplotlib (plotting)</li>
 </ul>
 
 <p>
@@ -1121,9 +1062,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org7a0f593" class="outline-2">
+<h2 id="org7a0f593">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org7a0f593">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -1133,7 +1074,6 @@ Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hol
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
     <span style="color: #111111;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
     <span style="color: #111111;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
@@ -1146,7 +1086,6 @@ Contrast this with C, where you can not assign different data types to the same 
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">C</span>
     <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">a</span> = 5;
     <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">b</span>[3] = {1.0, 2.0, 3.0};
@@ -1160,7 +1099,6 @@ In Matlab, adding a single number to a string will convert that string into an a
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
     a <span style="color: #111111;">=</span> <span style="color: #303030;">'text'</span>
     b <span style="color: #111111;">=</span> a <span style="color: #111111;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
@@ -1168,7 +1106,6 @@ In Matlab, adding a single number to a string will convert that string into an a
 </div>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
     <span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>
     <span style="color: #111111;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
@@ -1189,15 +1126,14 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Reading Python</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org5f682d4" class="outline-2">
+<h2 id="org5f682d4">Reading Python</h2>
+<div class="outline-text-2" id="text-org5f682d4">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy
     <span style="color: #111111;">a</span> = numpy.zeros(10, 1)
 </pre>
@@ -1208,7 +1144,6 @@ This is clearly cumbersome if you are planning to use Numpy all the time. So ins
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> *
     <span style="color: #111111;">a</span> = ones(30, 1)
 </pre>
@@ -1219,7 +1154,6 @@ Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scip
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pylab <span style="color: #111111; font-weight: bold;">import</span> *
     <span style="color: #111111;">a</span> = randn(100, 1)
     plot(a)
@@ -1237,16 +1171,13 @@ So far, the code you have seen should look pretty familiar. A few differences:
 
 <ul class="org-ul">
 <li>No semicolons at the end of lines;
-In order to print stuff to the console, use the <code>print()</code> function instead.
-</li>
+In order to print stuff to the console, use the <code>print()</code> function instead.</li>
 
 <li>No <code>end</code> anywhere.
-In Python, blocks of code are identified by indentation and they always start with a colon like so:
-</li>
+In Python, blocks of code are identified by indentation and they always start with a colon like so:</li>
 </ul>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111;">sum</span> = 0
     <span style="color: #111111; font-weight: bold;">for</span> n <span style="color: #111111; font-weight: bold;">in</span> [1, 2, 3, 4, 5]:
         <span style="color: #111111;">sum</span> = <span style="color: #111111;">sum</span> + n
@@ -1257,12 +1188,10 @@ In Python, blocks of code are identified by indentation and they always start wi
 <ul class="org-ul">
 <li>Function definitions are different.
 They use the <code>def</code> keyword instead of <code>function</code>.
-You don't have to name the output variable names in the definition and instead use <code>return()</code>.
-</li>
+You don't have to name the output variable names in the definition and instead use <code>return()</code>.</li>
 </ul>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
     <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number):
         <span style="color: #111111; font-weight: bold;">if</span> number &gt; 0:
@@ -1273,7 +1202,6 @@ You don't have to name the output variable names in the definition and instead u
 </div>
 
 <div class="org-src-container">
-
 <pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
     <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
         <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #111111;">&gt;</span> 0
@@ -1287,12 +1215,10 @@ You don't have to name the output variable names in the definition and instead u
 
 <ul class="org-ul">
 <li>There is no easy way to write out a list or matrix.
-Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <i>must</i> use commas to separate items and can not use semicolons to separate lines.
-</li>
+Since Python only gains a matrix engine by importing Numpy, it does not have a convenient way of writing arrays or matrices.   This sounds more inconvenient than it actually is, since you are probably using mostly functions like <code>zeros()</code> or <code>randn()</code> anyway and those work just fine. Also, many places accept Python lists (like this <code>[1, 2, 3]</code>) instead of Numpy arrays, so this rarely is a problem. Note that you <i>must</i> use commas to separate items and can not use semicolons to separate lines.</li>
 </ul>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a numpy matrix:</span>
     <span style="color: #111111;">m</span> = array([[1, 2, 3],
                [4, 5, 6],
@@ -1305,12 +1231,10 @@ Since Python only gains a matrix engine by importing Numpy, it does not have a c
 <ul class="org-ul">
 <li>Arrays access uses brackets and is numbered from 0.
 Thus, ranges <i>exclude</i> the last number (see below).
-Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.
-</li>
+Mostly, this just means that array access does not need any <code>+1</code> or <code>-1</code> when indexing arrays anymore.</li>
 </ul>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111;">a</span> = linspace(1, 10, 10)
     <span style="color: #111111;">one</span> = a[0]
     <span style="color: #111111;">two</span> = a[1]
@@ -1322,16 +1246,14 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Common traps</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgdb517d3" class="outline-2">
+<h2 id="orgdb517d3">Common traps</h2>
+<div class="outline-text-2" id="text-orgdb517d3">
 <ul class="org-ul">
-<li>Array slicing does not copy.
-</li>
+<li>Array slicing does not copy.</li>
 </ul>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111;">a</span> = array([1 2 3 4 5])
     <span style="color: #111111;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
     <span style="color: #111111;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
@@ -1342,12 +1264,10 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </div>
 <ul class="org-ul">
 <li>Arrays retain their data type.
-You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).
-</li>
+You can slice them, you can dice them, you can do math on them, but a 16 bit integer array will never lose its data type. Use <code>new = array(old, dtype=double)</code> to convert an array of any data type to the default <code>double</code> type (like in Matlab).</li>
 </ul>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pretend this came from a wave file:</span>
     <span style="color: #111111;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
     <span style="color: #111111;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
@@ -1358,9 +1278,9 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </div>
 
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">Going further</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orgb6d7c7b" class="outline-2">
+<h2 id="orgb6d7c7b">Going further</h2>
+<div class="outline-text-2" id="text-orgb6d7c7b">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>
@@ -1392,9 +1312,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orge75fb80" class="outline-2">
+<h2 id="orge75fb80">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-orge75fb80">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -1423,8 +1343,8 @@ If this is applied to a signal, it will create an envelope like this:
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png">
-</p>
+<img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png">
+
 </figure>
 
 <p>
@@ -1458,8 +1378,8 @@ Here you can see how that would look in practice:
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png">
-</p>
+<img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png">
+
 </figure>
 
 <p>
@@ -1468,8 +1388,8 @@ Zooming in on one of the limited section reveals that the gain is actually movin
 
 
 <figure>
-<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png">
-</p>
+<img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png">
+
 </figure>
 
 <p>
@@ -1481,7 +1401,6 @@ In Python, this might look like this:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">class</span> <span style="color: #111111; text-decoration: underline;">Limiter</span>:
         <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">__init__</span>(<span style="color: #111111; font-weight: bold;">self</span>, attack_coeff, release_coeff, delay, dtype=float32):
             <span style="color: #111111; font-weight: bold;">self</span>.delay_index = 0
@@ -1524,9 +1443,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orga5fff61" class="outline-2">
+<h2 id="orga5fff61">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-orga5fff61">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -1536,7 +1455,6 @@ A real-time audio processing framework using PyAudio would look like this:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pyaudio <span style="color: #111111; font-weight: bold;">import</span> PyAudio, paFloat32
 
     <span style="color: #111111;">pa</span> = PyAudio()
@@ -1569,7 +1487,6 @@ Every time the <code>callback</code> is called, it will have to return 1024 samp
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
 
     <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">callback</span>(in_data, frame_count, time_info, flag):
@@ -1592,15 +1509,14 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org8bf2358" class="outline-2">
+<h2 id="org8bf2358">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org8bf2358">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python Limiter class.</span>
     <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
         <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_index</span>;
@@ -1660,7 +1576,6 @@ Now in order to plug this code into Python I will use Cython. First of all, a "C
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    cdef extern <span style="color: #111111; font-weight: bold;">from</span> <span style="color: #303030;">"limiter.h"</span>:
         ctypedef struct limiter_state:
             <span style="color: #111111;">int</span> delay_index
@@ -1681,7 +1596,6 @@ This is very similar to the C header file of the limiter:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-c">    <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
         <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_index</span>;
         <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_length</span>;
@@ -1702,7 +1616,6 @@ With that squared away, the C functions are accessible for Cython. Now, we only 
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy <span style="color: #111111; font-weight: bold;">as</span> np
     cimport numpy <span style="color: #111111; font-weight: bold;">as</span> np
     cimport limiter
@@ -1743,7 +1656,6 @@ Finally, we need to build the whole contraption. The easiest way to do this is t
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> distutils.core <span style="color: #111111; font-weight: bold;">import</span> setup
     <span style="color: #111111; font-weight: bold;">from</span> distutils.extension <span style="color: #111111; font-weight: bold;">import</span> Extension
     <span style="color: #111111; font-weight: bold;">from</span> Cython.Distutils <span style="color: #111111; font-weight: bold;">import</span> build_ext
@@ -1768,9 +1680,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Conclusion</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgf9fd06c" class="outline-2">
+<h2 id="orgf9fd06c">Conclusion</h2>
+<div class="outline-text-2" id="text-orgf9fd06c">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -1781,16 +1693,13 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">Disclaimer</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org29006d5" class="outline-2">
+<h2 id="org29006d5">Disclaimer</h2>
+<div class="outline-text-2" id="text-org29006d5">
 <ol class="org-ol">
-<li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.
-</li>
-<li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.
-</li>
-<li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.
-</li>
+<li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
+<li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
+<li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.</li>
 </ol>
 </div>
 </div>
@@ -1822,7 +1731,6 @@ Short answer: Find your <i>site-packages</i> directory:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> distutils.sysconfig <span style="color: #111111; font-weight: bold;">import</span> get_python_lib
         <span style="color: #111111; font-weight: bold;">print</span>(get_python_lib())
 </pre>
@@ -1833,7 +1741,6 @@ Go there, navigate to the <i>epydoc\/markup</i> directory and change line 307 of
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">        <span style="color: #111111;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
 </pre>
 </div>
@@ -1843,7 +1750,6 @@ to
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python">        <span style="color: #111111; font-weight: bold;">try</span>:
                 <span style="color: #111111;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
         <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">AttributeError</span>:
@@ -1863,7 +1769,6 @@ It seems things have improved since I tried to compile last time! Well, it still
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">pip install -e git+https://github.com/scipy/scipy#<span style="color: #111111;">egg</span>=scipy-dev
 pip install -e git+https://github.com/matplotlib/matplotlib#<span style="color: #111111;">egg</span>=matplotlib
 </pre>
@@ -1887,7 +1792,6 @@ In order to get Scipy to compile, you need to insert <code>#include &lt;complex.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
     ./scipy/linalg/src/fblaswrap_veclib_c.c
     ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
@@ -1903,7 +1807,6 @@ But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/0
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #111111;">egg</span>=matplotlib
 </pre>
 </div>
@@ -1934,7 +1837,6 @@ Homebrew won't install Pygame, but it will install all the prerequisites for Pyg
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
 </pre>
 </div>
@@ -1944,7 +1846,6 @@ This will install most packages for you. Note that <code>libpng</code> is also a
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew link libpng
 </pre>
 </div>
@@ -1954,7 +1855,6 @@ Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew edit smpeg
 </pre>
 </div>
@@ -1964,7 +1864,6 @@ and add the following line just above the two end at the end of the file
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">include.install Dir[<span style="color: #303030;">"*.h"</span>]
 </pre>
 </div>
@@ -1974,7 +1873,6 @@ Then save the file. (I submitted a bug to have this fixed, so you might not need
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install smpeg
 </pre>
 </div>
@@ -1996,7 +1894,6 @@ At this point, the setup file is mostly useless since <code>config.py</code> fai
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
 </pre>
 </div>
@@ -2006,7 +1903,6 @@ Obviously, this is lacking the paths to the SDL library. If you installed Homebr
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
 </pre>
 </div>
@@ -2016,7 +1912,6 @@ The next lines are strangely garbled. They say, for example
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lS -lD -lL -l_ -lt -lt -lf
 </pre>
 </div>
@@ -2026,7 +1921,6 @@ Where they actually should say
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lSDL_ttf
 </pre>
 </div>
@@ -2060,7 +1954,6 @@ Alright, now without further ado, install Pygame by typing
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">python setup.py install
 </pre>
 </div>
@@ -2103,7 +1996,6 @@ To cut this short, here is what you need to get that Python running:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install python
 </pre>
 </div>
@@ -2117,7 +2009,6 @@ You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    <span style="color: #111111;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
 </pre>
 </div>
@@ -2135,7 +2026,6 @@ Alright, next up, install the python package manager:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install distribute
     brew install pip
 </pre>
@@ -2146,7 +2036,6 @@ This will come preconfigured for your newly installed Python. In an ideal world,
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install pkg-config
 </pre>
 </div>
@@ -2156,7 +2045,6 @@ Also, SciPy is using some FORTRAN sources, so you need a fortran compiler:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    brew install gfortran
 </pre>
 </div>
@@ -2166,7 +2054,6 @@ Alright. That was enough. Now on to pip. With all these dependencies cleared, pi
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install numpy
     pip install scipy
 </pre>
@@ -2181,7 +2068,6 @@ So we have to do this manually:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">    pip install -f http://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.0.1/matplotlib-1.0.1.tar.gz matplotlib
 </pre>
 </div>

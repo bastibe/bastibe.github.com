@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Numpy Broadcasting Rules</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -33,7 +31,7 @@ They say that all arithmetic operations in Numpy behave like their element-wise 
 </p>
 
 <p>
-In particular, this is what happens when you multiply an array with a matrix<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> in Numpy:
+In particular, this is what happens when you multiply an array with a matrix[1] in Numpy:
 </p>
 
 <pre class="example">
@@ -53,17 +51,11 @@ They behave as if each row was evaluated separately, and singular dimensions are
 <p>
 Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as in <code>[a[n]*b[n] for n in range(len(a))]</code>. I guess that's why this is called <i>broadcasting</i>, and not <i>element-wise</i>.
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-"matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div></div>
+<p>
+[1] "matrix" here refers to a 2-d <code>numpy.array</code>. There is also a <code>numpy.matrix</code>, where multiplication is matrix multiplication, but this is not what I'm talking about.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

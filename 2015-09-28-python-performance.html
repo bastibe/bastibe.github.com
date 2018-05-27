@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Python Numeric Performance</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -33,7 +31,6 @@ Recently, I was working on a dynamic programming algorithm that involves a lot o
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_python</span>(oct_per_sec):
     <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">b</span> = 1.781
@@ -94,7 +91,6 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numpy</span>(doubles_per_x):
     <span style="color: #111111;">""" ... """</span>
     <span style="color: #111111;">b</span> = 1.781
@@ -141,7 +137,6 @@ Another avenue for performance optimization is <a href="http://numba.pydata.org/
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; text-decoration: underline;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #111111;">True</span>)
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numba</span>(doubles_per_x):
     ...
@@ -161,7 +156,6 @@ However, Numba is no silver bullet, and does not support all of Python yet. In t
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">python version</span>
 <span style="color: #111111; font-weight: bold;">for</span> x_idx, cost_column <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">enumerate</span>(cost_matrix):
     ...

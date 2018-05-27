@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Installing Pygame using Homebrew</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -45,7 +43,6 @@ Homebrew won't install Pygame, but it will install all the prerequisites for Pyg
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install sdl, sdl_mixer, sdl_ttf, libpng, jpeg, sdl_image, portmidi
 </pre>
 </div>
@@ -55,7 +52,6 @@ This will install most packages for you. Note that <code>libpng</code> is also a
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew link libpng
 </pre>
 </div>
@@ -65,7 +61,6 @@ Now there is still one package missing, <code>smpeg</code>. Sadly, <code>smpeg</
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew edit smpeg
 </pre>
 </div>
@@ -75,7 +70,6 @@ and add the following line just above the two end at the end of the file
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">include.install Dir[<span style="color: #303030;">"*.h"</span>]
 </pre>
 </div>
@@ -85,7 +79,6 @@ Then save the file. (I submitted a bug to have this fixed, so you might not need
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">brew install smpeg
 </pre>
 </div>
@@ -107,7 +100,6 @@ At this point, the setup file is mostly useless since <code>config.py</code> fai
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/NEED_INC_PATH_FIX -L/NEED_LIB_PATH_FIX -lSDL
 </pre>
 </div>
@@ -117,7 +109,6 @@ Obviously, this is lacking the paths to the SDL library. If you installed Homebr
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">SDL = -I/usr/local/include/SDL -L/usr/local/lib -lSDL
 </pre>
 </div>
@@ -127,7 +118,6 @@ The next lines are strangely garbled. They say, for example
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lS -lD -lL -l_ -lt -lt -lf
 </pre>
 </div>
@@ -137,7 +127,6 @@ Where they actually should say
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">FONT = -lSDL_ttf
 </pre>
 </div>
@@ -171,7 +160,6 @@ Alright, now without further ado, install Pygame by typing
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">python setup.py install
 </pre>
 </div>

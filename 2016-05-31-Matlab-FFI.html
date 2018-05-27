@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Matlab has an FFI and it is not Mex</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -49,7 +47,6 @@ So here goes, a very simple C library that adds two arrays:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
 <span style="color: #111111;">#include</span> test.h
 
@@ -74,7 +71,6 @@ Now, let's load that library into Matlab with <code>loadlibrary</code>:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #303030;">'test'</span>))
     [notfound<span style="color: #111111;">,</span> warnings] <span style="color: #111111;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111;">;</span>
     assert(isempty(notfound)<span style="color: #111111;">,</span> <span style="color: #303030;">'could not load test library'</span>)
@@ -91,7 +87,6 @@ With that, we can call functions in that library using <code>calllib</code>. But
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-octave">vector1 <span style="color: #111111;">=</span> [1 2 3 4 5]<span style="color: #111111;">;</span>
 vector2 <span style="color: #111111;">=</span> [9 8 7 6 5]<span style="color: #111111;">;</span>
 
@@ -109,7 +104,6 @@ Then, finally, let's call our function:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1))<span style="color: #111111;">;</span>
 </pre>
 </div>
@@ -119,7 +113,6 @@ If you see no errors, everything went smoothly, and you will now have changed th
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-octave">added_vectors <span style="color: #111111;">=</span> vector1ptr.Value<span style="color: #111111;">;</span>
 </pre>
 </div>
@@ -129,7 +122,6 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1)))
 <span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
 timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111;">,</span> single(vector2)))

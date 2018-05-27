@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Debugging und GCC auf Windows</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -30,8 +28,8 @@
 <div class="post-date">15 Mar 2009</div><h1 class="post-title"><a href="2009-03-15-debugging-und-gcc-auf-windows.html">Debugging und GCC auf Windows</a></h1>
 
 <figure>
-<p><img src="http://bastibe.de/static/2009-03/code.png" alt="code.png">
-</p>
+<img src="http://bastibe.de/static/2009-03/code.png" alt="code.png">
+
 </figure>
 
 <p>
@@ -51,10 +49,8 @@ Das Ergebnis:
 </p>
 
 <ol class="org-ol">
-<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)
-</li>
-<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html">Realloc</a> ist schuld!
-</li>
+<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)</li>
+<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html">Realloc</a> ist schuld!</li>
 </ol>
 
 <p>
@@ -71,71 +67,71 @@ Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, gr
 
 
 <colgroup>
-<col  class="left">
+<col  class="org-left">
 
-<col  class="right">
+<col  class="org-right">
 
-<col  class="left">
+<col  class="org-left">
 </colgroup>
 <tbody>
 <tr>
-<td class="left">realloc()-Größe</td>
-<td class="right">realloc()-Aufrufe</td>
-<td class="left">benötigte   Zeit</td>
+<td class="org-left">realloc()-Größe</td>
+<td class="org-right">realloc()-Aufrufe</td>
+<td class="org-left">benötigte   Zeit</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>11</sup> =    2048</td>
-<td class="right">15000</td>
-<td class="left">~1 h</td>
+<td class="org-left">2<sup>11</sup> =    2048</td>
+<td class="org-right">15000</td>
+<td class="org-left">~1 h</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>16</sup> =   65536</td>
-<td class="right">470</td>
-<td class="left">~2 min</td>
+<td class="org-left">2<sup>16</sup> =   65536</td>
+<td class="org-right">470</td>
+<td class="org-left">~2 min</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>17</sup> =  131072</td>
-<td class="right">240</td>
-<td class="left">~1 min</td>
+<td class="org-left">2<sup>17</sup> =  131072</td>
+<td class="org-right">240</td>
+<td class="org-left">~1 min</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>18</sup> =  262144</td>
-<td class="right">120</td>
-<td class="left">30 s</td>
+<td class="org-left">2<sup>18</sup> =  262144</td>
+<td class="org-right">120</td>
+<td class="org-left">30 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>19</sup> =  524288</td>
-<td class="right">60</td>
-<td class="left">18 s</td>
+<td class="org-left">2<sup>19</sup> =  524288</td>
+<td class="org-right">60</td>
+<td class="org-left">18 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>20</sup> = 1048576</td>
-<td class="right">30</td>
-<td class="left">10.5 s</td>
+<td class="org-left">2<sup>20</sup> = 1048576</td>
+<td class="org-right">30</td>
+<td class="org-left">10.5 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>21</sup> = 2097152</td>
-<td class="right">15</td>
-<td class="left">7.3 s</td>
+<td class="org-left">2<sup>21</sup> = 2097152</td>
+<td class="org-right">15</td>
+<td class="org-left">7.3 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>22</sup> = 4194304</td>
-<td class="right">7</td>
-<td class="left">5.1 s</td>
+<td class="org-left">2<sup>22</sup> = 4194304</td>
+<td class="org-right">7</td>
+<td class="org-left">5.1 s</td>
 </tr>
 
 <tr>
-<td class="left">2<sup>23</sup> = 8388608</td>
-<td class="right">3</td>
-<td class="left">4.2 s</td>
+<td class="org-left">2<sup>23</sup> = 8388608</td>
+<td class="org-right">3</td>
+<td class="org-left">4.2 s</td>
 </tr>
 </tbody>
 </table>

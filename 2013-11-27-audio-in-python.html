@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Sound in Python</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -53,7 +51,6 @@ So, lets read some audio data, shall we?
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
 <span style="color: #111111;">data</span> = soundfile.read(<span style="color: #303030;">'sad_song.wav'</span>)
 </pre>
@@ -72,7 +69,6 @@ OK, that was easy. So let's read only the first and last 100 frames!
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
 <span style="color: #111111;">first</span> = soundfile.read(<span style="color: #303030;">'long_song.flac'</span>, stop=100)
 <span style="color: #111111;">last</span> = soundfile.read(start=-100)
@@ -92,7 +88,6 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
 <span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
 <span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
@@ -113,7 +108,7 @@ And that's really all there is to it. Working with audio data in Python is easy 
 </p>
 
 <p>
-Of course, there is much more you could do. You could create a callback function and be called every four<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>.
+Of course, there is much more you could do. You could create a callback function and be called every four[1] frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[3].
 </p>
 
 <p>
@@ -123,25 +118,13 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
 <p>
 <b>UPDATE:</b> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
-</p></div>
-
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
-More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div></div>
+<p>
+[1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
+[2] More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
+[3] More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Scheduling Future TODOs in org-journal</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -37,23 +35,28 @@ Despite all of these features however, org-journal remains one org file per day,
 </p>
 
 <p>
-Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:
 </p>
 
-<pre>
-<span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>
-<span style="color: #111111; font-weight: bold; font-style: italic;">Monday     2 April 2018 W14</span>
-<span style="color: #111111;">  2018-04-02: Easter Monday </span>
-<span style="color: #111111; font-weight: bold;">Tuesday    3 April 2018</span>
-<span style="color: #111111; font-weight: bold;">Wednesday  4 April 2018</span>
-<span style="color: #111111; font-weight: bold;">Thursday   5 April 2018</span>
-<span style="color: #111111;">  2018-04-05: Scheduled:  Give Lecture 4 on Applied Programming</span>             <span style="color: #111111;"><span style="font-weight: bold;">:BB:</span></span>
-<span style="color: #111111; font-weight: bold;">Friday     6 April 2018</span>
-<span style="color: #111111;">  2018-04-06: Scheduled:  Release of new Eels record</span>
-<span style="color: #111111; font-weight: bold;">Saturday   7 April 2018</span>
-<span style="color: #111111; font-weight: bold;">Sunday     8 April 2018</span>
-<span style="color: #111111;">  2018-04-08: Scheduled:  </span><span style="color: #111111;">TODO</span><span style="color: #111111;"> Celebrate Sunday</span>
-</pre>
+<div class="html">
+<p>
+&lt;pre&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Week-agenda (W14):&lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold; font-style: italic;"&gt;Monday     2 April 2018 W14&lt;/span&gt;
+&lt;span style="color: #111111;"&gt;  2018-04-02: Easter Monday &lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Tuesday    3 April 2018&lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Wednesday  4 April 2018&lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Thursday   5 April 2018&lt;/span&gt;
+&lt;span style="color: #111111;"&gt;  2018-04-05: Scheduled:  Give Lecture 4 on Applied Programming&lt;/span&gt;             &lt;span style="color: #111111;"&gt;&lt;span style="font-weight: bold;"&gt;:BB:&lt;/span&gt;&lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Friday     6 April 2018&lt;/span&gt;
+&lt;span style="color: #111111;"&gt;  2018-04-06: Scheduled:  Release of new Eels record&lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Saturday   7 April 2018&lt;/span&gt;
+&lt;span style="color: #111111; font-weight: bold;"&gt;Sunday     8 April 2018&lt;/span&gt;
+&lt;span style="color: #111111;"&gt;  2018-04-08: Scheduled:  &lt;/span&gt;&lt;span style="color: #111111;"&gt;TODO&lt;/span&gt;&lt;span style="color: #111111;"&gt; Celebrate Sunday&lt;/span&gt;
+&lt;/pre&gt;
+</p>
+
+</div>
 
 <p>
 And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing <code>i j</code> in <code>M-x calendar</code> or by calling <code>org-journal-new-scheduled-entry</code>, and org-journal will create an entry with a <code>SCHEDULED</code> property of the appropriate date (prefix to suppress <code>TODO</code>). When the current day reaches that entry, it will incorporate it into the daily journal.
@@ -62,17 +65,11 @@ And lo and behold, this now works in org-journal as well! Just create a new jour
 <p>
 Future journal entries are highlighted in <code>M-x calendar</code>, and you can get an overview of them with <code>org-journal-schedule-view</code>, or, if you enable <code>org-journal-enable-agenda-integration</code>, through the ordinary <code>org-agenda</code>, as shown above. The agenda integration does not include past journal entries in the agenda, since agenda searches tend to become very slow if they have to traverse the hundreds of files in my journal.
 </p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-: This is of course not <i>his</i> calendar, but mine.
-</p></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div></div>
+<p>
+[1]: This is of course not <i>his</i> calendar, but mine.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

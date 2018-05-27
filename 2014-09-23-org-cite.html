@@ -8,8 +8,6 @@
       title="RSS feed for https://bastibe.de/"/>
 <title>Org Mode Citation Links</title>
 <meta  name="author" content="Bastian Bechtold" />
-<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -41,7 +39,6 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
        <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
@@ -56,7 +53,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
        (beginning-of-buffer)
        (search-forward name))
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
-       <span style="color: #111111;">"Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."</span>
+       <span style="color: #111111;">"Export [[cite:cohen93]] as </span><span style="color: #111111; font-weight: bold;">\</span><span style="color: #111111;">cite{cohen93} in LaTeX."</span>
        (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
            (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
                (format <span style="color: #303030;">"\\cite{%s}"</span> path)
