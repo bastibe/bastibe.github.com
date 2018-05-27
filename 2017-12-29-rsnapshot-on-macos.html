@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-AMS_HTML' async></script>
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -255,9 +258,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-orgb9d0608" class="outline-2">
-<h2 id="orgb9d0608">Caveats</h2>
-<div class="outline-text-2" id="text-orgb9d0608">
+<div id="outline-container-orgc444d55" class="outline-2">
+<h2 id="orgc444d55">Caveats</h2>
+<div class="outline-text-2" id="text-orgc444d55">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>

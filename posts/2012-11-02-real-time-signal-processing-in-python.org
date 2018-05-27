@@ -28,12 +28,12 @@ If this is applied to a signal, it will create an envelope like this:
 
 Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using
 
-\begin{equation}
+\[
 g_t[n] = \begin{cases}
-    1 & e[n] < t \\\\
+    1 & e[n] < t \\
     1 + t - e[n] & e[n] > t
 \end{cases}
-\end{equation}
+\]
 
 Now, the output gain $g[n]$ can smoothly move towards that target gain using
 

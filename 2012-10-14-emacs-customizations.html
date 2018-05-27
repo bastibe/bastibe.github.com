@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-AMS_HTML' async></script>
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -42,9 +45,9 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-org21f2340" class="outline-2">
-<h2 id="org21f2340">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-org21f2340">
+<div id="outline-container-orgb2fea52" class="outline-2">
+<h2 id="orgb2fea52">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-orgb2fea52">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
@@ -87,9 +90,9 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </div>
 </div>
 
-<div id="outline-container-orgdf79d59" class="outline-2">
-<h2 id="orgdf79d59">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-orgdf79d59">
+<div id="outline-container-org193e2db" class="outline-2">
+<h2 id="org193e2db">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-org193e2db">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
@@ -107,9 +110,9 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 </div>
 </div>
 
-<div id="outline-container-org5947277" class="outline-2">
-<h2 id="org5947277">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-org5947277">
+<div id="outline-container-orgf243b15" class="outline-2">
+<h2 id="orgf243b15">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-orgf243b15">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
@@ -138,9 +141,9 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 </div>
 </div>
 
-<div id="outline-container-org4ef7d2e" class="outline-2">
-<h2 id="org4ef7d2e">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-org4ef7d2e">
+<div id="outline-container-org6034eb2" class="outline-2">
+<h2 id="org6034eb2">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-org6034eb2">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>

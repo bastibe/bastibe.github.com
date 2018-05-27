@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-AMS_HTML' async></script>
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -41,9 +44,9 @@ Why would you want to use Python over Matlab?
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-org53ecb55" class="outline-2">
-<h2 id="org53ecb55">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-org53ecb55">
+<div id="outline-container-org7e3f42b" class="outline-2">
+<h2 id="org7e3f42b">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org7e3f42b">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
@@ -60,9 +63,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-org7a0f593" class="outline-2">
-<h2 id="org7a0f593">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-org7a0f593">
+<div id="outline-container-org30203c7" class="outline-2">
+<h2 id="org30203c7">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org30203c7">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -124,9 +127,9 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-org5f682d4" class="outline-2">
-<h2 id="org5f682d4">Reading Python</h2>
-<div class="outline-text-2" id="text-org5f682d4">
+<div id="outline-container-org811ed0a" class="outline-2">
+<h2 id="org811ed0a">Reading Python</h2>
+<div class="outline-text-2" id="text-org811ed0a">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
@@ -244,9 +247,9 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </div>
 </div>
 
-<div id="outline-container-orgdb517d3" class="outline-2">
-<h2 id="orgdb517d3">Common traps</h2>
-<div class="outline-text-2" id="text-orgdb517d3">
+<div id="outline-container-orgcc6d7a9" class="outline-2">
+<h2 id="orgcc6d7a9">Common traps</h2>
+<div class="outline-text-2" id="text-orgcc6d7a9">
 <ul class="org-ul">
 <li>Array slicing does not copy.</li>
 </ul>
@@ -276,9 +279,9 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </div>
 
 
-<div id="outline-container-orgb6d7c7b" class="outline-2">
-<h2 id="orgb6d7c7b">Going further</h2>
-<div class="outline-text-2" id="text-orgb6d7c7b">
+<div id="outline-container-orgcdfd381" class="outline-2">
+<h2 id="orgcdfd381">Going further</h2>
+<div class="outline-text-2" id="text-orgcdfd381">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>

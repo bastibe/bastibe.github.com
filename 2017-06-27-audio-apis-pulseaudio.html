@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-AMS_HTML' async></script>
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -49,9 +52,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org55fc1b6" class="outline-2">
-<h2 id="org55fc1b6">PulseAudio</h2>
-<div class="outline-text-2" id="text-org55fc1b6">
+<div id="outline-container-orge4684cd" class="outline-2">
+<h2 id="orge4684cd">PulseAudio</h2>
+<div class="outline-text-2" id="text-orge4684cd">
 <p>
 PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
 </p>

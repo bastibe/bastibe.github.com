@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-AMS_HTML' async></script>
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -30,9 +33,9 @@
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org8bfe80e" class="outline-2">
-<h2 id="org8bfe80e">Usage</h2>
-<div class="outline-text-2" id="text-org8bfe80e">
+<div id="outline-container-orgc37fefb" class="outline-2">
+<h2 id="orgc37fefb">Usage</h2>
+<div class="outline-text-2" id="text-orgc37fefb">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -95,9 +98,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orga472e99" class="outline-2">
-<h2 id="orga472e99">Performance</h2>
-<div class="outline-text-2" id="text-orga472e99">
+<div id="outline-container-orgfa21fc1" class="outline-2">
+<h2 id="orgfa21fc1">Performance</h2>
+<div class="outline-text-2" id="text-orgfa21fc1">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -130,9 +133,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-org80d03ab" class="outline-2">
-<h2 id="org80d03ab">TL;DR</h2>
-<div class="outline-text-2" id="text-org80d03ab">
+<div id="outline-container-org6a96d2c" class="outline-2">
+<h2 id="org6a96d2c">TL;DR</h2>
+<div class="outline-text-2" id="text-org6a96d2c">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>

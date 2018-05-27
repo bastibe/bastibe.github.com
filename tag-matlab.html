@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
 <link rel="msapplication-TitleImage" href="static/favicon-144.png">
 <link rel="msapplication-TitleColor" href="#0141ff">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-AMS_HTML' async></script>
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
@@ -101,54 +104,54 @@ I could go on. The real power of code is abstraction. We use programming to repe
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
-<div id="outline-container-org547e563" class="outline-2">
-<h2 id="org547e563">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-org547e563">
+<div id="outline-container-org3deb9aa" class="outline-2">
+<h2 id="org3deb9aa">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-org3deb9aa">
 <p>
 Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf1ca773" class="outline-2">
-<h2 id="orgf1ca773">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-orgf1ca773">
+<div id="outline-container-org57ef575" class="outline-2">
+<h2 id="org57ef575">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-org57ef575">
 <p>
 If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb9572c4" class="outline-2">
-<h2 id="orgb9572c4">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-orgb9572c4">
+<div id="outline-container-orga591e6a" class="outline-2">
+<h2 id="orga591e6a">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-orga591e6a">
 <p>
 Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orga9bd3a8" class="outline-2">
-<h2 id="orga9bd3a8">Use of line breaks</h2>
-<div class="outline-text-2" id="text-orga9bd3a8">
+<div id="outline-container-org658a7de" class="outline-2">
+<h2 id="org658a7de">Use of line breaks</h2>
+<div class="outline-text-2" id="text-org658a7de">
 <p>
 In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgee23dbd" class="outline-2">
-<h2 id="orgee23dbd">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-orgee23dbd">
+<div id="outline-container-org06c80ba" class="outline-2">
+<h2 id="org06c80ba">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-org06c80ba">
 <p>
 Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org7618f4f" class="outline-2">
-<h2 id="org7618f4f">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-org7618f4f">
+<div id="outline-container-org656e3de" class="outline-2">
+<h2 id="org656e3de">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-org656e3de">
 <p>
 If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
 </p>
@@ -499,9 +502,9 @@ However, If I ask myself whether I would sacrifice 0.00007 seconds of computatio
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org8bfe80e" class="outline-2">
-<h2 id="org8bfe80e">Usage</h2>
-<div class="outline-text-2" id="text-org8bfe80e">
+<div id="outline-container-orgc37fefb" class="outline-2">
+<h2 id="orgc37fefb">Usage</h2>
+<div class="outline-text-2" id="text-orgc37fefb">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -564,9 +567,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orga472e99" class="outline-2">
-<h2 id="orga472e99">Performance</h2>
-<div class="outline-text-2" id="text-orga472e99">
+<div id="outline-container-orgfa21fc1" class="outline-2">
+<h2 id="orgfa21fc1">Performance</h2>
+<div class="outline-text-2" id="text-orgfa21fc1">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -599,9 +602,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-org80d03ab" class="outline-2">
-<h2 id="org80d03ab">TL;DR</h2>
-<div class="outline-text-2" id="text-org80d03ab">
+<div id="outline-container-org6a96d2c" class="outline-2">
+<h2 id="org6a96d2c">TL;DR</h2>
+<div class="outline-text-2" id="text-org6a96d2c">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -963,9 +966,9 @@ Why would you want to use Python over Matlab?
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-org53ecb55" class="outline-2">
-<h2 id="org53ecb55">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-org53ecb55">
+<div id="outline-container-org7e3f42b" class="outline-2">
+<h2 id="org7e3f42b">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org7e3f42b">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
@@ -982,9 +985,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-org7a0f593" class="outline-2">
-<h2 id="org7a0f593">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-org7a0f593">
+<div id="outline-container-org30203c7" class="outline-2">
+<h2 id="org30203c7">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org30203c7">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -1046,9 +1049,9 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-org5f682d4" class="outline-2">
-<h2 id="org5f682d4">Reading Python</h2>
-<div class="outline-text-2" id="text-org5f682d4">
+<div id="outline-container-org811ed0a" class="outline-2">
+<h2 id="org811ed0a">Reading Python</h2>
+<div class="outline-text-2" id="text-org811ed0a">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
@@ -1166,9 +1169,9 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </div>
 </div>
 
-<div id="outline-container-orgdb517d3" class="outline-2">
-<h2 id="orgdb517d3">Common traps</h2>
-<div class="outline-text-2" id="text-orgdb517d3">
+<div id="outline-container-orgcc6d7a9" class="outline-2">
+<h2 id="orgcc6d7a9">Common traps</h2>
+<div class="outline-text-2" id="text-orgcc6d7a9">
 <ul class="org-ul">
 <li>Array slicing does not copy.</li>
 </ul>
@@ -1198,9 +1201,9 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </div>
 
 
-<div id="outline-container-orgb6d7c7b" class="outline-2">
-<h2 id="orgb6d7c7b">Going further</h2>
-<div class="outline-text-2" id="text-orgb6d7c7b">
+<div id="outline-container-orgcdfd381" class="outline-2">
+<h2 id="orgcdfd381">Going further</h2>
+<div class="outline-text-2" id="text-orgcdfd381">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>
