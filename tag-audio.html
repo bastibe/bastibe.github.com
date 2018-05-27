@@ -7,7 +7,8 @@
       href="https://bastibe.de/rss.xml"
       title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
-<meta  name="author" content="Bastian Bechtold" />
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -17,7 +18,7 @@
 <script src="static/auto-render.min.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
-<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
 <div id="preamble" class="status"><div class="header">
@@ -52,9 +53,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org406535d" class="outline-2">
-<h2 id="org406535d">WASAPI</h2>
-<div class="outline-text-2" id="text-org406535d">
+<div id="outline-container-org6ee9671" class="outline-2">
+<h2 id="org6ee9671">WASAPI</h2>
+<div class="outline-text-2" id="text-org6ee9671">
 <p>
 WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
 </p>
@@ -121,9 +122,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-orge4684cd" class="outline-2">
-<h2 id="orge4684cd">PulseAudio</h2>
-<div class="outline-text-2" id="text-orge4684cd">
+<div id="outline-container-org0556fad" class="outline-2">
+<h2 id="org0556fad">PulseAudio</h2>
+<div class="outline-text-2" id="text-org0556fad">
 <p>
 PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
 </p>
@@ -186,9 +187,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-orgdba19c9" class="outline-2">
-<h2 id="orgdba19c9">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-orgdba19c9">
+<div id="outline-container-org8ab03d4" class="outline-2">
+<h2 id="org8ab03d4">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-org8ab03d4">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -361,9 +362,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-org21cfcb6" class="outline-2">
-<h2 id="org21cfcb6">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-org21cfcb6">
+<div id="outline-container-orgc13d68a" class="outline-2">
+<h2 id="orgc13d68a">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-orgc13d68a">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -494,9 +495,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-orga026141" class="outline-2">
-<h2 id="orga026141">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-orga026141">
+<div id="outline-container-org554c1ae" class="outline-2">
+<h2 id="org554c1ae">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-org554c1ae">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -560,9 +561,9 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-orgb358441" class="outline-2">
-<h2 id="orgb358441">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-orgb358441">
+<div id="outline-container-org132571a" class="outline-2">
+<h2 id="org132571a">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org132571a">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
@@ -731,9 +732,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-orga92eb72" class="outline-2">
-<h2 id="orga92eb72">Conclusion</h2>
-<div class="outline-text-2" id="text-orga92eb72">
+<div id="outline-container-org9e6f050" class="outline-2">
+<h2 id="org9e6f050">Conclusion</h2>
+<div class="outline-text-2" id="text-org9e6f050">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -744,9 +745,9 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-org27caa41" class="outline-2">
-<h2 id="org27caa41">Disclaimer</h2>
-<div class="outline-text-2" id="text-org27caa41">
+<div id="outline-container-orgb631896" class="outline-2">
+<h2 id="orgb631896">Disclaimer</h2>
+<div class="outline-text-2" id="text-orgb631896">
 <ol class="org-ol">
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>

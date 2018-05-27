@@ -7,7 +7,8 @@
       href="https://bastibe.de/rss.xml"
       title="RSS feed for https://bastibe.de/"/>
 <title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title>
-<meta  name="author" content="Bastian Bechtold" />
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
 <link rel="icon" href="static/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
@@ -17,7 +18,7 @@
 <script src="static/auto-render.min.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
-<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
 <div id="preamble" class="status">
@@ -37,9 +38,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-orgd2271a2" class="outline-2">
-<h2 id="orgd2271a2">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-orgd2271a2">
+<div id="outline-container-org71c012f" class="outline-2">
+<h2 id="org71c012f">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-org71c012f">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -54,9 +55,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-orgb08980a" class="outline-2">
-<h2 id="orgb08980a">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-orgb08980a">
+<div id="outline-container-org022a230" class="outline-2">
+<h2 id="org022a230">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-org022a230">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -71,9 +72,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-org166d3a9" class="outline-2">
-<h2 id="org166d3a9">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org166d3a9">
+<div id="outline-container-org2257fb2" class="outline-2">
+<h2 id="org2257fb2">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org2257fb2">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -134,9 +135,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-orgbd0b089" class="outline-2">
-<h2 id="orgbd0b089">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-orgbd0b089">
+<div id="outline-container-org3f63198" class="outline-2">
+<h2 id="org3f63198">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-org3f63198">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
