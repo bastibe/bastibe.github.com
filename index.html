@@ -29,6 +29,49 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">03 Jun 2018</div><h1 class="post-title"><a href="2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
+<p>
+<a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http://www.orgzly.com/">Orgzly</a> does <i>not</i> work with my 1k-file journal directory).
+</p>
+
+<p>
+But, as I keep re-discovering, org-mode already has a solution for this: org-mode can export your agenda to an iCalendar file! Most calendar applications can then subscribe to that file, and show your future journal entries right in your calendar. And if you set it up right, this will even sync changes to your calendar!
+</p>
+
+<p>
+First, you need to set up some kind of regular export job. I use a cron job that regularly runs an Emacs batch job <code>emacs --batch --script ~/bin/calendar_init.el</code> with the following code in <i>calendar​_init.el</i>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">no init file is loaded, so provide everything here:</span>
+(add-to-list 'load-path <span style="color: #303030;">"~/etc/org-journal/"</span>)
+(<span style="color: #111111; font-weight: bold;">setq</span> org-journal-dir <span style="color: #303030;">"~/journal/"</span>            <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">where my journal files are</span>
+      org-journal-file-format <span style="color: #303030;">"%Y-%m-%d.org"</span>  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">their file names</span>
+      org-journal-enable-agenda-integration t <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so entries are on the agenda</span>
+      org-icalendar-store-UID t               <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so changes sync correctly</span>
+      org-icalendar-include-todo <span style="color: #303030;">"all"</span>        <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">include TODOs and DONEs</span>
+      org-icalendar-combined-agenda-file <span style="color: #303030;">"~/calendar/org-journal.ics"</span>)
+
+(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">org-journal</span>)
+(org-journal-update-org-agenda-files) <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">put future entries on the agenda</span>
+(org-icalendar-combine-agenda-files)  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">export the ICS file</span>
+(save-buffers-kill-emacs t)           <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">save all modified files and exit</span>
+</pre>
+</div>
+
+<p>
+It is important to set <code>org-icalendar-store-UID</code>, as otherwise every change to a future entry would result in a duplicated calendar entry. It will clutter up your journal entries with an <code>UID</code> property, though.
+</p>
+
+<p>
+I do this on my web server, with my journal files <a href="https://syncthing.net/">syncthing</a>ed from my other computers. With that, I can subscribe to the calendar file from any internet-connected computer or mobile phone (using <a href="https://icsdroid.bitfire.at/">ICSdroid</a>). But you could just as well sync only the ICS file, or just subscribe to the local file, if you don't want to upload your complete yournal to a web server.
+</p>
+
+<p>
+(Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> </div>
 <div class="post-date">25 May 2018</div><h1 class="post-title"><a href="2018-05-25-gdpr-compliance.html">GDPR Compliance</a></h1>
 <p>
 Personal email is dead. The signal-to-noise ratio of my personal email account has been deeply negative for years. But the last few days have been especially riveting, with a torrent of GDPR-compliance emails from just about every company that has ever gotten their hands on my email address. Anecdotally, if spam makes up about 90% of all email traffic, and the last few days have seen a ten-fold increase in traffic due to GDPR emails, we might even have "defeated spam" for a few days! Yay internet!
@@ -208,24 +251,7 @@ Future journal entries are highlighted in <code>M-x calendar</code>, and you can
 <p>
 [1]: This is of course not <i>his</i> calendar, but mine.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div>
-<div class="post-date">22 Mar 2018</div><h1 class="post-title"><a href="2018-03-22-org-static-blog-gets-tags.html">Blogging with org-static-blog (Updated)</a></h1>
-<p>
-A while ago, I scratched an old itch and wrote my own static site generator, called <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. It is a simple thing: You hand it a directory full of *.org files with a <code>#+title:</code> and <code>#+date:</code>, and it assembles a bunch of HTML pages and an RSS feed from them. There are no external dependencies beyond Emacs.
-</p>
-
-<p>
-Today, I <a href="http://melpa-stable.milkbox.net/#/org-static-blog">released</a> version 1.1.0 of org-static-blog, which introduces two new features: <a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">speed</a>, and tags. You can now—optionally—add <code>#+filetags:</code> to your *.org files, <code>(setq org-static-blog-enable-tags t)</code>, and org-static-blog will add tag links to every blog post, create tag indices, and add <code>&lt;category&gt;</code> tags to the RSS feed.
-</p>
-
-<p>
-<b>Update:</b>
-</p>
-
-<p>
-As <a href="https://github.com/kaushalmodi">Kaushal Modi</a> pointed out in the comments, org-mode uses <code>#+filetags:</code> to set tags for entire files. My first implementation used <code>#+tags:</code>. This is now deprecated. <code>#+tags:</code> still works, but issues a warning, and will be removed in the future. Sorry for the inconvenience.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-blog.html">blog</a> </div><div id="archive">
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

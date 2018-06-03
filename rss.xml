@@ -4,7 +4,56 @@
 <title>Bastibe.de</title>
 <description>Bastibe.de</description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Mon, 28 May 2018 08:47:06 +0200</lastBuildDate>
+<lastBuildDate>Sun, 03 Jun 2018 11:06:32 +0200</lastBuildDate>
+<item>
+  <title>Syncing Org-Journal with your Calendar</title>
+  <description><![CDATA[
+<p>
+<a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http://www.orgzly.com/">Orgzly</a> does <i>not</i> work with my 1k-file journal directory).
+</p>
+
+<p>
+But, as I keep re-discovering, org-mode already has a solution for this: org-mode can export your agenda to an iCalendar file! Most calendar applications can then subscribe to that file, and show your future journal entries right in your calendar. And if you set it up right, this will even sync changes to your calendar!
+</p>
+
+<p>
+First, you need to set up some kind of regular export job. I use a cron job that regularly runs an Emacs batch job <code>emacs --batch --script ~/bin/calendar_init.el</code> with the following code in <i>calendar​_init.el</i>:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">no init file is loaded, so provide everything here:</span>
+(add-to-list 'load-path <span style="color: #303030;">"~/etc/org-journal/"</span>)
+(<span style="color: #111111; font-weight: bold;">setq</span> org-journal-dir <span style="color: #303030;">"~/journal/"</span>            <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">where my journal files are</span>
+      org-journal-file-format <span style="color: #303030;">"%Y-%m-%d.org"</span>  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">their file names</span>
+      org-journal-enable-agenda-integration t <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so entries are on the agenda</span>
+      org-icalendar-store-UID t               <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so changes sync correctly</span>
+      org-icalendar-include-todo <span style="color: #303030;">"all"</span>        <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">include TODOs and DONEs</span>
+      org-icalendar-combined-agenda-file <span style="color: #303030;">"~/calendar/org-journal.ics"</span>)
+
+(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">org-journal</span>)
+(org-journal-update-org-agenda-files) <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">put future entries on the agenda</span>
+(org-icalendar-combine-agenda-files)  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">export the ICS file</span>
+(save-buffers-kill-emacs t)           <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">save all modified files and exit</span>
+</pre>
+</div>
+
+<p>
+It is important to set <code>org-icalendar-store-UID</code>, as otherwise every change to a future entry would result in a duplicated calendar entry. It will clutter up your journal entries with an <code>UID</code> property, though.
+</p>
+
+<p>
+I do this on my web server, with my journal files <a href="https://syncthing.net/">syncthing</a>ed from my other computers. With that, I can subscribe to the calendar file from any internet-connected computer or mobile phone (using <a href="https://icsdroid.bitfire.at/">ICSdroid</a>). But you could just as well sync only the ICS file, or just subscribe to the local file, if you don't want to upload your complete yournal to a web server.
+</p>
+
+<p>
+(Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> </div>]]></description>
+  <category>org-journal</category>
+  <link>https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html</link>
+  <pubDate>Sun, 03 Jun 2018 10:28:00 +0200</pubDate>
+</item>
 <item>
   <title>GDPR Compliance</title>
   <description><![CDATA[
