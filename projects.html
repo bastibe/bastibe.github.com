@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>My Projects</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">13 Jun 2018</div><h1 class="post-title"><a href="projects.html">My Projects</a></h1>
+
+<div id="outline-container-org1bf8f5e" class="outline-2">
+<h2 id="org1bf8f5e"><a href="https://github.com/bastibe/SoundFile">SoundFile</a></h2>
+<div class="outline-text-2" id="text-org1bf8f5e">
+<p>
+Read and write audio files from Python as Numpy arrays, using the fantastic C library <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> and <a href="https://cffi.readthedocs.org/">CFFI</a>. Developed in collaboration with <a href="https://github.com/mgeier">@mgeier</a>. Install using <code>pip install soundfile</code>. Documentation at <a href="http://pysoundfile.readthedocs.io/">pysoundfile.readthedocs.io</a>. (Status: mature)
+</p>
+</div>
+</div>
+<div id="outline-container-orgf3de5ab" class="outline-2">
+<h2 id="orgf3de5ab"><a href="https://github.com/bastibe/SoundCard">SoundCard</a></h2>
+<div class="outline-text-2" id="text-orgf3de5ab">
+<p>
+Play and record audio from Python on <a href="https://freedesktop.org/software/pulseaudio/doxygen/index.html">Linux</a>, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">Windows</a>, and <a href="https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">macOS</a> as Numpy arrays, using the native audio libraries of the respective platform. My third attempt at cross-platform audio in Python. This grew out of my frustration with existing cross-platform audio libraries, because I wanted correct default sound cards and channel maps and convenient sound card selection. Install using <code>pip install soundcard</code>. (Status: alpha, but getting there)
+</p>
+</div>
+</div>
+<div id="outline-container-org2ef34e5" class="outline-2">
+<h2 id="org2ef34e5"><a href="https://github.com/bastibe/transplant">Transplant</a></h2>
+<div class="outline-text-2" id="text-org2ef34e5">
+<p>
+Call Matlab code from Python, without fighting it. Uses <a href="http://zeromq.org/">ZeroMQ</a> sockets and includes a complete <a href="https://msgpack.org/">MessagePack</a> and JSON parser in Matlab, because Matlab does not support any of these natively. And since Matlab is started safely in a subprocess, you can even crash Matlab without sacrificing your Python. Install using <code>pip install transplant</code>. (Status: mature)
+</p>
+</div>
+</div>
+<div id="outline-container-org43ebfd6" class="outline-2">
+<h2 id="org43ebfd6"><a href="https://github.com/bastibe/org-journal">org-journal</a></h2>
+<div class="outline-text-2" id="text-org43ebfd6">
+<p>
+Keep a journal as one org file per day. And if you want, carry TODO items with you until they are DONE, search your journal quickly even if it has thousands of files, and add future journal entries to remember appointments. Integrates with the agenda and the calendar. Install using <code>(package-install "org-journal")</code>. (Status: mature and ever expanding)
+</p>
+</div>
+</div>
+<div id="outline-container-org7f327fc" class="outline-2">
+<h2 id="org7f327fc"><a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></h2>
+<div class="outline-text-2" id="text-org7f327fc">
+<p>
+The engine this blog is built upon. A very simple collection of org files get transformed into static HTML and CSS, without any external dependencies beyond Emacs itself. (Status: works for me)
+</p>
+</div>
+</div>
+<div id="outline-container-org5fdcd45" class="outline-2">
+<h2 id="org5fdcd45"><a href="https://github.com/bastibe/RunForrest">RunForrest</a></h2>
+<div class="outline-text-2" id="text-org5fdcd45">
+<p>
+Run many tasks in parallel, even if they crash, kernel panic, and wreak havoc. If you run enough scientific code, it <i>will</i> crash your processes, leak memory, exhaust file descriptors, and destroy your file system. To stay sane anyway, runforrest runs every task in its own process, and saves everything to disk the moment it is done. <i>Very</i> simple, because simplicity is your only defense against the inhuman terror that is scientific code. (Status: easy to debug)
+</p>
+</div>
+</div>
+<div id="outline-container-orgcef2e13" class="outline-2">
+<h2 id="orgcef2e13"><a href="https://github.com/bastibe/jbof">JBOF - Just a Bunch Of Files</a></h2>
+<div class="outline-text-2" id="text-orgcef2e13">
+<p>
+Store collections of binary data as collections of files, with JSON metadata. Something like HDF, but thread safe and easy to browse and debug. (Status: beta)
+</p>
+</div>
+</div>
+<div id="outline-container-orgdbbfe68" class="outline-2">
+<h2 id="orgdbbfe68"><a href="https://github.com/bastibe/timeup">TimeUp</a></h2>
+<div class="outline-text-2" id="text-orgdbbfe68">
+<p>
+Back up your data with rsync, and keep different numbers of hourly, daily, weekly, and monthly copies. (Status: use at your own risk. Works, though)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4532d66" class="outline-2">
+<h2 id="org4532d66">Finished or Abandoned Projects</h2>
+<div class="outline-text-2" id="text-org4532d66">
+</div>
+<div id="outline-container-org925abe6" class="outline-3">
+<h3 id="org925abe6"><a href="https://github.com/bastibe/PySoundCard">PySoundCard</a></h3>
+<div class="outline-text-3" id="text-org925abe6">
+<p>
+My second attempt at getting cross-platform audio to work in Python. Uses <a href="https://cffi.readthedocs.org/">CFFI</a> and <a href="http://www.portaudio.com/">portaudio</a>, much like <a href="https://github.com/bastibe/SoundFile">SoundFile</a>. But it just didn't work out between portaudio and me. Use <a href="https://github.com/bastibe/SoundCard">SoundCard</a> for a better solution, or <a href="https://github.com/spatialaudio/python-sounddevice">SoundDevice</a> for a maintained portaudio bridge. (Status: starting to smell)
+</p>
+</div>
+</div>
+<div id="outline-container-org69523c1" class="outline-3">
+<h3 id="org69523c1"><a href="https://github.com/bastibe/Map-Matlab">Map-Matlab</a></h3>
+<div class="outline-text-3" id="text-org69523c1">
+<p>
+Show an asynchronously-loading, interactive map in a Matlab figure. This is an example for my lecture on programming Matlab. (Status: educational)
+</p>
+</div>
+</div>
+<div id="outline-container-orgc7e6c82" class="outline-3">
+<h3 id="orgc7e6c82"><a href="https://github.com/bastibe/WebGL-Spectrogram">WebGL-Spectrogram</a></h3>
+<div class="outline-text-3" id="text-orgc7e6c82">
+<p>
+Draw a smooth, interactive, zooming spectrogram using WebGL and a Python web server. Build as a technology demonstration for WebGL. (Status: probably doesn't even start any more)
+</p>
+</div>
+</div>
+<div id="outline-container-orgd9477cd" class="outline-3">
+<h3 id="orgd9477cd"><a href="https://github.com/bastibe/MatlabCodeAnalyzer">MatlabCodeAnalyzer</a></h3>
+<div class="outline-text-3" id="text-orgd9477cd">
+<p>
+Parse and criticize Matlab code. This was meant as a tool for students to help them improve their code quality, but turned out to be too nit-picky to be useful. (Status: annoying)
+</p>
+</div>
+</div>
+<div id="outline-container-orgd94d5e2" class="outline-3">
+<h3 id="orgd94d5e2"><a href="https://github.com/bastibe/MatType">MatType</a></h3>
+<div class="outline-text-3" id="text-orgd94d5e2">
+<p>
+A typing tutor in pure Matlab. See how fast you can type in Matlab. A fun little diversion to write a text editor without access to a text editing widget. (Status: fun hack)
+</p>
+</div>
+</div>
+<div id="outline-container-org2c8fe9a" class="outline-3">
+<h3 id="org2c8fe9a"><a href="https://github.com/bastibe/Violinplot-Matlab">Violinplot-Matlab</a></h3>
+<div class="outline-text-3" id="text-org2c8fe9a">
+<p>
+Plot violin plots in Matlab. Because everyone is using box plots and thus don't realize that their data is non-gaussian and too sparse. Violin plots show the same thing, but more beautifully and less wrong.
+</p>
+</div>
+</div>
+<div id="outline-container-org70e4f55" class="outline-3">
+<h3 id="org70e4f55"><a href="https://github.com/bastibe/annotate.el">annotate.el</a></h3>
+<div class="outline-text-3" id="text-org70e4f55">
+<p>
+Annotate arbitrary files as a minor mode in Emacs. Didn't turn out to be quite as useful as I'd hoped, but I learned a lot about Emacs. Install using <code>(package-install "annotate")</code>. (Status: works)
+</p>
+</div>
+</div>
+<div id="outline-container-org5245646" class="outline-3">
+<h3 id="org5245646"><a href="https://github.com/bastibe/MatlabXML">MatlabXML</a></h3>
+<div class="outline-text-3" id="text-org5245646">
+<p>
+It was literally faster to write my own XML parser for Matlab than to wait for Matlab's own parser to parse my 150 Mb XML file. No support for text nodes, cdata nodes, or any kind of schema validation. (Status: useful)
+</p>
+</div>
+</div>
+<div id="outline-container-orgf85de6e" class="outline-3">
+<h3 id="orgf85de6e"><a href="https://github.com/bastibe/matlab-msgpack">Matlab-MsgPack</a></h3>
+<div class="outline-text-3" id="text-orgf85de6e">
+<p>
+JSON parsing turned out to be the largest performance bottleneck in <a href="https://github.com/bastibe/transplant">Transplant</a>, so I use MsgPack instead. But Matlab lacked a MsgPack parser/dumper, so here is one. (Status: tested and complete)
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd9c2f9c" class="outline-2">
+<h2 id="orgd9c2f9c">Contributions</h2>
+<div class="outline-text-2" id="text-orgd9c2f9c">
+</div>
+<div id="outline-container-org29c4aa2" class="outline-3">
+<h3 id="org29c4aa2"><a href="https://github.com/bastibe/lunatic-python">Lunatic-Python</a></h3>
+<div class="outline-text-3" id="text-org29c4aa2">
+<p>
+Call Python from Lua, or Lua from Python. I ported this to Python 3, back in the day. But the original developer was nowhere to be found, so it ended up on my Github. Nowadays it is maintained by a dedicated group of wonderful volunteers. (Status: alive and kicking)
+</p>
+</div>
+</div>
+<div id="outline-container-orgd95ab05" class="outline-3">
+<h3 id="orgd95ab05"><a href="https://github.com/matplotlib/matplotlib/pull/6254">Matplotlib</a></h3>
+<div class="outline-text-3" id="text-orgd95ab05">
+<p>
+I often work with cyclic phase data, which wraps around such that its highest value is also its lowest value. Matplotlib didn't have a convenient color map for this kind of data, so I created one. And now this color map is part of Matplotlib. (Status: awesome!)
+</p>
+</div>
+</div>
+<div id="outline-container-orge01a01f" class="outline-3">
+<h3 id="orge01a01f"><a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a></h3>
+<div class="outline-text-3" id="text-orge01a01f">
+<p>
+My first attempt at getting cross-platform audio to work in Python. Back then, PyAudio was the best choice, but it didn't support Python 3 yet. So I helped out, and ported it to Python 3. (Status: still maintained)
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://bastibe.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

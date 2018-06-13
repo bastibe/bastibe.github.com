@@ -1,0 +1,47 @@
+#+title: My Projects
+#+date: <2018-06-13 00:00>
+
+** [[https://github.com/bastibe/SoundFile][SoundFile]]
+Read and write audio files from Python as Numpy arrays, using the fantastic C library [[http://www.mega-nerd.com/libsndfile/][libsndfile]] and [[https://cffi.readthedocs.org/][CFFI]]. Developed in collaboration with [[https://github.com/mgeier][@mgeier]]. Install using ~pip install soundfile~. Documentation at [[http://pysoundfile.readthedocs.io/][pysoundfile.readthedocs.io]]. (Status: mature)
+** [[https://github.com/bastibe/SoundCard][SoundCard]]
+Play and record audio from Python on [[https://freedesktop.org/software/pulseaudio/doxygen/index.html][Linux]], [[https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx][Windows]], and [[https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html][macOS]] as Numpy arrays, using the native audio libraries of the respective platform. My third attempt at cross-platform audio in Python. This grew out of my frustration with existing cross-platform audio libraries, because I wanted correct default sound cards and channel maps and convenient sound card selection. Install using ~pip install soundcard~. (Status: alpha, but getting there)
+** [[https://github.com/bastibe/transplant][Transplant]]
+Call Matlab code from Python, without fighting it. Uses [[http://zeromq.org/][ZeroMQ]] sockets and includes a complete [[https://msgpack.org/][MessagePack]] and JSON parser in Matlab, because Matlab does not support any of these natively. And since Matlab is started safely in a subprocess, you can even crash Matlab without sacrificing your Python. Install using ~pip install transplant~. (Status: mature)
+** [[https://github.com/bastibe/org-journal][org-journal]]
+Keep a journal as one org file per day. And if you want, carry TODO items with you until they are DONE, search your journal quickly even if it has thousands of files, and add future journal entries to remember appointments. Integrates with the agenda and the calendar. Install using ~(package-install "org-journal")~. (Status: mature and ever expanding)
+** [[https://github.com/bastibe/org-static-blog][org-static-blog]]
+The engine this blog is built upon. A very simple collection of org files get transformed into static HTML and CSS, without any external dependencies beyond Emacs itself. (Status: works for me)
+** [[https://github.com/bastibe/RunForrest][RunForrest]]
+Run many tasks in parallel, even if they crash, kernel panic, and wreak havoc. If you run enough scientific code, it /will/ crash your processes, leak memory, exhaust file descriptors, and destroy your file system. To stay sane anyway, runforrest runs every task in its own process, and saves everything to disk the moment it is done. /Very/ simple, because simplicity is your only defense against the inhuman terror that is scientific code. (Status: easy to debug)
+** [[https://github.com/bastibe/jbof][JBOF - Just a Bunch Of Files]]
+Store collections of binary data as collections of files, with JSON metadata. Something like HDF, but thread safe and easy to browse and debug. (Status: beta)
+** [[https://github.com/bastibe/timeup][TimeUp]]
+Back up your data with rsync, and keep different numbers of hourly, daily, weekly, and monthly copies. (Status: use at your own risk. Works, though)
+
+** Finished or Abandoned Projects
+*** [[https://github.com/bastibe/PySoundCard][PySoundCard]]
+My second attempt at getting cross-platform audio to work in Python. Uses [[https://cffi.readthedocs.org/][CFFI]] and [[http://www.portaudio.com/][portaudio]], much like [[https://github.com/bastibe/SoundFile][SoundFile]]. But it just didn't work out between portaudio and me. Use [[https://github.com/bastibe/SoundCard][SoundCard]] for a better solution, or [[https://github.com/spatialaudio/python-sounddevice][SoundDevice]] for a maintained portaudio bridge. (Status: starting to smell)
+*** [[https://github.com/bastibe/Map-Matlab][Map-Matlab]]
+Show an asynchronously-loading, interactive map in a Matlab figure. This is an example for my lecture on programming Matlab. (Status: educational)
+*** [[https://github.com/bastibe/WebGL-Spectrogram][WebGL-Spectrogram]]
+Draw a smooth, interactive, zooming spectrogram using WebGL and a Python web server. Build as a technology demonstration for WebGL. (Status: probably doesn't even start any more)
+*** [[https://github.com/bastibe/MatlabCodeAnalyzer][MatlabCodeAnalyzer]]
+Parse and criticize Matlab code. This was meant as a tool for students to help them improve their code quality, but turned out to be too nit-picky to be useful. (Status: annoying)
+*** [[https://github.com/bastibe/MatType][MatType]]
+A typing tutor in pure Matlab. See how fast you can type in Matlab. A fun little diversion to write a text editor without access to a text editing widget. (Status: fun hack)
+*** [[https://github.com/bastibe/Violinplot-Matlab][Violinplot-Matlab]]
+Plot violin plots in Matlab. Because everyone is using box plots and thus don't realize that their data is non-gaussian and too sparse. Violin plots show the same thing, but more beautifully and less wrong.
+*** [[https://github.com/bastibe/annotate.el][annotate.el]]
+Annotate arbitrary files as a minor mode in Emacs. Didn't turn out to be quite as useful as I'd hoped, but I learned a lot about Emacs. Install using ~(package-install "annotate")~. (Status: works)
+*** [[https://github.com/bastibe/MatlabXML][MatlabXML]]
+It was literally faster to write my own XML parser for Matlab than to wait for Matlab's own parser to parse my 150 Mb XML file. No support for text nodes, cdata nodes, or any kind of schema validation. (Status: useful)
+*** [[https://github.com/bastibe/matlab-msgpack][Matlab-MsgPack]]
+JSON parsing turned out to be the largest performance bottleneck in [[https://github.com/bastibe/transplant][Transplant]], so I use MsgPack instead. But Matlab lacked a MsgPack parser/dumper, so here is one. (Status: tested and complete)
+
+** Contributions
+*** [[https://github.com/bastibe/lunatic-python][Lunatic-Python]]
+Call Python from Lua, or Lua from Python. I ported this to Python 3, back in the day. But the original developer was nowhere to be found, so it ended up on my Github. Nowadays it is maintained by a dedicated group of wonderful volunteers. (Status: alive and kicking)
+*** [[https://github.com/matplotlib/matplotlib/pull/6254][Matplotlib]]
+I often work with cyclic phase data, which wraps around such that its highest value is also its lowest value. Matplotlib didn't have a convenient color map for this kind of data, so I created one. And now this color map is part of Matplotlib. (Status: awesome!)
+*** [[https://people.csail.mit.edu/hubert/pyaudio/][PyAudio]]
+My first attempt at getting cross-platform audio to work in Python. Back then, PyAudio was the best choice, but it didn't support Python 3 yet. So I helped out, and ported it to Python 3. (Status: still maintained)

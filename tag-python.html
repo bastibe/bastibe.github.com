@@ -24,7 +24,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -312,9 +312,9 @@ Happy Plotting!
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org621743f" class="outline-2">
-<h2 id="org621743f">Usage</h2>
-<div class="outline-text-2" id="text-org621743f">
+<div id="outline-container-org35a9f02" class="outline-2">
+<h2 id="org35a9f02">Usage</h2>
+<div class="outline-text-2" id="text-org35a9f02">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -377,9 +377,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orgdef0185" class="outline-2">
-<h2 id="orgdef0185">Performance</h2>
-<div class="outline-text-2" id="text-orgdef0185">
+<div id="outline-container-org25f68d6" class="outline-2">
+<h2 id="org25f68d6">Performance</h2>
+<div class="outline-text-2" id="text-org25f68d6">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -412,9 +412,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-orgb9f5596" class="outline-2">
-<h2 id="orgb9f5596">TL;DR</h2>
-<div class="outline-text-2" id="text-orgb9f5596">
+<div id="outline-container-org18a455e" class="outline-2">
+<h2 id="org18a455e">TL;DR</h2>
+<div class="outline-text-2" id="text-org18a455e">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -1047,9 +1047,9 @@ Why would you want to use Python over Matlab?
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-orga4fc654" class="outline-2">
-<h2 id="orga4fc654">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-orga4fc654">
+<div id="outline-container-org36a9b07" class="outline-2">
+<h2 id="org36a9b07">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org36a9b07">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
@@ -1066,9 +1066,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-org1e3a7e7" class="outline-2">
-<h2 id="org1e3a7e7">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-org1e3a7e7">
+<div id="outline-container-org4713035" class="outline-2">
+<h2 id="org4713035">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org4713035">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -1130,9 +1130,9 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-org1014f6c" class="outline-2">
-<h2 id="org1014f6c">Reading Python</h2>
-<div class="outline-text-2" id="text-org1014f6c">
+<div id="outline-container-org4fd261a" class="outline-2">
+<h2 id="org4fd261a">Reading Python</h2>
+<div class="outline-text-2" id="text-org4fd261a">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
@@ -1250,9 +1250,9 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </div>
 </div>
 
-<div id="outline-container-org7b304cb" class="outline-2">
-<h2 id="org7b304cb">Common traps</h2>
-<div class="outline-text-2" id="text-org7b304cb">
+<div id="outline-container-orgefc44ed" class="outline-2">
+<h2 id="orgefc44ed">Common traps</h2>
+<div class="outline-text-2" id="text-orgefc44ed">
 <ul class="org-ul">
 <li>Array slicing does not copy.</li>
 </ul>
@@ -1282,9 +1282,9 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </div>
 
 
-<div id="outline-container-org9c8e91a" class="outline-2">
-<h2 id="org9c8e91a">Going further</h2>
-<div class="outline-text-2" id="text-org9c8e91a">
+<div id="outline-container-org9414d50" class="outline-2">
+<h2 id="org9414d50">Going further</h2>
+<div class="outline-text-2" id="text-org9414d50">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>
@@ -1316,9 +1316,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-orgc13d68a" class="outline-2">
-<h2 id="orgc13d68a">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-orgc13d68a">
+<div id="outline-container-org695d24c" class="outline-2">
+<h2 id="org695d24c">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-org695d24c">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -1449,9 +1449,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-org554c1ae" class="outline-2">
-<h2 id="org554c1ae">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-org554c1ae">
+<div id="outline-container-org2497d48" class="outline-2">
+<h2 id="org2497d48">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-org2497d48">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -1515,9 +1515,9 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-org132571a" class="outline-2">
-<h2 id="org132571a">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-org132571a">
+<div id="outline-container-org456221e" class="outline-2">
+<h2 id="org456221e">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org456221e">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
@@ -1686,9 +1686,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-org9e6f050" class="outline-2">
-<h2 id="org9e6f050">Conclusion</h2>
-<div class="outline-text-2" id="text-org9e6f050">
+<div id="outline-container-org200700c" class="outline-2">
+<h2 id="org200700c">Conclusion</h2>
+<div class="outline-text-2" id="text-org200700c">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -1699,9 +1699,9 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-orgb631896" class="outline-2">
-<h2 id="orgb631896">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgb631896">
+<div id="outline-container-org4a9f3d8" class="outline-2">
+<h2 id="org4a9f3d8">Disclaimer</h2>
+<div class="outline-text-2" id="text-org4a9f3d8">
 <ol class="org-ol">
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>

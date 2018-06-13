@@ -4,7 +4,7 @@
 <title>Bastibe.de</title>
 <description>Bastibe.de</description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Sun, 03 Jun 2018 11:06:32 +0200</lastBuildDate>
+<lastBuildDate>Wed, 13 Jun 2018 16:15:51 +0200</lastBuildDate>
 <item>
   <title>Syncing Org-Journal with your Calendar</title>
   <description><![CDATA[
@@ -21,7 +21,6 @@ First, you need to set up some kind of regular export job. I use a cron job that
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">no init file is loaded, so provide everything here:</span>
 (add-to-list 'load-path <span style="color: #303030;">"~/etc/org-journal/"</span>)
 (<span style="color: #111111; font-weight: bold;">setq</span> org-journal-dir <span style="color: #303030;">"~/journal/"</span>            <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">where my journal files are</span>
@@ -577,9 +576,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-org92a0390" class="outline-2">
-<h2 id="org92a0390">Caveats</h2>
-<div class="outline-text-2" id="text-org92a0390">
+<div id="outline-container-org82fa772" class="outline-2">
+<h2 id="org82fa772">Caveats</h2>
+<div class="outline-text-2" id="text-org82fa772">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -629,9 +628,9 @@ A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get
 In late 2016, I took a short ferry flight to a small island in the area, and rekindled my love for aviation. Shortly afterwards, I started training for a pilot's license, and reading about aviation. From a literary perspective, aviation exists in the perfect goldilocks time frame of being just old enough to be thoroughly romanticized, but young enough for first-hand reports and thorough documentation to be available. What is more, powered flight has provided human observers with an unprecedented view of our world and our struggles, and is often as philosophical as it is exhilarating.
 </p>
 
-<div id="outline-container-org409ce8c" class="outline-2">
-<h2 id="org409ce8c">Aviation Reading List</h2>
-<div class="outline-text-2" id="text-org409ce8c">
+<div id="outline-container-org66e3749" class="outline-2">
+<h2 id="org66e3749">Aviation Reading List</h2>
+<div class="outline-text-2" id="text-org66e3749">
 <p>
 Out of a long list of fascinating books on aviation I have read over the last two years, my favorites are:
 </p>
@@ -670,9 +669,9 @@ Out of a long list of fascinating books on aviation I have read over the last tw
 </div>
 </div>
 
-<div id="outline-container-orgbe9d7a2" class="outline-2">
-<h2 id="orgbe9d7a2">Fiction Reading List</h2>
-<div class="outline-text-2" id="text-orgbe9d7a2">
+<div id="outline-container-org67bd145" class="outline-2">
+<h2 id="org67bd145">Fiction Reading List</h2>
+<div class="outline-text-2" id="text-org67bd145">
 <p>
 But as much as I love aviation, my first love is still Science Fiction. We live in strange times of unprecedented prosperity, and yet we are strangely unsatisfied, as if the future didn't turn out to be the utopia it was meant to be. Or is this just a reflection of ourselves, how we do not live up to the future we built?
 </p>
@@ -958,9 +957,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org6ee9671" class="outline-2">
-<h2 id="org6ee9671">WASAPI</h2>
-<div class="outline-text-2" id="text-org6ee9671">
+<div id="outline-container-orga939ce3" class="outline-2">
+<h2 id="orga939ce3">WASAPI</h2>
+<div class="outline-text-2" id="text-orga939ce3">
 <p>
 WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
 </p>
@@ -1035,9 +1034,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org0556fad" class="outline-2">
-<h2 id="org0556fad">PulseAudio</h2>
-<div class="outline-text-2" id="text-org0556fad">
+<div id="outline-container-org2c0c8b7" class="outline-2">
+<h2 id="org2c0c8b7">PulseAudio</h2>
+<div class="outline-text-2" id="text-org2c0c8b7">
 <p>
 PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
 </p>
@@ -1108,9 +1107,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org8ab03d4" class="outline-2">
-<h2 id="org8ab03d4">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-org8ab03d4">
+<div id="outline-container-orgd4e1ca2" class="outline-2">
+<h2 id="orgd4e1ca2">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-orgd4e1ca2">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -1364,54 +1363,54 @@ At any rate, I thoroughly enjoyed this experience, and can't wait for what this 
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
-<div id="outline-container-orgf034101" class="outline-2">
-<h2 id="orgf034101">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-orgf034101">
+<div id="outline-container-orgdfe2ad5" class="outline-2">
+<h2 id="orgdfe2ad5">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-orgdfe2ad5">
 <p>
 Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcf5fd89" class="outline-2">
-<h2 id="orgcf5fd89">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-orgcf5fd89">
+<div id="outline-container-org98b0954" class="outline-2">
+<h2 id="org98b0954">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-org98b0954">
 <p>
 If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc41f742" class="outline-2">
-<h2 id="orgc41f742">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-orgc41f742">
+<div id="outline-container-orgcf44f9b" class="outline-2">
+<h2 id="orgcf44f9b">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-orgcf44f9b">
 <p>
 Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org86f64c8" class="outline-2">
-<h2 id="org86f64c8">Use of line breaks</h2>
-<div class="outline-text-2" id="text-org86f64c8">
+<div id="outline-container-org10a37d5" class="outline-2">
+<h2 id="org10a37d5">Use of line breaks</h2>
+<div class="outline-text-2" id="text-org10a37d5">
 <p>
 In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc0a6937" class="outline-2">
-<h2 id="orgc0a6937">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-orgc0a6937">
+<div id="outline-container-org7c81594" class="outline-2">
+<h2 id="org7c81594">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-org7c81594">
 <p>
 Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org92e2573" class="outline-2">
-<h2 id="org92e2573">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-org92e2573">
+<div id="outline-container-org84e46a8" class="outline-2">
+<h2 id="org84e46a8">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-org84e46a8">
 <p>
 If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
 </p>
@@ -1968,9 +1967,9 @@ At just about two hours, Toren is not a long game. Instead of exploring one part
   <title>Books of 2015</title>
   <description><![CDATA[
 
-<div id="outline-container-orgc806cc2" class="outline-2">
-<h2 id="orgc806cc2"><a href="https://www.goodreads.com/book/show/8706185-among-others">Among Others</a>, by Jo Walton</h2>
-<div class="outline-text-2" id="text-orgc806cc2">
+<div id="outline-container-org6608904" class="outline-2">
+<h2 id="org6608904"><a href="https://www.goodreads.com/book/show/8706185-among-others">Among Others</a>, by Jo Walton</h2>
+<div class="outline-text-2" id="text-org6608904">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/d/d1/Among_Others_(Jo_Walton_novel).jpg" alt="Among_Others_(Jo_Walton_novel).jpg" style="float:left;margin:5px;" width="150px">
 I don't usually enjoy fantasy novels and their romantic escapism. I much prefer fascinating sci-fi thought experiments. But this book won all the most important awards, so I gave it a shot. What if random chance could be bent a little with creativity, the power of believing in something, and some mysticism? You end up with a world that is richer, more meaningful, and altogether more alive, if you just cared to observe and to appreciate it's beauty. Reading this book left me enchanted and more observant long after I put it down. What a wonderful book!
@@ -1978,9 +1977,9 @@ I don't usually enjoy fantasy novels and their romantic escapism. I much prefer 
 </div>
 </div>
 
-<div id="outline-container-org4129571" class="outline-2">
-<h2 id="org4129571"><a href="https://www.goodreads.com/book/show/7073.A_Son_of_the_Circus">A Son of the Circus</a>, by John Irving</h2>
-<div class="outline-text-2" id="text-org4129571">
+<div id="outline-container-org3c749bb" class="outline-2">
+<h2 id="org3c749bb"><a href="https://www.goodreads.com/book/show/7073.A_Son_of_the_Circus">A Son of the Circus</a>, by John Irving</h2>
+<div class="outline-text-2" id="text-org3c749bb">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/e/e7/ASonOfTheCircus.JPG" alt="ASonOfTheCircus.JPG" style="float:left;margin:5px;" width="150px">
 This is one of those books that was on my to-read list for months. It starts out as quirky and likeable as you would expect from John Irving. This time, we follow the tale of a Canadian/Indian doctor throughout his life, and his summer vacation in India. But this would not be John Irving if there weren't plenty of colourful characters, astute observations of human strangeness, and a meticulously crafted story. There is no scene in this book that does not serve a purpose, and so many moving parts my mind just boggles at the construction of it all. Yet at the same time, I was regularly laughing out loud. I loved every minute of this!
@@ -1988,9 +1987,9 @@ This is one of those books that was on my to-read list for months. It starts out
 </div>
 </div>
 
-<div id="outline-container-orga791b0d" class="outline-2">
-<h2 id="orga791b0d"><a href="https://www.goodreads.com/book/show/6597651-the-windup-girl">The Windup Girl</a>, by Paolo Bacigalupi</h2>
-<div class="outline-text-2" id="text-orga791b0d">
+<div id="outline-container-orga573b8b" class="outline-2">
+<h2 id="orga573b8b"><a href="https://www.goodreads.com/book/show/6597651-the-windup-girl">The Windup Girl</a>, by Paolo Bacigalupi</h2>
+<div class="outline-text-2" id="text-orga573b8b">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/1/1f/Wind_up.jpg" alt="Wind_up.jpg" style="float:left;margin:5px;" width="150px">
 The whole world changed in the near future, when gasoline is a rare luxury, sea levels have risen and swallowed all the coastal cities, and man-made scourges have devastated most crops. And now it's not just humans that populate our urbanized world, but so too are our inventions, artificial humans called "windups" for their stutter-stop movements. But at the core, both humans and windups struggle for the same security, prosperity as ever. Such an inventive world, so much vivid creativity, social commentary, in this human struggle to not destroy ourselves.
@@ -1998,9 +1997,9 @@ The whole world changed in the near future, when gasoline is a rare luxury, sea 
 </div>
 </div>
 
-<div id="outline-container-org25c5b5e" class="outline-2">
-<h2 id="org25c5b5e"><a href="https://www.goodreads.com/book/show/629.Zen_and_the_Art_of_Motorcycle_Maintenance">Zen and the art of motorcycle maintenance</a>, by Robert Pirsig</h2>
-<div class="outline-text-2" id="text-org25c5b5e">
+<div id="outline-container-org4e5daa1" class="outline-2">
+<h2 id="org4e5daa1"><a href="https://www.goodreads.com/book/show/629.Zen_and_the_Art_of_Motorcycle_Maintenance">Zen and the art of motorcycle maintenance</a>, by Robert Pirsig</h2>
+<div class="outline-text-2" id="text-org4e5daa1">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/8/85/Zen_motorcycle.jpg" alt="Zen_motorcycle.jpg" style="float:left;margin:5px;" width="150px">
 This is about equal parts a motorcycle journey of a father and his son across the US, and a dive into another man's discoveries of philosophy. To be honest, I liked this book more for it's character descriptions and travelling adventures than it's philosophy. I am really conflicted about putting this book on this list at all, but I kept thinking about this long after I finished reading it, so I guess this had a bigger influence on me than I realized.
@@ -2008,9 +2007,9 @@ This is about equal parts a motorcycle journey of a father and his son across th
 </div>
 </div>
 
-<div id="outline-container-org2080cd6" class="outline-2">
-<h2 id="org2080cd6">Nexus/Crux/Apex, Rad/Blue/Green Mars, The Martian, The Three-Body Problem</h2>
-<div class="outline-text-2" id="text-org2080cd6">
+<div id="outline-container-org8061565" class="outline-2">
+<h2 id="org8061565">Nexus/Crux/Apex, Rad/Blue/Green Mars, The Martian, The Three-Body Problem</h2>
+<div class="outline-text-2" id="text-org8061565">
 <p>
 What happens when you take today's world, and add nanotech brain upgrades (Nexus/Crux/Apex), or strand a lone scientist on Mars (The Martian), or send a large number of people to found a new colony on Mars (Red/Blue/Green Mars), or suddenly make contact with Aliens (The Three-Body Problem)? This what-if is what Science Fiction does best: Take this little what-if, and spin a gripping yarn from that. These books inspired me, made me think, were incredibly thrilling, but they did not have a lasting impact. Still well worth a read if you like Science Fiction, though.
 </p>
@@ -2028,9 +2027,9 @@ What happens when you take today's world, and add nanotech brain upgrades (Nexus
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org621743f" class="outline-2">
-<h2 id="org621743f">Usage</h2>
-<div class="outline-text-2" id="text-org621743f">
+<div id="outline-container-org35a9f02" class="outline-2">
+<h2 id="org35a9f02">Usage</h2>
+<div class="outline-text-2" id="text-org35a9f02">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -2093,9 +2092,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orgdef0185" class="outline-2">
-<h2 id="orgdef0185">Performance</h2>
-<div class="outline-text-2" id="text-orgdef0185">
+<div id="outline-container-org25f68d6" class="outline-2">
+<h2 id="org25f68d6">Performance</h2>
+<div class="outline-text-2" id="text-org25f68d6">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -2128,9 +2127,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-orgb9f5596" class="outline-2">
-<h2 id="orgb9f5596">TL;DR</h2>
-<div class="outline-text-2" id="text-orgb9f5596">
+<div id="outline-container-org18a455e" class="outline-2">
+<h2 id="org18a455e">TL;DR</h2>
+<div class="outline-text-2" id="text-org18a455e">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -2780,9 +2779,9 @@ The Congress is really unique. I can't recommend it enough. If you can free up t
   <title>Books of 2014</title>
   <description><![CDATA[
 
-<div id="outline-container-org27098dd" class="outline-2">
-<h2 id="org27098dd"><a href="http://www.amazon.de/Ancillary-Justice-Imperial-Radch-English-ebook/dp/B00BU1DG1S/ref=sr_1_1?s=books-intl-de&amp;ie=UTF8&amp;qid=1419948379&amp;sr=1-1&amp;keywords=ancillary+justice">Ancillary Justice</a> / <a href="http://www.amazon.de/Ancillary-Sword-Imperial-Radch-English-ebook/dp/B00IA2E5VA/ref=sr_1_2?s=books-intl-de&amp;ie=UTF8&amp;qid=1419948379&amp;sr=1-2&amp;keywords=ancillary+justice">Ancillary Sword</a>, by Ann Leckie</h2>
-<div class="outline-text-2" id="text-org27098dd">
+<div id="outline-container-org7ee2141" class="outline-2">
+<h2 id="org7ee2141"><a href="http://www.amazon.de/Ancillary-Justice-Imperial-Radch-English-ebook/dp/B00BU1DG1S/ref=sr_1_1?s=books-intl-de&amp;ie=UTF8&amp;qid=1419948379&amp;sr=1-1&amp;keywords=ancillary+justice">Ancillary Justice</a> / <a href="http://www.amazon.de/Ancillary-Sword-Imperial-Radch-English-ebook/dp/B00IA2E5VA/ref=sr_1_2?s=books-intl-de&amp;ie=UTF8&amp;qid=1419948379&amp;sr=1-2&amp;keywords=ancillary+justice">Ancillary Sword</a>, by Ann Leckie</h2>
+<div class="outline-text-2" id="text-org7ee2141">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/6/6a/Ann_Leckie_-_Ancillary_Justice.jpeg" alt="Ann_Leckie_-_Ancillary_Justice.jpeg" style="float:left;margin:5px;" width="150px">
 I have been reading a lot of science fiction in the last few years. These books are part one and two of the best space opera I have ever read. The story is written from the perspective of an AI, sometimes inhabiting a lot of bodies, sometimes only one. Interestingly, this makes for a very introspective viewpoint, where politics and actions are expressed as consequences of nuanced human behavior and astute observation, as opposed to arbitrary human decisions. This perspective is extremely compelling, and makes for an extremely <i>human</i> story in a world that is a clever amalgamation of ancient Roman society and post-modern egalitarianism. There is no book I look forward to more fiercely than the conclusion of this series.
@@ -2790,9 +2789,9 @@ I have been reading a lot of science fiction in the last few years. These books 
 </div>
 </div>
 
-<div id="outline-container-org037c2d9" class="outline-2">
-<h2 id="org037c2d9"><a href="https://en.wikipedia.org/wiki/Scott_Pilgrim">Scott Pilgrim</a>, by Bryan Lee O'Malley</h2>
-<div class="outline-text-2" id="text-org037c2d9">
+<div id="outline-container-org89eaaaf" class="outline-2">
+<h2 id="org89eaaaf"><a href="https://en.wikipedia.org/wiki/Scott_Pilgrim">Scott Pilgrim</a>, by Bryan Lee O'Malley</h2>
+<div class="outline-text-2" id="text-org89eaaaf">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/3/39/ScottPilgrim.jpg" alt="ScottPilgrim.jpg" style="float:left;margin:5px;" width="150px">
 Scott Pilgrim is a twenty-something in the nineties. Scott Pilgrim doesn't have a job, and likes to play video games. Scott Pilgrim is fighting epic Anime battles against his girlfriends' exes. Scott Pilgrim is everyone, living in the real world. Scott Pilgrim is awesome, especially the new color-versions. The last part of the series will be released next year, and I really can't wait! (There's also a movie that is supposedly very good, but I won't watch it until I read all the comic books).
@@ -2802,9 +2801,9 @@ Scott Pilgrim is a twenty-something in the nineties. Scott Pilgrim doesn't have 
 </div>
 </div>
 
-<div id="outline-container-org6f0cafe" class="outline-2">
-<h2 id="org6f0cafe"><a href="http://www.amazon.de/Doomsday-Book-Connie-Willis/dp/0553562738/ref=sr_1_sc_2?ie=UTF8&amp;qid=1419948450&amp;sr=8-2-spell&amp;keywords=doomsday+boo">Doomsday Book</a>, by Connie Willis</h2>
-<div class="outline-text-2" id="text-org6f0cafe">
+<div id="outline-container-org45ecb5b" class="outline-2">
+<h2 id="org45ecb5b"><a href="http://www.amazon.de/Doomsday-Book-Connie-Willis/dp/0553562738/ref=sr_1_sc_2?ie=UTF8&amp;qid=1419948450&amp;sr=8-2-spell&amp;keywords=doomsday+boo">Doomsday Book</a>, by Connie Willis</h2>
+<div class="outline-text-2" id="text-org45ecb5b">
 <p style="float:left;margin:5px;" width="150px">
 <img src="https://upload.wikimedia.org/wikipedia/en/1/19/DoomsdayBook(1stEd).jpg" alt="DoomsdayBook(1stEd).jpg" style="float:left;margin:5px;" width="150px">
 This is about time travel from near-future Britain to the fifteenth century. But then, an epidemic breaks loose: Britain is in quarantine and civil order starts breaking. At the same time in the fifteenth century, the plague hits. Disease, and the people trying to deal with it, is a human tragedy beyond belief. Connie Willis manages to write about these things with empathy, and astounding humane love and humor. This story moved me more deeply than I care to acknowledge.
@@ -2825,45 +2824,45 @@ This is about time travel from near-future Britain to the fifteenth century. But
 This is the time of the year when we reflect on our lives, and be thankful. We write Christmas cards to people we like, and celebrate with our loved ones. At my job, I am sitting in front of a screen all day, and I interacted not only with people, but also their software. So this is a column where I want to thank people I don't know for their delightful software:
 </p>
 
-<div id="outline-container-org66332c0" class="outline-2">
-<h2 id="org66332c0"><a href="http://orgmode.org/">Org Mode</a></h2>
-<div class="outline-text-2" id="text-org66332c0">
+<div id="outline-container-org68beb22" class="outline-2">
+<h2 id="org68beb22"><a href="http://orgmode.org/">Org Mode</a></h2>
+<div class="outline-text-2" id="text-org68beb22">
 <p>
 Thank you, Carsten Dominik, Bastien Guerry, and <a href="http://orgmode.org/org.html#History-and-Acknowledgments">everyone else</a>, for this amazing piece of software! I have used Org mode for my <a href="https://github.com/bastibe/org-journal">research journal</a>, <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">this blog</a>, <a href="http://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html">writing my thesis</a>, general note-taking, and all-around planning tool. Thank you for making my life so much easier to manage!
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc74c4e6" class="outline-2">
-<h2 id="orgc74c4e6"><a href="https://github.com/mgeier">Matthias Geier</a></h2>
-<div class="outline-text-2" id="text-orgc74c4e6">
+<div id="outline-container-org652add7" class="outline-2">
+<h2 id="org652add7"><a href="https://github.com/mgeier">Matthias Geier</a></h2>
+<div class="outline-text-2" id="text-org652add7">
 <p>
 Thank you, Matthias, for your many contributions to <a href="https://github.com/bastibe/PySoundFile">PySoundFile</a> and <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, and our many enlightening discussions. You have brought these two projects far further than I would have ever gone, and I learned a lot in the process! Also, a quick thank you to Github, which made our collaboration effortless and enjoyable.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org65d9516" class="outline-2">
-<h2 id="org65d9516"><a href="http://fishshell.com/">fish</a></h2>
-<div class="outline-text-2" id="text-org65d9516">
+<div id="outline-container-org420aadd" class="outline-2">
+<h2 id="org420aadd"><a href="http://fishshell.com/">fish</a></h2>
+<div class="outline-text-2" id="text-org420aadd">
 <p>
 Thank you, <a href="http://ridiculousfish.com/">Ridiculous Fish</a>, for bringing sane scripting, glorious VGA color, and general awesomeness to the command line! Finally, a shell that does not drown you in messy configuration, crazy syntax, and archaic conventions. Finally, a shell with beautiful documentation, and sane defaults! Thanks for all the fish!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org29a33fd" class="outline-2">
-<h2 id="org29a33fd"><a href="http://www.getsync.com/">BitTorrent Sync</a></h2>
-<div class="outline-text-2" id="text-org29a33fd">
+<div id="outline-container-org18ea41a" class="outline-2">
+<h2 id="org18ea41a"><a href="http://www.getsync.com/">BitTorrent Sync</a></h2>
+<div class="outline-text-2" id="text-org18ea41a">
 <p>
 Dropbox is awesome, no doubt, but it still feels awkward to upload all my documents to a faceless corporation. Synchronizing data between computers is still hard&#x2013;or rather, used to be hard. Because this year I discovered btsync. I now have a real off-site backup and file synchronization system fully under my own control, and it took all of ten minutes to set up. Thank you!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org352def5" class="outline-2">
-<h2 id="org352def5"><a href="http://x-plane.com">X-Plane</a></h2>
-<div class="outline-text-2" id="text-org352def5">
+<div id="outline-container-org1c477f1" class="outline-2">
+<h2 id="org1c477f1"><a href="http://x-plane.com">X-Plane</a></h2>
+<div class="outline-text-2" id="text-org1c477f1">
 <p>
 This year, I got back into an old hobby of mine: Flight Simulation. In particular, this year I re-discovered X-Plane, and the marvelous and free sceneries by <a href="http://simheaven.org/">SimHeaven</a> and <a href="http://www.alpilotx.net/">Andras Fabian</a>. Sadly, there doesn't seem to be any pilot school around where I can complete my real-world pilot's license, so flight simulation will have to do. But with this simulator, I am enjoying flight simulation more than ever!
 </p>
@@ -3290,9 +3289,9 @@ At the university, I have a big advantage: I can program. So many of my fellow s
 So how did I get to this point? After all, I went to the same university and studied the same topics they did. My first introduction to programming was our <i>Introduction to Programming</i> in the first semester. We learned how to write simple text-based programs in C.
 </p>
 
-<div id="outline-container-org7e1d698" class="outline-2">
-<h2 id="org7e1d698">My own blogging engine</h2>
-<div class="outline-text-2" id="text-org7e1d698">
+<div id="outline-container-org785d8ed" class="outline-2">
+<h2 id="org785d8ed">My own blogging engine</h2>
+<div class="outline-text-2" id="text-org785d8ed">
 <p>
 At the time, my fellow students and I wanted to organize our lecture notes, copied exams, and assignments on our own website. Not knowing any better, I picked up PHP and set out to write a little website for this. It turned into a little CMS, all hand-written in PHP, HTML and (almost no) CSS.
 </p>
@@ -3307,9 +3306,9 @@ It scares me to look at the ease with which I picked up PHP at the time. With mo
 </div>
 </div>
 
-<div id="outline-container-org42e5753" class="outline-2">
-<h2 id="org42e5753">C programming at the university</h2>
-<div class="outline-text-2" id="text-org42e5753">
+<div id="outline-container-org8a06d92" class="outline-2">
+<h2 id="org8a06d92">C programming at the university</h2>
+<div class="outline-text-2" id="text-org8a06d92">
 <p>
 In my third semester, a professor offered me a job as an undergraduate research assistant. As my first assignment, he wanted me to program a MIDI interface for Matlab. The idea was to use the Matlab-C interface <a href="http://www.mathworks.de/de/help/matlab/call-mex-files-1.html">Mex</a> to connect <a href="http://portmedia.sourceforge.net/">portmidi</a> to Matlab. At this point, I had had two programming courses (C and C++/Matlab), and had read <a href="http://pragprog.com/book/tpp/the-pragmatic-programmer"><i>The Pragmatic Programmer</i></a>.
 </p>
@@ -3324,9 +3323,9 @@ Another project concerned extending a C program that simulated small-room acoust
 </div>
 </div>
 
-<div id="outline-container-org2fb1dec" class="outline-2">
-<h2 id="org2fb1dec">Qt and Cocoa and OpenGL</h2>
-<div class="outline-text-2" id="text-org2fb1dec">
+<div id="outline-container-org0244042" class="outline-2">
+<h2 id="org0244042">Qt and Cocoa and OpenGL</h2>
+<div class="outline-text-2" id="text-org0244042">
 <p>
 I wrote my bachelor's thesis for a small company in southern Germany. At my university, the thesis was supposed to take half a year, and should be written at some company, so students would get some first-hand experience of the real world outside the university.
 </p>
@@ -3345,9 +3344,9 @@ Cocoa and Qt show two very different styles of documentation. The Qt documentati
 </div>
 </div>
 
-<div id="outline-container-org9629987" class="outline-2">
-<h2 id="org9629987">Why Software is paid for</h2>
-<div class="outline-text-2" id="text-org9629987">
+<div id="outline-container-org35b18d5" class="outline-2">
+<h2 id="org35b18d5">Why Software is paid for</h2>
+<div class="outline-text-2" id="text-org35b18d5">
 <p>
 In the meantime, the company had been bought by a foreign investor. While this meant that my program would never see actual users, it also meant that they could offer me a proper job. And like every good engineering student, I needed Matlab, Photoshop, and Microsoft Office. And like every cliché foreign investor, they replied with "This is too expensive, here is a link to the Pirate Bay".
 </p>
@@ -3362,9 +3361,9 @@ And thus we used <a href="http://www.inkscape.org/">Inkscape</a> instead of Illu
 </div>
 </div>
 
-<div id="outline-container-org65ee30d" class="outline-2">
-<h2 id="org65ee30d">Automation</h2>
-<div class="outline-text-2" id="text-org65ee30d">
+<div id="outline-container-org02e904c" class="outline-2">
+<h2 id="org02e904c">Automation</h2>
+<div class="outline-text-2" id="text-org02e904c">
 <p>
 We were working with a British company on a new <a href="http://www.cadac-sound.com/i/digital/cdc-four/12/">digital mixing console</a> at the time. Our team was mostly responsible for the software side of the project, while the British company was mostly concerned with the hardware. One big issue was that in order to get a testable system going, one had to compile some software, run some converter scripts on some files, zip some other files, set up the prototype hardware correctly, then send all the files to the prototype in the right order. Forget one step, or take an outdated version of something, and the system would not work.
 </p>
@@ -3379,9 +3378,9 @@ In the end, I wrote some crazy Rube Goldberg Machine that integrated GNU make wi
 </div>
 </div>
 
-<div id="outline-container-org8d3713d" class="outline-2">
-<h2 id="org8d3713d">Lua and DSLs</h2>
-<div class="outline-text-2" id="text-org8d3713d">
+<div id="outline-container-orgb2ef1a8" class="outline-2">
+<h2 id="orgb2ef1a8">Lua and DSLs</h2>
+<div class="outline-text-2" id="text-orgb2ef1a8">
 <p>
 When I started on the job, a colleague of mine handed me a copy of "Programming for Windows 95", and told me to read it since he had modeled the internal GUI library after it. This was 2010. I was very unhappy about this. In the following years, I would rework many a subsystem within this library. But the more I changed, the more I had to take responsibility for the library. Before long, I had taken official ownership of the library, and I had to answer to questions and feature requests.
 </p>
@@ -3408,9 +3407,9 @@ I vividly remember the feeling of liberation when I transitioned from C++ to Lua
 </div>
 </div>
 
-<div id="outline-container-orgce31906" class="outline-2">
-<h2 id="orgce31906">The role of boredom in my job</h2>
-<div class="outline-text-2" id="text-orgce31906">
+<div id="outline-container-org665b8c0" class="outline-2">
+<h2 id="org665b8c0">The role of boredom in my job</h2>
+<div class="outline-text-2" id="text-org665b8c0">
 <p>
 The Lua experiment started in a time when work was slow, and idle thoughts had the time to mature into ideas. The system automation was started in a similar time. I was lucky to have had a few of those weeks. Some of them amounted to cool projects in the company, others I spent on improving myself.
 </p>
@@ -3429,9 +3428,9 @@ I had one colleague who only used his two index fingers for typing. Seeing him t
 </div>
 </div>
 
-<div id="outline-container-org554bb29" class="outline-2">
-<h2 id="org554bb29">Open Source</h2>
-<div class="outline-text-2" id="text-org554bb29">
+<div id="outline-container-org2b74238" class="outline-2">
+<h2 id="org2b74238">Open Source</h2>
+<div class="outline-text-2" id="text-org2b74238">
 <p>
 Besides all of the GUI work I did for the company, I was actually hired for audio algorithm development. Since we didn't get a license for Matlab, I quickly grew to love Python instead. At the time, Python was right in the middle of the transition from Python 2 to Python 3, and <a href="http://people.csail.mit.edu/hubert/pyaudio/">one of the libraries</a> I needed was Python 2 only. In another one of those fateful slow weeks, I set out to translate it to Python 3.
 </p>
@@ -3446,9 +3445,9 @@ Not too long after that, I started writing my own <a href="https://github.com/ba
 </div>
 </div>
 
-<div id="outline-container-org20f93c2" class="outline-2">
-<h2 id="org20f93c2">My next adventure</h2>
-<div class="outline-text-2" id="text-org20f93c2">
+<div id="outline-container-orgc5a9887" class="outline-2">
+<h2 id="orgc5a9887">My next adventure</h2>
+<div class="outline-text-2" id="text-orgc5a9887">
 <p>
 This has been a summary of the things I did so far. It has been an incredible journey, and one that never stopped to surprise me. Now I am finishing my master's thesis, and getting ready for a doctorate after that. All the work I did and do is based on the incredible work of people before me. At least for the time being, I want this to be the goal of my further work: To advance the sum total knowledge of the world, if only by a tiny bit.
 </p>
@@ -4155,9 +4154,9 @@ Why would you want to use Python over Matlab?
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-orga4fc654" class="outline-2">
-<h2 id="orga4fc654">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-orga4fc654">
+<div id="outline-container-org36a9b07" class="outline-2">
+<h2 id="org36a9b07">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org36a9b07">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
@@ -4174,9 +4173,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-org1e3a7e7" class="outline-2">
-<h2 id="org1e3a7e7">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-org1e3a7e7">
+<div id="outline-container-org4713035" class="outline-2">
+<h2 id="org4713035">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org4713035">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -4238,9 +4237,9 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-org1014f6c" class="outline-2">
-<h2 id="org1014f6c">Reading Python</h2>
-<div class="outline-text-2" id="text-org1014f6c">
+<div id="outline-container-org4fd261a" class="outline-2">
+<h2 id="org4fd261a">Reading Python</h2>
+<div class="outline-text-2" id="text-org4fd261a">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
@@ -4358,9 +4357,9 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </div>
 </div>
 
-<div id="outline-container-org7b304cb" class="outline-2">
-<h2 id="org7b304cb">Common traps</h2>
-<div class="outline-text-2" id="text-org7b304cb">
+<div id="outline-container-orgefc44ed" class="outline-2">
+<h2 id="orgefc44ed">Common traps</h2>
+<div class="outline-text-2" id="text-orgefc44ed">
 <ul class="org-ul">
 <li>Array slicing does not copy.</li>
 </ul>
@@ -4390,9 +4389,9 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </div>
 
 
-<div id="outline-container-org9c8e91a" class="outline-2">
-<h2 id="org9c8e91a">Going further</h2>
-<div class="outline-text-2" id="text-org9c8e91a">
+<div id="outline-container-org9414d50" class="outline-2">
+<h2 id="org9414d50">Going further</h2>
+<div class="outline-text-2" id="text-org9414d50">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>
@@ -4431,9 +4430,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-orgc13d68a" class="outline-2">
-<h2 id="orgc13d68a">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-orgc13d68a">
+<div id="outline-container-org695d24c" class="outline-2">
+<h2 id="org695d24c">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-org695d24c">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -4564,9 +4563,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-org554c1ae" class="outline-2">
-<h2 id="org554c1ae">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-org554c1ae">
+<div id="outline-container-org2497d48" class="outline-2">
+<h2 id="org2497d48">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-org2497d48">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -4630,9 +4629,9 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-org132571a" class="outline-2">
-<h2 id="org132571a">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-org132571a">
+<div id="outline-container-org456221e" class="outline-2">
+<h2 id="org456221e">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org456221e">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
@@ -4801,9 +4800,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-org9e6f050" class="outline-2">
-<h2 id="org9e6f050">Conclusion</h2>
-<div class="outline-text-2" id="text-org9e6f050">
+<div id="outline-container-org200700c" class="outline-2">
+<h2 id="org200700c">Conclusion</h2>
+<div class="outline-text-2" id="text-org200700c">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -4814,9 +4813,9 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-orgb631896" class="outline-2">
-<h2 id="orgb631896">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgb631896">
+<div id="outline-container-org4a9f3d8" class="outline-2">
+<h2 id="org4a9f3d8">Disclaimer</h2>
+<div class="outline-text-2" id="text-org4a9f3d8">
 <ol class="org-ol">
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
@@ -5004,9 +5003,9 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-org6945a84" class="outline-2">
-<h2 id="org6945a84">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-org6945a84">
+<div id="outline-container-org8418d01" class="outline-2">
+<h2 id="org8418d01">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-org8418d01">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
@@ -5049,9 +5048,9 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </div>
 </div>
 
-<div id="outline-container-org5a7e1ef" class="outline-2">
-<h2 id="org5a7e1ef">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-org5a7e1ef">
+<div id="outline-container-org05ec4a5" class="outline-2">
+<h2 id="org05ec4a5">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-org05ec4a5">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
@@ -5069,9 +5068,9 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 </div>
 </div>
 
-<div id="outline-container-orgec69c8f" class="outline-2">
-<h2 id="orgec69c8f">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-orgec69c8f">
+<div id="outline-container-orgfe2113c" class="outline-2">
+<h2 id="orgfe2113c">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-orgfe2113c">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
@@ -5100,9 +5099,9 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 </div>
 </div>
 
-<div id="outline-container-orgc6367bd" class="outline-2">
-<h2 id="orgc6367bd">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-orgc6367bd">
+<div id="outline-container-orgfacee4a" class="outline-2">
+<h2 id="orgfacee4a">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-orgfacee4a">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>
@@ -5151,9 +5150,9 @@ In college, I realized for the first time how a good text editor could save me s
 Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!
 </p>
 
-<div id="outline-container-org5508fe7" class="outline-2">
-<h2 id="org5508fe7">Text editing</h2>
-<div class="outline-text-2" id="text-org5508fe7">
+<div id="outline-container-org4529320" class="outline-2">
+<h2 id="org4529320">Text editing</h2>
+<div class="outline-text-2" id="text-org4529320">
 <p>
 In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.
 </p>
@@ -5168,9 +5167,9 @@ This is a theme that goes through all these features: I look for stuff that is f
 </div>
 </div>
 
-<div id="outline-container-org45657af" class="outline-2">
-<h2 id="org45657af">Outlining and task management</h2>
-<div class="outline-text-2" id="text-org45657af">
+<div id="outline-container-org9afa54b" class="outline-2">
+<h2 id="org9afa54b">Outlining and task management</h2>
+<div class="outline-text-2" id="text-org9afa54b">
 <p>
 Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.
 </p>
@@ -5185,9 +5184,9 @@ Add to that the more advanced task tracking features of org-mode, such as <a hre
 </div>
 </div>
 
-<div id="outline-container-org62f98da" class="outline-2">
-<h2 id="org62f98da">Shell interaction and operating system compatibility</h2>
-<div class="outline-text-2" id="text-org62f98da">
+<div id="outline-container-org626029b" class="outline-2">
+<h2 id="org626029b">Shell interaction and operating system compatibility</h2>
+<div class="outline-text-2" id="text-org626029b">
 <p>
 Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.
 </p>
@@ -5202,9 +5201,9 @@ At more than one point, Eshell probably saved my sanity.
 </div>
 </div>
 
-<div id="outline-container-orgd02ee32" class="outline-2">
-<h2 id="orgd02ee32">Git interaction</h2>
-<div class="outline-text-2" id="text-orgd02ee32">
+<div id="outline-container-org9c97df3" class="outline-2">
+<h2 id="org9c97df3">Git interaction</h2>
+<div class="outline-text-2" id="text-org9c97df3">
 <p>
 Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.
 </p>
@@ -5215,9 +5214,9 @@ Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.git
 </div>
 </div>
 
-<div id="outline-container-orgff3b13e" class="outline-2">
-<h2 id="orgff3b13e">Grab bag</h2>
-<div class="outline-text-2" id="text-orgff3b13e">
+<div id="outline-container-org7e9ea56" class="outline-2">
+<h2 id="org7e9ea56">Grab bag</h2>
+<div class="outline-text-2" id="text-org7e9ea56">
 <ul class="org-ul">
 <li>Emacs' integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.</li>
 <li>REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.</li>
@@ -5479,9 +5478,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-org71c012f" class="outline-2">
-<h2 id="org71c012f">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-org71c012f">
+<div id="outline-container-orgca660da" class="outline-2">
+<h2 id="orgca660da">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-orgca660da">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -5496,9 +5495,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-org022a230" class="outline-2">
-<h2 id="org022a230">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-org022a230">
+<div id="outline-container-org1af5072" class="outline-2">
+<h2 id="org1af5072">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-org1af5072">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -5513,9 +5512,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-org2257fb2" class="outline-2">
-<h2 id="org2257fb2">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org2257fb2">
+<div id="outline-container-org4c6f129" class="outline-2">
+<h2 id="org4c6f129">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org4c6f129">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -5576,9 +5575,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-org3f63198" class="outline-2">
-<h2 id="org3f63198">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-org3f63198">
+<div id="outline-container-orga89d255" class="outline-2">
+<h2 id="orga89d255">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-orga89d255">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -5636,9 +5635,9 @@ Later, I marveled at the level of polish in the third party software ecosystem a
 So here are some of those problems:
 </p>
 
-<div id="outline-container-org3408f97" class="outline-2">
-<h2 id="org3408f97">Lack of Uninstallers</h2>
-<div class="outline-text-2" id="text-org3408f97">
+<div id="outline-container-org9baec99" class="outline-2">
+<h2 id="org9baec99">Lack of Uninstallers</h2>
+<div class="outline-text-2" id="text-org9baec99">
 <p>
 Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
 </p>
@@ -5663,9 +5662,9 @@ Really, this is beyond ridiculous. There is no way of uninstalling software that
 </div>
 </div>
 
-<div id="outline-container-org4d18265" class="outline-2">
-<h2 id="org4d18265">Failing Time Machine</h2>
-<div class="outline-text-2" id="text-org4d18265">
+<div id="outline-container-org6af38eb" class="outline-2">
+<h2 id="org6af38eb">Failing Time Machine</h2>
+<div class="outline-text-2" id="text-org6af38eb">
 <p>
 So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don't even need to plug in that hard drive any more. Magic!
 </p>
@@ -5680,9 +5679,9 @@ So, backups that are not backing up. How amazing is that?
 </div>
 </div>
 
-<div id="outline-container-org6a8270e" class="outline-2">
-<h2 id="org6a8270e">Living in the Cloud</h2>
-<div class="outline-text-2" id="text-org6a8270e">
+<div id="outline-container-org8fde93e" class="outline-2">
+<h2 id="org8fde93e">Living in the Cloud</h2>
+<div class="outline-text-2" id="text-org8fde93e">
 <p>
 OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
 </p>
@@ -5701,9 +5700,9 @@ Things can go wrong, I understand that. But deleting all my contacts? Not cool. 
 </div>
 </div>
 
-<div id="outline-container-org57e903d" class="outline-2">
-<h2 id="org57e903d">iPhoto</h2>
-<div class="outline-text-2" id="text-org57e903d">
+<div id="outline-container-orgbdb138d" class="outline-2">
+<h2 id="orgbdb138d">iPhoto</h2>
+<div class="outline-text-2" id="text-orgbdb138d">
 <p>
 My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
 </p>
@@ -5722,9 +5721,9 @@ At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftwar
 </div>
 </div>
 
-<div id="outline-container-org54b15c2" class="outline-2">
-<h2 id="org54b15c2">OS X Lion with Auto Save and Versions</h2>
-<div class="outline-text-2" id="text-org54b15c2">
+<div id="outline-container-org2ce9096" class="outline-2">
+<h2 id="org2ce9096">OS X Lion with Auto Save and Versions</h2>
+<div class="outline-text-2" id="text-org2ce9096">
 <p>
 The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
 </p>
@@ -5751,9 +5750,9 @@ I could go on. Let's just say that Lion increased my WTF-per-minute rate signifi
 </div>
 </div>
 
-<div id="outline-container-org5814e4b" class="outline-2">
-<h2 id="org5814e4b">Performance, Memory and File System</h2>
-<div class="outline-text-2" id="text-org5814e4b">
+<div id="outline-container-org41f4381" class="outline-2">
+<h2 id="org41f4381">Performance, Memory and File System</h2>
+<div class="outline-text-2" id="text-org41f4381">
 <p>
 Lets talk performance. I can't really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
 </p>
@@ -5776,9 +5775,9 @@ And lastly, let's talk HFS+. Did you know that HFS+ has a global lock that preve
 </div>
 </div>
 
-<div id="outline-container-orga8fe1e8" class="outline-2">
-<h2 id="orga8fe1e8">So, what now?</h2>
-<div class="outline-text-2" id="text-orga8fe1e8">
+<div id="outline-container-org55ad6d5" class="outline-2">
+<h2 id="org55ad6d5">So, what now?</h2>
+<div class="outline-text-2" id="text-org55ad6d5">
 <p>
 With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don't.
 </p>
@@ -6050,9 +6049,9 @@ As far as I can tell, there has been a resurgence of development in the landscap
 During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
 </p>
 
-<div id="outline-container-org868c200" class="outline-2">
-<h2 id="org868c200"><a href="http://www.vim.org/">Vim</a></h2>
-<div class="outline-text-2" id="text-org868c200">
+<div id="outline-container-org47aea12" class="outline-2">
+<h2 id="org47aea12"><a href="http://www.vim.org/">Vim</a></h2>
+<div class="outline-text-2" id="text-org47aea12">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/vim_small.png" alt="vim_small.png">
@@ -6094,9 +6093,9 @@ At the end of the day though, Vim is an amazingly powerful tool, and it is certa
 </div>
 </div>
 
-<div id="outline-container-orgd7bd7a1" class="outline-2">
-<h2 id="orgd7bd7a1"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h2>
-<div class="outline-text-2" id="text-orgd7bd7a1">
+<div id="outline-container-orgd0811f4" class="outline-2">
+<h2 id="orgd0811f4"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h2>
+<div class="outline-text-2" id="text-orgd0811f4">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/emacs_small.png" alt="emacs_small.png">
@@ -6149,9 +6148,9 @@ At any rate, I would recommend anyone to give Emacs a shot at least for a short 
 </div>
 </div>
 
-<div id="outline-container-org1ee7c8e" class="outline-2">
-<h2 id="org1ee7c8e"><a href="http://macromates.com/">Textmate (2)</a></h2>
-<div class="outline-text-2" id="text-org1ee7c8e">
+<div id="outline-container-org6095a42" class="outline-2">
+<h2 id="org6095a42"><a href="http://macromates.com/">Textmate (2)</a></h2>
+<div class="outline-text-2" id="text-org6095a42">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/textmate_small.png" alt="textmate_small.png">
@@ -6199,9 +6198,9 @@ Recently however, an early alpha version of Textmate 2 has been released that co
 </div>
 </div>
 
-<div id="outline-container-org527d324" class="outline-2">
-<h2 id="org527d324"><a href="http://www.vicoapp.com/">Vico</a></h2>
-<div class="outline-text-2" id="text-org527d324">
+<div id="outline-container-orgf418ea0" class="outline-2">
+<h2 id="orgf418ea0"><a href="http://www.vicoapp.com/">Vico</a></h2>
+<div class="outline-text-2" id="text-orgf418ea0">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/vico_small.png" alt="vico_small.png">
@@ -6226,9 +6225,9 @@ Personally, I like it quite a bit and I am hoping very much that it will not be 
 </div>
 </div>
 
-<div id="outline-container-org7c47c5d" class="outline-2">
-<h2 id="org7c47c5d"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h2>
-<div class="outline-text-2" id="text-org7c47c5d">
+<div id="outline-container-org452ab86" class="outline-2">
+<h2 id="org452ab86"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h2>
+<div class="outline-text-2" id="text-org452ab86">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/sublimetext_small.png" alt="sublimetext_small.png">
@@ -6273,17 +6272,17 @@ Really, Sublime Text is an amazing achievement. Maybe not quite as hackable as E
 </div>
 </div>
 
-<div id="outline-container-orgb6b16b7" class="outline-2">
-<h2 id="orgb6b16b7">What else is out there</h2>
-<div class="outline-text-2" id="text-orgb6b16b7">
+<div id="outline-container-org7245e1c" class="outline-2">
+<h2 id="org7245e1c">What else is out there</h2>
+<div class="outline-text-2" id="text-org7245e1c">
 <p>
 Of course, that little list up there is by no means complete. Neither does it list all the amazing features these text editors have to offer, nor does it represent an exhaustive list of them. To the best of my knowledge, this is a short list of other text editors for the Mac platform. Note however, that I have never used any of them extensively and can only tell you stuff from heresay.
 </p>
 </div>
 
-<div id="outline-container-org93bb67e" class="outline-3">
-<h3 id="org93bb67e"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h3>
-<div class="outline-text-3" id="text-org93bb67e">
+<div id="outline-container-org2dc213a" class="outline-3">
+<h3 id="org2dc213a"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h3>
+<div class="outline-text-3" id="text-org2dc213a">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/bbedit.png" alt="bbedit.png">
@@ -6297,9 +6296,9 @@ The remainder of its feature set seems rather standard crop though. There is som
 </div>
 </div>
 
-<div id="outline-container-orgf640ef0" class="outline-3">
-<h3 id="orgf640ef0"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h3>
-<div class="outline-text-3" id="text-orgf640ef0">
+<div id="outline-container-org61e7b65" class="outline-3">
+<h3 id="org61e7b65"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h3>
+<div class="outline-text-3" id="text-org61e7b65">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/textwrangler.png" alt="textwrangler.png">
@@ -6313,9 +6312,9 @@ Even for free, there are probably more capable candidates available, though mayb
 </div>
 </div>
 
-<div id="outline-container-org496503b" class="outline-3">
-<h3 id="org496503b"><a href="http://www.jedit.org/">JEdit</a></h3>
-<div class="outline-text-3" id="text-org496503b">
+<div id="outline-container-orgad39d89" class="outline-3">
+<h3 id="orgad39d89"><a href="http://www.jedit.org/">JEdit</a></h3>
+<div class="outline-text-3" id="text-orgad39d89">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/jedit.png" alt="jedit.png">
@@ -6329,9 +6328,9 @@ For all I know, this could be a very worthy alternative if you are on a budget (
 </div>
 </div>
 
-<div id="outline-container-org207ab77" class="outline-3">
-<h3 id="org207ab77"><a href="http://chocolatapp.com/">Chocolat</a></h3>
-<div class="outline-text-3" id="text-org207ab77">
+<div id="outline-container-orgc3c0fb7" class="outline-3">
+<h3 id="orgc3c0fb7"><a href="http://chocolatapp.com/">Chocolat</a></h3>
+<div class="outline-text-3" id="text-orgc3c0fb7">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/chocolat.png" alt="chocolat.png">
@@ -6344,9 +6343,9 @@ Chocolat is yet another text editor that came into being in the post-Textmate vo
 </div>
 </div>
 
-<div id="outline-container-orga711aa6" class="outline-3">
-<h3 id="orga711aa6"><a href="http://www.kodapp.com/">Kod</a></h3>
-<div class="outline-text-3" id="text-orga711aa6">
+<div id="outline-container-org1c3315b" class="outline-3">
+<h3 id="org1c3315b"><a href="http://www.kodapp.com/">Kod</a></h3>
+<div class="outline-text-3" id="text-org1c3315b">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/kod.png" alt="kod.png">
@@ -6359,9 +6358,9 @@ Kod started out as an open source alternative to Textmate. This is quite uncommo
 </div>
 </div>
 
-<div id="outline-container-orgc8be0b3" class="outline-3">
-<h3 id="orgc8be0b3"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h3>
-<div class="outline-text-3" id="text-orgc8be0b3">
+<div id="outline-container-org734d730" class="outline-3">
+<h3 id="org734d730"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h3>
+<div class="outline-text-3" id="text-org734d730">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/subethaedit.png" alt="subethaedit.png">
@@ -6375,9 +6374,9 @@ Beyond that, it is a capable shortcut-based text editor. If you don't need the c
 </div>
 </div>
 
-<div id="outline-container-orge9f6c3c" class="outline-3">
-<h3 id="orge9f6c3c"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h3>
-<div class="outline-text-3" id="text-orge9f6c3c">
+<div id="outline-container-org9c78b54" class="outline-3">
+<h3 id="org9c78b54"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h3>
+<div class="outline-text-3" id="text-org9c78b54">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/smultron.png" alt="smultron.png">
@@ -6391,9 +6390,9 @@ Smultron lost most of its following in that transition.
 </div>
 </div>
 
-<div id="outline-container-orgbb8c4fd" class="outline-3">
-<h3 id="orgbb8c4fd"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h3>
-<div class="outline-text-3" id="text-orgbb8c4fd">
+<div id="outline-container-orge0be699" class="outline-3">
+<h3 id="orge0be699"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h3>
+<div class="outline-text-3" id="text-orge0be699">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/slickedit.png" alt="slickedit.png">
@@ -6408,9 +6407,9 @@ That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I do
 </div>
 </div>
 
-<div id="outline-container-orga5ecbc5" class="outline-3">
-<h3 id="orga5ecbc5"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h3>
-<div class="outline-text-3" id="text-orga5ecbc5">
+<div id="outline-container-orgf874efc" class="outline-3">
+<h3 id="orgf874efc"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h3>
+<div class="outline-text-3" id="text-orgf874efc">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/komodo.png" alt="komodo.png">
@@ -6424,9 +6423,9 @@ There are also quite good Vim key bindings and it is available on the three majo
 </div>
 </div>
 
-<div id="outline-container-org977d557" class="outline-3">
-<h3 id="org977d557">TextEdit</h3>
-<div class="outline-text-3" id="text-org977d557">
+<div id="outline-container-org022e930" class="outline-3">
+<h3 id="org022e930">TextEdit</h3>
+<div class="outline-text-3" id="text-org022e930">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/textedit.png" alt="textedit.png">
@@ -6440,17 +6439,17 @@ That said, TextEdit does support rich text editing and might be of value for the
 </div>
 </div>
 
-<div id="outline-container-org64252a9" class="outline-3">
-<h3 id="org64252a9">Text editors for web development</h3>
-<div class="outline-text-3" id="text-org64252a9">
+<div id="outline-container-org2bf07c8" class="outline-3">
+<h3 id="org2bf07c8">Text editors for web development</h3>
+<div class="outline-text-3" id="text-org2bf07c8">
 <p>
 Strangely, all the major Mac text editors that cater specifically for web development are not cross platform. If web development is all you are ever doing though, these text editors might be well worth their money.
 </p>
 </div>
 
-<div id="outline-container-org57e9799" class="outline-4">
-<h4 id="org57e9799"><a href="http://www.panic.com/coda/">Coda</a></h4>
-<div class="outline-text-4" id="text-org57e9799">
+<div id="outline-container-orgeb02bd5" class="outline-4">
+<h4 id="orgeb02bd5"><a href="http://www.panic.com/coda/">Coda</a></h4>
+<div class="outline-text-4" id="text-orgeb02bd5">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/coda.png" alt="coda.png">
@@ -6463,9 +6462,9 @@ Combine the SubEthaEdit text editing engine including its collaborative tools wi
 </div>
 </div>
 
-<div id="outline-container-org8394979" class="outline-4">
-<h4 id="org8394979"><a href="http://macrabbit.com/espresso/">Espresso</a></h4>
-<div class="outline-text-4" id="text-org8394979">
+<div id="outline-container-org7ab1c7b" class="outline-4">
+<h4 id="org7ab1c7b"><a href="http://macrabbit.com/espresso/">Espresso</a></h4>
+<div class="outline-text-4" id="text-org7ab1c7b">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/espresso.png" alt="espresso.png">
@@ -6478,9 +6477,9 @@ Another text editor gearing specifically for web development. Thus, you get powe
 </div>
 </div>
 
-<div id="outline-container-org65a3902" class="outline-4">
-<h4 id="org65a3902"><a href="http://tacosw.com/">Taco HTML Editor</a></h4>
-<div class="outline-text-4" id="text-org65a3902">
+<div id="outline-container-orga2f02d6" class="outline-4">
+<h4 id="orga2f02d6"><a href="http://tacosw.com/">Taco HTML Editor</a></h4>
+<div class="outline-text-4" id="text-orga2f02d6">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/taco.png" alt="taco.png">
@@ -6493,9 +6492,9 @@ Another text editor geared exclusively towards web development. This time around
 </div>
 </div>
 
-<div id="outline-container-org0bfd0e0" class="outline-4">
-<h4 id="org0bfd0e0"><a href="http://www.beforedawnsolutions.com/applications/skedit">skEdit</a></h4>
-<div class="outline-text-4" id="text-org0bfd0e0">
+<div id="outline-container-orgd8f56ca" class="outline-4">
+<h4 id="orgd8f56ca"><a href="http://www.beforedawnsolutions.com/applications/skedit">skEdit</a></h4>
+<div class="outline-text-4" id="text-orgd8f56ca">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/skedit.png" alt="skedit.png">

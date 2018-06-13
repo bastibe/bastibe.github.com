@@ -25,7 +25,7 @@
 <div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a>
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -42,9 +42,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-orgc13d68a" class="outline-2">
-<h2 id="orgc13d68a">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-orgc13d68a">
+<div id="outline-container-org695d24c" class="outline-2">
+<h2 id="org695d24c">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-org695d24c">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -175,9 +175,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-org554c1ae" class="outline-2">
-<h2 id="org554c1ae">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-org554c1ae">
+<div id="outline-container-org2497d48" class="outline-2">
+<h2 id="org2497d48">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-org2497d48">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -241,9 +241,9 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-org132571a" class="outline-2">
-<h2 id="org132571a">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-org132571a">
+<div id="outline-container-org456221e" class="outline-2">
+<h2 id="org456221e">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org456221e">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
@@ -412,9 +412,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-org9e6f050" class="outline-2">
-<h2 id="org9e6f050">Conclusion</h2>
-<div class="outline-text-2" id="text-org9e6f050">
+<div id="outline-container-org200700c" class="outline-2">
+<h2 id="org200700c">Conclusion</h2>
+<div class="outline-text-2" id="text-org200700c">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -425,9 +425,9 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-orgb631896" class="outline-2">
-<h2 id="orgb631896">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgb631896">
+<div id="outline-container-org4a9f3d8" class="outline-2">
+<h2 id="org4a9f3d8">Disclaimer</h2>
+<div class="outline-text-2" id="text-org4a9f3d8">
 <ol class="org-ol">
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
