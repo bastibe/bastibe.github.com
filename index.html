@@ -29,6 +29,35 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">14 Oct 2018</div><h1 class="post-title"><a href="2018-10-14-appreciation-for-open-source-and-commercial-software.html">Appreciation for Open Source and Commercial Software</a></h1>
+<p>
+I recently released my first-ever piece of commercial software, a <a href="https://missiongenerator.eu/">plugin</a> for the <a href="https://www.x-plane.com/">X-Plane</a> flight simulator. I wrote this primarily to scratch my own itch, but thought other users might like it, too, so I put it up on <a href="https://store.x-plane.org/Mission-Generator_p_877.html">the store</a>. What struck me however, were the stark difference between the kinds of responses I got to this, as compared to my open source projects: They were astonishingly, resoundingly, <i>positive</i>!
+</p>
+
+<p>
+You see, I have a bunch of open source projects, with a few thousand downloads per month, and a dozen or so issues on Github per week. Most of my interactions with my users are utilitarian, and efficient. Someone reports a bug or asks for help, I ask for clarification or a pull request, we iterate a few times until the issue is resolved. The process is mechanical and the tone of our conversation is equally unemotional. This is as it should be.
+</p>
+
+<p>
+After having released my flight simulator plugin, however, people <i>thanked me</i>! They <i>congratulated me</i>! They extolled about the greatness of what I had built! And they did this despite the fact that the initial release had quite a few major bugs, and even flat-out did not work for some people. Yet even people who couldn't get it to work were <i>grateful</i> for my help in resolving their issue!
+</p>
+
+<p>
+This <i>blew my mind</i>, in comparison with the drab "I found a bug", "Could you implement…" I was used to from my open source work. There, the feedback I got was mostly neutral (bug reports, feature requests), and sometimes even negative ("You broke something!"). So I release my software <i>for free</i>, as a gift, and get average-negative feedback. My commercial work, in contrast, <i>costs money</i>, and yet the feedback I get is resoundingly positive! I can not overstate how motivating it is to get praise, and love, from my users.
+</p>
+
+<p>
+I think this is a huge problem for our Open Source community. I had my run-ins with burnout, when all the pull requests came to be too much, and I started dreading the little notification icon on Github. And I think the negativity inherent in bug reports and feature requests has a huge part to do with this. In the future, I will try to add more praise to my bug reports from now on, just to put things into perspective.
+</p>
+
+<p>
+But I think we should go further than that. We should create tools for praising stuff, beyond the impersonal Stars on Github. We should be able to write reviews on Github, and recommendations, and blog posts about cool libraries we find.
+</p>
+
+<p>
+I recently got my first github issue that was <a href="https://github.com/bastibe/org-static-blog/issues/12">just a thank-you note</a>. I loved it! We need more positivity like that.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-open-source.html">open-source</a> <a href="tag-thank-you.html">thank-you</a> </div>
 <div class="post-date">03 Jun 2018</div><h1 class="post-title"><a href="2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
 <p>
 <a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http://www.orgzly.com/">Orgzly</a> does <i>not</i> work with my 1k-file journal directory).
@@ -210,47 +239,7 @@ With this system, I never miss anything, but once I consume all the news in my f
   <text x="76" y="27" font-family="Verdana" font-size="13px" fill="#E1E6E7">ACHIEVEMENT UNLOCKED</text>
   <text x="76" y="48" font-family="Verdana" font-size="13px" fill="#E1E6E7">Defeated News Addiction!</text>
 </svg>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-workflow.html">workflow</a> </div>
-<div class="post-date">02 Apr 2018</div><h1 class="post-title"><a href="2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h1>
-<p>
-I keep a simple journal in <a href="https://github.com/bastibe/org-journal">org-journal</a>: One text file per day, in <a href="https://orgmode.org/">org-mode</a>. But over the years, org-journal has grown somewhat beyond this simple use case. <a href="https://github.com/bastibe/org-journal/releases/tag/1.7.1">About three years ago</a>, a gentleman named <a href="https://github.com/vkazanov">Vladimir Kazanov</a> implemented a very fast text search. Thus, my journal became an information archive. <a href="https://github.com/bastibe/org-journal/releases/tag/1.11.0">About two years ago</a>, org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And <a href="https://github.com/bastibe/org-journal/releases/tag/1.13.1">today</a>, org-journal gained the ability to work with future journal entries, thus becoming a calendar.
-</p>
-
-<p>
-Despite all of these features however, org-journal remains one org file per day, with fancy functions to do fancy things if you want them—or ignore them, if the journal is all you need.
-</p>
-
-<p>
-Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:
-</p>
-
-<pre>
-<span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>
-<span style="color: #111111; font-weight: bold; font-style: italic;">Monday     2 April 2018 W14</span>
-<span style="color: #111111;">  2018-04-02: Easter Monday </span>
-<span style="color: #111111; font-weight: bold;">Tuesday    3 April 2018</span>
-<span style="color: #111111; font-weight: bold;">Wednesday  4 April 2018</span>
-<span style="color: #111111; font-weight: bold;">Thursday   5 April 2018</span>
-<span style="color: #111111;">  2018-04-05: Scheduled:  Give Lecture 4 on Applied Programming</span>             <span style="color: #111111;"><span style="font-weight: bold;">:BB:</span></span>
-<span style="color: #111111; font-weight: bold;">Friday     6 April 2018</span>
-<span style="color: #111111;">  2018-04-06: Scheduled:  Release of new Eels record</span>
-<span style="color: #111111; font-weight: bold;">Saturday   7 April 2018</span>
-<span style="color: #111111; font-weight: bold;">Sunday     8 April 2018</span>
-<span style="color: #111111;">  2018-04-08: Scheduled:  </span><span style="color: #111111;">TODO</span><span style="color: #111111;"> Celebrate Sunday</span>
-</pre>
-
-<p>
-And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing <code>i j</code> in <code>M-x calendar</code> or by calling <code>org-journal-new-scheduled-entry</code>, and org-journal will create an entry with a <code>SCHEDULED</code> property of the appropriate date (prefix to suppress <code>TODO</code>). When the current day reaches that entry, it will incorporate it into the daily journal.
-</p>
-
-<p>
-Future journal entries are highlighted in <code>M-x calendar</code>, and you can get an overview of them with <code>org-journal-schedule-view</code>, or, if you enable <code>org-journal-enable-agenda-integration</code>, through the ordinary <code>org-agenda</code>, as shown above. The agenda integration does not include past journal entries in the agenda, since agenda searches tend to become very slow if they have to traverse the hundreds of files in my journal.
-</p>
-
-<p>
-[1]: This is of course not <i>his</i> calendar, but mine.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div><div id="archive">
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-workflow.html">workflow</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>
