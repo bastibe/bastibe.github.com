@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Dealing with Unreliable Software</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">26 Oct 2018</div><h1 class="post-title"><a href="2018-10-26-dealing-with-unreliable-software.html">Dealing with Unreliable Software</a></h1>
+<p>
+About a year ago, I started working on a big comparison study between a bunch of scientific algorithms. Many of these have open-source software available, and I wanted to evaluate them with a large variety of input signals. The problem is, this is <a href="https://bastibe.de/2017-05-14-scientific-code.html">scientific code</a>, i.e. the worst code imaginable.
+</p>
+
+<p>
+Things this code has done to my computer:
+</p>
+<ul class="org-ul">
+<li>it crashed, throwing an error, and shutting down nicely</li>
+<li>it crashed with a segfault, taking the owning process with it</li>
+<li>it crashed, leaving temporary files lying around</li>
+<li>it crashed, leaving zombie processes lying around</li>
+<li>it spin-locked, and never returned</li>
+<li>it spin-locked, and forked uncontrollably until all process decriptors were exhausted</li>
+<li>it spin-locked, and ate memory uncontrollably until all memory was consumed</li>
+<li>it crashed other, unrelated programs (no idea how it managed that)</li>
+<li>it corrupted the root file system (no idea how it managed that)</li>
+</ul>
+
+<p>
+Note that the code did not do any of this intentionally. It was merely code written by non-expert programmers, the problems often a side effect of performance optimizations. The code mostly works fine if called only once or twice. My problems only become apparent if I ran it, say, a few hundred thousand times, with dozens of processes in parallel.
+</p>
+
+<p>
+So, how do you deal with this? Multi-threading is not an option, since a segfault would kill the whole program. So it has to be multi-processing. But all the multi-processing frameworks I know will lose all progress if one of the more sinister scenarios from the above list hard-crashed one or more of its processes. I needed a more robust solution.
+</p>
+
+<p>
+Basically, the only hope of survival at this point is the kernel. Only the kernel has enough power to rein in rogue processes, and deal with hard crashes. So in my <a href="https://github.com/bastibe/runforrest">purpose-built multi-processing framework</a>, every task runs in its own process, with inputs and outputs written to unique files. And crucially, if any task does not finish within a set amount of time, it and all of its children are killed.
+</p>
+
+<p>
+It took me quite a while to figure out how to do this, so here's the deal:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">start your process with a new process group:</span>
+<span style="color: #111111;">process</span> = Popen(..., start_new_session=<span style="color: #111111;">True</span>)
+
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">after a timeout, kill the whole process group:</span>
+<span style="color: #111111;">process_group_id</span> = os.getpgid(process.pid)
+os.killpg(process_group_id, signal.SIGKILL)
+</pre>
+</div>
+
+<p>
+This is the nuclear option. I tried <code>SIGTERM</code> and <code>SIGHUP</code> instead, but programs would happily ignore it. I tried killing or terminating only the <code>process</code>, but that would leave zombie children. Sending <code>SIGKILL</code> to the process group does not take prisoners. The processes do not get a chance to respond or clean up after themselves. But you know what, after months of dealing with this stuff, this is the first time that my experiments actually run reliably for a few days without crashing or exhausting some resource. If that's what it takes, so be it.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> </div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://bastibe.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

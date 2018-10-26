@@ -1,0 +1,35 @@
+#+title: Dealing with Unreliable Software
+#+date: <2018-10-26 09:45>
+#+filetags: programming
+
+About a year ago, I started working on a big comparison study between a bunch of scientific algorithms. Many of these have open-source software available, and I wanted to evaluate them with a large variety of input signals. The problem is, this is [[https://bastibe.de/2017-05-14-scientific-code.html][scientific code]], i.e. the worst code imaginable.
+
+Things this code has done to my computer:
+- it crashed, throwing an error, and shutting down nicely
+- it crashed with a segfault, taking the owning process with it
+- it crashed, leaving temporary files lying around
+- it crashed, leaving zombie processes lying around
+- it spin-locked, and never returned
+- it spin-locked, and forked uncontrollably until all process decriptors were exhausted
+- it spin-locked, and ate memory uncontrollably until all memory was consumed
+- it crashed other, unrelated programs (no idea how it managed that)
+- it corrupted the root file system (no idea how it managed that)
+
+Note that the code did not do any of this intentionally. It was merely code written by non-expert programmers, the problems often a side effect of performance optimizations. The code mostly works fine if called only once or twice. My problems only become apparent if I ran it, say, a few hundred thousand times, with dozens of processes in parallel.
+
+So, how do you deal with this? Multi-threading is not an option, since a segfault would kill the whole program. So it has to be multi-processing. But all the multi-processing frameworks I know will lose all progress if one of the more sinister scenarios from the above list hard-crashed one or more of its processes. I needed a more robust solution.
+
+Basically, the only hope of survival at this point is the kernel. Only the kernel has enough power to rein in rogue processes, and deal with hard crashes. So in my [[https://github.com/bastibe/runforrest][purpose-built multi-processing framework]], every task runs in its own process, with inputs and outputs written to unique files. And crucially, if any task does not finish within a set amount of time, it and all of its children are killed.
+
+It took me quite a while to figure out how to do this, so here's the deal:
+
+#+begin_src python
+# start your process with a new process group:
+process = Popen(..., start_new_session=True)
+
+# after a timeout, kill the whole process group:
+process_group_id = os.getpgid(process.pid)
+os.killpg(process_group_id, signal.SIGKILL)
+#+end_src
+
+This is the nuclear option. I tried ~SIGTERM~ and ~SIGHUP~ instead, but programs would happily ignore it. I tried killing or terminating only the ~process~, but that would leave zombie children. Sending ~SIGKILL~ to the process group does not take prisoners. The processes do not get a chance to respond or clean up after themselves. But you know what, after months of dealing with this stuff, this is the first time that my experiments actually run reliably for a few days without crashing or exhausting some resource. If that's what it takes, so be it.

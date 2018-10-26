@@ -4,7 +4,63 @@
 <title>Bastibe.de</title>
 <description>Bastibe.de</description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Sun, 14 Oct 2018 11:41:14 +0200</lastBuildDate>
+<lastBuildDate>Fri, 26 Oct 2018 10:46:00 +0200</lastBuildDate>
+<item>
+  <title>Dealing with Unreliable Software</title>
+  <description><![CDATA[
+<p>
+About a year ago, I started working on a big comparison study between a bunch of scientific algorithms. Many of these have open-source software available, and I wanted to evaluate them with a large variety of input signals. The problem is, this is <a href="https://bastibe.de/2017-05-14-scientific-code.html">scientific code</a>, i.e. the worst code imaginable.
+</p>
+
+<p>
+Things this code has done to my computer:
+</p>
+<ul class="org-ul">
+<li>it crashed, throwing an error, and shutting down nicely</li>
+<li>it crashed with a segfault, taking the owning process with it</li>
+<li>it crashed, leaving temporary files lying around</li>
+<li>it crashed, leaving zombie processes lying around</li>
+<li>it spin-locked, and never returned</li>
+<li>it spin-locked, and forked uncontrollably until all process decriptors were exhausted</li>
+<li>it spin-locked, and ate memory uncontrollably until all memory was consumed</li>
+<li>it crashed other, unrelated programs (no idea how it managed that)</li>
+<li>it corrupted the root file system (no idea how it managed that)</li>
+</ul>
+
+<p>
+Note that the code did not do any of this intentionally. It was merely code written by non-expert programmers, the problems often a side effect of performance optimizations. The code mostly works fine if called only once or twice. My problems only become apparent if I ran it, say, a few hundred thousand times, with dozens of processes in parallel.
+</p>
+
+<p>
+So, how do you deal with this? Multi-threading is not an option, since a segfault would kill the whole program. So it has to be multi-processing. But all the multi-processing frameworks I know will lose all progress if one of the more sinister scenarios from the above list hard-crashed one or more of its processes. I needed a more robust solution.
+</p>
+
+<p>
+Basically, the only hope of survival at this point is the kernel. Only the kernel has enough power to rein in rogue processes, and deal with hard crashes. So in my <a href="https://github.com/bastibe/runforrest">purpose-built multi-processing framework</a>, every task runs in its own process, with inputs and outputs written to unique files. And crucially, if any task does not finish within a set amount of time, it and all of its children are killed.
+</p>
+
+<p>
+It took me quite a while to figure out how to do this, so here's the deal:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">start your process with a new process group:</span>
+<span style="color: #111111;">process</span> = Popen(..., start_new_session=<span style="color: #111111;">True</span>)
+
+<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">after a timeout, kill the whole process group:</span>
+<span style="color: #111111;">process_group_id</span> = os.getpgid(process.pid)
+os.killpg(process_group_id, signal.SIGKILL)
+</pre>
+</div>
+
+<p>
+This is the nuclear option. I tried <code>SIGTERM</code> and <code>SIGHUP</code> instead, but programs would happily ignore it. I tried killing or terminating only the <code>process</code>, but that would leave zombie children. Sending <code>SIGKILL</code> to the process group does not take prisoners. The processes do not get a chance to respond or clean up after themselves. But you know what, after months of dealing with this stuff, this is the first time that my experiments actually run reliably for a few days without crashing or exhausting some resource. If that's what it takes, so be it.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> </div>]]></description>
+  <category>programming</category>
+  <link>https://bastibe.de/2018-10-26-dealing-with-unreliable-software.html</link>
+  <pubDate>Fri, 26 Oct 2018 09:45:00 +0200</pubDate>
+</item>
 <item>
   <title>Appreciation for Open Source and Commercial Software</title>
   <description><![CDATA[
