@@ -29,6 +29,37 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">08 Nov 2018</div><h1 class="post-title"><a href="2018-11-08-cool-python-libraries.html">Cool Python Libraries: TQDM and Resampy</a></h1>
+<p>
+In my recent post about <a href="https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html">appreciation for open source software</a>, I mentioned that we should praise our open source heros more often. So here are two lesser-known libraries that I use daily, and which are unabashedly awesome:
+</p>
+
+<div id="outline-container-org396ee7f" class="outline-2">
+<h2 id="org396ee7f"><a href="https://tqdm.github.io/">TQDM</a></h2>
+<div class="outline-text-2" id="text-org396ee7f">
+<p>
+TQDM draws text progress bars for long-running processes, simply by wrapping your iterator in <code>tqdm(iterator)</code>. And this, alone, would be awesome. But, TQDM is one of those libraries that aren't just a good idea, but then go the extra mile, and add fantastic documentation, contingencies for all kinds of weird use cases, and integration with notebooks and GUIs.
+</p>
+
+<p>
+I use TQDM all the time, for running my scientific experiments and data analysis, and it just works. For long-running tasks, I recommend using <code>tqdm(iterator, smoothing=0, desc='calculating')</code>, which adds a meaningful description to the progress bar, and an accurate runtime estimate.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org53adbd0" class="outline-2">
+<h2 id="org53adbd0"><a href="https://resampy.readthedocs.io/en/latest/">Resampy</a></h2>
+<div class="outline-text-2" id="text-org53adbd0">
+<p>
+Resampy resamples numpy signals. Resample your data with <code>resample(signal, old_samplerate, new_samplerate)</code>. Just like with TQDM, this simple interface hides a lot of complexity and flexibility under the hood, yet remains conceptually simple and easy to use.
+</p>
+
+<p>
+But beyond simplicity, resampy uses a clever implementation that is a far cry better than <code>scipy.signal.resample</code>, while still being easy to install and fast. For a more thorough comparison of resampling algorithms, visit <a href="https://signalsprocessed.blogspot.com/2016/08/audio-resampling-in-python.html">Joachim Thiemann's blog</a>.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>
 <div class="post-date">26 Oct 2018</div><h1 class="post-title"><a href="2018-10-26-dealing-with-unreliable-software.html">Dealing with Unreliable Software</a></h1>
 <p>
 About a year ago, I started working on a big comparison study between a bunch of scientific algorithms. Many of these have open-source software available, and I wanted to evaluate them with a large variety of input signals. The problem is, this is <a href="https://bastibe.de/2017-05-14-scientific-code.html">scientific code</a>, i.e. the worst code imaginable.
@@ -172,53 +203,7 @@ Unless <a href="https://github.com/Khan/KaTeX">katex.min.js</a> somehow is loadi
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-privacy.html">privacy</a> <a href="tag-blog.html">blog</a> </div>
-<div class="post-date">10 Apr 2018</div><h1 class="post-title"><a href="2018-04-10-appending-to-matlab-arrays.html">Appending to Matlab Arrays</a></h1>
-<p>
-<i>The variable $var appears to change size on every loop iteration. Consider preallocating for speed.</i>
-</p>
-
-<p>
-So sayeth Matlab.
-</p>
-
-<p>
-Let's try it:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-octave">x_prealloc <span style="color: #111111;">=</span> cell(10000<span style="color: #111111;">,</span> 1)<span style="color: #111111;">;</span>
-x_end <span style="color: #111111;">=</span> {}<span style="color: #111111;">;</span>
-x_append <span style="color: #111111;">=</span> {}<span style="color: #111111;">;</span>
-<span style="color: #111111; font-weight: bold;">for</span> n<span style="color: #111111;">=</span>1<span style="color: #111111;">:</span>10000
-    <span style="color: #111111; font-style: italic;">% variant 1: preallocate</span>
-    x_prealloc(n) <span style="color: #111111;">=</span> {42}<span style="color: #111111;">;</span>
-    <span style="color: #111111; font-style: italic;">% variant 2: end+1</span>
-    x_end(end<span style="color: #111111;">+</span>1) <span style="color: #111111;">=</span> {42}<span style="color: #111111;">;</span>
-    <span style="color: #111111; font-style: italic;">% variant 3: append</span>
-    x_append <span style="color: #111111;">=</span> [x_append {42}]<span style="color: #111111;">;</span>
-<span style="color: #111111; font-weight: bold;">end</span>
-</pre>
-</div>
-
-<p>
-Which variant do you think is fastest?
-</p>
-
-
-<figure>
-<img src="./static/2018-04/array_performance.png" alt="array_performance.png">
-
-</figure>
-
-<p>
-Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is</i> surprising is that it is faster by a constant factor of about 2 instead of scaling with the array length. Only appending by <code>x = [x {42}]</code> actually becomes slower for larger arrays. (The same thing happens for numerical arrays, struct arrays, and object arrays.)
-</p>
-
-<p>
-<b>TL;DR:</b> Do not use <code>x = [x $something]</code>, ever. Instead, use <code>x(end+1) = $something</code>. Preallocation is generally overrated.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div><div id="archive">
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-privacy.html">privacy</a> <a href="tag-blog.html">blog</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

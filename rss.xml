@@ -4,7 +4,44 @@
 <title>Bastibe.de</title>
 <description>Bastibe.de</description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Fri, 26 Oct 2018 10:46:00 +0200</lastBuildDate>
+<lastBuildDate>Thu, 08 Nov 2018 16:27:13 +0100</lastBuildDate>
+<item>
+  <title>Cool Python Libraries: TQDM and Resampy</title>
+  <description><![CDATA[
+<p>
+In my recent post about <a href="https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html">appreciation for open source software</a>, I mentioned that we should praise our open source heros more often. So here are two lesser-known libraries that I use daily, and which are unabashedly awesome:
+</p>
+
+<div id="outline-container-org396ee7f" class="outline-2">
+<h2 id="org396ee7f"><a href="https://tqdm.github.io/">TQDM</a></h2>
+<div class="outline-text-2" id="text-org396ee7f">
+<p>
+TQDM draws text progress bars for long-running processes, simply by wrapping your iterator in <code>tqdm(iterator)</code>. And this, alone, would be awesome. But, TQDM is one of those libraries that aren't just a good idea, but then go the extra mile, and add fantastic documentation, contingencies for all kinds of weird use cases, and integration with notebooks and GUIs.
+</p>
+
+<p>
+I use TQDM all the time, for running my scientific experiments and data analysis, and it just works. For long-running tasks, I recommend using <code>tqdm(iterator, smoothing=0, desc='calculating')</code>, which adds a meaningful description to the progress bar, and an accurate runtime estimate.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org53adbd0" class="outline-2">
+<h2 id="org53adbd0"><a href="https://resampy.readthedocs.io/en/latest/">Resampy</a></h2>
+<div class="outline-text-2" id="text-org53adbd0">
+<p>
+Resampy resamples numpy signals. Resample your data with <code>resample(signal, old_samplerate, new_samplerate)</code>. Just like with TQDM, this simple interface hides a lot of complexity and flexibility under the hood, yet remains conceptually simple and easy to use.
+</p>
+
+<p>
+But beyond simplicity, resampy uses a clever implementation that is a far cry better than <code>scipy.signal.resample</code>, while still being easy to install and fast. For a more thorough comparison of resampling algorithms, visit <a href="https://signalsprocessed.blogspot.com/2016/08/audio-resampling-in-python.html">Joachim Thiemann's blog</a>.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>]]></description>
+  <category>python</category>
+  <link>https://bastibe.de/2018-11-08-cool-python-libraries.html</link>
+  <pubDate>Thu, 08 Nov 2018 14:52:00 +0100</pubDate>
+</item>
 <item>
   <title>Dealing with Unreliable Software</title>
   <description><![CDATA[
