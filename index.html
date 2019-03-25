@@ -29,6 +29,43 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">25 Mar 2019</div><h1 class="post-title"><a href="2019-03-25-on-camera-sensor-sizes.html">On camera sensor sizes</a></h1>
+<p>
+A common internet wisdom about photography is that bigger camera sensors capture more light. So if you want to work in low light, you need a full frame camera, and a bigger sensor is always better. I have struggled with this a lot, though, because it doesn't make sense. Lenses can focus light on any surface, so <i>why should the surface size matter</i>?
+</p>
+
+<p>
+The answer turned out to be&#x2026; disappointing. Bigger sensors allow for larger (practical) apertures, and lower base ISO. But less noise for the same picture, is simply impossible with the same sensor technology. Because that's not how physics works. Let me explain.
+</p>
+
+<p>
+Let's talk about three sensor sizes, full frame (FF), APS-C, and micro four thirds (MFT). For the sake of discussion, let's assume that these sensor sizes are always a factor of \(\sqrt{2}\) of each other, which is close enough to the truth. So FF is twice the area of APS-C, which is twice the area of MFT. Let's also assume that our hypothetical cameras at these sizes use sensors with the same resolution, and using the same technology. With that out of the way, what does it mean to use a smaller sensor?
+</p>
+
+<p>
+If you shrink the sensor area by a factor of two, every pixels gets equally smaller, and receives less light (on the same lens). To fix this, and account for the different field of view due to cropping, we zoom out, dividing the focal length by \(\sqrt{2}\). So now a FF 35mm f4 lens will get the same field of view and brightness as an APS-C 23mm f4 lens, or a 17mm MFT f4 lens, all at the same ISO number. The only difference being, that due to the smaller sensor, MFT will be twice as noisy as APS-C, which is twice as noisy as FF. This seems like a clear win for FF, right?
+</p>
+
+<p>
+As an aside, isn't it cool that we actually get the same brightness, as long as ISO and f-numbers are kept the same? That's what they are designed to say: Equal ISO and f-number means equal brightness! (But not equal noise, or, as we will see, equal depth of field).
+</p>
+
+<p>
+Because here's the catch: Even though the f-number is the same, the physical size of the aperture is bigger on the bigger sensor! This makes sense, because to get the same brightess on a bigger sensor area, you need more light. And to get more light, you need a bigger aperture. This also means that the depth of field on the FF sensor is twice as big as on the APS-C sensor, which is twice as big as the MFT sensor.
+</p>
+
+<p>
+So let's account for that, too, and give each camera a lens with the same physical aperture size as well as field of view, and stop down ISO to account for the increase in brightness: FF 35mm f4 ISO 1600 then becomes APS-C 23mm f2.8 ISO 800 and MFT 17mm f2 ISO 400. These combinations now actually have the same field of view, same brightness, same depth of field, and, you guessed it, same noise. If you account for field of view, there is no advantage to FF whatsoever. You can get the very same picture on a big sensor as on a small sensor, the only difference being how much you are willing to carry and pay for it.
+</p>
+
+<p>
+OK, that's not quite true: You can get FF lenses at f1 (equivalent to f0.7 on APS-C or f0.5 on MFT), which are just not available on smaller sensors. But have you used such lenses? At this point, the area in focus is literally razor-thin, and focusing becomes terrifyingly difficult. You might also notice that wider-aperture lenses are generally bigger. They have to be, to capture more light. By the same token, an f1.4 APS-C lens will be the same size as an f2 FF lens (because it is in fact mostly identical). And FF offers smaller base ISOs. If you need the minimum amount of noise, ISO 100 on FF would be equivalent to ISO 25 on MFT, which you just can't get, there.
+</p>
+
+<p>
+TL;DR: Bigger sensors afford bigger apertures, with all their associated downsides. But they do not magically reduce image noise (everything else being equal). Also, cameras are surprisingly complex beasts.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> </div>
 <div class="post-date">13 Mar 2019</div><h1 class="post-title"><a href="2019-03-13-learning-about-photography-sunstars.html">Learning about Photography: Sunstars</a></h1>
 <p>
 Normally, when you take a picture of something too bright, you get <i>bloom</i>: An all-consuming brightness that plunges everything around it into pure whiteness. Ugly.
@@ -300,57 +337,7 @@ But beyond simplicity, resampy uses a clever implementation that is a far cry be
 </p>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div>
-<div class="post-date">26 Oct 2018</div><h1 class="post-title"><a href="2018-10-26-dealing-with-unreliable-software.html">Dealing with Unreliable Software</a></h1>
-<p>
-About a year ago, I started working on a big comparison study between a bunch of scientific algorithms. Many of these have open-source software available, and I wanted to evaluate them with a large variety of input signals. The problem is, this is <a href="https://bastibe.de/2017-05-14-scientific-code.html">scientific code</a>, i.e. the worst code imaginable.
-</p>
-
-<p>
-Things this code has done to my computer:
-</p>
-<ul class="org-ul">
-<li>it crashed, throwing an error, and shutting down nicely</li>
-<li>it crashed with a segfault, taking the owning process with it</li>
-<li>it crashed, leaving temporary files lying around</li>
-<li>it crashed, leaving zombie processes lying around</li>
-<li>it spin-locked, and never returned</li>
-<li>it spin-locked, and forked uncontrollably until all process decriptors were exhausted</li>
-<li>it spin-locked, and ate memory uncontrollably until all memory was consumed</li>
-<li>it crashed other, unrelated programs (no idea how it managed that)</li>
-<li>it corrupted the root file system (no idea how it managed that)</li>
-</ul>
-
-<p>
-Note that the code did not do any of this intentionally. It was merely code written by non-expert programmers, the problems often a side effect of performance optimizations. The code mostly works fine if called only once or twice. My problems only become apparent if I ran it, say, a few hundred thousand times, with dozens of processes in parallel.
-</p>
-
-<p>
-So, how do you deal with this? Multi-threading is not an option, since a segfault would kill the whole program. So it has to be multi-processing. But all the multi-processing frameworks I know will lose all progress if one of the more sinister scenarios from the above list hard-crashed one or more of its processes. I needed a more robust solution.
-</p>
-
-<p>
-Basically, the only hope of survival at this point is the kernel. Only the kernel has enough power to rein in rogue processes, and deal with hard crashes. So in my <a href="https://github.com/bastibe/runforrest">purpose-built multi-processing framework</a>, every task runs in its own process, with inputs and outputs written to unique files. And crucially, if any task does not finish within a set amount of time, it and all of its children are killed.
-</p>
-
-<p>
-It took me quite a while to figure out how to do this, so here's the deal:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">start your process with a new process group:</span>
-<span style="color: #111111;">process</span> = Popen(..., start_new_session=<span style="color: #111111;">True</span>)
-
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">after a timeout, kill the whole process group:</span>
-<span style="color: #111111;">process_group_id</span> = os.getpgid(process.pid)
-os.killpg(process_group_id, signal.SIGKILL)
-</pre>
-</div>
-
-<p>
-This is the nuclear option. I tried <code>SIGTERM</code> and <code>SIGHUP</code> instead, but programs would happily ignore it. I tried killing or terminating only the <code>process</code>, but that would leave zombie children. Sending <code>SIGKILL</code> to the process group does not take prisoners. The processes do not get a chance to respond or clean up after themselves. But you know what, after months of dealing with this stuff, this is the first time that my experiments actually run reliably for a few days without crashing or exhausting some resource. If that's what it takes, so be it.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> </div><div id="archive">
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>
