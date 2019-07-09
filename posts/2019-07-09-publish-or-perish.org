@@ -1,0 +1,29 @@
+#+title: Publish or Perish
+#+date: <2019-07-09 13:48>
+#+filetags: science
+
+As part of my PhD, I am supposed to publish three papers. So far, I have been unable to do so. But this is not about me, I will survive regardless. This is about the /systems/ behind our papers' rejections. Because they are... /bad/. /Political/. /Un-scientific/.
+
+Our first manuscript was submitted for publications, and got a middling review. If we wanted our work to be published, we were to expand on our introduction to mention the reviewers' favorite publications, and broaden our comparison to include their work. This is considered normal. In the second round of reviews we then got rejected, because our introduction was now too long, and our comparison too broad.
+
+The reviews additionally claimed that "novelty cannot be claimed for something that is not validated and compared to state of the art" and that "[our work lacks] formal statistical evaluation of the estimation performance". Which is certainly true, but is also true of every other work published on the same topic in the last five years (I checked). We showed this evidence to the reviewers, but it was not even deemed worthy of a comment.
+
+In hindsight however, we realized that we had included at least one reviewer's own algorithms in our comparison, and found it lacking. Their work had only ever been tested, publicly, with a single example recording, where it worked well. Our comparison did the same with twenty thousand recordings, which highlighted some issues. So our paper was rejected. Of course we can't be sure that this was ultimately true, as the reviewers' names are not disclosed to the reviewees (but certainly vice-versa).
+
+Our next submission was to a different journal. This time, we had learned from our mistakes, and kept the scope of our investigation more minimal. There would be only a very small comparison, and we would be very careful not to step on anyone else's toes. The review was, again, negative.
+
+This time, the grounds for rejection were lack of comparison to state of the art (not a winning move, see above), and our too high false negative rate. Additionally, it contained wonderful verbiage like:
+
+#+begin_quote
+The are many methods that are very similar to the presented method in the sense of being feature extraction methods operating in the STFT domain.
+#+end_quote
+
+...which is just patently ridiculous. If being a "feature extraction method in the STFT domain" was grounds for rejection, there would be /no/ publications in our area of research. And let's ignore for a minute that our publication was not, in fact, such a method.
+
+Again, hindsight showed the real culprit: Our manuscript reported a high false negative rate of roughly 50%. Had we just /not mentioned this/, no one would have noticed. That is what everyone else is doing. More importantly however, reporting on false positive/negative rates in our evaluation called into question every other publication that hadn't. And we can't have that.
+
+Another submission was liked because no one had done anything similar before, and was found to provide value to many researchers, but rejected because it still somehow "lacked novelty".
+
+So, in summary, our first submission was rejected because it made one of the reviewers look bad, and the second because we not only wanted to report on our method's advantages, but also its shortcomings. Worse, in following the evidence where it lead, we had created new error measures that could potentially find flaws in existing publications, which could potentially make a whole lot of researchers look bad.
+
+After five years of dealing with this, I am thoroughly disheartened. Instead of a system for disseminating knowledge, I have found the scientific publishing system a political outlet for the famous, and a lever for keeping uncomfortable knowledge suppressed. This is not the scientific world I want to live in, and apparently, it doesn't want me to live in it, either.
