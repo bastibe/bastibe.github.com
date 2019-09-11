@@ -29,6 +29,46 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "science":</h1>
+<div class="post-date">11 Sep 2019</div><h1 class="post-title"><a href="2019-09-11-how-we-perceive-speech.html">How we perceive Speech</a></h1>
+<p>
+Now that I am officially a <a href="https://bastibe.de/2019-07-09-publish-or-perish.html">failed scientist</a>, I might as well talk about my research in public. I spent the last few years analyzing speech recordings. Particularly, <i>voiced speech</i>, where vibrations in the vocal folds excite resonances in the vocal tract, and a tonal sound leaves our mouths and noses.
+</p>
+
+<p>
+As humans, we are particularly tuned to recognizing these kinds of sounds. Even in loud background noise, even with dozens of people talking at the same time, we can clearly identify the sound of a human voice (even if we might not be able to understand the words).
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/spectrogram.png" alt="spectrogram.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>A spectrogram of speech (it's me, saying: "Es war einmal ein Mann")</figcaption>
+</figure>
+
+<p>
+Looking at these sounds from a physical point of view, we can see that it is made up of a fundamental frequency at the voice's pitch, and harmonics at integer multiples of the fundamental. And even though the sound is clearly composed of multiple harmonics, we perceive it as a single sound with a single pitch. Even more perplexing, we attribute all of these harmonics to a single voice, even if they criss-cross with tonal sounds from different sources.
+</p>
+
+<p>
+Yet, speech recognition systems regularly struggle with such tasks, unless we feed them unholy amounts of data and processing power. In other words, there has to be more to speech than the simple figure above indicates.
+</p>
+
+<p>
+One area is definitely time resolution. Obviously, when the vocal folds open to admit a puff of air into the vocal tract, phases align, and loudness is higher than when the vocal folds have closed again and phases go out of sync. This happens several hundreds of times per second, at the frequency of the fundamental. Yet, this phase coherence is invisible in most of our visualizations, such as the spectrogram above, or the MFCCs usually used in speech recognition, as they are too coarse for such short-time detail.
+</p>
+
+<p>
+An even more interesting detail emerges from fMRI scans of people who are speaking, and people who are listening to speech: their activation patterns are strikingly similar. As in, motor groups are activating when listening, just as if actual speech muscles were moved. To me, this indicates that when we listen to speech, we <i>simulate speaking</i>. And I find it highly likely that we understand speech mostly in terms of the movements we would have to make to imitate it. In other words, we do not internalize speech as an <i>audio</i> signal, but as <i>muscle movements</i>.
+</p>
+
+<p>
+This matches another observation from a different area: When learning a foreign language, we can not hear what we can not produce. If you didn't learn how to speak an Ö and Ü (two German umlauts) as a child, you will have a hard time hearing the difference as an adult. Yet they sound completely distinct to me. In a production model, this makes a lot of sense, as we wouldn't know how to simulate a sound we can not produce.
+</p>
+
+<p>
+Bringing this back to the science of signal processing, I believe that most speech analysis algorithms are currently lacking a production model of speech. Speech can not be fully understood as an audio signal. It needs to be understood in terms of the variables and limitations of a human vocal tract. I believe that if we integrated such a physiological production model into our machine learning models, we wouldn't need to feed them such vast amounts of data and electricity, and might even get by without them.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> <a href="tag-science.html">science</a> </div>
 <div class="post-date">09 Jul 2019</div><h1 class="post-title"><a href="2019-07-09-publish-or-perish.html">Publish or Perish</a></h1>
 <p>
 As part of my PhD, I am supposed to publish three papers. So far, I have been unable to do so. But this is not about me, I will survive regardless. This is about the <i>systems</i> behind our papers' rejections. Because they are&#x2026; <i>bad</i>. <i>Political</i>. <i>Un-scientific</i>.
