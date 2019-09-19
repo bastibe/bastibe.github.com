@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Periodicity and Harmonicity</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">19 Sep 2019</div><h1 class="post-title"><a href="2019-09-19-periodicity-and-harmonicity.html">Periodicity and Harmonicity</a></h1>
+<p>
+A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum.
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/comb.png" alt="comb.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>A click train (left), and its corresponding comb spectrum (right).</figcaption>
+</figure>
+
+<p>
+But why? After all, a solitary click has a uniform spectrum. So why should the sum of multiple clicks have a non-uniform spectrum?
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/click.png" alt="click.png">
+
+<figcaption><span class="figure-number">Figure 2: </span>A click (left), and its corresponding spectrum (right).</figcaption>
+</figure>
+
+<p>
+The answer exposes a lot of detail of how spectra work, and give us a glimpse into the inner workings of spectral phases. Let's start with that click: In that spectrum, we see that we can decompose a click into a sum of sine waves:
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/click_sum.png" alt="click_sum.png">
+
+<figcaption><span class="figure-number">Figure 3: </span>A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.</figcaption>
+</figure>
+
+<p>
+As we have seen in the spectrum of the click earlier, it is composed of all frequencies (uniform spectrum). But we see here that the individual sine waves are delayed <i>just so</i>, that they all add constructively at exactly one time, and form the click. At all other times, they cancel each other out. This per-sine delay is called the phase of the sine.
+</p>
+
+<p>
+But what happens if we have more than one click? How does this change things?
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/train.png" alt="train.png">
+
+<figcaption><span class="figure-number">Figure 4: </span>A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.</figcaption>
+</figure>
+
+<p>
+In a click train, odd frequencies in the Fourier series of the individual clicks cancel each other out (red/blue), and only harmonic frequencies (brown) remain. And this is exactly what our first spectrum showed: A periodic click train results in a harmonic spectrum.
+</p>
+
+<p>
+Even though each click has a uniform spectrum, adding multiple clicks together cancels out all non-harmonic parts, and only a harmonic comb spectrum remains.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> </div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://bastibe.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

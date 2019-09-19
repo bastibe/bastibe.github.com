@@ -29,6 +29,63 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "signal-processing":</h1>
+<div class="post-date">19 Sep 2019</div><h1 class="post-title"><a href="2019-09-19-periodicity-and-harmonicity.html">Periodicity and Harmonicity</a></h1>
+<p>
+A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum.
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/comb.png" alt="comb.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>A click train (left), and its corresponding comb spectrum (right).</figcaption>
+</figure>
+
+<p>
+But why? After all, a solitary click has a uniform spectrum. So why should the sum of multiple clicks have a non-uniform spectrum?
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/click.png" alt="click.png">
+
+<figcaption><span class="figure-number">Figure 2: </span>A click (left), and its corresponding spectrum (right).</figcaption>
+</figure>
+
+<p>
+The answer exposes a lot of detail of how spectra work, and give us a glimpse into the inner workings of spectral phases. Let's start with that click: In that spectrum, we see that we can decompose a click into a sum of sine waves:
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/click_sum.png" alt="click_sum.png">
+
+<figcaption><span class="figure-number">Figure 3: </span>A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.</figcaption>
+</figure>
+
+<p>
+As we have seen in the spectrum of the click earlier, it is composed of all frequencies (uniform spectrum). But we see here that the individual sine waves are delayed <i>just so</i>, that they all add constructively at exactly one time, and form the click. At all other times, they cancel each other out. This per-sine delay is called the phase of the sine.
+</p>
+
+<p>
+But what happens if we have more than one click? How does this change things?
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/train.png" alt="train.png">
+
+<figcaption><span class="figure-number">Figure 4: </span>A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.</figcaption>
+</figure>
+
+<p>
+In a click train, odd frequencies in the Fourier series of the individual clicks cancel each other out (red/blue), and only harmonic frequencies (brown) remain. And this is exactly what our first spectrum showed: A periodic click train results in a harmonic spectrum.
+</p>
+
+<p>
+Even though each click has a uniform spectrum, adding multiple clicks together cancels out all non-harmonic parts, and only a harmonic comb spectrum remains.
+</p>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> </div>
 <div class="post-date">11 Sep 2019</div><h1 class="post-title"><a href="2019-09-11-how-we-perceive-speech.html">How we perceive Speech</a></h1>
 <p>
 Now that I am officially a <a href="https://bastibe.de/2019-07-09-publish-or-perish.html">failed scientist</a>, I might as well talk about my research in public. I spent the last few years analyzing speech recordings. Particularly, <i>voiced speech</i>, where vibrations in the vocal folds excite resonances in the vocal tract, and a tonal sound leaves our mouths and noses.

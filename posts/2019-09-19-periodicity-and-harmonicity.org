@@ -1,0 +1,29 @@
+#+title: Periodicity and Harmonicity
+#+date: <2019-09-19 13:51>
+#+filetags: signal-processing
+
+A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum.
+
+#+caption: A click train (left), and its corresponding comb spectrum (right).
+[[https://bastibe.de/static/2019-09/comb.png]]
+
+But why? After all, a solitary click has a uniform spectrum. So why should the sum of multiple clicks have a non-uniform spectrum?
+
+#+caption: A click (left), and its corresponding spectrum (right).
+[[https://bastibe.de/static/2019-09/click.png]]
+
+The answer exposes a lot of detail of how spectra work, and give us a glimpse into the inner workings of spectral phases. Let's start with that click: In that spectrum, we see that we can decompose a click into a sum of sine waves:
+
+#+caption: A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.
+[[https://bastibe.de/static/2019-09/click_sum.png]]
+
+As we have seen in the spectrum of the click earlier, it is composed of all frequencies (uniform spectrum). But we see here that the individual sine waves are delayed /just so/, that they all add constructively at exactly one time, and form the click. At all other times, they cancel each other out. This per-sine delay is called the phase of the sine.
+
+But what happens if we have more than one click? How does this change things?
+
+#+caption: A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.
+[[https://bastibe.de/static/2019-09/train.png]]
+
+In a click train, odd frequencies in the Fourier series of the individual clicks cancel each other out (red/blue), and only harmonic frequencies (brown) remain. And this is exactly what our first spectrum showed: A periodic click train results in a harmonic spectrum.
+
+Even though each click has a uniform spectrum, adding multiple clicks together cancels out all non-harmonic parts, and only a harmonic comb spectrum remains.
