@@ -2,6 +2,9 @@ from matplotlib import pyplot
 import numpy
 import signals
 import scipy.signal
+import matplotlib
+
+matplotlib.rcParams['font.size'] = 7
 
 fig, (ax1, ax2) = pyplot.subplots(ncols=2, sharex=True, figsize=[4, 2])
 

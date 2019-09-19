@@ -1,7 +1,8 @@
 from matplotlib import pyplot
 import numpy
-import signals
-import scipy.signal
+import matplotlib
+
+matplotlib.rcParams['font.size'] = 7
 
 fig, (ax1, ax2) = pyplot.subplots(ncols=2, sharex=True, figsize=[4, 2])
 
@@ -33,8 +34,9 @@ ax2.set(yticks=numpy.arange(0, 0.45, 0.1), yticklabels=numpy.arange(100, 550, 10
 ax2.set_yticks(numpy.arange(0, 0.45, 0.05), minor=True)
 ax2.yaxis.tick_right()
 ax2.yaxis.set_label_position("right")
+ax2.set(xticks=[0.2, 0.21, 0.22])
 
-ax1.annotate("→", (0.48, 0.5), xycoords='figure fraction',
+ax1.annotate("→", (0.5, 0.5), xycoords='figure fraction',
              horizontalalignment='center', fontsize='xx-large')
 
 fig.tight_layout()
