@@ -29,6 +29,92 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">20 Sep 2019</div><h1 class="post-title"><a href="2019-09-20-analyzing-speech-signals-in-time-and-frequency.html">Analyzing Speech Signals in Time and Frequency</a></h1>
+<p>
+Our first stop in speech analysis is usually the short-time Fourier transform, or STFT<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/stft.png" alt="stft.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>Top: an STFT of speech (it's me, saying: "Es war einmal ein Mann"). Bottom: the signal's waveform.</figcaption>
+</figure>
+
+<p>
+As we can see, this speech signal has a strong fundamental frequency track around 120 Hz, and harmonics at integer multiples of the fundamental frequency. We perceive the frequency of the fundamental as the speech's pitch. The magnitude of the harmonics varies over time, which we perceive as the sounds of different vowels.
+</p>
+
+<p>
+All of this is clearly visible in this STFT. To calculate the STFT, we chop up the audio signal into short, overlapping blocks, apply a <i>window function</i> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> to each of these blocks, and Fourier-transform each windowed block into the frequency domain:
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/block-processing.png" alt="block-processing.png">
+
+<figcaption><span class="figure-number">Figure 2: </span>The STFT is a two-dimensional graph of short-time spectra. Window functions and corresponding spectra of some blocks are highlighted.</figcaption>
+</figure>
+
+<p>
+We zoomed in a bit to make this visible. At this zoom level, an <a href="https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html">old friend</a> becomes visible in the waveform: The waveform of our harmonic spectra is clearly periodic. We also see that each of our blocks contain multiple periods of the speech signal. So what happens if we make our blocks shorter?
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/short-blocks.png" alt="short-blocks.png">
+
+<figcaption><span class="figure-number">Figure 3: </span>STFT with shorter blocks (graph shows a shorter time, too). Each window now covers roughly one period of the signal.</figcaption>
+</figure>
+
+<p>
+As we make our blocks shorter, such that they only contain a single period of the signal, a funny thing happens: the harmonic structure vanishes. Why? Because the harmonic structure is caused by the interference between neighboring clicks; As soon as each block is restricted to a single period, there is no interference any longer, and no harmonic structure.
+</p>
+
+<p>
+But instead of a harmonic structure, we see the periodicity of the waveform emerge in the STFT! To look at this phenomenon in a bit more detail, we will have to leave the classical STFT domain, and look at a close sibling, the Constant Q Transform, or CQT. The CQT is simply an STFT with different block sizes for different frequencies:
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/cqt.png" alt="cqt.png">
+
+<figcaption><span class="figure-number">Figure 4: </span>The CQT uses shorter block sizes for higher frequencies and longer block sizes for lower frequencies.</figcaption>
+</figure>
+
+<p>
+The periodic structure of the signal is now perfectly apparent. Each period of the signal gives rise to a skewed click-like spectrum that repeats at the fundamental frequency. Interestingly, however, the fundamental itself shows no periodicity. To see why this is so, and to finally get a grasp of how the short-time Fourier transforms interprets signals, we have to turn to our last graph, a gamma-tone filterbank:
+</p>
+
+
+<figure>
+<img src="https://bastibe.de/static/2019-09/gammatone.png" alt="gammatone.png">
+
+<figcaption><span class="figure-number">Figure 5: </span>A gamma-tone filterbank is a series of band-pass filters. Each horizontal line is now a frequency-constrained waveform.</figcaption>
+</figure>
+
+<p>
+The fundamental frequency is now clearly a visible as a single sinusoid, rotating its merry way at 120 Hz. Each harmonic is its own sinusoid at an integer multiple of the fundamental frequency, but changing in amplitude in lockstep with the findamental. Thus in this graph, we see both the harmonicity and the periodicity at the same time, and can finally appreciate the complex interplay of magnitudes and phases that give rise to the beautiful and simple sound of the human voice<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+also known as "spectrogram"
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+a Hann window, in this case
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+in the magnitude domain only; Phases, and different window functions, go beyond the scope of this article.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> </div>
 <div class="post-date">19 Sep 2019</div><h1 class="post-title"><a href="2019-09-19-periodicity-and-harmonicity.html">Periodicity and Harmonicity</a></h1>
 <p>
 A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum:
@@ -409,39 +495,6 @@ Autofocus speed. Is good. No need obsessing over it.
 </p>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> </div>
-<div class="post-date">25 Mar 2019</div><h1 class="post-title"><a href="2019-03-25-on-camera-sensor-sizes.html">On camera sensor sizes</a></h1>
-<p>
-A common internet wisdom about photography is that bigger camera sensors capture more light. So if you want to work in low light, you need a full frame camera, and a bigger sensor always produces better image quality. I have struggled with this a lot. It just doesn't make sense: Lenses can focus light on any surface, so <i>why should the surface size matter</i>?
-</p>
-
-<p>
-The answer turns out to be&#x2026; disappointing. Big-sensor cameras allow for larger (practical) apertures, and lower base ISO. But less noise for the same picture is simply impossible with the same sensor technology. Because that's not how physics works. Let me explain.
-</p>
-
-<p>
-<i>At this point, I had previously launched into a long-winded explanation on <a href="https://photographylife.com/equivalence-also-includes-aperture-and-iso">equivalence</a>, and reached a slightly misguided conclusion. So here's a better one:</i>
-</p>
-
-<p>
-It is possible to build <i>equivalent</i> lenses for differently sized sensors, which capture the same amount of light, with the same depth of field, and the same field of view, but simply project this light on a differently sized sensor. Or you can use a "speed booster", which adapts a "bigger" lens to a "smaller" sensor. Both of these will give you identical images, and identical amounts of noise (if the same sensor technology is used).
-</p>
-
-<p>
-As an example, a micro four thirds 23mm f/1.4 lens produces identical images to an APS-C 35mm f/2 lens or a full frame 50mm f/2.8 lens. You might notice that \(\frac{23}{1.4} = \frac{35}{2} = \frac{50}{2.8}\), which means each of these lenses will have the same physical aperture size, and therefore admit the same amount of light. And be the same size and weight. Since the smaller sensor collects the same light on a smaller area, the image will be brighter, and will need to use a lower ISO for the same exposure. And since lower ISO produces less noise, the "one stop advantage" of bigger sensors is bunk, <i>if equivalent lenses are used</i>.
-</p>
-
-<p>
-The one remaining difference between sensor sizes is that bigger photosites carry more charge, which means more dynamic range at base ISO on a bigger sensor. This is only a factor if you indeed shoot at base ISO.
-</p>
-
-<p>
-<i>But</i>, that's not the interesting part. Camera manufacturers cleverly designed their product lines such that small-sensor cameras are physically smaller, and get smaller lenses, while large-sensor cameras are bigger, with bigger lenses. Thus, if you want to get access to the most fancy glass, you will have to use a bigger, more expensive camera body as well. And inversely, if you want to use the most compact glass, it will only be available on smaller, less expensive camera bodies. And that's not pure marketing, either, as bigger lenses require bigger bodies to hold them comfortably, while smaller lenses balance better on a smaller body.
-</p>
-
-<p>
-So in the end, it comes down to a compromize: If you want/need the best glass, it will only be available on the bigger bodies with the bigger sensors. If, on the other hand, you want to go small and light, you will need to sacrifice big apertures, but get access to smaller bodies with smaller sensors. But it's really all about the glass, not the sensor sizes.
-</p>
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>

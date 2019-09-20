@@ -1,0 +1,38 @@
+#+title: Analyzing Speech Signals in Time and Frequency
+#+date: <2019-09-20 09:40>
+#+filetags: signal-processing
+
+Our first stop in speech analysis is usually the short-time Fourier transform, or STFT[fn:1]:
+
+#+caption: Top: an STFT of speech (it's me, saying: "Es war einmal ein Mann"). Bottom: the signal's waveform.
+[[https://bastibe.de/static/2019-09/stft.png]]
+
+As we can see, this speech signal has a strong fundamental frequency track around 120 Hz, and harmonics at integer multiples of the fundamental frequency. We perceive the frequency of the fundamental as the speech's pitch. The magnitude of the harmonics varies over time, which we perceive as the sounds of different vowels.
+
+All of this is clearly visible in this STFT. To calculate the STFT, we chop up the audio signal into short, overlapping blocks, apply a /window function/ [fn:2] to each of these blocks, and Fourier-transform each windowed block into the frequency domain:
+
+#+caption: The STFT is a two-dimensional graph of short-time spectra. Window functions and corresponding spectra of some blocks are highlighted.
+[[https://bastibe.de/static/2019-09/block-processing.png]]
+
+We zoomed in a bit to make this visible. At this zoom level, an [[https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html][old friend]] becomes visible in the waveform: The waveform of our harmonic spectra is clearly periodic. We also see that each of our blocks contain multiple periods of the speech signal. So what happens if we make our blocks shorter?
+
+#+caption: STFT with shorter blocks (graph shows a shorter time, too). Each window now covers roughly one period of the signal.
+[[https://bastibe.de/static/2019-09/short-blocks.png]]
+
+As we make our blocks shorter, such that they only contain a single period of the signal, a funny thing happens: the harmonic structure vanishes. Why? Because the harmonic structure is caused by the interference between neighboring clicks; As soon as each block is restricted to a single period, there is no interference any longer, and no harmonic structure.
+
+But instead of a harmonic structure, we see the periodicity of the waveform emerge in the STFT! To look at this phenomenon in a bit more detail, we will have to leave the classical STFT domain, and look at a close sibling, the Constant Q Transform, or CQT. The CQT is simply an STFT with different block sizes for different frequencies:
+
+#+caption: The CQT uses shorter block sizes for higher frequencies and longer block sizes for lower frequencies.
+[[https://bastibe.de/static/2019-09/cqt.png]]
+
+The periodic structure of the signal is now perfectly apparent. Each period of the signal gives rise to a skewed click-like spectrum that repeats at the fundamental frequency. Interestingly, however, the fundamental itself shows no periodicity. To see why this is so, and to finally get a grasp of how the short-time Fourier transforms interprets signals, we have to turn to our last graph, a gamma-tone filterbank:
+
+#+caption: A gamma-tone filterbank is a series of band-pass filters. Each horizontal line is now a frequency-constrained waveform.
+[[https://bastibe.de/static/2019-09/gammatone.png]]
+
+The fundamental frequency is now clearly a visible as a single sinusoid, rotating its merry way at 120 Hz. Each harmonic is its own sinusoid at an integer multiple of the fundamental frequency, but changing in amplitude in lockstep with the findamental. Thus in this graph, we see both the harmonicity and the periodicity at the same time, and can finally appreciate the complex interplay of magnitudes and phases that give rise to the beautiful and simple sound of the human voice[fn:3].
+
+[fn:1] also known as "spectrogram"
+[fn:2] a Hann window, in this case
+[fn:3] in the magnitude domain only; Phases, and different window functions, go beyond the scope of this article.
