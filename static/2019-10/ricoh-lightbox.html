@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Travel Photographs with the Ricoh GR</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<style>
+  body {
+      background-color: black;
+  }
+  div#lightbox {
+      display: flex;
+      flex-direction: row;
+      overflow-x: hidden;
+      height: 100vh;
+      padding-left: 30px;
+      padding-right: 30px;
+  }
+  div.page {
+      position: relative;
+      flex: 0 0 auto;
+      width: calc(100vw - 120px);
+      height: 100vh;
+  }
+  div#lightbox img {
+      max-height: calc(100% - 2em);
+      max-width: calc(100% - 20px);
+      position: relative;
+      top: calc(50% - 2em);
+      transform: translateY(-50%) translateX(-50%);
+      left: 50%;
+  }
+  div#lightbox p {
+      position: absolute;
+      color: darkgrey;
+      text-align: center;
+      width: 100%;
+      bottom: 0;
+  }
+</style>
+<script>
+  document.onkeydown = function navigate(key) {
+      key = key || window.event;
+      if (key.key === "ArrowRight") {
+          scroll(1);
+      } else if (key.key === "ArrowLeft") {
+          scroll(-1);
+      }
+  }
+  function scroll(rightOrLeft) {
+      lightbox = document.getElementById('lightbox');
+      scrollWidth = document.getElementsByClassName('page')[0].clientWidth;
+      lightbox.scrollLeft += scrollWidth * rightOrLeft;
+  }
+  window.addEventListener('load', function() {
+      document.getElementById('lightbox').onclick = function click(event) {
+          scrollWidth = document.getElementsByClassName('page')[0].clientWidth;
+          if (event.buttons == 0) {
+              if (event.clientX > scrollWidth / 2) {
+                  scroll(1);
+              } else {
+                  scroll(-1);
+              }
+          }
+      }
+  })
+</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+  <div id="lightbox">
+    <div class="page">
+      <img src="GR030371_4.jpg">
+      <p>Landing in Amsterdam, looking westwards.</p>
+    </div>
+    <div class="page">
+      <img src="GR030471_4.jpg">
+      <p>The GR is small enough to carry while biking.</p>
+    </div>
+    <div class="page">
+      <img src="GR030994_4.jpg">
+      <p>Low light is no problem, either.</p>
+    </div>
+    <div class="page">
+      <img src="GR031668_4.jpg">
+      <p>Would you take your expensive DSLR on a little paddle boat?</p>
+    </div>
+    <div class="page">
+      <img src="GR031686_4.jpg">
+      <p>Camera in the center console. So useful.</p>
+    </div>
+    <div class="page">
+      <img src="GR031800_4.jpg">
+      <p>I don't know what it is about these colors, but I love this look!</p>
+    </div>
+    <div class="page">
+      <img src="GR031827_4.jpg">
+      <p>Inside the diner is beautiful as well.</p>
+    </div>
+    <div class="page">
+      <img src="GR031878_4.jpg">
+      <p>A serene landscape.<p>
+    </div>
+    <div class="page">
+      <img src="GR031947_4.jpg">
+      <p>It seems kind of a retro look, but the colors are just wonderful to me.</p>
+    </div>
+    <div class="page">
+      <img src="GR032078_4.jpg">
+      <p>Having a camera in the car is great fun!</p>
+    </div>
+    <div class="page">
+      <img src="GR032376_4.jpg">
+      <p>I have searched for this picture for a long time.</p>
+    </div>
+    <div class="page">
+      <img src="GR032380_4.jpg">
+      <p>Who knew grass could be beautiful?</p>
+    </div>
+    <div class="page">
+      <img src="GR032420_4.jpg">
+      <p>Or trees?</p>
+    </div>
+    <div class="page">
+      <img src="GR032551_4.jpg">
+      <p>Or the little things.</p>
+    </div>
+    <div class="page">
+      <img src="GR032806_4.jpg">
+      <p>I was surprised that stabilization is not as important as I'd thought.</p>
+    </div>
+    <div class="page">
+      <img src="GR032887_4.jpg">
+      <p>Classic New York City.</p>
+    </div>
+    <div class="page">
+      <img src="GR033056_4.jpg">
+      <p>There sometimes is a luminance to the GR's colors that is magical.</p>
+    </div>
+    <div class="page">
+      <img src="GR033178_4.jpg">
+      <p>Taking pictures without anyone noticing.</p>
+    </div>
+    <div class="page">
+      <img src="GR033179_4.jpg">
+      <p>Light and Dark.</p>
+    </div>
+    <div class="page">
+      <img src="GR033248_4.jpg">
+      <p>Landfall back in the Netherlands.</p>
+    </div>
+    <div class="page">
+      <img src="GR033263_4.jpg">
+      <p>And back in Germany.</p>
+    </div>
+  </div>
+</body>
+</html>
