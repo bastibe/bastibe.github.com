@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Editing Fuji Photos on Linux</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">09 Feb 2020</div><h1 class="post-title"><a href="2020-02-09-editing-fuji-photos-on-linux.html">Editing Fuji Photos on Linux</a></h1>
+<p>
+Darktable is my favorite RAW editor. It's a program for developing digital negatives ("RAW files") to JPEGs. But, I've long struggled with matching the quality of the out-of-camera JPEGs of my Fuji camera. Let me explain.
+</p>
+
+<p>
+Today's cameras capture an astounding amount of detail, far more than monitors can display or printers can print. And then they crush it down to a printable and viewable JPEG file. But that crushing operation is idiomatic for each camera, irreversible, and not always appropriate to the image. And at those inappropriate times, when you want a wider dynamic range or different colors, a RAW editor like Darktable can take a digital sensor dump ("RAW file"), and render it differently. The challenge is that the camera's own JPEGs are already very, very good, and it's a fine line to walk between fixing a particular flaw with the image, while retaining as much detail as possible.
+</p>
+
+<p>
+Fuji cameras produce notoriously difficult RAW files, as their internal processing is (said to be) particularly elaborate, and they use an <a href="https://en.wikipedia.org/wiki/Fujifilm_X-Trans_sensor">unusual image sensor</a>. This post is about matching the quality of Fuji's JPEGs in Darktable, while maintaining the fidelity and malleability of the RAW files.
+</p>
+
+<p>
+Here are a few renditions of a photograph I took, the first created with my revised process, the second is Fuji's JPEG, and the third is Darktable's default rendition. First the entire picture, the a zoomed view so you can see each pixel:
+</p>
+
+<br>
+<a href="/static/2020-02/darktable-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <img src="/static/2020-02/mine_full.thumb.jpg">
+    <img src="/static/2020-02/fuji_full.thumb.jpg">
+    <img src="/static/2020-02/dt_full.thumb.jpg">
+    <img src="/static/2020-02/mine_100.thumb.jpg">
+    <img src="/static/2020-02/fuji_100.thumb.jpg">
+    <img src="/static/2020-02/dt_100.thumb.jpg">
+  </div>
+</a>
+<br>
+
+<p>
+While contrast and saturation don't match 100% in my version and Fuji's, the colors are close enough for further processing. Darktable's default version does not match those colors at all. The zoomed-in version highlights even worse problems with sharpness and detail retention. After working with Fuji files in Darktable for about a year, and editing about 3500 Fuji files, I finally found a workflow that reliably produces results on par with Fuji's JPEGs:
+</p>
+
+<ol class="org-ol">
+<li>Use the <a href="https://www.iridientdigital.com/products/xtransformer.html">Iridient X-Transformer</a> to convert Fuji's RAF RAW-files to DNG RAW-files, and have the X-Transformer do the "More Detailed" demosaicing, and the full lens correction.</li>
+<li>Use <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's LUTs</a> instead of Darktable's Base Curve or Filmic RGB.</li>
+</ol>
+
+<p>
+My first gripe with Darktable's rendering of Fuji files is that the demosaicing and lens corrections are not particularly great. Pictures simply come out softer than with other tools, and chromatic aberrations remain an issue. The Iridient X-Transformer completely fixes this issue for me. The X-Transformer can also do sharpening and denoising, but I find those are better relegated to Darktable where needed. "But&#x2026; that's proprietary Windows software!!!". Yes, it is. And it works beautifully in Wine.
+</p>
+
+<p>
+My second issue is colors. Darktable needs a lot of massaging to produce Fuji-like colors. The Base Curve module (shown above) really does not do Fuji files justice most of the time. And while Filmic RGB is much better, it requires a lot of tedious adjustments even in simple cases. So instead, I use LUTs extracted with a color chart and some fancy math to replicate Fuji's colors. At the moment (v3.0), Darktable understands only .cube and .png LUTs. But Stuart Sowerby's website has them in .3dl. So for now, you need to install a <a href="https://grossgrade.com/en/2019/08/14/batch-3d-lut-converter/">3D LUT converter</a>, and convert them to .cube manually. On Windows.
+</p>
+
+<p>
+With these two steps you can develop your Fuji RAFs better than your camera, and with relatively little fuss. I'll leave you with a finished render of the image above:
+</p>
+
+
+<figure>
+<img src="file:///static/2020-02/mine.jpg" alt="mine.jpg">
+
+</figure>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> <a href="tag-linux.html">linux</a> </div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://bastibe.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

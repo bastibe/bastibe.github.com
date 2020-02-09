@@ -29,6 +29,63 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">09 Feb 2020</div><h1 class="post-title"><a href="2020-02-09-editing-fuji-photos-on-linux.html">Editing Fuji Photos on Linux</a></h1>
+<p>
+Darktable is my favorite RAW editor. It's a program for developing digital negatives ("RAW files") to JPEGs. But, I've long struggled with matching the quality of the out-of-camera JPEGs of my Fuji camera. Let me explain.
+</p>
+
+<p>
+Today's cameras capture an astounding amount of detail, far more than monitors can display or printers can print. And then they crush it down to a printable and viewable JPEG file. But that crushing operation is idiomatic for each camera, irreversible, and not always appropriate to the image. And at those inappropriate times, when you want a wider dynamic range or different colors, a RAW editor like Darktable can take a digital sensor dump ("RAW file"), and render it differently. The challenge is that the camera's own JPEGs are already very, very good, and it's a fine line to walk between fixing a particular flaw with the image, while retaining as much detail as possible.
+</p>
+
+<p>
+Fuji cameras produce notoriously difficult RAW files, as their internal processing is (said to be) particularly elaborate, and they use an <a href="https://en.wikipedia.org/wiki/Fujifilm_X-Trans_sensor">unusual image sensor</a>. This post is about matching the quality of Fuji's JPEGs in Darktable, while maintaining the fidelity and malleability of the RAW files.
+</p>
+
+<p>
+Here are a few renditions of a photograph I took, the first created with my revised process, the second is Fuji's JPEG, and the third is Darktable's default rendition. First the entire picture, the a zoomed view so you can see each pixel:
+</p>
+
+<br>
+<a href="/static/2020-02/darktable-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <img src="/static/2020-02/mine_full.thumb.jpg">
+    <img src="/static/2020-02/fuji_full.thumb.jpg">
+    <img src="/static/2020-02/dt_full.thumb.jpg">
+    <img src="/static/2020-02/mine_100.thumb.jpg">
+    <img src="/static/2020-02/fuji_100.thumb.jpg">
+    <img src="/static/2020-02/dt_100.thumb.jpg">
+  </div>
+</a>
+<br>
+
+<p>
+While contrast and saturation don't match 100% in my version and Fuji's, the colors are close enough for further processing. Darktable's default version does not match those colors at all. The zoomed-in version highlights even worse problems with sharpness and detail retention. After working with Fuji files in Darktable for about a year, and editing about 3500 Fuji files, I finally found a workflow that reliably produces results on par with Fuji's JPEGs:
+</p>
+
+<ol class="org-ol">
+<li>Use the <a href="https://www.iridientdigital.com/products/xtransformer.html">Iridient X-Transformer</a> to convert Fuji's RAF RAW-files to DNG RAW-files, and have the X-Transformer do the "More Detailed" demosaicing, and the full lens correction.</li>
+<li>Use <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's LUTs</a> instead of Darktable's Base Curve or Filmic RGB.</li>
+</ol>
+
+<p>
+My first gripe with Darktable's rendering of Fuji files is that the demosaicing and lens corrections are not particularly great. Pictures simply come out softer than with other tools, and chromatic aberrations remain an issue. The Iridient X-Transformer completely fixes this issue for me. The X-Transformer can also do sharpening and denoising, but I find those are better relegated to Darktable where needed. "But&#x2026; that's proprietary Windows software!!!". Yes, it is. And it works beautifully in Wine.
+</p>
+
+<p>
+My second issue is colors. Darktable needs a lot of massaging to produce Fuji-like colors. The Base Curve module (shown above) really does not do Fuji files justice most of the time. And while Filmic RGB is much better, it requires a lot of tedious adjustments even in simple cases. So instead, I use LUTs extracted with a color chart and some fancy math to replicate Fuji's colors. At the moment (v3.0), Darktable understands only .cube and .png LUTs. But Stuart Sowerby's website has them in .3dl. So for now, you need to install a <a href="https://grossgrade.com/en/2019/08/14/batch-3d-lut-converter/">3D LUT converter</a>, and convert them to .cube manually. On Windows.
+</p>
+
+<p>
+With these two steps you can develop your Fuji RAFs better than your camera, and with relatively little fuss. I'll leave you with a finished render of the image above:
+</p>
+
+
+<figure>
+<img src="file:///static/2020-02/mine.jpg" alt="mine.jpg">
+
+</figure>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> <a href="tag-linux.html">linux</a> </div>
 <div class="post-date">21 Jan 2020</div><h1 class="post-title"><a href="2020-01-21-i-miss-my-mac.html">I Miss My Mac</a></h1>
 <p>
 There was a time, maybe from 2009 to 2011, when Apple computers were glorious. They were elegant devices, beautiful to me, and powerful. Never before, or since, have I loved a machine as I loved that MacBook Pro early 2011.
@@ -74,7 +131,7 @@ As I said, I miss my Mac, back when technology was magical, and just worked. And
 I should go play with my child now, and run around in the yard, or maybe read a paper book. There's no joy in technology any more.
 </p>
 <div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">29 Dec 2019</div><h1 class="post-title"><a href="2019-12-29-efficiency-is-not-intuitive.html">Efficiency is not Intuitive</a></h1>
+<div class="post-date">29 Dez 2019</div><h1 class="post-title"><a href="2019-12-29-efficiency-is-not-intuitive.html">Efficiency is not Intuitive</a></h1>
 <p>
 A few days ago, a <a href="https://www.darktable.org/2019/12/darktable-30/">new version of Darktable</a> was released. Darktable is an Open Source RAW image processor, and one of my favorite pieces of software of all time. It may be THE most powerful RAW processor on the market, far exceeding its proprietary brothers. But in the social media discussions following the release, it got dismissed for being <i>unintuitive</i>.
 </p>
@@ -377,104 +434,7 @@ in the magnitude domain only; Phases, and different window functions, go beyond 
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> </div>
-<div class="post-date">19 Sep 2019</div><h1 class="post-title"><a href="2019-09-19-periodicity-and-harmonicity.html">Periodicity and Harmonicity</a></h1>
-<p>
-A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum:
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-09/comb.png" alt="comb.png">
-
-<figcaption><span class="figure-number">Figure 1: </span>A click train (left), and its corresponding comb spectrum (right).</figcaption>
-</figure>
-
-<p>
-But why? After all, a solitary click has a uniform spectrum. So why should the sum of multiple clicks have a non-uniform spectrum?
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-09/click.png" alt="click.png">
-
-<figcaption><span class="figure-number">Figure 2: </span>A click (left), and its corresponding spectrum (right).</figcaption>
-</figure>
-
-<p>
-The answer exposes a lot of detail of how spectra work, and gives us a glimpse into the inner workings of spectral phases. Let's start with that click: In that spectrum, we see that we can decompose a click into a sum of sine waves:
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-09/click_sum.png" alt="click_sum.png">
-
-<figcaption><span class="figure-number">Figure 3: </span>A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.</figcaption>
-</figure>
-
-<p>
-As we have seen in the spectrum of the click earlier, it is composed of all frequencies (uniform spectrum). But we see here that the individual sine waves are delayed <i>just so</i>, that they all add constructively at exactly one time, and form the click. At all other times, they cancel each other out. This per-sine delay is called the phase of that frequency.
-</p>
-
-<p>
-But what happens if we have more than one click? How does that change things?
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-09/click_train.png" alt="click_train.png">
-
-<figcaption><span class="figure-number">Figure 4: </span>A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.</figcaption>
-</figure>
-
-<p>
-In a click train, odd frequencies in the Fourier series of the individual clicks cancel each other out (red/blue), and only harmonic frequencies (brown) remain. And this is exactly what our first spectrum showed: A periodic click train results in a harmonic spectrum.
-</p>
-
-<p>
-Even though each click has a uniform spectrum, adding multiple clicks together cancels out all non-harmonic parts, and only a harmonic comb spectrum remains.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> </div>
-<div class="post-date">11 Sep 2019</div><h1 class="post-title"><a href="2019-09-11-how-we-perceive-speech.html">How we perceive Speech</a></h1>
-<p>
-Now that I am officially a <a href="https://bastibe.de/2019-07-09-publish-or-perish.html">failed scientist</a>, I might as well talk about my research in public. I spent the last few years analyzing speech recordings. Particularly, <i>voiced speech</i>, where vibrations in the vocal folds excite resonances in the vocal tract, and a tonal sound leaves our mouths and noses.
-</p>
-
-<p>
-As humans, we are particularly tuned to recognizing these kinds of sounds. Even in loud background noise, even with dozens of people talking at the same time, we can clearly identify the sound of a human voice (even if we might not be able to understand the words).
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-09/spectrogram.png" alt="spectrogram.png">
-
-<figcaption><span class="figure-number">Figure 1: </span>A spectrogram of speech (it's me, saying: "Es war einmal ein Mann")</figcaption>
-</figure>
-
-<p>
-Looking at these sounds from a physical point of view, we can see that it is made up of a fundamental frequency at the voice's pitch, and harmonics at integer multiples of the fundamental. And even though the sound is clearly composed of multiple harmonics, we perceive it as a single sound with a single pitch. Even more perplexing, we attribute all of these harmonics to a single voice, even if they criss-cross with tonal sounds from different sources.
-</p>
-
-<p>
-Yet, speech recognition systems regularly struggle with such tasks, unless we feed them unholy amounts of data and processing power. In other words, there has to be more to speech than the simple figure above indicates.
-</p>
-
-<p>
-One area is definitely time resolution. Obviously, when the vocal folds open to admit a puff of air into the vocal tract, phases align, and loudness is higher than when the vocal folds have closed again and phases go out of sync. This happens several hundreds of times per second, at the frequency of the fundamental. Yet, this phase coherence is invisible in most of our visualizations, such as the spectrogram above, or the MFCCs usually used in speech recognition, as they are too coarse for such short-time detail.
-</p>
-
-<p>
-An even more interesting detail emerges from fMRI scans of people who are speaking, and people who are listening to speech: their activation patterns are strikingly similar. As in, motor groups are activating when listening, just as if actual speech muscles were moved. To me, this indicates that when we listen to speech, we <i>simulate speaking</i>. And I find it highly likely that we understand speech mostly in terms of the movements we would have to make to imitate it. In other words, we do not internalize speech as an <i>audio</i> signal, but as <i>muscle movements</i>.
-</p>
-
-<p>
-This matches another observation from a different area: When learning a foreign language, we can not hear what we can not produce. If you didn't learn how to speak an Ö and Ü (two German umlauts) as a child, you will have a hard time hearing the difference as an adult. Yet they sound completely distinct to me. In a production model, this makes a lot of sense, as we wouldn't know how to simulate a sound we can not produce.
-</p>
-
-<p>
-Bringing this back to the science of signal processing, I believe that most speech analysis algorithms are currently lacking a production model of speech. Speech can not be fully understood as an audio signal. It needs to be understood in terms of the variables and limitations of a human vocal tract. I believe that if we integrated such a physiological production model into our machine learning models, we wouldn't need to feed them such vast amounts of data and electricity, and might even get by without them.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> <a href="tag-science.html">science</a> </div><div id="archive">
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-signal-processing.html">signal-processing</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

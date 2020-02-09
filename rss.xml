@@ -4,7 +4,71 @@
 <title>Bastibe.de</title>
 <description>Bastibe.de</description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Tue, 21 Jan 2020 16:27:41 +0100</lastBuildDate>
+<lastBuildDate>So, 09 Feb 2020 15:32:35 +0100</lastBuildDate>
+<item>
+  <title>Editing Fuji Photos on Linux</title>
+  <description><![CDATA[
+<p>
+Darktable is my favorite RAW editor. It's a program for developing digital negatives ("RAW files") to JPEGs. But, I've long struggled with matching the quality of the out-of-camera JPEGs of my Fuji camera. Let me explain.
+</p>
+
+<p>
+Today's cameras capture an astounding amount of detail, far more than monitors can display or printers can print. And then they crush it down to a printable and viewable JPEG file. But that crushing operation is idiomatic for each camera, irreversible, and not always appropriate to the image. And at those inappropriate times, when you want a wider dynamic range or different colors, a RAW editor like Darktable can take a digital sensor dump ("RAW file"), and render it differently. The challenge is that the camera's own JPEGs are already very, very good, and it's a fine line to walk between fixing a particular flaw with the image, while retaining as much detail as possible.
+</p>
+
+<p>
+Fuji cameras produce notoriously difficult RAW files, as their internal processing is (said to be) particularly elaborate, and they use an <a href="https://en.wikipedia.org/wiki/Fujifilm_X-Trans_sensor">unusual image sensor</a>. This post is about matching the quality of Fuji's JPEGs in Darktable, while maintaining the fidelity and malleability of the RAW files.
+</p>
+
+<p>
+Here are a few renditions of a photograph I took, the first created with my revised process, the second is Fuji's JPEG, and the third is Darktable's default rendition. First the entire picture, the a zoomed view so you can see each pixel:
+</p>
+
+<br>
+<a href="/static/2020-02/darktable-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <img src="/static/2020-02/mine_full.thumb.jpg">
+    <img src="/static/2020-02/fuji_full.thumb.jpg">
+    <img src="/static/2020-02/dt_full.thumb.jpg">
+    <img src="/static/2020-02/mine_100.thumb.jpg">
+    <img src="/static/2020-02/fuji_100.thumb.jpg">
+    <img src="/static/2020-02/dt_100.thumb.jpg">
+  </div>
+</a>
+<br>
+
+<p>
+While contrast and saturation don't match 100% in my version and Fuji's, the colors are close enough for further processing. Darktable's default version does not match those colors at all. The zoomed-in version highlights even worse problems with sharpness and detail retention. After working with Fuji files in Darktable for about a year, and editing about 3500 Fuji files, I finally found a workflow that reliably produces results on par with Fuji's JPEGs:
+</p>
+
+<ol class="org-ol">
+<li>Use the <a href="https://www.iridientdigital.com/products/xtransformer.html">Iridient X-Transformer</a> to convert Fuji's RAF RAW-files to DNG RAW-files, and have the X-Transformer do the "More Detailed" demosaicing, and the full lens correction.</li>
+<li>Use <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's LUTs</a> instead of Darktable's Base Curve or Filmic RGB.</li>
+</ol>
+
+<p>
+My first gripe with Darktable's rendering of Fuji files is that the demosaicing and lens corrections are not particularly great. Pictures simply come out softer than with other tools, and chromatic aberrations remain an issue. The Iridient X-Transformer completely fixes this issue for me. The X-Transformer can also do sharpening and denoising, but I find those are better relegated to Darktable where needed. "But&#x2026; that's proprietary Windows software!!!". Yes, it is. And it works beautifully in Wine.
+</p>
+
+<p>
+My second issue is colors. Darktable needs a lot of massaging to produce Fuji-like colors. The Base Curve module (shown above) really does not do Fuji files justice most of the time. And while Filmic RGB is much better, it requires a lot of tedious adjustments even in simple cases. So instead, I use LUTs extracted with a color chart and some fancy math to replicate Fuji's colors. At the moment (v3.0), Darktable understands only .cube and .png LUTs. But Stuart Sowerby's website has them in .3dl. So for now, you need to install a <a href="https://grossgrade.com/en/2019/08/14/batch-3d-lut-converter/">3D LUT converter</a>, and convert them to .cube manually. On Windows.
+</p>
+
+<p>
+With these two steps you can develop your Fuji RAFs better than your camera, and with relatively little fuss. I'll leave you with a finished render of the image above:
+</p>
+
+
+<figure>
+<img src="file:///static/2020-02/mine.jpg" alt="mine.jpg">
+
+</figure>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> <a href="tag-linux.html">linux</a> </div>]]></description>
+  <category>photography</category>
+  <category>linux</category>
+  <link>https://bastibe.de/2020-02-09-editing-fuji-photos-on-linux.html</link>
+  <pubDate>So, 09 Feb 2020 12:54:00 +0100</pubDate>
+</item>
 <item>
   <title>I Miss My Mac</title>
   <description><![CDATA[
