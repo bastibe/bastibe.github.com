@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Qt for Python Video Tutorial</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">20 Mär 2020</div><h1 class="post-title"><a href="2020-03-20-qt-for-python-tutorial.html">Qt for Python Video Tutorial</a></h1>
+<p>
+This video series was produced in the spring of 2020, during the COVID19-pandemic, when all lectures had to be held electronically, without physical attendance. It is a tutorial, in German, for building a small Qt GUI that visualizes the ongoing pandemic on a world map.
+</p>
+
+<p>
+If the videos are too slow, feel free to speed them up by right-clicking, and adjusting play speed (Firefox only, as far as I know).
+</p>
+
+<p>
+You may also download the videos and share them with your friends. Please do not upload them to social media or YouTube, but link to this website instead. If you want to modify them or create derivative works, please contact me.
+</p>
+
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />The <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/MovingImage" property="dct:title" rel="dct:type">Qt for Python Video Tutorial</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+</center>
+
+<div id="outline-container-orgd80e701" class="outline-2">
+<h2 id="orgd80e701">1 Intro</h2>
+<div class="outline-text-2" id="text-orgd80e701">
+<p>
+Prerequisites: A basic understanding of Python, and a working installation of python ≥3.4.
+</p>
+
+<p>
+An overview over the topics discussed in the rest of the videos, and installation of <a href="https://www.qt.io/qt-for-python">Qt for Python</a> and <a href="https://pandas.pydata.org/">Pandas</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/01 intro.mp4" type="video/mp4">
+</video>
+</div>
+</div>
+
+<div id="outline-container-orga83b3ef" class="outline-2">
+<h2 id="orga83b3ef">2 Hello World</h2>
+<div class="outline-text-2" id="text-orga83b3ef">
+<p>
+Our first GUI program, a window with a text label.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/02 hello world.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map2.py">map2.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgb266801" class="outline-2">
+<h2 id="orgb266801">3 Main Window</h2>
+<div class="outline-text-2" id="text-orgb266801">
+<p>
+Create a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QMainWindow.html">QMainWindow</a>, and build some structure for later episodes.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/03 main window.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map3.py">map3.py</a></p>
+</div>
+</div>
+
+<div id="outline-container-org37b92ce" class="outline-2">
+<h2 id="org37b92ce">4 Layouts</h2>
+<div class="outline-text-2" id="text-org37b92ce">
+<p>
+Position a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLabel.html">QLabel</a> and a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QPushButton.html">QPushButton</a> side by side, using layouts.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/04 layouts.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map4.py">map4.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org20cf796" class="outline-2">
+<h2 id="org20cf796">5 Signals and Slots</h2>
+<div class="outline-text-2" id="text-org20cf796">
+<p>
+Make the button change the label's text if clicked.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/05 signals and slots.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map2.py">map5.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org67ecee8" class="outline-2">
+<h2 id="org67ecee8">6 Loading Data</h2>
+<div class="outline-text-2" id="text-org67ecee8">
+<p>
+Load the data required to draw a map.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/06 loading data.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map6.py">map6.py</a></p>
+<p>Data: <a href="/static/2020-03/countries_110m.json">countries_110m.json</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org78302d0" class="outline-2">
+<h2 id="org78302d0">7 Drawing the Map</h2>
+<div class="outline-text-2" id="text-org78302d0">
+<p>
+Draw a world map into a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QGraphicsScene.html">QGraphicsScene</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/07 drawing the map.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map7.py">map7.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org3d3e45f" class="outline-2">
+<h2 id="org3d3e45f">8 Pens and Brushes</h2>
+<div class="outline-text-2" id="text-org3d3e45f">
+<p>
+Make the map pretty, using <a href="https://doc.qt.io/qtforpython/PySide2/QtGui/QPen.html">QPens</a> and <a href="https://doc.qt.io/qtforpython/PySide2/QtGui/QBrush.html">QBrushes</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/08 pens and brushes.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map8.py">map8.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org56209c9" class="outline-2">
+<h2 id="org56209c9">9 Resize Event</h2>
+<div class="outline-text-2" id="text-org56209c9">
+<p>
+Resize the map when the window size changes, by overloading <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.PySide2.QtWidgets.QWidget.resizeEvent"><code>resizeEvent</code></a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/09 resize event.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map9.py">map9.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgd03b717" class="outline-2">
+<h2 id="orgd03b717">10 Mouse Tracking</h2>
+<div class="outline-text-2" id="text-orgd03b717">
+<p>
+Highlight the country under the mouse.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/10 mouse tracking.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map10.py">map10.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org200212d" class="outline-2">
+<h2 id="org200212d">11 Custom Signal</h2>
+<div class="outline-text-2" id="text-org200212d">
+<p>
+Respond to clicks of a country.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/11 custom signal.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map11.py">map11.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgdca02fe" class="outline-2">
+<h2 id="orgdca02fe">12 Addendum</h2>
+<div class="outline-text-2" id="text-orgdca02fe">
+<p>
+Improve the code by cutting out a middle man.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/12 addendum.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map12.py">map12.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgd79a539" class="outline-2">
+<h2 id="orgd79a539">13 Pandas</h2>
+<div class="outline-text-2" id="text-orgd79a539">
+<p>
+A quick introduction to <a href="https://pandas.pydata.org/">Pandas</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/13 pandas.mp4" type="video/mp4">
+</video>
+<p>Data: <a href="/static/2020-03/covid19.csv">covid19.csv</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgc9d3ac7" class="outline-2">
+<h2 id="orgc9d3ac7">14 Pandas Integration</h2>
+<div class="outline-text-2" id="text-orgc9d3ac7">
+<p>
+Load the COVID19 dataset and print some stats.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/14 pandas integration.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map14.py">map14.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org2e50602" class="outline-2">
+<h2 id="org2e50602">15 Model View Tables</h2>
+<div class="outline-text-2" id="text-org2e50602">
+<p>
+Display the COVID19 dataset in a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QTableView.html">QTableView</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/15 model view tables.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map15.py">map15.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org272f0da" class="outline-2">
+<h2 id="org272f0da">16 Table Header Data</h2>
+<div class="outline-text-2" id="text-org272f0da">
+<p>
+Fill in the table headers from the dataset.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/16 header data.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map16.py">map16.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org3a0bbdb" class="outline-2">
+<h2 id="org3a0bbdb">17 Country Selection</h2>
+<div class="outline-text-2" id="text-org3a0bbdb">
+<p>
+Show only a subset of the dataset when a country is clicked.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/17 country selection.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map17.py">map18.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgb6f5cf6" class="outline-2">
+<h2 id="orgb6f5cf6">18 Cleanup</h2>
+<div class="outline-text-2" id="text-orgb6f5cf6">
+<p>
+Summary, and a few finishing touches.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/18 cleanup.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map18.py">map18.py</a></p>
+</div>
+</div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-python.html">python</a> </div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://bastibe.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

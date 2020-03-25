@@ -29,6 +29,294 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">20 Mär 2020</div><h1 class="post-title"><a href="2020-03-20-qt-for-python-tutorial.html">Qt for Python Video Tutorial</a></h1>
+<p>
+This video series was produced in the spring of 2020, during the COVID19-pandemic, when all lectures had to be held electronically, without physical attendance. It is a tutorial, in German, for building a small Qt GUI that visualizes the ongoing pandemic on a world map.
+</p>
+
+<p>
+If the videos are too slow, feel free to speed them up by right-clicking, and adjusting play speed (Firefox only, as far as I know).
+</p>
+
+<p>
+You may also download the videos and share them with your friends. Please do not upload them to social media or YouTube, but link to this website instead. If you want to modify them or create derivative works, please contact me.
+</p>
+
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />The <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/MovingImage" property="dct:title" rel="dct:type">Qt for Python Video Tutorial</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+</center>
+
+<div id="outline-container-orgd80e701" class="outline-2">
+<h2 id="orgd80e701">1 Intro</h2>
+<div class="outline-text-2" id="text-orgd80e701">
+<p>
+Prerequisites: A basic understanding of Python, and a working installation of python ≥3.4.
+</p>
+
+<p>
+An overview over the topics discussed in the rest of the videos, and installation of <a href="https://www.qt.io/qt-for-python">Qt for Python</a> and <a href="https://pandas.pydata.org/">Pandas</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/01 intro.mp4" type="video/mp4">
+</video>
+</div>
+</div>
+
+<div id="outline-container-orga83b3ef" class="outline-2">
+<h2 id="orga83b3ef">2 Hello World</h2>
+<div class="outline-text-2" id="text-orga83b3ef">
+<p>
+Our first GUI program, a window with a text label.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/02 hello world.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map2.py">map2.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgb266801" class="outline-2">
+<h2 id="orgb266801">3 Main Window</h2>
+<div class="outline-text-2" id="text-orgb266801">
+<p>
+Create a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QMainWindow.html">QMainWindow</a>, and build some structure for later episodes.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/03 main window.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map3.py">map3.py</a></p>
+</div>
+</div>
+
+<div id="outline-container-org37b92ce" class="outline-2">
+<h2 id="org37b92ce">4 Layouts</h2>
+<div class="outline-text-2" id="text-org37b92ce">
+<p>
+Position a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLabel.html">QLabel</a> and a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QPushButton.html">QPushButton</a> side by side, using layouts.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/04 layouts.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map4.py">map4.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org20cf796" class="outline-2">
+<h2 id="org20cf796">5 Signals and Slots</h2>
+<div class="outline-text-2" id="text-org20cf796">
+<p>
+Make the button change the label's text if clicked.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/05 signals and slots.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map2.py">map5.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org67ecee8" class="outline-2">
+<h2 id="org67ecee8">6 Loading Data</h2>
+<div class="outline-text-2" id="text-org67ecee8">
+<p>
+Load the data required to draw a map.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/06 loading data.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map6.py">map6.py</a></p>
+<p>Data: <a href="/static/2020-03/countries_110m.json">countries_110m.json</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org78302d0" class="outline-2">
+<h2 id="org78302d0">7 Drawing the Map</h2>
+<div class="outline-text-2" id="text-org78302d0">
+<p>
+Draw a world map into a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QGraphicsScene.html">QGraphicsScene</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/07 drawing the map.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map7.py">map7.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org3d3e45f" class="outline-2">
+<h2 id="org3d3e45f">8 Pens and Brushes</h2>
+<div class="outline-text-2" id="text-org3d3e45f">
+<p>
+Make the map pretty, using <a href="https://doc.qt.io/qtforpython/PySide2/QtGui/QPen.html">QPens</a> and <a href="https://doc.qt.io/qtforpython/PySide2/QtGui/QBrush.html">QBrushes</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/08 pens and brushes.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map8.py">map8.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org56209c9" class="outline-2">
+<h2 id="org56209c9">9 Resize Event</h2>
+<div class="outline-text-2" id="text-org56209c9">
+<p>
+Resize the map when the window size changes, by overloading <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.PySide2.QtWidgets.QWidget.resizeEvent"><code>resizeEvent</code></a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/09 resize event.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map9.py">map9.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgd03b717" class="outline-2">
+<h2 id="orgd03b717">10 Mouse Tracking</h2>
+<div class="outline-text-2" id="text-orgd03b717">
+<p>
+Highlight the country under the mouse.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/10 mouse tracking.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map10.py">map10.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org200212d" class="outline-2">
+<h2 id="org200212d">11 Custom Signal</h2>
+<div class="outline-text-2" id="text-org200212d">
+<p>
+Respond to clicks of a country.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/11 custom signal.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map11.py">map11.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgdca02fe" class="outline-2">
+<h2 id="orgdca02fe">12 Addendum</h2>
+<div class="outline-text-2" id="text-orgdca02fe">
+<p>
+Improve the code by cutting out a middle man.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/12 addendum.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map12.py">map12.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgd79a539" class="outline-2">
+<h2 id="orgd79a539">13 Pandas</h2>
+<div class="outline-text-2" id="text-orgd79a539">
+<p>
+A quick introduction to <a href="https://pandas.pydata.org/">Pandas</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/13 pandas.mp4" type="video/mp4">
+</video>
+<p>Data: <a href="/static/2020-03/covid19.csv">covid19.csv</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgc9d3ac7" class="outline-2">
+<h2 id="orgc9d3ac7">14 Pandas Integration</h2>
+<div class="outline-text-2" id="text-orgc9d3ac7">
+<p>
+Load the COVID19 dataset and print some stats.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/14 pandas integration.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map14.py">map14.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org2e50602" class="outline-2">
+<h2 id="org2e50602">15 Model View Tables</h2>
+<div class="outline-text-2" id="text-org2e50602">
+<p>
+Display the COVID19 dataset in a <a href="https://doc.qt.io/qtforpython/PySide2/QtWidgets/QTableView.html">QTableView</a>.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/15 model view tables.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map15.py">map15.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org272f0da" class="outline-2">
+<h2 id="org272f0da">16 Table Header Data</h2>
+<div class="outline-text-2" id="text-org272f0da">
+<p>
+Fill in the table headers from the dataset.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/16 header data.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map16.py">map16.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-org3a0bbdb" class="outline-2">
+<h2 id="org3a0bbdb">17 Country Selection</h2>
+<div class="outline-text-2" id="text-org3a0bbdb">
+<p>
+Show only a subset of the dataset when a country is clicked.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/17 country selection.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map17.py">map18.py</a></p>
+</div>
+</div>
+
+
+<div id="outline-container-orgb6f5cf6" class="outline-2">
+<h2 id="orgb6f5cf6">18 Cleanup</h2>
+<div class="outline-text-2" id="text-orgb6f5cf6">
+<p>
+Summary, and a few finishing touches.
+</p>
+
+<video controls width="100%">
+  <source src="/static/2020-03/18 cleanup.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map18.py">map18.py</a></p>
+</div>
+</div>
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-python.html">python</a> </div>
 <div class="post-date">11 Mär 2020</div><h1 class="post-title"><a href="2020-03-11-books-of-2019.html">Books of 2019</a></h1>
 
 <div id="outline-container-orge4d5676" class="outline-2">
@@ -252,204 +540,7 @@ In my career as a software developer, I know these ideas as traits of good APIs:
 <p>
 Which is quite the opposite of <i>Intuitive</i>. Quite the opposite of "easy to grasp without reading the manual". That's a description of a video game, not a professional tool. As professionals, we should seek and build empowering, efficient tools for adults, not intuitive games maskerading as professional software.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> <a href="tag-ui.html">ui</a> </div>
-<div class="post-date">27 Oct 2019</div><h1 class="post-title"><a href="2019-10-27-travel-cameras.html">Travel Cameras</a></h1>
-<p>
-We went on a once-in-a-lifetime vacation this year. Six weeks in the USA, roving New England in an RV, and going on a helicopter tour around New York City. I have spent months thinking about the perfect camera for going on this trip. I went on several vacations with various permutations of cameras and lenses as a test-run. I data-mined my existing photographs to find the perfect setup through science. And I scoured the internet for untold hours to get it right.
-</p>
-
-<p>
-Here's what I took with me:
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-10/P1020974_2.jpg" alt="P1020974_2.jpg">
-
-<figcaption><span class="figure-number">Figure 1: </span>A Fuji X-E3 with an XF 18-135 lens, and a Ricoh GR</figcaption>
-</figure>
-
-
-<p>
-That's <i>two</i> cameras! Most people would take <del>their smartphone</del> one camera with multiple lenses. I take multiple cameras with one lens each. Why? Because they're both awesome, at different things:
-</p>
-
-<div id="outline-container-orgf3ef44f" class="outline-2">
-<h2 id="orgf3ef44f">The Fujifilm X-E3 with an XF 18-135 f/3.5-5.6 lens</h2>
-<div class="outline-text-2" id="text-orgf3ef44f">
-<p>
-The X-E3 is a mirrorless camera, which means it's small. It is a very recent camera with a modern sensor. It's a rangefinder-style camera with the viewfinder in the top left. So it doesn't obscure my whole face when I lift it to my eye.
-</p>
-
-<p>
-<a href="https://camerasize.com/compact/#721.426,7.175,ha,t">Compared to a DSLR</a>, this is a small and light camera<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. But paired with the lens, it is neither. That lens, though: a massive focal range from 18 mm to 135 mm is suitable for wide landscapes, as well as tight tele shots of wildlife. Cramming it all in one lens must come with a loss in sharpness and aperture, but the 18-135 is a best of its breed, and still plenty sharp enough for me. And it comes with an image stabilization so sophisticated that I can hand-hold half-second exposures. Which is <i>magic</i>.
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-10/P1020982_2.jpg" alt="P1020982_2.jpg">
-
-<figcaption><span class="figure-number">Figure 2: </span>The X-E3 with the lens extended. Small, it is not.</figcaption>
-</figure>
-
-<p>
-This is a great camera for deliberately framing a shot; it feels great to hold, with a neat and efficient control layout for quickly playing with apertures and shutter speeds and focal lengths with a minimum amount of fuss. It is a dependable tool, an amazing piece of engineering, and an artistic means of expression. It is truly a great camera.
-</p>
-
-<p>
-If it has an Achille's heel, it's that it takes a while to get ready. Not because it is slow to start up, but because there's a delay before the viewfinder activates when raised to the face. Which just means you will stare into the void for half a second, while seeing the critical moment pass in front of you. Half a second of missing the shot.
-</p>
-
-<p>
-And the white balance can struggle a bit with forests and lakes. Forests are green, and to compensate, the X-E3 turns everything else magenta. Easy to fix in post, but annoying. These are minor complaints, and most of the time the X-E3 is as perfect a camera as I've ever seen one.
-</p>
-
-<p>
-Here are a few pictures I took with the X-E3 on my last vacation<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>:
-</p>
-
-<br>
-<a href="/static/2019-10/fuji-lightbox.html" target="_blank">
-  <div class="lightbox" style="height: 200px">
-    <img src="/static/2019-10/DSCF5479_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF5734_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF5832_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF5864_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6399_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6485_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6535_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6599_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6659_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6750_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6806_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6891_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6928_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF6960_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF7359_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF7512_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF7590_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF7694_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF7744_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF7807_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF8016_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF8076_4.thumb.jpg">
-    <img src="/static/2019-10/DSCF8137_4.thumb.jpg">
-  </div>
-</a>
-<br>
-
-<p>
-Image quality is simply excellent. Not once has the X-E3 let me down. Autofocus is accurate, and instant. The lens is amazingly sharp all through its focal range. Dynamic range is unreal, at times. As you can see in the pictures, I've shot everything from landscapes to people, to wildlife, long exposures, and even some astro. All with one lens, on one camera.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgbeed375" class="outline-2">
-<h2 id="orgbeed375">The Ricoh GR</h2>
-<div class="outline-text-2" id="text-orgbeed375">
-<p>
-So, if the X-E3 is my "professional" camera, the Ricoh GR is my fun camera. In 2019, the GR old technology. It was released in 2013, it has a big but aging 16 megapixel APS-C sensor, and a fixed 18 mm f/2.8 lens with no zoom. It shouldn't be able to compete with the Fuji. But there is one thing the GR does better than any other camera: <i>Speed</i>.
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-10/DSCF1333_3.jpg" alt="DSCF1333_3.jpg">
-
-<figcaption><span class="figure-number">Figure 3: </span>The Ricoh GR in all its glory (before the vacation)</figcaption>
-</figure>
-
-<p>
-The GR is in my pants pocket. It wouldn't be my pants without a GR in it. I have it with me everywhere, all the time. And at the right moment, I will pull it out, and take a picture, before you even notice it's there. That's the GR's mission: <i>The fastest possible time from pants to picture!</i>
-</p>
-
-<p>
-Seriously, the GR goes from off to taking the first shot before even its screen turns on<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. I can whip out my GR and take a picture long before you have unlocked your phone, never mind started the camera app, selected a focus point, or aimed it at your prey. In the car, I had the GR in the center console, and could take a picture of the roadside before it whizzed past. And without taking my eyes off the road, naturally.
-</p>
-
-<p>
-Since the GR has a fixed and wide focal length, I don't have to look at its screen to see what I'm taking a picture of. I can do it by feel. Because all the controls are on the right, I can adjust everything with my right hand only, without taking my hands off the wheel, or stroller, or wife. And then there's snap focus, where a full-press of the shutter will take a shot at a pre-defined distance, without waiting for autofocus. I wish every camera had this feature!
-</p>
-
-<p>
-However, all of this took some getting used to at first. I missed focus a lot in the beginning. But once I figured it out, a new world opened up. A world of whimsy and spontaneity that is simply not possible with a bigger or slower camera. A good half of my favorite pictures were only possible thanks to the GR.
-</p>
-
-
-<figure>
-<img src="https://bastibe.de/static/2019-10/DSCF9162_2.jpg" alt="DSCF9162_2.jpg">
-
-<figcaption><span class="figure-number">Figure 4: </span>The Ricoh GR after the vacation: scarred, but stronger for it.</figcaption>
-</figure>
-
-
-<p>
-Again, there are downsides. It's an old sensor. Dynamic range is limited. Autofocus could be faster. There's a noticeable shutter delay. There is no viewfinder or image stabilization. The white balance is not great. It can struggle with a full memory card<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>.
-</p>
-
-<p>
-But none of that matters. I <i>love</i> its colors. I <i>love</i> its sharpness. It has taken quite the beating on this vacation, but I wouldn't have it any other way. The GR is magnificent. There is nothing else quite like it<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>. And so many memories would have been lost if not for the GR:
-</p>
-
-<br>
-<a href="/static/2019-10/ricoh-lightbox.html" target="_blank">
-  <div class="lightbox" style="height: 200px">
-    <img src="/static/2019-10/GR030371_4.thumb.jpg">
-    <img src="/static/2019-10/GR030471_4.thumb.jpg">
-    <img src="/static/2019-10/GR030994_4.thumb.jpg">
-    <img src="/static/2019-10/GR031668_4.thumb.jpg">
-    <img src="/static/2019-10/GR031686_4.thumb.jpg">
-    <img src="/static/2019-10/GR031800_4.thumb.jpg">
-    <img src="/static/2019-10/GR031827_4.thumb.jpg">
-    <img src="/static/2019-10/GR031878_4.thumb.jpg">
-    <img src="/static/2019-10/GR031947_4.thumb.jpg">
-    <img src="/static/2019-10/GR032078_4.thumb.jpg">
-    <img src="/static/2019-10/GR032376_4.thumb.jpg">
-    <img src="/static/2019-10/GR032380_4.thumb.jpg">
-    <img src="/static/2019-10/GR032420_4.thumb.jpg">
-    <img src="/static/2019-10/GR032551_4.thumb.jpg">
-    <img src="/static/2019-10/GR032806_4.thumb.jpg">
-    <img src="/static/2019-10/GR032887_4.thumb.jpg">
-    <img src="/static/2019-10/GR033056_4.thumb.jpg">
-    <img src="/static/2019-10/GR033178_4.thumb.jpg">
-    <img src="/static/2019-10/GR033179_4.thumb.jpg">
-    <img src="/static/2019-10/GR033248_4.thumb.jpg">
-    <img src="/static/2019-10/GR033263_4.thumb.jpg">
-  </div>
-</a>
-<br>
-
-<p>
-Many of these shots were taken in the spur of the moment. In situations where I didn't take the big camera with me. Where a big camera would have been inappropriate. But the GR is so tiny, so non-threatening, it can become part my daily life. And capture the fleeting moments that make life worth living. That is a photographic super power if there ever was one.
-</p>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
-The body weighs 337g, which is a feather. The lens weighs 490g.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
-No personal pictures, though. I don't share those publicly.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
-The magic is "snap focus". If you depress the shutter fully, without waiting for autofocus, the GR immediately takes the shot at a pre-set distance. Works in any mode, and even when just powering on: Press the power button, aim, press the shutter, and before even the screen turns on you will have taken a picture. Lightning fast.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
-As the card fills up, getting into playback mode takes longer and longer. Minutes, for a full 64 Gb card.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
-Forget about the Fuji XF10. I tried it. It's a newer sensor, but so clumsy, so slow, so awkward to use. It's no comparison.
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-photography.html">photography</a> </div><div id="archive">
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> <a href="tag-ui.html">ui</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

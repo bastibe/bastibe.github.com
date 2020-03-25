@@ -1,0 +1,230 @@
+#+title: Qt for Python Video Tutorial
+#+date: <2020-03-20 00:00>
+#+filetags: programming python
+
+This video series was produced in the spring of 2020, during the COVID19-pandemic, when all lectures had to be held electronically, without physical attendance. It is a tutorial, in German, for building a small Qt GUI that visualizes the ongoing pandemic on a world map.
+
+If the videos are too slow, feel free to speed them up by right-clicking, and adjusting play speed (Firefox only, as far as I know).
+
+You may also download the videos and share them with your friends. Please do not upload them to social media or YouTube, but link to this website instead. If you want to modify them or create derivative works, please contact me.
+
+#+begin_export html
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />The <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/MovingImage" property="dct:title" rel="dct:type">Qt for Python Video Tutorial</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+</center>
+#+end_export
+
+** 1 Intro
+
+Prerequisites: A basic understanding of Python, and a working installation of python ≥3.4.
+
+An overview over the topics discussed in the rest of the videos, and installation of [[https://www.qt.io/qt-for-python][Qt for Python]] and [[https://pandas.pydata.org/][Pandas]].
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/01 intro.mp4" type="video/mp4">
+</video>
+#+end_export
+
+** 2 Hello World
+
+Our first GUI program, a window with a text label.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/02 hello world.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map2.py">map2.py</a></p>
+#+end_export
+
+
+** 3 Main Window
+
+Create a [[https://doc.qt.io/qtforpython/PySide2/QtWidgets/QMainWindow.html][QMainWindow]], and build some structure for later episodes.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/03 main window.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map3.py">map3.py</a></p>
+#+end_export
+
+** 4 Layouts
+
+Position a [[https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLabel.html][QLabel]] and a [[https://doc.qt.io/qtforpython/PySide2/QtWidgets/QPushButton.html][QPushButton]] side by side, using layouts.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/04 layouts.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map4.py">map4.py</a></p>
+#+end_export
+
+
+** 5 Signals and Slots
+
+Make the button change the label's text if clicked.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/05 signals and slots.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map2.py">map5.py</a></p>
+#+end_export
+
+
+** 6 Loading Data
+
+Load the data required to draw a map.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/06 loading data.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map6.py">map6.py</a></p>
+<p>Data: <a href="/static/2020-03/countries_110m.json">countries_110m.json</a></p>
+#+end_export
+
+
+** 7 Drawing the Map
+
+Draw a world map into a [[https://doc.qt.io/qtforpython/PySide2/QtWidgets/QGraphicsScene.html][QGraphicsScene]].
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/07 drawing the map.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map7.py">map7.py</a></p>
+#+end_export
+
+
+** 8 Pens and Brushes
+
+Make the map pretty, using [[https://doc.qt.io/qtforpython/PySide2/QtGui/QPen.html][QPens]] and [[https://doc.qt.io/qtforpython/PySide2/QtGui/QBrush.html][QBrushes]].
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/08 pens and brushes.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map8.py">map8.py</a></p>
+#+end_export
+
+
+** 9 Resize Event
+
+Resize the map when the window size changes, by overloading [[https://doc.qt.io/qtforpython/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.PySide2.QtWidgets.QWidget.resizeEvent][~resizeEvent~]].
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/09 resize event.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map9.py">map9.py</a></p>
+#+end_export
+
+
+** 10 Mouse Tracking
+
+Highlight the country under the mouse.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/10 mouse tracking.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map10.py">map10.py</a></p>
+#+end_export
+
+
+** 11 Custom Signal
+
+Respond to clicks of a country.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/11 custom signal.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map11.py">map11.py</a></p>
+#+end_export
+
+
+** 12 Addendum
+
+Improve the code by cutting out a middle man.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/12 addendum.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map12.py">map12.py</a></p>
+#+end_export
+
+
+** 13 Pandas
+
+A quick introduction to [[https://pandas.pydata.org/][Pandas]].
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/13 pandas.mp4" type="video/mp4">
+</video>
+<p>Data: <a href="/static/2020-03/covid19.csv">covid19.csv</a></p>
+#+end_export
+
+
+** 14 Pandas Integration
+
+Load the COVID19 dataset and print some stats.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/14 pandas integration.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map14.py">map14.py</a></p>
+#+end_export
+
+
+** 15 Model View Tables
+
+Display the COVID19 dataset in a [[https://doc.qt.io/qtforpython/PySide2/QtWidgets/QTableView.html][QTableView]].
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/15 model view tables.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map15.py">map15.py</a></p>
+#+end_export
+
+
+** 16 Table Header Data
+
+Fill in the table headers from the dataset.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/16 header data.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map16.py">map16.py</a></p>
+#+end_export
+
+
+** 17 Country Selection
+
+Show only a subset of the dataset when a country is clicked.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/17 country selection.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map17.py">map18.py</a></p>
+#+end_export
+
+
+** 18 Cleanup
+
+Summary, and a few finishing touches.
+
+#+begin_export html
+<video controls width="100%">
+  <source src="/static/2020-03/18 cleanup.mp4" type="video/mp4">
+</video>
+<p>Code: <a href="/static/2020-03/map18.py">map18.py</a></p>
+#+end_export
