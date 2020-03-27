@@ -6,7 +6,7 @@
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
       title="RSS feed for https://bastibe.de/"/>
-<title>Bastibe.de</title>
+<title>The Value Proposition of Open Source Software</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -21,14 +21,14 @@
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div id="preamble" class="status">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
-<h1 class="title">Posts tagged "open-source":</h1>
 <div class="post-date">27 Mär 2020</div><h1 class="post-title"><a href="2020-03-27-the-value-proposition-of-open-source-software.html">The Value Proposition of Open Source Software</a></h1>
 <p>
 To <a href="https://en.wikipedia.org/wiki/Open-source_software">quote Wikipedia</a>:
@@ -95,83 +95,22 @@ So in summary, I have generally found Open Source Software to be <i>better</i> t
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-open-source.html">open-source</a> </div>
-<div class="post-date">14 Oct 2018</div><h1 class="post-title"><a href="2018-10-14-appreciation-for-open-source-and-commercial-software.html">Appreciation for Open Source and Commercial Software</a></h1>
-<p>
-I recently released my first-ever piece of commercial software, a <a href="https://missiongenerator.eu/">plugin</a> for the <a href="https://www.x-plane.com/">X-Plane</a> flight simulator. I wrote this primarily to scratch my own itch, but thought other users might like it, too, so I put it up on <a href="https://store.x-plane.org/Mission-Generator_p_877.html">the store</a>. What struck me however, were the stark difference between the kinds of responses I got to this, as compared to my open source projects: They were astonishingly, resoundingly, <i>positive</i>!
-</p>
-
-<p>
-You see, I have a bunch of open source projects, with a few thousand downloads per month, and a dozen or so issues on Github per week. Most of my interactions with my users are utilitarian, and efficient. Someone reports a bug or asks for help, I ask for clarification or a pull request, we iterate a few times until the issue is resolved. The process is mechanical and the tone of our conversation is equally unemotional. This is as it should be.
-</p>
-
-<p>
-After having released my flight simulator plugin, however, people <i>thanked me</i>! They <i>congratulated me</i>! They extolled about the greatness of what I had built! And they did this despite the fact that the initial release had quite a few major bugs, and even flat-out did not work for some people. Yet even people who couldn't get it to work were <i>grateful</i> for my help in resolving their issue!
-</p>
-
-<p>
-This <i>blew my mind</i>, in comparison with the drab "I found a bug", "Could you implement…" I was used to from my open source work. There, the feedback I got was mostly neutral (bug reports, feature requests), and sometimes even negative ("You broke something!"). So I release my software <i>for free</i>, as a gift, and get average-negative feedback. My commercial work, in contrast, <i>costs money</i>, and yet the feedback I get is resoundingly positive! I can not overstate how motivating it is to get praise, and love, from my users.
-</p>
-
-<p>
-I think this is a huge problem for our Open Source community. I had my run-ins with burnout, when all the pull requests came to be too much, and I started dreading the little notification icon on Github. And I think the negativity inherent in bug reports and feature requests has a huge part to do with this. In the future, I will try to add more praise to my bug reports from now on, just to put things into perspective.
-</p>
-
-<p>
-But I think we should go further than that. We should create tools for praising stuff, beyond the impersonal Stars on Github. We should be able to write reviews on Github, and recommendations, and blog posts about cool libraries we find.
-</p>
-
-<p>
-I recently got my first github issue that was <a href="https://github.com/bastibe/org-static-blog/issues/12">just a thank-you note</a>. I loved it! We need more positivity like that.
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-open-source.html">open-source</a> <a href="tag-thank-you.html">thank-you</a> </div>
-<div class="post-date">08 Sep 2012</div><h1 class="post-title"><a href="2012-09-08-on-the-virtue-of-oss.html">On the Virtue of Contributing to and Using Open Source Software</a></h1>
-<p>
-I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
-</p>
-
-<p>
-About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/">numpy</a> <a href="http://scipy.org/">scipy</a> and <a href="http://matplotlib.sourceforge.net/">matplotlib</a> that, for my particular purposes, rivals Matlab.
-</p>
-
-<p>
-However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used <a href="http://playrec.co.uk/">Playrec</a> for that purpose, which implements <a href="http://www.portaudio.com/">PortAudio</a> bindings for Matlab. Luckily, there was a similar package available for Python, called <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>.
-</p>
-
-<p>
-But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.
-</p>
-
-<p>
-At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!
-</p>
-
-<p>
-This was a revelation to me: I could not only <i>use</i> a piece of software, I could also <i>change</i> it and mold it to my special needs!
-</p>
-
-<p>
-Thus, I put up my changes on <a href="https://github.com/bastibe/PyAudio">github</a> and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!
-</p>
-
-<p>
-This, again, was a revelation to me: Not only could <i>I</i> change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!
-</p>
-
-<p>
-Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.
-</p>
-
-<p>
-And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.
-</p>
-
-<p>
-<b>By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.</b>
-</p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-open-source.html">open-source</a> </div><div id="archive">
-<a href="archive.html">Other posts</a>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-open-source.html">open-source</a> </div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    function load_disqus() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://bastibe.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        document.getElementById('disqus_button').style.visibility = 'hidden';
+    };
+</script>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>
