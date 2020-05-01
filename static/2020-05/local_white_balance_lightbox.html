@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Comparison of Renderings</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<style>
+  body {
+      background-color: black;
+  }
+  div#lightbox {
+      display: flex;
+      flex-direction: row;
+      overflow-x: hidden;
+      height: 100vh;
+      padding-left: 30px;
+      padding-right: 30px;
+  }
+  div.page {
+      position: relative;
+      flex: 0 0 auto;
+      width: calc(100vw - 120px);
+      height: 100vh;
+  }
+  div#lightbox img {
+      max-height: calc(100% - 2em);
+      max-width: calc(100% - 20px);
+      position: relative;
+      top: calc(50% - 2em);
+      transform: translateY(-50%) translateX(-50%);
+      left: 50%;
+  }
+  div#lightbox p {
+      position: absolute;
+      color: darkgrey;
+      text-align: center;
+      width: 100%;
+      bottom: 0;
+  }
+</style>
+<script>
+  document.onkeydown = function navigate(key) {
+      key = key || window.event;
+      if (key.key === "ArrowRight") {
+          scroll(1);
+      } else if (key.key === "ArrowLeft") {
+          scroll(-1);
+      }
+  }
+  function scroll(rightOrLeft) {
+      lightbox = document.getElementById('lightbox');
+      scrollWidth = document.getElementsByClassName('page')[0].clientWidth;
+      lightbox.scrollLeft += scrollWidth * rightOrLeft;
+  }
+  window.addEventListener('load', function() {
+      document.getElementById('lightbox').onclick = function click(event) {
+          scrollWidth = document.getElementsByClassName('page')[0].clientWidth;
+          if (event.buttons == 0) {
+              if (event.clientX > scrollWidth / 2) {
+                  scroll(1);
+              } else {
+                  scroll(-1);
+              }
+          }
+      }
+  })
+</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+  <div id="lightbox">
+    <div class="page">
+      <img src="ACDSee_DSCF8214.jpg">
+      <p>ACDSee: Fill Light 50, Develop Brush with WB -50 (no picker)</p>
+    </div>
+    <div class="page">
+      <img src="CaptureOne_DSCF8214.jpg">
+      <p>Capture One: Shadows +50, Black +75, Drawn Layer with White Balance picker on Backpack</p>
+    </div>
+    <div class="page">
+      <img src="Darktable_DSCF8214.jpg">
+      <p>Darktable: My Defaults, Filmic RGB to shift dynamic range to include shadows, Luminosity and Painted mask with Color Balance picker</p>
+    </div>
+    <div class="page">
+      <img src="Exposure_DSCF8214.jpg">
+      <p>Exposure: Shadows +100, Blacks +25, Layer with Color Temperature lowered (no picker)</p>
+    </div>
+    <div class="page">
+      <img src="Lightroom_DSCF8214.jpg">
+      <p>Lightroom: Shadows +100, Local Adjustment with WB -14 (no picker)</p>
+    </div>
+    <div class="page">
+      <img src="Luminar_DSCF8214.jpg">
+      <p>Luminar: Shadows +100, No local adjustments available</p>
+    </div>
+    <div class="page">
+      <img src="ON1_DSCF8214.jpg">
+      <p>ON1: Shadows +50, Local Adjustment with WB -18 and tint +4 (no picker)</p>
+    </div>
+    <div class="page">
+      <img src="PhotoNinja_DSCF8214.jpg">
+      <p>Photo Ninja: Illumination 25, Exposure offset -1.61, Highlights -0.50 (all chosen automatically), Shadows +0.50, No local adjustments available</p>
+    </div>
+    <div class="page">
+      <img src="RawTherapee_DSCF8214.jpg">
+      <p>RawTherapee: Shadows 50, No local adjustments</p>
+    </div>
+  </div>
+</body>
+</html>

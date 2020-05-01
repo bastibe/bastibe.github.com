@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/"/>
+<title>Comparison of Renderings</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="/static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<style>
+  body {
+      background-color: black;
+  }
+  div#lightbox {
+      display: flex;
+      flex-direction: row;
+      overflow-x: hidden;
+      height: 100vh;
+      padding-left: 30px;
+      padding-right: 30px;
+  }
+  div.page {
+      position: relative;
+      flex: 0 0 auto;
+      width: calc(100vw - 120px);
+      height: 100vh;
+  }
+  div#lightbox img {
+      max-height: calc(100% - 2em);
+      max-width: calc(100% - 20px);
+      position: relative;
+      top: calc(50% - 2em);
+      transform: translateY(-50%) translateX(-50%);
+      left: 50%;
+  }
+  div#lightbox p {
+      position: absolute;
+      color: darkgrey;
+      text-align: center;
+      width: 100%;
+      bottom: 0;
+  }
+</style>
+<script>
+  document.onkeydown = function navigate(key) {
+      key = key || window.event;
+      if (key.key === "ArrowRight") {
+          scroll(1);
+      } else if (key.key === "ArrowLeft") {
+          scroll(-1);
+      }
+  }
+  function scroll(rightOrLeft) {
+      lightbox = document.getElementById('lightbox');
+      scrollWidth = document.getElementsByClassName('page')[0].clientWidth;
+      lightbox.scrollLeft += scrollWidth * rightOrLeft;
+  }
+  window.addEventListener('load', function() {
+      document.getElementById('lightbox').onclick = function click(event) {
+          scrollWidth = document.getElementsByClassName('page')[0].clientWidth;
+          if (event.buttons == 0) {
+              if (event.clientX > scrollWidth / 2) {
+                  scroll(1);
+              } else {
+                  scroll(-1);
+              }
+          }
+      }
+  })
+</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+  <div id="lightbox">
+    <div class="page">
+      <img src="ACDSee_DSCF9670.jpg">
+      <p>ACDSee: Amount 25</p>
+    </div>
+    <div class="page">
+      <img src="CaptureOne_DSCF9670.jpg">
+      <p>Capture One: Amount 140</p>
+    </div>
+    <div class="page">
+      <img src="Darktable_DSCF9670.jpg">
+      <p>Darktable: My Defaults, Sharpen 2</p>
+    </div>
+    <div class="page">
+      <img src="Exposure_DSCF9670.jpg">
+      <p>Exposure: Amount 50</p>
+    </div>
+    <div class="page">
+      <img src="Lightroom_DSCF9670.jpg">
+      <p>Lightroom: Amount 40</p>
+    </div>
+    <div class="page">
+      <img src="Luminar_DSCF9670.jpg">
+      <p>Luminar: Details Enhancer, Sharpen 50</p>
+    </div>
+    <div class="page">
+      <img src="ON1_DSCF9670.jpg">
+      <p>ON1: Sharpening 50</p>
+    </div>
+    <div class="page">
+      <img src="PhotoNinja_DSCF9670.jpg">
+      <p>Photo Ninja: Sharpening strength 50</p>
+    </div>
+    <div class="page">
+      <img src="RawTherapee_DSCF9670.jpg">
+      <p>RawTherapee: Sharpening 20</p>
+    </div>
+  </div>
+</body>
+</html>
