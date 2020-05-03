@@ -40,6 +40,8 @@ Obviously, I am a lot more proficient in my current tool, Darktable, than in any
   Allegedly super fast, with great sharpening and noise removal.
 - Photo Ninja 1.3.7a ([[https://www.picturecode.com/index.php][$130]]) \\
   Another new developer, borne out of a dedicated noise reduction tool, and with an emphasis on “intelligent” tools.
+- Silkypix Developer Studio Pro 10.0.3.0 ([[https://silkypix.isl.co.jp/en/][$200]]) \\
+  A Japanese RAW developer. I wasn't aware of it until a comment brought it up, thank you for that! And I mention its country of origin, as the English translation is a bit rough sometimes. Quite unusual in its feature set.
 
 Not considered:
 - Aftershot ([[https://www.aftershotpro.com/][$80]]) \\
@@ -51,7 +53,7 @@ Not considered:
 - Affinity Photo ([[https://affinity.serif.com/][$55]]) \\
   Cheap, awesome, but not non-destructive. I'll probably buy this regardless in a sale, just because it's so affordable.
 
-In terms of price, it is hard to argue with /free/. But considering the price of my other photographic equipment, most prices in this list are pretty adequate. Except for Capture One. $350 is a hard price to swallow.
+In terms of price, it is hard to argue with /free/. But considering the price of my other photographic equipment, most prices in this list are pretty adequate. Except for Capture One (and maybe Silkypix). $350 ($200) is a hard price to swallow.
 
 
 * The Test
@@ -98,6 +100,10 @@ I prepared 18 RAW images for this test, and made a plan of what exactly I would 
       <img src="/static/2020-05/RawTherapee_DSCF3861.thumb.jpg">
       <figcaption>RawTherapee</figcaption>
     </figure>
+    <figure>
+      <img src="/static/2020-05/Silkypix_DSCF3861.thumb.jpg">
+      <figcaption>Silkypix</figcaption>
+    </figure>
   </div>
 </a>
 <p><a href="/static/2020-05/DSCF3861.RAF">&#x1f4c2; DSCF3861.RAF</a> (23.0 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a></p>
@@ -105,7 +111,7 @@ I prepared 18 RAW images for this test, and made a plan of what exactly I would 
 
 A shot of the sunset in Greece, with both the sun and its reflection in the water blowing out. I want to lower the highlights, and boost the shadows a bit. The transition from sky to sun should be smooth without lightness reversals or rings. The transition from water to reflection should have no color cast. The hills in the background should not show any halos.
 
-Capture One and Lightroom show the smallest sun without artifacts. RawTherapee, Darktable, and ACDSee produce a smooth transition, but a bigger sun. In Luminar, Exposure, Photo Ninja, and ON1 the sun is smaller, but has a distinct ring around it that looks wrong. In RawTherapee the sun is big and slightly ringed. Actually, Capture One also has that ring, but so faint that it wouldn't matter to me.
+Capture One, Lightroom, and Silkypix show the smallest sun without artifacts. RawTherapee, Darktable, and ACDSee produce a smooth transition, but a bigger sun. In Luminar, Exposure, Photo Ninja, and ON1 the sun is smaller, but has a distinct ring around it that looks wrong. In RawTherapee the sun is big and slightly ringed. Actually, Capture One and Silkypix also have a ring, but so faint that it wouldn't matter to me.
 
 The reflections in the water are artifact-free in Darktable, Lightroom, Exposure, and RawTherapee. The other developers show magenta artifacts to varying degrees. In terms of detail, Capture One, Lightroom, and Exposure recover a bit more wave details in the blown-out reflections.
 
@@ -120,8 +126,11 @@ The hills in the background show distracting halos in Capture One, Lightroom, an
 - ON1: Highlights -50, Shadows +25 (More Highlights produce lightness reversals)
 - Photo Ninja: Illumination 27, Exposure offset -1.62, Highlights -0.50 (all chosen automatically)
 - RawTherapee: Highlight Compression 250, Highlights 100, Shadows 25
+- Silkypix: Highlight Dynamic Range +3, Hue 100
 
-While a bit of a pathological image, there are clear differences in how these RAW developers handle it. Really, only Darktable and Lightroom produce a truly pleasing image for me, with second place to Capture One and ON1.
+While a bit of a pathological image, there are clear differences in how these RAW developers handle it. Really, only Darktable and Lightroom produce a truly pleasing image for me, with second place to Capture One, ON1, and Silkypix.
+
+Silkypix deserves a special mention, though, as its highlight control tool has a fantastic Hue slider, which trades off higher saturation against more accurate hue. Which is exactly the tradeoff that underlies all the rings and magenta artifacts in all the other programs.
 
 On a side note, I have never quite understood why nobody seems to complain about the obvious haloing in Lightroom. I see it in almost every high dynamic range landscape shot on the internet, and I do not enjoy the look. But apparently I'm alone with this.
 
@@ -166,6 +175,10 @@ On a side note, I have never quite understood why nobody seems to complain about
       <img src="/static/2020-05/RawTherapee_DSCF6535.thumb.jpg">
       <figcaption>RawTherapee</figcaption>
     </figure>
+    <figure>
+      <img src="/static/2020-05/Silkypix_DSCF6535.thumb.jpg">
+      <figcaption>Silkypix</figcaption>
+    </figure>
   </div>
 </a>
 <p><a href="/static/2020-05/DSCF6535.RAF">&#x1f4c2; DSCF6535.RAF</a> (21.6 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a></p>
@@ -186,8 +199,9 @@ All developers show magenta artifacts on the bright forest floor to some degrees
 - ON1: Highlights -75, Shadows +50 (disable Recover Highlight Hue to prevent color fringes)
 - Photo Ninja: Illumination 25, Exposure offset -1.47, Highlights -0.50 (all chosen automatically)
 - RawTherapee: Highlights 50, Shadows 25, Dynamic Range Compression 50
+- Silkypix: HDR 50, Exposure -2/3
 
-In terms of tools, I like the explicit dynamic range slider in Darktable and RawTherapee better than the shadows and highlights sliders in the other tools. But if calibrated well, both methods can result in a pleasing image.
+In terms of tools, I like the explicit dynamic range slider in Darktable, RawTherapee, and Silkypix better than the shadows and highlights sliders in the other tools. But if calibrated well, both methods can result in a pleasing image.
 
 To my eyes, Lightroom, RawTherapee, and Photo Ninja take the crown in this shot. But I expect that the tone progression could be improved in the other tools as well if I strayed beyond the default tools.
 
@@ -232,6 +246,10 @@ To my eyes, Lightroom, RawTherapee, and Photo Ninja take the crown in this shot.
       <img src="/static/2020-05/RawTherapee_DSCF8214.thumb.jpg">
       <figcaption>RawTherapee</figcaption>
     </figure>
+    <figure>
+      <img src="/static/2020-05/Silkypix_DSCF8214.thumb.jpg">
+      <figcaption>Silkypix</figcaption>
+    </figure>
   </div>
 </a>
 <p><a href="/static/2020-05/DSCF8214.RAF">&#x1f4c2; DSCF8214.RAF</a> (22.1 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a></p>
@@ -241,7 +259,7 @@ A shot of myself, underexposed, in front of Space Shuttle Enterprise. I want to 
 
 Luminar, Photo Ninja, and RawTherapee fail this test, as they lack local adjustment tools. Exposure for some reason shows terrible color bleeding, where my arm's color is leaking out onto the Space Shuttle in the background. Truly noteworthy is ACDSee with its intelligent brush, much like the intelligent selection tools in pixel editors. Darktable als stands out for being able to combine a drawn mask with a luminosity and hue mask.
 
-Capture One strangely did something terrible to my skin, with weird gradients where there should be none. The Shuttle in the background lost details in the highlights in ACDSee and Exposure.
+Capture One strangely did something terrible to my skin, with weird gradients where there should be none. The Shuttle in the background lost details in the highlights in ACDSee and Exposure. Silkypix by default insisted on crazy noise reduction that turned the picture into a watercolor. Thankfully that is easy to turn down.
 
 - ACDSee: Fill Light 50, Develop Brush with WB -50 (no picker)
 - Capture One: Shadows +50, Black +75, Drawn Layer with White Balance picker on Backpack
@@ -252,6 +270,7 @@ Capture One strangely did something terrible to my skin, with weird gradients wh
 - ON1: Shadows +50, Local Adjustment with WB -18 and tint +4 (no picker)
 - Photo Ninja: Illumination 25, Exposure offset -1.61, Highlights -0.50 (all chosen automatically), Shadows +0.50, No local adjustments available
 - RawTherapee: Shadows 50, No local adjustments
+- Silkypix: Dodge HDR 50, Noise Reduction Smoothness 25, Partial Correction with Hue 130, Saturation 0.37
 
 I find local color adjustments my main use for localized edits. Having a color picker for that is very useful, but only available in Capture One and Darktable. In the other tools, I had to either eyeball it, or manually adjust tones until the RGB values read grey.
 
@@ -298,6 +317,10 @@ Thus, it is Lightroom, ON1, and Darktable that pass this test.
       <img src="/static/2020-05/RawTherapee_DSCF0034.thumb.jpg">
       <figcaption>RawTherapee</figcaption>
     </figure>
+    <figure>
+      <img src="/static/2020-05/Silkypix_DSCF0034.thumb.jpg">
+      <figcaption>Silkypix</figcaption>
+    </figure>
   </div>
 </a>
 <p><a href="/static/2020-05/DSCF0034.RAF">&#x1f4c2; DSCF0034.RAF</a> (15.7 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a></p>
@@ -305,7 +328,7 @@ Thus, it is Lightroom, ON1, and Darktable that pass this test.
 
 A shot of the Congress building in Leipzig, with a bright purple light that blows out the red color channel, which is wildly out of gamut of any reasonable color space. I want to see how the RAW developers deal with out-of-gamut colors. I raise Exposure by 1 EV, then push shadows until the clouds become faintly visible.
 
-ACDSee, ON1, Photo Ninja, and RawTherapee fail this task, with obvious magenta or blue artifacts on the illuminated water jet. The other developers use various methods of inpainting, which look particularly convincing in Capture One, Lightroom, and Luminar. Exposure and Darktable look less realistic, but acceptable in a pinch.
+ACDSee, ON1, Photo Ninja, and RawTherapee fail this task, with obvious magenta or blue artifacts on the illuminated water jet. The other developers use various methods of inpainting, which look particularly convincing in Capture One, Lightroom, Silkypix, and Luminar. Exposure and Darktable look less realistic, but acceptable in a pinch. Again, Silkypix' hue slider is very handy.
 
 - ACDSee: Fill Light 50, Exposure +1
 - Capture One: Black +75, Exposure +1
@@ -316,6 +339,7 @@ ACDSee, ON1, Photo Ninja, and RawTherapee fail this task, with obvious magenta o
 - ON1: Shadows +50, Exposure +1
 - Photo Ninja: Illumination 9, Highlights -0.50 (all chosen automatically), Exposure offset 0.0
 - RawTherapee: Shadows 50, Exposure +1 (Highlight Reconstruction: Blend)
+- Silkypix: Dodge HDR 100, Noise reduction Smoothness 25, Highlight Hue 100
 
 I know the Darktable devs are actively working on improving this. In truth, Darktable would have failed this task just a few months ago. Issues like these also often happen with deep-blue flowers, which turn purple in the failing developers but maintain hue in the better ones.
 
@@ -360,6 +384,10 @@ I know the Darktable devs are actively working on improving this. In truth, Dark
       <img src="/static/2020-05/RawTherapee_DSCF9670.thumb.jpg">
       <figcaption>RawTherapee</figcaption>
     </figure>
+    <figure>
+      <img src="/static/2020-05/Silkypix_DSCF9670.thumb.jpg">
+      <figcaption>Silkypix</figcaption>
+    </figure>
   </div>
 </a>
 <p><a href="/static/2020-05/DSCF9670.RAF">&#x1f4c2; DSCF9670.RAF</a> (25.7 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
@@ -368,9 +396,9 @@ I know the Darktable devs are actively working on improving this. In truth, Dark
 
 A shot of a field and forest. I want to see how the RAW developers render these details and colors. Zero out noise reduction, use default sharpening, JPEG 100%.
 
-In terms of detail, Lightroom, Capture One, Exposure, and Darktable seem to retain the most fine details, particularly in the little trees and the forest floor. ACDSee, Luminar, RawTherapee, Photo Ninja, and ON1 look comparatively soft or lose detail in the shadows.
+In terms of detail, Lightroom, Capture One, Exposure, Silkypix, and Darktable seem to retain the most fine details, particularly in the little trees and the forest floor. ACDSee, Luminar, RawTherapee, Photo Ninja, and ON1 look comparatively soft or lose detail in the shadows. Silkypix, however, has a strange, painterly look to the grass details that I wasn't able to get rid of.
 
-In terms of overall color, Exposure, Photo Ninja, RawTherapee, and Capture One clearly tend towards the most saturated look, with a clear distinction between a green and a yellow part in the field. I suspect that these try to approximate the punchy look of Fuji's colors. These color transitions are much more subtle in ACDSee, Darktable, Exposure, Lightroom, Luminar, and ON1. The sky is distinctly blue in Darktable, Photo Ninja, and Luminar, more cyan in ACDSee and Lightroom, and weirdly purple in Capture One and RawTherapee.
+In terms of overall color, Exposure, Photo Ninja, RawTherapee, and Capture One clearly tend towards the most saturated look, with a clear distinction between a green and a yellow part in the field. I suspect that these try to approximate the punchy look of Fuji's colors. These color transitions are much more subtle in ACDSee, Darktable, Exposure, Lightroom, Luminar, Silkypix, and ON1. The sky is distinctly blue in Darktable, Photo Ninja, and Luminar, more cyan in ACDSee, Lightroom, and Silkypix, and weirdly purple in Capture One and RawTherapee.
 
 - ACDSee: Amount 25
 - Capture One: Amount 140
@@ -381,6 +409,7 @@ In terms of overall color, Exposure, Photo Ninja, RawTherapee, and Capture One c
 - ON1: Sharpening 50
 - Photo Ninja: Sharpening strength 50
 - RawTherapee: Sharpening 20
+- Silkypix: Zero Noise reduction, Outline emphasis 30, Ringing artifact control 15 (defaults)
 
 I would not put too much emphasis on the colors, saturation, and contrast here, as these are easily and typically adjusted manually. I am a bit surprised about the differences in detail retention, however.
 
@@ -391,15 +420,46 @@ I went into this expecting to find Lightroom and Capture One to be vastly faster
 #+begin_export html
 <br>
 <div class="lightbox" style="height: 200px">
-  <img src="/static/2020-05/ACDSee_exposure.png">
-  <img src="/static/2020-05/CaptureOne_exposure.png">
-  <img src="/static/2020-05/Darktable_exposure.png">
-  <img src="/static/2020-05/Exposure_exposure.png">
-  <img src="/static/2020-05/Lightroom_exposure.png">
-  <img src="/static/2020-05/Luminar_exposure.png">
-  <img src="/static/2020-05/ON1_exposure.png">
-  <img src="/static/2020-05/PhotoNinja_exposure.png">
-  <img src="/static/2020-05/RawTherapee_exposure.png">
+  <figure>
+    <img src="/static/2020-05/ACDSee_exposure.png">
+    <figcaption>ACDSee</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/CaptureOne_exposure.png">
+    <figcaption>CaptureOne</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Darktable_exposure.png">
+    <figcaption>Darktable</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Exposure_exposure.png">
+    <figcaption>Exposure</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Lightroom_exposure.png">
+    <figcaption>Lightroom</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Luminar_exposure.png">
+    <figcaption>Luminar</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/ON1_exposure.png">
+    <figcaption>ON1</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/PhotoNinja_exposure.png">
+    <figcaption>PhotoNinja</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/RawTherapee_exposure.png">
+    <figcaption>RawTherapee</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Silkypix_exposure.png">
+    <figcaption>Silkypix</figcaption>
+  </figure>
 </div>
 <br>
 #+end_export
@@ -409,15 +469,46 @@ Simple saturation and contrast adjustments, a bit of local contrast, and rarely 
 #+begin_export html
 <br>
 <div class="lightbox" style="height: 200px">
-  <img src="/static/2020-05/ACDSee_color.png">
-  <img src="/static/2020-05/CaptureOne_color.png">
-  <img src="/static/2020-05/Darktable_color.png">
-  <img src="/static/2020-05/Exposure_color.png">
-  <img src="/static/2020-05/Lightroom_color.png">
-  <img src="/static/2020-05/Luminar_color.png">
-  <img src="/static/2020-05/ON1_color.png">
-  <img src="/static/2020-05/PhotoNinja_color.png">
-  <img src="/static/2020-05/RawTherapee_color.png">
+  <figure>
+    <img src="/static/2020-05/ACDSee_color.png">
+    <figcaption>ACDSee</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/CaptureOne_color.png">
+    <figcaption>CaptureOne</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Darktable_color.png">
+    <figcaption>Darktable</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Exposure_color.png">
+    <figcaption>Exposure</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Lightroom_color.png">
+    <figcaption>Lightroom</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Luminar_color.png">
+    <figcaption>Luminar</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/ON1_color.png">
+    <figcaption>ON1</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/PhotoNinja_color.png">
+    <figcaption>PhotoNinja</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/RawTherapee_color.png">
+    <figcaption>RawTherapee</figcaption>
+  </figure>
+  <figure>
+    <img src="/static/2020-05/Silkypix_color.png">
+    <figcaption>Silkypix</figcaption>
+  </figure>
 </div>
 <br>
 #+end_export
@@ -433,6 +524,8 @@ I like ON1. It's relatively affordable, works with simple JSON sidecar files ins
 Exposure is another program I could like a lot, but the color bleeding and graphical artifacts are just not up to snuff. In one example, it entirely failed to guess colors from an underexposed bar scene (not shown). In another it bled colors out onto adjacent objects for no reason. And white balance sometimes changed lightness as well as colors. I read that this might be a graphics driver issue, but regardless, it shook my confidence in Exposure.
 
 ACDSee was a real surprise to me. I seem to remember it as a fast image viewer, but apparently it is (now?) an impressive RAW editor as well. There is a lot to like about this tool. The magic brush for local adjustments is a particularly noteworthy touch, as well as very robust healing tools. Alas, I found the UI rather slow, and it failed on exporting a few files. I'll try again in a year or so.
+
+I was only made aware of Silkypix through a comment after the post had already been published (thank you!). And what I read on the website made me quite excited! Its tools stray somewhat from the Lightroom-inspired norm, which is a very good thing in some cases, such as the hue-priority highlight recovery. It also works on plain files, and seems to have outstanding Fuji film simulations. Alas, it was very slow to use, and not suitable for my Surface tablet.
 
 I had tried RawTherapee a few times in the past, and was always frustrated by its lack of local adjustments, and the need to view things at 100% to see some adjustments. On the other hand, it can match the embedded JPEG tones, and has quite a number of impressive algorithms. Still, it does not appeal to me. But it's still an amazing achievement and a pretty inspiring community as well.
 
@@ -454,14 +547,13 @@ Which leaves Darktable. This is a tool I am deeply familiar with, and have used 
 <br>
 #+end_export
 
-
 Yet, in direct comparison, I find Darktable's tools equally efficient at solving problems, even if the solutions are sometimes a bit different from its Lightroom-inspired peers. One tool in particular I want to emphasize: Color Zones. At first glance, it looks like your standard HSL tool that allows brightness, saturation, and hue changes by color (albeit as a graph instead of sliders). But then you discover the “select-by” switch, and realize that you can modify colors by lightness and saturation, as well as hue. I use this frequently to saturate shadows, which is a great effect I haven't seen in any other program.
 
 No doubt other programs have cool features, too, but Darktable (and RawTherapee) seem uniquely open about their inner workings. And this brings joy to me, on a level the closed, artistic programs can't match. I /like/ graphs, and maths. I'm weird like that.
 
 But what really prompted this whole comparison blog post was my frustration with Darktable's speed. Particularly on my 4K screen, it is not the fastest program out there. And the AMD/OpenCL situation on Linux is still a travesty, which doesn't help. But I learned a thing during this experiment: You must work bottom-up through the rendering chain, if you want Darktable to be fast[fn::because lower stages in the pipeline are cached, but higher stages need to be recalculated after every edit.]. Which, in my case, usually means working through /Lens Correction/ → /Crop and Rotate/ → /Exposure/ → /Tone Equalizer/ → /Contrast Equalizer/ → /Color Balance/ → /Filmic RGB/ → /Color Zones/. As long as I (mostly) edit things in this order, Darktable is fast enough, even on my Surface tablet.
 
-Lastly, I have to say a few words about file management. Most programs here work on some kind of local library that stores all edits. The downside of this is that these libraries are hard to sync between computers, are hard to back up, and need to manually be kept in sync when file locations change. Notable exceptions here are Lightroom, Darktable, Exposure[fn::in an unnecessary subdirectory], RawTherapee, and ON1, which keep their edits alongside the RAW files in little text “sidecar” files[fn::Capture One saves sidecar files, too, but only for metadata, not edits]. Thus even if their library goes out of sync or is lost, at least the edits are still there.
+Lastly, I have to say a few words about file management. Most programs here work on some kind of local library that stores all edits. The downside of this is that these libraries are hard to sync between computers, are hard to back up, and need to manually be kept in sync when file locations change. Notable exceptions here are Lightroom, Darktable, Exposure[fn:subdir:in an unnecessary subdirectory], Silkypix[fn:subdir], RawTherapee, and ON1, which keep their edits alongside the RAW files in little text “sidecar” files[fn::Capture One saves sidecar files, too, but only for metadata, not edits]. Thus even if their library goes out of sync or is lost, at least the edits are still there. To be honest, this is quite an important factor for me.
 
 As for library management, my requirements are small: I want to filter by date, rating, and maybe camera or lens. These needs are met by all programs except possibly Luminar and Photo Ninja. I do most of my file management in external programs on camera import, and with the exported JPEGs, so this area of the RAW developers is not very important to me.
 
