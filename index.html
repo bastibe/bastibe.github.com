@@ -271,6 +271,55 @@ A summary of the topics discussed.
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-python.html">python</a> </div>
+<div class="post-date">19 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-19-how-i-record-screen-casts.html">How I Record Screen Casts</a></h1>
+<p>
+This semester is weird. Instead of holding my "Applied Programming" lecture as I normally would, live-coding in front of the students and narrating my foibles, this time it all had to be done online, thanks to the ongoing pandemic. Which meant I had to record videos. I have no idea how recording video works. This is a record of what I did, in case I have to do more of it. You can see the results of my efforts in my <a href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html">Qt for Python video tutorials</a> and my <a href="https://bastibe.de/2020-05-20-file-parsing-tutorial.html">file parsing with Python video tutorials</a>. Through some strange coincidences, wired.com wrote an <a href="https://www.wired.com/story/anyones-celebrity-streamer-open-source-app/">article</a> about my use of OBS.
+</p>
+
+<p>
+Working on Linux, I used the <a href="https://obsproject.com/">Open Broadcaster Software</a>, or OBS for short, as my recording program. OBS can do much more than record screencasts, but I only use it for two things: Recording a portion of my screen, and switching between different portions.
+</p>
+
+<img src="/static/2020-05/OBS_screenshot.png">
+
+<p>
+To this end, I divide my screen into four quadrants. The top left is OBS, for monitoring my recording and mic levels. The bottom left is a text editor with my speaker notes. The top right and bottom right are my two recording <i>scenes</i>, usually a terminal or browser in the top right, and a text editor in the bottom right. The screenshot shows the <i>Editor</i> scene, which has a filter applied to its source to record only the bottom right quadrant. On a 4K screen, each quadrant is exactly full HD.
+</p>
+
+<p>
+In OBS's settings, I set hotkeys to switch scenes: I use F1 and F2 to select the <i>Browser</i> and <i>Editor</i> scenes, and F6 for starting and stopping recordings. To make these recordings look clean, I disable window shadows for the duration of the recording. For more compatible video files, I enable "Automatically remux to mp4" in OBS' advanced settings.
+</p>
+
+<p>
+The second ingredient to my recording setup is KDE, where I assign F3 and F4 to activate the browser or editor window (right click any window → More Actions → Assign Window Shortcut). For example, to switch to the <i>Browser</i> scene, I hit F1 and F3, or F2 and F4 for the <i>Editor</i> scene. To make this work smoothly, I disabled these shortcuts within my terminal, browser, and text editor.
+</p>
+
+<p>
+With that, I can record screen casts with very minimal effort. The last ingredient however is editing; and I loathe video editing. I'd much rather record a few more takes than spend the same time in a video editor. Instead, I record short snippets of a few minutes each, and simply concatenate them with <a href="https://ffmpeg.org/">FFmpeg</a>:
+</p>
+
+<p>
+Create a file <i>concatenate.txt</i>, that lists all the files to be concatenated:
+</p>
+
+<pre class="example">
+file part-one.mp4
+file part-two.mp4
+file part-three.mp4
+</pre>
+
+<p>
+then run <code>ffmpeg -f concat -i concatenate.txt -c copy output.mp4</code> to concatenate them into a new file <code>output.mp4</code>.
+</p>
+
+<p>
+The great thing about this method is that it uses the <code>copy</code> codec, which does not re-encode the file. I.e. it only takes a fraction of a second, and does not degrade quality.
+</p>
+
+<p>
+In summary, this setup works very well for me. It is simple and efficient, and does not require any video editing. The ability to switch scenes is cool and powerful. But I don't know how often I accidentally recorded the wrong part of the screen and had to redo a recording. All in all, the 18 videos in the file parsing tutorials took 250 takes, according to my trash directory.
+</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div>
 <div class="post-date">01 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-01-raw-developer-comparison.html">RAW Developer Comparison</a></h1>
 <p>
 It bit me again: I got software envy. <i>What if</i> I could develop my pictures faster with a different RAW developer? <i>What if</i> they looked better than they do now? Questions like these keep me up at night.
@@ -1390,108 +1439,7 @@ Summary, and a few finishing touches.
 <p>Code: <a href="/static/2020-03/map18.py">map18.py</a></p>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-python.html">python</a> </div>
-<div class="post-date">11 Mär 2020</div><h1 class="post-title"><a href="2020-03-11-books-of-2019.html">Books of 2019</a></h1>
-
-<div id="outline-container-orge4d5676" class="outline-2">
-<h2 id="orge4d5676"><a href="https://www.goodreads.com/book/show/23692271-sapiens">Sapiens</a></h2>
-<div class="outline-text-2" id="text-orge4d5676">
-
-<figure>
-<img src="https://bastibe.de/static/2020-03/sapiens-cover.jpg" alt="sapiens-cover.jpg" style="float:left;margin:5px;margin-right:20px" width="150px">
-
-</figure>
-
-<p>
-More than any other book this year, <i>Sapiens</i> changed my view of the world. Or at least that's what it felt like while reading. It seemed as if every page contained a new and mind-blowing shift in perspective, such as casting money, democracy, and capitalism as "religions", and questioning the value of civilization in terms of individual human experience. My mind was reeling from the implications of these viewpoints, in a very good way.
-</p>
-
-<p>
-On the other hand, my memory of the book is marred by the author's second book, <i>Homo Deus</i>, which highlights just how little the author's knowledge of history is worth when extrapolating into the future. It is, essentially, boring and shallow science fiction, with seemingly no knowledge decades of previous writing on the topic.
-</p>
-
-<p>
-Come to think about it, this might reveal more about me than the author, for my own expertise is clearly more in science fiction than history; I might simply be much easier to please in the latter than in the former.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org38465ad" class="outline-2">
-<h2 id="org38465ad"><a href="https://www.goodreads.com/book/show/785625.The_Boat_Who_Wouldn_t_Float">The Boat Who Wouldn't Float</a></h2>
-<div class="outline-text-2" id="text-org38465ad">
-
-<figure>
-<img src="https://bastibe.de/static/2020-03/the-boat-who-wouldnt-float-cover.jpg" alt="the-boat-who-wouldnt-float-cover.jpg" style="float:left;margin:5px;margin-right:20px" width="150px">
-
-</figure>
-
-<p>
-This is the partly-fictional account of the author, Mowat Farley, and his boat. That leeks. And stinks. And doesn't sail well. And that is still entirely endearing.
-</p>
-
-<p>
-Or maybe it is really about the humor with which the author recounts his misadventures on the Canadian shore. I stuck with this book even though my terrible digital library loaner had whole corrupted pages every chapter or two. But I could neither put it down, nor stop laughing. This might be the funniest book I have read in a decade. I must read more Mowat Farley!
-</p>
-</div>
-</div>
-
-<div id="outline-container-orga4e1e29" class="outline-2">
-<h2 id="orga4e1e29"><a href="https://www.goodreads.com/series/160439-the-machineries-of-empire">Ninefox Gambit / Raven Stratagem / Revenant Gun</a></h2>
-<div class="outline-text-2" id="text-orga4e1e29">
-
-<figure>
-<img src="https://bastibe.de/static/2020-03/ninefox-gambit-cover.jpg" alt="ninefox-gambit-cover.jpg" style="float:left;margin:5px;margin-right:20px" width="150px">
-
-</figure>
-
-<p>
-I did not like the first book in this series. It had a certain spark, but there was so much jargon and confusion, I just couldn't keep up. Yet. I kept coming back to it. That spark.
-</p>
-
-<p>
-And in 2019, I bit the bullet, and picked up the sequel. And as with many things in life, it was better the second time around. Even though I still didn't quite get this particular sciency-fantasy-space-opera thing; I now felt at home in it, and could enjoy the story unraveling before me. At which point I couldn't put it down any longer. The <i>two weeks</i> I had to wait after finishing the second book before the third one released were harrowing. A masterpiece!
-</p>
-</div>
-</div>
-
-<div id="outline-container-org5fbf6a8" class="outline-2">
-<h2 id="org5fbf6a8"><a href="https://www.goodreads.com/series/191900-the-murderbot-diaries">The Murderbot Diaries</a></h2>
-<div class="outline-text-2" id="text-org5fbf6a8">
-
-<figure>
-<img src="https://bastibe.de/static/2020-03/murderbot-cover.jpg" alt="murderbot-cover.jpg" style="float:left;margin:5px;margin-right:20px" width="150px">
-
-</figure>
-
-<p>
-Sometimes I don't want to think. Sometimes I like a simple bit of escapism, like chocolate. Sometimes, I need to read about the Murderbot.
-</p>
-
-<p>
-I love how the Murderbot Diaries cast humanity as uncaring and somewhat dim animals, with the most humane characters invariably being artificial intelligences. And the character of Murderbot itself is just so plain delightful, how it simultaneously wants to get away from, yet deeply cares for, us silly, childish humans.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orga21291b" class="outline-2">
-<h2 id="orga21291b"><a href="https://www.goodreads.com/book/show/19537969-brains-bullets">Brains vs. Bullets</a></h2>
-<div class="outline-text-2" id="text-orga21291b">
-
-<figure>
-<img src="https://bastibe.de/static/2020-03/brains-vs-bullets-cover.jpg" alt="brains-vs-bullets-cover.jpg" style="float:left;margin:5px;margin-right:20px" width="150px">
-
-</figure>
-
-<p>
-This is an odd one. It's about soldiers, and how they fight. Or rather, what keeps them from fighting. Because every one has a breaking point, and soldiers are often quite close to it when they fight.
-</p>
-
-<p>
-And as it turns out, humans are by and large pretty bad at killing each other. Even professional soldiers apparently are often unable to do so, despite years of training and propaganda. Which is a heartening message indeed, for a book on warfare.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-books.html">books</a> </div><div id="archive">
+<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-python.html">python</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
