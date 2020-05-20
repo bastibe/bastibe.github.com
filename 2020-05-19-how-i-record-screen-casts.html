@@ -31,7 +31,7 @@
 <div id="content">
 <div class="post-date">19 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-19-how-i-record-screen-casts.html">How I Record Screen Casts</a></h1>
 <p>
-This semester is weird. Instead of holding my "Applied Programming" lecture as I normally would, live-coding in front of the students and narrating my foibles, this time it all had to be done online, thanks to the ongoing pandemic. Which meant I had to record videos. I have no idea how recording video works. This is a record of what I did, in case I have to do more of it. You can see the results of my efforts in my <a href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html">Qt for Python video tutorials</a> and my <a href="https://bastibe.de/2020-05-20-file-parsing-tutorial.html">file parsing with Python video tutorials</a>. Through some strange coincidences, wired.com wrote an <a href="https://www.wired.com/story/anyones-celebrity-streamer-open-source-app/">article</a> about my use of OBS.
+This semester is weird. Instead of holding my "Applied Programming" lecture as I normally would, live-coding in front of the students and narrating my foibles, this time it all had to be done online, thanks to the ongoing pandemic. Which meant I had to record videos. I had no idea how to record videos. This is a writeup of what I did, in case I have to do more of it. You can see the results of my efforts in my <a href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html">Qt for Python video tutorials</a> and my <a href="https://bastibe.de/2020-05-20-file-parsing-tutorial.html">file parsing with Python video tutorials</a>. Through some strange coincidences, wired.com wrote an <a href="https://www.wired.com/story/anyones-celebrity-streamer-open-source-app/">article</a> about my use of OBS.
 </p>
 
 <p>
@@ -45,15 +45,19 @@ To this end, I divide my screen into four quadrants. The top left is OBS, for mo
 </p>
 
 <p>
-In OBS's settings, I set hotkeys to switch scenes: I use F1 and F2 to select the <i>Browser</i> and <i>Editor</i> scenes, and F6 for starting and stopping recordings. To make these recordings look clean, I disable window shadows for the duration of the recording. For more compatible video files, I enable "Automatically remux to mp4" in OBS' advanced settings.
+In OBS's settings, I set hotkeys to switch scenes: I use F1 and F2 to select the <i>Browser</i> and <i>Editor</i> scenes, and F6 for starting and stopping recordings. For more compatible video files, I enable "Automatically remux to mp4" in OBS' advanced settings.
 </p>
 
 <p>
-The second ingredient to my recording setup is KDE, where I assign F3 and F4 to activate the browser or editor window (right click any window → More Actions → Assign Window Shortcut). For example, to switch to the <i>Browser</i> scene, I hit F1 and F3, or F2 and F4 for the <i>Editor</i> scene. To make this work smoothly, I disabled these shortcuts within my terminal, browser, and text editor.
+The second ingredient to my recording setup is KDE, where I assign F3 and F4 to activate the browser or editor window (right click any window → More Actions → Assign Window Shortcut). And to make my recordings look clean, I disable window shadows for the duration of the recording.
 </p>
 
 <p>
-With that, I can record screen casts with very minimal effort. The last ingredient however is editing; and I loathe video editing. I'd much rather record a few more takes than spend the same time in a video editor. Instead, I record short snippets of a few minutes each, and simply concatenate them with <a href="https://ffmpeg.org/">FFmpeg</a>:
+With these shortcuts, I hit F1 and F3 to switch focus and scene to the browser, or F2 and F4 for the text editor. To make this work smoothly, I disabled these shortcuts within my terminal, browser, and text editor. But always be weary of accidentally getting those out of sync. I don't know how often I accidentally recorded the wrong part of the screen and had to redo a recording.
+</p>
+
+<p>
+Anyway, with this setup, I can record screen casts with very minimal effort. The last ingredient however is editing; and I loathe video editing. I'd much rather record a few more takes than spend the same time in a video editor. Instead, I record short snippets of a few minutes each, and simply concatenate them with <a href="https://ffmpeg.org/">FFmpeg</a>:
 </p>
 
 <p>
@@ -75,7 +79,7 @@ The great thing about this method is that it uses the <code>copy</code> codec, w
 </p>
 
 <p>
-In summary, this setup works very well for me. It is simple and efficient, and does not require any video editing. The ability to switch scenes is cool and powerful. But I don't know how often I accidentally recorded the wrong part of the screen and had to redo a recording. All in all, the 18 videos in the file parsing tutorials took 250 takes, according to my trash directory.
+In summary, this setup works very well for me. It is simple and efficient, and does not require any video editing. The ability to switch scenes is cool and powerful. Still, recording videos is a lot of work. All in all, the 18 videos in the file parsing tutorials took 250 takes, according to my trash directory.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
