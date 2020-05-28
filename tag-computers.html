@@ -29,6 +29,104 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "computers":</h1>
+<div class="post-date">27 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
+<p>
+Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
+</p>
+
+<div id="outline-container-orgcd9373c" class="outline-2">
+<h2 id="orgcd9373c">Text</h2>
+<div class="outline-text-2" id="text-orgcd9373c">
+<p>
+For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
+</p>
+
+<p>
+That said, modern LaTeX is not so bad any more: XeLaTeX supports normal OpenType fonts, mixed languages, proper unicode, and natively renders to PDF. It also renders pretty quickly. My entire dissertation renders in less than three seconds, which is plenty fast enough for me.
+</p>
+
+<p>
+To render, I run a simple makefile in an infinite loop that recompiles my PDF whenever the TeX source changes, giving live feedback while writing:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #111111;">graph_pdfs</span>)
+    xelatex -interaction nonstopmode diss.tex
+</pre>
+</div>
+
+<p>
+We'll get back to <code>$(graph_pdfs)</code> in a second.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org98d9774" class="outline-2">
+<h2 id="org98d9774">Graphs</h2>
+<div class="outline-text-2" id="text-org98d9774">
+<p>
+A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
+</p>
+
+<p>
+But you don't want to simply execute <i>all</i> the scripts in <code>graphs</code>, as some of them might be shared dependencies that do not produce PDFs. So instead, I only execute scripts that start with a chapter number, which conveniently sorts them by chapter in the file manager, as well.
+</p>
+
+<p>
+Thus all graphs render into the main PDF and update automatically, just like the main document:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #111111;">graph_sources</span> = $(<span style="color: #111111;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
+<span style="color: #111111;">graph_pdfs</span> = $(<span style="color: #111111;">patsubst</span> %.py,%.pdf,$(<span style="color: #111111;">graph_sources</span>))
+
+<span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
+    cd graphs; .venv/bin/python $(<span style="color: #111111;">notdir</span> $<span style="color: #111111;">&lt;</span>)
+</pre>
+</div>
+
+<p>
+The first two lines build a list of all graph scripts in the <code>graphs</code> directory, and their matching PDFs. The last two lines are a makefile recipy that compiles any graph script into a PDF, using the virtualenv in <code>graphs/.venv/</code>. How elegant these makefiles are, with recipe definitions independent of targets.
+</p>
+
+<p>
+This system is surprisingly flexible, and absolutely trivial to debug. For example, I sometimes use those graph scripts as glorified shell scripts, for converting an SVG to PDF with Inkscape or some similar task. Or I compile some intermediate data before actually building the graph, and cache them for later use. Just make sure to set an appropriate exit code in the graph script, to signal to the makefile whether the graph was successfully created. An additional makefile target <code>graphs: $(graph_pdfs)</code> can also come in handy if you want ignore the TeX side of things for a bit.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf7ab3aa" class="outline-2">
+<h2 id="orgf7ab3aa">Data</h2>
+<div class="outline-text-2" id="text-orgf7ab3aa">
+<p>
+All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
+</p>
+
+<p>
+To set up a new writing environment from scratch, all I need is the following series of commands:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
+<span style="color: #111111;">cd</span> dissertation
+git annex init
+env <span style="color: #111111;">WEBDAV_USERNAME</span>=xxx <span style="color: #111111;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
+git annex copy --from mywebdavserver
+(<span style="color: #111111;">cd</span> graphs; pipenv install)
+make all
+</pre>
+</div>
+
+<p>
+This will download my graphs and text from <code>mygitserver</code>, download my databases from <code>mywebdavserver</code>, build my Python environment with <code>pipenv</code>, recreate all the graph PDFs, and compile the TeX. A process that can take a few hours, but is completely automated and reliable.
+</p>
+
+<p>
+And that is truly the key part; The last thing you want to do while writing is being distracted by technical issues such as "where did I put that database again?", "didn't that graph show something different the other day?", or "I forgot to my database file at work and now I'm stuck at home during the pandemic and can't progress". Not that any of those would have ever happened to me, of course.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
 <div class="post-date">21 Jan 2020</div><h1 class="post-title"><a href="2020-01-21-i-miss-my-mac.html">I Miss My Mac</a></h1>
 <p>
 There was a time, maybe from 2009 to 2011, when Apple computers were glorious. They were elegant devices, beautiful to me, and powerful. Never before, or since, have I loved a machine as I loved that MacBook Pro early 2011.
