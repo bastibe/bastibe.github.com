@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
+<div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="https://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
 <p>
 What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
 </p>
@@ -47,13 +47,13 @@ But lately, I have come to struggle with these rules. I am now writing a lot of 
     <span style="color: #111111;">"""The spectrum of a rectangular window. [...]"""</span>
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will be corrected later, suppress the warning.</span>
-    <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #303030;">'ignore'</span>):
-        <span style="color: #111111;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+    <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #606060;">'ignore'</span>):
+        <span style="color: #404040;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
                      np.sin(specsize*angular_frequency/2) /
                      np.sin(angular_frequency/2) )
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">since sin(x) == x for small x, the above expression</span>
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
-    <span style="color: #111111;">spectrum</span>[angular_frequency == 0.0] = specsize
+    <span style="color: #404040;">spectrum</span>[angular_frequency == 0.0] = specsize
     <span style="color: #111111; font-weight: bold;">return</span> spectrum
 </pre>
 </div>
@@ -67,7 +67,7 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #111111;">&lt;</span> handle
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #404040;">&lt;</span> handle
     <span style="color: #111111; font-weight: bold;">properties</span>
         data
         samplerate
@@ -78,24 +78,24 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
         duration
     <span style="color: #111111; font-weight: bold;">end</span>
     <span style="color: #111111; font-weight: bold;">methods</span>
-        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #111111;">,</span> samplerate<span style="color: #111111;">,</span> blocksize<span style="color: #111111;">,</span> hopsize)
+        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #404040;">,</span> samplerate<span style="color: #404040;">,</span> blocksize<span style="color: #404040;">,</span> hopsize)
             <span style="color: #111111; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
-            narginchk(2<span style="color: #111111;">,</span> 4)<span style="color: #111111;">;</span>
-            obj.data <span style="color: #111111;">=</span> data<span style="color: #111111;">;</span>
-            obj.samplerate <span style="color: #111111;">=</span> samplerate<span style="color: #111111;">;</span>
-            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111;">&gt;=</span> 3
-                obj.blocksize <span style="color: #111111;">=</span> blocksize<span style="color: #111111;">;</span>
+            narginchk(2<span style="color: #404040;">,</span> 4)<span style="color: #404040;">;</span>
+            obj.data <span style="color: #404040;">=</span> data<span style="color: #404040;">;</span>
+            obj.samplerate <span style="color: #404040;">=</span> samplerate<span style="color: #404040;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #404040;">&gt;=</span> 3
+                obj.blocksize <span style="color: #404040;">=</span> blocksize<span style="color: #404040;">;</span>
             <span style="color: #111111; font-weight: bold;">else</span>
-                obj.blocksize <span style="color: #111111;">=</span> 2048<span style="color: #111111;">;</span>
+                obj.blocksize <span style="color: #404040;">=</span> 2048<span style="color: #404040;">;</span>
             <span style="color: #111111; font-weight: bold;">end</span>
-            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #111111;">==</span> 4
-                obj.hopsize <span style="color: #111111;">=</span> hopsize<span style="color: #111111;">;</span>
+            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #404040;">==</span> 4
+                obj.hopsize <span style="color: #404040;">=</span> hopsize<span style="color: #404040;">;</span>
             <span style="color: #111111; font-weight: bold;">else</span>
-                obj.hopsize <span style="color: #111111;">=</span> 1024<span style="color: #111111;">;</span>
+                obj.hopsize <span style="color: #404040;">=</span> 1024<span style="color: #404040;">;</span>
             <span style="color: #111111; font-weight: bold;">end</span>
         <span style="color: #111111; font-weight: bold;">end</span>
-        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
-            time <span style="color: #111111;">=</span> length(obj.data)<span style="color: #111111;">/</span>obj.samplerate<span style="color: #111111;">;</span>
+        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
+            time <span style="color: #404040;">=</span> length(obj.data)<span style="color: #404040;">/</span>obj.samplerate<span style="color: #404040;">;</span>
         <span style="color: #111111; font-weight: bold;">end</span>
     <span style="color: #111111; font-weight: bold;">end</span>
 <span style="color: #111111; font-weight: bold;">end</span>
@@ -113,7 +113,7 @@ The sad thing is, I don't know the answer to these questions. There have been a 
 <p>
 Do you have any idea how to progress from here?
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

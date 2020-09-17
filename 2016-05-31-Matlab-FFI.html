@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">31 May 2016</div><h1 class="post-title"><a href="2016-05-31-Matlab-FFI.html">Matlab has an FFI and it is not Mex</a></h1>
+<div class="post-date">31 May 2016</div><h1 class="post-title"><a href="https://bastibe.de/2016-05-31-Matlab-FFI.html">Matlab has an FFI and it is not Mex</a></h1>
 <p>
 Sometimes, you just have to use C code. There's no way around it. C is the lingua franca and bedrock of our computational world. Even in Matlab, sometimes, you just have to call into a C library.
 </p>
@@ -54,15 +54,15 @@ So here goes, a very simple C library that adds two arrays:
 <pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
 <span style="color: #111111;">#include</span> test.h
 
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>) {
-    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">n</span>=0; n&lt;length; n++) {
+<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #404040;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">length</span>) {
+    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">n</span>=0; n&lt;length; n++) {
         out[n] += in[n];
     }
 }
 
 <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
-<span style="color: #111111;">#include</span> <span style="color: #303030;">&lt;stddef.h&gt;</span>
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #111111;">length</span>);
+<span style="color: #111111;">#include</span> <span style="color: #606060;">&lt;stddef.h&gt;</span>
+<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">length</span>);
 </pre>
 </div>
 
@@ -75,9 +75,9 @@ Now, let's load that library into Matlab with <code>loadlibrary</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #303030;">'test'</span>))
-    [notfound<span style="color: #111111;">,</span> warnings] <span style="color: #111111;">=</span> loadlibrary(<span style="color: #303030;">'test.so'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'test.h'</span>)<span style="color: #111111;">;</span>
-    assert(isempty(notfound)<span style="color: #111111;">,</span> <span style="color: #303030;">'could not load test library'</span>)
+<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #606060;">'test'</span>))
+    [notfound<span style="color: #404040;">,</span> warnings] <span style="color: #404040;">=</span> loadlibrary(<span style="color: #606060;">'test.so'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'test.h'</span>)<span style="color: #404040;">;</span>
+    assert(isempty(notfound)<span style="color: #404040;">,</span> <span style="color: #606060;">'could not load test library'</span>)
 <span style="color: #111111; font-weight: bold;">end</span>
 </pre>
 </div>
@@ -91,11 +91,11 @@ With that, we can call functions in that library using <code>calllib</code>. But
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">vector1 <span style="color: #111111;">=</span> [1 2 3 4 5]<span style="color: #111111;">;</span>
-vector2 <span style="color: #111111;">=</span> [9 8 7 6 5]<span style="color: #111111;">;</span>
+<pre class="src src-octave">vector1 <span style="color: #404040;">=</span> [1 2 3 4 5]<span style="color: #404040;">;</span>
+vector2 <span style="color: #404040;">=</span> [9 8 7 6 5]<span style="color: #404040;">;</span>
 
-vector1ptr <span style="color: #111111;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111;">,</span> vector1)<span style="color: #111111;">;</span>
-vector2ptr <span style="color: #111111;">=</span> libpointer(<span style="color: #303030;">'singlePointer'</span><span style="color: #111111;">,</span> vector2)<span style="color: #111111;">;</span>
+vector1ptr <span style="color: #404040;">=</span> libpointer(<span style="color: #606060;">'singlePointer'</span><span style="color: #404040;">,</span> vector1)<span style="color: #404040;">;</span>
+vector2ptr <span style="color: #404040;">=</span> libpointer(<span style="color: #606060;">'singlePointer'</span><span style="color: #404040;">,</span> vector2)<span style="color: #404040;">;</span>
 </pre>
 </div>
 
@@ -108,7 +108,7 @@ Then, finally, let's call our function:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1))<span style="color: #111111;">;</span>
+<pre class="src src-octave">calllib(<span style="color: #606060;">'test'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'add_arrays'</span><span style="color: #404040;">,</span> vector1ptr<span style="color: #404040;">,</span> vector2ptr<span style="color: #404040;">,</span> length(vector1))<span style="color: #404040;">;</span>
 </pre>
 </div>
 
@@ -117,7 +117,7 @@ If you see no errors, everything went smoothly, and you will now have changed th
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">added_vectors <span style="color: #111111;">=</span> vector1ptr.Value<span style="color: #111111;">;</span>
+<pre class="src src-octave">added_vectors <span style="color: #404040;">=</span> vector1ptr.Value<span style="color: #404040;">;</span>
 </pre>
 </div>
 
@@ -126,11 +126,11 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">timeit(@() calllib(<span style="color: #303030;">'test'</span><span style="color: #111111;">,</span> <span style="color: #303030;">'add_arrays'</span><span style="color: #111111;">,</span> vector1ptr<span style="color: #111111;">,</span> vector2ptr<span style="color: #111111;">,</span> length(vector1)))
+<pre class="src src-octave">timeit(@() calllib(<span style="color: #606060;">'test'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'add_arrays'</span><span style="color: #404040;">,</span> vector1ptr<span style="color: #404040;">,</span> vector2ptr<span style="color: #404040;">,</span> length(vector1)))
 <span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
-timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #111111;">,</span> single(vector2)))
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #404040;">,</span> single(vector2)))
 <span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
-timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #111111;">,</span> vector2))
+timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #404040;">,</span> vector2))
 <span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
 </pre>
 </div>
@@ -142,7 +142,7 @@ So as you can see, the <code>calllib</code> is plenty fast. However, if you add 
 <p>
 However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life <i>not</i> spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

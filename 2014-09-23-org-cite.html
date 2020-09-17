@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
+<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
 <p>
 I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
 </p>
@@ -43,7 +43,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
+<pre class="src src-elisp">(org-add-link-type <span style="color: #606060;">"cite"</span>
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
        <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
 <span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
@@ -52,23 +52,23 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
         (<span style="color: #111111; font-weight: bold;">save-excursion</span>
           (beginning-of-buffer)
           (<span style="color: #111111; font-weight: bold;">save-match-data</span>
-            (re-search-forward <span style="color: #303030;">"\\\\bibliography{</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">}]+</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">}"</span>)
-            (concat (match-string 1) <span style="color: #303030;">".bib"</span>))))
+            (re-search-forward <span style="color: #606060;">"\\\\bibliography{</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">}]+</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">}"</span>)
+            (concat (match-string 1) <span style="color: #606060;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
        <span style="color: #111111;">"Export [[cite:cohen93]] as </span><span style="color: #111111; font-weight: bold;">\</span><span style="color: #111111;">cite{cohen93} in LaTeX."</span>
        (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
-           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
-               (format <span style="color: #303030;">"\\cite{%s}"</span> path)
-             (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #606060;">"cite:"</span> desc)))
+               (format <span style="color: #606060;">"\\cite{%s}"</span> path)
+             (format <span style="color: #606060;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
 </div>
 
 <p>
 This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

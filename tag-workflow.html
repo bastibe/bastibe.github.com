@@ -29,14 +29,14 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "workflow":</h1>
-<div class="post-date">27 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
+<div class="post-date">27 May 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
 <p>
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
 </p>
 
-<div id="outline-container-orgcd9373c" class="outline-2">
-<h2 id="orgcd9373c">Text</h2>
-<div class="outline-text-2" id="text-orgcd9373c">
+<div id="outline-container-orgc389b08" class="outline-2">
+<h2 id="orgc389b08">Text</h2>
+<div class="outline-text-2" id="text-orgc389b08">
 <p>
 For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
 </p>
@@ -50,7 +50,7 @@ To render, I run a simple makefile in an infinite loop that recompiles my PDF wh
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #111111;">graph_pdfs</span>)
+<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #404040;">graph_pdfs</span>)
     xelatex -interaction nonstopmode diss.tex
 </pre>
 </div>
@@ -61,9 +61,9 @@ We'll get back to <code>$(graph_pdfs)</code> in a second.
 </div>
 </div>
 
-<div id="outline-container-org98d9774" class="outline-2">
-<h2 id="org98d9774">Graphs</h2>
-<div class="outline-text-2" id="text-org98d9774">
+<div id="outline-container-org183767d" class="outline-2">
+<h2 id="org183767d">Graphs</h2>
+<div class="outline-text-2" id="text-org183767d">
 <p>
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
 </p>
@@ -77,11 +77,11 @@ Thus all graphs render into the main PDF and update automatically, just like the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111;">graph_sources</span> = $(<span style="color: #111111;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
-<span style="color: #111111;">graph_pdfs</span> = $(<span style="color: #111111;">patsubst</span> %.py,%.pdf,$(<span style="color: #111111;">graph_sources</span>))
+<pre class="src src-makefile"><span style="color: #404040;">graph_sources</span> = $(<span style="color: #404040;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
+<span style="color: #404040;">graph_pdfs</span> = $(<span style="color: #404040;">patsubst</span> %.py,%.pdf,$(<span style="color: #404040;">graph_sources</span>))
 
 <span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
-    cd graphs; .venv/bin/python $(<span style="color: #111111;">notdir</span> $<span style="color: #111111;">&lt;</span>)
+    cd graphs; .venv/bin/python $(<span style="color: #404040;">notdir</span> $<span style="color: #111111;">&lt;</span>)
 </pre>
 </div>
 
@@ -95,9 +95,9 @@ This system is surprisingly flexible, and absolutely trivial to debug. For examp
 </div>
 </div>
 
-<div id="outline-container-orgf7ab3aa" class="outline-2">
-<h2 id="orgf7ab3aa">Data</h2>
-<div class="outline-text-2" id="text-orgf7ab3aa">
+<div id="outline-container-org0998a93" class="outline-2">
+<h2 id="org0998a93">Data</h2>
+<div class="outline-text-2" id="text-org0998a93">
 <p>
 All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
 </p>
@@ -108,11 +108,11 @@ To set up a new writing environment from scratch, all I need is the following se
 
 <div class="org-src-container">
 <pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
-<span style="color: #111111;">cd</span> dissertation
+<span style="color: #404040;">cd</span> dissertation
 git annex init
-env <span style="color: #111111;">WEBDAV_USERNAME</span>=xxx <span style="color: #111111;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
+env <span style="color: #404040;">WEBDAV_USERNAME</span>=xxx <span style="color: #404040;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
 git annex copy --from mywebdavserver
-(<span style="color: #111111;">cd</span> graphs; pipenv install)
+(<span style="color: #404040;">cd</span> graphs; pipenv install)
 make all
 </pre>
 </div>
@@ -127,7 +127,7 @@ And that is truly the key part; The last thing you want to do while writing is b
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
-<div class="post-date">07 Apr 2018</div><h1 class="post-title"><a href="2018-04-07-defeating-news-addiction.html">Defeating News Addiction</a></h1>
+<div class="post-date">07 Apr 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-04-07-defeating-news-addiction.html">Defeating News Addiction</a></h1>
 <p>
 I want to consume the news, both because it is genuinely relevant for my work, and because conversations about news are part of my social life. But I do not want to be consumed by news, and end up scanning news websites over and over for new content, even though you know that the likelihood of finding anything interesting is small.
 </p>
@@ -197,11 +197,14 @@ With this system, I never miss anything, but once I consume all the news in my f
   <text x="76" y="27" font-family="Verdana" font-size="13px" fill="#E1E6E7">ACHIEVEMENT UNLOCKED</text>
   <text x="76" y="48" font-family="Verdana" font-size="13px" fill="#E1E6E7">Defeated News Addiction!</text>
 </svg>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-workflow.html">workflow</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     function load_disqus() {

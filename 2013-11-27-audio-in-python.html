@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">27 Nov 2013</div><h1 class="post-title"><a href="2013-11-27-audio-in-python.html">Sound in Python</a></h1>
+<div class="post-date">27 Nov 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-11-27-audio-in-python.html">Sound in Python</a></h1>
 <p>
 Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
 </p>
@@ -56,7 +56,7 @@ So, lets read some audio data, shall we?
 
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
-<span style="color: #111111;">data</span> = soundfile.read(<span style="color: #303030;">'sad_song.wav'</span>)
+<span style="color: #404040;">data</span> = soundfile.read(<span style="color: #606060;">'sad_song.wav'</span>)
 </pre>
 </div>
 
@@ -74,8 +74,8 @@ OK, that was easy. So let's read only the first and last 100 frames!
 
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
-<span style="color: #111111;">first</span> = soundfile.read(<span style="color: #303030;">'long_song.flac'</span>, stop=100)
-<span style="color: #111111;">last</span> = soundfile.read(start=-100)
+<span style="color: #404040;">first</span> = soundfile.read(<span style="color: #606060;">'long_song.flac'</span>, stop=100)
+<span style="color: #404040;">last</span> = soundfile.read(start=-100)
 </pre>
 </div>
 
@@ -96,8 +96,8 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 <span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
 <span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
-    <span style="color: #111111;">f</span> = SoundFile(<span style="color: #303030;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #111111;">format</span>=ogg_file,
+    <span style="color: #404040;">f</span> = SoundFile(<span style="color: #606060;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
+                  channels=s.channels, <span style="color: #404040;">format</span>=ogg_file,
                   mode=write_mode)
     f.write(s.read(s.sample_rate)) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">one second</span>
 </pre>
@@ -128,7 +128,7 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
 [2] More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
 [3] More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

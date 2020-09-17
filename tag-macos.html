@@ -29,7 +29,7 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "macos":</h1>
-<div class="post-date">21 Jan 2020</div><h1 class="post-title"><a href="2020-01-21-i-miss-my-mac.html">I Miss My Mac</a></h1>
+<div class="post-date">21 Jan 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-01-21-i-miss-my-mac.html">I Miss My Mac</a></h1>
 <p>
 There was a time, maybe from 2009 to 2011, when Apple computers were glorious. They were elegant devices, beautiful to me, and powerful. Never before, or since, have I loved a machine as I loved that MacBook Pro early 2011.
 </p>
@@ -73,8 +73,8 @@ As I said, I miss my Mac, back when technology was magical, and just worked. And
 <p>
 I should go play with my child now, and run around in the yard, or maybe read a paper book. There's no joy in technology any more.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">29 Dec 2017</div><h1 class="post-title"><a href="2017-12-29-rsnapshot-on-macos.html">How to set up rsnapshot instead of Time Machine</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">29 Dec 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-12-29-rsnapshot-on-macos.html">How to set up rsnapshot instead of Time Machine</a></h1>
 <p>
 (This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
 </p>
@@ -175,9 +175,9 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">  <span style="color: #303030;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #303030;"> </span><span style="color: #111111;">version="1.0" encoding="UTF-8"</span><span style="color: #303030;">?&gt;</span>
-  <span style="color: #303030;">&lt;!</span><span style="color: #303030;">DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
-  &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #111111;">version</span>=<span style="color: #303030;">"1.0"</span>&gt;
+<pre class="src src-xml">  <span style="color: #606060;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #606060;"> </span><span style="color: #111111;">version="1.0" encoding="UTF-8"</span><span style="color: #606060;">?&gt;</span>
+  <span style="color: #606060;">&lt;!</span><span style="color: #606060;">DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+  &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #404040;">version</span>=<span style="color: #606060;">"1.0"</span>&gt;
   &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
       &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
       &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
@@ -304,9 +304,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-org82fa772" class="outline-2">
-<h2 id="org82fa772">Caveats</h2>
-<div class="outline-text-2" id="text-org82fa772">
+<div id="outline-container-orgbc82ad4" class="outline-2">
+<h2 id="orgbc82ad4">Caveats</h2>
+<div class="outline-text-2" id="text-orgbc82ad4">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -320,8 +320,8 @@ There are other possible solutions: ① You could modify the launchd entry such 
 </p>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-backup.html">backup</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
 <p>
 This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
 </p>
@@ -345,9 +345,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-orgd4e1ca2" class="outline-2">
-<h2 id="orgd4e1ca2">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-orgd4e1ca2">
+<div id="outline-container-org0a899b1" class="outline-2">
+<h2 id="org0a899b1">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-org0a899b1">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -389,8 +389,8 @@ All of that said, once you know what to do and how to do it, the resulting code 
 </p>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-audio.html">audio</a> <a href="tag-programming.html">programming</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">16 Oct 2015</div><h1 class="post-title"><a href="2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">16 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
 
 <figure>
 <img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png">
@@ -416,8 +416,8 @@ And with the newest version of OS X, El Capitan, they finally blew it for me. Be
 <p>
 So, good bye OS X. I updated my work laptop first, and I regret it. I never regretted an OS X update before. My home machine is not going to get the update. It is honestly sad to see my once-beloved Mac platform becoming worse and worse and worse with every new release.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-macos.html">macos</a> <a href="tag-ui.html">ui</a> </div>
-<div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-ui.html">ui</a> </div>
+<div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
 <p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
 </p>
@@ -443,20 +443,20 @@ Anyway, here's a small Python script that changes the file creation date (but no
 <span style="color: #111111; font-weight: bold;">import</span> os
 <span style="color: #111111; font-weight: bold;">import</span> datetime
 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">range</span>(426, 465):
-    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111;">format</span>(index)
+<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(426, 465):
+    <span style="color: #404040;">filename</span> = <span style="color: #606060;">'GOPR0{}.MP4'</span>.<span style="color: #404040;">format</span>(index)
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
-    <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #404040;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #404040;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    os.system(<span style="color: #606060;">'SetFile -d "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    os.system(<span style="color: #606060;">'SetFile -m "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">13 Sep 2012</div><h1 class="post-title"><a href="2012-09-13-Kindle-app-does-not-start.html">Kindle.app not starting on a case-sensitive file system</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">13 Sep 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-09-13-Kindle-app-does-not-start.html">Kindle.app not starting on a case-sensitive file system</a></h1>
 <p>
 So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.
 </p>
@@ -492,8 +492,8 @@ Kindle works again.
 <p>
 Spelling is hard, it seems.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
 <p>
 A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
 </p>
@@ -564,10 +564,10 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">    <span style="color: #303030;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #303030;"> </span><span style="color: #111111;">version="1.0" standalone='no'</span><span style="color: #303030;">?&gt;</span><span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
-    <span style="color: #303030;">&lt;!</span><span style="color: #303030;">DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;</span>
+<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+    &lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
     &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #111111;">replace-wildcards</span>=<span style="color: #303030;">"yes"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
+        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #404040;">replace-wildcards</span>=<span style="color: #606060;">"yes"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
         &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
             &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
             &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
@@ -638,8 +638,8 @@ This article heavily steals from these fine folks on the internet:
 </ul>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-macos.html">macos</a> <a href="tag-backup.html">backup</a> </div>
-<div class="post-date">19 Jul 2012</div><h1 class="post-title"><a href="2012-07-09-apple-is-failing-me.html">How Apple is Failing Me</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-backup.html">backup</a> </div>
+<div class="post-date">19 Jul 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-07-09-apple-is-failing-me.html">How Apple is Failing Me</a></h1>
 <p>
 I bought my first Apple computer in 2007 after a long time of gaming on Windows and a few years of Linux. In the beginning, I was just amazed at the consistency, practicality and sanity of the whole experience. I think I had a bad case of tinkeritis and neophilia in my Linux days, so this was probably to be expected.
 </p>
@@ -818,8 +818,8 @@ As a matter of fact, I would love to see well enough to see Retina at all, but t
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">22 Feb 2012</div><h1 class="post-title"><a href="2012-02-22-how-to-gem-install-rlua-on-osx-slash-homebrew.html">How to gem install rlua on OSX/homebrew</a></h1>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">22 Feb 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-02-22-how-to-gem-install-rlua-on-osx-slash-homebrew.html">How to gem install rlua on OSX/homebrew</a></h1>
 <p>
 If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using
 </p>
@@ -855,8 +855,8 @@ Hence, here is how you get rlua to install:
 <p>
 Not exactly a beautiful solution, but it works.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">03 Sep 2011</div><h1 class="post-title"><a href="2011-09-03-adobe-air-application-crashes.html">Adobe AIR Application Crashes</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">03 Sep 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-09-03-adobe-air-application-crashes.html">Adobe AIR Application Crashes</a></h1>
 <p>
 Adobe, oh Adobe. Why?
 </p>
@@ -878,7 +878,7 @@ At least this is an error that can easily be fixed. Fire up your terminal, type
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #111111;">cd</span> /Library/Frameworks/Adobe<span style="color: #303030;">\ </span>AIR.framework/Version/Current/Resources/
+<pre class="src src-sh"><span style="color: #404040;">cd</span> /Library/Frameworks/Adobe<span style="color: #606060;">\ </span>AIR.framework/Version/Current/Resources/
 sudo ln -s WebKit.dylib Webkit.dylib
 </pre>
 </div>
@@ -890,8 +890,8 @@ Then enter your password and your AIR applications should work again.
 <p>
 Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">01 Aug 2011</div><h1 class="post-title"><a href="2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">Compiling Scipy and Matplotlib using pip on Lion</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">01 Aug 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">Compiling Scipy and Matplotlib using pip on Lion</a></h1>
 <p>
 So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.
 </p>
@@ -920,7 +920,7 @@ But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/0
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #111111;">egg</span>=matplotlib
+<pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #404040;">egg</span>=matplotlib
 </pre>
 </div>
 
@@ -931,8 +931,8 @@ By doing that, Matplotlib should install just fine.
 <p>
 Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-python.html">python</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">04 Mar 2011</div><h1 class="post-title"><a href="2011-03-04-installing-pygame-using-homebrew.html">Installing Pygame using Homebrew</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">04 Mar 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Installing Pygame using Homebrew</a></h1>
 <p>
 So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
 </p>
@@ -977,7 +977,7 @@ and add the following line just above the two end at the end of the file
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">include.install Dir[<span style="color: #303030;">"*.h"</span>]
+<pre class="src src-sh">include.install Dir[<span style="color: #606060;">"*.h"</span>]
 </pre>
 </div>
 
@@ -1074,8 +1074,8 @@ Alright, now without further ado, install Pygame by typing
 <p>
 Great! That's it! Everything should work now!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-python.html">python</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">03 Feb 2011</div><h1 class="post-title"><a href="2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">03 Feb 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a></h1>
 <p>
 For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.
 </p>
@@ -1122,7 +1122,7 @@ You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">    <span style="color: #111111;">export</span> <span style="color: #111111;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #111111;">PATH</span>
+<pre class="src src-sh">    <span style="color: #404040;">export</span> <span style="color: #404040;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #404040;">PATH</span>
 </pre>
 </div>
 
@@ -1204,8 +1204,8 @@ This should now download and install matplotlib.
 <p>
 Thank you for reading.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-compiling.html">compiling</a> <a href="tag-python.html">python</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">14 Mar 2009</div><h1 class="post-title"><a href="2009-03-14-get-a-mac.html">Get a Mac</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">14 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-14-get-a-mac.html">Get a Mac</a></h1>
 
 <figure>
 <img src="http://bastibe.de/static/2009-03/osx.png" alt="osx.png">
@@ -1229,11 +1229,14 @@ Ziemlich genau wie ihm ging es mir auch.
 <p>
 Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll sind. Viel besser als alles, was ich dazu schreiben würde oder <a href="http://www.meinstudi.de/basti/?p=49">bereits</a> <a href="http://www.meinstudi.de/basti/?p=4">getan</a> <a href="http://www.meinstudi.de/basti/?p=24">habe</a>.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-macos.html">macos</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     function load_disqus() {

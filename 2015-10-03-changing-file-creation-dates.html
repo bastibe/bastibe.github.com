@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+<div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
 <p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
 </p>
@@ -55,19 +55,19 @@ Anyway, here's a small Python script that changes the file creation date (but no
 <span style="color: #111111; font-weight: bold;">import</span> os
 <span style="color: #111111; font-weight: bold;">import</span> datetime
 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #111111;">range</span>(426, 465):
-    <span style="color: #111111;">filename</span> = <span style="color: #303030;">'GOPR0{}.MP4'</span>.<span style="color: #111111;">format</span>(index)
+<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(426, 465):
+    <span style="color: #404040;">filename</span> = <span style="color: #606060;">'GOPR0{}.MP4'</span>.<span style="color: #404040;">format</span>(index)
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
-    <span style="color: #111111;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    <span style="color: #404040;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #111111;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    <span style="color: #404040;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #303030;">'SetFile -d "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    os.system(<span style="color: #606060;">'SetFile -d "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #303030;">'SetFile -m "{}" {}'</span>.<span style="color: #111111;">format</span>(new_date.strftime(<span style="color: #303030;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+    os.system(<span style="color: #606060;">'SetFile -m "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-programming.html">programming</a> <a href="tag-macos.html">macos</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

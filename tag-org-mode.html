@@ -29,7 +29,7 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "org-mode":</h1>
-<div class="post-date">02 Apr 2018</div><h1 class="post-title"><a href="2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h1>
+<div class="post-date">02 Apr 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h1>
 <p>
 I keep a simple journal in <a href="https://github.com/bastibe/org-journal">org-journal</a>: One text file per day, in <a href="https://orgmode.org/">org-mode</a>. But over the years, org-journal has grown somewhat beyond this simple use case. <a href="https://github.com/bastibe/org-journal/releases/tag/1.7.1">About three years ago</a>, a gentleman named <a href="https://github.com/vkazanov">Vladimir Kazanov</a> implemented a very fast text search. Thus, my journal became an information archive. <a href="https://github.com/bastibe/org-journal/releases/tag/1.11.0">About two years ago</a>, org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And <a href="https://github.com/bastibe/org-journal/releases/tag/1.13.1">today</a>, org-journal gained the ability to work with future journal entries, thus becoming a calendar.
 </p>
@@ -68,8 +68,8 @@ Future journal entries are highlighted in <code>M-x calendar</code>, and you can
 <p>
 [1]: This is of course not <i>his</i> calendar, but mine.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> <a href="tag-org-mode.html">org-mode</a> </div>
-<div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> </div>
+<div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
 <p>
 Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
 </p>
@@ -85,8 +85,8 @@ Today, I finally tackled this problem: Now, org-static-blog only exports each po
 <p>
 Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> <a href="tag-blog.html">blog</a> </div>
-<div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
+<div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
 <p>
 This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
 </p>
@@ -99,12 +99,12 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
     (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
-         (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
+         (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>))
         (replace-regexp-in-string
-         <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
-         <span style="color: #303030;">"\\1*"</span> data nil nil 1)
+         <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
+         <span style="color: #606060;">"\\1*"</span> data nil nil 1)
       data)))
 
 (<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
@@ -140,23 +140,23 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 
 <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">h2::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: section;
 }
 <span style="color: #111111; text-decoration: underline;">h3::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsection;
 }
 <span style="color: #111111; text-decoration: underline;">h4::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsubsection;
 }
 <span style="color: #111111; text-decoration: underline;">h5::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: paragraph;
 }
 <span style="color: #111111; text-decoration: underline;">h6::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">"."</span> counter(subparagraph) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: subparagraph;
 }
 
@@ -173,16 +173,16 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>)
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>)
         (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
                (replace-regexp-in-string
-                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
-                <span style="color: #303030;">"\\1*"</span> data nil nil 1))
+                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
+                <span style="color: #606060;">"\\1*"</span> data nil nil 1))
               ((eq backend 'html)
                (replace-regexp-in-string
-                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">&lt;h[1-6]</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">&gt;]*&gt;</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
-                <span style="color: #303030;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">&lt;h[1-6]</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">&gt;]*&gt;</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
+                <span style="color: #606060;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
       data)))
 
 (<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
@@ -192,8 +192,8 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <p>
 Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
 <p>
 Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
 </p>
@@ -246,8 +246,8 @@ The one thing where Org really shines, though, is the inclusion of code fragment
 <p>
 At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
 <p>
 I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
 </p>
@@ -261,7 +261,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
+<pre class="src src-elisp">(org-add-link-type <span style="color: #606060;">"cite"</span>
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
        <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
 <span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
@@ -270,24 +270,24 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
         (<span style="color: #111111; font-weight: bold;">save-excursion</span>
           (beginning-of-buffer)
           (<span style="color: #111111; font-weight: bold;">save-match-data</span>
-            (re-search-forward <span style="color: #303030;">"\\\\bibliography{</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">}]+</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">}"</span>)
-            (concat (match-string 1) <span style="color: #303030;">".bib"</span>))))
+            (re-search-forward <span style="color: #606060;">"\\\\bibliography{</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">}]+</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">}"</span>)
+            (concat (match-string 1) <span style="color: #606060;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
        <span style="color: #111111;">"Export [[cite:cohen93]] as </span><span style="color: #111111; font-weight: bold;">\</span><span style="color: #111111;">cite{cohen93} in LaTeX."</span>
        (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
-           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
-               (format <span style="color: #303030;">"\\cite{%s}"</span> path)
-             (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #606060;">"cite:"</span> desc)))
+               (format <span style="color: #606060;">"\\cite{%s}"</span> path)
+             (format <span style="color: #606060;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
 </div>
 
 <p>
 This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">07 May 2014</div><h1 class="post-title"><a href="2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">07 May 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
 <p>
 I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
 </p>
@@ -307,11 +307,14 @@ Some package in my configuration set up <code>vc-find-file-hook</code> as part o
 <p>
 But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     function load_disqus() {

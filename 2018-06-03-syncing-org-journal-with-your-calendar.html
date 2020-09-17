@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">03 Jun 2018</div><h1 class="post-title"><a href="2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
+<div class="post-date">03 Jun 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
 <p>
 <a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http://www.orgzly.com/">Orgzly</a> does <i>not</i> work with my 1k-file journal directory).
 </p>
@@ -44,13 +44,13 @@ First, you need to set up some kind of regular export job. I use a cron job that
 
 <div class="org-src-container">
 <pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">no init file is loaded, so provide everything here:</span>
-(add-to-list 'load-path <span style="color: #303030;">"~/etc/org-journal/"</span>)
-(<span style="color: #111111; font-weight: bold;">setq</span> org-journal-dir <span style="color: #303030;">"~/journal/"</span>            <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">where my journal files are</span>
-      org-journal-file-format <span style="color: #303030;">"%Y-%m-%d.org"</span>  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">their file names</span>
+(add-to-list 'load-path <span style="color: #606060;">"~/etc/org-journal/"</span>)
+(<span style="color: #111111; font-weight: bold;">setq</span> org-journal-dir <span style="color: #606060;">"~/journal/"</span>            <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">where my journal files are</span>
+      org-journal-file-format <span style="color: #606060;">"%Y-%m-%d.org"</span>  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">their file names</span>
       org-journal-enable-agenda-integration t <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so entries are on the agenda</span>
       org-icalendar-store-UID t               <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so changes sync correctly</span>
-      org-icalendar-include-todo <span style="color: #303030;">"all"</span>        <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">include TODOs and DONEs</span>
-      org-icalendar-combined-agenda-file <span style="color: #303030;">"~/calendar/org-journal.ics"</span>)
+      org-icalendar-include-todo <span style="color: #606060;">"all"</span>        <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">include TODOs and DONEs</span>
+      org-icalendar-combined-agenda-file <span style="color: #606060;">"~/calendar/org-journal.ics"</span>)
 
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">org-journal</span>)
 (org-journal-update-org-agenda-files) <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">put future entries on the agenda</span>
@@ -70,7 +70,7 @@ I do this on my web server, with my journal files <a href="https://syncthing.net
 <p>
 (Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-journal.html">org-journal</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

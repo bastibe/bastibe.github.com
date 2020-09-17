@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">28 Aug 2012</div><h1 class="post-title"><a href="2012-08-28-errors-in-epydoc.html">Fixing Errors in Epydoc</a></h1>
+<div class="post-date">28 Aug 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-08-28-errors-in-epydoc.html">Fixing Errors in Epydoc</a></h1>
 <p>
 I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.
 </p>
@@ -66,7 +66,7 @@ Go there, navigate to the <i>epydoc\/markup</i> directory and change line 307 of
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">        <span style="color: #111111;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
+<pre class="src src-python">        <span style="color: #404040;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
 </pre>
 </div>
 
@@ -76,16 +76,16 @@ to
 
 <div class="org-src-container">
 <pre class="src src-python">        <span style="color: #111111; font-weight: bold;">try</span>:
-                <span style="color: #111111;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
+                <span style="color: #404040;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
         <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">AttributeError</span>:
-                <span style="color: #111111;">m</span> = <span style="color: #111111;">None</span>
+                <span style="color: #404040;">m</span> = <span style="color: #111111;">None</span>
 </pre>
 </div>
 
 <p>
 This should fix that problem.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

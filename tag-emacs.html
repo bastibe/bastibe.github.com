@@ -29,14 +29,14 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "emacs":</h1>
-<div class="post-date">27 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
+<div class="post-date">27 May 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
 <p>
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
 </p>
 
-<div id="outline-container-orgcd9373c" class="outline-2">
-<h2 id="orgcd9373c">Text</h2>
-<div class="outline-text-2" id="text-orgcd9373c">
+<div id="outline-container-orgc389b08" class="outline-2">
+<h2 id="orgc389b08">Text</h2>
+<div class="outline-text-2" id="text-orgc389b08">
 <p>
 For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
 </p>
@@ -50,7 +50,7 @@ To render, I run a simple makefile in an infinite loop that recompiles my PDF wh
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #111111;">graph_pdfs</span>)
+<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #404040;">graph_pdfs</span>)
     xelatex -interaction nonstopmode diss.tex
 </pre>
 </div>
@@ -61,9 +61,9 @@ We'll get back to <code>$(graph_pdfs)</code> in a second.
 </div>
 </div>
 
-<div id="outline-container-org98d9774" class="outline-2">
-<h2 id="org98d9774">Graphs</h2>
-<div class="outline-text-2" id="text-org98d9774">
+<div id="outline-container-org183767d" class="outline-2">
+<h2 id="org183767d">Graphs</h2>
+<div class="outline-text-2" id="text-org183767d">
 <p>
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
 </p>
@@ -77,11 +77,11 @@ Thus all graphs render into the main PDF and update automatically, just like the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111;">graph_sources</span> = $(<span style="color: #111111;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
-<span style="color: #111111;">graph_pdfs</span> = $(<span style="color: #111111;">patsubst</span> %.py,%.pdf,$(<span style="color: #111111;">graph_sources</span>))
+<pre class="src src-makefile"><span style="color: #404040;">graph_sources</span> = $(<span style="color: #404040;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
+<span style="color: #404040;">graph_pdfs</span> = $(<span style="color: #404040;">patsubst</span> %.py,%.pdf,$(<span style="color: #404040;">graph_sources</span>))
 
 <span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
-    cd graphs; .venv/bin/python $(<span style="color: #111111;">notdir</span> $<span style="color: #111111;">&lt;</span>)
+    cd graphs; .venv/bin/python $(<span style="color: #404040;">notdir</span> $<span style="color: #111111;">&lt;</span>)
 </pre>
 </div>
 
@@ -95,9 +95,9 @@ This system is surprisingly flexible, and absolutely trivial to debug. For examp
 </div>
 </div>
 
-<div id="outline-container-orgf7ab3aa" class="outline-2">
-<h2 id="orgf7ab3aa">Data</h2>
-<div class="outline-text-2" id="text-orgf7ab3aa">
+<div id="outline-container-org0998a93" class="outline-2">
+<h2 id="org0998a93">Data</h2>
+<div class="outline-text-2" id="text-org0998a93">
 <p>
 All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
 </p>
@@ -108,11 +108,11 @@ To set up a new writing environment from scratch, all I need is the following se
 
 <div class="org-src-container">
 <pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
-<span style="color: #111111;">cd</span> dissertation
+<span style="color: #404040;">cd</span> dissertation
 git annex init
-env <span style="color: #111111;">WEBDAV_USERNAME</span>=xxx <span style="color: #111111;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
+env <span style="color: #404040;">WEBDAV_USERNAME</span>=xxx <span style="color: #404040;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
 git annex copy --from mywebdavserver
-(<span style="color: #111111;">cd</span> graphs; pipenv install)
+(<span style="color: #404040;">cd</span> graphs; pipenv install)
 make all
 </pre>
 </div>
@@ -127,7 +127,7 @@ And that is truly the key part; The last thing you want to do while writing is b
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
-<div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
+<div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
 <p>
 Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
 </p>
@@ -143,8 +143,8 @@ Today, I finally tackled this problem: Now, org-static-blog only exports each po
 <p>
 Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> <a href="tag-blog.html">blog</a> </div>
-<div class="post-date">19 Nov 2017</div><h1 class="post-title"><a href="2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
+<div class="post-date">19 Nov 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h1>
 <p>
 The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
 </p>
@@ -156,8 +156,8 @@ However, I have found that this does not work any more: As of Emacs 25, Emacs is
 <p>
 This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> <a href="tag-windows.html">windows</a> </div>
-<div class="post-date">19 Sep 2017</div><h1 class="post-title"><a href="2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
+<div class="post-date">19 Sep 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
 <p>
 Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
 </p>
@@ -209,8 +209,8 @@ Still, I love the look of this! (Of course it won't work in a terminal, or most 
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
 <p>
 This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
 </p>
@@ -223,12 +223,12 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
     (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
-         (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>))
+         (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>))
         (replace-regexp-in-string
-         <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
-         <span style="color: #303030;">"\\1*"</span> data nil nil 1)
+         <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
+         <span style="color: #606060;">"\\1*"</span> data nil nil 1)
       data)))
 
 (<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
@@ -264,23 +264,23 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 
 <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
 <span style="color: #111111; text-decoration: underline;">h2::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: section;
 }
 <span style="color: #111111; text-decoration: underline;">h3::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsection;
 }
 <span style="color: #111111; text-decoration: underline;">h4::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsubsection;
 }
 <span style="color: #111111; text-decoration: underline;">h5::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: paragraph;
 }
 <span style="color: #111111; text-decoration: underline;">h6::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #303030;">"."</span> counter(subsection) <span style="color: #303030;">"."</span> counter(subsubsection) <span style="color: #303030;">"."</span> counter(paragraph) <span style="color: #303030;">"."</span> counter(subparagraph) <span style="color: #303030;">" "</span>;
+    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">"."</span> counter(subparagraph) <span style="color: #606060;">" "</span>;
     <span style="color: #111111; font-weight: bold;">counter-increment</span>: subparagraph;
 }
 
@@ -297,16 +297,16 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
   <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
   (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #111111;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #111111;">:NUMBERS</span> headline) <span style="color: #303030;">"no"</span>)
+         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
+    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>)
         (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
                (replace-regexp-in-string
-                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">part</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">chapter</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">*section</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(?:</span><span style="color: #303030;">sub</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">?paragraph</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
-                <span style="color: #303030;">"\\1*"</span> data nil nil 1))
+                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
+                <span style="color: #606060;">"\\1*"</span> data nil nil 1))
               ((eq backend 'html)
                (replace-regexp-in-string
-                <span style="color: #303030;">"</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">&lt;h[1-6]</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">&gt;]*&gt;</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">"</span>
-                <span style="color: #303030;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">&lt;h[1-6]</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">&gt;]*&gt;</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
+                <span style="color: #606060;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
       data)))
 
 (<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
@@ -316,8 +316,8 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <p>
 Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
 <p>
 Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
 </p>
@@ -370,8 +370,8 @@ The one thing where Org really shines, though, is the inclusion of code fragment
 <p>
 At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
 <p>
 I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
 </p>
@@ -385,7 +385,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(org-add-link-type <span style="color: #303030;">"cite"</span>
+<pre class="src src-elisp">(org-add-link-type <span style="color: #606060;">"cite"</span>
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
        <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
 <span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
@@ -394,24 +394,24 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
         (<span style="color: #111111; font-weight: bold;">save-excursion</span>
           (beginning-of-buffer)
           (<span style="color: #111111; font-weight: bold;">save-match-data</span>
-            (re-search-forward <span style="color: #303030;">"\\\\bibliography{</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">(</span><span style="color: #303030;">[</span><span style="color: #303030;">^</span><span style="color: #303030;">}]+</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">)</span><span style="color: #303030;">}"</span>)
-            (concat (match-string 1) <span style="color: #303030;">".bib"</span>))))
+            (re-search-forward <span style="color: #606060;">"\\\\bibliography{</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">}]+</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">}"</span>)
+            (concat (match-string 1) <span style="color: #606060;">".bib"</span>))))
        (beginning-of-buffer)
        (search-forward name))
      (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
        <span style="color: #111111;">"Export [[cite:cohen93]] as </span><span style="color: #111111; font-weight: bold;">\</span><span style="color: #111111;">cite{cohen93} in LaTeX."</span>
        (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
-           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #303030;">"cite:"</span> desc)))
-               (format <span style="color: #303030;">"\\cite{%s}"</span> path)
-             (format <span style="color: #303030;">"\\cite[%s]{%s}"</span> desc path)))))
+           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #606060;">"cite:"</span> desc)))
+               (format <span style="color: #606060;">"\\cite{%s}"</span> path)
+             (format <span style="color: #606060;">"\\cite[%s]{%s}"</span> desc path)))))
 </pre>
 </div>
 
 <p>
 This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">07 May 2014</div><h1 class="post-title"><a href="2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">07 May 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
 <p>
 I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
 </p>
@@ -431,8 +431,8 @@ Some package in my configuration set up <code>vc-find-file-hook</code> as part o
 <p>
 But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-org-mode.html">org-mode</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">13 Nov 2013</div><h1 class="post-title"><a href="2013-11-13-blogging-with-emacs.html">Blogging with Emacs</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">13 Nov 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-11-13-blogging-with-emacs.html">Blogging with Emacs</a></h1>
 <p>
 When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
 </p>
@@ -470,19 +470,19 @@ Getting the pages to work is rather simple: You have to create a "publishing pro
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
 (<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
-      '((<span style="color: #303030;">"blog-content"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
-         <span style="color: #111111;">:html-extension</span> <span style="color: #303030;">"html"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
-         <span style="color: #111111;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #111111;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
-         <span style="color: #111111;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
-         <span style="color: #111111;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
-         <span style="color: #111111;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
-         <span style="color: #111111;">:html-head-extra</span> <span style="color: #303030;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
-         <span style="color: #111111;">:html-preamble</span> <span style="color: #303030;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
-         <span style="color: #111111;">:html-postamble</span> <span style="color: #303030;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
+      '((<span style="color: #606060;">"blog-content"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+         <span style="color: #404040;">:html-extension</span> <span style="color: #606060;">"html"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+         <span style="color: #404040;">:publishing-function</span> (org-html-publish-to-html)
+         <span style="color: #404040;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
+         <span style="color: #404040;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
+         <span style="color: #404040;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
+         <span style="color: #404040;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
+         <span style="color: #404040;">:html-head-extra</span> <span style="color: #606060;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
+         <span style="color: #404040;">:html-preamble</span> <span style="color: #606060;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
+         <span style="color: #404040;">:html-postamble</span> <span style="color: #606060;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
 )))
 </pre>
 </div>
@@ -500,12 +500,12 @@ Emacs can auto-generate this for you. Simply add these lines to <code>blog-conte
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">         <span style="color: #111111;">:auto-sitemap</span> t
-         <span style="color: #111111;">:sitemap-filename</span> <span style="color: #303030;">"archive.org"</span>
-         <span style="color: #111111;">:sitemap-title</span> <span style="color: #303030;">"Archive"</span>
-         <span style="color: #111111;">:sitemap-sort-files</span> anti-chronologically
-         <span style="color: #111111;">:sitemap-style</span> list
-         <span style="color: #111111;">:makeindex</span> t
+<pre class="src src-elisp">         <span style="color: #404040;">:auto-sitemap</span> t
+         <span style="color: #404040;">:sitemap-filename</span> <span style="color: #606060;">"archive.org"</span>
+         <span style="color: #404040;">:sitemap-title</span> <span style="color: #606060;">"Archive"</span>
+         <span style="color: #404040;">:sitemap-sort-files</span> anti-chronologically
+         <span style="color: #404040;">:sitemap-style</span> list
+         <span style="color: #404040;">:makeindex</span> t
 </pre>
 </div>
 
@@ -514,7 +514,7 @@ Also, you can put something like
 </p>
 
 <div class="org-src-container">
-<pre class="src src-html">&lt;<span style="color: #111111; text-decoration: underline;">a</span> <span style="color: #111111;">href</span>=<span style="color: #303030;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #111111; text-decoration: underline;">a</span>&gt;
+<pre class="src src-html">&lt;<span style="color: #111111; text-decoration: underline;">a</span> <span style="color: #404040;">href</span>=<span style="color: #606060;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #111111; text-decoration: underline;">a</span>&gt;
 </pre>
 </div>
 
@@ -527,7 +527,7 @@ Adding a front page is simple, too. My front page is simply a normal page called
 </p>
 
 <div class="org-src-container">
-<pre class="src src-org"><span style="color: #aaaaa8;"> #+TITLE:</span> <span style="color: #111111; font-size: 140%;">RECENT POSTS</span>
+<pre class="src src-org"><span style="color: #606060;"> #+TITLE:</span> <span style="color: #111111; font-size: 140%;">RECENT POSTS</span>
 
  * <span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">Speeding up Matplotlib</a></span>
 <span style="color: #111111; background-color: #f4f4f0;"> #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
@@ -540,12 +540,12 @@ But a blog is more than just text. There are images and CSS, too. I keep all tha
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #303030;">"blog-static"</span>
- <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/static"</span>
- <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"png</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">jpg</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">css"</span>
- <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish/static"</span>
- <span style="color: #111111;">:recursive</span> t
- <span style="color: #111111;">:publishing-function</span> org-publish-attachment)
+<pre class="src src-elisp">(<span style="color: #606060;">"blog-static"</span>
+ <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/static"</span>
+ <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"png</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">jpg</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">css"</span>
+ <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish/static"</span>
+ <span style="color: #404040;">:recursive</span> t
+ <span style="color: #404040;">:publishing-function</span> org-publish-attachment)
 </pre>
 </div>
 
@@ -554,18 +554,18 @@ Setting up the RSS feed works similarly. The RSS feed is created from a single O
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #303030;">"blog-rss"</span>
- <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
- <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
- <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
- <span style="color: #111111;">:publishing-function</span> (org-rss-publish-to-rss)
- <span style="color: #111111;">:html-link-home</span> <span style="color: #303030;">"http://bastibe.de/"</span>
- <span style="color: #111111;">:html-link-use-abs-url</span> t
- <span style="color: #111111;">:exclude</span> <span style="color: #303030;">".*"</span>
- <span style="color: #111111;">:include</span> (<span style="color: #303030;">"rss.org"</span>)
- <span style="color: #111111;">:with-toc</span> nil
- <span style="color: #111111;">:section-numbers</span> nil
- <span style="color: #111111;">:title</span> <span style="color: #303030;">"Bastis Scratchpad on the Internet"</span>)
+<pre class="src src-elisp">(<span style="color: #606060;">"blog-rss"</span>
+ <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+ <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+ <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+ <span style="color: #404040;">:publishing-function</span> (org-rss-publish-to-rss)
+ <span style="color: #404040;">:html-link-home</span> <span style="color: #606060;">"http://bastibe.de/"</span>
+ <span style="color: #404040;">:html-link-use-abs-url</span> t
+ <span style="color: #404040;">:exclude</span> <span style="color: #606060;">".*"</span>
+ <span style="color: #404040;">:include</span> (<span style="color: #606060;">"rss.org"</span>)
+ <span style="color: #404040;">:with-toc</span> nil
+ <span style="color: #404040;">:section-numbers</span> nil
+ <span style="color: #404040;">:title</span> <span style="color: #606060;">"Bastis Scratchpad on the Internet"</span>)
 </pre>
 </div>
 
@@ -592,8 +592,8 @@ You can even create a meta publishing project that executes all three projects i
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #303030;">"blog"</span>
- <span style="color: #111111;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
+<pre class="src src-elisp">(<span style="color: #606060;">"blog"</span>
+ <span style="color: #404040;">:components</span> (<span style="color: #606060;">"blog-content"</span> <span style="color: #606060;">"blog-static"</span> <span style="color: #606060;">"blog-rss"</span>))
 </pre>
 </div>
 
@@ -602,18 +602,18 @@ There is one more thing that is kind of fiddly though: As I said, I use Disqus f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #111111;">:html-postamble</span>
+<pre class="src src-elisp"><span style="color: #404040;">:html-postamble</span>
 (<span style="color: #111111; font-weight: bold;">lambda</span> (info)
   <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
-  (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Archive"</span>)
-         <span style="color: #303030;">""</span>)
-        ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Recent Posts"</span>)
-         <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+  (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Archive"</span>)
+         <span style="color: #606060;">""</span>)
+        ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Recent Posts"</span>)
+         <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
         (t
-    <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">     &lt;script type=\"text/javascript\"&gt;</span>
-<span style="color: #303030;">     ..."</span>
+    <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">     &lt;script type=\"text/javascript\"&gt;</span>
+<span style="color: #606060;">     ..."</span>
 </pre>
 </div>
 
@@ -626,86 +626,86 @@ This should get you started! For completeness, here is my complete configuration
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
 (<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
-      '((<span style="color: #303030;">"blog"</span>
-         <span style="color: #111111;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
-        (<span style="color: #303030;">"blog-content"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
-         <span style="color: #111111;">:html-extension</span> <span style="color: #303030;">"html"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
-         <span style="color: #111111;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #111111;">:auto-sitemap</span> t
-         <span style="color: #111111;">:sitemap-filename</span> <span style="color: #303030;">"archive.org"</span>
-         <span style="color: #111111;">:sitemap-title</span> <span style="color: #303030;">"Archive"</span>
-         <span style="color: #111111;">:sitemap-sort-files</span> anti-chronologically
-         <span style="color: #111111;">:sitemap-style</span> list
-         <span style="color: #111111;">:makeindex</span> t
-         <span style="color: #111111;">:recursive</span> t
-         <span style="color: #111111;">:section-numbers</span> nil
-         <span style="color: #111111;">:with-toc</span> nil
-         <span style="color: #111111;">:with-latex</span> t
-         <span style="color: #111111;">:html-head-include-default-style</span> nil
-         <span style="color: #111111;">:html-head-include-scripts</span> nil
-         <span style="color: #111111;">:html-head-extra</span>
-         <span style="color: #303030;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
-<span style="color: #303030;">                href=\"http://bastibe.de/rss.xml\"</span>
-<span style="color: #303030;">                title=\"RSS feed for bastibe.de\"&gt;</span>
-<span style="color: #303030;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
-<span style="color: #303030;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
-<span style="color: #303030;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
-<span style="color: #303030;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
-<span style="color: #303030;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
-<span style="color: #303030;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
-         <span style="color: #111111;">:html-preamble</span>
-         <span style="color: #303030;">"&lt;div class=\"header\"&gt;</span>
-<span style="color: #303030;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
-<span style="color: #303030;">              &lt;div class=\"sitelinks\"&gt;</span>
-<span style="color: #303030;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
-<span style="color: #303030;">              &lt;/div&gt;</span>
-<span style="color: #303030;">          &lt;/div&gt;"</span>
-         <span style="color: #111111;">:html-postamble</span>
+      '((<span style="color: #606060;">"blog"</span>
+         <span style="color: #404040;">:components</span> (<span style="color: #606060;">"blog-content"</span> <span style="color: #606060;">"blog-static"</span> <span style="color: #606060;">"blog-rss"</span>))
+        (<span style="color: #606060;">"blog-content"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+         <span style="color: #404040;">:html-extension</span> <span style="color: #606060;">"html"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+         <span style="color: #404040;">:publishing-function</span> (org-html-publish-to-html)
+         <span style="color: #404040;">:auto-sitemap</span> t
+         <span style="color: #404040;">:sitemap-filename</span> <span style="color: #606060;">"archive.org"</span>
+         <span style="color: #404040;">:sitemap-title</span> <span style="color: #606060;">"Archive"</span>
+         <span style="color: #404040;">:sitemap-sort-files</span> anti-chronologically
+         <span style="color: #404040;">:sitemap-style</span> list
+         <span style="color: #404040;">:makeindex</span> t
+         <span style="color: #404040;">:recursive</span> t
+         <span style="color: #404040;">:section-numbers</span> nil
+         <span style="color: #404040;">:with-toc</span> nil
+         <span style="color: #404040;">:with-latex</span> t
+         <span style="color: #404040;">:html-head-include-default-style</span> nil
+         <span style="color: #404040;">:html-head-include-scripts</span> nil
+         <span style="color: #404040;">:html-head-extra</span>
+         <span style="color: #606060;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
+<span style="color: #606060;">                href=\"http://bastibe.de/rss.xml\"</span>
+<span style="color: #606060;">                title=\"RSS feed for bastibe.de\"&gt;</span>
+<span style="color: #606060;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
+<span style="color: #606060;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
+<span style="color: #606060;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+<span style="color: #606060;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
+<span style="color: #606060;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
+<span style="color: #606060;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
+         <span style="color: #404040;">:html-preamble</span>
+         <span style="color: #606060;">"&lt;div class=\"header\"&gt;</span>
+<span style="color: #606060;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
+<span style="color: #606060;">              &lt;div class=\"sitelinks\"&gt;</span>
+<span style="color: #606060;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
+<span style="color: #606060;">              &lt;/div&gt;</span>
+<span style="color: #606060;">          &lt;/div&gt;"</span>
+         <span style="color: #404040;">:html-postamble</span>
          (<span style="color: #111111; font-weight: bold;">lambda</span> (info)
            <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
-           (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Archive"</span>) <span style="color: #303030;">""</span>)
-                 ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Recent Posts"</span>)
-                  <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+           (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Archive"</span>) <span style="color: #606060;">""</span>)
+                 ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Recent Posts"</span>)
+                  <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
                  (t
-             <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">              &lt;script type=\"text/javascript\"&gt;</span>
-<span style="color: #303030;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
-<span style="color: #303030;">              var disqus_shortname = 'bastibe';</span>
-<span style="color: #303030;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
-<span style="color: #303030;">              (function() {</span>
-<span style="color: #303030;">                var dsq = document.createElement('script');</span>
-<span style="color: #303030;">                dsq.type = 'text/javascript';</span>
-<span style="color: #303030;">                dsq.async = true;</span>
-<span style="color: #303030;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
-<span style="color: #303030;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
-<span style="color: #303030;">                  })();</span>
-<span style="color: #303030;">              &lt;/script&gt;</span>
-<span style="color: #303030;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
-<span style="color: #303030;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
-<span style="color: #303030;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
-         <span style="color: #111111;">:exclude</span> <span style="color: #303030;">"rss.org</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">archive.org</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">theindex.org"</span>)
-        (<span style="color: #303030;">"blog-rss"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
-         <span style="color: #111111;">:publishing-function</span> (org-rss-publish-to-rss)
-         <span style="color: #111111;">:html-link-home</span> <span style="color: #303030;">"http://bastibe.de/"</span>
-         <span style="color: #111111;">:html-link-use-abs-url</span> t
-         <span style="color: #111111;">:exclude</span> <span style="color: #303030;">".*"</span>
-         <span style="color: #111111;">:include</span> (<span style="color: #303030;">"rss.org"</span>)
-         <span style="color: #111111;">:with-toc</span> nil
-         <span style="color: #111111;">:section-numbers</span> nil
-         <span style="color: #111111;">:title</span> <span style="color: #303030;">"Bastis Scratchpad on the Internet"</span>)
-        (<span style="color: #303030;">"blog-static"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/static"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"png</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">jpg</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">css"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish/static"</span>
-         <span style="color: #111111;">:recursive</span> t
-         <span style="color: #111111;">:publishing-function</span> org-publish-attachment)))
+             <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">              &lt;script type=\"text/javascript\"&gt;</span>
+<span style="color: #606060;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
+<span style="color: #606060;">              var disqus_shortname = 'bastibe';</span>
+<span style="color: #606060;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
+<span style="color: #606060;">              (function() {</span>
+<span style="color: #606060;">                var dsq = document.createElement('script');</span>
+<span style="color: #606060;">                dsq.type = 'text/javascript';</span>
+<span style="color: #606060;">                dsq.async = true;</span>
+<span style="color: #606060;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
+<span style="color: #606060;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
+<span style="color: #606060;">                  })();</span>
+<span style="color: #606060;">              &lt;/script&gt;</span>
+<span style="color: #606060;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
+<span style="color: #606060;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
+<span style="color: #606060;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
+         <span style="color: #404040;">:exclude</span> <span style="color: #606060;">"rss.org</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">archive.org</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">theindex.org"</span>)
+        (<span style="color: #606060;">"blog-rss"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+         <span style="color: #404040;">:publishing-function</span> (org-rss-publish-to-rss)
+         <span style="color: #404040;">:html-link-home</span> <span style="color: #606060;">"http://bastibe.de/"</span>
+         <span style="color: #404040;">:html-link-use-abs-url</span> t
+         <span style="color: #404040;">:exclude</span> <span style="color: #606060;">".*"</span>
+         <span style="color: #404040;">:include</span> (<span style="color: #606060;">"rss.org"</span>)
+         <span style="color: #404040;">:with-toc</span> nil
+         <span style="color: #404040;">:section-numbers</span> nil
+         <span style="color: #404040;">:title</span> <span style="color: #606060;">"Bastis Scratchpad on the Internet"</span>)
+        (<span style="color: #606060;">"blog-static"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/static"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"png</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">jpg</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">css"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish/static"</span>
+         <span style="color: #404040;">:recursive</span> t
+         <span style="color: #404040;">:publishing-function</span> org-publish-attachment)))
 </pre>
 </div>
 
@@ -730,8 +730,8 @@ All other sources, including the source code to all blog posts, can be found on 
 <p>
 Now, the RSS feed includes the full text of all articles.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> <a href="tag-blog.html">blog</a> </div>
-<div class="post-date">14 Oct 2012</div><h1 class="post-title"><a href="2012-10-14-emacs-customizations.html">My Emacs customizations</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
+<div class="post-date">14 Oct 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-10-14-emacs-customizations.html">My Emacs customizations</a></h1>
 <p>
 I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
 </p>
@@ -803,9 +803,9 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 <div class="org-src-container">
 <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
           (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
-                      (string-equal (buffer-name) <span style="color: #303030;">"*eshell*"</span>)
-                      (string-equal (buffer-name) <span style="color: #303030;">"*tex-shell*"</span>))
+            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #606060;">"*Python*"</span>)
+                      (string-equal (buffer-name) <span style="color: #606060;">"*eshell*"</span>)
+                      (string-equal (buffer-name) <span style="color: #606060;">"*tex-shell*"</span>))
               (<span style="color: #111111; font-weight: bold;">if</span> (not (eq (window-height) 15))
                   (enlarge-window (- 15 (window-height)))))))
 </pre>
@@ -837,8 +837,8 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
     (end-of-line))
   (newline-and-indent))
 
-(global-set-key (kbd <span style="color: #303030;">"C-o"</span>) 'vi-open-line-below)
-(global-set-key (kbd <span style="color: #303030;">"M-o"</span>) 'vi-open-line-above)
+(global-set-key (kbd <span style="color: #606060;">"C-o"</span>) 'vi-open-line-below)
+(global-set-key (kbd <span style="color: #606060;">"M-o"</span>) 'vi-open-line-above)
 </pre>
 </div>
 </div>
@@ -860,7 +860,7 @@ This function will open or refresh a split window with the generated PDF file in
 (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
   (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">let</span> ((tex-buffer-name (buffer-name))
-        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #303030;">".pdf"</span>)))
+        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #606060;">".pdf"</span>)))
     (<span style="color: #111111; font-weight: bold;">if</span> (get-buffer pdf-buffer-name)
         (switch-to-buffer-other-window pdf-buffer-name)
       (find-file-other-window pdf-buffer-name))
@@ -871,7 +871,7 @@ This function will open or refresh a split window with the generated PDF file in
 
 (add-hook 'LaTeX-mode-hook
           (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (define-key LaTeX-mode-map (kbd <span style="color: #303030;">"C-c C-v"</span>) 'open-show-pdf)
+            (define-key LaTeX-mode-map (kbd <span style="color: #606060;">"C-c C-v"</span>) 'open-show-pdf)
             (visual-line-mode t)
             (turn-on-reftex))
           t)
@@ -879,8 +879,8 @@ This function will open or refresh a split window with the generated PDF file in
 </div>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">13 Oct 2012</div><h1 class="post-title"><a href="2012-10-13-emacs.html">Text editing with confidence and Emacs</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">13 Oct 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-10-13-emacs.html">Text editing with confidence and Emacs</a></h1>
 <p>
 In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>.
 </p>
@@ -966,8 +966,8 @@ Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.git
 </ul>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> </div>
-<div class="post-date">03 Feb 2012</div><h1 class="post-title"><a href="2012-02-03-text-editors.html">Text Editors</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="post-date">03 Feb 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-02-03-text-editors.html">Text Editors</a></h1>
 <p>
 As far as I can tell, there has been a resurgence of development in the landscape of text editors of late. Only a few years ago, the text editing scene one the Mac seemed to be dominated by
 </p>
@@ -1441,11 +1441,14 @@ skEdit supports a nice array of web development languages and offers a good rang
 </div>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-text-editor.html">text-editor</a> <a href="tag-vim.html">vim</a> <a href="tag-emacs.html">emacs</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-text-editor.html">text-editor</a> <a href="https://bastibe.de/tag-vim.html">vim</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     function load_disqus() {

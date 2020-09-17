@@ -29,14 +29,139 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "computers":</h1>
-<div class="post-date">27 Mai 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
+<div class="post-date">17 Sep 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">Dear Computer, We Need to Talk</a></h1>
+<p>
+After years of using Linux on my desktop, I decided to install Windows on my computer, to get access to a few commercial photo editing applications. I'll go into my grievances with Linux later, but for now:
+</p>
+
+<div id="outline-container-org382898f" class="outline-2">
+<h2 id="org382898f">I tried to install Windows, you won't believe what happened next</h2>
+<div class="outline-text-2" id="text-org382898f">
+<p>
+Like I have done many times with Linux, I download a Windows image from my university, and write it to a USB drive, then reboot into the USB drive. The USB drive can't be booted. A quick internet search leads me to a Microsoft Support page on how to <a href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive">Install Windows from a USB Flash Drive</a>, which says that
+</p>
+
+<img style="width:50%;padding-left:25%" src="/static/2020-09/one does not simply.jpg">
+
+<p>
+Instead, one has to format the stick as FAT32, make it <i>active</i>, then copy the files from the image to it. So I follow the instructions and open the Disk Management program. It does not offer an option of FAT32, nor for making the partition <i>active</i>. I settle on (inactive) exFAT instead. It doesn't boot.
+</p>
+
+<p>
+I switch over to Linux, where I can indeed make a FAT32 partition, and I can mark it as <i>bootable</i>, which I take as the equivalent of <i>active</i>. But Linux can not open the Windows image to copy the files onto the USB stick. So back to Windows, for copying the files. Except they can't be copied, because some of them are larger than 4Gb, which can't be written to a FAT32 partition. What now?
+</p>
+
+<p>
+While researching how to download a different version of Windows 10, I stumble upon the <a href="https://www.microsoft.com/de-de/software-download/windows10">Media Creation Tool</a>, which automatically downloads Windows 10 and writes it to the USB stick correctly. Why was this not pointed out in the article above? Who knows. At any rate, it works. I can finally install Windows.
+</p>
+
+<p>
+The installation process requires the usual dozen-or-so refusals of tracking, ads, privacy intrusions, and voice assistants. I wish I could simply reject them all at once. And then the install hangs, while "polishing up a few things". Pressing the helpful back button, and then immediately the forward button unhangs it, and the installation completes.
+</p>
+
+<p>
+Next up are drivers. It feels anachronistic to have to install drivers manually in this day and age, but oh well. The new GPU driver to make screen tearing go away, a driver for my trackball to recognize the third mouse button, a wacom driver, ten or so Intel drivers of unknown utility. The trackball driver is not signed. I install it anyway. The GPU driver does not recognize my GPU and can't be installed. A quick Internet search reveals that my particular AMD/Intel GPU/CPU was discontinued from support by both AMD and Intel, and does not have a current driver. But fora suggest that up to version 20.2.1 of the AMD driver work fine. They don't, the driver crashes when I open images in my photo editor. An even older version published by Intel does work correctly. So now I am running an AMD GPU with an Intel driver from 2018.
+</p>
+
+<img style="width:50%;padding-left:25%" src="/static/2020-09/this is fine.png">
+
+<p>
+Installing and setting up Firefox and my photo editors works without issue, thank goodness. Emacs has a Windows installer now, which is greatly appreciated. OpenCL and network shares just work. This is why I'm installing Windows next to my Linux.
+</p>
+
+<p>
+But Windows is still not activated. I copy my university's product key in the appropriate text box, but hesitate: That's for Windows Enterprise, and I'd be just fine with Home. So I cancel the activation without activating. A helpful link in the activation systems sends me to the Microsoft Store to get my very own version of Windows Home for €145, which normally retails for around €95, so that's a no-go. Whatever, I'll go with my university's Enterprise edition. Except the activation box now says my product key is invalid. And the Store now literally says "We don't know how you got here but you shouldn't be here" instead of selling me Windows. After a restart it installs and activates Windows Enterprise, even though I never actually completed the activation.
+</p>
+
+<img style="width:70%;padding-left:15%" src="/static/2020-09/this is fine 2.jpg">
+
+<p>
+I install Git, but in order to access my Github I need to copy over my SSH key from the Linux install. Which I can't boot at the moment, because installing Windows overwrites the boot loader. This is normal. So I download Ubuntu, write it to the USB stick, boot into it, recover the bootloader, boot into my old install, reformat the stick, copy the files to the stick, boot back into Windows, and the files aren't on the stick. Tough. Boot back into Linux, copy the files onto the stick, <i>eject the stick</i>, boot back into Windows, copy the files to the computer. Great user experience.
+</p>
+
+<p>
+Now that I have my SSH key, I open a Git Bash to download a project. It says my credentials are incorrect. I execute the same commands in a regular CMD instead of Git Bash, and now my credentials are correct. Obviously.
+</p>
+
+<p>
+There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!
+</p>
+
+<p>
+I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many "solutions" are offered <a href="https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1">in the support fora</a>. What works for me is to first set the lock screen to "Windows Spotlight", then to "Slideshow". Only in that order will my pictures be shown.
+</p>
+
+<p>
+I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga45a9ad" class="outline-2">
+<h2 id="orga45a9ad">Why install Windows in the first place?</h2>
+<div class="outline-text-2" id="text-orga45a9ad">
+<p>
+Part of the reason for installing Windows was my growing frustration with Linux. I have been a happy user of KDE of various flavors for about seven years now. But ever since I got into photo editing, things began to become problematic:
+</p>
+
+<p>
+My photo editor requires OpenCL, but the graphics driver situation on Linux is problematic, to say the least. I generally managed to get RocM running most of the time, but kernel updates frequently broke it, or required down- or upgrading RocM. It was a constant struggle.
+</p>
+
+<p>
+I wanted to work with some of my data on a network share, but KDE's implementation of network shares does not simply mount them for applications to use, but instead requires each application to be able to open network locations on their own. Needless to say, this worked almost never, requiring many unnecessary file copies. Perhaps Gnome handles network shares better, but let's not open that can of worms.
+</p>
+
+<p>
+Printing photos simply never worked right for me. The colors were off, photo papers were not supported, the networked printer was rarely recognized. Both for a Samsung printer and an Epson and a Canon. One time a <a href="https://turboprint.info/">commercial printer driver for Linux</a> printed with so much ink it dripped off the paper afterwards. Neither Darktable nor Gimp nor Digikam have a robust printing mode. I generally resorted to Windows for printing.
+</p>
+
+<p>
+I ran that Windows in a virtual machine. With Virtualbox, the virtual machine would be extremely slow, to the point where it had a delay of several seconds between typing and seeing letters on the screen. VMWare did better, but would suddenly freeze and hang for minutes at a time. Disabling hugepages helped sometimes, for a short while. The virtual machine network was extremely unreliable. Some of these issues were probably related to my using a 4K screen.
+</p>
+
+<p>
+Speaking of screens, I have two screens, one HighDPI 4k and one normal 1440p. Using X, the system can be either in HighDPI mode, or in normal mode. But it can't drive the two displays in different modes. Thus the second monitor was almost useless and I generally worked only on the 4k screen. With Wayland I would have been able to use both screens in different modes, but not be able to color-calibrate them or record screen casts. Which is completely unacceptable. So I stuck with one screen and X. In Windows, I can use both screens and calibrate them.
+</p>
+
+<img style="width:50%;padding-left:25%" src="/static/2020-09/wtf.jpg">
+
+
+<p>
+Additionally, Linux hardware support is still a bit spotty. My SD card reader couldn't read some SD cards because of driver issues. It would sometimes corrupt the SD card's file systems. USB-connected cameras were generally not accessible. The web cam did not work reliably. The CPU fan ran too hot most of the time.
+</p>
+
+<p>
+So there had been numerous grievances in Linux that had no solutions. Still I stuck with it because so many more smaller issues were actually fixable if I put in the work. In fact I had accumulated quite a number of small hacks and scripts for various issues. I feared that Windows would leave me without recourse in these situations. And it doesn't. But at least the bigger features generally work as advertised.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge5ed406" class="outline-2">
+<h2 id="orge5ed406">Where do we go from here?</h2>
+<div class="outline-text-2" id="text-orge5ed406">
+<p>
+Just for completion's sake, I should really find an Apple computer and run it through its paces. From my experience of occasionally using a Macbook for teaching over the last few years, I am confident that it fares no better than Linux or Windows.
+</p>
+
+<p>
+Were things always this broken? How are normal people expected to deal with these things? No wonder every sane person now prefers a smartphone or tablet to their computers. Limited as they may be, at least they generally <i>work</i>.
+</p>
+
+<p>
+There is no joy in technology any more.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
+<div class="post-date">27 May 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
 <p>
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
 </p>
 
-<div id="outline-container-orgcd9373c" class="outline-2">
-<h2 id="orgcd9373c">Text</h2>
-<div class="outline-text-2" id="text-orgcd9373c">
+<div id="outline-container-orgc389b08" class="outline-2">
+<h2 id="orgc389b08">Text</h2>
+<div class="outline-text-2" id="text-orgc389b08">
 <p>
 For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
 </p>
@@ -50,7 +175,7 @@ To render, I run a simple makefile in an infinite loop that recompiles my PDF wh
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #111111;">graph_pdfs</span>)
+<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #404040;">graph_pdfs</span>)
     xelatex -interaction nonstopmode diss.tex
 </pre>
 </div>
@@ -61,9 +186,9 @@ We'll get back to <code>$(graph_pdfs)</code> in a second.
 </div>
 </div>
 
-<div id="outline-container-org98d9774" class="outline-2">
-<h2 id="org98d9774">Graphs</h2>
-<div class="outline-text-2" id="text-org98d9774">
+<div id="outline-container-org183767d" class="outline-2">
+<h2 id="org183767d">Graphs</h2>
+<div class="outline-text-2" id="text-org183767d">
 <p>
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
 </p>
@@ -77,11 +202,11 @@ Thus all graphs render into the main PDF and update automatically, just like the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111;">graph_sources</span> = $(<span style="color: #111111;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
-<span style="color: #111111;">graph_pdfs</span> = $(<span style="color: #111111;">patsubst</span> %.py,%.pdf,$(<span style="color: #111111;">graph_sources</span>))
+<pre class="src src-makefile"><span style="color: #404040;">graph_sources</span> = $(<span style="color: #404040;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
+<span style="color: #404040;">graph_pdfs</span> = $(<span style="color: #404040;">patsubst</span> %.py,%.pdf,$(<span style="color: #404040;">graph_sources</span>))
 
 <span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
-    cd graphs; .venv/bin/python $(<span style="color: #111111;">notdir</span> $<span style="color: #111111;">&lt;</span>)
+    cd graphs; .venv/bin/python $(<span style="color: #404040;">notdir</span> $<span style="color: #111111;">&lt;</span>)
 </pre>
 </div>
 
@@ -95,9 +220,9 @@ This system is surprisingly flexible, and absolutely trivial to debug. For examp
 </div>
 </div>
 
-<div id="outline-container-orgf7ab3aa" class="outline-2">
-<h2 id="orgf7ab3aa">Data</h2>
-<div class="outline-text-2" id="text-orgf7ab3aa">
+<div id="outline-container-org0998a93" class="outline-2">
+<h2 id="org0998a93">Data</h2>
+<div class="outline-text-2" id="text-org0998a93">
 <p>
 All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
 </p>
@@ -108,11 +233,11 @@ To set up a new writing environment from scratch, all I need is the following se
 
 <div class="org-src-container">
 <pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
-<span style="color: #111111;">cd</span> dissertation
+<span style="color: #404040;">cd</span> dissertation
 git annex init
-env <span style="color: #111111;">WEBDAV_USERNAME</span>=xxx <span style="color: #111111;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
+env <span style="color: #404040;">WEBDAV_USERNAME</span>=xxx <span style="color: #404040;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
 git annex copy --from mywebdavserver
-(<span style="color: #111111;">cd</span> graphs; pipenv install)
+(<span style="color: #404040;">cd</span> graphs; pipenv install)
 make all
 </pre>
 </div>
@@ -127,7 +252,7 @@ And that is truly the key part; The last thing you want to do while writing is b
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
-<div class="post-date">21 Jan 2020</div><h1 class="post-title"><a href="2020-01-21-i-miss-my-mac.html">I Miss My Mac</a></h1>
+<div class="post-date">21 Jan 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-01-21-i-miss-my-mac.html">I Miss My Mac</a></h1>
 <p>
 There was a time, maybe from 2009 to 2011, when Apple computers were glorious. They were elegant devices, beautiful to me, and powerful. Never before, or since, have I loved a machine as I loved that MacBook Pro early 2011.
 </p>
@@ -171,8 +296,8 @@ As I said, I miss my Mac, back when technology was magical, and just worked. And
 <p>
 I should go play with my child now, and run around in the yard, or maybe read a paper book. There's no joy in technology any more.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> <a href="tag-macos.html">macos</a> </div>
-<div class="post-date">29 Dez 2019</div><h1 class="post-title"><a href="2019-12-29-efficiency-is-not-intuitive.html">Efficiency is not Intuitive</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="post-date">29 Dec 2019</div><h1 class="post-title"><a href="https://bastibe.de/2019-12-29-efficiency-is-not-intuitive.html">Efficiency is not Intuitive</a></h1>
 <p>
 A few days ago, a <a href="https://www.darktable.org/2019/12/darktable-30/">new version of Darktable</a> was released. Darktable is an Open Source RAW image processor, and one of my favorite pieces of software of all time. It may be THE most powerful RAW processor on the market, far exceeding its proprietary brothers. But in the social media discussions following the release, it got dismissed for being <i>unintuitive</i>.
 </p>
@@ -192,8 +317,8 @@ In my career as a software developer, I know these ideas as traits of good APIs:
 <p>
 Which is quite the opposite of <i>Intuitive</i>. Quite the opposite of "easy to grasp without reading the manual". That's a description of a video game, not a professional tool. As professionals, we should seek and build empowering, efficient tools for adults, not intuitive games maskerading as professional software.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> <a href="tag-ui.html">ui</a> </div>
-<div class="post-date">09 Dec 2014</div><h1 class="post-title"><a href="2014-12-09-mailbox.html">Choosing a German Email Provider</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-ui.html">ui</a> </div>
+<div class="post-date">09 Dec 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-12-09-mailbox.html">Choosing a German Email Provider</a></h1>
 <p>
 Why not just use Gmail<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>? Because if you're not paying for the service, you <i>are</i> the service. Google gives you Gmail for free, and in return they analyze and market your data. That's a fair deal, as far as I am concerned. But not a deal I want to make.
 </p>
@@ -231,8 +356,8 @@ For the record, <a href="http://arstechnica.com/tech-policy/2014/09/judge-mulls-
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> </div>
-<div class="post-date">28 Mar 2009</div><h1 class="post-title"><a href="2009-03-28-synchronisieren-von-google.html">Synchronisieren von Google, Äpfeln, Fenstern und Telefonen</a></h1>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> </div>
+<div class="post-date">28 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-28-synchronisieren-von-google.html">Synchronisieren von Google, Äpfeln, Fenstern und Telefonen</a></h1>
 
 <figure>
 <img src="http://bastibe.de/static/2009-03/cloud.jpg" alt="cloud.jpg">
@@ -259,8 +384,8 @@ Dennoch: ganz zufrieden bin ich nicht, einfach, weil zwei Rechner immer eine gew
 Aber ich wäre nicht der Sohn meines Vaters, wenn ich nicht immer noch mehr technischen Schnickschnack haben müsste, enter: the iPhone. Dank Apple und iTunes ist es natürlich kein Problem, Kalender, Email, Kontakte und Musik immer synchronisiert zu halten; Kabel reinstecken, iTunes machen lassen und fertig.
 Perfektioniert wird das alles aber erst durch Beihilfe von Google, welches durch ActiveSync (sprich: Exchange) nun auch alle meine Kontakte, Kalendereinträge, Emails und Dokumente auf allen Geräten zur Verfügung stellt. Dieses Setup ist nun endlich wirklich extrem zufriedenstellend. Es ist zwar ein Haufen Kleinkram, den man durcharbeiten muss, bis man das alles richtig konfiguriert hat, aber hat man das einmal getan funktioniert es wirklich tadellos! Und Syncplicity und Dropbox laufen auf dem Rechner einfach nur noch als Backup weiter.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> </div>
-<div class="post-date">19 Mar 2009</div><h1 class="post-title"><a href="2009-03-19-western-digital-festplatten-umtausch-mit-uberraschungen.html">Western Digital Festplatten-Umtausch mit Überraschungen</a></h1>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> </div>
+<div class="post-date">19 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-19-western-digital-festplatten-umtausch-mit-uberraschungen.html">Western Digital Festplatten-Umtausch mit Überraschungen</a></h1>
 
 <figure>
 <img src="http://bastibe.de/static/2009-03/festplatte.jpg" alt="festplatte.jpg">
@@ -290,11 +415,14 @@ Faszinierend, so wünsche ich mir Kundenservice. Der einzige Wermutstropfen ist,
 <p>
 <b>Nachschlag:</b> Es stellt sich heraus, die neue Festplatte unterscheidet sich ein wenig von der alten: Sie ist silber statt schwarz und hat zwei Firewire 800 Anschlüsse anstatt Firewire 400 &#x2013; ein Glück, dass auch Kabel mitgeliefert wurden, sonst könnte ich sie jetzt nicht anschließen!
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computers.html">computers</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     function load_disqus() {

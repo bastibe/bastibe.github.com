@@ -1,0 +1,76 @@
+#+title: Dear Computer, We Need to Talk
+#+date: <2020-09-17 10:25>
+#+filetags: computers linux windows
+
+After years of using Linux on my desktop, I decided to install Windows on my computer, to get access to a few commercial photo editing applications. I'll go into my grievances with Linux later, but for now:
+
+** I tried to install Windows, you won't believe what happened next
+
+Like I have done many times with Linux, I download a Windows image from my university, and write it to a USB drive, then reboot into the USB drive. The USB drive can't be booted. A quick internet search leads me to a Microsoft Support page on how to [[https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive][Install Windows from a USB Flash Drive]], which says that
+
+#+begin_export html
+<img style="width:50%;padding-left:25%" src="/static/2020-09/one does not simply.jpg">
+#+end_export
+
+Instead, one has to format the stick as FAT32, make it /active/, then copy the files from the image to it. So I follow the instructions and open the Disk Management program. It does not offer an option of FAT32, nor for making the partition /active/. I settle on (inactive) exFAT instead. It doesn't boot.
+
+I switch over to Linux, where I can indeed make a FAT32 partition, and I can mark it as /bootable/, which I take as the equivalent of /active/. But Linux can not open the Windows image to copy the files onto the USB stick. So back to Windows, for copying the files. Except they can't be copied, because some of them are larger than 4Gb, which can't be written to a FAT32 partition. What now?
+
+While researching how to download a different version of Windows 10, I stumble upon the [[https://www.microsoft.com/de-de/software-download/windows10][Media Creation Tool]], which automatically downloads Windows 10 and writes it to the USB stick correctly. Why was this not pointed out in the article above? Who knows. At any rate, it works. I can finally install Windows.
+
+The installation process requires the usual dozen-or-so refusals of tracking, ads, privacy intrusions, and voice assistants. I wish I could simply reject them all at once. And then the install hangs, while "polishing up a few things". Pressing the helpful back button, and then immediately the forward button unhangs it, and the installation completes.
+
+Next up are drivers. It feels anachronistic to have to install drivers manually in this day and age, but oh well. The new GPU driver to make screen tearing go away, a driver for my trackball to recognize the third mouse button, a wacom driver, ten or so Intel drivers of unknown utility. The trackball driver is not signed. I install it anyway. The GPU driver does not recognize my GPU and can't be installed. A quick Internet search reveals that my particular AMD/Intel GPU/CPU was discontinued from support by both AMD and Intel, and does not have a current driver. But fora suggest that up to version 20.2.1 of the AMD driver work fine. They don't, the driver crashes when I open images in my photo editor. An even older version published by Intel does work correctly. So now I am running an AMD GPU with an Intel driver from 2018.
+
+#+begin_export html
+<img style="width:50%;padding-left:25%" src="/static/2020-09/this is fine.png">
+#+end_export
+
+Installing and setting up Firefox and my photo editors works without issue, thank goodness. Emacs has a Windows installer now, which is greatly appreciated. OpenCL and network shares just work. This is why I'm installing Windows next to my Linux.
+
+But Windows is still not activated. I copy my university's product key in the appropriate text box, but hesitate: That's for Windows Enterprise, and I'd be just fine with Home. So I cancel the activation without activating. A helpful link in the activation systems sends me to the Microsoft Store to get my very own version of Windows Home for €145, which normally retails for around €95, so that's a no-go. Whatever, I'll go with my university's Enterprise edition. Except the activation box now says my product key is invalid. And the Store now literally says "We don't know how you got here but you shouldn't be here" instead of selling me Windows. After a restart it installs and activates Windows Enterprise, even though I never actually completed the activation.
+
+#+begin_export html
+<img style="width:70%;padding-left:15%" src="/static/2020-09/this is fine 2.jpg">
+#+end_export
+
+I install Git, but in order to access my Github I need to copy over my SSH key from the Linux install. Which I can't boot at the moment, because installing Windows overwrites the boot loader. This is normal. So I download Ubuntu, write it to the USB stick, boot into it, recover the bootloader, boot into my old install, reformat the stick, copy the files to the stick, boot back into Windows, and the files aren't on the stick. Tough. Boot back into Linux, copy the files onto the stick, /eject the stick/, boot back into Windows, copy the files to the computer. Great user experience.
+
+Now that I have my SSH key, I open a Git Bash to download a project. It says my credentials are incorrect. I execute the same commands in a regular CMD instead of Git Bash, and now my credentials are correct. Obviously.
+
+There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!
+
+I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many "solutions" are offered [[https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1][in the support fora]]. What works for me is to first set the lock screen to "Windows Spotlight", then to "Slideshow". Only in that order will my pictures be shown.
+
+I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.
+
+** Why install Windows in the first place?
+
+Part of the reason for installing Windows was my growing frustration with Linux. I have been a happy user of KDE of various flavors for about seven years now. But ever since I got into photo editing, things began to become problematic:
+
+My photo editor requires OpenCL, but the graphics driver situation on Linux is problematic, to say the least. I generally managed to get RocM running most of the time, but kernel updates frequently broke it, or required down- or upgrading RocM. It was a constant struggle.
+
+I wanted to work with some of my data on a network share, but KDE's implementation of network shares does not simply mount them for applications to use, but instead requires each application to be able to open network locations on their own. Needless to say, this worked almost never, requiring many unnecessary file copies. Perhaps Gnome handles network shares better, but let's not open that can of worms.
+
+Printing photos simply never worked right for me. The colors were off, photo papers were not supported, the networked printer was rarely recognized. Both for a Samsung printer and an Epson and a Canon. One time a [[https://turboprint.info/][commercial printer driver for Linux]] printed with so much ink it dripped off the paper afterwards. Neither Darktable nor Gimp nor Digikam have a robust printing mode. I generally resorted to Windows for printing.
+
+I ran that Windows in a virtual machine. With Virtualbox, the virtual machine would be extremely slow, to the point where it had a delay of several seconds between typing and seeing letters on the screen. VMWare did better, but would suddenly freeze and hang for minutes at a time. Disabling hugepages helped sometimes, for a short while. The virtual machine network was extremely unreliable. Some of these issues were probably related to my using a 4K screen.
+
+Speaking of screens, I have two screens, one HighDPI 4k and one normal 1440p. Using X, the system can be either in HighDPI mode, or in normal mode. But it can't drive the two displays in different modes. Thus the second monitor was almost useless and I generally worked only on the 4k screen. With Wayland I would have been able to use both screens in different modes, but not be able to color-calibrate them or record screen casts. Which is completely unacceptable. So I stuck with one screen and X. In Windows, I can use both screens and calibrate them.
+
+#+begin_export html
+<img style="width:50%;padding-left:25%" src="/static/2020-09/wtf.jpg">
+#+end_export
+
+
+Additionally, Linux hardware support is still a bit spotty. My SD card reader couldn't read some SD cards because of driver issues. It would sometimes corrupt the SD card's file systems. USB-connected cameras were generally not accessible. The web cam did not work reliably. The CPU fan ran too hot most of the time.
+
+So there had been numerous grievances in Linux that had no solutions. Still I stuck with it because so many more smaller issues were actually fixable if I put in the work. In fact I had accumulated quite a number of small hacks and scripts for various issues. I feared that Windows would leave me without recourse in these situations. And it doesn't. But at least the bigger features generally work as advertised.
+
+** Where do we go from here?
+
+Just for completion's sake, I should really find an Apple computer and run it through its paces. From my experience of occasionally using a Macbook for teaching over the last few years, I am confident that it fares no better than Linux or Windows.
+
+Were things always this broken? How are normal people expected to deal with these things? No wonder every sane person now prefers a smartphone or tablet to their computers. Limited as they may be, at least they generally /work/.
+
+There is no joy in technology any more.

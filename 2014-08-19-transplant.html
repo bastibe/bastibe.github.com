@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">19 Aug 2014</div><h1 class="post-title"><a href="2014-08-19-transplant.html">Transplant</a></h1>
+<div class="post-date">19 Aug 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-08-19-transplant.html">Transplant</a></h1>
 <p>
 In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.
 </p>
@@ -44,7 +44,7 @@ But write my own I did: <a href="https://github.com/bastibe/transplant">Transpla
 
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> transplant
-<span style="color: #111111;">matlab</span> = transplant.Matlab()
+<span style="color: #404040;">matlab</span> = transplant.Matlab()
 </pre>
 </div>
 
@@ -65,7 +65,7 @@ As you can see, Matlab matrices are converted to Numpy matrices. In contrast to 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #303030;">'uint8'</span>)
+<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #606060;">'uint8'</span>)
 &gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
 </pre>
 </div>
@@ -79,10 +79,10 @@ This alone accounts for a large percentage of Matlab code out there. But not eve
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111;">data</span> = matlab.randn(1, 4)
-matlab.<span style="color: #111111;">max</span>(data)
+<pre class="src src-python"><span style="color: #404040;">data</span> = matlab.randn(1, 4)
+matlab.<span style="color: #404040;">max</span>(data)
 &gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
-matlab.<span style="color: #111111;">max</span>(data, nargout=1)
+matlab.<span style="color: #404040;">max</span>(data, nargout=1)
 &gt;&gt;&gt; 1.5326      <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = max(...)</span>
 </pre>
 </div>
@@ -101,8 +101,8 @@ You can save/retrieve variables in the global workspace:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">  <span style="color: #111111;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
-  <span style="color: #111111;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
+<pre class="src src-python">  <span style="color: #404040;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
+  <span style="color: #404040;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
 </pre>
 </div></li>
 
@@ -111,8 +111,8 @@ You van eval some code:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">  matlab.<span style="color: #111111;">eval</span>(<span style="color: #303030;">'class(value)'</span>)
-  &gt;&gt;&gt; <span style="color: #111111;">ans</span> =
+<pre class="src src-python">  matlab.<span style="color: #404040;">eval</span>(<span style="color: #606060;">'class(value)'</span>)
+  &gt;&gt;&gt; <span style="color: #404040;">ans</span> =
   &gt;&gt;&gt;
   &gt;&gt;&gt; double
   &gt;&gt;&gt;
@@ -159,7 +159,7 @@ At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I d
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-matlab.html">matlab</a> </div></div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

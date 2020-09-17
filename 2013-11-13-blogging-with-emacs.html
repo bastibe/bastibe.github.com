@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">13 Nov 2013</div><h1 class="post-title"><a href="2013-11-13-blogging-with-emacs.html">Blogging with Emacs</a></h1>
+<div class="post-date">13 Nov 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-11-13-blogging-with-emacs.html">Blogging with Emacs</a></h1>
 <p>
 When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
 </p>
@@ -67,19 +67,19 @@ Getting the pages to work is rather simple: You have to create a "publishing pro
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
 (<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
-      '((<span style="color: #303030;">"blog-content"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
-         <span style="color: #111111;">:html-extension</span> <span style="color: #303030;">"html"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
-         <span style="color: #111111;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #111111;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
-         <span style="color: #111111;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
-         <span style="color: #111111;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
-         <span style="color: #111111;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
-         <span style="color: #111111;">:html-head-extra</span> <span style="color: #303030;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
-         <span style="color: #111111;">:html-preamble</span> <span style="color: #303030;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
-         <span style="color: #111111;">:html-postamble</span> <span style="color: #303030;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
+      '((<span style="color: #606060;">"blog-content"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+         <span style="color: #404040;">:html-extension</span> <span style="color: #606060;">"html"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+         <span style="color: #404040;">:publishing-function</span> (org-html-publish-to-html)
+         <span style="color: #404040;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
+         <span style="color: #404040;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
+         <span style="color: #404040;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
+         <span style="color: #404040;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
+         <span style="color: #404040;">:html-head-extra</span> <span style="color: #606060;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
+         <span style="color: #404040;">:html-preamble</span> <span style="color: #606060;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
+         <span style="color: #404040;">:html-postamble</span> <span style="color: #606060;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
 )))
 </pre>
 </div>
@@ -97,12 +97,12 @@ Emacs can auto-generate this for you. Simply add these lines to <code>blog-conte
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">         <span style="color: #111111;">:auto-sitemap</span> t
-         <span style="color: #111111;">:sitemap-filename</span> <span style="color: #303030;">"archive.org"</span>
-         <span style="color: #111111;">:sitemap-title</span> <span style="color: #303030;">"Archive"</span>
-         <span style="color: #111111;">:sitemap-sort-files</span> anti-chronologically
-         <span style="color: #111111;">:sitemap-style</span> list
-         <span style="color: #111111;">:makeindex</span> t
+<pre class="src src-elisp">         <span style="color: #404040;">:auto-sitemap</span> t
+         <span style="color: #404040;">:sitemap-filename</span> <span style="color: #606060;">"archive.org"</span>
+         <span style="color: #404040;">:sitemap-title</span> <span style="color: #606060;">"Archive"</span>
+         <span style="color: #404040;">:sitemap-sort-files</span> anti-chronologically
+         <span style="color: #404040;">:sitemap-style</span> list
+         <span style="color: #404040;">:makeindex</span> t
 </pre>
 </div>
 
@@ -111,7 +111,7 @@ Also, you can put something like
 </p>
 
 <div class="org-src-container">
-<pre class="src src-html">&lt;<span style="color: #111111; text-decoration: underline;">a</span> <span style="color: #111111;">href</span>=<span style="color: #303030;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #111111; text-decoration: underline;">a</span>&gt;
+<pre class="src src-html">&lt;<span style="color: #111111; text-decoration: underline;">a</span> <span style="color: #404040;">href</span>=<span style="color: #606060;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #111111; text-decoration: underline;">a</span>&gt;
 </pre>
 </div>
 
@@ -124,7 +124,7 @@ Adding a front page is simple, too. My front page is simply a normal page called
 </p>
 
 <div class="org-src-container">
-<pre class="src src-org"><span style="color: #aaaaa8;"> #+TITLE:</span> <span style="color: #111111; font-size: 140%;">RECENT POSTS</span>
+<pre class="src src-org"><span style="color: #606060;"> #+TITLE:</span> <span style="color: #111111; font-size: 140%;">RECENT POSTS</span>
 
  * <span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">Speeding up Matplotlib</a></span>
 <span style="color: #111111; background-color: #f4f4f0;"> #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
@@ -137,12 +137,12 @@ But a blog is more than just text. There are images and CSS, too. I keep all tha
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #303030;">"blog-static"</span>
- <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/static"</span>
- <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"png</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">jpg</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">css"</span>
- <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish/static"</span>
- <span style="color: #111111;">:recursive</span> t
- <span style="color: #111111;">:publishing-function</span> org-publish-attachment)
+<pre class="src src-elisp">(<span style="color: #606060;">"blog-static"</span>
+ <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/static"</span>
+ <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"png</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">jpg</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">css"</span>
+ <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish/static"</span>
+ <span style="color: #404040;">:recursive</span> t
+ <span style="color: #404040;">:publishing-function</span> org-publish-attachment)
 </pre>
 </div>
 
@@ -151,18 +151,18 @@ Setting up the RSS feed works similarly. The RSS feed is created from a single O
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #303030;">"blog-rss"</span>
- <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
- <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
- <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
- <span style="color: #111111;">:publishing-function</span> (org-rss-publish-to-rss)
- <span style="color: #111111;">:html-link-home</span> <span style="color: #303030;">"http://bastibe.de/"</span>
- <span style="color: #111111;">:html-link-use-abs-url</span> t
- <span style="color: #111111;">:exclude</span> <span style="color: #303030;">".*"</span>
- <span style="color: #111111;">:include</span> (<span style="color: #303030;">"rss.org"</span>)
- <span style="color: #111111;">:with-toc</span> nil
- <span style="color: #111111;">:section-numbers</span> nil
- <span style="color: #111111;">:title</span> <span style="color: #303030;">"Bastis Scratchpad on the Internet"</span>)
+<pre class="src src-elisp">(<span style="color: #606060;">"blog-rss"</span>
+ <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+ <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+ <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+ <span style="color: #404040;">:publishing-function</span> (org-rss-publish-to-rss)
+ <span style="color: #404040;">:html-link-home</span> <span style="color: #606060;">"http://bastibe.de/"</span>
+ <span style="color: #404040;">:html-link-use-abs-url</span> t
+ <span style="color: #404040;">:exclude</span> <span style="color: #606060;">".*"</span>
+ <span style="color: #404040;">:include</span> (<span style="color: #606060;">"rss.org"</span>)
+ <span style="color: #404040;">:with-toc</span> nil
+ <span style="color: #404040;">:section-numbers</span> nil
+ <span style="color: #404040;">:title</span> <span style="color: #606060;">"Bastis Scratchpad on the Internet"</span>)
 </pre>
 </div>
 
@@ -189,8 +189,8 @@ You can even create a meta publishing project that executes all three projects i
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #303030;">"blog"</span>
- <span style="color: #111111;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
+<pre class="src src-elisp">(<span style="color: #606060;">"blog"</span>
+ <span style="color: #404040;">:components</span> (<span style="color: #606060;">"blog-content"</span> <span style="color: #606060;">"blog-static"</span> <span style="color: #606060;">"blog-rss"</span>))
 </pre>
 </div>
 
@@ -199,18 +199,18 @@ There is one more thing that is kind of fiddly though: As I said, I use Disqus f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #111111;">:html-postamble</span>
+<pre class="src src-elisp"><span style="color: #404040;">:html-postamble</span>
 (<span style="color: #111111; font-weight: bold;">lambda</span> (info)
   <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
-  (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Archive"</span>)
-         <span style="color: #303030;">""</span>)
-        ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Recent Posts"</span>)
-         <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+  (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Archive"</span>)
+         <span style="color: #606060;">""</span>)
+        ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Recent Posts"</span>)
+         <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
         (t
-    <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">     &lt;script type=\"text/javascript\"&gt;</span>
-<span style="color: #303030;">     ..."</span>
+    <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">     &lt;script type=\"text/javascript\"&gt;</span>
+<span style="color: #606060;">     ..."</span>
 </pre>
 </div>
 
@@ -223,86 +223,86 @@ This should get you started! For completeness, here is my complete configuration
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
 (<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
 (<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
-      '((<span style="color: #303030;">"blog"</span>
-         <span style="color: #111111;">:components</span> (<span style="color: #303030;">"blog-content"</span> <span style="color: #303030;">"blog-static"</span> <span style="color: #303030;">"blog-rss"</span>))
-        (<span style="color: #303030;">"blog-content"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
-         <span style="color: #111111;">:html-extension</span> <span style="color: #303030;">"html"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
-         <span style="color: #111111;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #111111;">:auto-sitemap</span> t
-         <span style="color: #111111;">:sitemap-filename</span> <span style="color: #303030;">"archive.org"</span>
-         <span style="color: #111111;">:sitemap-title</span> <span style="color: #303030;">"Archive"</span>
-         <span style="color: #111111;">:sitemap-sort-files</span> anti-chronologically
-         <span style="color: #111111;">:sitemap-style</span> list
-         <span style="color: #111111;">:makeindex</span> t
-         <span style="color: #111111;">:recursive</span> t
-         <span style="color: #111111;">:section-numbers</span> nil
-         <span style="color: #111111;">:with-toc</span> nil
-         <span style="color: #111111;">:with-latex</span> t
-         <span style="color: #111111;">:html-head-include-default-style</span> nil
-         <span style="color: #111111;">:html-head-include-scripts</span> nil
-         <span style="color: #111111;">:html-head-extra</span>
-         <span style="color: #303030;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
-<span style="color: #303030;">                href=\"http://bastibe.de/rss.xml\"</span>
-<span style="color: #303030;">                title=\"RSS feed for bastibe.de\"&gt;</span>
-<span style="color: #303030;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
-<span style="color: #303030;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
-<span style="color: #303030;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
-<span style="color: #303030;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
-<span style="color: #303030;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
-<span style="color: #303030;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
-         <span style="color: #111111;">:html-preamble</span>
-         <span style="color: #303030;">"&lt;div class=\"header\"&gt;</span>
-<span style="color: #303030;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
-<span style="color: #303030;">              &lt;div class=\"sitelinks\"&gt;</span>
-<span style="color: #303030;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
-<span style="color: #303030;">              &lt;/div&gt;</span>
-<span style="color: #303030;">          &lt;/div&gt;"</span>
-         <span style="color: #111111;">:html-postamble</span>
+      '((<span style="color: #606060;">"blog"</span>
+         <span style="color: #404040;">:components</span> (<span style="color: #606060;">"blog-content"</span> <span style="color: #606060;">"blog-static"</span> <span style="color: #606060;">"blog-rss"</span>))
+        (<span style="color: #606060;">"blog-content"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+         <span style="color: #404040;">:html-extension</span> <span style="color: #606060;">"html"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+         <span style="color: #404040;">:publishing-function</span> (org-html-publish-to-html)
+         <span style="color: #404040;">:auto-sitemap</span> t
+         <span style="color: #404040;">:sitemap-filename</span> <span style="color: #606060;">"archive.org"</span>
+         <span style="color: #404040;">:sitemap-title</span> <span style="color: #606060;">"Archive"</span>
+         <span style="color: #404040;">:sitemap-sort-files</span> anti-chronologically
+         <span style="color: #404040;">:sitemap-style</span> list
+         <span style="color: #404040;">:makeindex</span> t
+         <span style="color: #404040;">:recursive</span> t
+         <span style="color: #404040;">:section-numbers</span> nil
+         <span style="color: #404040;">:with-toc</span> nil
+         <span style="color: #404040;">:with-latex</span> t
+         <span style="color: #404040;">:html-head-include-default-style</span> nil
+         <span style="color: #404040;">:html-head-include-scripts</span> nil
+         <span style="color: #404040;">:html-head-extra</span>
+         <span style="color: #606060;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
+<span style="color: #606060;">                href=\"http://bastibe.de/rss.xml\"</span>
+<span style="color: #606060;">                title=\"RSS feed for bastibe.de\"&gt;</span>
+<span style="color: #606060;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
+<span style="color: #606060;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
+<span style="color: #606060;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+<span style="color: #606060;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
+<span style="color: #606060;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
+<span style="color: #606060;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
+         <span style="color: #404040;">:html-preamble</span>
+         <span style="color: #606060;">"&lt;div class=\"header\"&gt;</span>
+<span style="color: #606060;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
+<span style="color: #606060;">              &lt;div class=\"sitelinks\"&gt;</span>
+<span style="color: #606060;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
+<span style="color: #606060;">              &lt;/div&gt;</span>
+<span style="color: #606060;">          &lt;/div&gt;"</span>
+         <span style="color: #404040;">:html-postamble</span>
          (<span style="color: #111111; font-weight: bold;">lambda</span> (info)
            <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
-           (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Archive"</span>) <span style="color: #303030;">""</span>)
-                 ((string= (car (plist-get info <span style="color: #111111;">:title</span>)) <span style="color: #303030;">"Recent Posts"</span>)
-                  <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+           (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Archive"</span>) <span style="color: #606060;">""</span>)
+                 ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Recent Posts"</span>)
+                  <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
                  (t
-             <span style="color: #303030;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-<span style="color: #303030;">              &lt;script type=\"text/javascript\"&gt;</span>
-<span style="color: #303030;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
-<span style="color: #303030;">              var disqus_shortname = 'bastibe';</span>
-<span style="color: #303030;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
-<span style="color: #303030;">              (function() {</span>
-<span style="color: #303030;">                var dsq = document.createElement('script');</span>
-<span style="color: #303030;">                dsq.type = 'text/javascript';</span>
-<span style="color: #303030;">                dsq.async = true;</span>
-<span style="color: #303030;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
-<span style="color: #303030;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
-<span style="color: #303030;">                  })();</span>
-<span style="color: #303030;">              &lt;/script&gt;</span>
-<span style="color: #303030;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
-<span style="color: #303030;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
-<span style="color: #303030;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
-         <span style="color: #111111;">:exclude</span> <span style="color: #303030;">"rss.org</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">archive.org</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">theindex.org"</span>)
-        (<span style="color: #303030;">"blog-rss"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/posts"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"org"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish"</span>
-         <span style="color: #111111;">:publishing-function</span> (org-rss-publish-to-rss)
-         <span style="color: #111111;">:html-link-home</span> <span style="color: #303030;">"http://bastibe.de/"</span>
-         <span style="color: #111111;">:html-link-use-abs-url</span> t
-         <span style="color: #111111;">:exclude</span> <span style="color: #303030;">".*"</span>
-         <span style="color: #111111;">:include</span> (<span style="color: #303030;">"rss.org"</span>)
-         <span style="color: #111111;">:with-toc</span> nil
-         <span style="color: #111111;">:section-numbers</span> nil
-         <span style="color: #111111;">:title</span> <span style="color: #303030;">"Bastis Scratchpad on the Internet"</span>)
-        (<span style="color: #303030;">"blog-static"</span>
-         <span style="color: #111111;">:base-directory</span> <span style="color: #303030;">"~/Projects/blog/static"</span>
-         <span style="color: #111111;">:base-extension</span> <span style="color: #303030;">"png</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">jpg</span><span style="color: #303030; font-weight: bold;">\\</span><span style="color: #303030; font-weight: bold;">|</span><span style="color: #303030;">css"</span>
-         <span style="color: #111111;">:publishing-directory</span> <span style="color: #303030;">"~/Projects/blog/publish/static"</span>
-         <span style="color: #111111;">:recursive</span> t
-         <span style="color: #111111;">:publishing-function</span> org-publish-attachment)))
+             <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
+<span style="color: #606060;">              &lt;script type=\"text/javascript\"&gt;</span>
+<span style="color: #606060;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
+<span style="color: #606060;">              var disqus_shortname = 'bastibe';</span>
+<span style="color: #606060;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
+<span style="color: #606060;">              (function() {</span>
+<span style="color: #606060;">                var dsq = document.createElement('script');</span>
+<span style="color: #606060;">                dsq.type = 'text/javascript';</span>
+<span style="color: #606060;">                dsq.async = true;</span>
+<span style="color: #606060;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
+<span style="color: #606060;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
+<span style="color: #606060;">                  })();</span>
+<span style="color: #606060;">              &lt;/script&gt;</span>
+<span style="color: #606060;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
+<span style="color: #606060;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
+<span style="color: #606060;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
+         <span style="color: #404040;">:exclude</span> <span style="color: #606060;">"rss.org</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">archive.org</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">theindex.org"</span>)
+        (<span style="color: #606060;">"blog-rss"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
+         <span style="color: #404040;">:publishing-function</span> (org-rss-publish-to-rss)
+         <span style="color: #404040;">:html-link-home</span> <span style="color: #606060;">"http://bastibe.de/"</span>
+         <span style="color: #404040;">:html-link-use-abs-url</span> t
+         <span style="color: #404040;">:exclude</span> <span style="color: #606060;">".*"</span>
+         <span style="color: #404040;">:include</span> (<span style="color: #606060;">"rss.org"</span>)
+         <span style="color: #404040;">:with-toc</span> nil
+         <span style="color: #404040;">:section-numbers</span> nil
+         <span style="color: #404040;">:title</span> <span style="color: #606060;">"Bastis Scratchpad on the Internet"</span>)
+        (<span style="color: #606060;">"blog-static"</span>
+         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/static"</span>
+         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"png</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">jpg</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">css"</span>
+         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish/static"</span>
+         <span style="color: #404040;">:recursive</span> t
+         <span style="color: #404040;">:publishing-function</span> org-publish-attachment)))
 </pre>
 </div>
 
@@ -327,7 +327,7 @@ All other sources, including the source code to all blog posts, can be found on 
 <p>
 Now, the RSS feed includes the full text of all articles.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> <a href="tag-blog.html">blog</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

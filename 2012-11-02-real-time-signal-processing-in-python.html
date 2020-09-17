@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">02 Nov 2012</div><h1 class="post-title"><a href="2012-11-02-real-time-signal-processing-in-python.html">Real Time Signal Processing in Python</a></h1>
+<div class="post-date">02 Nov 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-11-02-real-time-signal-processing-in-python.html">Real Time Signal Processing in Python</a></h1>
 <p>
 Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.
 </p>
@@ -144,24 +144,24 @@ In Python, this might look like this:
             <span style="color: #111111; font-weight: bold;">self</span>.attack_coeff = attack_coeff
 
         <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; font-weight: bold;">self</span>, signal, threshold):
-            <span style="color: #111111; font-weight: bold;">for</span> i <span style="color: #111111; font-weight: bold;">in</span> arange(<span style="color: #111111;">len</span>(signal)):
+            <span style="color: #111111; font-weight: bold;">for</span> i <span style="color: #111111; font-weight: bold;">in</span> arange(<span style="color: #404040;">len</span>(signal)):
                 <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] = signal[i]
                 <span style="color: #111111; font-weight: bold;">self</span>.delay_index = (<span style="color: #111111; font-weight: bold;">self</span>.delay_index + 1) % <span style="color: #111111; font-weight: bold;">self</span>.delay
 
                 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">calculate an envelope of the signal</span>
                 <span style="color: #111111; font-weight: bold;">self</span>.envelope *= <span style="color: #111111; font-weight: bold;">self</span>.release_coeff
-                <span style="color: #111111; font-weight: bold;">self</span>.envelope  = <span style="color: #111111;">max</span>(<span style="color: #111111;">abs</span>(signal[i]), <span style="color: #111111; font-weight: bold;">self</span>.envelope)
+                <span style="color: #111111; font-weight: bold;">self</span>.envelope  = <span style="color: #404040;">max</span>(<span style="color: #404040;">abs</span>(signal[i]), <span style="color: #111111; font-weight: bold;">self</span>.envelope)
 
                 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">have self.gain go towards a desired limiter gain</span>
                 <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111; font-weight: bold;">self</span>.envelope &gt; threshold:
-                    <span style="color: #111111;">target_gain</span> = (1+threshold-<span style="color: #111111; font-weight: bold;">self</span>.envelope)
+                    <span style="color: #404040;">target_gain</span> = (1+threshold-<span style="color: #111111; font-weight: bold;">self</span>.envelope)
                 <span style="color: #111111; font-weight: bold;">else</span>:
-                    <span style="color: #111111;">target_gain</span> = 1.0
+                    <span style="color: #404040;">target_gain</span> = 1.0
                 <span style="color: #111111; font-weight: bold;">self</span>.gain = ( <span style="color: #111111; font-weight: bold;">self</span>.gain*<span style="color: #111111; font-weight: bold;">self</span>.attack_coeff +
                               target_gain*(1-<span style="color: #111111; font-weight: bold;">self</span>.attack_coeff) )
 
                 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">limit the delayed signal</span>
-                <span style="color: #111111;">signal</span>[i] = <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] * <span style="color: #111111; font-weight: bold;">self</span>.gain
+                <span style="color: #404040;">signal</span>[i] = <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] * <span style="color: #111111; font-weight: bold;">self</span>.gain
 </pre>
 </div>
 
@@ -189,9 +189,9 @@ A real-time audio processing framework using PyAudio would look like this:
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pyaudio <span style="color: #111111; font-weight: bold;">import</span> PyAudio, paFloat32
 
-    <span style="color: #111111;">pa</span> = PyAudio()
+    <span style="color: #404040;">pa</span> = PyAudio()
 
-    <span style="color: #111111;">stream</span> = pa.<span style="color: #111111;">open</span>(<span style="color: #111111;">format</span> = paFloat32,
+    <span style="color: #404040;">stream</span> = pa.<span style="color: #404040;">open</span>(<span style="color: #404040;">format</span> = paFloat32,
                      channels = 1,
                      rate = 44100,
                      output = <span style="color: #111111;">True</span>,
@@ -219,13 +219,13 @@ Every time the <code>callback</code> is called, it will have to return 1024 samp
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
+<pre class="src src-python">    <span style="color: #404040;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
 
     <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">callback</span>(in_data, frame_count, time_info, flag):
         <span style="color: #111111; font-weight: bold;">if</span> flag:
-            <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #303030;">"Playback Error: %i"</span> % flag)
-        <span style="color: #111111;">played_frames</span> = counter
-        <span style="color: #111111;">counter</span> += frame_count
+            <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #606060;">"Playback Error: %i"</span> % flag)
+        <span style="color: #404040;">played_frames</span> = counter
+        <span style="color: #404040;">counter</span> += frame_count
         limiter.limit(signal[played_frames:counter], threshold)
         <span style="color: #111111; font-weight: bold;">return</span> signal[played_frames:counter], paContinue
 </pre>
@@ -251,19 +251,19 @@ The limiter defined above could be rewritten in C like this:
 <div class="org-src-container">
 <pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python Limiter class.</span>
     <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_index</span>;
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_length</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">envelope</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">current_gain</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">attack_coeff</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">release_coeff</span>;
+        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_index</span>;
+        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_length</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">envelope</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">current_gain</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_coeff</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_coeff</span>;
     } <span style="color: #111111; text-decoration: underline;">limiter_state</span>;
 
-<span style="color: #111111;">    #define</span> <span style="color: #111111; text-decoration: underline;">MAX</span>(<span style="color: #111111;">x</span>,<span style="color: #111111;">y</span>) ((x)&gt;(y)?(x):(y))
+<span style="color: #111111;">    #define</span> <span style="color: #111111; text-decoration: underline;">MAX</span>(<span style="color: #404040;">x</span>,<span style="color: #404040;">y</span>) ((x)&gt;(y)?(x):(y))
 
     <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python __init__ function.</span>
-    <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">attack_coeff</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">release_coeff</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_len</span>) {
-        <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111;">state</span>;
+    <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_coeff</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_coeff</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_len</span>) {
+        <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #404040;">state</span>;
         state.attack_coeff = attack_coeff;
         state.release_coeff = release_coeff;
         state.delay_index = 0;
@@ -273,9 +273,9 @@ The limiter defined above could be rewritten in C like this:
         <span style="color: #111111; font-weight: bold;">return</span> state;
     }
 
-    <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">signal</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">block_length</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">threshold</span>,
-               <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">delay_line</span>, <span style="color: #111111; text-decoration: underline;">limiter_state</span> *<span style="color: #111111;">state</span>) {
-        <span style="color: #111111; font-weight: bold;">for</span>(<span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">i</span>=0; i&lt;block_length; i++) {
+    <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">signal</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">block_length</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">threshold</span>,
+               <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">delay_line</span>, <span style="color: #111111; text-decoration: underline;">limiter_state</span> *<span style="color: #404040;">state</span>) {
+        <span style="color: #111111; font-weight: bold;">for</span>(<span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">i</span>=0; i&lt;block_length; i++) {
             delay_line[state-&gt;delay_index] = signal[i];
             state-&gt;delay_index = (state-&gt;delay_index + 1) % state-&gt;delay_length;
 
@@ -284,7 +284,7 @@ The limiter defined above could be rewritten in C like this:
             state-&gt;envelope = MAX(fabs(signal[i]), state-&gt;envelope);
 
             <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">have current_gain go towards a desired limiter target_gain</span>
-            <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">target_gain</span>;
+            <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">target_gain</span>;
             <span style="color: #111111; font-weight: bold;">if</span> (state-&gt;envelope &gt; threshold)
                 target_gain = (1+threshold-state-&gt;envelope);
             <span style="color: #111111; font-weight: bold;">else</span>
@@ -308,18 +308,18 @@ Now in order to plug this code into Python I will use Cython. First of all, a "C
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    cdef extern <span style="color: #111111; font-weight: bold;">from</span> <span style="color: #303030;">"limiter.h"</span>:
+<pre class="src src-python">    cdef extern <span style="color: #111111; font-weight: bold;">from</span> <span style="color: #606060;">"limiter.h"</span>:
         ctypedef struct limiter_state:
-            <span style="color: #111111;">int</span> delay_index
-            <span style="color: #111111;">int</span> delay_length
-            <span style="color: #111111;">float</span> envelope
-            <span style="color: #111111;">float</span> current_gain
-            <span style="color: #111111;">float</span> attack_coeff
-            <span style="color: #111111;">float</span> release_coeff
+            <span style="color: #404040;">int</span> delay_index
+            <span style="color: #404040;">int</span> delay_length
+            <span style="color: #404040;">float</span> envelope
+            <span style="color: #404040;">float</span> current_gain
+            <span style="color: #404040;">float</span> attack_coeff
+            <span style="color: #404040;">float</span> release_coeff
 
-        limiter_state init_limiter(<span style="color: #111111;">float</span> attack_factor, <span style="color: #111111;">float</span> release_factor, <span style="color: #111111;">int</span> delay_len)
-        void limit(<span style="color: #111111;">float</span> *signal, <span style="color: #111111;">int</span> block_length, <span style="color: #111111;">float</span> threshold,
-                   <span style="color: #111111;">float</span> *delay_line, limiter_state *state)
+        limiter_state init_limiter(<span style="color: #404040;">float</span> attack_factor, <span style="color: #404040;">float</span> release_factor, <span style="color: #404040;">int</span> delay_len)
+        void limit(<span style="color: #404040;">float</span> *signal, <span style="color: #404040;">int</span> block_length, <span style="color: #404040;">float</span> threshold,
+                   <span style="color: #404040;">float</span> *delay_line, limiter_state *state)
 </pre>
 </div>
 
@@ -329,17 +329,17 @@ This is very similar to the C header file of the limiter:
 
 <div class="org-src-container">
 <pre class="src src-c">    <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_index</span>;
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_length</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">envelope</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">current_gain</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">attack_coeff</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">release_coeff</span>;
+        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_index</span>;
+        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_length</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">envelope</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">current_gain</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_coeff</span>;
+        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_coeff</span>;
     } <span style="color: #111111; text-decoration: underline;">limiter_state</span>;
 
-    <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">attack_factor</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">release_factor</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">delay_len</span>);
-    <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">signal</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">block_length</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">threshold</span>,
-               <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #111111;">delay_line</span>, <span style="color: #111111; text-decoration: underline;">limiter_state</span> *<span style="color: #111111;">state</span>);
+    <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_factor</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_factor</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_len</span>);
+    <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">signal</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">block_length</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">threshold</span>,
+               <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">delay_line</span>, <span style="color: #111111; text-decoration: underline;">limiter_state</span> *<span style="color: #404040;">state</span>);
 </pre>
 </div>
 
@@ -352,21 +352,21 @@ With that squared away, the C functions are accessible for Cython. Now, we only 
     cimport numpy <span style="color: #111111; font-weight: bold;">as</span> np
     cimport limiter
 
-    <span style="color: #111111;">DTYPE</span> = np.float32
+    <span style="color: #404040;">DTYPE</span> = np.float32
     ctypedef np.float32_t DTYPE_t
 
     cdef <span style="color: #111111; font-weight: bold;">class</span> <span style="color: #111111; text-decoration: underline;">Limiter</span>:
         cdef limiter.limiter_state state
         cdef np.ndarray delay_line
-        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">__init__</span>(<span style="color: #111111; font-weight: bold;">self</span>, <span style="color: #111111;">float</span> attack_coeff, <span style="color: #111111;">float</span> release_coeff,
-                     <span style="color: #111111;">int</span> delay_length):
+        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">__init__</span>(<span style="color: #111111; font-weight: bold;">self</span>, <span style="color: #404040;">float</span> attack_coeff, <span style="color: #404040;">float</span> release_coeff,
+                     <span style="color: #404040;">int</span> delay_length):
             <span style="color: #111111; font-weight: bold;">self</span>.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
             <span style="color: #111111; font-weight: bold;">self</span>.delay_line = np.zeros(delay_length, dtype=DTYPE)
 
-        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; font-weight: bold;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #111111;">float</span> threshold):
-            limiter.limit(&lt;<span style="color: #111111;">float</span>*&gt;np.PyArray_DATA(signal),
-                       &lt;<span style="color: #111111;">int</span>&gt;<span style="color: #111111;">len</span>(signal), threshold,
-                       &lt;<span style="color: #111111;">float</span>*&gt;np.PyArray_DATA(<span style="color: #111111; font-weight: bold;">self</span>.delay_line),
+        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; font-weight: bold;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #404040;">float</span> threshold):
+            limiter.limit(&lt;<span style="color: #404040;">float</span>*&gt;np.PyArray_DATA(signal),
+                       &lt;<span style="color: #404040;">int</span>&gt;<span style="color: #404040;">len</span>(signal), threshold,
+                       &lt;<span style="color: #404040;">float</span>*&gt;np.PyArray_DATA(<span style="color: #111111; font-weight: bold;">self</span>.delay_line),
                        &lt;limiter.limiter_state*&gt;&amp;<span style="color: #111111; font-weight: bold;">self</span>.state)
 </pre>
 </div>
@@ -393,14 +393,14 @@ Finally, we need to build the whole contraption. The easiest way to do this is t
     <span style="color: #111111; font-weight: bold;">from</span> Cython.Distutils <span style="color: #111111; font-weight: bold;">import</span> build_ext
     <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> get_include
 
-    <span style="color: #111111;">ext_modules</span> = [Extension(<span style="color: #303030;">"cython_limiter"</span>,
-                             sources=[<span style="color: #303030;">"cython_limiter.pyx"</span>,
-                                      <span style="color: #303030;">"limiter.c"</span>],
-                             include_dirs=[<span style="color: #303030;">'.'</span>, get_include()])]
+    <span style="color: #404040;">ext_modules</span> = [Extension(<span style="color: #606060;">"cython_limiter"</span>,
+                             sources=[<span style="color: #606060;">"cython_limiter.pyx"</span>,
+                                      <span style="color: #606060;">"limiter.c"</span>],
+                             include_dirs=[<span style="color: #606060;">'.'</span>, get_include()])]
 
     setup(
-        name = <span style="color: #303030;">"cython_limiter"</span>,
-        cmdclass = {<span style="color: #303030;">'build_ext'</span>: build_ext},
+        name = <span style="color: #606060;">"cython_limiter"</span>,
+        cmdclass = {<span style="color: #606060;">'build_ext'</span>: build_ext},
         ext_modules = ext_modules
         )
 </pre>
@@ -435,7 +435,7 @@ You can find all the source code in this article at <a href="https://github.com/
 </ol>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-audio.html">audio</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

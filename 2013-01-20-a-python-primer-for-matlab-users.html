@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">20 Jan 2013</div><h1 class="post-title"><a href="2013-01-20-a-python-primer-for-matlab-users.html">A Python Primer for Matlab Users</a></h1>
+<div class="post-date">20 Jan 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-01-20-a-python-primer-for-matlab-users.html">A Python Primer for Matlab Users</a></h1>
 <blockquote>
 <p>
 Why would you want to use Python over Matlab?
@@ -77,9 +77,9 @@ Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hol
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #111111;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
-    <span style="color: #111111;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
-    <span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a string</span>
+    <span style="color: #404040;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
+    <span style="color: #404040;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
+    <span style="color: #404040;">a</span> = <span style="color: #606060;">'text'</span>    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a string</span>
 </pre>
 </div>
 
@@ -89,9 +89,9 @@ Contrast this with C, where you can not assign different data types to the same 
 
 <div class="org-src-container">
 <pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">C</span>
-    <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #111111;">a</span> = 5;
-    <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #111111;">b</span>[3] = {1.0, 2.0, 3.0};
-    <span style="color: #111111; text-decoration: underline;">char</span> <span style="color: #111111;">c</span>[] = <span style="color: #303030;">"text"</span>;
+    <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">a</span> = 5;
+    <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">b</span>[3] = {1.0, 2.0, 3.0};
+    <span style="color: #111111; text-decoration: underline;">char</span> <span style="color: #404040;">c</span>[] = <span style="color: #606060;">"text"</span>;
 </pre>
 </div>
 
@@ -102,15 +102,15 @@ In Matlab, adding a single number to a string will convert that string into an a
 
 <div class="org-src-container">
 <pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
-    a <span style="color: #111111;">=</span> <span style="color: #303030;">'text'</span>
-    b <span style="color: #111111;">=</span> a <span style="color: #111111;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
+    a <span style="color: #404040;">=</span> <span style="color: #606060;">'text'</span>
+    b <span style="color: #404040;">=</span> a <span style="color: #404040;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
 </pre>
 </div>
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #111111;">a</span> = <span style="color: #303030;">'text'</span>
-    <span style="color: #111111;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
+    <span style="color: #404040;">a</span> = <span style="color: #606060;">'text'</span>
+    <span style="color: #404040;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
 </pre>
 </div>
 
@@ -137,7 +137,7 @@ When you start up Python, it is a rather empty environment. In order to do anyth
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy
-    <span style="color: #111111;">a</span> = numpy.zeros(10, 1)
+    <span style="color: #404040;">a</span> = numpy.zeros(10, 1)
 </pre>
 </div>
 
@@ -147,7 +147,7 @@ This is clearly cumbersome if you are planning to use Numpy all the time. So ins
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> *
-    <span style="color: #111111;">a</span> = ones(30, 1)
+    <span style="color: #404040;">a</span> = ones(30, 1)
 </pre>
 </div>
 
@@ -157,7 +157,7 @@ Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scip
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pylab <span style="color: #111111; font-weight: bold;">import</span> *
-    <span style="color: #111111;">a</span> = randn(100, 1)
+    <span style="color: #404040;">a</span> = randn(100, 1)
     plot(a)
     show()
 </pre>
@@ -180,10 +180,10 @@ In Python, blocks of code are identified by indentation and they always start wi
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111;">sum</span> = 0
+<pre class="src src-python">    <span style="color: #404040;">sum</span> = 0
     <span style="color: #111111; font-weight: bold;">for</span> n <span style="color: #111111; font-weight: bold;">in</span> [1, 2, 3, 4, 5]:
-        <span style="color: #111111;">sum</span> = <span style="color: #111111;">sum</span> + n
-    <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #111111;">sum</span>)
+        <span style="color: #404040;">sum</span> = <span style="color: #404040;">sum</span> + n
+    <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #404040;">sum</span>)
 </pre>
 </div>
 
@@ -205,11 +205,11 @@ You don't have to name the output variable names in the definition and instead u
 
 <div class="org-src-container">
 <pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
-    <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #111111;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
-        <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #111111;">&gt;</span> 0
-            out <span style="color: #111111;">=</span> number
+    <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
+        <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #404040;">&gt;</span> 0
+            out <span style="color: #404040;">=</span> number
         <span style="color: #111111; font-weight: bold;">else</span>
-            out <span style="color: #111111;">=</span> <span style="color: #111111;">-</span>number
+            out <span style="color: #404040;">=</span> <span style="color: #404040;">-</span>number
         <span style="color: #111111; font-weight: bold;">end</span>
     <span style="color: #111111; font-weight: bold;">end</span>
 </pre>
@@ -222,11 +222,11 @@ Since Python only gains a matrix engine by importing Numpy, it does not have a c
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a numpy matrix:</span>
-    <span style="color: #111111;">m</span> = array([[1, 2, 3],
+    <span style="color: #404040;">m</span> = array([[1, 2, 3],
                [4, 5, 6],
                [7, 8, 9]])
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a Python list:</span>
-    <span style="color: #111111;">l</span> = [1 2 3]
+    <span style="color: #404040;">l</span> = [1 2 3]
 </pre>
 </div>
 
@@ -237,12 +237,12 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111;">a</span> = linspace(1, 10, 10)
-    <span style="color: #111111;">one</span> = a[0]
-    <span style="color: #111111;">two</span> = a[1]
+<pre class="src src-python">    <span style="color: #404040;">a</span> = linspace(1, 10, 10)
+    <span style="color: #404040;">one</span> = a[0]
+    <span style="color: #404040;">two</span> = a[1]
 
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">"6:8" is a range of two elements:</span>
-    <span style="color: #111111;">a</span>[6:8] = [70, 80] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">&lt;-- a Python list!</span>
+    <span style="color: #404040;">a</span>[6:8] = [70, 80] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">&lt;-- a Python list!</span>
 </pre>
 </div>
 </div>
@@ -256,12 +256,12 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111;">a</span> = array([1 2 3 4 5])
-    <span style="color: #111111;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
-    <span style="color: #111111;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
+<pre class="src src-python">    <span style="color: #404040;">a</span> = array([1 2 3 4 5])
+    <span style="color: #404040;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
+    <span style="color: #404040;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">make a copy like this:</span>
-    <span style="color: #111111;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">copy=True can be omitted</span>
-    <span style="color: #111111;">c</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">changes only c</span>
+    <span style="color: #404040;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">copy=True can be omitted</span>
+    <span style="color: #404040;">c</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">changes only c</span>
 </pre>
 </div>
 <ul class="org-ul">
@@ -271,8 +271,8 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 
 <div class="org-src-container">
 <pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pretend this came from a wave file:</span>
-    <span style="color: #111111;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
-    <span style="color: #111111;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
+    <span style="color: #404040;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
+    <span style="color: #404040;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
     <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
 </pre>
 </div>
@@ -300,7 +300,7 @@ A great way to get to know any programming language is to solve the first few pr
 </p>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> <a href="tag-matlab.html">matlab</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">10 Apr 2018</div><h1 class="post-title"><a href="2018-04-10-appending-to-matlab-arrays.html">Appending to Matlab Arrays</a></h1>
+<div class="post-date">10 Apr 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-04-10-appending-to-matlab-arrays.html">Appending to Matlab Arrays</a></h1>
 <p>
 <i>The variable $var appears to change size on every loop iteration. Consider preallocating for speed.</i>
 </p>
@@ -43,16 +43,16 @@ Let's try it:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">x_prealloc <span style="color: #111111;">=</span> cell(10000<span style="color: #111111;">,</span> 1)<span style="color: #111111;">;</span>
-x_end <span style="color: #111111;">=</span> {}<span style="color: #111111;">;</span>
-x_append <span style="color: #111111;">=</span> {}<span style="color: #111111;">;</span>
-<span style="color: #111111; font-weight: bold;">for</span> n<span style="color: #111111;">=</span>1<span style="color: #111111;">:</span>10000
+<pre class="src src-octave">x_prealloc <span style="color: #404040;">=</span> cell(10000<span style="color: #404040;">,</span> 1)<span style="color: #404040;">;</span>
+x_end <span style="color: #404040;">=</span> {}<span style="color: #404040;">;</span>
+x_append <span style="color: #404040;">=</span> {}<span style="color: #404040;">;</span>
+<span style="color: #111111; font-weight: bold;">for</span> n<span style="color: #404040;">=</span>1<span style="color: #404040;">:</span>10000
     <span style="color: #111111; font-style: italic;">% variant 1: preallocate</span>
-    x_prealloc(n) <span style="color: #111111;">=</span> {42}<span style="color: #111111;">;</span>
+    x_prealloc(n) <span style="color: #404040;">=</span> {42}<span style="color: #404040;">;</span>
     <span style="color: #111111; font-style: italic;">% variant 2: end+1</span>
-    x_end(end<span style="color: #111111;">+</span>1) <span style="color: #111111;">=</span> {42}<span style="color: #111111;">;</span>
+    x_end(end<span style="color: #404040;">+</span>1) <span style="color: #404040;">=</span> {42}<span style="color: #404040;">;</span>
     <span style="color: #111111; font-style: italic;">% variant 3: append</span>
-    x_append <span style="color: #111111;">=</span> [x_append {42}]<span style="color: #111111;">;</span>
+    x_append <span style="color: #404040;">=</span> [x_append {42}]<span style="color: #404040;">;</span>
 <span style="color: #111111; font-weight: bold;">end</span>
 </pre>
 </div>
@@ -74,7 +74,7 @@ Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is
 <p>
 <b>TL;DR:</b> Do not use <code>x = [x $something]</code>, ever. Instead, use <code>x(end+1) = $something</code>. Preallocation is generally overrated.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">30 May 2013</div><h1 class="post-title"><a href="2013-05-30-speeding-up-matplotlib.html">Speeding up Matplotlib</a></h1>
+<div class="post-date">30 May 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-05-30-speeding-up-matplotlib.html">Speeding up Matplotlib</a></h1>
 <p>
 For the record, <a href="http://matplotlib.org">Matplotlib</a> is awesome! Its output looks amazing, it is extremely configurable and very easy to use. What more could you want?
 </p>
@@ -43,15 +43,15 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 <span style="color: #111111; font-weight: bold;">import</span> numpy <span style="color: #111111; font-weight: bold;">as</span> np
 <span style="color: #111111; font-weight: bold;">import</span> time
 
-<span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
+<span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
 
-<span style="color: #111111;">tstart</span> = time.time()
-<span style="color: #111111;">num_plots</span> = 0
+<span style="color: #404040;">tstart</span> = time.time()
+<span style="color: #404040;">num_plots</span> = 0
 <span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 1:
     ax.clear()
     ax.plot(np.random.randn(100))
     plt.pause(0.001)
-    <span style="color: #111111;">num_plots</span> += 1
+    <span style="color: #404040;">num_plots</span> += 1
 <span style="color: #111111; font-weight: bold;">print</span>(num_plots)
 </pre>
 </div>
@@ -73,15 +73,15 @@ Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effec
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #111111;">tstart</span> = time.time()
-<span style="color: #111111;">num_plots</span> = 0
+<span style="color: #404040;">tstart</span> = time.time()
+<span style="color: #404040;">num_plots</span> = 0
 <span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 1:
     line.set_ydata(np.random.randn(100))
     plt.pause(0.001)
-    <span style="color: #111111;">num_plots</span> += 1
+    <span style="color: #404040;">num_plots</span> += 1
 <span style="color: #111111; font-weight: bold;">print</span>(num_plots)
 </pre>
 </div>
@@ -144,16 +144,16 @@ Putting this all together now yields:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #111111;">tstart</span> = time.time()
-<span style="color: #111111;">num_plots</span> = 0
+<span style="color: #404040;">tstart</span> = time.time()
+<span style="color: #404040;">num_plots</span> = 0
 <span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 1:
     line.set_ydata(np.random.randn(100))
     fig.canvas.draw()
     fig.canvas.flush_events()
-    <span style="color: #111111;">num_plots</span> += 1
+    <span style="color: #404040;">num_plots</span> += 1
 <span style="color: #111111; font-weight: bold;">print</span>(num_plots)
 </pre>
 </div>
@@ -178,19 +178,19 @@ What we can do here is to selectively draw only the parts that are actually chan
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111;">fig</span>, <span style="color: #111111;">ax</span> = plt.subplots()
+<pre class="src src-python"><span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 plt.show(block=<span style="color: #111111;">False</span>)
 
-<span style="color: #111111;">tstart</span> = time.time()
-<span style="color: #111111;">num_plots</span> = 0
+<span style="color: #404040;">tstart</span> = time.time()
+<span style="color: #404040;">num_plots</span> = 0
 <span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 5:
     line.set_ydata(np.random.randn(100))
     ax.draw_artist(ax.patch)
     ax.draw_artist(line)
     fig.canvas.update()
     fig.canvas.flush_events()
-    <span style="color: #111111;">num_plots</span> += 1
+    <span style="color: #404040;">num_plots</span> += 1
 <span style="color: #111111; font-weight: bold;">print</span>(num_plots/5)
 </pre>
 </div>
@@ -218,7 +218,7 @@ In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotl
 <p>
 <b>EDIT</b>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-python.html">python</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

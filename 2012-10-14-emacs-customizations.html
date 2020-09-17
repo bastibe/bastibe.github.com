@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">14 Oct 2012</div><h1 class="post-title"><a href="2012-10-14-emacs-customizations.html">My Emacs customizations</a></h1>
+<div class="post-date">14 Oct 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-10-14-emacs-customizations.html">My Emacs customizations</a></h1>
 <p>
 I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
 </p>
@@ -101,9 +101,9 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 <div class="org-src-container">
 <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
           (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #303030;">"*Python*"</span>)
-                      (string-equal (buffer-name) <span style="color: #303030;">"*eshell*"</span>)
-                      (string-equal (buffer-name) <span style="color: #303030;">"*tex-shell*"</span>))
+            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #606060;">"*Python*"</span>)
+                      (string-equal (buffer-name) <span style="color: #606060;">"*eshell*"</span>)
+                      (string-equal (buffer-name) <span style="color: #606060;">"*tex-shell*"</span>))
               (<span style="color: #111111; font-weight: bold;">if</span> (not (eq (window-height) 15))
                   (enlarge-window (- 15 (window-height)))))))
 </pre>
@@ -135,8 +135,8 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
     (end-of-line))
   (newline-and-indent))
 
-(global-set-key (kbd <span style="color: #303030;">"C-o"</span>) 'vi-open-line-below)
-(global-set-key (kbd <span style="color: #303030;">"M-o"</span>) 'vi-open-line-above)
+(global-set-key (kbd <span style="color: #606060;">"C-o"</span>) 'vi-open-line-below)
+(global-set-key (kbd <span style="color: #606060;">"M-o"</span>) 'vi-open-line-above)
 </pre>
 </div>
 </div>
@@ -158,7 +158,7 @@ This function will open or refresh a split window with the generated PDF file in
 (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
   (<span style="color: #111111; font-weight: bold;">interactive</span>)
   (<span style="color: #111111; font-weight: bold;">let</span> ((tex-buffer-name (buffer-name))
-        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #303030;">".pdf"</span>)))
+        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #606060;">".pdf"</span>)))
     (<span style="color: #111111; font-weight: bold;">if</span> (get-buffer pdf-buffer-name)
         (switch-to-buffer-other-window pdf-buffer-name)
       (find-file-other-window pdf-buffer-name))
@@ -169,7 +169,7 @@ This function will open or refresh a split window with the generated PDF file in
 
 (add-hook 'LaTeX-mode-hook
           (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (define-key LaTeX-mode-map (kbd <span style="color: #303030;">"C-c C-v"</span>) 'open-show-pdf)
+            (define-key LaTeX-mode-map (kbd <span style="color: #606060;">"C-c C-v"</span>) 'open-show-pdf)
             (visual-line-mode t)
             (turn-on-reftex))
           t)
@@ -177,7 +177,7 @@ This function will open or refresh a split window with the generated PDF file in
 </div>
 </div>
 </div>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-emacs.html">emacs</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>

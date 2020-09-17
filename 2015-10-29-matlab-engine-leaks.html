@@ -29,7 +29,7 @@
   </div>
 </div></div>
 <div id="content">
-<div class="post-date">29 Oct 2015</div><h1 class="post-title"><a href="2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
+<div class="post-date">29 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-29-matlab-engine-leaks.html">Massive Memory Leak in the Matlab Engine for Python</a></h1>
 <p>
 As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Python module</a> for calling Matlab code from Python. This is how you use it:
 </p>
@@ -39,11 +39,11 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 <span style="color: #111111; font-weight: bold;">import</span> matlab
 <span style="color: #111111; font-weight: bold;">import</span> matlab.engine
 
-<span style="color: #111111;">eng</span> = matlab.engine.start_matlab()
-<span style="color: #111111;">random_data</span> = numpy.random.randn(100)
+<span style="color: #404040;">eng</span> = matlab.engine.start_matlab()
+<span style="color: #404040;">random_data</span> = numpy.random.randn(100)
 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">convert Numpy data to Matlab:</span>
-<span style="color: #111111;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #111111;">data_sum</span> = eng.<span style="color: #111111;">sum</span>(matlab_data)
+<span style="color: #404040;">matlab_data</span> = matlab.double(random_data.tolist())
+<span style="color: #404040;">data_sum</span> = eng.<span style="color: #404040;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -100,12 +100,12 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
-<span style="color: #111111;">all_objects</span> = muppy.get_objects()
+<span style="color: #404040;">all_objects</span> = muppy.get_objects()
 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">sort out only `array.array` instances:</span>
-<span style="color: #111111;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111;">isinstance</span>(obj, array.array)]
+<span style="color: #404040;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #404040;">isinstance</span>(obj, array.array)]
 
 <span style="color: #111111; font-weight: bold;">import</span> objgraph
-objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #303030;">'array.png'</span>)
+objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #606060;">'array.png'</span>)
 </pre>
 </div>
 
@@ -125,9 +125,9 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
-    <span style="color: #111111;">test_data</span> = numpy.zeros(1024*1024)
-    <span style="color: #111111;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #111111;">sum</span>(matlab_data)
+    <span style="color: #404040;">test_data</span> = numpy.zeros(1024*1024)
+    <span style="color: #404040;">matlab_data</span> = matlab.double(test_data.tolist())
+    eng.<span style="color: #404040;">sum</span>(matlab_data)
 </pre>
 </div>
 
@@ -137,7 +137,7 @@ Pympler has another great feature that can track allocations. The <code>SummaryT
 
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> tracker
-<span style="color: #111111;">tr</span> = tracker.SummaryTracker()
+<span style="color: #404040;">tr</span> = tracker.SummaryTracker()
 tr.print_diff()
 leak()
 tr.print_diff()
@@ -166,7 +166,7 @@ This data is not referenced from anywhere within Python, and is counted as <i>le
 <p>
 I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
 </p>
-<div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-matlab.html">matlab</a> </div></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div></div>
 <div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
