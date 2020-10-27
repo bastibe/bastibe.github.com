@@ -29,6 +29,57 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">27 Oct 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-10-26-differences-between-cameras.html">Differences Between Camera Sensors</a></h1>
+<p>
+Most cameras have the option to capture <i>raw</i> images, i.e. un-processed image data right from the image sensor. In theory, these images are pure physical measurements of light, and should therefore be very comparable between cameras. But are they? To investigate, I took a <i>raw</i> picture of <a href="https://en.wikipedia.org/wiki/ColorChecker">a color target</a> with each of my five cameras, and compared their output.
+</p>
+
+<p>
+Capturing accurate colors is a surprisingly intricate matter, as the color depends on the spectrum of the illumination, the reflective spectrum of the colored object, and the color filters in the camera. I normalized the illumination by taking pictures on an overcast day outside<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>, and used a standard color target with 24 colored patches of a certified color.
+</p>
+
+<p>
+The resulting colored spectra are captured on the camera sensor by photon counters behind three color filters “red”, “green”, and “blue”<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>, which differ from camera to camera in their spectral sensitivity. The recorded colors then get projected on a computer screen with another set of “red”, “green”, and “blue” LEDs of some different spectral makeup, or printed in three or more inks on paper. And this is then seen with eyes of yet another set of “red”, “green”, and “blue” retinal cells. Let's leave it at <i>color is complicated</i>.
+</p>
+
+<p>
+At any rate, I took pictures at base ISO in <i>raw</i>, white-balanced and exposed for the third grey patch, and adjusted in saturation on the red patch. Here are the colors on the color checker and the recorded colors of my cameras:
+</p>
+
+<img style="width:70%;padding-left:15%;padding-top:5px;padding-bottom:10px" src="/static/2020-10/Colorchecker.svg">
+
+<p>
+The image shows the 24 colored patches of the color target<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. Within each patch, five rectangles show the recorded color of (in reading order) the Pentax Q7, the Ricoh GR, the Panasonic LX100, the Fujifilm X-T2, and the Google Pixel 2.
+</p>
+
+<p>
+Due to my exposure and white balance calibration, the third grey patch is completely equalized and shows no difference between the cameras and the target. The “Light Skin” patch (second on the first row) is also very close to equal, which is an important sanity check for my measurement procedure, as skin tones are optimized by all cameras. Seeing that the skin color patch is one of the most similar hopefully indicates that I did not do anything gravely wrong.
+</p>
+
+<p>
+The last row shows greys, which are very similar across cameras (excluding the white patch for now). This indicates that RAW values indeed correspond to photon counts, with little additional processing. I have no idea why the white patch is off. Perhaps due to specular reflections on the white patch? Color is complicated.
+</p>
+
+<p>
+As for the other colors, the Panasonic LX100 (center) and the Fujifilm X-T2 (bottom left) seem to record somewhat more accurate colors than the other three cameras. The Pentax Q7 (top left) and Ricoh GR (top right) seem comparatively weak across the board. The Panasonic (center) is great in darker blues and reds and greens, but somewhat weaker in yellows and pastels. The Fujifilm (top right) is very good in almost all colors, with pastels somewhat weaker than darker colors. The Google Pixel 2 (bottom right) is better in reds and greens and yellows than in blues and oranges. Pastel colors in general seem weaker than darker colors, which might be due to the same process that affected the white patch as well.
+</p>
+
+<p>
+I think I learned something from this experiment: There are indeed color differences between cameras even when shooting RAW, but they are relatively minor. Whenever I see larger differences in my pictures, they are likely (easily correctible) white balance differences, and not sensor differences. When in doubt however, my Panasonic LX100 and Fujifilm X-T2 do capture more lifelike colors than my other cameras.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara">any kind of artificial light is comparatively terrible for color reproduction!</div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara">in quotes, because colors are three-channel information, and we're talking about single channels here.</div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara">encoded as sRGB, which might or might not be displayed correctly on your screen, depending on your OS, your browser, your settings, your room's illumination, and your screen. Color is complicated.</div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> </div>
 <div class="post-date">16 Oct 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-10-16-lenses-matter.html">Lenses Matter</a></h1>
 <p>
 A common trope in discussions about cameras on the internet is: “sensor size trumps all”, and as a corollary, “smartphone cameras suck”. Which is obviously false to anyone who has ever taken a good picture on a smartphone (with its tiny sensor).
@@ -533,256 +584,11 @@ The great thing about this method is that it uses the <code>copy</code> codec, w
 <p>
 In summary, this setup works very well for me. It is simple and efficient, and does not require any video editing. The ability to switch scenes is cool and powerful. Still, recording videos is a lot of work. All in all, the 18 videos in the file parsing tutorials took 250 takes, according to my trash directory.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div>
-<div class="post-date">14 May 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-14-file-parsing-tutorial.html">File Parsing with Python Video Tutorial</a></h1>
-<p>
-This video series was produced in the spring of 2020, during the COVID19-pandemic, when all lectures had to be held electronically, without physical attendance. It is a tutorial, in German, for parsing text files, and basic unit testing.
-</p>
-
-<p>
-If the videos are too slow, feel free to speed them up by right-clicking, and adjusting play speed (Firefox only, as far as I know).
-</p>
-
-<p>
-You may also download the videos and share them with your friends. Please do not upload them to social media or YouTube, but link to this website instead. If you want to modify them or create derivative works, please contact me.
-</p>
-
-<center>
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />The <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/MovingImage" property="dct:title" rel="dct:type">Qt for Python Video Tutorial</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://bastibe.de/2020-03-20-qt-for-python-tutorial.html" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
-</center>
-
-<div id="outline-container-orgaddd59a" class="outline-2">
-<h2 id="orgaddd59a">1 Intro</h2>
-<div class="outline-text-2" id="text-orgaddd59a">
-<p>
-Prerequisites: A basic understanding of Python, and a working installation of python ≥3.6.
-</p>
-
-<p>
-An overview over the topics discussed in the rest of the videos, and installation of <a href="https://pytest.org">pytest</a>.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/01 Intro.mp4" type="video/mp4">
-</video>
-</div>
-</div>
-
-<div id="outline-container-orgbacdee2" class="outline-2">
-<h2 id="orgbacdee2">2 INI: First Steps</h2>
-<div class="outline-text-2" id="text-orgbacdee2">
-<p>
-Basic setup, and our first test.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/02 INI first steps.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/inifile_1.py">inifile_1.py</a> and <a href="/static/2020-05/inifile_test_1.py">inifile_test_1.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org6752829" class="outline-2">
-<h2 id="org6752829">3 INI: Sections</h2>
-<div class="outline-text-2" id="text-org6752829">
-<p>
-Parsing INI sections.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/03 INI sections.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/inifile_2.py">inifile_2.py</a> and <a href="/static/2020-05/inifile_test_2.py">inifile_test_2.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org07272f9" class="outline-2">
-<h2 id="org07272f9">4 INI: Variables</h2>
-<div class="outline-text-2" id="text-org07272f9">
-<p>
-Parsing INI variable assignments.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/04 INI variables.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/inifile_3.py">inifile_3.py</a> and <a href="/static/2020-05/inifile_test_3.py">inifile_test_3.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org546f29c" class="outline-2">
-<h2 id="org546f29c">5 INI: Bugfixes and Integration Tests</h2>
-<div class="outline-text-2" id="text-org546f29c">
-<p>
-Parsing difficult values, and comments.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/05 INI bugfixes and integration tests.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/inifile_4.py">inifile_4.py</a> and <a href="/static/2020-05/inifile_test_4.py">inifile_test_4.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-orgf0b8eeb" class="outline-2">
-<h2 id="orgf0b8eeb">6 INI: Test the Tests</h2>
-<div class="outline-text-2" id="text-orgf0b8eeb">
-<p>
-Tests can be wrong, too.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/06 INI test the tests.mp4" type="video/mp4">
-</video>
-</div>
-</div>
-
-<div id="outline-container-org50eeb47" class="outline-2">
-<h2 id="org50eeb47">7 CSV: First Prototype</h2>
-<div class="outline-text-2" id="text-org50eeb47">
-<p>
-A simple parser for values without quotes.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/07 CSV first prototype.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/csvfile_1.py">csvfile_1.py</a> and <a href="/static/2020-05/csvfile_test_1.py">csvfile_test_1.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org13aa6a2" class="outline-2">
-<h2 id="org13aa6a2">8 CSV: Quotes</h2>
-<div class="outline-text-2" id="text-org13aa6a2">
-<p>
-Parsing quoted values makes everything harder.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/08 CSV quotes.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/csvfile_2.py">csvfile_2.py</a> and <a href="/static/2020-05/csvfile_test_2.py">csvfile_test_2.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org7bfc0d4" class="outline-2">
-<h2 id="org7bfc0d4">9 CSV: A Few More Features</h2>
-<div class="outline-text-2" id="text-org7bfc0d4">
-<p>
-Comments and a choice of separators.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/09 CSV a few more feature.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/csvfile_3.py">csvfile_3.py</a> and <a href="/static/2020-05/csvfile_test_3.py">csvfile_test_3.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org4bc329e" class="outline-2">
-<h2 id="org4bc329e">10 JSON: Keyword Parser</h2>
-<div class="outline-text-2" id="text-org4bc329e">
-<p>
-Parsing the simplest of JSON expressions.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/10 JSON keyword parser.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/jsonfile_1.py">jsonfile_1.py</a> and <a href="/static/2020-05/jsonfile_test_1.py">jsonfile_test_1.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org2f60f1c" class="outline-2">
-<h2 id="org2f60f1c">11 JSON: Strings</h2>
-<div class="outline-text-2" id="text-org2f60f1c">
-<p>
-Parsing JSON strings is not as simple as it seems.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/11 JSON strings.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/jsonfile_2.py">jsonfile_2.py</a> and <a href="/static/2020-05/jsonfile_test_2.py">jsonfile_test_2.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-org0b28ace" class="outline-2">
-<h2 id="org0b28ace">12 JSON: Numbers</h2>
-<div class="outline-text-2" id="text-org0b28ace">
-<p>
-Numbers in JSON.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/12 JSON numbers.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/jsonfile_3.py">jsonfile_3.py</a> and <a href="/static/2020-05/jsonfile_test_3.py">jsonfile_test_3.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-orgff7a71e" class="outline-2">
-<h2 id="orgff7a71e">13 JSON: Data Structures</h2>
-<div class="outline-text-2" id="text-orgff7a71e">
-<p>
-The rest of JSON: Objects and Arrays.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/13 JSON data structures.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/jsonfile_4.py">jsonfile_4.py</a> and <a href="/static/2020-05/jsonfile_test_4.py">jsonfile_test_4.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-orgc23b48d" class="outline-2">
-<h2 id="orgc23b48d">14 Regular Expressions 1</h2>
-<div class="outline-text-2" id="text-orgc23b48d">
-<p>
-How to parse parts of INI files with regular expressions.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/14 Regular Expressions 1.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/inifile_regex.py">inifile_regex.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-orgd7af759" class="outline-2">
-<h2 id="orgd7af759">15 Regular Expressions 2</h2>
-<div class="outline-text-2" id="text-orgd7af759">
-<p>
-How to parse parts of JSON files with regular expressions.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/15 Regular Expressions 2.mp4" type="video/mp4">
-</video>
-<p>Code: <a href="/static/2020-05/jsonfile_regex.py">jsonfile_regex.py</a></p>
-</div>
-</div>
-
-<div id="outline-container-orgb2ad504" class="outline-2">
-<h2 id="orgb2ad504">16 Wrapup</h2>
-<div class="outline-text-2" id="text-orgb2ad504">
-<p>
-A summary of the topics discussed.
-</p>
-
-<video controls width="100%">
-  <source src="/static/2020-05/16 Zusammenfassung.mp4" type="video/mp4">
-</video>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-python.html">python</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div><div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
+<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
 <div id="disqus_thread"></div>
 <script type="text/javascript">
     function load_disqus() {
