@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>Bastibe.de</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -54,7 +54,6 @@ Install rsnapshot
 
 <pre class="example">
 brew install rsnapshot
-
 </pre></li>
 
 <li><p>
@@ -66,8 +65,8 @@ You can copy a template from homebrew:
 </p>
 <pre class="example">
 cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
-
 </pre>
+
 <p>
 And then configure the new configuration file to your liking (preserve the tabs!):
 </p>
@@ -111,8 +110,8 @@ Make sure it works and create initial backup
 
 <pre class="example">
 rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
-
 </pre>
+
 <p>
 The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
 </p></li>
@@ -130,8 +129,8 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">  <span style="color: #606060;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #606060;"> </span><span style="color: #111111;">version="1.0" encoding="UTF-8"</span><span style="color: #606060;">?&gt;</span>
-  <span style="color: #606060;">&lt;!</span><span style="color: #606060;">DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<pre class="src src-xml">  &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" encoding="UTF-8"</span>?&gt;
+  &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
   &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #404040;">version</span>=<span style="color: #606060;">"1.0"</span>&gt;
   &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
       &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
@@ -211,7 +210,6 @@ Load launchd agents
 
 <pre class="example">
 launchctl load ~/Library/LaunchAgents/rsnapshot.*
-
 </pre></li>
 
 <li><p>
@@ -220,8 +218,8 @@ Test launchd agent
 
 <pre class="example">
 launchctl start rsnapshot.hourly
-
 </pre>
+
 <p>
 If it doesn't work, Console.app might show a relevant error message.
 </p></li>
@@ -259,9 +257,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-orgbc82ad4" class="outline-2">
-<h2 id="orgbc82ad4">Caveats</h2>
-<div class="outline-text-2" id="text-orgbc82ad4">
+<div id="outline-container-org1c1cddb" class="outline-2">
+<h2 id="org1c1cddb">Caveats</h2>
+<div class="outline-text-2" id="text-org1c1cddb">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -275,7 +273,7 @@ There are other possible solutions: ① You could modify the launchd entry such 
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">28 Dec 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html">Dropbox deleted my pictures and Time Machine didn't backup</a></h1>
 <p>
 Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. <a href="https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952">I am not alone with this problem</a>. It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
@@ -292,7 +290,7 @@ From now on, I will use <a href="http://rsnapshot.org/">rsnapshot</a> for backup
 <p>
 A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get-a-mac.html">Apple</a> and <a href="http://bastibe.de/2009-03-28-synchronisieren-von-google.html">Dropbox</a> and Google and Amazon would lead us to a bright future of computers that "just work", and could solve our daily chores ever more conveniently and reliably. But I was proven wrong. <a href="http://bastibe.de/2012-07-09-apple-is-failing-me.html">So</a>. <a href="http://bastibe.de/2012-11-01-apple-tv.html">Many</a>. <a href="http://bastibe.de/2015-10-16-finder-woes.html">Times</a>. It seems that for-profit software inevitably becomes less dependable as it adds ever more features to attract ever more users. In contrast, free software can focus on <a href="http://bastibe.de/2017-10-24-the-long-game.html">incremental improvements and steadily increasing reliability</a>.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a>
 <div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
 <p>
 A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
@@ -302,9 +300,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-orgca660da" class="outline-2">
-<h2 id="orgca660da">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-orgca660da">
+<div id="outline-container-orgd86a06a" class="outline-2">
+<h2 id="orgd86a06a">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-orgd86a06a">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -319,9 +317,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-org1af5072" class="outline-2">
-<h2 id="org1af5072">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-org1af5072">
+<div id="outline-container-org86a206d" class="outline-2">
+<h2 id="org86a206d">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-org86a206d">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -336,9 +334,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-org4c6f129" class="outline-2">
-<h2 id="org4c6f129">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org4c6f129">
+<div id="outline-container-org78960e8" class="outline-2">
+<h2 id="org78960e8">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org78960e8">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -399,9 +397,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-orga89d255" class="outline-2">
-<h2 id="orga89d255">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-orga89d255">
+<div id="outline-container-org5f8796b" class="outline-2">
+<h2 id="org5f8796b">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-org5f8796b">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -438,22 +436,10 @@ This article heavily steals from these fine folks on the internet:
 </ul>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-backup.html">backup</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-backup.html">backup</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
-    };
-</script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

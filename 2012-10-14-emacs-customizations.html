@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>My Emacs customizations</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -21,8 +21,7 @@
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
+<div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
@@ -46,9 +45,9 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-org8418d01" class="outline-2">
-<h2 id="org8418d01">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-org8418d01">
+<div id="outline-container-orgea2b580" class="outline-2">
+<h2 id="orgea2b580">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-orgea2b580">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
@@ -91,9 +90,9 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </div>
 </div>
 
-<div id="outline-container-org05ec4a5" class="outline-2">
-<h2 id="org05ec4a5">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-org05ec4a5">
+<div id="outline-container-org447b3eb" class="outline-2">
+<h2 id="org447b3eb">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-org447b3eb">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
@@ -111,9 +110,9 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 </div>
 </div>
 
-<div id="outline-container-orgfe2113c" class="outline-2">
-<h2 id="orgfe2113c">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-orgfe2113c">
+<div id="outline-container-org5eb2f48" class="outline-2">
+<h2 id="org5eb2f48">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-org5eb2f48">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
@@ -142,9 +141,9 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 </div>
 </div>
 
-<div id="outline-container-orgfacee4a" class="outline-2">
-<h2 id="orgfacee4a">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-orgfacee4a">
+<div id="outline-container-org3a5e1a9" class="outline-2">
+<h2 id="org3a5e1a9">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-org3a5e1a9">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>
@@ -177,22 +176,19 @@ This function will open or refresh a split window with the generated PDF file in
 </div>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div></div>
-<div id="postamble" class="status"><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div id="comments"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
+<div id="hyvor-talk-view"></div>
 <script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
+    var HYVOR_TALK_WEBSITE = 3390;
+    var HYVOR_TALK_CONFIG = {
+        url: false,
+        id: location.pathname
     };
 </script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>Bastibe.de</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -34,9 +34,9 @@
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
 </p>
 
-<div id="outline-container-orgc389b08" class="outline-2">
-<h2 id="orgc389b08">Text</h2>
-<div class="outline-text-2" id="text-orgc389b08">
+<div id="outline-container-org18d2b13" class="outline-2">
+<h2 id="org18d2b13">Text</h2>
+<div class="outline-text-2" id="text-org18d2b13">
 <p>
 For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
 </p>
@@ -61,9 +61,9 @@ We'll get back to <code>$(graph_pdfs)</code> in a second.
 </div>
 </div>
 
-<div id="outline-container-org183767d" class="outline-2">
-<h2 id="org183767d">Graphs</h2>
-<div class="outline-text-2" id="text-org183767d">
+<div id="outline-container-org318c507" class="outline-2">
+<h2 id="org318c507">Graphs</h2>
+<div class="outline-text-2" id="text-org318c507">
 <p>
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
 </p>
@@ -95,9 +95,9 @@ This system is surprisingly flexible, and absolutely trivial to debug. For examp
 </div>
 </div>
 
-<div id="outline-container-org0998a93" class="outline-2">
-<h2 id="org0998a93">Data</h2>
-<div class="outline-text-2" id="text-org0998a93">
+<div id="outline-container-org69a93d6" class="outline-2">
+<h2 id="org69a93d6">Data</h2>
+<div class="outline-text-2" id="text-org69a93d6">
 <p>
 All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
 </p>
@@ -126,7 +126,7 @@ And that is truly the key part; The last thing you want to do while writing is b
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a>
 <div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
 <p>
 Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
@@ -143,7 +143,7 @@ Today, I finally tackled this problem: Now, org-static-blog only exports each po
 <p>
 Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a>
 <div class="post-date">19 Nov 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h1>
 <p>
 The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
@@ -156,7 +156,7 @@ However, I have found that this does not work any more: As of Emacs 25, Emacs is
 <p>
 This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-windows.html">windows</a>
 <div class="post-date">19 Sep 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
 <p>
 Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
@@ -209,7 +209,7 @@ Still, I love the look of this! (Of course it won't work in a terminal, or most 
 
 
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
 <p>
 This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
@@ -316,7 +316,7 @@ With this in place, we can extend the previous filter to work for HTML as well a
 <p>
 Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">19 Nov 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html">Writing a Thesis in Org Mode</a></h1>
 <p>
 Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a> instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
@@ -370,7 +370,7 @@ The one thing where Org really shines, though, is the inclusion of code fragment
 <p>
 At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
 <p>
 I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
@@ -410,7 +410,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 <p>
 This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">07 May 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
 <p>
 I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
@@ -431,7 +431,7 @@ Some package in my configuration set up <code>vc-find-file-hook</code> as part o
 <p>
 But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">13 Nov 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-11-13-blogging-with-emacs.html">Blogging with Emacs</a></h1>
 <p>
 When I first started blogging, it was on <a href="http://blogger.com">blogger.com</a> (on the now-abandoned domain <a href="http://daskrachen.com">daskrachen.com</a>). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
@@ -575,10 +575,10 @@ Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code
 
 <div class="org-src-container">
 <pre class="src src-org"> * Speeding up Matplotlib
-<span style="color: #111111;"> :PROPERTIES:</span>
+<span style="color: #0000ff;"> :PROPERTIES:</span>
  <span style="color: #111111;">:RSS_PERMALINK:</span> "<span style="color: #111111; text-decoration: underline;"><a href="http://bastibe.de/2013-05-30-speeding-up-matplotlib.html">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</a></span>"
  <span style="color: #111111;">:PUBDATE:</span> &lt;2013-05-30&gt;
-<span style="color: #111111;"> :END:</span>
+<span style="color: #0000ff;"> :END:</span>
 <span style="color: #111111; background-color: #f4f4f0;"> #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
 </pre>
 </div>
@@ -730,7 +730,7 @@ All other sources, including the source code to all blog posts, can be found on 
 <p>
 Now, the RSS feed includes the full text of all articles.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a>
 <div class="post-date">14 Oct 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-10-14-emacs-customizations.html">My Emacs customizations</a></h1>
 <p>
 I don't host my <code>.emacs</code> in a repository. I tried it for a while, but it did not work for me. I think repos are great for managing multiple divergent versions of the same source tree. However, my dotfiles should never diverge, they should just be kept in sync. This is what Dropbox is great at. So I use Dropbox instead of git.
@@ -748,9 +748,9 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-org8418d01" class="outline-2">
-<h2 id="org8418d01">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-org8418d01">
+<div id="outline-container-orgea2b580" class="outline-2">
+<h2 id="orgea2b580">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-orgea2b580">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
@@ -793,9 +793,9 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </div>
 </div>
 
-<div id="outline-container-org05ec4a5" class="outline-2">
-<h2 id="org05ec4a5">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-org05ec4a5">
+<div id="outline-container-org447b3eb" class="outline-2">
+<h2 id="org447b3eb">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-org447b3eb">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
@@ -813,9 +813,9 @@ Usually when you open a new split window in Emacs, it takes up half the frame. F
 </div>
 </div>
 
-<div id="outline-container-orgfe2113c" class="outline-2">
-<h2 id="orgfe2113c">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-orgfe2113c">
+<div id="outline-container-org5eb2f48" class="outline-2">
+<h2 id="org5eb2f48">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-org5eb2f48">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
@@ -844,9 +844,9 @@ There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'ope
 </div>
 </div>
 
-<div id="outline-container-orgfacee4a" class="outline-2">
-<h2 id="orgfacee4a">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-orgfacee4a">
+<div id="outline-container-org3a5e1a9" class="outline-2">
+<h2 id="org3a5e1a9">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-org3a5e1a9">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>
@@ -879,7 +879,7 @@ This function will open or refresh a split window with the generated PDF file in
 </div>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">13 Oct 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-10-13-emacs.html">Text editing with confidence and Emacs</a></h1>
 <p>
 In college, I realized for the first time how a good text editor could save me serious time, when I dragged an image file into Textmate and it auto-inserted all the LaTeX boilerplate for a figure. A few years later, on my first job, I learned <a href="http://www.viemu.com/">Vim key bindings for Visual Studio</a> because I hated text editing in Visual Studio so much. This showed me another way how a good text editor could save me serious time. A year after that, I was bored and tried Emacs. With Emacs, I discovered the marvelous world of <a href="https://en.wikipedia.org/wiki/REPL">REPLs</a> and <a href="http://orgmode.org/">outlining</a>.
@@ -889,9 +889,9 @@ In college, I realized for the first time how a good text editor could save me s
 Note that this is not supposed to be a comparison between text editors. I have done that <a href="http://bastibe.de/text-editors.html">already</a>. This will be a collection of some of the coolest things my text editor of choice is capable of. Stuff I love!
 </p>
 
-<div id="outline-container-org4529320" class="outline-2">
-<h2 id="org4529320">Text editing</h2>
-<div class="outline-text-2" id="text-org4529320">
+<div id="outline-container-org853bd7c" class="outline-2">
+<h2 id="org853bd7c">Text editing</h2>
+<div class="outline-text-2" id="text-org853bd7c">
 <p>
 In my admittedly short history of working with computers and text professionally I have realized a universal truth about the tools I like to use: A great tool is a tool I can trust. A tool I can use with confidence because I know that it will do what I want. Furthermore, a great tool is a tool that does what I want with a minimum amount of friction.
 </p>
@@ -906,9 +906,9 @@ This is a theme that goes through all these features: I look for stuff that is f
 </div>
 </div>
 
-<div id="outline-container-org9afa54b" class="outline-2">
-<h2 id="org9afa54b">Outlining and task management</h2>
-<div class="outline-text-2" id="text-org9afa54b">
+<div id="outline-container-org7acab93" class="outline-2">
+<h2 id="org7acab93">Outlining and task management</h2>
+<div class="outline-text-2" id="text-org7acab93">
 <p>
 Outlining is writing an hierarchical list of stuff that can be reordered and sub-trees can be hidden. I tried some graphical outliners before. I did not quite see the point of it. Instead, I always kept my todo lists in simple <a href="http://daringfireball.net/projects/markdown/">Markdown</a> files. It worked well enough.
 </p>
@@ -923,9 +923,9 @@ Add to that the more advanced task tracking features of org-mode, such as <a hre
 </div>
 </div>
 
-<div id="outline-container-org626029b" class="outline-2">
-<h2 id="org626029b">Shell interaction and operating system compatibility</h2>
-<div class="outline-text-2" id="text-org626029b">
+<div id="outline-container-orgdff0dfc" class="outline-2">
+<h2 id="orgdff0dfc">Shell interaction and operating system compatibility</h2>
+<div class="outline-text-2" id="text-orgdff0dfc">
 <p>
 Whenever my job required me to work on Windows, I often found it jarring to not have a command line available. Granted, there is <a href="http://cygwin.com/">Cygwin</a>, but that does not play with the Windows directory structure too well. Also, many programs behave slightly differently on Linux, Cygwin and OSX. Basically, it drove me nuts.
 </p>
@@ -940,9 +940,9 @@ At more than one point, Eshell probably saved my sanity.
 </div>
 </div>
 
-<div id="outline-container-org9c97df3" class="outline-2">
-<h2 id="org9c97df3">Git interaction</h2>
-<div class="outline-text-2" id="text-org9c97df3">
+<div id="outline-container-org9c5ca89" class="outline-2">
+<h2 id="org9c5ca89">Git interaction</h2>
+<div class="outline-text-2" id="text-org9c5ca89">
 <p>
 Source control is a crucial tool when working with source code. In college we used <a href="http://subversion.tigris.org/">SVN</a>. Even cooler is <a href="http://git-scm.com/">Git</a>, though the initial learning curve is pretty bad. Personally, I learned it by mucking around on the command line and breaking stuff there, then using <a href="http://www.git-tower.com/">Tower</a> to restore the repository to some sane state. Sadly though, Tower is OSX only, so I was kind of screwed on Windows and Linux.
 </p>
@@ -953,9 +953,9 @@ Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.git
 </div>
 </div>
 
-<div id="outline-container-org7e9ea56" class="outline-2">
-<h2 id="org7e9ea56">Grab bag</h2>
-<div class="outline-text-2" id="text-org7e9ea56">
+<div id="outline-container-org22fa468" class="outline-2">
+<h2 id="org22fa468">Grab bag</h2>
+<div class="outline-text-2" id="text-org22fa468">
 <ul class="org-ul">
 <li>Emacs' integrated <a href="http://www.gnu.org/software/emacs/manual/html_node/ediff/Introduction.html">ediff</a> is a joy to use.</li>
 <li>REPLs are one honking great idea and come with most language modes for dynamic languages in Emacs.</li>
@@ -966,7 +966,7 @@ Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.git
 </ul>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">03 Feb 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-02-03-text-editors.html">Text Editors</a></h1>
 <p>
 As far as I can tell, there has been a resurgence of development in the landscape of text editors of late. Only a few years ago, the text editing scene one the Mac seemed to be dominated by
@@ -982,9 +982,9 @@ As far as I can tell, there has been a resurgence of development in the landscap
 During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
 </p>
 
-<div id="outline-container-org47aea12" class="outline-2">
-<h2 id="org47aea12"><a href="http://www.vim.org/">Vim</a></h2>
-<div class="outline-text-2" id="text-org47aea12">
+<div id="outline-container-org1b9dc74" class="outline-2">
+<h2 id="org1b9dc74"><a href="http://www.vim.org/">Vim</a></h2>
+<div class="outline-text-2" id="text-org1b9dc74">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/vim_small.png" alt="vim_small.png">
@@ -1026,9 +1026,9 @@ At the end of the day though, Vim is an amazingly powerful tool, and it is certa
 </div>
 </div>
 
-<div id="outline-container-orgd0811f4" class="outline-2">
-<h2 id="orgd0811f4"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h2>
-<div class="outline-text-2" id="text-orgd0811f4">
+<div id="outline-container-orgc20befb" class="outline-2">
+<h2 id="orgc20befb"><a href="http://www.gnu.org/software/emacs/">Emacs 24</a></h2>
+<div class="outline-text-2" id="text-orgc20befb">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/emacs_small.png" alt="emacs_small.png">
@@ -1081,9 +1081,9 @@ At any rate, I would recommend anyone to give Emacs a shot at least for a short 
 </div>
 </div>
 
-<div id="outline-container-org6095a42" class="outline-2">
-<h2 id="org6095a42"><a href="http://macromates.com/">Textmate (2)</a></h2>
-<div class="outline-text-2" id="text-org6095a42">
+<div id="outline-container-org276bf68" class="outline-2">
+<h2 id="org276bf68"><a href="http://macromates.com/">Textmate (2)</a></h2>
+<div class="outline-text-2" id="text-org276bf68">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/textmate_small.png" alt="textmate_small.png">
@@ -1131,9 +1131,9 @@ Recently however, an early alpha version of Textmate 2 has been released that co
 </div>
 </div>
 
-<div id="outline-container-orgf418ea0" class="outline-2">
-<h2 id="orgf418ea0"><a href="http://www.vicoapp.com/">Vico</a></h2>
-<div class="outline-text-2" id="text-orgf418ea0">
+<div id="outline-container-orgf11afce" class="outline-2">
+<h2 id="orgf11afce"><a href="http://www.vicoapp.com/">Vico</a></h2>
+<div class="outline-text-2" id="text-orgf11afce">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/vico_small.png" alt="vico_small.png">
@@ -1158,9 +1158,9 @@ Personally, I like it quite a bit and I am hoping very much that it will not be 
 </div>
 </div>
 
-<div id="outline-container-org452ab86" class="outline-2">
-<h2 id="org452ab86"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h2>
-<div class="outline-text-2" id="text-org452ab86">
+<div id="outline-container-orgb64b2a5" class="outline-2">
+<h2 id="orgb64b2a5"><a href="http://www.sublimetext.com/">Sublime Text 2</a></h2>
+<div class="outline-text-2" id="text-orgb64b2a5">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/sublimetext_small.png" alt="sublimetext_small.png">
@@ -1205,17 +1205,17 @@ Really, Sublime Text is an amazing achievement. Maybe not quite as hackable as E
 </div>
 </div>
 
-<div id="outline-container-org7245e1c" class="outline-2">
-<h2 id="org7245e1c">What else is out there</h2>
-<div class="outline-text-2" id="text-org7245e1c">
+<div id="outline-container-orgb11b42c" class="outline-2">
+<h2 id="orgb11b42c">What else is out there</h2>
+<div class="outline-text-2" id="text-orgb11b42c">
 <p>
 Of course, that little list up there is by no means complete. Neither does it list all the amazing features these text editors have to offer, nor does it represent an exhaustive list of them. To the best of my knowledge, this is a short list of other text editors for the Mac platform. Note however, that I have never used any of them extensively and can only tell you stuff from heresay.
 </p>
 </div>
 
-<div id="outline-container-org2dc213a" class="outline-3">
-<h3 id="org2dc213a"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h3>
-<div class="outline-text-3" id="text-org2dc213a">
+<div id="outline-container-org9630838" class="outline-3">
+<h3 id="org9630838"><a href="http://www.barebones.com/products/bbedit/index.html">BBEdit</a></h3>
+<div class="outline-text-3" id="text-org9630838">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/bbedit.png" alt="bbedit.png">
@@ -1229,9 +1229,9 @@ The remainder of its feature set seems rather standard crop though. There is som
 </div>
 </div>
 
-<div id="outline-container-org61e7b65" class="outline-3">
-<h3 id="org61e7b65"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h3>
-<div class="outline-text-3" id="text-org61e7b65">
+<div id="outline-container-orgc10abf9" class="outline-3">
+<h3 id="orgc10abf9"><a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a></h3>
+<div class="outline-text-3" id="text-orgc10abf9">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/textwrangler.png" alt="textwrangler.png">
@@ -1245,9 +1245,9 @@ Even for free, there are probably more capable candidates available, though mayb
 </div>
 </div>
 
-<div id="outline-container-orgad39d89" class="outline-3">
-<h3 id="orgad39d89"><a href="http://www.jedit.org/">JEdit</a></h3>
-<div class="outline-text-3" id="text-orgad39d89">
+<div id="outline-container-org9640b1b" class="outline-3">
+<h3 id="org9640b1b"><a href="http://www.jedit.org/">JEdit</a></h3>
+<div class="outline-text-3" id="text-org9640b1b">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/jedit.png" alt="jedit.png">
@@ -1261,9 +1261,9 @@ For all I know, this could be a very worthy alternative if you are on a budget (
 </div>
 </div>
 
-<div id="outline-container-orgc3c0fb7" class="outline-3">
-<h3 id="orgc3c0fb7"><a href="http://chocolatapp.com/">Chocolat</a></h3>
-<div class="outline-text-3" id="text-orgc3c0fb7">
+<div id="outline-container-org03d9e09" class="outline-3">
+<h3 id="org03d9e09"><a href="http://chocolatapp.com/">Chocolat</a></h3>
+<div class="outline-text-3" id="text-org03d9e09">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/chocolat.png" alt="chocolat.png">
@@ -1276,9 +1276,9 @@ Chocolat is yet another text editor that came into being in the post-Textmate vo
 </div>
 </div>
 
-<div id="outline-container-org1c3315b" class="outline-3">
-<h3 id="org1c3315b"><a href="http://www.kodapp.com/">Kod</a></h3>
-<div class="outline-text-3" id="text-org1c3315b">
+<div id="outline-container-org9d4c229" class="outline-3">
+<h3 id="org9d4c229"><a href="http://www.kodapp.com/">Kod</a></h3>
+<div class="outline-text-3" id="text-org9d4c229">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/kod.png" alt="kod.png">
@@ -1291,9 +1291,9 @@ Kod started out as an open source alternative to Textmate. This is quite uncommo
 </div>
 </div>
 
-<div id="outline-container-org734d730" class="outline-3">
-<h3 id="org734d730"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h3>
-<div class="outline-text-3" id="text-org734d730">
+<div id="outline-container-org1af9a35" class="outline-3">
+<h3 id="org1af9a35"><a href="http://www.codingmonkeys.de/subethaedit">SubEthaEdit</a></h3>
+<div class="outline-text-3" id="text-org1af9a35">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/subethaedit.png" alt="subethaedit.png">
@@ -1307,9 +1307,9 @@ Beyond that, it is a capable shortcut-based text editor. If you don't need the c
 </div>
 </div>
 
-<div id="outline-container-org9c78b54" class="outline-3">
-<h3 id="org9c78b54"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h3>
-<div class="outline-text-3" id="text-org9c78b54">
+<div id="outline-container-org77c96a2" class="outline-3">
+<h3 id="org77c96a2"><a href="http://www.peterborgapps.com/smultron/">Smultron</a></h3>
+<div class="outline-text-3" id="text-org77c96a2">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/smultron.png" alt="smultron.png">
@@ -1323,9 +1323,9 @@ Smultron lost most of its following in that transition.
 </div>
 </div>
 
-<div id="outline-container-orge0be699" class="outline-3">
-<h3 id="orge0be699"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h3>
-<div class="outline-text-3" id="text-orge0be699">
+<div id="outline-container-orgd1ad43a" class="outline-3">
+<h3 id="orgd1ad43a"><a href="http://www.slickedit.com/products/slickedit">SlickEdit</a></h3>
+<div class="outline-text-3" id="text-orgd1ad43a">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/slickedit.png" alt="slickedit.png">
@@ -1340,9 +1340,9 @@ That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I do
 </div>
 </div>
 
-<div id="outline-container-orgf874efc" class="outline-3">
-<h3 id="orgf874efc"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h3>
-<div class="outline-text-3" id="text-orgf874efc">
+<div id="outline-container-org34cd89f" class="outline-3">
+<h3 id="org34cd89f"><a href="http://www.activestate.com/komodo-edit">Komodo Edit</a></h3>
+<div class="outline-text-3" id="text-org34cd89f">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/komodo.png" alt="komodo.png">
@@ -1356,9 +1356,9 @@ There are also quite good Vim key bindings and it is available on the three majo
 </div>
 </div>
 
-<div id="outline-container-org022e930" class="outline-3">
-<h3 id="org022e930">TextEdit</h3>
-<div class="outline-text-3" id="text-org022e930">
+<div id="outline-container-org8f51dd1" class="outline-3">
+<h3 id="org8f51dd1">TextEdit</h3>
+<div class="outline-text-3" id="text-org8f51dd1">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/textedit.png" alt="textedit.png">
@@ -1372,17 +1372,17 @@ That said, TextEdit does support rich text editing and might be of value for the
 </div>
 </div>
 
-<div id="outline-container-org2bf07c8" class="outline-3">
-<h3 id="org2bf07c8">Text editors for web development</h3>
-<div class="outline-text-3" id="text-org2bf07c8">
+<div id="outline-container-org2bf0f9d" class="outline-3">
+<h3 id="org2bf0f9d">Text editors for web development</h3>
+<div class="outline-text-3" id="text-org2bf0f9d">
 <p>
 Strangely, all the major Mac text editors that cater specifically for web development are not cross platform. If web development is all you are ever doing though, these text editors might be well worth their money.
 </p>
 </div>
 
-<div id="outline-container-orgeb02bd5" class="outline-4">
-<h4 id="orgeb02bd5"><a href="http://www.panic.com/coda/">Coda</a></h4>
-<div class="outline-text-4" id="text-orgeb02bd5">
+<div id="outline-container-org2940013" class="outline-4">
+<h4 id="org2940013"><a href="http://www.panic.com/coda/">Coda</a></h4>
+<div class="outline-text-4" id="text-org2940013">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/coda.png" alt="coda.png">
@@ -1395,9 +1395,9 @@ Combine the SubEthaEdit text editing engine including its collaborative tools wi
 </div>
 </div>
 
-<div id="outline-container-org7ab1c7b" class="outline-4">
-<h4 id="org7ab1c7b"><a href="http://macrabbit.com/espresso/">Espresso</a></h4>
-<div class="outline-text-4" id="text-org7ab1c7b">
+<div id="outline-container-orgc2d5c61" class="outline-4">
+<h4 id="orgc2d5c61"><a href="http://macrabbit.com/espresso/">Espresso</a></h4>
+<div class="outline-text-4" id="text-orgc2d5c61">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/espresso.png" alt="espresso.png">
@@ -1410,9 +1410,9 @@ Another text editor gearing specifically for web development. Thus, you get powe
 </div>
 </div>
 
-<div id="outline-container-orga2f02d6" class="outline-4">
-<h4 id="orga2f02d6"><a href="http://tacosw.com/">Taco HTML Editor</a></h4>
-<div class="outline-text-4" id="text-orga2f02d6">
+<div id="outline-container-orgbea7257" class="outline-4">
+<h4 id="orgbea7257"><a href="http://tacosw.com/">Taco HTML Editor</a></h4>
+<div class="outline-text-4" id="text-orgbea7257">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/taco.png" alt="taco.png">
@@ -1425,9 +1425,9 @@ Another text editor geared exclusively towards web development. This time around
 </div>
 </div>
 
-<div id="outline-container-orgd8f56ca" class="outline-4">
-<h4 id="orgd8f56ca"><a href="http://www.beforedawnsolutions.com/applications/skedit">skEdit</a></h4>
-<div class="outline-text-4" id="text-orgd8f56ca">
+<div id="outline-container-orgb4a325b" class="outline-4">
+<h4 id="orgb4a325b"><a href="http://www.beforedawnsolutions.com/applications/skedit">skEdit</a></h4>
+<div class="outline-text-4" id="text-orgb4a325b">
 
 <figure>
 <img src="http://bastibe.de/static/2012-02/skedit.png" alt="skedit.png">
@@ -1441,22 +1441,10 @@ skEdit supports a nice array of web development languages and offers a good rang
 </div>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-text-editor.html">text-editor</a> <a href="https://bastibe.de/tag-vim.html">vim</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-text-editor.html">text-editor</a> <a href="https://bastibe.de/tag-vim.html">vim</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
-    };
-</script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>Calling Matlab from Python</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -21,8 +21,7 @@
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
+<div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
@@ -34,9 +33,9 @@
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org9c4e9a2" class="outline-2">
-<h2 id="org9c4e9a2">Usage</h2>
-<div class="outline-text-2" id="text-org9c4e9a2">
+<div id="outline-container-org53ec70e" class="outline-2">
+<h2 id="org53ec70e">Usage</h2>
+<div class="outline-text-2" id="text-org53ec70e">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
@@ -99,9 +98,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orgb600a80" class="outline-2">
-<h2 id="orgb600a80">Performance</h2>
-<div class="outline-text-2" id="text-orgb600a80">
+<div id="outline-container-orgf0f0537" class="outline-2">
+<h2 id="orgf0f0537">Performance</h2>
+<div class="outline-text-2" id="text-orgf0f0537">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -134,9 +133,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-orgdb61ec9" class="outline-2">
-<h2 id="orgdb61ec9">TL;DR</h2>
-<div class="outline-text-2" id="text-orgdb61ec9">
+<div id="outline-container-orgc3d932b" class="outline-2">
+<h2 id="orgc3d932b">TL;DR</h2>
+<div class="outline-text-2" id="text-orgc3d932b">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -146,22 +145,19 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-python.html">python</a> </div></div>
-<div id="postamble" class="status"><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-python.html">python</a> </div>
+<div id="comments"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
+<div id="hyvor-talk-view"></div>
 <script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
+    var HYVOR_TALK_WEBSITE = 3390;
+    var HYVOR_TALK_CONFIG = {
+        url: false,
+        id: location.pathname
     };
 </script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

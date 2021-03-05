@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>MATLAB Syntax</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -21,8 +21,7 @@
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
+<div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
@@ -34,75 +33,72 @@
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
-<div id="outline-container-orgd70abde" class="outline-2">
-<h2 id="orgd70abde">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-orgd70abde">
+<div id="outline-container-org71da5d6" class="outline-2">
+<h2 id="org71da5d6">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-org71da5d6">
 <p>
 Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcb444ee" class="outline-2">
-<h2 id="orgcb444ee">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-orgcb444ee">
+<div id="outline-container-orgf8e6656" class="outline-2">
+<h2 id="orgf8e6656">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-orgf8e6656">
 <p>
 If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgdc29276" class="outline-2">
-<h2 id="orgdc29276">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-orgdc29276">
+<div id="outline-container-orgb382e80" class="outline-2">
+<h2 id="orgb382e80">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-orgb382e80">
 <p>
 Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org8a8f6a3" class="outline-2">
-<h2 id="org8a8f6a3">Use of line breaks</h2>
-<div class="outline-text-2" id="text-org8a8f6a3">
+<div id="outline-container-orgbeb4c3a" class="outline-2">
+<h2 id="orgbeb4c3a">Use of line breaks</h2>
+<div class="outline-text-2" id="text-orgbeb4c3a">
 <p>
 In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgec44b1c" class="outline-2">
-<h2 id="orgec44b1c">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-orgec44b1c">
+<div id="outline-container-org08ac819" class="outline-2">
+<h2 id="org08ac819">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-org08ac819">
 <p>
 Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org97c3da1" class="outline-2">
-<h2 id="org97c3da1">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-org97c3da1">
+<div id="outline-container-org5fa5a7e" class="outline-2">
+<h2 id="org5fa5a7e">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-org5fa5a7e">
 <p>
 If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div></div>
-<div id="postamble" class="status"><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
+<div id="comments"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
+<div id="hyvor-talk-view"></div>
 <script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
+    var HYVOR_TALK_WEBSITE = 3390;
+    var HYVOR_TALK_CONFIG = {
+        url: false,
+        id: location.pathname
     };
 </script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

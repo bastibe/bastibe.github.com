@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>Real Time Signal Processing in Python</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -21,8 +21,7 @@
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
 <body>
-<div id="preamble" class="status">
-<div class="header">
+<div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
@@ -42,9 +41,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-org695d24c" class="outline-2">
-<h2 id="org695d24c">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-org695d24c">
+<div id="outline-container-org8c3c4d0" class="outline-2">
+<h2 id="org8c3c4d0">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-org8c3c4d0">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -175,9 +174,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-org2497d48" class="outline-2">
-<h2 id="org2497d48">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-org2497d48">
+<div id="outline-container-org1d8600d" class="outline-2">
+<h2 id="org1d8600d">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-org1d8600d">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -241,9 +240,9 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-org456221e" class="outline-2">
-<h2 id="org456221e">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-org456221e">
+<div id="outline-container-org4f4d34a" class="outline-2">
+<h2 id="org4f4d34a">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org4f4d34a">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
@@ -412,9 +411,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-org200700c" class="outline-2">
-<h2 id="org200700c">Conclusion</h2>
-<div class="outline-text-2" id="text-org200700c">
+<div id="outline-container-orgeb42a18" class="outline-2">
+<h2 id="orgeb42a18">Conclusion</h2>
+<div class="outline-text-2" id="text-orgeb42a18">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -425,9 +424,9 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-org4a9f3d8" class="outline-2">
-<h2 id="org4a9f3d8">Disclaimer</h2>
-<div class="outline-text-2" id="text-org4a9f3d8">
+<div id="outline-container-orgc2d2603" class="outline-2">
+<h2 id="orgc2d2603">Disclaimer</h2>
+<div class="outline-text-2" id="text-orgc2d2603">
 <ol class="org-ol">
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
@@ -435,22 +434,19 @@ You can find all the source code in this article at <a href="https://github.com/
 </ol>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div></div>
-<div id="postamble" class="status"><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
+<div id="comments"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
+<div id="hyvor-talk-view"></div>
 <script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
+    var HYVOR_TALK_WEBSITE = 3390;
+    var HYVOR_TALK_CONFIG = {
+        url: false,
+        id: location.pathname
     };
 </script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

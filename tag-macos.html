@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/"/>
+      title="RSS feed for https://bastibe.de/">
 <title>Bastibe.de</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -73,7 +73,7 @@ As I said, I miss my Mac, back when technology was magical, and just worked. And
 <p>
 I should go play with my child now, and run around in the yard, or maybe read a paper book. There's no joy in technology any more.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">29 Dec 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-12-29-rsnapshot-on-macos.html">How to set up rsnapshot instead of Time Machine</a></h1>
 <p>
 (This blog post was changed since my initial strategy of disabling the lockfile didn't work. Turns out, the lockfile is required, and backups have to be stacked.)
@@ -99,7 +99,6 @@ Install rsnapshot
 
 <pre class="example">
 brew install rsnapshot
-
 </pre></li>
 
 <li><p>
@@ -111,8 +110,8 @@ You can copy a template from homebrew:
 </p>
 <pre class="example">
 cp /usr/local/Cellar/rsnapshot/1.4.2/etc/rsnapshot.conf.default /usr/local/etc/rsnapshot.conf
-
 </pre>
+
 <p>
 And then configure the new configuration file to your liking (preserve the tabs!):
 </p>
@@ -156,8 +155,8 @@ Make sure it works and create initial backup
 
 <pre class="example">
 rsnapshot -c /usr/local/etc/rsnapshot.conf hourly
-
 </pre>
+
 <p>
 The first backup will take a while, but subsequent backups will be fast. A normal backup on my machine takes about two minutes and runs unnoticeably in the background.
 </p></li>
@@ -175,8 +174,8 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">  <span style="color: #606060;">&lt;?</span><span style="color: #111111; font-weight: bold;">xml</span><span style="color: #606060;"> </span><span style="color: #111111;">version="1.0" encoding="UTF-8"</span><span style="color: #606060;">?&gt;</span>
-  <span style="color: #606060;">&lt;!</span><span style="color: #606060;">DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<pre class="src src-xml">  &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" encoding="UTF-8"</span>?&gt;
+  &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
   &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #404040;">version</span>=<span style="color: #606060;">"1.0"</span>&gt;
   &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
       &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
@@ -256,7 +255,6 @@ Load launchd agents
 
 <pre class="example">
 launchctl load ~/Library/LaunchAgents/rsnapshot.*
-
 </pre></li>
 
 <li><p>
@@ -265,8 +263,8 @@ Test launchd agent
 
 <pre class="example">
 launchctl start rsnapshot.hourly
-
 </pre>
+
 <p>
 If it doesn't work, Console.app might show a relevant error message.
 </p></li>
@@ -304,9 +302,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-orgbc82ad4" class="outline-2">
-<h2 id="orgbc82ad4">Caveats</h2>
-<div class="outline-text-2" id="text-orgbc82ad4">
+<div id="outline-container-org1c1cddb" class="outline-2">
+<h2 id="org1c1cddb">Caveats</h2>
+<div class="outline-text-2" id="text-org1c1cddb">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -320,7 +318,7 @@ There are other possible solutions: ① You could modify the launchd entry such 
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
 <p>
 This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
@@ -345,9 +343,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org0a899b1" class="outline-2">
-<h2 id="org0a899b1">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-org0a899b1">
+<div id="outline-container-org8b73437" class="outline-2">
+<h2 id="org8b73437">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-org8b73437">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -389,7 +387,7 @@ All of that said, once you know what to do and how to do it, the resulting code 
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">16 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
 
 <figure>
@@ -416,7 +414,7 @@ And with the newest version of OS X, El Capitan, they finally blew it for me. Be
 <p>
 So, good bye OS X. I updated my work laptop first, and I regret it. I never regretted an OS X update before. My home machine is not going to get the update. It is honestly sad to see my once-beloved Mac platform becoming worse and worse and worse with every new release.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-ui.html">ui</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-ui.html">ui</a>
 <div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
 <p>
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
@@ -455,7 +453,7 @@ Anyway, here's a small Python script that changes the file creation date (but no
     os.system(<span style="color: #606060;">'SetFile -m "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
 </pre>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">13 Sep 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-09-13-Kindle-app-does-not-start.html">Kindle.app not starting on a case-sensitive file system</a></h1>
 <p>
 So Kindle.app was updated through the App Store and did not start any more. It just crashed and the crash reporter came up.
@@ -492,7 +490,7 @@ Kindle works again.
 <p>
 Spelling is hard, it seems.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
 <p>
 A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
@@ -502,9 +500,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-orgca660da" class="outline-2">
-<h2 id="orgca660da">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-orgca660da">
+<div id="outline-container-orgd86a06a" class="outline-2">
+<h2 id="orgd86a06a">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-orgd86a06a">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -519,9 +517,9 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-org1af5072" class="outline-2">
-<h2 id="org1af5072">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-org1af5072">
+<div id="outline-container-org86a206d" class="outline-2">
+<h2 id="org86a206d">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-org86a206d">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
@@ -536,9 +534,9 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-org4c6f129" class="outline-2">
-<h2 id="org4c6f129">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org4c6f129">
+<div id="outline-container-org78960e8" class="outline-2">
+<h2 id="org78960e8">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org78960e8">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
@@ -599,9 +597,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-orga89d255" class="outline-2">
-<h2 id="orga89d255">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-orga89d255">
+<div id="outline-container-org5f8796b" class="outline-2">
+<h2 id="org5f8796b">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-org5f8796b">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -638,7 +636,7 @@ This article heavily steals from these fine folks on the internet:
 </ul>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-backup.html">backup</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-backup.html">backup</a>
 <div class="post-date">19 Jul 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-07-09-apple-is-failing-me.html">How Apple is Failing Me</a></h1>
 <p>
 I bought my first Apple computer in 2007 after a long time of gaming on Windows and a few years of Linux. In the beginning, I was just amazed at the consistency, practicality and sanity of the whole experience. I think I had a bad case of tinkeritis and neophilia in my Linux days, so this was probably to be expected.
@@ -652,9 +650,9 @@ Later, I marveled at the level of polish in the third party software ecosystem a
 So here are some of those problems:
 </p>
 
-<div id="outline-container-org9baec99" class="outline-2">
-<h2 id="org9baec99">Lack of Uninstallers</h2>
-<div class="outline-text-2" id="text-org9baec99">
+<div id="outline-container-orgc7e1bbd" class="outline-2">
+<h2 id="orgc7e1bbd">Lack of Uninstallers</h2>
+<div class="outline-text-2" id="text-orgc7e1bbd">
 <p>
 Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
 </p>
@@ -679,9 +677,9 @@ Really, this is beyond ridiculous. There is no way of uninstalling software that
 </div>
 </div>
 
-<div id="outline-container-org6af38eb" class="outline-2">
-<h2 id="org6af38eb">Failing Time Machine</h2>
-<div class="outline-text-2" id="text-org6af38eb">
+<div id="outline-container-org11e6228" class="outline-2">
+<h2 id="org11e6228">Failing Time Machine</h2>
+<div class="outline-text-2" id="text-org11e6228">
 <p>
 So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don't even need to plug in that hard drive any more. Magic!
 </p>
@@ -696,9 +694,9 @@ So, backups that are not backing up. How amazing is that?
 </div>
 </div>
 
-<div id="outline-container-org8fde93e" class="outline-2">
-<h2 id="org8fde93e">Living in the Cloud</h2>
-<div class="outline-text-2" id="text-org8fde93e">
+<div id="outline-container-org9cd4701" class="outline-2">
+<h2 id="org9cd4701">Living in the Cloud</h2>
+<div class="outline-text-2" id="text-org9cd4701">
 <p>
 OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
 </p>
@@ -717,9 +715,9 @@ Things can go wrong, I understand that. But deleting all my contacts? Not cool. 
 </div>
 </div>
 
-<div id="outline-container-orgbdb138d" class="outline-2">
-<h2 id="orgbdb138d">iPhoto</h2>
-<div class="outline-text-2" id="text-orgbdb138d">
+<div id="outline-container-orgb10c17a" class="outline-2">
+<h2 id="orgb10c17a">iPhoto</h2>
+<div class="outline-text-2" id="text-orgb10c17a">
 <p>
 My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
 </p>
@@ -738,9 +736,9 @@ At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftwar
 </div>
 </div>
 
-<div id="outline-container-org2ce9096" class="outline-2">
-<h2 id="org2ce9096">OS X Lion with Auto Save and Versions</h2>
-<div class="outline-text-2" id="text-org2ce9096">
+<div id="outline-container-org9797df2" class="outline-2">
+<h2 id="org9797df2">OS X Lion with Auto Save and Versions</h2>
+<div class="outline-text-2" id="text-org9797df2">
 <p>
 The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
 </p>
@@ -767,9 +765,9 @@ I could go on. Let's just say that Lion increased my WTF-per-minute rate signifi
 </div>
 </div>
 
-<div id="outline-container-org41f4381" class="outline-2">
-<h2 id="org41f4381">Performance, Memory and File System</h2>
-<div class="outline-text-2" id="text-org41f4381">
+<div id="outline-container-orgf809d52" class="outline-2">
+<h2 id="orgf809d52">Performance, Memory and File System</h2>
+<div class="outline-text-2" id="text-orgf809d52">
 <p>
 Lets talk performance. I can't really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
 </p>
@@ -792,9 +790,9 @@ And lastly, let's talk HFS+. Did you know that HFS+ has a global lock that preve
 </div>
 </div>
 
-<div id="outline-container-org55ad6d5" class="outline-2">
-<h2 id="org55ad6d5">So, what now?</h2>
-<div class="outline-text-2" id="text-org55ad6d5">
+<div id="outline-container-orge8bc9f3" class="outline-2">
+<h2 id="orge8bc9f3">So, what now?</h2>
+<div class="outline-text-2" id="text-orge8bc9f3">
 <p>
 With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don't.
 </p>
@@ -818,7 +816,7 @@ As a matter of fact, I would love to see well enough to see Retina at all, but t
 
 
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">22 Feb 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-02-22-how-to-gem-install-rlua-on-osx-slash-homebrew.html">How to gem install rlua on OSX/homebrew</a></h1>
 <p>
 If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using
@@ -855,7 +853,7 @@ Hence, here is how you get rlua to install:
 <p>
 Not exactly a beautiful solution, but it works.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">03 Sep 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-09-03-adobe-air-application-crashes.html">Adobe AIR Application Crashes</a></h1>
 <p>
 Adobe, oh Adobe. Why?
@@ -890,7 +888,7 @@ Then enter your password and your AIR applications should work again.
 <p>
 Dear Adobe, is it too much to ask to pretty please make your software work on a case sensitive file system? Spelling is primary school stuff. It is really not that hard!
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">01 Aug 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">Compiling Scipy and Matplotlib using pip on Lion</a></h1>
 <p>
 So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.
@@ -931,7 +929,7 @@ By doing that, Matplotlib should install just fine.
 <p>
 Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">04 Mar 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Installing Pygame using Homebrew</a></h1>
 <p>
 So I want to do audio development on the Mac without using Matlab. An alternative to Matlab is Python, or rather, <a href="http://www.daskrachen.com/2011/02/installing-pythonnumpyscipymatplotlib.html">Numpy, Scipy and Matplotlib</a>. They are awesome for working with audio data. What they don't do however is playing back audio. There are several packages out there that would afford audio playback. If you are serious about this though, you not only want audio playback, you want asynchronous audio playback. That is, you want to send some audio data to the sound card and continue with your program without waiting for the audio to finish playing. This allows continuous audio playback of computer-generated sound.
@@ -1074,7 +1072,7 @@ Alright, now without further ado, install Pygame by typing
 <p>
 Great! That's it! Everything should work now!
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">03 Feb 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing Python/Numpy/Scipy/Matplotlib on OSX</a></h1>
 <p>
 For numerical analysis and signal processing prototyping, you would use <a href="http://www.mathworks.com/products/matlab/">Matlab</a>. However, Matlab has some downsides that might make it unsuitable for your project. It might be too expensive. You might be a snobbish programmer that can't stand less-than-elegant programming languages. I certainly am.
@@ -1204,7 +1202,7 @@ This should now download and install matplotlib.
 <p>
 Thank you for reading.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">14 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-14-get-a-mac.html">Get a Mac</a></h1>
 
 <figure>
@@ -1229,22 +1227,10 @@ Ziemlich genau wie ihm ging es mir auch.
 <p>
 Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll sind. Viel besser als alles, was ich dazu schreiben würde oder <a href="http://www.meinstudi.de/basti/?p=49">bereits</a> <a href="http://www.meinstudi.de/basti/?p=4">getan</a> <a href="http://www.meinstudi.de/basti/?p=24">habe</a>.
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> </div><div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
-<div id="postamble" class="status"><center><button id="disqus_button" onclick="load_disqus()">Load Disqus Comments</button></center>
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    function load_disqus() {
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = 'https://bastibe.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        document.getElementById('disqus_button').style.visibility = 'hidden';
-    };
-</script>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>
