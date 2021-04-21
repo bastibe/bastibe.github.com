@@ -24,6 +24,17 @@ A simple [[https://en.wikipedia.org/wiki/Pomodoro_Technique][pomodoro timer]], w
 ** [[http://bastibe.de/2020-03-20-qt-for-python-tutorial.html][Qt for Python Video Tutorial]]
 A video series explaining the use of [[https://www.qt.io/qt-for-python][Qt for Python]] by building a small GUI application. In German, because that's the language I teach in. (Status: released)
 
+** PhD Dissertation
+*** [[https://bastibe.github.io/Dissertation-Website/][Pitch of Voiced Speech in the Short-Time Fourier Transform: Algorithms, Ground Truths, and Evaluation Methods]]
+or /Speech has a Pitch, but what is Pitch Anyway?/
+
+My dissertation started from the design of a pitch estimation algorithm, originally destined for quite a different task. Surprisingly, I found the true scientific challenge not the algorithm itself but how to evaluate its accuracy: Traditionally, pitch estimation algorithms are evaluated against a /ground truth/ that is just assumed to be accurate. Pitch is a human perception, not a measurable, physical quantity. As it turns out, these ground truths are based on pitch estimation algorithms themselves, and often ones derived from laryngograph measurements instead of acoustic recordings, which are not ideal for the task. Furthermore, the error measures used for evaluating pitch estimation algorithms are woefully inadequate.
+
+So I set out to design a better ground truth, which does not rely on a single pitch estimation algorithm, but a large number of them, and is based on acoustic recordings. This does not solve the categorical mismatch between an algorithm's estimate and a human perception, but at least it sidesteps the biases of any one algorithm and laryngographs.
+
+With that, I conducted a huge comparison study between a very large number of pitch estimation algorithms and speech databases, and introduced a number of new evaluation methods. This study was unprecedented in the area of research, and produced a number of interesting results. Chiefly among them, that the differences between speech and noise databases used for evaluation far outweigh any minute differences between algorithms. In other words, a strong case of overfitting across the entire area of research.
+
+In the end, the work was more about data science than signal processing. Regrettably, I was [[https://bastibe.de/2019-07-09-publish-or-perish.html][not able to publish]] my results in journals.
 
 ** Finished or Abandoned Projects
 *** [[https://github.com/bastibe/PySoundCard][PySoundCard]]
