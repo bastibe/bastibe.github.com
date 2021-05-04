@@ -5,7 +5,7 @@
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de/"/>
 <title>Bastibe.de</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -29,6 +29,103 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">04 May 2021</div><h1 class="post-title"><a href="https://bastibe.de/2021-05-04-a-review-of-the-raw-photo-editor-capture-one.html">A Review of the RAW Photo Editor Capture One</a></h1>
+<p>
+About half a year ago, my second child was born, and all that precious free time that I had used for photo editing evaporated. So I started looking for faster photo editor, as a temporary replacement for <a href="https://www.darktable.org/">Darktable</a>. Based on my <a href="https://bastibe.de/2020-05-01-raw-developer-comparison.html">research last time</a>, I chose <a href="https://www.captureone.com/en">Capture One</a>. During the last six months, I got to know the program well, and want to share my thoughts on it, and how it compares to Darktable, in this blog post.
+</p>
+
+<p>
+Let's start with a bit of background about my photography, to put my views into context. I learned photo editing on Linux, with <a href="https://www.darktable.org/">Darktable</a>, mostly for documenting my travels and family. I gather that a photographer who does not know Lightroom is a bit of an oddity. But it should provide an interesting perspective for the purposes of this review. Furthermore, my interest in post processing is not purely artistic. Being a signal processing scientist, I can't help but analyze the underlying image processing algorithms, and am perhaps more annoyed by certain editing artifacts than most people.
+</p>
+
+<p>
+In terms of photography, I tend towards quick reactionary shooting of the fleeting moments of my family's life. Mostly because I prefer to spend my time playing with my kids instead of pointing a camera at them. I am therefore perhaps a bit more tolerant of slight imperfections in terms of focus and exposure than is usual. This also means I value my camera/editor's capability for recovering misjudged exposures or imperfect lighting very highly.
+</p>
+
+<p>
+Most review articles of photo editing software are conducted from only a short glance at the contesting programs, since spending the months necessary to get to know each program is usually neither practical nor affordable. But due to my particular circumstances, the present text actually comes from a few months of more-or-less exclusive use of Capture One, on about 30 thousand pictures, of which I edited about 2000 (all new, not just re-edits of old ones, and implicitly the incentive to recreate another program’s rendering).
+</p>
+
+<figure style="width: 100%; text-align: center;">
+<a href="/static/2021-05/develop screen.png" target="_blank"><img width="75%" src="/static/2021-05/develop screen.png" alt="Capture One screen layout" /></a>
+<figcaption>Capture One's main develop screen </figcaption>
+</figure>
+
+<p>
+So, Capture One. It is very fast. You move a slider, you see the results of that change immediately, even on my lowly Surface (7 Pro) tablet. After a few months of this, I discovered that this focus on speed actually goes deeper than just slider movements: I discovered that the need for speed is built into many parts of the application, which allows me to process pictures much more quickly. This was frankly a revelation in the time-starved months after my second baby’s birth.
+</p>
+
+<p>
+As an example of how much quicker Capture One's default workflow is than Darktable's, here's my usual editing flow in Darktable: I start with fixing exposure, in the Exposure module. Then I adjust shadow density and recover highlight color with the black and white sliders in the Filmic RGB module. Then I adjust white balance to taste in the Color Calibration module. Then I crop in Crop and Rotate, then add additional adjustments such as Color Zones, Color Balance, Tone Equalizer, Denoise (Profiled), or Contrast Equalizer. Last come local adjustments if necessary. The thing is, more or less every image needs at least Exposure adjustments, some Filmic RGB tweaking, and cropping. And all of these items are situated in different modules in Darktable, each requiring multiple clicks to access and change. This is supposed to change in the next version of Darktable, which will let you put all your favorite sliders in a custom module. I am very much looking forward to that.
+</p>
+
+<figure style="width: 100%; text-align: center;">
+<img width="24%" src="/static/2021-05/color calibration.png" alt="Darktable color calibration" />
+<img width="24%" src="/static/2021-05/crop and rotate.png" alt="Darktable crop and rotate" />
+<img width="24%" src="/static/2021-05/filmic rgb.png" alt="Darktable filmic RGB" />
+<img width="24%" src="/static/2021-05/tone equalizer.png" alt="Darktable tone equalizer" />
+<figcaption>Darktable's basic controls</figcaption>
+</figure>
+
+<p>
+In contrast, a similar workflow in Capture One happens entirely on one screen, just by going from one slider to the next:
+</p>
+
+<figure style="width: 100%; text-align: center;">
+<img width="25%" src="/static/2021-05/basic controls.png" alt="Capture One basic controls" />
+<figcaption>Capture One's basic controls</figcaption>
+</figure>
+
+<p>
+And furthermore, common tools such as cropping, rotating, and the white balance picker are accessible at all times with highly memorable keyboard shortcuts (C, R, W, respectively). Taken as a whole, this allows me to positively blaze through images compared to my Darktable workflow. It took me a while to appreciate this, but the difference is quite significant in my use. I now sometimes do a few days’ edits in a spare half hour, which used to be an all-evening affair in my usual Darktable workflow.
+</p>
+
+<p>
+Custom keyboard shortcuts in Darktable can help speed things up, and of course Darktable’s module system is infinitely more powerful, so there's a reason for the complexity. But the above example highlights a bit of a philosophical difference between Darktable’s unflinching priority on user control, and Capture One’s compromise between power and speed. There are upsides and downsides to both, but at this moment in my life, I begrudgingly value speed over power.
+</p>
+
+<p>
+However, there were also a number of occasions where I missed Darktable’s deep control. Most notably, Capture One’s High Dynamic Range sliders and Clarity controls feel a bit restrictive and oversimplified: It can be hard to control which parts of the image are affected, and the tools are prone to produce artifacts such as halos if not managed carefully. In contrast, Darktable's continuous Tone Equalizer mask gives very precise and adjustable control over the affected area. Similarly, Darktable's Contrast Equalizer can affect local contrast at arbitrary wavelet sizes, not just the very small ("Structure") or very big ("Clarity") ones, for example for specifically highlighting tree trunks or bird feathers.
+</p>
+
+<figure style="width: 100%; text-align: center;">
+<a href="/static/2021-05/darktable.png" target="_blank"><img width="75%" src="/static/2021-05/darktable.png" alt="Darktable develop screen with contrast equalizer" /></a>
+<figcaption>Highlighting feather detail with darktable's contrast equalizer</figcaption>
+</figure>
+
+<p>
+Another annoyance can be found in colors at the edges of the tone curve: When pushing exposure, Capture One tends to turn brightly colored highlight cyan/magenta/yellow before desaturating. Similarly, shadow recovery sometimes pushes brightness and saturation a bit more strongly for brightly colored shadows than for dull ones, leading to an unnatural glowy effect. These cases are usually easy enough to fix with a quick tug on the shadows/highlights slider or by reigning in the offending color's lightness in the Color Editor, but they smell a bit of a runaway algorithm, which bothers me. Although in direct comparison they bother me less than the various rocks and hard places in Darktable's Filmic RGB chrominance preservation modes.
+</p>
+
+<p>
+On the topic of bothersome details, Capture One's repair layer has a mind of its own when deciding whether to create a new control point, or adding to an existing one. The Highlight and White slider in the High Dynamic Range module sometimes can't quite decide whether to move white point, and sometimes lead to lightness reversals around bright objects. More on the algorithmic side, it annoys me that only the Exposure and High Dynamic Range modules have access to the full raw dynamic range, while all the other tools apparently come after the screen transform, and therefore can't reach beyond the black point and white point. This makes Levels and Curve a bit less useful than I'm used to. Demosaicing is also not <i>quite</i> as detailed as Darktable's, although only by a tiny margin.
+</p>
+
+<p>
+One perhaps surprising problem with Capture One is that its support for cameras and lenses is a bit hit-and-miss. Film simulations are only supported for my Fuji X-T2, but not for the older Fuji X100T, nor the Ricohs or Panasonic. Some of their lens profiles are also laughably bad, and leave obvious reverse-vignetting or barrel distortion. Frankly, Darktable does better in terms of lens support.
+</p>
+
+<p>
+In terms of UI, Capture One is generally very configurable and well-organized. But there is a constant stumbling block in the Layers module that I find very annoying: many of Capture One's tools automatically create new layers, but deselecting the tool does not deselect the layer. As delightfully easy it is to press B for the brush and paint in some Clarity, as unnecessarily laborious it is to then spend three clicks to slide open the Layers module and select the background layer again to resume editing. Or alternatively, wonder why your edits don't work while you <i>don't</i> have the background layer selected. It's a true pain.
+</p>
+
+<figure style="width: 100%; text-align: center;">
+<img width="25%" src="/static/2021-05/layers.png" alt="Capture One layers" />
+<figcaption>With a layer selected, edits only affect the layer</figcaption>
+</figure>
+
+<p>
+As the last point of the nit picking, I was disappointed by the number of minor bugs I encountered in my use of Capture One: Half the time, Capture One starts half zoomed-in, and leaves me scratching my head at what weird compositions I chose for a few seconds. And the main, zoomed-out view is weirdly blurry if you use two displays with different DPI. Both of these issues are well-documented on their forums for several releases, but have not been fixed. For the exorbitant price that Capture One commands, such issues and customer communication are frankly unaccetable.
+</p>
+
+<p>
+Finally, a few words about the library module and file organization. At first glance, I hated Capture One’s library. You have to import every single directory manually (I organize my images in daily directories), all the edits go into a central catalogue and nowhere else, and the sidecar files contain no editing information. But then someone told me a much better way: Instead of using Capture One’s <i>Catalogue</i>, create a <i>Session</i>, but ignore all those pre-built import and output directories, as well as the import button, and instead simply navigate to any old directory on your computer with the sidebar file browser. This is clearly not how sessions are meant to be used. But it actually works reasonably well, and puts editing information in a subdirectory of the raw file.
+</p>
+
+<p>
+On the whole, I grew to quite like Capture One, despite its flaws, mostly for its streamlined user interface and speed of operation. In terms of image quality, I honestly didn’t see much difference between Darktable and Capture One. But perhaps I am not the most discerning of users, either, as my focus is not on crazy detail recovery or the more technical arts of macro or astro. When it comes to control, I occasionally felt restricted and, dare I say, patronized by Capture One. But the speed of operation and general good-enough-ness of the image quality are still hard to argue with. I just wish they fixed their UI bugs, and improved their algorithms a bit.
+</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a>
 <div class="post-date">27 Dec 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-12-27-ios-and-android.html">A review of iOS, from an Android user's perspective</a></h1>
 <p>
 My Pixel 2 phone received its final software update the other day, and its battery took the occasion to really show its age. So it was time for a new phone. Which is not a decision to make lightly, considering that I spend multiple hours per day using it. And this time, I was inclined to give the iPhone another go, mostly because of Google's gross lack of human decency in the last few years. So, after years of using various Android devices, I bought a used, red, iPhone SE (2020). I made this choice with some trepidations, as my last experience with iOS was an iPad 3 from 2012. These are my experiences.
@@ -504,105 +601,7 @@ There is no joy in technology any more.
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-windows.html">windows</a>
-<div class="post-date">27 May 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
-<p>
-Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
-</p>
-
-<div id="outline-container-org18d2b13" class="outline-2">
-<h2 id="org18d2b13">Text</h2>
-<div class="outline-text-2" id="text-org18d2b13">
-<p>
-For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
-</p>
-
-<p>
-That said, modern LaTeX is not so bad any more: XeLaTeX supports normal OpenType fonts, mixed languages, proper unicode, and natively renders to PDF. It also renders pretty quickly. My entire dissertation renders in less than three seconds, which is plenty fast enough for me.
-</p>
-
-<p>
-To render, I run a simple makefile in an infinite loop that recompiles my PDF whenever the TeX source changes, giving live feedback while writing:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #404040;">graph_pdfs</span>)
-    xelatex -interaction nonstopmode diss.tex
-</pre>
-</div>
-
-<p>
-We'll get back to <code>$(graph_pdfs)</code> in a second.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org318c507" class="outline-2">
-<h2 id="org318c507">Graphs</h2>
-<div class="outline-text-2" id="text-org318c507">
-<p>
-A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
-</p>
-
-<p>
-But you don't want to simply execute <i>all</i> the scripts in <code>graphs</code>, as some of them might be shared dependencies that do not produce PDFs. So instead, I only execute scripts that start with a chapter number, which conveniently sorts them by chapter in the file manager, as well.
-</p>
-
-<p>
-Thus all graphs render into the main PDF and update automatically, just like the main document:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #404040;">graph_sources</span> = $(<span style="color: #404040;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
-<span style="color: #404040;">graph_pdfs</span> = $(<span style="color: #404040;">patsubst</span> %.py,%.pdf,$(<span style="color: #404040;">graph_sources</span>))
-
-<span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
-    cd graphs; .venv/bin/python $(<span style="color: #404040;">notdir</span> $<span style="color: #111111;">&lt;</span>)
-</pre>
-</div>
-
-<p>
-The first two lines build a list of all graph scripts in the <code>graphs</code> directory, and their matching PDFs. The last two lines are a makefile recipy that compiles any graph script into a PDF, using the virtualenv in <code>graphs/.venv/</code>. How elegant these makefiles are, with recipe definitions independent of targets.
-</p>
-
-<p>
-This system is surprisingly flexible, and absolutely trivial to debug. For example, I sometimes use those graph scripts as glorified shell scripts, for converting an SVG to PDF with Inkscape or some similar task. Or I compile some intermediate data before actually building the graph, and cache them for later use. Just make sure to set an appropriate exit code in the graph script, to signal to the makefile whether the graph was successfully created. An additional makefile target <code>graphs: $(graph_pdfs)</code> can also come in handy if you want ignore the TeX side of things for a bit.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org69a93d6" class="outline-2">
-<h2 id="org69a93d6">Data</h2>
-<div class="outline-text-2" id="text-org69a93d6">
-<p>
-All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
-</p>
-
-<p>
-To set up a new writing environment from scratch, all I need is the following series of commands:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
-<span style="color: #404040;">cd</span> dissertation
-git annex init
-env <span style="color: #404040;">WEBDAV_USERNAME</span>=xxx <span style="color: #404040;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
-git annex copy --from mywebdavserver
-(<span style="color: #404040;">cd</span> graphs; pipenv install)
-make all
-</pre>
-</div>
-
-<p>
-This will download my graphs and text from <code>mygitserver</code>, download my databases from <code>mywebdavserver</code>, build my Python environment with <code>pipenv</code>, recreate all the graph PDFs, and compile the TeX. A process that can take a few hours, but is completely automated and reliable.
-</p>
-
-<p>
-And that is truly the key part; The last thing you want to do while writing is being distracted by technical issues such as "where did I put that database again?", "didn't that graph show something different the other day?", or "I forgot to my database file at work and now I'm stuck at home during the pandemic and can't progress". Not that any of those would have ever happened to me, of course.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> <div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-windows.html">windows</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
