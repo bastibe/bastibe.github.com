@@ -26,6 +26,8 @@ function openLightbox(event) {
 
 function enterLightbox(figure, image) {
     figure.classList.add('lightbox');
+    // don't scroll background when scrolling figure:
+    figure.onwheel = e => { e.preventDefault(); };
     image.classList.add('lightbox');
     image.onwheel = zoomLightbox;
     image.style['max-width'] = '90%';
@@ -41,6 +43,7 @@ function enterLightbox(figure, image) {
 
 function exitLightbox(figure, image) {
     figure.classList.remove('lightbox');
+    figure.onwheel = undefined;
     image.classList.remove('lightbox');
     image.onwheel = undefined;
     image.style['max-width'] = '';
