@@ -81,9 +81,6 @@ function zoomLightbox(event) {
     let imageRect = image.getBoundingClientRect();
     let imageX = (event.clientX-imageRect.left)/imageRect.width;
     let imageY = (event.clientY-imageRect.top)/imageRect.height;
-    // relative position on viewport:
-    let screenX = event.clientX/window.innerWidth;
-    let screenY = event.clientY/window.innerHeight;
 
     // zoom in:
     let zoomFactor = parseFloat(image.style['max-width']) / 100;
@@ -93,10 +90,10 @@ function zoomLightbox(event) {
     image.style['max-height'] = `${zoomFactor*100}%`;
 
     // pan so the image does not move under cursor:
-    let newPositionX = -imageX*zoomFactor + screenX;
-    let newPositionY = -imageY*zoomFactor + screenY;
-    image.style['left'] = `${newPositionX*window.innerWidth}px`;
-    image.style['top'] = `${newPositionY*window.innerHeight}px`;
+    let newPositionX = -imageX*image.offsetWidth + event.clientX;
+    let newPositionY = -imageY*image.offsetHeight + event.clientY;
+    image.style['left'] = `${newPositionX}px`;
+    image.style['top'] = `${newPositionY}px`;
 
     moveImageIntoBorders(image);
 
@@ -107,18 +104,37 @@ function zoomLightbox(event) {
 function moveImageIntoBorders(image) {
     // make sure the image stays within the viewport borders:
     imageRect = image.getBoundingClientRect(); // refresh to new coordinates
-    if (imageRect.left > window.innerWidth*0.05 || image.style['max-width'] === '90%') {
-        image.style['left'] = `${window.innerWidth*0.05}px`;
-    } else if (imageRect.right < window.innerWidth*0.95) {
-        image.style['left'] = `${window.innerWidth*0.95-imageRect.width}px`;
+    if (imageRect.width <= window.innerWidth*0.9) {
+        // image fits into figure: prevent edges from leaving figure
+        if (imageRect.left < window.innerWidth*0.05) {
+            image.style['left'] = `${window.innerWidth*0.05}px`;
+        } else if (imageRect.right > window.innerWidth*0.95) {
+            image.style['left'] = `${window.innerWidth*0.95-imageRect.width}px`;
+        }
+    } else {
+        // image too big for figure: prevent edges from entering figure
+        if (imageRect.left > window.innerWidth*0.05) {
+            image.style['left'] = `${window.innerWidth*0.05}px`;
+        } else if (imageRect.right < window.innerWidth*0.95) {
+            image.style['left'] = `${window.innerWidth*0.95-imageRect.width}px`;
+        }
     }
-    if (imageRect.top > window.innerHeight*0.05 || image.style['max-height'] === '90%') {
-        image.style['top'] = `${window.innerHeight*0.05}px`;
-    } else if (imageRect.bottom < window.innerHeight*0.95) {
-        image.style['top'] = `${window.innerHeight*0.95-imageRect.height}px`;
+    if (imageRect.height <= window.innerHeight*0.9) {
+        // image fits into figure: prevent edges from leaving figure
+        if (imageRect.top < window.innerHeight*0.05) {
+            image.style['top'] = `${window.innerHeight*0.05}px`;
+        } else if (imageRect.bottom > window.innerHeight*0.95) {
+            image.style['top'] = `${window.innerHeight*0.95-imageRect.height}px`;
+        }
+    } else {
+        // image too big for figure: prevent edges from entering figure
+        if (imageRect.top > window.innerHeight*0.05 ) {
+            image.style['top'] = `${window.innerHeight*0.05}px`;
+        } else if (imageRect.bottom < window.innerHeight*0.95) {
+            image.style['top'] = `${window.innerHeight*0.95-imageRect.height}px`;
+        }
     }
 }
-
 
 window.addEventListener('DOMContentLoaded', (event) => {
     var figures = document.getElementsByTagName('figure');
