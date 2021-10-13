@@ -30,12 +30,13 @@ function enterLightbox(figure, image) {
     image.onwheel = zoomLightbox;
     image.style['max-width'] = '90%';
     image.style['max-height'] = '90%';
-    image.style['left'] = '5%';
-    image.style['top'] = '5%';
     image.addEventListener('mousedown', lightboxMouseDown);
     image.addEventListener('mousemove', lightboxMouseMove);
     image.addEventListener('mouseup', lightboxMouseUp);
     image.setAttribute('draggable', false);
+    // set initial image position to center:
+    image.style['left'] = `${(window.innerWidth-image.offsetWidth)/2}px`;
+    image.style['top'] = `${(window.innerHeight-image.offsetHeight)/2}px`;
 }
 
 function exitLightbox(figure, image) {
