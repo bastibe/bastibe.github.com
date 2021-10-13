@@ -39,6 +39,10 @@ function enterLightbox(figure, image) {
     // set initial image position to center:
     image.style['left'] = `${(window.innerWidth-image.offsetWidth)/2}px`;
     image.style['top'] = `${(window.innerHeight-image.offsetHeight)/2}px`;
+    // hide all other images in this figure:
+    for (let otherImage of figure.querySelectorAll('img:not(.lightbox)')) {
+        otherImage.style['visibility'] = 'hidden';
+    }
 }
 
 function exitLightbox(figure, image) {
@@ -54,6 +58,10 @@ function exitLightbox(figure, image) {
     image.removeEventListener('mousemove', lightboxMouseMove);
     image.removeEventListener('mouseup', lightboxMouseUp);
     image.setAttribute('draggable', true);
+    // unhide all images in this figure:
+    for (let otherImage of figure.querySelectorAll('img')) {
+        otherImage.style['visibility'] = '';
+    }
 }
 
 function lightboxMouseDown(event) {
