@@ -82,10 +82,8 @@ function lightboxMouseDown(event) {
 function lightboxMouseMove(event) {
     if (isDragging === true) {
         let image = event.target;
-        let left = parseFloat(image.style['left']);
-        image.style['left'] = `${left + event.movementX}px`;
-        let top = parseFloat(image.style['top']);
-        image.style['top'] = `${top + event.movementY}px`;
+        image.style['left'] = `${image.offsetLeft + event.movementX}px`;
+        image.style['top'] = `${image.offsetTop + event.movementY}px`;
         moveImageIntoBorders(image);
         // prevent closing of figure:
         if (event.movementX != 0 || event.movementY != 0) {
@@ -105,7 +103,7 @@ function zoomLightbox(event) {
     let imageY = (event.clientY-imageRect.top)/imageRect.height;
 
     // zoom in:
-    let zoomFactor = parseFloat(image.style['max-width']) / 100;
+    let zoomFactor = imageRect.width / window.innerWidth;
     zoomFactor /= 1.0 - event.wheelDeltaY / 360;
     zoomFactor = Math.min(Math.max(zoomFactor, 0.9), 5);
     image.style['max-width'] = `${zoomFactor*100}%`;
