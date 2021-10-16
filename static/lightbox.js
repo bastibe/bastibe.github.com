@@ -1,5 +1,8 @@
 let isDragging = false;
 let wasDragged = false;
+let touchCoordinate = [];
+let lightboxTime = undefined;
+
 
 document.addEventListener('keyup', e => {
     let lightboxImage = document.querySelector('figure.lightbox img.lightbox');
@@ -13,6 +16,14 @@ function openLightbox(event) {
     if (event.buttons !== 0) {
         return;
     }
+
+    // if the browser issues both click and touch events, ignore
+    // the later one:
+    if (event.timeStamp - lightboxTime < 100) {
+        return;
+    }
+    lightboxTime = event.timeStamp;
+
     let image = event.target;
     let figure = image.parentNode;
     if (wasDragged === true) {
@@ -147,11 +158,68 @@ function moveImageIntoBorders(image) {
     }
 }
 
+
+// these function implements a poor-man's 'onclick' for touch events:
+function handleTouchStart(event) {
+    if (event.touches.length == 1 && touchCoordinate.length == 0) {
+        // remember where the touch started:
+        touchCoordinate = [event.touches[0].screenX, event.touches[0].screenY];
+    }
+}
+
+function handleTouchMove(event) {
+    // if the cursor moves too much during the touch, it's not a click:
+    if (event.touches.length == 1 && touchCoordinate.length == 2) {
+        if ((Math.abs(event.touches[0].screenX - touchCoordinate[0]) > 10) ||
+            (Math.abs(event.touches[0].screenY - touchCoordinate[1]) > 10)) {
+            touchCoordinate = [];
+        }
+    // if more than one finger touches the screen, it's not a click:
+    } else if (event.touches.length != 1) {
+        touchCoordinate = [];
+    }
+    // don't scroll the underlying page while the lightbox is active:
+    if (event.target.classList.contains('lightbox') && event.touches.length == 1) {
+        event.preventDefault();
+    }
+}
+
+function handleTouchEnd(event) {
+    // if touchCoordinate still exists at touch end, it's a click:
+    if (touchCoordinate.length == 2) {
+        // if the browser issues both click and touch events, ignore
+        // the later one:
+        if (event.timeStamp - lightboxTime < 100) {
+            return;
+        }
+        lightboxTime = event.timeStamp;
+
+        let image = event.target;
+        let figure = image.parentNode;
+        if (figure.classList.contains('lightbox')) {
+            exitLightbox(figure, image);
+        } else {
+            enterLightbox(figure, image);
+        }
+        touchCoordinate = [];
+    }
+}
+
+function handleTouchCancel(event) {
+    // if the touch is cancelled, it's not a click:
+    touchCoordinate = [];
+}
+
 window.addEventListener('DOMContentLoaded', (event) => {
     var figures = document.getElementsByTagName('figure');
     for (let figure of figures) {
         let images = figure.querySelectorAll('img');
         for (let image of images) {
             image.onclick = openLightbox;
+            // This is a workaround for image.ontap = opanLightbox:
+            image.addEventListener("touchstart", handleTouchStart);
+            image.addEventListener("touchend", handleTouchEnd);
+            image.addEventListener("touchmove", handleTouchMove);
+            image.addEventListener("touchcancel", handleTouchCancel);
         }
     }});
