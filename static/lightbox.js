@@ -36,9 +36,13 @@ function openLightbox(event) {
 }
 
 function enterLightbox(figure, image) {
+    // fix body in place so it doesn't scroll when the lightbox is
+    // moved by touch
+    document.body.style['top'] = `${-window.scrollY}px`;
+    document.body.style['width'] = `${window.innerWidth}px`;
+    document.body.style['position'] = 'fixed';
+    // activate lightbox
     figure.classList.add('lightbox');
-    // don't scroll background when scrolling figure:
-    figure.onwheel = e => { e.preventDefault(); };
     image.classList.add('lightbox');
     image.onwheel = zoomLightbox;
     image.style['max-width'] = '90%';
@@ -57,8 +61,14 @@ function enterLightbox(figure, image) {
 }
 
 function exitLightbox(figure, image) {
+    // release body
+    let scrollY = parseInt(document.body.style['top']);
+    document.body.style['top'] = '';
+    document.body.style['position'] = '';
+    document.body.style['width'] = '';
+    window.scrollTo(0, -scrollY);
+    // disable lightbox
     figure.classList.remove('lightbox');
-    figure.onwheel = undefined;
     image.classList.remove('lightbox');
     image.onwheel = undefined;
     image.style['max-width'] = '';
@@ -175,10 +185,6 @@ function handleTouchMove(event) {
     // if more than one finger touches the screen, it's not a click:
     } else if (event.touches.length != 1) {
         touchCoordinate = [];
-    }
-    // don't scroll the underlying page while the lightbox is active:
-    if (event.target.classList.contains('lightbox') && event.touches.length == 1) {
-        event.preventDefault();
     }
 }
 
