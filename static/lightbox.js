@@ -41,6 +41,14 @@ function enterLightbox(figure, image) {
     document.body.style['top'] = `${-window.scrollY}px`;
     document.body.style['width'] = `${window.innerWidth}px`;
     document.body.style['position'] = 'fixed';
+    // add fake figure as a placeholder while lightbox is showing to
+    // prevent relayout
+    let fakeFig = document.createElement('figure');
+    fakeFig.id = 'fakefig';
+    fakeFig.style['width'] = `${figure.offsetWidth}px`;
+    fakeFig.style['height'] = `${figure.offsetHeight}px`;
+    fakeFig.style['background-color'] = '#f0f0f0';
+    figure.parentNode.insertBefore(fakeFig, figure);
     // activate lightbox
     figure.classList.add('lightbox');
     image.classList.add('lightbox');
@@ -67,6 +75,9 @@ function exitLightbox(figure, image) {
     document.body.style['position'] = '';
     document.body.style['width'] = '';
     window.scrollTo(0, -scrollY);
+    // remove fake figure
+    let fakeFig = document.getElementById('fakefig');
+    fakeFig.remove();
     // disable lightbox
     figure.classList.remove('lightbox');
     image.classList.remove('lightbox');
