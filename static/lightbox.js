@@ -59,6 +59,17 @@ function enterLightbox(figure, image) {
     image.addEventListener('mousemove', lightboxMouseMove);
     image.addEventListener('mouseup', lightboxMouseUp);
     image.setAttribute('draggable', false);
+    // replace thumbnail with full-resolution image (if necessary):
+    if (image.src.includes('thumb')) {
+        image.src = image.src.replace('thumb.', '');
+        // reposition to center once image is loaded (it will move
+        // because its size changes)
+        image.onload = e => {
+            image.style['left'] = `${(window.innerWidth-image.offsetWidth)/2}px`;
+            image.style['top'] = `${(window.innerHeight-image.offsetHeight)/2}px`;
+            image.onload = undefined;
+        }
+    }
     // set initial image position to center:
     image.style['left'] = `${(window.innerWidth-image.offsetWidth)/2}px`;
     image.style['top'] = `${(window.innerHeight-image.offsetHeight)/2}px`;
