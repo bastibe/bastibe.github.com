@@ -30,6 +30,27 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "computers":</h1>
+<div class="post-date">04 Dec 2021</div><h1 class="post-title"><a href="https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html">Fixing AMD OpenCL on Windows</a></h1>
+<p>
+When I recently installed Windows 11 on my desktop, my photo editor Darktable suddenly got much slower than it used to be. When I looked into its preferences, I noticed OpenCL was no longer available.
+</p>
+
+<p>
+As it turns out, some versions of the AMD graphics driver apparently no longer ship with OpenCL support on Windows. However, they <i>do</i> ship with the necessary libraries, it's just that these libraries are not registered any longer.
+</p>
+
+<p>
+To register them, open the Registry Editor (aka <i>regedit.exe</i>), navigate to the key <code>HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\OpenCL\Vendors</code> (if the key does not exist, create it), and create a new DWORD of Value <code>0</code>. Now rename the DWORD to be the path to your <i>amdocl64.dll</i>. Mine is <code>C:\Windows\System32\DriverStore\FileRepository\u0344717.inf_amd64_d38cec78c83eee99\B343886\amdocl64.dll</code>. Search <i>C:\Windows\System32\</i> for <i>amdocl64.dll</i> to find the correct path on your computer.
+</p>
+
+<p>
+With that, OpenCL was once again recognized by Darktable and the rest of my photo editing programs.
+</p>
+
+<p>
+(<a href="https://github.com/ethereum-mining/ethminer/issues/2001#issuecomment-662288143">source</a>)
+</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-windows.html">windows</a>
 <div class="post-date">27 Dec 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-12-27-ios-and-android.html">A review of iOS, from an Android user's perspective</a></h1>
 <p>
 My Pixel 2 phone received its final software update the other day, and its battery took the occasion to really show its age. So it was time for a new phone. Which is not a decision to make lightly, considering that I spend multiple hours per day using it. And this time, I was inclined to give the iPhone another go, mostly because of Google's gross lack of human decency in the last few years. So, after years of using various Android devices, I bought a used, red, iPhone SE (2020). I made this choice with some trepidations, as my last experience with iOS was an iPad 3 from 2012. These are my experiences.

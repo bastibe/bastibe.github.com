@@ -1,0 +1,13 @@
+#+title: Fixing AMD OpenCL on Windows
+#+date: <2021-12-04 09:19>
+#+filetags: computers windows
+
+When I recently installed Windows 11 on my desktop, my photo editor Darktable suddenly got much slower than it used to be. When I looked into its preferences, I noticed OpenCL was no longer available.
+
+As it turns out, some versions of the AMD graphics driver apparently no longer ship with OpenCL support on Windows. However, they /do/ ship with the necessary libraries, it's just that these libraries are not registered any longer.
+
+To register them, open the Registry Editor (aka /regedit.exe/), navigate to the key ~HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\OpenCL\Vendors~ (if the key does not exist, create it), and create a new DWORD of Value ~0~. Now rename the DWORD to be the path to your /amdocl64.dll/. Mine is ~C:\Windows\System32\DriverStore\FileRepository\u0344717.inf_amd64_d38cec78c83eee99\B343886\amdocl64.dll~. Search /C:\Windows\System32\/ for /amdocl64.dll/ to find the correct path on your computer.
+
+With that, OpenCL was once again recognized by Darktable and the rest of my photo editing programs.
+
+([[https://github.com/ethereum-mining/ethminer/issues/2001#issuecomment-662288143][source]])

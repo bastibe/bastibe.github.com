@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de/">
+<title>Fixing AMD OpenCL on Windows</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+  </div>
+</div></div>
+<div id="content">
+<div class="post-date">04 Dec 2021</div><h1 class="post-title"><a href="https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html">Fixing AMD OpenCL on Windows</a></h1>
+<p>
+When I recently installed Windows 11 on my desktop, my photo editor Darktable suddenly got much slower than it used to be. When I looked into its preferences, I noticed OpenCL was no longer available.
+</p>
+
+<p>
+As it turns out, some versions of the AMD graphics driver apparently no longer ship with OpenCL support on Windows. However, they <i>do</i> ship with the necessary libraries, it's just that these libraries are not registered any longer.
+</p>
+
+<p>
+To register them, open the Registry Editor (aka <i>regedit.exe</i>), navigate to the key <code>HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\OpenCL\Vendors</code> (if the key does not exist, create it), and create a new DWORD of Value <code>0</code>. Now rename the DWORD to be the path to your <i>amdocl64.dll</i>. Mine is <code>C:\Windows\System32\DriverStore\FileRepository\u0344717.inf_amd64_d38cec78c83eee99\B343886\amdocl64.dll</code>. Search <i>C:\Windows\System32\</i> for <i>amdocl64.dll</i> to find the correct path on your computer.
+</p>
+
+<p>
+With that, OpenCL was once again recognized by Darktable and the rest of my photo editing programs.
+</p>
+
+<p>
+(<a href="https://github.com/ethereum-mining/ethminer/issues/2001#issuecomment-662288143">source</a>)
+</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
+<div id="comments"><div id="hyvor-talk-view"></div>
+<script type="text/javascript">
+    var HYVOR_TALK_WEBSITE = 3390;
+    var HYVOR_TALK_CONFIG = {
+        url: false,
+        id: location.pathname
+    };
+</script>
+<script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

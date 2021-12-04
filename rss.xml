@@ -4,7 +4,35 @@
 <title><![CDATA[Bastibe.de]]></title>
 <description><![CDATA[Bastibe.de]]></description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Wed, 20 Oct 2021 21:13:01 +0200</lastBuildDate>
+<lastBuildDate>Sat, 04 Dec 2021 09:35:05 +0100</lastBuildDate>
+<item>
+  <title><![CDATA[Fixing AMD OpenCL on Windows]]></title>
+  <description><![CDATA[
+<p>
+When I recently installed Windows 11 on my desktop, my photo editor Darktable suddenly got much slower than it used to be. When I looked into its preferences, I noticed OpenCL was no longer available.
+</p>
+
+<p>
+As it turns out, some versions of the AMD graphics driver apparently no longer ship with OpenCL support on Windows. However, they <i>do</i> ship with the necessary libraries, it's just that these libraries are not registered any longer.
+</p>
+
+<p>
+To register them, open the Registry Editor (aka <i>regedit.exe</i>), navigate to the key <code>HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\OpenCL\Vendors</code> (if the key does not exist, create it), and create a new DWORD of Value <code>0</code>. Now rename the DWORD to be the path to your <i>amdocl64.dll</i>. Mine is <code>C:\Windows\System32\DriverStore\FileRepository\u0344717.inf_amd64_d38cec78c83eee99\B343886\amdocl64.dll</code>. Search <i>C:\Windows\System32\</i> for <i>amdocl64.dll</i> to find the correct path on your computer.
+</p>
+
+<p>
+With that, OpenCL was once again recognized by Darktable and the rest of my photo editing programs.
+</p>
+
+<p>
+(<a href="https://github.com/ethereum-mining/ethminer/issues/2001#issuecomment-662288143">source</a>)
+</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-windows.html">windows</a> ]]></description>
+  <category><![CDATA[computers]]></category>
+  <category><![CDATA[windows]]></category>
+  <link>https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html</link>
+  <pubDate>Sat, 04 Dec 2021 09:19:00 +0100</pubDate>
+</item>
 <item>
   <title><![CDATA[Comparing the Fujifilm XF 16‑80 with the XF 18‑138 Travel Zoom Lenses]]></title>
   <description><![CDATA[
