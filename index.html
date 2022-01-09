@@ -30,6 +30,49 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">09 Jan 2022</div><h1 class="post-title"><a href="https://bastibe.de/2022-01-09-converting-capture-one-presets-to-luts.html">Converting Capture one Presets to LUTs</a></h1>
+<p>
+A while ago, I bought an <a href="https://www.reallyniceimages.com/">RNI film pack</a> for Capture One. That's a set of presets that makes your digital photos look similar to analog film scans. However, since then my <i>other</i> image editor, <a href="https://www.darktable.org/">Darktable</a> just released a new version, I'm now back to using Darktable instead of Capture One, thus without access to those presets.
+</p>
+
+<p>
+Here's how to export Capture One presets to LUTs, to make them accessable to other programs.
+</p>
+
+<p>
+The fun thing is, LUTs are just PNG files that contain a table of colors. You know, a "Look Up Table", of sorts. So, in order convert a preset to a LUT, all we need to do is apply the preset to a pristine "identity" LUT, and export it as a new PNG.
+</p>
+
+<ol class="org-ol">
+<li>Get yourself an identity LUT. <br>
+For example, the one included in <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's Fuji Film Simulation Profiles</a>. Choose the sRGB PNG LUTs, for RawTherapee and Affinity Photo.</li>
+<li>Open the LUT PNG in Capture One.</li>
+<li>Apply the preset you want. <br>
+Optionally lower <i>saturation</i> by -15, see below.</li>
+<li>Export as PNG. <br>
+Make sure the color space is sRGB, just like the original file.</li>
+</ol>
+
+<p>
+As easy as that.
+</p>
+
+<p>
+A few more adjustments: many Capture One presets expect to be working on raw data, which is less saturated than Darktable's default. So I export with -15 <i>saturation</i>. Also, many presets include spacial adjustments such as Highlights or Shadows that are bound to not play well with the LUT PNG. To disable them, delete the offending lines from the *.costyle files<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>, or compensate the values with opposite slider movements.
+</p>
+
+<p>
+When applying the LUTs in Darktable's <i>lut 3D</i> module, there are a few more things you can do to fit them into your workflow. For example, you can lower the opacity of the <i>lut 3D</i> module to vary their effect. Or you can choose <i>chromaticity</i> as blend more to only apply their color transformation, but keep Darktable's tonal rendering. In <i>normal</i> blend mode, some LUTs prefer a flat rendering as their input, so lower <i>contrast</i> in <i>filmic rgb</i> to zero and use the auto-pickers to set the image black and white point.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">don't do this for RNI LUTs, it's forbidden by the User License Agreement that is hidden quite well in dark-grey-on-black at the very bottom of their website</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a>
 <div class="post-date">04 Jan 2022</div><h1 class="post-title"><a href="https://bastibe.de/2022-01-04-books-of-2021.html">Books of 2021</a></h1>
 
 <div id="outline-container-org7428c9d" class="outline-2">
@@ -314,61 +357,7 @@ So overall, I am very happy with Darktable in its latest iteration. As always, t
 
 
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a>
-<div class="post-date">27 May 2021</div><h1 class="post-title"><a href="https://bastibe.de/2021-05-27-camera-resolution.html">Camera Resolution</a></h1>
-<p>
-Some of my photographic lenses are reknown for their outstanding sharpness, others are said to be mediocre. But somehow I never quite saw a big difference in sharpness between them. Do older lenses have less resolution than the newer ones? Can a dedicated prime lens resolve more detail than a multi-purpose zoom lens? Let's find out.
-</p>
-
-<p>
-These questions recently came to a head for me, in the choice between two compact cameras: <a href="https://camerasize.com/compact/#566,819,ha,f">A Fujifilm X100T, 16 MP, with a 23 mm lens, and a Ricoh GR III, 24 MP, with an 18 mm lens</a>. In the last few months, I grew to like the X100T's 23 mm viewpoint, but did not enjoy how bulky the camera is in comparison to the GR III. So I wondered if I could replace the X100T with the Ricoh GR III and simply crop to 23 mm.
-</p>
-
-<p>
-Being a scientist and all that, I set up an experiment: I printed out a <a href="https://www.graphics.cornell.edu/~westin/misc/res-chart.html">resolution chart</a>, set my cameras on a tripod, and took pictures with all my cameras such that the chart filled a similar portion of each image. Base ISO, two-second timer, processed in Capture One. White balance and contrast were equalized.
-</p>
-
-<figure style="text-align: center;">
-<a href="/static/2021-05/comparison.svg"><img src="/static/2021-05/comparison.svg" alt="camera resolution comparison" width="80%"/></a>
-<figcaption>Red bars indicate the point where some lines are no longer distinguishable, i.e. the limit of the system's resolution.</figcaption>
-</figure>
-
-<p>
-Each row in the above grid is one camera/lens/focal length combination, taken at the brightest aperture in the left column, and at the sharpest aperture in the right column. The text on the left shows photographic parameters, and the text on the right image parameters. The red line is the spot on the chart where some lines start to blend together, the limit of the image's resolution, as judged by my eyeballs. Depending on the exact framing, DPIs vary somewhat between the images, but generally at a factor of around √(̅2̅4̅/̅1̅6̅)̅ = 1.22 between the 24 MP images and the 16 MP images. The bottom row shows a synthetic image at simulated 24 MP / 380 DPI and 16 MP / 280 DPI.
-</p>
-
-<p>
-From these images, the biggest contribution to resolution seems to be sensor megapixels. All 24 MP images resolve closer line pairs than any 16 MP image. This could also be a hint that lenses seem to generally outresolve their sensors.
-</p>
-
-<p>
-Looking closely at the images, another hint becomes visible: aliasing is visible in all images. This is only possible if lens resolution is higher than sensor resolution.
-</p>
-
-<p>
-Frankly, this is a rather big surprise to me. Reading discussions on the internet had predisposed me to believe that some lenses should be much higher resolution than others, and my big travel-zoom in particular should be terribly soft. From my measurements however, I see no evidence of this claim. All of these lenses outresolve their sensors, and differences between lenses is rather miniscule in general.
-</p>
-
-<p>
-Another common wisdom is that lenses wide open are less sharp than stopped down. In this test sample, this seems to be true for the X100T's, and to a lesser extent for the LX100, and the Fujifilm XF 60. All other lenses do not show significant (!) differences between apertures. And even for the affected lenses, the difference in resolution is not dramatic.
-</p>
-
-<p>
-However, resolution is not sharpness. While line pairs may remain resolvable, their edges do lose definition at wide-open apertures on the Fujifilm XF 18-135 at some focal lengths, and the X100T. These lenses definitely need at least additional sharpening at wider apertures. Contrast is also visibly different, but I chose to edit out contrast differences to keep the graphs legible. Generally, the Ricoh GRs' lenses (particularly the GR I) were by far the most contrasty of these lenses.
-</p>
-
-<p>
-Another interesting comparison can be drawn between the synthetic images in the bottom row and the camera exposures above: None of the 24 MP images reach the resolution of the synthetic image, perhaps due to demosaicing artifacts. However, the 16 MP exposures are very close to the synthetic image. I don't yet know how to interpret this.
-</p>
-
-<p>
-Speaking of demosaicing however, there does not seem to be a difference in resolution between the X-Trans Fujifilm sensors and the Bayer Ricoh/Panasonic sensors. I also checked whether a different raw developer would make a difference, but did not find anything noteworthy.
-</p>
-
-<p>
-Overall, this experiment has taught me that all my lenses are high resolution, and that lens resolution in general is probably not a topic worth fussing over. Subpixel patterns are equally unimportant. Instead, lenses do differentiate themselves in contrast and sharpness, and camera sensors in megapixels. And finally, the tiny GR III in crop mode can indeed outresolve the X100T, and out-contrast and out-sharpness it as well.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <div id="archive">
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>

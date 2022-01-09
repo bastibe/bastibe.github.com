@@ -4,7 +4,56 @@
 <title><![CDATA[Bastibe.de]]></title>
 <description><![CDATA[Bastibe.de]]></description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Tue, 04 Jan 2022 10:51:20 +0100</lastBuildDate>
+<lastBuildDate>Sun, 09 Jan 2022 15:13:14 +0100</lastBuildDate>
+<item>
+  <title><![CDATA[Converting Capture one Presets to LUTs]]></title>
+  <description><![CDATA[
+<p>
+A while ago, I bought an <a href="https://www.reallyniceimages.com/">RNI film pack</a> for Capture One. That's a set of presets that makes your digital photos look similar to analog film scans. However, since then my <i>other</i> image editor, <a href="https://www.darktable.org/">Darktable</a> just released a new version, I'm now back to using Darktable instead of Capture One, thus without access to those presets.
+</p>
+
+<p>
+Here's how to export Capture One presets to LUTs, to make them accessable to other programs.
+</p>
+
+<p>
+The fun thing is, LUTs are just PNG files that contain a table of colors. You know, a "Look Up Table", of sorts. So, in order convert a preset to a LUT, all we need to do is apply the preset to a pristine "identity" LUT, and export it as a new PNG.
+</p>
+
+<ol class="org-ol">
+<li>Get yourself an identity LUT. <br>
+For example, the one included in <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's Fuji Film Simulation Profiles</a>. Choose the sRGB PNG LUTs, for RawTherapee and Affinity Photo.</li>
+<li>Open the LUT PNG in Capture One.</li>
+<li>Apply the preset you want. <br>
+Optionally lower <i>saturation</i> by -15, see below.</li>
+<li>Export as PNG. <br>
+Make sure the color space is sRGB, just like the original file.</li>
+</ol>
+
+<p>
+As easy as that.
+</p>
+
+<p>
+A few more adjustments: many Capture One presets expect to be working on raw data, which is less saturated than Darktable's default. So I export with -15 <i>saturation</i>. Also, many presets include spacial adjustments such as Highlights or Shadows that are bound to not play well with the LUT PNG. To disable them, delete the offending lines from the *.costyle files<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>, or compensate the values with opposite slider movements.
+</p>
+
+<p>
+When applying the LUTs in Darktable's <i>lut 3D</i> module, there are a few more things you can do to fit them into your workflow. For example, you can lower the opacity of the <i>lut 3D</i> module to vary their effect. Or you can choose <i>chromaticity</i> as blend more to only apply their color transformation, but keep Darktable's tonal rendering. In <i>normal</i> blend mode, some LUTs prefer a flat rendering as their input, so lower <i>contrast</i> in <i>filmic rgb</i> to zero and use the auto-pickers to set the image black and white point.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">don't do this for RNI LUTs, it's forbidden by the User License Agreement that is hidden quite well in dark-grey-on-black at the very bottom of their website</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
+  <category><![CDATA[photography]]></category>
+  <link>https://bastibe.de/2022-01-09-converting-capture-one-presets-to-luts.html</link>
+  <pubDate>Sun, 09 Jan 2022 14:37:00 +0100</pubDate>
+</item>
 <item>
   <title><![CDATA[Books of 2021]]></title>
   <description><![CDATA[
