@@ -1,8 +1,8 @@
 import sys
 import json
-from PySide2 import QtCore
-from PySide2 import QtWidgets
-from PySide2 import QtGui
+from PySide6 import QtCore
+from PySide6 import QtWidgets
+from PySide6 import QtGui
 import pandas
 
 
@@ -44,11 +44,11 @@ class WorldMap(QtWidgets.QGraphicsView):
         self.previous_item = None
 
     def mousePressEvent(self, event):
-        item = self.itemAt(event.pos())
+        item = self.itemAt(event.position().toPoint())
         self.countryClicked.emit(item.country)
 
     def mouseMoveEvent(self, event):
-        item = self.itemAt(event.pos())
+        item = self.itemAt(event.position().toPoint())
         if self.previous_item is not None:
             self.previous_item.setBrush(QtGui.QBrush("white", QtCore.Qt.BrushStyle.SolidPattern))
             self.previous_item = None
@@ -120,4 +120,4 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

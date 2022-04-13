@@ -1,8 +1,9 @@
 import sys
 import json
-from PySide2 import QtCore
-from PySide2 import QtWidgets
-from PySide2 import QtGui
+from PySide6 import QtCore
+from PySide6 import QtWidgets
+from PySide6 import QtGui
+import pandas
 
 class WorldMap(QtWidgets.QGraphicsView):
     currentCountry = QtCore.Signal(str)
@@ -14,7 +15,7 @@ class WorldMap(QtWidgets.QGraphicsView):
         self.previous_item = None
 
     def mouseMoveEvent(self, event):
-        item = self.itemAt(event.pos())
+        item = self.itemAt(event.position().toPoint())
         if self.previous_item is not None:
             self.previous_item.setBrush(QtGui.QBrush("white", QtCore.Qt.BrushStyle.SolidPattern))
             self.previous_item = None
@@ -68,7 +69,7 @@ class MainWindow(QtWidgets.QMainWindow):
         window_content.setLayout(layout)
         self.setCentralWidget(window_content)
 
-        self.covid_data = pandas.read_csv('data/covid19.csv')
+        self.covid_data = pandas.read_csv('covid19.csv')
 
     def load_map_data(self):
         with open('countries_110m.json', 'rt') as f:
@@ -83,4 +84,4 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

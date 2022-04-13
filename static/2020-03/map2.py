@@ -1,9 +1,9 @@
 import sys
-from PySide2 import QtWidgets
+from PySide6 import QtWidgets
 
 app = QtWidgets.QApplication(sys.argv)
 
 label = QtWidgets.QLabel("Hello, World!")
 label.show()
 
-sys.exit(app.exec_())
+sys.exit(app.exec())

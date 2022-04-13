@@ -1,8 +1,8 @@
 import sys
 import json
-from PySide2 import QtCore
-from PySide2 import QtWidgets
-from PySide2 import QtGui
+from PySide6 import QtCore
+from PySide6 import QtWidgets
+from PySide6 import QtGui
 import pandas
 
 
@@ -17,7 +17,7 @@ class CovidModel(QtCore.QAbstractTableModel):
     @QtCore.Slot(str)
     def display_country(self, country):
         self.current_data = self.dataframe[self.dataframe.location == country]
-        self.current_data = self.current_data.drop('location', 1)
+        self.current_data = self.current_data.drop(labels='location', axis=1)
         self.layoutChanged.emit()
 
     def rowCount(self, parent=None):
@@ -54,14 +54,14 @@ class WorldMap(QtWidgets.QGraphicsView):
         self.previous_item = None
 
     def mousePressEvent(self, event):
-        item = self.itemAt(event.pos())
+        item = self.itemAt(event.position().toPoint())
         if item is None:
             self.countryClicked.emit("World")
         else:
             self.countryClicked.emit(item.country)
 
     def mouseMoveEvent(self, event):
-        item = self.itemAt(event.pos())
+        item = self.itemAt(event.position().toPoint())
         if self.previous_item is not None:
             self.previous_item.setBrush(QtGui.QBrush("white", QtCore.Qt.BrushStyle.SolidPattern))
             self.previous_item = None
@@ -113,8 +113,8 @@ class MainWindow(QtWidgets.QMainWindow):
         table_view.setModel(table_model)
         world_map.countryClicked.connect(table_model.display_country)
 
-        layout = QtWidgets.QHBoxLayout()
-        layout.addWidget(world_map)
+        hlayout = QtWidgets.QHBoxLayout()
+        hlayout.addWidget(world_map)
 
         country_label = QtWidgets.QLabel("World")
         country_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -142,4 +142,4 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

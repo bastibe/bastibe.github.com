@@ -1,5 +1,5 @@
 import sys
-from PySide2 import QtWidgets
+from PySide6 import QtWidgets
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -22,4 +22,4 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
