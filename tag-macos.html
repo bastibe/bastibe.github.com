@@ -175,25 +175,25 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">  &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" encoding="UTF-8"</span>?&gt;
+<pre class="src src-xml">  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
-  &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #404040;">version</span>=<span style="color: #606060;">"1.0"</span>&gt;
-  &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-      &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-      &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-  &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-  &lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+  &lt;plist version="1.0"&gt;
+  &lt;dict&gt;
+      &lt;key&gt;Label&lt;/key&gt;
+      &lt;string&gt;rsnapshot.hourly&lt;/string&gt;
+      &lt;key&gt;ProgramArguments&lt;/key&gt;
+      &lt;array&gt;
+          &lt;string&gt;/bin/bash&lt;/string&gt;
+          &lt;string&gt;-c&lt;/string&gt;
+          &lt;string&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/string&gt;
+      &lt;/array&gt;
+      &lt;key&gt;StartCalendarInterval&lt;/key&gt;
+      &lt;dict&gt;
+          &lt;key&gt;Minute&lt;/key&gt;
+          &lt;integer&gt;0&lt;/integer&gt;
+      &lt;/dict&gt;
+  &lt;/dict&gt;
+  &lt;/plist&gt;
 </pre>
 </div>
 
@@ -206,34 +206,34 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 daily:
 </p>
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;key&gt;Minute&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Hour&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
 </pre>
 </div></li>
 <li><p>
 weekly:
 </p>
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;key&gt;Minute&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Hour&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Weekday&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
 </pre>
 </div></li>
 <li><p>
 monthly:
 </p>
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;key&gt;Minute&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Hour&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Day&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
 </pre>
 </div></li>
 </ul>
@@ -303,9 +303,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-org1c1cddb" class="outline-2">
-<h2 id="org1c1cddb">Caveats</h2>
-<div class="outline-text-2" id="text-org1c1cddb">
+<div id="outline-container-org2a8f6a2" class="outline-2">
+<h2 id="org2a8f6a2">Caveats</h2>
+<div class="outline-text-2" id="text-org2a8f6a2">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -344,9 +344,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org8b73437" class="outline-2">
-<h2 id="org8b73437">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-org8b73437">
+<div id="outline-container-orgac5956a" class="outline-2">
+<h2 id="orgac5956a">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-orgac5956a">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -391,7 +391,7 @@ All of that said, once you know what to do and how to do it, the resulting code 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">16 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-16-finder-woes.html">OS X Finder Woes</a></h1>
 
-<figure>
+<figure id="org5597974">
 <img src="http://bastibe.de/static/2015-10/Mac.png" alt="Mac.png">
 
 </figure>
@@ -438,20 +438,20 @@ Anyway, here's a small Python script that changes the file creation date (but no
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> os.path
-<span style="color: #111111; font-weight: bold;">import</span> os
-<span style="color: #111111; font-weight: bold;">import</span> datetime
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
-<span style="color: #111111; font-weight: bold;">for</span> index <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(426, 465):
-    <span style="color: #404040;">filename</span> = <span style="color: #606060;">'GOPR0{}.MP4'</span>.<span style="color: #404040;">format</span>(index)
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract old date:</span>
-    <span style="color: #404040;">date</span> = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a new date with the same time, but on 2015-08-22</span>
-    <span style="color: #404040;">new_date</span> = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file creation date with the "-d" switch, which presumably stands for "dodification"</span>
-    os.system(<span style="color: #606060;">'SetFile -d "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">set the file modification date with the "-m" switch</span>
-    os.system(<span style="color: #606060;">'SetFile -m "{}" {}'</span>.<span style="color: #404040;">format</span>(new_date.strftime(<span style="color: #606060;">'%m/%d/%Y %H:%M:%S'</span>), filename))
+<pre class="src src-python">import os.path
+import os
+import datetime
+# I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4
+for index in range(426, 465):
+    filename = 'GOPR0{}.MP4'.format(index)
+    # extract old date:
+    date = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    # create a new date with the same time, but on 2015-08-22
+    new_date = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    # set the file creation date with the "-d" switch, which presumably stands for "dodification"
+    os.system('SetFile -d "{}" {}'.format(new_date.strftime('%m/%d/%Y %H:%M:%S'), filename))
+    # set the file modification date with the "-m" switch
+    os.system('SetFile -m "{}" {}'.format(new_date.strftime('%m/%d/%Y %H:%M:%S'), filename))
 </pre>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
@@ -464,7 +464,7 @@ So Kindle.app was updated through the App Store and did not start any more. It j
 A quick look at Console.app turns up a link to the actual crash report. And the crash report starts with
 </p>
 
-<pre class="example">
+<pre class="example" id="org2dda16c">
     Dyld Error Message:
       Library not loaded: @executable_path/../Frameworks/libWEbCoreKRF.dylib
       Referenced from: /Applications/Kindle.app/Contents/Frameworks/libWebCoreViewer.dylib
@@ -501,9 +501,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-orgd86a06a" class="outline-2">
-<h2 id="orgd86a06a">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-orgd86a06a">
+<div id="outline-container-org85f242c" class="outline-2">
+<h2 id="org85f242c">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-org85f242c">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -518,14 +518,14 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-org86a206d" class="outline-2">
-<h2 id="org86a206d">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-org86a206d">
+<div id="outline-container-orgc089e71" class="outline-2">
+<h2 id="orgc089e71">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-orgc089e71">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
 
-<pre class="example">
+<pre class="example" id="org555ea67">
     /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
 </pre>
 
@@ -535,14 +535,14 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-org78960e8" class="outline-2">
-<h2 id="org78960e8">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org78960e8">
+<div id="outline-container-org8a9d2df" class="outline-2">
+<h2 id="org8a9d2df">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org8a9d2df">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
 
-<pre class="example">
+<pre class="example" id="orge43fdab">
     /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
 </pre>
 
@@ -550,7 +550,7 @@ First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get updat
 Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
 </p>
 
-<pre class="example">
+<pre class="example" id="org95af516">
     - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
 </pre>
 
@@ -563,20 +563,20 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+<pre class="src src-xml">    &lt;?xml version="1.0" standalone='no'?&gt;&lt;!--*-nxml-*--&gt;
     &lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #404040;">replace-wildcards</span>=<span style="color: #606060;">"yes"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
-        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;
-        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-    &lt;/<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
+    &lt;service-group&gt;
+		&lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;
+		&lt;service&gt;
+			&lt;type&gt;_afpovertcp._tcp&lt;/type&gt;
+			&lt;port&gt;548&lt;/port&gt;
+		&lt;/service&gt;
+		&lt;service&gt;
+			&lt;type&gt;_device-info._tcp&lt;/type&gt;
+			&lt;port&gt;0&lt;/port&gt;
+			&lt;txt-record&gt;model=Xserve&lt;/txt-record&gt;
+		&lt;/service&gt;
+	&lt;/service-group&gt;
 </pre>
 </div>
 
@@ -598,9 +598,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-org5f8796b" class="outline-2">
-<h2 id="org5f8796b">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-org5f8796b">
+<div id="outline-container-orgc93e2ef" class="outline-2">
+<h2 id="orgc93e2ef">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-orgc93e2ef">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>
@@ -651,9 +651,9 @@ Later, I marveled at the level of polish in the third party software ecosystem a
 So here are some of those problems:
 </p>
 
-<div id="outline-container-orgc7e1bbd" class="outline-2">
-<h2 id="orgc7e1bbd">Lack of Uninstallers</h2>
-<div class="outline-text-2" id="text-orgc7e1bbd">
+<div id="outline-container-org1e9c4ca" class="outline-2">
+<h2 id="org1e9c4ca">Lack of Uninstallers</h2>
+<div class="outline-text-2" id="text-org1e9c4ca">
 <p>
 Computer people like to try new software. Some new software is crap. You should delete crap from your computer. Amazingly however, the Mac does not have any way of uninstalling some software.
 </p>
@@ -678,9 +678,9 @@ Really, this is beyond ridiculous. There is no way of uninstalling software that
 </div>
 </div>
 
-<div id="outline-container-org11e6228" class="outline-2">
-<h2 id="org11e6228">Failing Time Machine</h2>
-<div class="outline-text-2" id="text-org11e6228">
+<div id="outline-container-org40ef2a7" class="outline-2">
+<h2 id="org40ef2a7">Failing Time Machine</h2>
+<div class="outline-text-2" id="text-org40ef2a7">
 <p>
 So the Mac comes with this awesome backup solution called Time Machine. Just plug in your external hard drive, and it will magically keep all your data save, at all times. Better yet, buy a Time Capsule and this will happen over the wireless network so you don't even need to plug in that hard drive any more. Magic!
 </p>
@@ -695,9 +695,9 @@ So, backups that are not backing up. How amazing is that?
 </div>
 </div>
 
-<div id="outline-container-org9cd4701" class="outline-2">
-<h2 id="org9cd4701">Living in the Cloud</h2>
-<div class="outline-text-2" id="text-org9cd4701">
+<div id="outline-container-orgae6caac" class="outline-2">
+<h2 id="orgae6caac">Living in the Cloud</h2>
+<div class="outline-text-2" id="text-orgae6caac">
 <p>
 OS X is this astonishingly modern operating system, where all your email, contacts, calendars and settings are synced in the cloud, accessible from anywhere and any device or service you use. In theory.
 </p>
@@ -716,9 +716,9 @@ Things can go wrong, I understand that. But deleting all my contacts? Not cool. 
 </div>
 </div>
 
-<div id="outline-container-orgb10c17a" class="outline-2">
-<h2 id="orgb10c17a">iPhoto</h2>
-<div class="outline-text-2" id="text-orgb10c17a">
+<div id="outline-container-org3414e2e" class="outline-2">
+<h2 id="org3414e2e">iPhoto</h2>
+<div class="outline-text-2" id="text-org3414e2e">
 <p>
 My grandfather has this G4 PowerBook. He stores all his photos on it. So at one point, we just could not stand it any more to support his software problems and set him up with a newer MacBook (2007) just so we could at least roughly recreate his problems on our machines.
 </p>
@@ -737,9 +737,9 @@ At this point, a giant <b>thank you</b> to the <a href="http://www.fatcatsoftwar
 </div>
 </div>
 
-<div id="outline-container-org9797df2" class="outline-2">
-<h2 id="org9797df2">OS X Lion with Auto Save and Versions</h2>
-<div class="outline-text-2" id="text-org9797df2">
+<div id="outline-container-orgda94a4d" class="outline-2">
+<h2 id="orgda94a4d">OS X Lion with Auto Save and Versions</h2>
+<div class="outline-text-2" id="text-orgda94a4d">
 <p>
 The newest and brightest  in the land of Apple is OS X 10.7 Lion (at the time of writing). This amazing piece of software has a life-changing new feature: It friggin breaks one of the oldest tradition in computer history: Saving files.
 </p>
@@ -766,9 +766,9 @@ I could go on. Let's just say that Lion increased my WTF-per-minute rate signifi
 </div>
 </div>
 
-<div id="outline-container-orgf809d52" class="outline-2">
-<h2 id="orgf809d52">Performance, Memory and File System</h2>
-<div class="outline-text-2" id="text-orgf809d52">
+<div id="outline-container-orgdaf0a76" class="outline-2">
+<h2 id="orgdaf0a76">Performance, Memory and File System</h2>
+<div class="outline-text-2" id="text-orgdaf0a76">
 <p>
 Lets talk performance. I can't really complain here. In my MacBook Pro I have four cores, eight Gb of memory and a fast, Apple-sanctioned SSD. Life is good. Except that I happen to use virtual machines a whole lot and regardless of whether I use Linux (Ubuntu, Fedora, OpenSuse) or Windows (7, 8) on there, they feel faster.
 </p>
@@ -791,11 +791,11 @@ And lastly, let's talk HFS+. Did you know that HFS+ has a global lock that preve
 </div>
 </div>
 
-<div id="outline-container-orge8bc9f3" class="outline-2">
-<h2 id="orge8bc9f3">So, what now?</h2>
-<div class="outline-text-2" id="text-orge8bc9f3">
+<div id="outline-container-org4775077" class="outline-2">
+<h2 id="org4775077">So, what now?</h2>
+<div class="outline-text-2" id="text-org4775077">
 <p>
-With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. But I don't.
+With all this love, why am I still using a Mac? Well, for one thing, the hardware is seriously great. I would love to see some laptop manufacturer build something equally sturdy, light and good looking as a MacBook Pro. I would love to see someone build a great touch pad into a non-Apple device. I would love to see Retina displays everywhere<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. But I don't.
 </p>
 
 <p>
@@ -811,7 +811,7 @@ That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and 
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 As a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point
 </p></div></div>
 
@@ -877,7 +877,7 @@ At least this is an error that can easily be fixed. Fire up your terminal, type
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #404040;">cd</span> /Library/Frameworks/Adobe<span style="color: #606060;">\ </span>AIR.framework/Version/Current/Resources/
+<pre class="src src-sh">cd /Library/Frameworks/Adobe\ AIR.framework/Version/Current/Resources/
 sudo ln -s WebKit.dylib Webkit.dylib
 </pre>
 </div>
@@ -919,7 +919,7 @@ But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/0
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#<span style="color: #404040;">egg</span>=matplotlib
+<pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#egg=matplotlib
 </pre>
 </div>
 
@@ -976,7 +976,7 @@ and add the following line just above the two end at the end of the file
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">include.install Dir[<span style="color: #606060;">"*.h"</span>]
+<pre class="src src-sh">include.install Dir["*.h"]
 </pre>
 </div>
 
@@ -1121,7 +1121,7 @@ You also need to put <code>/usr/local/bin</code> and <code>/usr/local/sbin</code
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">    <span style="color: #404040;">export</span> <span style="color: #404040;">PATH</span>=/usr/local/bin:/usr/local/sbin:$<span style="color: #404040;">PATH</span>
+<pre class="src src-sh">    export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 </pre>
 </div>
 
@@ -1206,7 +1206,7 @@ Thank you for reading.
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a>
 <div class="post-date">14 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-14-get-a-mac.html">Get a Mac</a></h1>
 
-<figure>
+<figure id="org4ca4d82">
 <img src="http://bastibe.de/static/2009-03/osx.png" alt="osx.png">
 
 </figure>

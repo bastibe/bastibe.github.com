@@ -35,9 +35,9 @@
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
 </p>
 
-<div id="outline-container-org18d2b13" class="outline-2">
-<h2 id="org18d2b13">Text</h2>
-<div class="outline-text-2" id="text-org18d2b13">
+<div id="outline-container-org24dc8a2" class="outline-2">
+<h2 id="org24dc8a2">Text</h2>
+<div class="outline-text-2" id="text-org24dc8a2">
 <p>
 For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
 </p>
@@ -51,8 +51,8 @@ To render, I run a simple makefile in an infinite loop that recompiles my PDF wh
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #404040;">graph_pdfs</span>)
-    xelatex -interaction nonstopmode diss.tex
+<pre class="src src-makefile">diss.pdf: diss.tex makefile $(graph_pdfs)
+	xelatex -interaction nonstopmode diss.tex
 </pre>
 </div>
 
@@ -62,9 +62,9 @@ We'll get back to <code>$(graph_pdfs)</code> in a second.
 </div>
 </div>
 
-<div id="outline-container-org318c507" class="outline-2">
-<h2 id="org318c507">Graphs</h2>
-<div class="outline-text-2" id="text-org318c507">
+<div id="outline-container-org76b666a" class="outline-2">
+<h2 id="org76b666a">Graphs</h2>
+<div class="outline-text-2" id="text-org76b666a">
 <p>
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
 </p>
@@ -78,11 +78,11 @@ Thus all graphs render into the main PDF and update automatically, just like the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #404040;">graph_sources</span> = $(<span style="color: #404040;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
-<span style="color: #404040;">graph_pdfs</span> = $(<span style="color: #404040;">patsubst</span> %.py,%.pdf,$(<span style="color: #404040;">graph_sources</span>))
+<pre class="src src-makefile">graph_sources = $(shell find graphs -regex "graphs/[0-9]-.*\.py")
+graph_pdfs = $(patsubst %.py,%.pdf,$(graph_sources))
 
-<span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
-    cd graphs; .venv/bin/python $(<span style="color: #404040;">notdir</span> $<span style="color: #111111;">&lt;</span>)
+graphs/%.pdf: graphs/%.py
+	cd graphs; .venv/bin/python $(notdir $&lt;)
 </pre>
 </div>
 
@@ -96,9 +96,9 @@ This system is surprisingly flexible, and absolutely trivial to debug. For examp
 </div>
 </div>
 
-<div id="outline-container-org69a93d6" class="outline-2">
-<h2 id="org69a93d6">Data</h2>
-<div class="outline-text-2" id="text-org69a93d6">
+<div id="outline-container-org53f4df7" class="outline-2">
+<h2 id="org53f4df7">Data</h2>
+<div class="outline-text-2" id="text-org53f4df7">
 <p>
 All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
 </p>
@@ -109,11 +109,11 @@ To set up a new writing environment from scratch, all I need is the following se
 
 <div class="org-src-container">
 <pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
-<span style="color: #404040;">cd</span> dissertation
+cd dissertation
 git annex init
-env <span style="color: #404040;">WEBDAV_USERNAME</span>=xxx <span style="color: #404040;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
+env WEBDAV_USERNAME=xxx WEBDAV_PASSWORD=yyy git annex enableremote mywebdavserver
 git annex copy --from mywebdavserver
-(<span style="color: #404040;">cd</span> graphs; pipenv install)
+(cd graphs; pipenv install)
 make all
 </pre>
 </div>

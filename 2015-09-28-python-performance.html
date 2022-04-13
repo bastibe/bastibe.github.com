@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -34,50 +35,50 @@ Recently, I was working on a dynamic programming algorithm that involves a lot o
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_python</span>(oct_per_sec):
-    <span style="color: #111111;">""" ... """</span>
-    <span style="color: #404040;">b</span> = 1.781
-    <span style="color: #404040;">mu</span> = -0.301
-    <span style="color: #111111; font-weight: bold;">return</span> 1/(2*b)*math.exp(-<span style="color: #404040;">abs</span>(oct_per_sec-mu)/b)
+<pre class="src src-python">def y_change_probability_python(oct_per_sec):
+    """ ... """
+    b = 1.781
+    mu = -0.301
+    return 1/(2*b)*math.exp(-abs(oct_per_sec-mu)/b)
 
-<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_idx_range_python</span>(y_idx, max_y_factor, height):
-    <span style="color: #111111;">""" ... """</span>
-    <span style="color: #404040;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-    <span style="color: #404040;">y_lo</span> = <span style="color: #404040;">max</span>(y/max_y_factor, min_y)
-    <span style="color: #404040;">y_hi</span> = <span style="color: #404040;">min</span>(y*max_y_factor, max_y)
-    <span style="color: #404040;">y_lo_idx</span> = <span style="color: #404040;">int</span>((y_lo-min_y)/(max_y-min_y)*height)
-    <span style="color: #404040;">y_hi_idx</span> = <span style="color: #404040;">int</span>((y_hi-min_y)/(max_y-min_y)*height)
-    <span style="color: #111111; font-weight: bold;">return</span> y_lo_idx, y_hi_idx
+def y_idx_range_python(y_idx, max_y_factor, height):
+    """ ... """
+    y = (y_idx/height)*(max_y-min_y)+min_y
+    y_lo = max(y/max_y_factor, min_y)
+    y_hi = min(y*max_y_factor, max_y)
+    y_lo_idx = int((y_lo-min_y)/(max_y-min_y)*height)
+    y_hi_idx = int((y_hi-min_y)/(max_y-min_y)*height)
+    return y_lo_idx, y_hi_idx
 
-<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">find_tracks_python</span>(cost_matrix, delta_x):
-    <span style="color: #111111;">""" ... """</span>
-    <span style="color: #404040;">tracks</span> = np.zeros(correlogram.shape, dtype=np.int64)
-    <span style="color: #404040;">cum_cost</span> = np.zeros(correlogram.shape)
+def find_tracks_python(cost_matrix, delta_x):
+    """ ... """
+    tracks = np.zeros(correlogram.shape, dtype=np.int64)
+    cum_cost = np.zeros(correlogram.shape)
 
-    <span style="color: #404040;">max_y_factor</span> = (2**5)**(delta_x)
-    <span style="color: #404040;">height</span> = correlogram.shape[1]
+    max_y_factor = (2**5)**(delta_x)
+    height = correlogram.shape[1]
 
-    <span style="color: #404040;">probabilities</span> = np.empty((height, height))
-    <span style="color: #111111; font-weight: bold;">for</span> y_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(height):
-        <span style="color: #404040;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #111111; font-weight: bold;">for</span> y_pre_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-            <span style="color: #404040;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-            <span style="color: #404040;">doubles_per_x</span> = math.log2((y/y_pre)**(1/delta_x))
-            <span style="color: #404040;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
+    probabilities = np.empty((height, height))
+    for y_idx in range(height):
+        y = (y_idx/height)*(max_y-min_y)+min_y
+        for y_pre_idx in range(*y_idx_range_numba(y_idx, max_y_factor, height)):
+            y_pre = (y_pre_idx/height)*(max_y-min_y)+min_y
+            doubles_per_x = math.log2((y/y_pre)**(1/delta_x))
+            probabilities[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
 
-    <span style="color: #111111; font-weight: bold;">for</span> x_idx, cost_column <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">enumerate</span>(cost_matrix):
-        <span style="color: #111111; font-weight: bold;">if</span> x_idx == 0:
-            <span style="color: #404040;">cum_cost</span>[x_idx] = cost_column
-            <span style="color: #111111; font-weight: bold;">continue</span>
-        <span style="color: #111111; font-weight: bold;">for</span> y_idx, cost <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">enumerate</span>(cost_column):
-            <span style="color: #111111; font-weight: bold;">for</span> y_pre_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(*y_idx_range_numba(y_idx, max_y_factor, height)):
-                <span style="color: #404040;">weighted_cum_cost</span> = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
-                <span style="color: #111111; font-weight: bold;">if</span> weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
-                    <span style="color: #404040;">cum_cost</span>[x_idx, y_idx] = weighted_cum_cost
-                    <span style="color: #404040;">tracks</span>[x_idx, y_idx] = y_pre_idx
-            <span style="color: #404040;">cum_cost</span>[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
+    for x_idx, cost_column in enumerate(cost_matrix):
+        if x_idx == 0:
+            cum_cost[x_idx] = cost_column
+            continue
+        for y_idx, cost in enumerate(cost_column):
+            for y_pre_idx in range(*y_idx_range_numba(y_idx, max_y_factor, height)):
+                weighted_cum_cost = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
+                if weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
+                    cum_cost[x_idx, y_idx] = weighted_cum_cost
+                    tracks[x_idx, y_idx] = y_pre_idx
+            cum_cost[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
 
-    <span style="color: #111111; font-weight: bold;">return</span> tracks, cum_cost
+    return tracks, cum_cost
 </pre>
 </div>
 
@@ -94,40 +95,40 @@ If you can express your code in terms of linear algebra, Numpy will execute them
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numpy</span>(doubles_per_x):
-    <span style="color: #111111;">""" ... """</span>
-    <span style="color: #404040;">b</span> = 1.781
-    <span style="color: #404040;">mu</span> = -0.301
-    <span style="color: #111111; font-weight: bold;">return</span> 1/(2*b)*np.exp(-np.<span style="color: #404040;">abs</span>(doubles_per_x-mu)/b)
+<pre class="src src-python">def y_change_probability_numpy(doubles_per_x):
+    """ ... """
+    b = 1.781
+    mu = -0.301
+    return 1/(2*b)*np.exp(-np.abs(doubles_per_x-mu)/b)
 
-<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">find_frequency_tracks_numpy</span>(cost_matrix, delta_x):
-    <span style="color: #111111;">""" ... """</span>
-    <span style="color: #404040;">tracks</span> = np.zeros(cost_matrix.shape, dtype=np.<span style="color: #404040;">int</span>)
-    <span style="color: #404040;">cum_cost</span> = np.zeros(cost_matrix.shape)
+def find_frequency_tracks_numpy(cost_matrix, delta_x):
+    """ ... """
+    tracks = np.zeros(cost_matrix.shape, dtype=np.int)
+    cum_cost = np.zeros(cost_matrix.shape)
 
-    <span style="color: #404040;">max_y_factor</span> = (2**5)**(delta_t) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">allow at most 5 octaves per second (3 sigma)</span>
-    <span style="color: #404040;">height</span> = cost_matrix.shape[1]
+    max_y_factor = (2**5)**(delta_t) # allow at most 5 octaves per second (3 sigma)
+    height = cost_matrix.shape[1]
 
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pre-allocate probabilities matrix as minus infinity. This matrix</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">will be sparsely filled with positive probability values, and</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">empty values will have minus infinite probability.</span>
-    <span style="color: #404040;">probabilities</span> = -np.ones((height, height))*np.inf
-    <span style="color: #111111; font-weight: bold;">for</span> y_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(probabilities.shape[0]):
-        <span style="color: #404040;">y</span> = (y_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #404040;">y_pre_idx</span> = np.arange(<span style="color: #404040;">int</span>((<span style="color: #404040;">max</span>(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
-                              <span style="color: #404040;">int</span>((<span style="color: #404040;">min</span>(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
-        <span style="color: #404040;">y_pre</span> = (y_pre_idx/height)*(max_y-min_y)+min_y
-        <span style="color: #404040;">doubles_per_x</span> = np.log2((y/y_pre)**(1/delta_x))
-        <span style="color: #404040;">probabilities</span>[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
+    # pre-allocate probabilities matrix as minus infinity. This matrix
+    # will be sparsely filled with positive probability values, and
+    # empty values will have minus infinite probability.
+    probabilities = -np.ones((height, height))*np.inf
+    for y_idx in range(probabilities.shape[0]):
+        y = (y_idx/height)*(max_y-min_y)+min_y
+        y_pre_idx = np.arange(int((max(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
+                              int((min(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
+        y_pre = (y_pre_idx/height)*(max_y-min_y)+min_y
+        doubles_per_x = np.log2((y/y_pre)**(1/delta_x))
+        probabilities[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
 
-    <span style="color: #404040;">cum_cost</span>[0] = cost_matrix[0]
-    <span style="color: #111111; font-weight: bold;">for</span> x_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(1, <span style="color: #404040;">len</span>(cost_matrix)):
-        <span style="color: #404040;">cost_column</span> = cost_matrix[x_idx:x_idx+1] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">extract cost_column as 2d-vector!</span>
-        <span style="color: #404040;">weighted_cum_cost</span> = cum_cost[x_idx-1] + cost_column.T*probabilities
-        <span style="color: #404040;">tracks</span>[x_idx] = np.argmax(weighted_cum_cost, axis=1)
-        <span style="color: #404040;">cum_cost</span>[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
+    cum_cost[0] = cost_matrix[0]
+    for x_idx in range(1, len(cost_matrix)):
+        cost_column = cost_matrix[x_idx:x_idx+1] # extract cost_column as 2d-vector!
+        weighted_cum_cost = cum_cost[x_idx-1] + cost_column.T*probabilities
+        tracks[x_idx] = np.argmax(weighted_cum_cost, axis=1)
+        cum_cost[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
 
-    <span style="color: #111111; font-weight: bold;">return</span> tracks, cum_corrs
+    return tracks, cum_corrs
 </pre>
 </div>
 
@@ -140,16 +141,16 @@ Another avenue for performance optimization is <a href="http://numba.pydata.org/
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; text-decoration: underline;">@jit</span>(numba.float64(numba.float64), nopython=<span style="color: #111111;">True</span>)
-<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_change_probability_numba</span>(doubles_per_x):
+<pre class="src src-python">@jit(numba.float64(numba.float64), nopython=True)
+def y_change_probability_numba(doubles_per_x):
     ...
 
-<span style="color: #111111; text-decoration: underline;">@jit</span>((numba.int64, numba.float64, numba.int64), nopython=<span style="color: #111111;">True</span>)
-<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">y_idx_range_numba</span>(y_idx, max_y_factor, height):
+@jit((numba.int64, numba.float64, numba.int64), nopython=True)
+def y_idx_range_numba(y_idx, max_y_factor, height):
     ...
 
-<span style="color: #111111; text-decoration: underline;">@jit</span>((numba.float64[:,:], numba.float64), nopython=<span style="color: #111111;">True</span>)
-<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">find_tracks_numba</span>(cost_matrix, delta_t):
+@jit((numba.float64[:,:], numba.float64), nopython=True)
+def find_tracks_numba(cost_matrix, delta_t):
     ...
 </pre>
 </div>
@@ -159,13 +160,13 @@ However, Numba is no silver bullet, and does not support all of Python yet. In t
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">python version</span>
-<span style="color: #111111; font-weight: bold;">for</span> x_idx, cost_column <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">enumerate</span>(cost_matrix):
+<pre class="src src-python"># python version
+for x_idx, cost_column in enumerate(cost_matrix):
     ...
 
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">numba version</span>
-<span style="color: #111111; font-weight: bold;">for</span> x_idx <span style="color: #111111; font-weight: bold;">in</span> <span style="color: #404040;">range</span>(<span style="color: #404040;">len</span>(cost_matrix)):
-    <span style="color: #404040;">cost_column</span> = cost_matrix[x_idx]
+# numba version
+for x_idx in range(len(cost_matrix)):
+    cost_column = cost_matrix[x_idx]
     ...
 </pre>
 </div>
@@ -182,10 +183,7 @@ Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This i
 So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code <i>more beautiful</i>. Numba on the other hand often requires you to make your code <i>less beautiful</i> to conform to it's subset of compilable Python.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -194,6 +192,9 @@ So why wouldn't you just always use Numba? After all, when it comes down to raw 
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

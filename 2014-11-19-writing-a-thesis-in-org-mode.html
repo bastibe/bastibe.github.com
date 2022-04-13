@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -46,10 +47,10 @@ As for the thesis text, I used Org's export functionality to convert the Org sou
 </p>
 
 <div class="org-src-container">
-<pre class="src src-org"><span style="color: #111111; background-color: #f4f4f0;">#+CAPTION:</span> <span style="color: #111111; background-color: #fcfcf8;">Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
-<span style="color: #111111; background-color: #f4f4f0;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
-<span style="color: #111111; background-color: #f4f4f0;">#+NAME: fig:summary_tracks</span>
-<span style="color: #111111; text-decoration: underline;"><a href="file:images/summary_tracks.pdf">file:images/summary_tracks.pdf</a></span>
+<pre class="src src-org">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.
+#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn
+#+NAME: fig:summary_tracks
+[[file:images/summary_tracks.pdf]]
 </pre>
 </div>
 
@@ -58,11 +59,11 @@ In LaTeX, this would be
 </p>
 
 <div class="org-src-container">
-<pre class="src src-latex"><span style="color: #111111; font-weight: bold;">\begin</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
-<span style="color: #111111; font-weight: bold;">\centering</span>
-<span style="color: #111111; font-weight: bold;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
-<span style="color: #111111; font-weight: bold;">\caption</span>{<span style="color: #111111; font-weight: bold; text-decoration: underline;">\label</span><span style="color: #111111; text-decoration: underline;">{</span><span style="color: #111111; text-decoration: underline;">fig:summary_tracks</span><span style="color: #111111; text-decoration: underline;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
-<span style="color: #111111; font-weight: bold;">\end</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
+<pre class="src src-latex">\begin{figure*}
+\centering
+\includegraphics[width=6in,height=2.5in]{images/summary_tracks.pdf}
+\caption{\label{fig:summary_tracks}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.}
+\end{figure*}
 </pre>
 </div>
 
@@ -82,10 +83,7 @@ The one thing where Org really shines, though, is the inclusion of code fragment
 At the end of the day, I am not sure whether Org mode is the right tool for writing a thesis. It worked fine, but there were a lot of edge cases and <a href="http://bastibe.de/2014-09-23-org-cite.html">workarounds</a>, which made the whole process a bit uncomfortable. The only really strong argument in favor of Org is the way it can include both code and prose in the same document. But maybe a similar thing could be implemented with LaTeX and some literate programming tool.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -94,6 +92,9 @@ At the end of the day, I am not sure whether Org mode is the right tool for writ
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

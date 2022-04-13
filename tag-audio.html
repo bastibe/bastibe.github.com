@@ -54,9 +54,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org612f329" class="outline-2">
-<h2 id="org612f329">WASAPI</h2>
-<div class="outline-text-2" id="text-org612f329">
+<div id="outline-container-orgf320333" class="outline-2">
+<h2 id="orgf320333">WASAPI</h2>
+<div class="outline-text-2" id="text-orgf320333">
 <p>
 WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
 </p>
@@ -123,9 +123,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org4e03720" class="outline-2">
-<h2 id="org4e03720">PulseAudio</h2>
-<div class="outline-text-2" id="text-org4e03720">
+<div id="outline-container-org9d147b2" class="outline-2">
+<h2 id="org9d147b2">PulseAudio</h2>
+<div class="outline-text-2" id="text-org9d147b2">
 <p>
 PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
 </p>
@@ -188,9 +188,9 @@ This series of blog posts summarizes my experiences with these three APIs and ou
 
 <hr>
 
-<div id="outline-container-org8b73437" class="outline-2">
-<h2 id="org8b73437">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-org8b73437">
+<div id="outline-container-orgac5956a" class="outline-2">
+<h2 id="orgac5956a">CoreAudio, or the Mac's best kept secret</h2>
+<div class="outline-text-2" id="text-orgac5956a">
 <p>
 CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
 </p>
@@ -276,8 +276,8 @@ So, lets read some audio data, shall we?
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
-<span style="color: #404040;">data</span> = soundfile.read(<span style="color: #606060;">'sad_song.wav'</span>)
+<pre class="src src-python">import soundfile
+data = soundfile.read('sad_song.wav')
 </pre>
 </div>
 
@@ -294,9 +294,9 @@ OK, that was easy. So let's read only the first and last 100 frames!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
-<span style="color: #404040;">first</span> = soundfile.read(<span style="color: #606060;">'long_song.flac'</span>, stop=100)
-<span style="color: #404040;">last</span> = soundfile.read(start=-100)
+<pre class="src src-python">import soundfile
+first = soundfile.read('long_song.flac', stop=100)
+last = soundfile.read(start=-100)
 </pre>
 </div>
 
@@ -313,14 +313,14 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
-<span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
-    <span style="color: #404040;">f</span> = SoundFile(<span style="color: #606060;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #404040;">format</span>=ogg_file,
+<pre class="src src-python">from pysoundcard import Stream
+from pysoundfile import SoundFile, ogg_file, write_mode
+with Stream() as s: # opens your default audio device
+    # This is supposed to be a new file, so specify it completely
+    f = SoundFile('happy_song.ogg', sample_rate=s.sample_rate,
+                  channels=s.channels, format=ogg_file,
                   mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">one second</span>
+    f.write(s.read(s.sample_rate)) # one second
 </pre>
 </div>
 
@@ -363,9 +363,9 @@ But this is not going to be about Matlab. This is going to be about Python. Comb
 However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
 </p>
 
-<div id="outline-container-org8c3c4d0" class="outline-2">
-<h2 id="org8c3c4d0">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-org8c3c4d0">
+<div id="outline-container-org90a6a5a" class="outline-2">
+<h2 id="org90a6a5a">A Simple Limiter</h2>
+<div class="outline-text-2" id="text-org90a6a5a">
 <p>
 A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
 </p>
@@ -393,7 +393,7 @@ If this is applied to a signal, it will create an envelope like this:
 </p>
 
 
-<figure>
+<figure id="orga3d5d04">
 <img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png">
 
 </figure>
@@ -430,7 +430,7 @@ Here you can see how that would look in practice:
 </p>
 
 
-<figure>
+<figure id="orge0e1ef9">
 <img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png">
 
 </figure>
@@ -440,7 +440,7 @@ Zooming in on one of the limited section reveals that the gain is actually movin
 </p>
 
 
-<figure>
+<figure id="orgd494a34">
 <img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png">
 
 </figure>
@@ -454,35 +454,35 @@ In Python, this might look like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">class</span> <span style="color: #111111; text-decoration: underline;">Limiter</span>:
-        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">__init__</span>(<span style="color: #111111; font-weight: bold;">self</span>, attack_coeff, release_coeff, delay, dtype=float32):
-            <span style="color: #111111; font-weight: bold;">self</span>.delay_index = 0
-            <span style="color: #111111; font-weight: bold;">self</span>.envelope = 0
-            <span style="color: #111111; font-weight: bold;">self</span>.gain = 1
-            <span style="color: #111111; font-weight: bold;">self</span>.delay = delay
-            <span style="color: #111111; font-weight: bold;">self</span>.delay_line = zeros(delay, dtype=dtype)
-            <span style="color: #111111; font-weight: bold;">self</span>.release_coeff = release_coeff
-            <span style="color: #111111; font-weight: bold;">self</span>.attack_coeff = attack_coeff
+<pre class="src src-python">    class Limiter:
+        def __init__(self, attack_coeff, release_coeff, delay, dtype=float32):
+            self.delay_index = 0
+            self.envelope = 0
+            self.gain = 1
+            self.delay = delay
+            self.delay_line = zeros(delay, dtype=dtype)
+            self.release_coeff = release_coeff
+            self.attack_coeff = attack_coeff
 
-        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; font-weight: bold;">self</span>, signal, threshold):
-            <span style="color: #111111; font-weight: bold;">for</span> i <span style="color: #111111; font-weight: bold;">in</span> arange(<span style="color: #404040;">len</span>(signal)):
-                <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] = signal[i]
-                <span style="color: #111111; font-weight: bold;">self</span>.delay_index = (<span style="color: #111111; font-weight: bold;">self</span>.delay_index + 1) % <span style="color: #111111; font-weight: bold;">self</span>.delay
+        def limit(self, signal, threshold):
+            for i in arange(len(signal)):
+                self.delay_line[self.delay_index] = signal[i]
+                self.delay_index = (self.delay_index + 1) % self.delay
 
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">calculate an envelope of the signal</span>
-                <span style="color: #111111; font-weight: bold;">self</span>.envelope *= <span style="color: #111111; font-weight: bold;">self</span>.release_coeff
-                <span style="color: #111111; font-weight: bold;">self</span>.envelope  = <span style="color: #404040;">max</span>(<span style="color: #404040;">abs</span>(signal[i]), <span style="color: #111111; font-weight: bold;">self</span>.envelope)
+                # calculate an envelope of the signal
+                self.envelope *= self.release_coeff
+                self.envelope  = max(abs(signal[i]), self.envelope)
 
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">have self.gain go towards a desired limiter gain</span>
-                <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #111111; font-weight: bold;">self</span>.envelope &gt; threshold:
-                    <span style="color: #404040;">target_gain</span> = (1+threshold-<span style="color: #111111; font-weight: bold;">self</span>.envelope)
-                <span style="color: #111111; font-weight: bold;">else</span>:
-                    <span style="color: #404040;">target_gain</span> = 1.0
-                <span style="color: #111111; font-weight: bold;">self</span>.gain = ( <span style="color: #111111; font-weight: bold;">self</span>.gain*<span style="color: #111111; font-weight: bold;">self</span>.attack_coeff +
-                              target_gain*(1-<span style="color: #111111; font-weight: bold;">self</span>.attack_coeff) )
+                # have self.gain go towards a desired limiter gain
+                if self.envelope &gt; threshold:
+                    target_gain = (1+threshold-self.envelope)
+                else:
+                    target_gain = 1.0
+                self.gain = ( self.gain*self.attack_coeff +
+                              target_gain*(1-self.attack_coeff) )
 
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">limit the delayed signal</span>
-                <span style="color: #404040;">signal</span>[i] = <span style="color: #111111; font-weight: bold;">self</span>.delay_line[<span style="color: #111111; font-weight: bold;">self</span>.delay_index] * <span style="color: #111111; font-weight: bold;">self</span>.gain
+                # limit the delayed signal
+                signal[i] = self.delay_line[self.delay_index] * self.gain
 </pre>
 </div>
 
@@ -496,9 +496,9 @@ Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\)
 </div>
 </div>
 
-<div id="outline-container-org1d8600d" class="outline-2">
-<h2 id="org1d8600d">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-org1d8600d">
+<div id="outline-container-orgf6d84f1" class="outline-2">
+<h2 id="orgf6d84f1">Implementing audio processing in Python</h2>
+<div class="outline-text-2" id="text-orgf6d84f1">
 <p>
 A real-time audio processing framework using PyAudio would look like this:
 </p>
@@ -508,18 +508,18 @@ A real-time audio processing framework using PyAudio would look like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pyaudio <span style="color: #111111; font-weight: bold;">import</span> PyAudio, paFloat32
+<pre class="src src-python">    from pyaudio import PyAudio, paFloat32
 
-    <span style="color: #404040;">pa</span> = PyAudio()
+    pa = PyAudio()
 
-    <span style="color: #404040;">stream</span> = pa.<span style="color: #404040;">open</span>(<span style="color: #404040;">format</span> = paFloat32,
+    stream = pa.open(format = paFloat32,
                      channels = 1,
                      rate = 44100,
-                     output = <span style="color: #111111;">True</span>,
+                     output = True,
                      frames_per_buffer = 1024,
                      stream_callback = callback)
 
-    <span style="color: #111111; font-weight: bold;">while</span> stream.is_active():
+    while stream.is_active():
         sleep(0.1)
 
     stream.close()
@@ -540,15 +540,15 @@ Every time the <code>callback</code> is called, it will have to return 1024 samp
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">limiter</span> = Limiter(attack_coeff, release_coeff, delay, dtype)
+<pre class="src src-python">    limiter = Limiter(attack_coeff, release_coeff, delay, dtype)
 
-    <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">callback</span>(in_data, frame_count, time_info, flag):
-        <span style="color: #111111; font-weight: bold;">if</span> flag:
-            <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #606060;">"Playback Error: %i"</span> % flag)
-        <span style="color: #404040;">played_frames</span> = counter
-        <span style="color: #404040;">counter</span> += frame_count
+    def callback(in_data, frame_count, time_info, flag):
+        if flag:
+            print("Playback Error: %i" % flag)
+        played_frames = counter
+        counter += frame_count
         limiter.limit(signal[played_frames:counter], threshold)
-        <span style="color: #111111; font-weight: bold;">return</span> signal[played_frames:counter], paContinue
+        return signal[played_frames:counter], paContinue
 </pre>
 </div>
 
@@ -562,58 +562,58 @@ Now this will run the limiter and play back the result. Sadly however, Python is
 </div>
 </div>
 
-<div id="outline-container-org4f4d34a" class="outline-2">
-<h2 id="org4f4d34a">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-org4f4d34a">
+<div id="outline-container-org557fe10" class="outline-2">
+<h2 id="org557fe10">Speeding up execution using Cython</h2>
+<div class="outline-text-2" id="text-org557fe10">
 <p>
 The limiter defined above could be rewritten in C like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python Limiter class.</span>
-    <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_index</span>;
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_length</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">envelope</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">current_gain</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_coeff</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_coeff</span>;
-    } <span style="color: #111111; text-decoration: underline;">limiter_state</span>;
+<pre class="src src-c">    // this corresponds to the Python Limiter class.
+    typedef struct limiter_state_t {
+        int delay_index;
+        int delay_length;
+        float envelope;
+        float current_gain;
+        float attack_coeff;
+        float release_coeff;
+    } limiter_state;
 
-<span style="color: #111111;">    #define</span> <span style="color: #111111; text-decoration: underline;">MAX</span>(<span style="color: #404040;">x</span>,<span style="color: #404040;">y</span>) ((x)&gt;(y)?(x):(y))
+    #define MAX(x,y) ((x)&gt;(y)?(x):(y))
 
-    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">this corresponds to the Python __init__ function.</span>
-    <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_coeff</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_coeff</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_len</span>) {
-        <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #404040;">state</span>;
+    // this corresponds to the Python __init__ function.
+    limiter_state init_limiter(float attack_coeff, float release_coeff, int delay_len) {
+        limiter_state state;
         state.attack_coeff = attack_coeff;
         state.release_coeff = release_coeff;
         state.delay_index = 0;
         state.envelope = 0;
         state.current_gain = 1;
         state.delay_length = delay_len;
-        <span style="color: #111111; font-weight: bold;">return</span> state;
+        return state;
     }
 
-    <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">signal</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">block_length</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">threshold</span>,
-               <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">delay_line</span>, <span style="color: #111111; text-decoration: underline;">limiter_state</span> *<span style="color: #404040;">state</span>) {
-        <span style="color: #111111; font-weight: bold;">for</span>(<span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">i</span>=0; i&lt;block_length; i++) {
+    void limit(float *signal, int block_length, float threshold,
+               float *delay_line, limiter_state *state) {
+        for(int i=0; i&lt;block_length; i++) {
             delay_line[state-&gt;delay_index] = signal[i];
             state-&gt;delay_index = (state-&gt;delay_index + 1) % state-&gt;delay_length;
 
-            <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">calculate an envelope of the signal</span>
+            // calculate an envelope of the signal
             state-&gt;envelope *= state-&gt;release_coeff;
             state-&gt;envelope = MAX(fabs(signal[i]), state-&gt;envelope);
 
-            <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">have current_gain go towards a desired limiter target_gain</span>
-            <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">target_gain</span>;
-            <span style="color: #111111; font-weight: bold;">if</span> (state-&gt;envelope &gt; threshold)
+            // have current_gain go towards a desired limiter target_gain
+            float target_gain;
+            if (state-&gt;envelope &gt; threshold)
                 target_gain = (1+threshold-state-&gt;envelope);
-            <span style="color: #111111; font-weight: bold;">else</span>
+            else
                 target_gain = 1.0;
             state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
                 target_gain*(1-state-&gt;attack_coeff);
 
-            <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">limit the delayed signal</span>
+            // limit the delayed signal
             signal[i] = delay_line[state-&gt;delay_index] * state-&gt;current_gain;
         }
     }
@@ -629,18 +629,18 @@ Now in order to plug this code into Python I will use Cython. First of all, a "C
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    cdef extern <span style="color: #111111; font-weight: bold;">from</span> <span style="color: #606060;">"limiter.h"</span>:
+<pre class="src src-python">    cdef extern from "limiter.h":
         ctypedef struct limiter_state:
-            <span style="color: #404040;">int</span> delay_index
-            <span style="color: #404040;">int</span> delay_length
-            <span style="color: #404040;">float</span> envelope
-            <span style="color: #404040;">float</span> current_gain
-            <span style="color: #404040;">float</span> attack_coeff
-            <span style="color: #404040;">float</span> release_coeff
+            int delay_index
+            int delay_length
+            float envelope
+            float current_gain
+            float attack_coeff
+            float release_coeff
 
-        limiter_state init_limiter(<span style="color: #404040;">float</span> attack_factor, <span style="color: #404040;">float</span> release_factor, <span style="color: #404040;">int</span> delay_len)
-        void limit(<span style="color: #404040;">float</span> *signal, <span style="color: #404040;">int</span> block_length, <span style="color: #404040;">float</span> threshold,
-                   <span style="color: #404040;">float</span> *delay_line, limiter_state *state)
+        limiter_state init_limiter(float attack_factor, float release_factor, int delay_len)
+        void limit(float *signal, int block_length, float threshold,
+                   float *delay_line, limiter_state *state)
 </pre>
 </div>
 
@@ -649,18 +649,18 @@ This is very similar to the C header file of the limiter:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c">    <span style="color: #111111; font-weight: bold;">typedef</span> <span style="color: #111111; font-weight: bold;">struct</span> <span style="color: #111111; text-decoration: underline;">limiter_state_t</span> {
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_index</span>;
-        <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_length</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">envelope</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">current_gain</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_coeff</span>;
-        <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_coeff</span>;
-    } <span style="color: #111111; text-decoration: underline;">limiter_state</span>;
+<pre class="src src-c">    typedef struct limiter_state_t {
+        int delay_index;
+        int delay_length;
+        float envelope;
+        float current_gain;
+        float attack_coeff;
+        float release_coeff;
+    } limiter_state;
 
-    <span style="color: #111111; text-decoration: underline;">limiter_state</span> <span style="color: #111111; text-decoration: underline;">init_limiter</span>(<span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">attack_factor</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">release_factor</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">delay_len</span>);
-    <span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">signal</span>, <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">block_length</span>, <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">threshold</span>,
-               <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">delay_line</span>, <span style="color: #111111; text-decoration: underline;">limiter_state</span> *<span style="color: #404040;">state</span>);
+    limiter_state init_limiter(float attack_factor, float release_factor, int delay_len);
+    void limit(float *signal, int block_length, float threshold,
+               float *delay_line, limiter_state *state);
 </pre>
 </div>
 
@@ -669,26 +669,26 @@ With that squared away, the C functions are accessible for Cython. Now, we only 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy <span style="color: #111111; font-weight: bold;">as</span> np
-    cimport numpy <span style="color: #111111; font-weight: bold;">as</span> np
+<pre class="src src-python">    import numpy as np
+    cimport numpy as np
     cimport limiter
 
-    <span style="color: #404040;">DTYPE</span> = np.float32
+    DTYPE = np.float32
     ctypedef np.float32_t DTYPE_t
 
-    cdef <span style="color: #111111; font-weight: bold;">class</span> <span style="color: #111111; text-decoration: underline;">Limiter</span>:
+    cdef class Limiter:
         cdef limiter.limiter_state state
         cdef np.ndarray delay_line
-        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">__init__</span>(<span style="color: #111111; font-weight: bold;">self</span>, <span style="color: #404040;">float</span> attack_coeff, <span style="color: #404040;">float</span> release_coeff,
-                     <span style="color: #404040;">int</span> delay_length):
-            <span style="color: #111111; font-weight: bold;">self</span>.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
-            <span style="color: #111111; font-weight: bold;">self</span>.delay_line = np.zeros(delay_length, dtype=DTYPE)
+        def __init__(self, float attack_coeff, float release_coeff,
+                     int delay_length):
+            self.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
+            self.delay_line = np.zeros(delay_length, dtype=DTYPE)
 
-        <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">limit</span>(<span style="color: #111111; font-weight: bold;">self</span>, np.ndarray[DTYPE_t,ndim=1] signal, <span style="color: #404040;">float</span> threshold):
-            limiter.limit(&lt;<span style="color: #404040;">float</span>*&gt;np.PyArray_DATA(signal),
-                       &lt;<span style="color: #404040;">int</span>&gt;<span style="color: #404040;">len</span>(signal), threshold,
-                       &lt;<span style="color: #404040;">float</span>*&gt;np.PyArray_DATA(<span style="color: #111111; font-weight: bold;">self</span>.delay_line),
-                       &lt;limiter.limiter_state*&gt;&amp;<span style="color: #111111; font-weight: bold;">self</span>.state)
+        def limit(self, np.ndarray[DTYPE_t,ndim=1] signal, float threshold):
+            limiter.limit(&lt;float*&gt;np.PyArray_DATA(signal),
+                       &lt;int&gt;len(signal), threshold,
+                       &lt;float*&gt;np.PyArray_DATA(self.delay_line),
+                       &lt;limiter.limiter_state*&gt;&amp;self.state)
 </pre>
 </div>
 
@@ -709,19 +709,19 @@ Finally, we need to build the whole contraption. The easiest way to do this is t
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> distutils.core <span style="color: #111111; font-weight: bold;">import</span> setup
-    <span style="color: #111111; font-weight: bold;">from</span> distutils.extension <span style="color: #111111; font-weight: bold;">import</span> Extension
-    <span style="color: #111111; font-weight: bold;">from</span> Cython.Distutils <span style="color: #111111; font-weight: bold;">import</span> build_ext
-    <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> get_include
+<pre class="src src-python">    from distutils.core import setup
+    from distutils.extension import Extension
+    from Cython.Distutils import build_ext
+    from numpy import get_include
 
-    <span style="color: #404040;">ext_modules</span> = [Extension(<span style="color: #606060;">"cython_limiter"</span>,
-                             sources=[<span style="color: #606060;">"cython_limiter.pyx"</span>,
-                                      <span style="color: #606060;">"limiter.c"</span>],
-                             include_dirs=[<span style="color: #606060;">'.'</span>, get_include()])]
+    ext_modules = [Extension("cython_limiter",
+                             sources=["cython_limiter.pyx",
+                                      "limiter.c"],
+                             include_dirs=['.', get_include()])]
 
     setup(
-        name = <span style="color: #606060;">"cython_limiter"</span>,
-        cmdclass = {<span style="color: #606060;">'build_ext'</span>: build_ext},
+        name = "cython_limiter",
+        cmdclass = {'build_ext': build_ext},
         ext_modules = ext_modules
         )
 </pre>
@@ -733,9 +733,9 @@ With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</c
 </div>
 </div>
 
-<div id="outline-container-orgeb42a18" class="outline-2">
-<h2 id="orgeb42a18">Conclusion</h2>
-<div class="outline-text-2" id="text-orgeb42a18">
+<div id="outline-container-org16f1975" class="outline-2">
+<h2 id="org16f1975">Conclusion</h2>
+<div class="outline-text-2" id="text-org16f1975">
 <p>
 In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
 </p>
@@ -746,9 +746,9 @@ You can find all the source code in this article at <a href="https://github.com/
 </div>
 </div>
 
-<div id="outline-container-orgc2d2603" class="outline-2">
-<h2 id="orgc2d2603">Disclaimer</h2>
-<div class="outline-text-2" id="text-orgc2d2603">
+<div id="outline-container-org2b31577" class="outline-2">
+<h2 id="org2b31577">Disclaimer</h2>
+<div class="outline-text-2" id="text-org2b31577">
 <ol class="org-ol">
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>

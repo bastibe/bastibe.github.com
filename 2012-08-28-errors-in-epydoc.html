@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -37,7 +38,7 @@ I ran into this error twice now and wasted an hour both times, so it is time to 
 If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:
 </p>
 
-<pre class="example">
+<pre class="example" id="orgcb72f57">
     UNEXPECTED ERROR:
     'Text' object has no attribute 'data'
 </pre>
@@ -55,8 +56,8 @@ Short answer: Find your <i>site-packages</i> directory:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> distutils.sysconfig <span style="color: #111111; font-weight: bold;">import</span> get_python_lib
-        <span style="color: #111111; font-weight: bold;">print</span>(get_python_lib())
+<pre class="src src-python">    from distutils.sysconfig import get_python_lib
+	print(get_python_lib())
 </pre>
 </div>
 
@@ -65,7 +66,7 @@ Go there, navigate to the <i>epydoc\/markup</i> directory and change line 307 of
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">        <span style="color: #404040;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
+<pre class="src src-python">	m = self._SUMMARY_RE.match(child.data)
 </pre>
 </div>
 
@@ -74,10 +75,10 @@ to
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">        <span style="color: #111111; font-weight: bold;">try</span>:
-                <span style="color: #404040;">m</span> = <span style="color: #111111; font-weight: bold;">self</span>._SUMMARY_RE.match(child.data)
-        <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">AttributeError</span>:
-                <span style="color: #404040;">m</span> = <span style="color: #111111;">None</span>
+<pre class="src src-python">	try:
+		m = self._SUMMARY_RE.match(child.data)
+	except AttributeError:
+		m = None
 </pre>
 </div>
 
@@ -85,10 +86,7 @@ to
 This should fix that problem.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -97,6 +95,9 @@ This should fix that problem.
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

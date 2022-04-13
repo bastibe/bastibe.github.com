@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -45,21 +46,21 @@ One downside of that is that it is not as easy to provide a public link to my do
 Now on to the meat of this post: Some customizations I made that I think are cool.
 </p>
 
-<div id="outline-container-orgea2b580" class="outline-2">
-<h2 id="orgea2b580">When Emacs starts up, make it fit the left half of the screen</h2>
-<div class="outline-text-2" id="text-orgea2b580">
+<div id="outline-container-org2cd85e7" class="outline-2">
+<h2 id="org2cd85e7">When Emacs starts up, make it fit the left half of the screen</h2>
+<div class="outline-text-2" id="text-org2cd85e7">
 <p>
 First, I need a function to set the size of a frame in terms of pixels. Emacs only provides <code>set-frame-size</code>, but that works on characters, not pixels.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">set-frame-pixel-size</span> (frame width height)
-  <span style="color: #111111;">"Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."</span>
-  (<span style="color: #111111; font-weight: bold;">let</span> ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
-        (pixels-per-char-height (/ (frame-pixel-height) (frame-height))))
-    (set-frame-size frame
-                    (floor (/ width pixels-per-char-width))
-                    (floor (/ height pixels-per-char-height)))))
+<pre class="src src-elisp">(defun set-frame-pixel-size (frame width height)
+  "Sets size of FRAME to WIDTH by HEIGHT, measured in pixels."
+  (let ((pixels-per-char-width (/ (frame-pixel-width) (frame-width)))
+		(pixels-per-char-height (/ (frame-pixel-height) (frame-height))))
+	(set-frame-size frame
+					(floor (/ width pixels-per-char-width))
+					(floor (/ height pixels-per-char-height)))))
 </pre>
 </div>
 
@@ -68,13 +69,13 @@ Next, a function that uses the above to set the frame size to exactly fit the le
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">use-left-half-screen</span> ()
-  (<span style="color: #111111; font-weight: bold;">interactive</span>)
-  (<span style="color: #111111; font-weight: bold;">let*</span> ((excess-width 32)
-         (excess-height 48)
-         (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
-         (screen-height (- (x-display-pixel-height) excess-height)))
-    (set-frame-pixel-size (selected-frame) half-screen-width screen-height)))
+<pre class="src src-elisp">(defun use-left-half-screen ()
+  (interactive)
+  (let* ((excess-width 32)
+		 (excess-height 48)
+		 (half-screen-width (- (/ (x-display-pixel-width) 2) excess-width))
+		 (screen-height (- (x-display-pixel-height) excess-height)))
+	(set-frame-pixel-size (selected-frame) half-screen-width screen-height)))
 </pre>
 </div>
 
@@ -83,67 +84,67 @@ Finally, when Emacs starts up, make it use half the screen. Just how I like it!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">if</span> window-system
-    (use-left-half-screen))
+<pre class="src src-elisp">(if window-system
+	(use-left-half-screen))
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org447b3eb" class="outline-2">
-<h2 id="org447b3eb">Make shell split windows auto-resize</h2>
-<div class="outline-text-2" id="text-org447b3eb">
+<div id="outline-container-org672f606" class="outline-2">
+<h2 id="org672f606">Make shell split windows auto-resize</h2>
+<div class="outline-text-2" id="text-org672f606">
 <p>
 Usually when you open a new split window in Emacs, it takes up half the frame. For some kinds of windows, I like them to be smaller. So here is a little snippet that shrinks some kinds of windows to 15 lines of height.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-elisp">(add-hook 'window-configuration-change-hook
-          (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (<span style="color: #111111; font-weight: bold;">when</span> (<span style="color: #111111; font-weight: bold;">or</span> (string-equal (buffer-name) <span style="color: #606060;">"*Python*"</span>)
-                      (string-equal (buffer-name) <span style="color: #606060;">"*eshell*"</span>)
-                      (string-equal (buffer-name) <span style="color: #606060;">"*tex-shell*"</span>))
-              (<span style="color: #111111; font-weight: bold;">if</span> (not (eq (window-height) 15))
-                  (enlarge-window (- 15 (window-height)))))))
+		  (lambda ()
+			(when (or (string-equal (buffer-name) "*Python*")
+					  (string-equal (buffer-name) "*eshell*")
+					  (string-equal (buffer-name) "*tex-shell*"))
+			  (if (not (eq (window-height) 15))
+				  (enlarge-window (- 15 (window-height)))))))
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org5eb2f48" class="outline-2">
-<h2 id="org5eb2f48">Create a new line above/below the current one</h2>
-<div class="outline-text-2" id="text-org5eb2f48">
+<div id="outline-container-orgf7592ef" class="outline-2">
+<h2 id="orgf7592ef">Create a new line above/below the current one</h2>
+<div class="outline-text-2" id="text-orgf7592ef">
 <p>
 There is one feature of Vim that I really missed: <code>o~/~O</code>, which 'opens' a new line above or below the current one without changing the current line.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-above</span> ()
-  <span style="color: #111111;">"Insert a newline above the current line and put point at beginning."</span>
-  (<span style="color: #111111; font-weight: bold;">interactive</span>)
-  (<span style="color: #111111; font-weight: bold;">unless</span> (bolp)
+<pre class="src src-elisp">(defun vi-open-line-above ()
+  "Insert a newline above the current line and put point at beginning."
+  (interactive)
+  (unless (bolp)
     (beginning-of-line))
   (newline)
   (forward-line -1)
   (indent-according-to-mode))
 
-(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">vi-open-line-below</span> ()
-  <span style="color: #111111;">"Insert a newline below the current line and put point at beginning."</span>
-  (<span style="color: #111111; font-weight: bold;">interactive</span>)
-  (<span style="color: #111111; font-weight: bold;">unless</span> (eolp)
+(defun vi-open-line-below ()
+  "Insert a newline below the current line and put point at beginning."
+  (interactive)
+  (unless (eolp)
     (end-of-line))
   (newline-and-indent))
 
-(global-set-key (kbd <span style="color: #606060;">"C-o"</span>) 'vi-open-line-below)
-(global-set-key (kbd <span style="color: #606060;">"M-o"</span>) 'vi-open-line-above)
+(global-set-key (kbd "C-o") 'vi-open-line-below)
+(global-set-key (kbd "M-o") 'vi-open-line-above)
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org3a5e1a9" class="outline-2">
-<h2 id="org3a5e1a9">When editing LaTeX, show PDF output in Emacs</h2>
-<div class="outline-text-2" id="text-org3a5e1a9">
+<div id="outline-container-org5c6249d" class="outline-2">
+<h2 id="org5c6249d">When editing LaTeX, show PDF output in Emacs</h2>
+<div class="outline-text-2" id="text-org5c6249d">
 <p>
 Emacs provides an awesome mode for editing LaTeX files. But isn't it sad that you always have to leave Emacs for viewing the PDF? Well, not any more.
 </p>
@@ -153,34 +154,31 @@ This function will open or refresh a split window with the generated PDF file in
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">open/show pdf file within Emacs using doc-view-mode</span>
-(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">open-show-pdf</span> ()
-  (<span style="color: #111111; font-weight: bold;">interactive</span>)
-  (<span style="color: #111111; font-weight: bold;">let</span> ((tex-buffer-name (buffer-name))
-        (pdf-buffer-name (concat (TeX-master-file) <span style="color: #606060;">".pdf"</span>)))
-    (<span style="color: #111111; font-weight: bold;">if</span> (get-buffer pdf-buffer-name)
-        (switch-to-buffer-other-window pdf-buffer-name)
-      (find-file-other-window pdf-buffer-name))
-    (<span style="color: #111111; font-weight: bold;">if</span> (not (eq major-mode 'doc-view-mode))
-        (doc-view-mode))
-    (doc-view-revert-buffer t t)
-    (switch-to-buffer-other-window tex-buffer-name)))
+<pre class="src src-elisp">;; open/show pdf file within Emacs using doc-view-mode
+(defun open-show-pdf ()
+  (interactive)
+  (let ((tex-buffer-name (buffer-name))
+		(pdf-buffer-name (concat (TeX-master-file) ".pdf")))
+	(if (get-buffer pdf-buffer-name)
+		(switch-to-buffer-other-window pdf-buffer-name)
+	  (find-file-other-window pdf-buffer-name))
+	(if (not (eq major-mode 'doc-view-mode))
+		(doc-view-mode))
+	(doc-view-revert-buffer t t)
+	(switch-to-buffer-other-window tex-buffer-name)))
 
 (add-hook 'LaTeX-mode-hook
-          (<span style="color: #111111; font-weight: bold;">lambda</span> ()
-            (define-key LaTeX-mode-map (kbd <span style="color: #606060;">"C-c C-v"</span>) 'open-show-pdf)
-            (visual-line-mode t)
-            (turn-on-reftex))
-          t)
+		  (lambda ()
+			(define-key LaTeX-mode-map (kbd "C-c C-v") 'open-show-pdf)
+			(visual-line-mode t)
+			(turn-on-reftex))
+		  t)
 </pre>
 </div>
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -189,6 +187,9 @@ This function will open or refresh a split window with the generated PDF file in
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

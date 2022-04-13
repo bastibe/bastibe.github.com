@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -34,7 +35,7 @@ Traditionally, text editor themes are all about colors, right? In programming, w
 </p>
 
 <p>
-I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>.
+I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.
 </p>
 
 <p>
@@ -50,13 +51,13 @@ But then, inspiration hit me: Who says that I could only use one single font? No
 </p>
 
 
-<figure>
+<figure id="org8c82e7f">
 <img src="http://bastibe.de/static/2017-09/color%20theme.png" alt="color%20theme.png">
 
 </figure>
 
 <p>
-The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> for strings, and oblique<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> Iosevka for comments. <a href="http://font.ubuntu.com/">Ubuntu Mono</a> and <a href="http://input.fontbureau.com/">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
+The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> for strings, and oblique<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> Iosevka for comments. <a href="http://font.ubuntu.com/">Ubuntu Mono</a> and <a href="http://input.fontbureau.com/">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
 </p>
 
 <p>
@@ -66,25 +67,22 @@ Still, I love the look of this! (Of course it won't work in a terminal, or most 
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 : Can other text editors do this? I honestly have no idea.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 : I just love the look of the slab-serif characters in Iosevka! Look at the beautiful <code>"}"</code> in the screenshot!
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 : not to be confused with <i>italic</i>, which changes glyphs in addition to slanting.
 </p></div></div>
 
 
 </div>
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -93,6 +91,9 @@ Still, I love the look of this! (Of course it won't work in a terminal, or most 
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

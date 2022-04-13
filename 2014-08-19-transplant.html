@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -42,8 +43,8 @@ But write my own I did: <a href="https://github.com/bastibe/transplant">Transpla
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> transplant
-<span style="color: #404040;">matlab</span> = transplant.Matlab()
+<pre class="src src-python">import transplant
+matlab = transplant.Matlab()
 </pre>
 </div>
 
@@ -60,11 +61,11 @@ This <code>matlab</code> object starts a Matlab interpreter in the background an
 </div>
 
 <p>
-As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #606060;">'uint8'</span>)
+<pre class="src src-python">matlab.randi(255, 1, 4, 'uint8')
 &gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
 </pre>
 </div>
@@ -74,15 +75,15 @@ All matrix data is actually transferred in binary, so both Matlab and Python wor
 </p>
 
 <p>
-This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
+This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #404040;">data</span> = matlab.randn(1, 4)
-matlab.<span style="color: #404040;">max</span>(data)
-&gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
-matlab.<span style="color: #404040;">max</span>(data, nargout=1)
-&gt;&gt;&gt; 1.5326      <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = max(...)</span>
+<pre class="src src-python">data = matlab.randn(1, 4)
+matlab.max(data)
+&gt;&gt;&gt; [1.5326, 3] # Matlab: x, n = max(...)
+matlab.max(data, nargout=1)
+&gt;&gt;&gt; 1.5326      # Matlab: x = max(...)
 </pre>
 </div>
 
@@ -100,8 +101,8 @@ You can save/retrieve variables in the global workspace:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">  <span style="color: #404040;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
-  <span style="color: #404040;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
+<pre class="src src-python">  matlab.value = 5 # Matlab: value = 5
+  x = matlab.value # Matlab: x = value
 </pre>
 </div></li>
 
@@ -110,8 +111,8 @@ You van eval some code:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">  matlab.<span style="color: #404040;">eval</span>(<span style="color: #606060;">'class(value)'</span>)
-  &gt;&gt;&gt; <span style="color: #404040;">ans</span> =
+<pre class="src src-python">  matlab.eval('class(value)')
+  &gt;&gt;&gt; ans =
   &gt;&gt;&gt;
   &gt;&gt;&gt; double
   &gt;&gt;&gt;
@@ -130,7 +131,7 @@ There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonl
 </p>
 
 <p>
-Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
+Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
 </p>
 
 <p>
@@ -144,25 +145,22 @@ For now, head over to <a href="https://github.com/bastibe/transplant">Github.com
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Except for integer complex numbers, since those are not supported by Numpy.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Like the Matlab function <code>nargout</code>
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
 </p></div></div>
 
 
 </div>
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -171,6 +169,9 @@ At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I d
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

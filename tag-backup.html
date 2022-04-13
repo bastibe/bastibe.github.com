@@ -130,25 +130,25 @@ Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">  &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" encoding="UTF-8"</span>?&gt;
+<pre class="src src-xml">  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
-  &lt;<span style="color: #111111; text-decoration: underline;">plist</span> <span style="color: #404040;">version</span>=<span style="color: #606060;">"1.0"</span>&gt;
-  &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Label&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;rsnapshot.hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;ProgramArguments&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;/bin/bash&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;-c&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">string</span>&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/<span style="color: #111111; text-decoration: underline;">string</span>&gt;
-      &lt;/<span style="color: #111111; text-decoration: underline;">array</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;StartCalendarInterval&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-      &lt;<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-          &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-      &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-  &lt;/<span style="color: #111111; text-decoration: underline;">dict</span>&gt;
-  &lt;/<span style="color: #111111; text-decoration: underline;">plist</span>&gt;
+  &lt;plist version="1.0"&gt;
+  &lt;dict&gt;
+      &lt;key&gt;Label&lt;/key&gt;
+      &lt;string&gt;rsnapshot.hourly&lt;/string&gt;
+      &lt;key&gt;ProgramArguments&lt;/key&gt;
+      &lt;array&gt;
+          &lt;string&gt;/bin/bash&lt;/string&gt;
+          &lt;string&gt;-c&lt;/string&gt;
+          &lt;string&gt;sleep 0 &amp;&amp; /usr/local/bin/rsnapshot -c /usr/local/etc/rsnapshot.conf hourly&lt;/string&gt;
+      &lt;/array&gt;
+      &lt;key&gt;StartCalendarInterval&lt;/key&gt;
+      &lt;dict&gt;
+          &lt;key&gt;Minute&lt;/key&gt;
+          &lt;integer&gt;0&lt;/integer&gt;
+      &lt;/dict&gt;
+  &lt;/dict&gt;
+  &lt;/plist&gt;
 </pre>
 </div>
 
@@ -161,34 +161,34 @@ For the other four scripts, change the two occurrences of <code>hourly</code> to
 daily:
 </p>
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;key&gt;Minute&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Hour&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
 </pre>
 </div></li>
 <li><p>
 weekly:
 </p>
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Weekday&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;key&gt;Minute&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Hour&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Weekday&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
 </pre>
 </div></li>
 <li><p>
 monthly:
 </p>
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Minute&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Hour&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">key</span>&gt;Day&lt;/<span style="color: #111111; text-decoration: underline;">key</span>&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">integer</span>&gt;1&lt;/<span style="color: #111111; text-decoration: underline;">integer</span>&gt;
+<pre class="src src-xml">    &lt;key&gt;Minute&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Hour&lt;/key&gt;
+    &lt;integer&gt;0&lt;/integer&gt;
+    &lt;key&gt;Day&lt;/key&gt;
+    &lt;integer&gt;1&lt;/integer&gt;
 </pre>
 </div></li>
 </ul>
@@ -258,9 +258,9 @@ Start Time Machine, right-click any directory you want to delete, and select "de
 [4] This will fail if the hourly backup takes longer than 15 minutes. This is rather unlikely, though, or at least should not happen often enough to be of concern.
 </p>
 
-<div id="outline-container-org1c1cddb" class="outline-2">
-<h2 id="org1c1cddb">Caveats</h2>
-<div class="outline-text-2" id="text-org1c1cddb">
+<div id="outline-container-org2a8f6a2" class="outline-2">
+<h2 id="org2a8f6a2">Caveats</h2>
+<div class="outline-text-2" id="text-org2a8f6a2">
 <p>
 The configuration file of rsnapshot says that you might experience data corruption if you run several copies of rsnapshot at the same time (and you can use the lockfile to prevent this). This is a problem if your computer is asleep while rsnapshot is scheduled to run, since launchd will then re-schedule all missed tasks at once when the computer wakes up. If you enable the lockfile, only one of them will run.
 </p>
@@ -301,9 +301,9 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 </p>
 
-<div id="outline-container-orgd86a06a" class="outline-2">
-<h2 id="orgd86a06a">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-orgd86a06a">
+<div id="outline-container-org85f242c" class="outline-2">
+<h2 id="org85f242c">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<div class="outline-text-2" id="text-org85f242c">
 <p>
 Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
 </p>
@@ -318,14 +318,14 @@ After that, I disconnected the display and immediately was stumped because I now
 </div>
 </div>
 
-<div id="outline-container-org86a206d" class="outline-2">
-<h2 id="org86a206d">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-org86a206d">
+<div id="outline-container-orgc089e71" class="outline-2">
+<h2 id="orgc089e71">Setting up the hard drive</h2>
+<div class="outline-text-2" id="text-orgc089e71">
 <p>
 First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
 </p>
 
-<pre class="example">
+<pre class="example" id="org555ea67">
     /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
 </pre>
 
@@ -335,14 +335,14 @@ Note: <code>sync</code> specifies that all file system changes have to be writte
 </div>
 </div>
 
-<div id="outline-container-org78960e8" class="outline-2">
-<h2 id="org78960e8">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org78960e8">
+<div id="outline-container-org8a9d2df" class="outline-2">
+<h2 id="org8a9d2df">Setting up the shared folder</h2>
+<div class="outline-text-2" id="text-org8a9d2df">
 <p>
 First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
 </p>
 
-<pre class="example">
+<pre class="example" id="orge43fdab">
     /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
 </pre>
 
@@ -350,7 +350,7 @@ First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get updat
 Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
 </p>
 
-<pre class="example">
+<pre class="example" id="org95af516">
     - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
 </pre>
 
@@ -363,20 +363,20 @@ Also, the afp daemon should be configured to use the proper authentification sch
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">    &lt;?<span style="color: #111111; font-weight: bold;">xml</span> <span style="color: #111111;">version="1.0" standalone='no'</span>?&gt;<span style="color: #111111; font-style: italic;">&lt;!--</span><span style="color: #111111; font-style: italic;">*-nxml-*</span><span style="color: #111111; font-style: italic;">--&gt;</span>
+<pre class="src src-xml">    &lt;?xml version="1.0" standalone='no'?&gt;&lt;!--*-nxml-*--&gt;
     &lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
-    &lt;<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">name</span> <span style="color: #404040;">replace-wildcards</span>=<span style="color: #606060;">"yes"</span>&gt;%h&lt;/<span style="color: #111111; text-decoration: underline;">name</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_afpovertcp._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;548&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
-        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-        &lt;<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">type</span>&gt;_device-info._tcp&lt;/<span style="color: #111111; text-decoration: underline;">type</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">port</span>&gt;0&lt;/<span style="color: #111111; text-decoration: underline;">port</span>&gt;
-            &lt;<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;model=Xserve&lt;/<span style="color: #111111; text-decoration: underline;">txt-record</span>&gt;
-        &lt;/<span style="color: #111111; text-decoration: underline;">service</span>&gt;
-    &lt;/<span style="color: #111111; text-decoration: underline;">service-group</span>&gt;
+    &lt;service-group&gt;
+		&lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;
+		&lt;service&gt;
+			&lt;type&gt;_afpovertcp._tcp&lt;/type&gt;
+			&lt;port&gt;548&lt;/port&gt;
+		&lt;/service&gt;
+		&lt;service&gt;
+			&lt;type&gt;_device-info._tcp&lt;/type&gt;
+			&lt;port&gt;0&lt;/port&gt;
+			&lt;txt-record&gt;model=Xserve&lt;/txt-record&gt;
+		&lt;/service&gt;
+	&lt;/service-group&gt;
 </pre>
 </div>
 
@@ -398,9 +398,9 @@ Anyway, with all that done, restart both the netatalk and the Bonjour daemon usi
 </div>
 </div>
 
-<div id="outline-container-org5f8796b" class="outline-2">
-<h2 id="org5f8796b">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-org5f8796b">
+<div id="outline-container-orgc93e2ef" class="outline-2">
+<h2 id="orgc93e2ef">Setting up the Time Machine</h2>
+<div class="outline-text-2" id="text-orgc93e2ef">
 <p>
 <del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
 </p>

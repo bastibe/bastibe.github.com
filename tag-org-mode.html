@@ -97,18 +97,18 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
-  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
-  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
-         (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>))
+<pre class="src src-elisp">(defun headline-numbering-filter (data backend info)
+  "No numbering in headlines that have a property :numbers: no"
+  (let* ((beg (next-property-change 0 data))
+         (headline (if beg (get-text-property beg :parent data))))
+    (if (and (eq backend 'latex)
+         (string= (org-element-property :NUMBERS headline) "no"))
         (replace-regexp-in-string
-         <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
-         <span style="color: #606060;">"\\1*"</span> data nil nil 1)
+         "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
+         "\\1*" data nil nil 1)
       data)))
 
-(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
 </pre>
 </div>
 
@@ -125,44 +125,44 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-css"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
+<pre class="src src-css">/* hide Org-mode's section numbers */
+span.section-number-2 { display: none; }
+span.section-number-3 { display: none; }
+span.section-number-4 { display: none; }
+span.section-number-5 { display: none; }
+span.section-number-6 { display: none; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: section; }
-<span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subsection; }
-<span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subsubsection; }
-<span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: paragraph; }
-<span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subparagraph; }
+/* define counters for the different headline levels */
+h1 { counter-reset: section; }
+h2 { counter-reset: subsection; }
+h3 { counter-reset: subsubsection; }
+h4 { counter-reset: paragraph; }
+h5 { counter-reset: subparagraph; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">h2::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: section;
+/* prepend section numbers before headlines */
+h2::before {
+    content: counter(section) " ";
+    counter-increment: section;
 }
-<span style="color: #111111; text-decoration: underline;">h3::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsection;
+h3::before {
+    content: counter(section) "." counter(subsection) " ";
+    counter-increment: subsection;
 }
-<span style="color: #111111; text-decoration: underline;">h4::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsubsection;
+h4::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
+    counter-increment: subsubsection;
 }
-<span style="color: #111111; text-decoration: underline;">h5::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: paragraph;
+h5::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) " ";
+    counter-increment: paragraph;
 }
-<span style="color: #111111; text-decoration: underline;">h6::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">"."</span> counter(subparagraph) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subparagraph;
+h6::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) "." counter(subparagraph) " ";
+    counter-increment: subparagraph;
 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111; font-weight: bold;">content</span>: none; }
+/* suppress numbering for headlines with class="nonumber" */
+.nonumber::before { content: none; }
 </pre>
 </div>
 
@@ -171,22 +171,22 @@ With this in place, we can extend the previous filter to work for HTML as well a
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
-  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
-  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>)
-        (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
+<pre class="src src-elisp">(defun headline-numbering-filter (data backend info)
+  "No numbering in headlines that have a property :numbers: no"
+  (let* ((beg (next-property-change 0 data))
+         (headline (if beg (get-text-property beg :parent data))))
+    (if (string= (org-element-property :NUMBERS headline) "no")
+        (cond ((eq backend 'latex)
                (replace-regexp-in-string
-                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
-                <span style="color: #606060;">"\\1*"</span> data nil nil 1))
+                "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
+                "\\1*" data nil nil 1))
               ((eq backend 'html)
                (replace-regexp-in-string
-                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">&lt;h[1-6]</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">&gt;]*&gt;</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
-                <span style="color: #606060;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+                "\\(&lt;h[1-6]\\)\\([^&gt;]*&gt;\\)"
+                "\\1 class=\"nonumber\"\\2" data nil nil)))
       data)))
 
-(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
 </pre>
 </div>
 
@@ -212,10 +212,10 @@ As for the thesis text, I used Org's export functionality to convert the Org sou
 </p>
 
 <div class="org-src-container">
-<pre class="src src-org"><span style="color: #111111; background-color: #f4f4f0;">#+CAPTION:</span> <span style="color: #111111; background-color: #fcfcf8;">Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>
-<span style="color: #111111; background-color: #f4f4f0;">#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn</span>
-<span style="color: #111111; background-color: #f4f4f0;">#+NAME: fig:summary_tracks</span>
-<span style="color: #111111; text-decoration: underline;"><a href="file:images/summary_tracks.pdf">file:images/summary_tracks.pdf</a></span>
+<pre class="src src-org">#+CAPTION: Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.
+#+ATTR_LATEX: :width 6in :height 2.5in :float multicolumn
+#+NAME: fig:summary_tracks
+[[file:images/summary_tracks.pdf]]
 </pre>
 </div>
 
@@ -224,11 +224,11 @@ In LaTeX, this would be
 </p>
 
 <div class="org-src-container">
-<pre class="src src-latex"><span style="color: #111111; font-weight: bold;">\begin</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
-<span style="color: #111111; font-weight: bold;">\centering</span>
-<span style="color: #111111; font-weight: bold;">\includegraphics</span>[width=6in,height=2.5in]{images/summary_tracks.pdf}
-<span style="color: #111111; font-weight: bold;">\caption</span>{<span style="color: #111111; font-weight: bold; text-decoration: underline;">\label</span><span style="color: #111111; text-decoration: underline;">{</span><span style="color: #111111; text-decoration: underline;">fig:summary_tracks</span><span style="color: #111111; text-decoration: underline;">}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.</span>}
-<span style="color: #111111; font-weight: bold;">\end</span>{<span style="color: #111111; text-decoration: underline;">figure*</span>}
+<pre class="src src-latex">\begin{figure*}
+\centering
+\includegraphics[width=6in,height=2.5in]{images/summary_tracks.pdf}
+\caption{\label{fig:summary_tracks}Modulation tracks of a clarinet recording with and without white noise. The modulation tracks are not normalized.}
+\end{figure*}
 </pre>
 </div>
 
@@ -262,25 +262,25 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(org-add-link-type <span style="color: #606060;">"cite"</span>
-     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
-       <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
-<span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
-<span style="color: #111111;">        for this to work"</span>
+<pre class="src src-elisp">(org-add-link-type "cite"
+     (defun follow-cite (name)
+       "Open bibliography and jump to appropriate entry.
+        The document must contain \bibliography{filename} somewhere
+        for this to work"
        (find-file-other-window
-        (<span style="color: #111111; font-weight: bold;">save-excursion</span>
+        (save-excursion
           (beginning-of-buffer)
-          (<span style="color: #111111; font-weight: bold;">save-match-data</span>
-            (re-search-forward <span style="color: #606060;">"\\\\bibliography{</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">}]+</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">}"</span>)
-            (concat (match-string 1) <span style="color: #606060;">".bib"</span>))))
+          (save-match-data
+            (re-search-forward "\\\\bibliography{\\([^}]+\\)}")
+            (concat (match-string 1) ".bib"))))
        (beginning-of-buffer)
        (search-forward name))
-     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
-       <span style="color: #111111;">"Export [[cite:cohen93]] as </span><span style="color: #111111; font-weight: bold;">\</span><span style="color: #111111;">cite{cohen93} in LaTeX."</span>
-       (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
-           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #606060;">"cite:"</span> desc)))
-               (format <span style="color: #606060;">"\\cite{%s}"</span> path)
-             (format <span style="color: #606060;">"\\cite[%s]{%s}"</span> desc path)))))
+     (defun export-cite (path desc format)
+       "Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."
+       (if (eq format 'latex)
+           (if (or (not desc) (equal 0 (search "cite:" desc)))
+               (format "\\cite{%s}" path)
+             (format "\\cite[%s]{%s}" desc path)))))
 </pre>
 </div>
 

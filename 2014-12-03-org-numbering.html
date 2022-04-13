@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -38,18 +39,18 @@ In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headlin
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
-  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
-  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">and</span> (eq backend 'latex)
-         (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>))
+<pre class="src src-elisp">(defun headline-numbering-filter (data backend info)
+  "No numbering in headlines that have a property :numbers: no"
+  (let* ((beg (next-property-change 0 data))
+         (headline (if beg (get-text-property beg :parent data))))
+    (if (and (eq backend 'latex)
+         (string= (org-element-property :NUMBERS headline) "no"))
         (replace-regexp-in-string
-         <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
-         <span style="color: #606060;">"\\1*"</span> data nil nil 1)
+         "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
+         "\\1*" data nil nil 1)
       data)))
 
-(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
 </pre>
 </div>
 
@@ -66,44 +67,44 @@ Here is some CSS that uses CSS3 counters to number all headlines and hide Org's 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-css"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">hide Org-mode's section numbers </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">span.section-number-2 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-3 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-4 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-5 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
-<span style="color: #111111; text-decoration: underline;">span.section-number-6 </span>{ <span style="color: #111111; font-weight: bold;">display</span>: none; }
+<pre class="src src-css">/* hide Org-mode's section numbers */
+span.section-number-2 { display: none; }
+span.section-number-3 { display: none; }
+span.section-number-4 { display: none; }
+span.section-number-5 { display: none; }
+span.section-number-6 { display: none; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">define counters for the different headline levels </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">h1 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: section; }
-<span style="color: #111111; text-decoration: underline;">h2 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subsection; }
-<span style="color: #111111; text-decoration: underline;">h3 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subsubsection; }
-<span style="color: #111111; text-decoration: underline;">h4 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: paragraph; }
-<span style="color: #111111; text-decoration: underline;">h5 </span>{ <span style="color: #111111; font-weight: bold;">counter-reset</span>: subparagraph; }
+/* define counters for the different headline levels */
+h1 { counter-reset: section; }
+h2 { counter-reset: subsection; }
+h3 { counter-reset: subsubsection; }
+h4 { counter-reset: paragraph; }
+h5 { counter-reset: subparagraph; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">prepend section numbers before headlines </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">h2::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: section;
+/* prepend section numbers before headlines */
+h2::before {
+    content: counter(section) " ";
+    counter-increment: section;
 }
-<span style="color: #111111; text-decoration: underline;">h3::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsection;
+h3::before {
+    content: counter(section) "." counter(subsection) " ";
+    counter-increment: subsection;
 }
-<span style="color: #111111; text-decoration: underline;">h4::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subsubsection;
+h4::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
+    counter-increment: subsubsection;
 }
-<span style="color: #111111; text-decoration: underline;">h5::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: paragraph;
+h5::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) " ";
+    counter-increment: paragraph;
 }
-<span style="color: #111111; text-decoration: underline;">h6::before </span>{
-    <span style="color: #111111; font-weight: bold;">content</span>: counter(section) <span style="color: #606060;">"."</span> counter(subsection) <span style="color: #606060;">"."</span> counter(subsubsection) <span style="color: #606060;">"."</span> counter(paragraph) <span style="color: #606060;">"."</span> counter(subparagraph) <span style="color: #606060;">" "</span>;
-    <span style="color: #111111; font-weight: bold;">counter-increment</span>: subparagraph;
+h6::before {
+    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) "." counter(subparagraph) " ";
+    counter-increment: subparagraph;
 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">suppress numbering for headlines with class="nonumber" </span><span style="color: #111111; font-style: italic;">*/</span>
-<span style="color: #111111; text-decoration: underline;">.nonumber::before </span>{ <span style="color: #111111; font-weight: bold;">content</span>: none; }
+/* suppress numbering for headlines with class="nonumber" */
+.nonumber::before { content: none; }
 </pre>
 </div>
 
@@ -112,22 +113,22 @@ With this in place, we can extend the previous filter to work for HTML as well a
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">headline-numbering-filter</span> (data backend info)
-  <span style="color: #111111;">"No numbering in headlines that have a property :numbers: no"</span>
-  (<span style="color: #111111; font-weight: bold;">let*</span> ((beg (next-property-change 0 data))
-         (headline (<span style="color: #111111; font-weight: bold;">if</span> beg (get-text-property beg <span style="color: #404040;">:parent</span> data))))
-    (<span style="color: #111111; font-weight: bold;">if</span> (string= (org-element-property <span style="color: #404040;">:NUMBERS</span> headline) <span style="color: #606060;">"no"</span>)
-        (<span style="color: #111111; font-weight: bold;">cond</span> ((eq backend 'latex)
+<pre class="src src-elisp">(defun headline-numbering-filter (data backend info)
+  "No numbering in headlines that have a property :numbers: no"
+  (let* ((beg (next-property-change 0 data))
+         (headline (if beg (get-text-property beg :parent data))))
+    (if (string= (org-element-property :NUMBERS headline) "no")
+        (cond ((eq backend 'latex)
                (replace-regexp-in-string
-                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">part</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">chapter</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">*section</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(?:</span><span style="color: #606060;">sub</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">?paragraph</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
-                <span style="color: #606060;">"\\1*"</span> data nil nil 1))
+                "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
+                "\\1*" data nil nil 1))
               ((eq backend 'html)
                (replace-regexp-in-string
-                <span style="color: #606060;">"</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">&lt;h[1-6]</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">&gt;]*&gt;</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">"</span>
-                <span style="color: #606060;">"\\1 class=\"nonumber\"\\2"</span> data nil nil)))
+                "\\(&lt;h[1-6]\\)\\([^&gt;]*&gt;\\)"
+                "\\1 class=\"nonumber\"\\2" data nil nil)))
       data)))
 
-(<span style="color: #111111; font-weight: bold;">setq</span> org-export-filter-headline-functions '(headline-numbering-filter))
+(setq org-export-filter-headline-functions '(headline-numbering-filter))
 </pre>
 </div>
 
@@ -135,10 +136,7 @@ With this in place, we can extend the previous filter to work for HTML as well a
 Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -147,6 +145,9 @@ Previously, I implemented this in Org mode only (no CSS). While that worked as w
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

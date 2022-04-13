@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -42,19 +43,19 @@ First, you need to set up some kind of regular export job. I use a cron job that
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #111111; font-style: italic;">;; </span><span style="color: #111111; font-style: italic;">no init file is loaded, so provide everything here:</span>
-(add-to-list 'load-path <span style="color: #606060;">"~/etc/org-journal/"</span>)
-(<span style="color: #111111; font-weight: bold;">setq</span> org-journal-dir <span style="color: #606060;">"~/journal/"</span>            <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">where my journal files are</span>
-      org-journal-file-format <span style="color: #606060;">"%Y-%m-%d.org"</span>  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">their file names</span>
-      org-journal-enable-agenda-integration t <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so entries are on the agenda</span>
-      org-icalendar-store-UID t               <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">so changes sync correctly</span>
-      org-icalendar-include-todo <span style="color: #606060;">"all"</span>        <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">include TODOs and DONEs</span>
-      org-icalendar-combined-agenda-file <span style="color: #606060;">"~/calendar/org-journal.ics"</span>)
+<pre class="src src-elisp">;; no init file is loaded, so provide everything here:
+(add-to-list 'load-path "~/etc/org-journal/")
+(setq org-journal-dir "~/journal/"            ; where my journal files are
+      org-journal-file-format "%Y-%m-%d.org"  ; their file names
+      org-journal-enable-agenda-integration t ; so entries are on the agenda
+      org-icalendar-store-UID t               ; so changes sync correctly
+      org-icalendar-include-todo "all"        ; include TODOs and DONEs
+      org-icalendar-combined-agenda-file "~/calendar/org-journal.ics")
 
-(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">org-journal</span>)
-(org-journal-update-org-agenda-files) <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">put future entries on the agenda</span>
-(org-icalendar-combine-agenda-files)  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">export the ICS file</span>
-(save-buffers-kill-emacs t)           <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">save all modified files and exit</span>
+(require 'org-journal)
+(org-journal-update-org-agenda-files) ; put future entries on the agenda
+(org-icalendar-combine-agenda-files)  ; export the ICS file
+(save-buffers-kill-emacs t)           ; save all modified files and exit
 </pre>
 </div>
 
@@ -70,10 +71,7 @@ I do this on my web server, with my journal files <a href="https://syncthing.net
 (Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -82,6 +80,9 @@ I do this on my web server, with my journal files <a href="https://syncthing.net
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

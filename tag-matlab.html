@@ -44,17 +44,17 @@ Let's try it:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">x_prealloc <span style="color: #404040;">=</span> cell(10000<span style="color: #404040;">,</span> 1)<span style="color: #404040;">;</span>
-x_end <span style="color: #404040;">=</span> {}<span style="color: #404040;">;</span>
-x_append <span style="color: #404040;">=</span> {}<span style="color: #404040;">;</span>
-<span style="color: #111111; font-weight: bold;">for</span> n<span style="color: #404040;">=</span>1<span style="color: #404040;">:</span>10000
-    <span style="color: #111111; font-style: italic;">% variant 1: preallocate</span>
-    x_prealloc(n) <span style="color: #404040;">=</span> {42}<span style="color: #404040;">;</span>
-    <span style="color: #111111; font-style: italic;">% variant 2: end+1</span>
-    x_end(end<span style="color: #404040;">+</span>1) <span style="color: #404040;">=</span> {42}<span style="color: #404040;">;</span>
-    <span style="color: #111111; font-style: italic;">% variant 3: append</span>
-    x_append <span style="color: #404040;">=</span> [x_append {42}]<span style="color: #404040;">;</span>
-<span style="color: #111111; font-weight: bold;">end</span>
+<pre class="src src-octave">x_prealloc = cell(10000, 1);
+x_end = {};
+x_append = {};
+for n=1:10000
+    % variant 1: preallocate
+    x_prealloc(n) = {42};
+    % variant 2: end+1
+    x_end(end+1) = {42};
+    % variant 3: append
+    x_append = [x_append {42}];
+end
 </pre>
 </div>
 
@@ -63,7 +63,7 @@ Which variant do you think is fastest?
 </p>
 
 
-<figure>
+<figure id="org14b38cf">
 <img src="./static/2018-04/array_performance.png" alt="array_performance.png">
 
 </figure>
@@ -106,54 +106,54 @@ I could go on. The real power of code is abstraction. We use programming to repe
 In a <a href="https://github.com/bastibe/MatlabCodeAnalyzer">recent project</a>, I tried to parse MATLAB code. During this trying exercise, I stumbled upon a few&#x2026; <i>unique</i> design decisions of the MATLAB language:
 </p>
 
-<div id="outline-container-org71da5d6" class="outline-2">
-<h2 id="org71da5d6">Use of apostrophes (<code>'</code>)</h2>
-<div class="outline-text-2" id="text-org71da5d6">
+<div id="outline-container-orge7fb030" class="outline-2">
+<h2 id="orge7fb030">Use of apostrophes (<code>'</code>)</h2>
+<div class="outline-text-2" id="text-orge7fb030">
 <p>
 Apostrophes can mean one of two things: If applied as a unary postfix operator, it means <i>transpose</i>. If used as a unary prefix operator, it marks the start of a string. While not a big problem for human readers, this makes code surprisingly hard to parse. The interesting bit about this, though, is the fact that there would have been a much easier way to do this: Why not use double quotation marks for strings, and apostrophes for transpose? The double quotation mark is <i>never</i> used in MATLAB, so this would have been a very easy choice.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf8e6656" class="outline-2">
-<h2 id="orgf8e6656">Use of parens (<code>()</code>)</h2>
-<div class="outline-text-2" id="text-orgf8e6656">
+<div id="outline-container-org9aac744" class="outline-2">
+<h2 id="org9aac744">Use of parens (<code>()</code>)</h2>
+<div class="outline-text-2" id="text-org9aac744">
 <p>
 If Parens follow a variable name, they can mean one of two things: If the variable is a function, the parens denote a <i>function call</i>. If the variable is anything else, this is an indexing operation. This can actually be very confusing to readers, since it makes it entirely unclear what kind of operation <code>foo(5)</code> will execute without knowledge about <code>foo</code> (which might not be available until runtime). Again, this could have been easily solved by using brackets (<code>[]</code>) for indexing, and parens (<code>()</code>) for function calls.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb382e80" class="outline-2">
-<h2 id="orgb382e80">Use of braces (<code>{}</code>) and cell arrays</h2>
-<div class="outline-text-2" id="text-orgb382e80">
+<div id="outline-container-org6173934" class="outline-2">
+<h2 id="org6173934">Use of braces (<code>{}</code>) and cell arrays</h2>
+<div class="outline-text-2" id="text-org6173934">
 <p>
 Cell arrays are multi-dimensional, ordered, heterogeneous collections of things. But in contrast to every other collection (structs, objects, maps, tables, matrices), they are not indexed using parens, but <i>braces</i>. Why? I don't know. In fact, you <i>can</i> index cell arrays using parens, but this only yields a new cell array with only one value. Why would this ever be useful? I have no explanation. This constantly leads to errors, and for the life of me I can not think of a reason for this behavior.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgbeb4c3a" class="outline-2">
-<h2 id="orgbeb4c3a">Use of line breaks</h2>
-<div class="outline-text-2" id="text-orgbeb4c3a">
+<div id="outline-container-org1a8b884" class="outline-2">
+<h2 id="org1a8b884">Use of line breaks</h2>
+<div class="outline-text-2" id="text-org1a8b884">
 <p>
 In MATLAB, your line can end on one of three characters: A newline character, a semicolon (<code>;</code>), and a comma (,). As we all know, the semicolon suppresses program output, while the newline character does not. The comma ends the logical line, but does not suppress program output. This is a relatively little-known feature, so I thought it would be useful to share it. Except, the meaning of <code>;</code> and , changes in literals (like <code>[1, 2; 3, 4]</code> or <code>{'a', 'b'; 3, 4}</code>). Here, commas separate values on the same row and are optional, and semicolons end the current row. Interestingly, literals also change the meaning of the newline character: Inside a literal, a newline acts just like a semicolon, overrides a preceding comma, and you don't have to use ellipsis (<code>...</code>) for line continuations.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org08ac819" class="outline-2">
-<h2 id="org08ac819">Syntax rules for commands</h2>
-<div class="outline-text-2" id="text-org08ac819">
+<div id="outline-container-org1abcec1" class="outline-2">
+<h2 id="org1abcec1">Syntax rules for commands</h2>
+<div class="outline-text-2" id="text-org1abcec1">
 <p>
 Commands are function calls without the parenthesis, like <code>help disp</code>, which is syntactically equivalent to <code>help('disp')</code>. You see, if you just specify a function name (can't be a compound expression or a function handle), and don't use parenthesis, all following words will be interpreted as strings, and passed to the function. This is actually kind of a neat feature. However, how do you differentiate between <code>variable_name + 5</code> and <code>help + 5</code>? The answer is: Commands are actually a bit more complex. A command starts with a function name, followed by a space, which is not followed by an operator <i>and a space</i>. Thus, <code>help +5 + 4</code> is a command, while <code>help + 5 + 4</code> is an addition. Tricky!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org5fa5a7e" class="outline-2">
-<h2 id="org5fa5a7e">The more-than-one-value value</h2>
-<div class="outline-text-2" id="text-org5fa5a7e">
+<div id="outline-container-org9fd8692" class="outline-2">
+<h2 id="org9fd8692">The more-than-one-value value</h2>
+<div class="outline-text-2" id="text-org9fd8692">
 <p>
 If you want to save more than one value in a variable, you can use a collection (structs, matrices, maps, tables, cell arrays). In addition though, MATLAB knows another way of handling more than one values at once: The thing you get when you index a cell array with <code>{:}</code> or assign a function call with more than one result. In that case, you get something that is assignable to several variables, but that is not itself a collection. Just another quirk of MATLAB's indexing logic. However, you can capture these values into matrices or cell arrays using brackets or braces, like this: <code>{x{:}}</code> or <code>[x{:}]</code>. Note that this also works in assignments in a confusing way: <code>[z{:}] = x{:}</code> (if both x and z have the same length). Incidentally, this is often a neat way of converting between different kinds of collections (but utterly unreadable, because type information is hopelessly lost).
 </p>
@@ -166,7 +166,7 @@ A few months ago, I <a href="http://bastibe.de/2015-11-03-matlab-engine-performa
 </p>
 
 
-<figure>
+<figure id="org7fba5e7">
 <img src="http://bastibe.de/static/2016-06/timings.png" alt="timings.png">
 
 </figure>
@@ -407,18 +407,18 @@ So here goes, a very simple C library that adds two arrays:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
-<span style="color: #111111;">#include</span> test.h
+<pre class="src src-C">// test.c:
+#include test.h
 
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #404040;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">length</span>) {
-    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">n</span>=0; n&lt;length; n++) {
+void add_arrays(float *out, float* in, size_t length) {
+    for (size_t n=0; n&lt;length; n++) {
         out[n] += in[n];
     }
 }
 
-<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
-<span style="color: #111111;">#include</span> <span style="color: #606060;">&lt;stddef.h&gt;</span>
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">length</span>);
+// test.h:
+#include &lt;stddef.h&gt;
+void add_arrays(float *out, float *in, size_t length);
 </pre>
 </div>
 
@@ -431,10 +431,10 @@ Now, let's load that library into Matlab with <code>loadlibrary</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #606060;">'test'</span>))
-    [notfound<span style="color: #404040;">,</span> warnings] <span style="color: #404040;">=</span> loadlibrary(<span style="color: #606060;">'test.so'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'test.h'</span>)<span style="color: #404040;">;</span>
-    assert(isempty(notfound)<span style="color: #404040;">,</span> <span style="color: #606060;">'could not load test library'</span>)
-<span style="color: #111111; font-weight: bold;">end</span>
+<pre class="src src-octave">if not(libisloaded('test'))
+    [notfound, warnings] = loadlibrary('test.so', 'test.h');
+    assert(isempty(notfound), 'could not load test library')
+end
 </pre>
 </div>
 
@@ -447,11 +447,11 @@ With that, we can call functions in that library using <code>calllib</code>. But
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">vector1 <span style="color: #404040;">=</span> [1 2 3 4 5]<span style="color: #404040;">;</span>
-vector2 <span style="color: #404040;">=</span> [9 8 7 6 5]<span style="color: #404040;">;</span>
+<pre class="src src-octave">vector1 = [1 2 3 4 5];
+vector2 = [9 8 7 6 5];
 
-vector1ptr <span style="color: #404040;">=</span> libpointer(<span style="color: #606060;">'singlePointer'</span><span style="color: #404040;">,</span> vector1)<span style="color: #404040;">;</span>
-vector2ptr <span style="color: #404040;">=</span> libpointer(<span style="color: #606060;">'singlePointer'</span><span style="color: #404040;">,</span> vector2)<span style="color: #404040;">;</span>
+vector1ptr = libpointer('singlePointer', vector1);
+vector2ptr = libpointer('singlePointer', vector2);
 </pre>
 </div>
 
@@ -464,7 +464,7 @@ Then, finally, let's call our function:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">calllib(<span style="color: #606060;">'test'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'add_arrays'</span><span style="color: #404040;">,</span> vector1ptr<span style="color: #404040;">,</span> vector2ptr<span style="color: #404040;">,</span> length(vector1))<span style="color: #404040;">;</span>
+<pre class="src src-octave">calllib('test', 'add_arrays', vector1ptr, vector2ptr, length(vector1));
 </pre>
 </div>
 
@@ -473,7 +473,7 @@ If you see no errors, everything went smoothly, and you will now have changed th
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">added_vectors <span style="color: #404040;">=</span> vector1ptr.Value<span style="color: #404040;">;</span>
+<pre class="src src-octave">added_vectors = vector1ptr.Value;
 </pre>
 </div>
 
@@ -482,12 +482,12 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">timeit(@() calllib(<span style="color: #606060;">'test'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'add_arrays'</span><span style="color: #404040;">,</span> vector1ptr<span style="color: #404040;">,</span> vector2ptr<span style="color: #404040;">,</span> length(vector1)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
-timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #404040;">,</span> single(vector2)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
-timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #404040;">,</span> vector2))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
+<pre class="src src-octave">timeit(@() calllib('test', 'add_arrays', vector1ptr, vector2ptr, length(vector1)))
+%   ans = 1.9155e-05
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1), single(vector2)))
+%   ans = 4.6262e-05
+timeit(@() the_same_thing_plus_argument_conversion(vector1, vector2))
+%   ans = 1.2326e-04
 </pre>
 </div>
 
@@ -504,14 +504,14 @@ However, If I ask myself whether I would sacrifice 0.00007 seconds of computatio
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org53ec70e" class="outline-2">
-<h2 id="org53ec70e">Usage</h2>
-<div class="outline-text-2" id="text-org53ec70e">
+<div id="outline-container-org87e0c1c" class="outline-2">
+<h2 id="org87e0c1c">Usage</h2>
+<div class="outline-text-2" id="text-org87e0c1c">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
 
-<pre class="example">
+<pre class="example" id="org10399bc">
        Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 import numpy                           | import numpy
@@ -529,7 +529,7 @@ data_sum = eng.sum(matlab_data)        | data_sum = eng.sum(numpy_data)
 Aside from this difference, both libraries work almost identical. Even the handling of the number of output arguments is (accidentally) almost the same:
 </p>
 
-<pre class="example">
+<pre class="example" id="org2579892">
        Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 eng.max(matlab_data)                   | eng.max(numpy_data)
@@ -544,7 +544,7 @@ eng.max(matlab_data, nargout=2)        | eng.max(numpy_data, nargout=2)
 Similarly, both libraries can interact with Matlab objects in Python, although the MEfP can't access object properties:
 </p>
 
-<pre class="example">
+<pre class="example" id="org6693143">
        Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 f = eng.figure()                       | f = eng.figure()
@@ -569,9 +569,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orgf0f0537" class="outline-2">
-<h2 id="orgf0f0537">Performance</h2>
-<div class="outline-text-2" id="text-orgf0f0537">
+<div id="outline-container-orgb087e4f" class="outline-2">
+<h2 id="orgb087e4f">Performance</h2>
+<div class="outline-text-2" id="text-orgb087e4f">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -581,7 +581,7 @@ More interesting is the time it takes to call a Matlab function from Python. Hav
 </p>
 
 
-<figure>
+<figure id="org8d35fdb">
 <img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
 
 </figure>
@@ -604,9 +604,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-orgc3d932b" class="outline-2">
-<h2 id="orgc3d932b">TL;DR</h2>
-<div class="outline-text-2" id="text-orgc3d932b">
+<div id="outline-container-org9ae3522" class="outline-2">
+<h2 id="org9ae3522">TL;DR</h2>
+<div class="outline-text-2" id="text-org9ae3522">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -623,15 +623,15 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> numpy
-<span style="color: #111111; font-weight: bold;">import</span> matlab
-<span style="color: #111111; font-weight: bold;">import</span> matlab.engine
+<pre class="src src-python">import numpy
+import matlab
+import matlab.engine
 
-<span style="color: #404040;">eng</span> = matlab.engine.start_matlab()
-<span style="color: #404040;">random_data</span> = numpy.random.randn(100)
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">convert Numpy data to Matlab:</span>
-<span style="color: #404040;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #404040;">data_sum</span> = eng.<span style="color: #404040;">sum</span>(matlab_data)
+eng = matlab.engine.start_matlab()
+random_data = numpy.random.randn(100)
+# convert Numpy data to Matlab:
+matlab_data = matlab.double(random_data.tolist())
+data_sum = eng.sum(matlab_data)
 </pre>
 </div>
 
@@ -652,12 +652,12 @@ Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> muppy, summary
+<pre class="src src-python">from pympler import muppy, summary
 summary.print_(summary.summarize(muppy.get_objects()))
 </pre>
 </div>
 
-<pre class="example">
+<pre class="example" id="org6040c44">
                                       types |   # objects |   total size
 =========================================== | =========== | ============
                         &lt;class 'array.array |        1076 |      2.77 GB
@@ -686,19 +686,19 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
-<span style="color: #404040;">all_objects</span> = muppy.get_objects()
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">sort out only `array.array` instances:</span>
-<span style="color: #404040;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #404040;">isinstance</span>(obj, array.array)]
+<pre class="src src-python">import array
+# get a list of all objects known to Python:
+all_objects = muppy.get_objects()
+# sort out only `array.array` instances:
+all_arrays = [obj for obj in all_objects if isinstance(obj, array.array)]
 
-<span style="color: #111111; font-weight: bold;">import</span> objgraph
-objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #606060;">'array.png'</span>)
+import objgraph
+objgraph.show_backrefs(all_arrays[0], filename='array.png')
 </pre>
 </div>
 
 
-<figure>
+<figure id="org50730ab">
 <img src="http://bastibe.de/static/2015-10/array.png" alt="array.png">
 
 </figure>
@@ -712,10 +712,10 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
-    <span style="color: #404040;">test_data</span> = numpy.zeros(1024*1024)
-    <span style="color: #404040;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #404040;">sum</span>(matlab_data)
+<pre class="src src-python">def leak():
+    test_data = numpy.zeros(1024*1024)
+    matlab_data = matlab.double(test_data.tolist())
+    eng.sum(matlab_data)
 </pre>
 </div>
 
@@ -724,15 +724,15 @@ Pympler has another great feature that can track allocations. The <code>SummaryT
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> tracker
-<span style="color: #404040;">tr</span> = tracker.SummaryTracker()
+<pre class="src src-python">from pympler import tracker
+tr = tracker.SummaryTracker()
 tr.print_diff()
 leak()
 tr.print_diff()
 </pre>
 </div>
 
-<pre class="example">
+<pre class="example" id="org4781114">
                      types |   # objects |   total size
 ========================== | =========== | ============
        &lt;class 'array.array |           1 |      8.00 MB
@@ -798,8 +798,8 @@ But luckily, there is help. Matlab has a widely documented (not) and easily disc
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #404040;">name</span>=<span style="color: #606060;">"de_DE"</span> <span style="color: #404040;">encoding</span>=<span style="color: #606060;">"ISO-8859-1"</span> <span style="color: #404040;">xpg_name</span>=<span style="color: #606060;">"de_DE.ISO8859-1"</span>&gt; ...
-&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #404040;">name</span>=<span style="color: #606060;">"en_US"</span> <span style="color: #404040;">encoding</span>=<span style="color: #606060;">"ISO-8859-1"</span> <span style="color: #404040;">xpg_name</span>=<span style="color: #606060;">"en_US.ISO8859-1"</span>&gt; ...
+<pre class="src src-xml">&lt;locale name="de_DE" encoding="ISO-8859-1" xpg_name="de_DE.ISO8859-1"&gt; ...
+&lt;locale name="en_US" encoding="ISO-8859-1" xpg_name="en_US.ISO8859-1"&gt; ...
 </pre>
 </div>
 
@@ -808,8 +808,8 @@ In order to make Matlab's encoding default to UTF-8, change the entry for your l
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml">&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #404040;">name</span>=<span style="color: #606060;">"de_DE"</span> <span style="color: #404040;">encoding</span>=<span style="color: #606060;">"UTF-8"</span> <span style="color: #404040;">xpg_name</span>=<span style="color: #606060;">"de_DE.UTF-8"</span>&gt; ...
-&lt;<span style="color: #111111; text-decoration: underline;">locale</span> <span style="color: #404040;">name</span>=<span style="color: #606060;">"en_US"</span> <span style="color: #404040;">encoding</span>=<span style="color: #606060;">"UTF-8"</span> <span style="color: #404040;">xpg_name</span>=<span style="color: #606060;">"en_US.UTF-8"</span>&gt; ...
+<pre class="src src-xml">&lt;locale name="de_DE" encoding="UTF-8" xpg_name="de_DE.UTF-8"&gt; ...
+&lt;locale name="en_US" encoding="UTF-8" xpg_name="en_US.UTF-8"&gt; ...
 </pre>
 </div>
 
@@ -835,8 +835,8 @@ But write my own I did: <a href="https://github.com/bastibe/transplant">Transpla
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> transplant
-<span style="color: #404040;">matlab</span> = transplant.Matlab()
+<pre class="src src-python">import transplant
+matlab = transplant.Matlab()
 </pre>
 </div>
 
@@ -853,11 +853,11 @@ This <code>matlab</code> object starts a Matlab interpreter in the background an
 </div>
 
 <p>
-As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">matlab.randi(255, 1, 4, <span style="color: #606060;">'uint8'</span>)
+<pre class="src src-python">matlab.randi(255, 1, 4, 'uint8')
 &gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
 </pre>
 </div>
@@ -867,15 +867,15 @@ All matrix data is actually transferred in binary, so both Matlab and Python wor
 </p>
 
 <p>
-This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
+This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #404040;">data</span> = matlab.randn(1, 4)
-matlab.<span style="color: #404040;">max</span>(data)
-&gt;&gt;&gt; [1.5326, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x, n = max(...)</span>
-matlab.<span style="color: #404040;">max</span>(data, nargout=1)
-&gt;&gt;&gt; 1.5326      <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = max(...)</span>
+<pre class="src src-python">data = matlab.randn(1, 4)
+matlab.max(data)
+&gt;&gt;&gt; [1.5326, 3] # Matlab: x, n = max(...)
+matlab.max(data, nargout=1)
+&gt;&gt;&gt; 1.5326      # Matlab: x = max(...)
 </pre>
 </div>
 
@@ -893,8 +893,8 @@ You can save/retrieve variables in the global workspace:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">  <span style="color: #404040;">matlab.value</span> = 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: value = 5</span>
-  <span style="color: #404040;">x</span> = matlab.value <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Matlab: x = value</span>
+<pre class="src src-python">  matlab.value = 5 # Matlab: value = 5
+  x = matlab.value # Matlab: x = value
 </pre>
 </div></li>
 
@@ -903,8 +903,8 @@ You van eval some code:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">  matlab.<span style="color: #404040;">eval</span>(<span style="color: #606060;">'class(value)'</span>)
-  &gt;&gt;&gt; <span style="color: #404040;">ans</span> =
+<pre class="src src-python">  matlab.eval('class(value)')
+  &gt;&gt;&gt; ans =
   &gt;&gt;&gt;
   &gt;&gt;&gt; double
   &gt;&gt;&gt;
@@ -923,7 +923,7 @@ There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonl
 </p>
 
 <p>
-Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
+Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
 </p>
 
 <p>
@@ -937,15 +937,15 @@ For now, head over to <a href="https://github.com/bastibe/transplant">Github.com
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Except for integer complex numbers, since those are not supported by Numpy.
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Like the Matlab function <code>nargout</code>
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
 </p></div></div>
 
@@ -968,9 +968,9 @@ Why would you want to use Python over Matlab?
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-orgf3f657e" class="outline-2">
-<h2 id="orgf3f657e">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-orgf3f657e">
+<div id="outline-container-org2647147" class="outline-2">
+<h2 id="org2647147">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org2647147">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
@@ -987,9 +987,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-org6372678" class="outline-2">
-<h2 id="org6372678">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-org6372678">
+<div id="outline-container-org998530d" class="outline-2">
+<h2 id="org998530d">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org998530d">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -999,10 +999,10 @@ Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hol
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #404040;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
-    <span style="color: #404040;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
-    <span style="color: #404040;">a</span> = <span style="color: #606060;">'text'</span>    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a string</span>
+<pre class="src src-python">    # Python
+    a = 5         # a number
+    a = [1, 2, 3] # a list
+    a = 'text'    # a string
 </pre>
 </div>
 
@@ -1011,10 +1011,10 @@ Contrast this with C, where you can not assign different data types to the same 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">C</span>
-    <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">a</span> = 5;
-    <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">b</span>[3] = {1.0, 2.0, 3.0};
-    <span style="color: #111111; text-decoration: underline;">char</span> <span style="color: #404040;">c</span>[] = <span style="color: #606060;">"text"</span>;
+<pre class="src src-c">    // C
+    int a = 5;
+    float b[3] = {1.0, 2.0, 3.0};
+    char c[] = "text";
 </pre>
 </div>
 
@@ -1024,16 +1024,16 @@ In Matlab, adding a single number to a string will convert that string into an a
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
-    a <span style="color: #404040;">=</span> <span style="color: #606060;">'text'</span>
-    b <span style="color: #404040;">=</span> a <span style="color: #404040;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
+<pre class="src src-octave">    % Matlab
+    a = 'text'
+    b = a + 5 % [121 106 125 121]
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #404040;">a</span> = <span style="color: #606060;">'text'</span>
-    <span style="color: #404040;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
+<pre class="src src-python">    # Python
+    a = 'text'
+    b = a + 5 # TypeError: Can't convert 'int' object to str implicitly
 </pre>
 </div>
 
@@ -1051,16 +1051,16 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-org8e38fcb" class="outline-2">
-<h2 id="org8e38fcb">Reading Python</h2>
-<div class="outline-text-2" id="text-org8e38fcb">
+<div id="outline-container-orgacec82c" class="outline-2">
+<h2 id="orgacec82c">Reading Python</h2>
+<div class="outline-text-2" id="text-orgacec82c">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy
-    <span style="color: #404040;">a</span> = numpy.zeros(10, 1)
+<pre class="src src-python">    import numpy
+    a = numpy.zeros(10, 1)
 </pre>
 </div>
 
@@ -1069,8 +1069,8 @@ This is clearly cumbersome if you are planning to use Numpy all the time. So ins
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> *
-    <span style="color: #404040;">a</span> = ones(30, 1)
+<pre class="src src-python">    from numpy import *
+    a = ones(30, 1)
 </pre>
 </div>
 
@@ -1079,8 +1079,8 @@ Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scip
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pylab <span style="color: #111111; font-weight: bold;">import</span> *
-    <span style="color: #404040;">a</span> = randn(100, 1)
+<pre class="src src-python">    from pylab import *
+    a = randn(100, 1)
     plot(a)
     show()
 </pre>
@@ -1103,10 +1103,10 @@ In Python, blocks of code are identified by indentation and they always start wi
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">sum</span> = 0
-    <span style="color: #111111; font-weight: bold;">for</span> n <span style="color: #111111; font-weight: bold;">in</span> [1, 2, 3, 4, 5]:
-        <span style="color: #404040;">sum</span> = <span style="color: #404040;">sum</span> + n
-    <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #404040;">sum</span>)
+<pre class="src src-python">    sum = 0
+    for n in [1, 2, 3, 4, 5]:
+        sum = sum + n
+    print(sum)
 </pre>
 </div>
 
@@ -1117,24 +1117,24 @@ You don't have to name the output variable names in the definition and instead u
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number):
-        <span style="color: #111111; font-weight: bold;">if</span> number &gt; 0:
-            <span style="color: #111111; font-weight: bold;">return</span> number
-        <span style="color: #111111; font-weight: bold;">else</span>:
-            <span style="color: #111111; font-weight: bold;">return</span> -number
+<pre class="src src-python">    # Python
+    def abs(number):
+        if number &gt; 0:
+            return number
+        else:
+            return -number
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
-    <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
-        <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #404040;">&gt;</span> 0
-            out <span style="color: #404040;">=</span> number
-        <span style="color: #111111; font-weight: bold;">else</span>
-            out <span style="color: #404040;">=</span> <span style="color: #404040;">-</span>number
-        <span style="color: #111111; font-weight: bold;">end</span>
-    <span style="color: #111111; font-weight: bold;">end</span>
+<pre class="src src-octave">    % Matlab
+    function [out] = abs(number)
+        if number &gt; 0
+            out = number
+        else
+            out = -number
+        end
+    end
 </pre>
 </div>
 
@@ -1144,12 +1144,12 @@ Since Python only gains a matrix engine by importing Numpy, it does not have a c
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a numpy matrix:</span>
-    <span style="color: #404040;">m</span> = array([[1, 2, 3],
+<pre class="src src-python">    # create a numpy matrix:
+    m = array([[1, 2, 3],
                [4, 5, 6],
                [7, 8, 9]])
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a Python list:</span>
-    <span style="color: #404040;">l</span> = [1 2 3]
+    # create a Python list:
+    l = [1 2 3]
 </pre>
 </div>
 
@@ -1160,31 +1160,31 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">a</span> = linspace(1, 10, 10)
-    <span style="color: #404040;">one</span> = a[0]
-    <span style="color: #404040;">two</span> = a[1]
+<pre class="src src-python">    a = linspace(1, 10, 10)
+    one = a[0]
+    two = a[1]
 
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">"6:8" is a range of two elements:</span>
-    <span style="color: #404040;">a</span>[6:8] = [70, 80] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">&lt;-- a Python list!</span>
+    # "6:8" is a range of two elements:
+    a[6:8] = [70, 80] # &lt;-- a Python list!
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org3050d22" class="outline-2">
-<h2 id="org3050d22">Common traps</h2>
-<div class="outline-text-2" id="text-org3050d22">
+<div id="outline-container-org2f8dadb" class="outline-2">
+<h2 id="org2f8dadb">Common traps</h2>
+<div class="outline-text-2" id="text-org2f8dadb">
 <ul class="org-ul">
 <li>Array slicing does not copy.</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">a</span> = array([1 2 3 4 5])
-    <span style="color: #404040;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
-    <span style="color: #404040;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">make a copy like this:</span>
-    <span style="color: #404040;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">copy=True can be omitted</span>
-    <span style="color: #404040;">c</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">changes only c</span>
+<pre class="src src-python">    a = array([1 2 3 4 5])
+    b = a[1:4] # [2 3 4]
+    b[1] = rand() # this will change a and b!
+    # make a copy like this:
+    c = array(a[1:4], copy=True) # copy=True can be omitted
+    c[1] = rand() # changes only c
 </pre>
 </div>
 <ul class="org-ul">
@@ -1193,19 +1193,19 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pretend this came from a wave file:</span>
-    <span style="color: #404040;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
-    <span style="color: #404040;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
+<pre class="src src-python">    # pretend this came from a wave file:
+    a = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
+    a = a * 10 # int16 only goes to 32768!
+    # a is now [10000, 20000, 30000, -25536, -15536]
 </pre>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-org13591e3" class="outline-2">
-<h2 id="org13591e3">Going further</h2>
-<div class="outline-text-2" id="text-org13591e3">
+<div id="outline-container-org245d05e" class="outline-2">
+<h2 id="org245d05e">Going further</h2>
+<div class="outline-text-2" id="text-org245d05e">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>
@@ -1242,58 +1242,58 @@ At least these things are rather easy to fix, since all these settings are saved
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile">    <span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">StorageVersion: 1.0</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyName: GNU C</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyManufacturer: GNU</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyLanguage: C</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyVersion:</span>
-                <span style="color: #404040;">CC</span>=<span style="color: #606060;">'gcc'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'gcc-4.2'</span>
+<pre class="src src-makefile">    #----------------------------------------------------------------------------
+                # StorageVersion: 1.0
+                # CkeyName: GNU C
+                # CkeyManufacturer: GNU
+                # CkeyLanguage: C
+                # CkeyVersion:
+                CC='gcc' # used to be 'gcc-4.2'
 
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
-                <span style="color: #404040;">SDKROOT</span>=<span style="color: #606060;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
-                <span style="color: #404040;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #606060;">'10.8'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '10.5'</span>
-                <span style="color: #404040;">ARCHS</span>=<span style="color: #606060;">'x86_64'</span>
-                <span style="color: #404040;">CFLAGS</span>=<span style="color: #606060;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-                <span style="color: #404040;">CFLAGS</span>=<span style="color: #606060;">"$CFLAGS  -fexceptions"</span>
-                <span style="color: #404040;">CFLAGS</span>=<span style="color: #606060;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew include path</span>
-                <span style="color: #404040;">CLIBS</span>=<span style="color: #606060;">"$MLIBS"</span>
-                <span style="color: #404040;">COPTIMFLAGS</span>=<span style="color: #606060;">'-O2 -DNDEBUG'</span>
-                <span style="color: #404040;">CDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #404040;">CLIBS</span>=<span style="color: #606060;">"$CLIBS -lstdc++"</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyName: GNU C++</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyManufacturer: GNU</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyLanguage: C++</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyVersion:</span>
-                <span style="color: #404040;">CXX</span>=g++ <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'g++-4.2'</span>
-                <span style="color: #404040;">CXXFLAGS</span>=<span style="color: #606060;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-                <span style="color: #404040;">CXXLIBS</span>=<span style="color: #606060;">"$MLIBS -lstdc++"</span>
-                <span style="color: #404040;">CXXOPTIMFLAGS</span>=<span style="color: #606060;">'-O2 -DNDEBUG'</span>
-                <span style="color: #404040;">CXXDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyName: GNU Fortran</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyManufacturer: GNU</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyLanguage: Fortran</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyVersion:</span>
-                <span style="color: #404040;">FC</span>=<span style="color: #606060;">'gfortran'</span>
-                <span style="color: #404040;">FFLAGS</span>=<span style="color: #606060;">'-fexceptions -m64 -fbackslash'</span>
-                <span style="color: #404040;">FC_LIBDIR</span>=<span style="color: #606060;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
-                <span style="color: #404040;">FC_LIBDIR2</span>=<span style="color: #606060;">`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`</span>
-                <span style="color: #404040;">FLIBS</span>=<span style="color: #606060;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
-                <span style="color: #404040;">FOPTIMFLAGS</span>=<span style="color: #606060;">'-O'</span>
-                <span style="color: #404040;">FDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #404040;">LD</span>=<span style="color: #606060;">"$CC"</span>
-                <span style="color: #404040;">LDEXTENSION</span>=<span style="color: #606060;">'.mexmaci64'</span>
-                <span style="color: #404040;">LDFLAGS</span>=<span style="color: #606060;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-                <span style="color: #404040;">LDFLAGS</span>=<span style="color: #606060;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
-                <span style="color: #404040;">LDFLAGS</span>=<span style="color: #606060;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew library path</span>
-                <span style="color: #404040;">LDOPTIMFLAGS</span>=<span style="color: #606060;">'-O'</span>
-                <span style="color: #404040;">LDDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #404040;">POSTLINK_CMDS</span>=<span style="color: #606060;">':'</span>
-    <span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
+                # used to be '/Developer/SDKs/MacOSX10.6.sdk'
+                SDKROOT='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'
+                MACOSX_DEPLOYMENT_TARGET='10.8' # used to be '10.5'
+                ARCHS='x86_64'
+                CFLAGS="-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                CFLAGS="$CFLAGS  -fexceptions"
+                CFLAGS="$CFLAGS -I/usr/local/include" # Homebrew include path
+                CLIBS="$MLIBS"
+                COPTIMFLAGS='-O2 -DNDEBUG'
+                CDEBUGFLAGS='-g'
+    #
+                CLIBS="$CLIBS -lstdc++"
+                # C++keyName: GNU C++
+                # C++keyManufacturer: GNU
+                # C++keyLanguage: C++
+                # C++keyVersion:
+                CXX=g++ # used to be 'g++-4.2'
+                CXXFLAGS="-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                CXXLIBS="$MLIBS -lstdc++"
+                CXXOPTIMFLAGS='-O2 -DNDEBUG'
+                CXXDEBUGFLAGS='-g'
+    #
+                # FortrankeyName: GNU Fortran
+                # FortrankeyManufacturer: GNU
+                # FortrankeyLanguage: Fortran
+                # FortrankeyVersion:
+                FC='gfortran'
+                FFLAGS='-fexceptions -m64 -fbackslash'
+                FC_LIBDIR=`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`
+                FC_LIBDIR2=`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`
+                FLIBS="$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"
+                FOPTIMFLAGS='-O'
+                FDEBUGFLAGS='-g'
+    #
+                LD="$CC"
+                LDEXTENSION='.mexmaci64'
+                LDFLAGS="-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                LDFLAGS="$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"
+                LDFLAGS="$LDFLAGS -L/usr/local/lib" # Homebrew library path
+                LDOPTIMFLAGS='-O'
+                LDDEBUGFLAGS='-g'
+    #
+                POSTLINK_CMDS=':'
+    #----------------------------------------------------------------------------
 </pre>
 </div>
 
@@ -1316,7 +1316,7 @@ With those settings, the mex compiler should work and it should pick up any libr
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a>
 <div class="post-date">12 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h1>
 
-<figure>
+<figure id="org2d5fa12">
 <img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png">
 
 </figure>
@@ -1343,7 +1343,7 @@ Eine Fortsetzung kommt noch&#x2026;
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-windows.html">windows</a>
 <div class="post-date">05 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-05-great-scott.html">Vom Sinn und Unsinn, ein Cross-Platform-Compiling-Matlab-System aufzubauen</a></h1>
 
-<figure>
+<figure id="orge55b77e">
 <img src="http://bastibe.de/static/2009-03/bitte_warten.png" alt="bitte_warten.png">
 
 </figure>
@@ -1365,7 +1365,7 @@ Außerdem: ein aktuelles Linux muss her. VMWare sei Dank, lauert im Linux-Instal
 </p>
 
 
-<figure>
+<figure id="orgf252a47">
 <img src="http://bastibe.de/static/2009-03/upgradepatch.png" alt="upgradepatch.png">
 
 </figure>

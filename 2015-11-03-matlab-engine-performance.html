@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -33,14 +34,14 @@
 For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
 </p>
 
-<div id="outline-container-org53ec70e" class="outline-2">
-<h2 id="org53ec70e">Usage</h2>
-<div class="outline-text-2" id="text-org53ec70e">
+<div id="outline-container-org87e0c1c" class="outline-2">
+<h2 id="org87e0c1c">Usage</h2>
+<div class="outline-text-2" id="text-org87e0c1c">
 <p>
 As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
 </p>
 
-<pre class="example">
+<pre class="example" id="org10399bc">
        Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 import numpy                           | import numpy
@@ -58,7 +59,7 @@ data_sum = eng.sum(matlab_data)        | data_sum = eng.sum(numpy_data)
 Aside from this difference, both libraries work almost identical. Even the handling of the number of output arguments is (accidentally) almost the same:
 </p>
 
-<pre class="example">
+<pre class="example" id="org2579892">
        Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 eng.max(matlab_data)                   | eng.max(numpy_data)
@@ -73,7 +74,7 @@ eng.max(matlab_data, nargout=2)        | eng.max(numpy_data, nargout=2)
 Similarly, both libraries can interact with Matlab objects in Python, although the MEfP can't access object properties:
 </p>
 
-<pre class="example">
+<pre class="example" id="org6693143">
        Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 f = eng.figure()                       | f = eng.figure()
@@ -98,9 +99,9 @@ There are a few small differences, though:
 </div>
 </div>
 
-<div id="outline-container-orgf0f0537" class="outline-2">
-<h2 id="orgf0f0537">Performance</h2>
-<div class="outline-text-2" id="text-orgf0f0537">
+<div id="outline-container-orgb087e4f" class="outline-2">
+<h2 id="orgb087e4f">Performance</h2>
+<div class="outline-text-2" id="text-orgb087e4f">
 <p>
 The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
 </p>
@@ -110,7 +111,7 @@ More interesting is the time it takes to call a Matlab function from Python. Hav
 </p>
 
 
-<figure>
+<figure id="org8d35fdb">
 <img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
 
 </figure>
@@ -133,9 +134,9 @@ It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, desp
 </div>
 </div>
 
-<div id="outline-container-orgc3d932b" class="outline-2">
-<h2 id="orgc3d932b">TL;DR</h2>
-<div class="outline-text-2" id="text-orgc3d932b">
+<div id="outline-container-org9ae3522" class="outline-2">
+<h2 id="org9ae3522">TL;DR</h2>
+<div class="outline-text-2" id="text-org9ae3522">
 <p>
 It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
 </p>
@@ -146,10 +147,7 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -158,6 +156,9 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

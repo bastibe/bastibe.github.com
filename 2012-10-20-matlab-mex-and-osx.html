@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -46,58 +47,58 @@ At least these things are rather easy to fix, since all these settings are saved
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile">    <span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">StorageVersion: 1.0</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyName: GNU C</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyManufacturer: GNU</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyLanguage: C</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">CkeyVersion:</span>
-                <span style="color: #404040;">CC</span>=<span style="color: #606060;">'gcc'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'gcc-4.2'</span>
+<pre class="src src-makefile">    #----------------------------------------------------------------------------
+                # StorageVersion: 1.0
+                # CkeyName: GNU C
+                # CkeyManufacturer: GNU
+                # CkeyLanguage: C
+                # CkeyVersion:
+                CC='gcc' # used to be 'gcc-4.2'
 
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '/Developer/SDKs/MacOSX10.6.sdk'</span>
-                <span style="color: #404040;">SDKROOT</span>=<span style="color: #606060;">'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'</span>
-                <span style="color: #404040;">MACOSX_DEPLOYMENT_TARGET</span>=<span style="color: #606060;">'10.8'</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be '10.5'</span>
-                <span style="color: #404040;">ARCHS</span>=<span style="color: #606060;">'x86_64'</span>
-                <span style="color: #404040;">CFLAGS</span>=<span style="color: #606060;">"-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-                <span style="color: #404040;">CFLAGS</span>=<span style="color: #606060;">"$CFLAGS  -fexceptions"</span>
-                <span style="color: #404040;">CFLAGS</span>=<span style="color: #606060;">"$CFLAGS -I/usr/local/include"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew include path</span>
-                <span style="color: #404040;">CLIBS</span>=<span style="color: #606060;">"$MLIBS"</span>
-                <span style="color: #404040;">COPTIMFLAGS</span>=<span style="color: #606060;">'-O2 -DNDEBUG'</span>
-                <span style="color: #404040;">CDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #404040;">CLIBS</span>=<span style="color: #606060;">"$CLIBS -lstdc++"</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyName: GNU C++</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyManufacturer: GNU</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyLanguage: C++</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">C++keyVersion:</span>
-                <span style="color: #404040;">CXX</span>=g++ <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">used to be 'g++-4.2'</span>
-                <span style="color: #404040;">CXXFLAGS</span>=<span style="color: #606060;">"-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-                <span style="color: #404040;">CXXLIBS</span>=<span style="color: #606060;">"$MLIBS -lstdc++"</span>
-                <span style="color: #404040;">CXXOPTIMFLAGS</span>=<span style="color: #606060;">'-O2 -DNDEBUG'</span>
-                <span style="color: #404040;">CXXDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyName: GNU Fortran</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyManufacturer: GNU</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyLanguage: Fortran</span>
-                <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">FortrankeyVersion:</span>
-                <span style="color: #404040;">FC</span>=<span style="color: #606060;">'gfortran'</span>
-                <span style="color: #404040;">FFLAGS</span>=<span style="color: #606060;">'-fexceptions -m64 -fbackslash'</span>
-                <span style="color: #404040;">FC_LIBDIR</span>=<span style="color: #606060;">`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`</span>
-                <span style="color: #404040;">FC_LIBDIR2</span>=<span style="color: #606060;">`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`</span>
-                <span style="color: #404040;">FLIBS</span>=<span style="color: #606060;">"$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"</span>
-                <span style="color: #404040;">FOPTIMFLAGS</span>=<span style="color: #606060;">'-O'</span>
-                <span style="color: #404040;">FDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #404040;">LD</span>=<span style="color: #606060;">"$CC"</span>
-                <span style="color: #404040;">LDEXTENSION</span>=<span style="color: #606060;">'.mexmaci64'</span>
-                <span style="color: #404040;">LDFLAGS</span>=<span style="color: #606060;">"-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"</span>
-                <span style="color: #404040;">LDFLAGS</span>=<span style="color: #606060;">"$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"</span>
-                <span style="color: #404040;">LDFLAGS</span>=<span style="color: #606060;">"$LDFLAGS -L/usr/local/lib"</span> <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Homebrew library path</span>
-                <span style="color: #404040;">LDOPTIMFLAGS</span>=<span style="color: #606060;">'-O'</span>
-                <span style="color: #404040;">LDDEBUGFLAGS</span>=<span style="color: #606060;">'-g'</span>
-    <span style="color: #111111; font-style: italic;">#</span>
-                <span style="color: #404040;">POSTLINK_CMDS</span>=<span style="color: #606060;">':'</span>
-    <span style="color: #111111; font-style: italic;">#</span><span style="color: #111111; font-style: italic;">----------------------------------------------------------------------------</span>
+                # used to be '/Developer/SDKs/MacOSX10.6.sdk'
+                SDKROOT='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk'
+                MACOSX_DEPLOYMENT_TARGET='10.8' # used to be '10.5'
+                ARCHS='x86_64'
+                CFLAGS="-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                CFLAGS="$CFLAGS  -fexceptions"
+                CFLAGS="$CFLAGS -I/usr/local/include" # Homebrew include path
+                CLIBS="$MLIBS"
+                COPTIMFLAGS='-O2 -DNDEBUG'
+                CDEBUGFLAGS='-g'
+    #
+                CLIBS="$CLIBS -lstdc++"
+                # C++keyName: GNU C++
+                # C++keyManufacturer: GNU
+                # C++keyLanguage: C++
+                # C++keyVersion:
+                CXX=g++ # used to be 'g++-4.2'
+                CXXFLAGS="-fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                CXXLIBS="$MLIBS -lstdc++"
+                CXXOPTIMFLAGS='-O2 -DNDEBUG'
+                CXXDEBUGFLAGS='-g'
+    #
+                # FortrankeyName: GNU Fortran
+                # FortrankeyManufacturer: GNU
+                # FortrankeyLanguage: Fortran
+                # FortrankeyVersion:
+                FC='gfortran'
+                FFLAGS='-fexceptions -m64 -fbackslash'
+                FC_LIBDIR=`$FC -print-file-name=libgfortran.dylib 2&gt;&amp;1 | sed -n '1s/\/*libgfortran\.dylib//p'`
+                FC_LIBDIR2=`$FC -print-file-name=libgfortranbegin.a 2&gt;&amp;1 | sed -n '1s/\/*libgfortranbegin\.a//p'`
+                FLIBS="$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"
+                FOPTIMFLAGS='-O'
+                FDEBUGFLAGS='-g'
+    #
+                LD="$CC"
+                LDEXTENSION='.mexmaci64'
+                LDFLAGS="-Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+                LDFLAGS="$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"
+                LDFLAGS="$LDFLAGS -L/usr/local/lib" # Homebrew library path
+                LDOPTIMFLAGS='-O'
+                LDDEBUGFLAGS='-g'
+    #
+                POSTLINK_CMDS=':'
+    #----------------------------------------------------------------------------
 </pre>
 </div>
 
@@ -118,10 +119,7 @@ To summarize:
 With those settings, the mex compiler should work and it should pick up any libraries installed by homebrew.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -130,6 +128,9 @@ With those settings, the mex compiler should work and it should pick up any libr
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

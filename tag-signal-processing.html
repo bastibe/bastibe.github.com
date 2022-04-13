@@ -32,11 +32,11 @@
 <h1 class="title">Posts tagged "signal-processing":</h1>
 <div class="post-date">20 Sep 2019</div><h1 class="post-title"><a href="https://bastibe.de/2019-09-20-analyzing-speech-signals-in-time-and-frequency.html">Analyzing Speech Signals in Time and Frequency</a></h1>
 <p>
-Our first stop in speech analysis is usually the short-time Fourier transform, or STFT<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+Our first stop in speech analysis is usually the short-time Fourier transform, or STFT<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
 </p>
 
 
-<figure>
+<figure id="org54e6d3d">
 <img src="https://bastibe.de/static/2019-09/stft.png" alt="stft.png">
 
 <figcaption><span class="figure-number">Figure 1: </span>Top: an STFT of speech (it's me, saying: "Es war einmal ein Mann"). Bottom: the signal's waveform.</figcaption>
@@ -47,11 +47,11 @@ As we can see, this speech signal has a strong fundamental frequency track aroun
 </p>
 
 <p>
-All of this is clearly visible in this STFT. To calculate the STFT, we chop up the audio signal into short, overlapping blocks, apply a <i>window function</i> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> to each of these blocks, and Fourier-transform each windowed block into the frequency domain:
+All of this is clearly visible in this STFT. To calculate the STFT, we chop up the audio signal into short, overlapping blocks, apply a <i>window function</i> <sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> to each of these blocks, and Fourier-transform each windowed block into the frequency domain:
 </p>
 
 
-<figure>
+<figure id="org3034e77">
 <img src="https://bastibe.de/static/2019-09/block-processing.png" alt="block-processing.png">
 
 <figcaption><span class="figure-number">Figure 2: </span>The STFT is a two-dimensional graph of short-time spectra. Window functions and corresponding spectra of some blocks are highlighted.</figcaption>
@@ -62,7 +62,7 @@ We zoomed in a bit to make this visible. At this zoom level, an <a href="https:/
 </p>
 
 
-<figure>
+<figure id="org5c6c56d">
 <img src="https://bastibe.de/static/2019-09/short-blocks.png" alt="short-blocks.png">
 
 <figcaption><span class="figure-number">Figure 3: </span>STFT with shorter blocks (graph shows a shorter time, too). Each window now covers roughly one period of the signal.</figcaption>
@@ -77,7 +77,7 @@ But instead of a harmonic structure, we see the periodicity of the waveform emer
 </p>
 
 
-<figure>
+<figure id="org24e6504">
 <img src="https://bastibe.de/static/2019-09/cqt.png" alt="cqt.png">
 
 <figcaption><span class="figure-number">Figure 4: </span>The CQT uses shorter block sizes for higher frequencies and longer block sizes for lower frequencies.</figcaption>
@@ -88,28 +88,28 @@ The periodic structure of the signal is now perfectly apparent. Each period of t
 </p>
 
 
-<figure>
+<figure id="org3151ed0">
 <img src="https://bastibe.de/static/2019-09/gammatone.png" alt="gammatone.png">
 
 <figcaption><span class="figure-number">Figure 5: </span>A gamma-tone filterbank is a series of band-pass filters. Each horizontal line is now a frequency-constrained waveform.</figcaption>
 </figure>
 
 <p>
-The fundamental frequency is now clearly a visible as a single sinusoid, rotating its merry way at 120 Hz. Each harmonic is its own sinusoid at an integer multiple of the fundamental frequency, but changing in amplitude in lockstep with the findamental. Thus in this graph, we see both the harmonicity and the periodicity at the same time, and can finally appreciate the complex interplay of magnitudes and phases that give rise to the beautiful and simple sound of the human voice<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>.
+The fundamental frequency is now clearly a visible as a single sinusoid, rotating its merry way at 120 Hz. Each harmonic is its own sinusoid at an integer multiple of the fundamental frequency, but changing in amplitude in lockstep with the findamental. Thus in this graph, we see both the harmonicity and the periodicity at the same time, and can finally appreciate the complex interplay of magnitudes and phases that give rise to the beautiful and simple sound of the human voice<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
 </p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 also known as "spectrogram"
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 a Hann window, in this case
 </p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 in the magnitude domain only; Phases, and different window functions, go beyond the scope of this article.
 </p></div></div>
 
@@ -122,7 +122,7 @@ A periodic signal has a harmonic spectrum. In the extreme case, a click train si
 </p>
 
 
-<figure>
+<figure id="org713372f">
 <img src="https://bastibe.de/static/2019-09/comb.png" alt="comb.png">
 
 <figcaption><span class="figure-number">Figure 1: </span>A click train (left), and its corresponding comb spectrum (right).</figcaption>
@@ -133,7 +133,7 @@ But why? After all, a solitary click has a uniform spectrum. So why should the s
 </p>
 
 
-<figure>
+<figure id="orgf02c194">
 <img src="https://bastibe.de/static/2019-09/click.png" alt="click.png">
 
 <figcaption><span class="figure-number">Figure 2: </span>A click (left), and its corresponding spectrum (right).</figcaption>
@@ -144,7 +144,7 @@ The answer exposes a lot of detail of how spectra work, and gives us a glimpse i
 </p>
 
 
-<figure>
+<figure id="org5552b7c">
 <img src="https://bastibe.de/static/2019-09/click_sum.png" alt="click_sum.png">
 
 <figcaption><span class="figure-number">Figure 3: </span>A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.</figcaption>
@@ -159,7 +159,7 @@ But what happens if we have more than one click? How does that change things?
 </p>
 
 
-<figure>
+<figure id="org8f68aa7">
 <img src="https://bastibe.de/static/2019-09/click_train.png" alt="click_train.png">
 
 <figcaption><span class="figure-number">Figure 4: </span>A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.</figcaption>
@@ -183,7 +183,7 @@ As humans, we are particularly tuned to recognizing these kinds of sounds. Even 
 </p>
 
 
-<figure>
+<figure id="org4bc83a9">
 <img src="https://bastibe.de/static/2019-09/spectrogram.png" alt="spectrogram.png">
 
 <figcaption><span class="figure-number">Figure 1: </span>A spectrogram of speech (it's me, saying: "Es war einmal ein Mann")</figcaption>

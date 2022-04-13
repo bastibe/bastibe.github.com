@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -42,25 +43,25 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(org-add-link-type <span style="color: #606060;">"cite"</span>
-     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">follow-cite</span> (name)
-       <span style="color: #111111;">"Open bibliography and jump to appropriate entry.</span>
-<span style="color: #111111;">        The document must contain \bibliography{filename} somewhere</span>
-<span style="color: #111111;">        for this to work"</span>
+<pre class="src src-elisp">(org-add-link-type "cite"
+     (defun follow-cite (name)
+       "Open bibliography and jump to appropriate entry.
+        The document must contain \bibliography{filename} somewhere
+        for this to work"
        (find-file-other-window
-        (<span style="color: #111111; font-weight: bold;">save-excursion</span>
+        (save-excursion
           (beginning-of-buffer)
-          (<span style="color: #111111; font-weight: bold;">save-match-data</span>
-            (re-search-forward <span style="color: #606060;">"\\\\bibliography{</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">(</span><span style="color: #606060;">[</span><span style="color: #606060;">^</span><span style="color: #606060;">}]+</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">)</span><span style="color: #606060;">}"</span>)
-            (concat (match-string 1) <span style="color: #606060;">".bib"</span>))))
+          (save-match-data
+            (re-search-forward "\\\\bibliography{\\([^}]+\\)}")
+            (concat (match-string 1) ".bib"))))
        (beginning-of-buffer)
        (search-forward name))
-     (<span style="color: #111111; font-weight: bold;">defun</span> <span style="color: #111111; text-decoration: underline;">export-cite</span> (path desc format)
-       <span style="color: #111111;">"Export [[cite:cohen93]] as </span><span style="color: #111111; font-weight: bold;">\</span><span style="color: #111111;">cite{cohen93} in LaTeX."</span>
-       (<span style="color: #111111; font-weight: bold;">if</span> (eq format 'latex)
-           (<span style="color: #111111; font-weight: bold;">if</span> (<span style="color: #111111; font-weight: bold;">or</span> (not desc) (equal 0 (search <span style="color: #606060;">"cite:"</span> desc)))
-               (format <span style="color: #606060;">"\\cite{%s}"</span> path)
-             (format <span style="color: #606060;">"\\cite[%s]{%s}"</span> desc path)))))
+     (defun export-cite (path desc format)
+       "Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."
+       (if (eq format 'latex)
+           (if (or (not desc) (equal 0 (search "cite:" desc)))
+               (format "\\cite{%s}" path)
+             (format "\\cite[%s]{%s}" desc path)))))
 </pre>
 </div>
 
@@ -68,10 +69,7 @@ But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode 
 This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -80,6 +78,9 @@ This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

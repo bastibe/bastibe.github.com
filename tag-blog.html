@@ -40,13 +40,13 @@ But sadly, I can't add to the signal-to-noise ratio, because this website does n
 </p>
 
 <p>
-That is&#x2026; with one exception: Comments on this website are powered by Disqus, and I'm sure Disqus collects all kinds of data about all kinds of things. That's why comments are now hidden behind a "Load Disqus Comments" button. I promise you that no foreign Javascript is executed unless you press that button<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. And honestly, GDPR didn't even have anything to do with that. I just didn't want any foreign JavaScript.
+That is&#x2026; with one exception: Comments on this website are powered by Disqus, and I'm sure Disqus collects all kinds of data about all kinds of things. That's why comments are now hidden behind a "Load Disqus Comments" button. I promise you that no foreign Javascript is executed unless you press that button<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. And honestly, GDPR didn't even have anything to do with that. I just didn't want any foreign JavaScript.
 </p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 Unless <a href="https://github.com/Khan/KaTeX">katex.min.js</a> somehow is loading external javascript&#x2026;
 </p></div></div>
 
@@ -121,23 +121,23 @@ Getting the pages to work is rather simple: You have to create a "publishing pro
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-html</span>)
-(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
-(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
-(<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
-      '((<span style="color: #606060;">"blog-content"</span>
-         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
-         <span style="color: #404040;">:html-extension</span> <span style="color: #606060;">"html"</span>
-         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
-         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
-         <span style="color: #404040;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #404040;">:recursive</span> t          <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">descend into sub-folders?</span>
-         <span style="color: #404040;">:section-numbers</span> nil  <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create numbered sections</span>
-         <span style="color: #404040;">:with-toc</span> nil         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">don't create a table of contents</span>
-         <span style="color: #404040;">:with-latex</span> t         <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">do use MathJax for awesome formulas!</span>
-         <span style="color: #404040;">:html-head-extra</span> <span style="color: #606060;">""</span>   <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">extra &lt;head&gt; entries go here</span>
-         <span style="color: #404040;">:html-preamble</span> <span style="color: #606060;">""</span>     <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put before your post</span>
-         <span style="color: #404040;">:html-postamble</span> <span style="color: #606060;">""</span>    <span style="color: #111111; font-style: italic;">; </span><span style="color: #111111; font-style: italic;">this stuff is put after your post</span>
+<pre class="src src-elisp">(require 'ox-html)
+(require 'ox-rss)
+(require 'ox-publish)
+(setq org-publish-project-alist
+      '(("blog-content"
+         :base-directory "~/Projects/blog/posts"
+         :html-extension "html"
+         :base-extension "org"
+         :publishing-directory "~/Projects/blog/publish"
+         :publishing-function (org-html-publish-to-html)
+         :recursive t          ; descend into sub-folders?
+         :section-numbers nil  ; don't create numbered sections
+         :with-toc nil         ; don't create a table of contents
+         :with-latex t         ; do use MathJax for awesome formulas!
+         :html-head-extra ""   ; extra &lt;head&gt; entries go here
+         :html-preamble ""     ; this stuff is put before your post
+         :html-postamble ""    ; this stuff is put after your post
 )))
 </pre>
 </div>
@@ -155,12 +155,12 @@ Emacs can auto-generate this for you. Simply add these lines to <code>blog-conte
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">         <span style="color: #404040;">:auto-sitemap</span> t
-         <span style="color: #404040;">:sitemap-filename</span> <span style="color: #606060;">"archive.org"</span>
-         <span style="color: #404040;">:sitemap-title</span> <span style="color: #606060;">"Archive"</span>
-         <span style="color: #404040;">:sitemap-sort-files</span> anti-chronologically
-         <span style="color: #404040;">:sitemap-style</span> list
-         <span style="color: #404040;">:makeindex</span> t
+<pre class="src src-elisp">         :auto-sitemap t
+         :sitemap-filename "archive.org"
+         :sitemap-title "Archive"
+         :sitemap-sort-files anti-chronologically
+         :sitemap-style list
+         :makeindex t
 </pre>
 </div>
 
@@ -169,7 +169,7 @@ Also, you can put something like
 </p>
 
 <div class="org-src-container">
-<pre class="src src-html">&lt;<span style="color: #111111; text-decoration: underline;">a</span> <span style="color: #404040;">href</span>=<span style="color: #606060;">"archive.html"</span>&gt;Other posts&lt;/<span style="color: #111111; text-decoration: underline;">a</span>&gt;
+<pre class="src src-html">&lt;a href="archive.html"&gt;Other posts&lt;/a&gt;
 </pre>
 </div>
 
@@ -182,11 +182,11 @@ Adding a front page is simple, too. My front page is simply a normal page called
 </p>
 
 <div class="org-src-container">
-<pre class="src src-org"><span style="color: #606060;"> #+TITLE:</span> <span style="color: #111111; font-size: 140%;">RECENT POSTS</span>
+<pre class="src src-org"> #+TITLE: RECENT POSTS
 
- * <span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">Speeding up Matplotlib</a></span>
-<span style="color: #111111; background-color: #f4f4f0;"> #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"</span>
- <span style="color: #111111; text-decoration: underline;"><a href="file:2013-05-30-speeding-up-matplotlib.org">read more...</a></span>
+ * [[file:2013-05-30-speeding-up-matplotlib.org][Speeding up Matplotlib]]
+ #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-9"
+ [[file:2013-05-30-speeding-up-matplotlib.org][read more...]]
 </pre>
 </div>
 
@@ -195,12 +195,12 @@ But a blog is more than just text. There are images and CSS, too. I keep all tha
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #606060;">"blog-static"</span>
- <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/static"</span>
- <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"png</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">jpg</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">css"</span>
- <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish/static"</span>
- <span style="color: #404040;">:recursive</span> t
- <span style="color: #404040;">:publishing-function</span> org-publish-attachment)
+<pre class="src src-elisp">("blog-static"
+ :base-directory "~/Projects/blog/static"
+ :base-extension "png\\|jpg\\|css"
+ :publishing-directory "~/Projects/blog/publish/static"
+ :recursive t
+ :publishing-function org-publish-attachment)
 </pre>
 </div>
 
@@ -209,18 +209,18 @@ Setting up the RSS feed works similarly. The RSS feed is created from a single O
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #606060;">"blog-rss"</span>
- <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
- <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
- <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
- <span style="color: #404040;">:publishing-function</span> (org-rss-publish-to-rss)
- <span style="color: #404040;">:html-link-home</span> <span style="color: #606060;">"http://bastibe.de/"</span>
- <span style="color: #404040;">:html-link-use-abs-url</span> t
- <span style="color: #404040;">:exclude</span> <span style="color: #606060;">".*"</span>
- <span style="color: #404040;">:include</span> (<span style="color: #606060;">"rss.org"</span>)
- <span style="color: #404040;">:with-toc</span> nil
- <span style="color: #404040;">:section-numbers</span> nil
- <span style="color: #404040;">:title</span> <span style="color: #606060;">"Bastis Scratchpad on the Internet"</span>)
+<pre class="src src-elisp">("blog-rss"
+ :base-directory "~/Projects/blog/posts"
+ :base-extension "org"
+ :publishing-directory "~/Projects/blog/publish"
+ :publishing-function (org-rss-publish-to-rss)
+ :html-link-home "http://bastibe.de/"
+ :html-link-use-abs-url t
+ :exclude ".*"
+ :include ("rss.org")
+ :with-toc nil
+ :section-numbers nil
+ :title "Bastis Scratchpad on the Internet")
 </pre>
 </div>
 
@@ -230,11 +230,11 @@ Make sure to exclude this <code>rss.org</code> from the <code>blog-content</code
 
 <div class="org-src-container">
 <pre class="src src-org"> * Speeding up Matplotlib
-<span style="color: #0000ff;"> :PROPERTIES:</span>
- <span style="color: #111111;">:RSS_PERMALINK:</span> "<span style="color: #111111; text-decoration: underline;"><a href="http://bastibe.de/2013-05-30-speeding-up-matplotlib.html">http://bastibe.de/2013-05-30-speeding-up-matplotlib.html</a></span>"
- <span style="color: #111111;">:PUBDATE:</span> &lt;2013-05-30&gt;
-<span style="color: #0000ff;"> :END:</span>
-<span style="color: #111111; background-color: #f4f4f0;"> #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"</span>
+ :PROPERTIES:
+ :RSS_PERMALINK: "http://bastibe.de/2013-05-30-speeding-up-matplotlib.html"
+ :PUBDATE: &lt;2013-05-30&gt;
+ :END:
+ #+include: "~/Projects/blog/posts/2013-05-30-speeding-up-matplotlib.org" :lines "4-"
 </pre>
 </div>
 
@@ -247,8 +247,8 @@ You can even create a meta publishing project that executes all three projects i
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #606060;">"blog"</span>
- <span style="color: #404040;">:components</span> (<span style="color: #606060;">"blog-content"</span> <span style="color: #606060;">"blog-static"</span> <span style="color: #606060;">"blog-rss"</span>))
+<pre class="src src-elisp">("blog"
+ :components ("blog-content" "blog-static" "blog-rss"))
 </pre>
 </div>
 
@@ -257,18 +257,18 @@ There is one more thing that is kind of fiddly though: As I said, I use Disqus f
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp"><span style="color: #404040;">:html-postamble</span>
-(<span style="color: #111111; font-weight: bold;">lambda</span> (info)
-  <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
-  (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Archive"</span>)
-         <span style="color: #606060;">""</span>)
-        ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Recent Posts"</span>)
-         <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+<pre class="src src-elisp">:html-postamble
+(lambda (info)
+  "Do not show disqus for Archive and Recent Posts"
+  (cond ((string= (car (plist-get info :title)) "Archive")
+         "")
+        ((string= (car (plist-get info :title)) "Recent Posts")
+         "&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;")
         (t
-    <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-<span style="color: #606060;">     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-<span style="color: #606060;">     &lt;script type=\"text/javascript\"&gt;</span>
-<span style="color: #606060;">     ..."</span>
+    "&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;
+     &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;
+     &lt;script type=\"text/javascript\"&gt;
+     ..."
 </pre>
 </div>
 
@@ -277,90 +277,90 @@ This should get you started! For completeness, here is my complete configuration
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-html</span>)
-(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-rss</span>)
-(<span style="color: #111111; font-weight: bold;">require</span> '<span style="color: #111111;">ox-publish</span>)
-(<span style="color: #111111; font-weight: bold;">setq</span> org-publish-project-alist
-      '((<span style="color: #606060;">"blog"</span>
-         <span style="color: #404040;">:components</span> (<span style="color: #606060;">"blog-content"</span> <span style="color: #606060;">"blog-static"</span> <span style="color: #606060;">"blog-rss"</span>))
-        (<span style="color: #606060;">"blog-content"</span>
-         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
-         <span style="color: #404040;">:html-extension</span> <span style="color: #606060;">"html"</span>
-         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
-         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
-         <span style="color: #404040;">:publishing-function</span> (org-html-publish-to-html)
-         <span style="color: #404040;">:auto-sitemap</span> t
-         <span style="color: #404040;">:sitemap-filename</span> <span style="color: #606060;">"archive.org"</span>
-         <span style="color: #404040;">:sitemap-title</span> <span style="color: #606060;">"Archive"</span>
-         <span style="color: #404040;">:sitemap-sort-files</span> anti-chronologically
-         <span style="color: #404040;">:sitemap-style</span> list
-         <span style="color: #404040;">:makeindex</span> t
-         <span style="color: #404040;">:recursive</span> t
-         <span style="color: #404040;">:section-numbers</span> nil
-         <span style="color: #404040;">:with-toc</span> nil
-         <span style="color: #404040;">:with-latex</span> t
-         <span style="color: #404040;">:html-head-include-default-style</span> nil
-         <span style="color: #404040;">:html-head-include-scripts</span> nil
-         <span style="color: #404040;">:html-head-extra</span>
-         <span style="color: #606060;">"&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"</span>
-<span style="color: #606060;">                href=\"http://bastibe.de/rss.xml\"</span>
-<span style="color: #606060;">                title=\"RSS feed for bastibe.de\"&gt;</span>
-<span style="color: #606060;">          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;</span>
-<span style="color: #606060;">          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;</span>
-<span style="color: #606060;">          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
-<span style="color: #606060;">          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;</span>
-<span style="color: #606060;">          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;</span>
-<span style="color: #606060;">          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"</span>
-         <span style="color: #404040;">:html-preamble</span>
-         <span style="color: #606060;">"&lt;div class=\"header\"&gt;</span>
-<span style="color: #606060;">              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;</span>
-<span style="color: #606060;">              &lt;div class=\"sitelinks\"&gt;</span>
-<span style="color: #606060;">                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;</span>
-<span style="color: #606060;">              &lt;/div&gt;</span>
-<span style="color: #606060;">          &lt;/div&gt;"</span>
-         <span style="color: #404040;">:html-postamble</span>
-         (<span style="color: #111111; font-weight: bold;">lambda</span> (info)
-           <span style="color: #111111;">"Do not show disqus for Archive and Recent Posts"</span>
-           (<span style="color: #111111; font-weight: bold;">cond</span> ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Archive"</span>) <span style="color: #606060;">""</span>)
-                 ((string= (car (plist-get info <span style="color: #404040;">:title</span>)) <span style="color: #606060;">"Recent Posts"</span>)
-                  <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;"</span>)
+<pre class="src src-elisp">(require 'ox-html)
+(require 'ox-rss)
+(require 'ox-publish)
+(setq org-publish-project-alist
+      '(("blog"
+         :components ("blog-content" "blog-static" "blog-rss"))
+        ("blog-content"
+         :base-directory "~/Projects/blog/posts"
+         :html-extension "html"
+         :base-extension "org"
+         :publishing-directory "~/Projects/blog/publish"
+         :publishing-function (org-html-publish-to-html)
+         :auto-sitemap t
+         :sitemap-filename "archive.org"
+         :sitemap-title "Archive"
+         :sitemap-sort-files anti-chronologically
+         :sitemap-style list
+         :makeindex t
+         :recursive t
+         :section-numbers nil
+         :with-toc nil
+         :with-latex t
+         :html-head-include-default-style nil
+         :html-head-include-scripts nil
+         :html-head-extra
+         "&lt;link rel=\"alternate\" type=\"appliation/rss+xml\"
+                href=\"http://bastibe.de/rss.xml\"
+                title=\"RSS feed for bastibe.de\"&gt;
+          &lt;link href='http://fonts.googleapis.com/css?family=Roboto&amp;subset=latin' rel='stylesheet' type='text/css'&gt;
+          &lt;link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'&gt;
+          &lt;link href= \"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;
+          &lt;title&gt;Basti's Scratchpad on the Internet&lt;/title&gt;
+          &lt;meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" /&gt;
+          &lt;meta name=\"viewport\" content=\"initial-scale=1,width=device-width,minimum-scale=1\"&gt;"
+         :html-preamble
+         "&lt;div class=\"header\"&gt;
+              &lt;a href=\"http://bastibe.de\"&gt;Basti's Scratchpad on the Internet&lt;/a&gt;
+              &lt;div class=\"sitelinks\"&gt;
+                  &lt;a href=\"http://alpha.app.net/bastibe\"&gt;alpha.app.net&lt;/a&gt;  | &lt;a href=\"http://github.com/bastibe\"&gt;Github&lt;/a&gt;
+              &lt;/div&gt;
+          &lt;/div&gt;"
+         :html-postamble
+         (lambda (info)
+           "Do not show disqus for Archive and Recent Posts"
+           (cond ((string= (car (plist-get info :title)) "Archive") "")
+                 ((string= (car (plist-get info :title)) "Recent Posts")
+                  "&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;")
                  (t
-             <span style="color: #606060;">"&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;</span>
-<span style="color: #606060;">              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;</span>
-<span style="color: #606060;">              &lt;script type=\"text/javascript\"&gt;</span>
-<span style="color: #606060;">              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
-<span style="color: #606060;">              var disqus_shortname = 'bastibe';</span>
-<span style="color: #606060;">              /* * * DON'T EDIT BELOW THIS LINE * * */</span>
-<span style="color: #606060;">              (function() {</span>
-<span style="color: #606060;">                var dsq = document.createElement('script');</span>
-<span style="color: #606060;">                dsq.type = 'text/javascript';</span>
-<span style="color: #606060;">                dsq.async = true;</span>
-<span style="color: #606060;">                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';</span>
-<span style="color: #606060;">                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);</span>
-<span style="color: #606060;">                  })();</span>
-<span style="color: #606060;">              &lt;/script&gt;</span>
-<span style="color: #606060;">              &lt;noscript&gt;Please enable JavaScript to view the</span>
-<span style="color: #606060;">                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;</span>
-<span style="color: #606060;">              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;"</span>)))
-         <span style="color: #404040;">:exclude</span> <span style="color: #606060;">"rss.org</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">archive.org</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">theindex.org"</span>)
-        (<span style="color: #606060;">"blog-rss"</span>
-         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/posts"</span>
-         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"org"</span>
-         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish"</span>
-         <span style="color: #404040;">:publishing-function</span> (org-rss-publish-to-rss)
-         <span style="color: #404040;">:html-link-home</span> <span style="color: #606060;">"http://bastibe.de/"</span>
-         <span style="color: #404040;">:html-link-use-abs-url</span> t
-         <span style="color: #404040;">:exclude</span> <span style="color: #606060;">".*"</span>
-         <span style="color: #404040;">:include</span> (<span style="color: #606060;">"rss.org"</span>)
-         <span style="color: #404040;">:with-toc</span> nil
-         <span style="color: #404040;">:section-numbers</span> nil
-         <span style="color: #404040;">:title</span> <span style="color: #606060;">"Bastis Scratchpad on the Internet"</span>)
-        (<span style="color: #606060;">"blog-static"</span>
-         <span style="color: #404040;">:base-directory</span> <span style="color: #606060;">"~/Projects/blog/static"</span>
-         <span style="color: #404040;">:base-extension</span> <span style="color: #606060;">"png</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">jpg</span><span style="color: #606060; font-weight: bold;">\\</span><span style="color: #606060; font-weight: bold;">|</span><span style="color: #606060;">css"</span>
-         <span style="color: #404040;">:publishing-directory</span> <span style="color: #606060;">"~/Projects/blog/publish/static"</span>
-         <span style="color: #404040;">:recursive</span> t
-         <span style="color: #404040;">:publishing-function</span> org-publish-attachment)))
+             "&lt;div id=\"archive\"&gt;&lt;a href=\"archive.html\"&gt;Other posts&lt;/a&gt;&lt;/div&gt;
+              &lt;div id=\"disqus_thread\"&gt;&lt;/div&gt;
+              &lt;script type=\"text/javascript\"&gt;
+              /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+              var disqus_shortname = 'bastibe';
+              /* * * DON'T EDIT BELOW THIS LINE * * */
+              (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                  })();
+              &lt;/script&gt;
+              &lt;noscript&gt;Please enable JavaScript to view the
+                  &lt;a href=\"http://disqus.com/?ref_noscript\"&gt;comments powered by Disqus.&lt;/a&gt;&lt;/noscript&gt;
+              &lt;a href=\"http://disqus.com\" class=\"dsq-brlink\"&gt;comments powered by &lt;span class=\"logo-disqus\"&gt;Disqus&lt;/span&gt;&lt;/a&gt;")))
+         :exclude "rss.org\\|archive.org\\|theindex.org")
+        ("blog-rss"
+         :base-directory "~/Projects/blog/posts"
+         :base-extension "org"
+         :publishing-directory "~/Projects/blog/publish"
+         :publishing-function (org-rss-publish-to-rss)
+         :html-link-home "http://bastibe.de/"
+         :html-link-use-abs-url t
+         :exclude ".*"
+         :include ("rss.org")
+         :with-toc nil
+         :section-numbers nil
+         :title "Bastis Scratchpad on the Internet")
+        ("blog-static"
+         :base-directory "~/Projects/blog/static"
+         :base-extension "png\\|jpg\\|css"
+         :publishing-directory "~/Projects/blog/publish/static"
+         :recursive t
+         :publishing-function org-publish-attachment)))
 </pre>
 </div>
 
@@ -373,12 +373,12 @@ All other sources, including the source code to all blog posts, can be found on 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(<span style="color: #111111; font-weight: bold;">defadvice</span> <span style="color: #111111; text-decoration: underline;">org-rss-headline</span>
+<pre class="src src-elisp">(defadvice org-rss-headline
   (around my-rss-headline (headline contents info) activate)
-  <span style="color: #111111;">"only use org-rss-headline for top level headlines"</span>
-  (<span style="color: #111111; font-weight: bold;">if</span> (&lt; (org-export-get-relative-level headline info) 2)
+  "only use org-rss-headline for top level headlines"
+  (if (&lt; (org-export-get-relative-level headline info) 2)
       ad-do-it
-    (<span style="color: #111111; font-weight: bold;">setq</span> ad-return-value (org-html-headline headline contents info))))
+    (setq ad-return-value (org-html-headline headline contents info))))
 </pre>
 </div>
 
@@ -433,121 +433,121 @@ Yesterday, I spent a few hours creating a solarized like CSS file for use with m
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c"><span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Text</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .t   { <span style="color: #111111;">color</span>: #586e75 }
+<pre class="src src-c">/* Text */
+.codehilite .t   { color: #586e75 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Whitespace</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .w   { <span style="color: #111111;">color</span>: #073642 }
+/* Whitespace */
+.codehilite .w   { color: #073642 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Error</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .err { <span style="color: #111111;">color</span>: #cb4b16; }
+/* Error */
+.codehilite .err { color: #cb4b16; }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .k   { <span style="color: #111111;">color</span>: #859900 }
-.codehilite .kc  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Constant</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .kd  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Declaration</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .kn  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Namespace</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .kp  { <span style="color: #111111;">color</span>: #859900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Pseudo</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .kr  { <span style="color: #111111;">color</span>: #073642 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Reserved</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .kt  { <span style="color: #111111;">color</span>: #b58900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Keyword.Type</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Keyword */
+.codehilite .k   { color: #859900 }
+.codehilite .kc  { color: #2aa198 } /* Keyword.Constant */
+.codehilite .kd  { color: #268bd2 } /* Keyword.Declaration */
+.codehilite .kn  { color: #b58900 } /* Keyword.Namespace */
+.codehilite .kp  { color: #859900 } /* Keyword.Pseudo */
+.codehilite .kr  { color: #073642 } /* Keyword.Reserved */
+.codehilite .kt  { color: #b58900 } /* Keyword.Type */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .n   { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .na  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Attribute</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nb  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Builtin</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nc  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Class</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .ne  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Error</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .no  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Constant</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nd  { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Decorator</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .ni  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Entity</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nf  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Function</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nn  { <span style="color: #111111;">color</span>: #586e75; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Namespace</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nt  { <span style="color: #111111;">color</span>: #2aa198; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Tag</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .nv  { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Name */
+.codehilite .n   { color: #586e75 }
+.codehilite .na  { color: #2aa198 } /* Name.Attribute */
+.codehilite .nb  { color: #268bd2 } /* Name.Builtin */
+.codehilite .nc  { color: #268bd2 } /* Name.Class */
+.codehilite .ne  { color: #cb4b16 } /* Name.Error */
+.codehilite .no  { color: #2aa198 } /* Name.Constant */
+.codehilite .nd  { color: #2aa198 } /* Name.Decorator */
+.codehilite .ni  { color: #2aa198; font-weight: bold } /* Name.Entity */
+.codehilite .nf  { color: #268bd2 } /* Name.Function */
+.codehilite .nn  { color: #586e75; } /* Name.Namespace */
+.codehilite .nt  { color: #2aa198; font-weight: bold } /* Name.Tag */
+.codehilite .nv  { color: #cb4b16 } /* Name.Variable */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Builtin</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .b   { <span style="color: #111111;">color</span>: #859900 }
-.codehilite .bp  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Builtin.Pseudo</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Builtin */
+.codehilite .b   { color: #859900 }
+.codehilite .bp  { color: #586e75 } /* Name.Builtin.Pseudo */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Variable</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .v   { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .vc  { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Class</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .vg  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Global</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .vi  { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Name.Variable.Instance</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Variable */
+.codehilite .v   { color: #586e75 }
+.codehilite .vc  { color: #586e75 } /* Name.Variable.Class */
+.codehilite .vg  { color: #268bd2 } /* Name.Variable.Global */
+.codehilite .vi  { color: #268bd2 } /* Name.Variable.Instance */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Literal */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .m { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .mf { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Float</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .mh { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Hex</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .mi { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Integer</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .mo { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Oct</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Literal.Number */
+.codehilite .m { color: #268bd2 } /* Literal.Number */
+.codehilite .mf { color: #268bd2 } /* Literal.Number.Float */
+.codehilite .mh { color: #268bd2 } /* Literal.Number.Hex */
+.codehilite .mi { color: #268bd2 } /* Literal.Number.Integer */
+.codehilite .mo { color: #268bd2 } /* Literal.Number.Oct */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .s { <span style="color: #111111;">color</span>: #2aa198 }
-.codehilite .sb { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Backtick</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .sc { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Char</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .sd { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Doc</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .s2 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Double</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .se { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Escape</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .sh { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Heredoc</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .si { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Interpol</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .sx { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Other</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .sr { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Regex</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .s1 { <span style="color: #111111;">color</span>: #2aa198 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Single</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .ss { <span style="color: #111111;">color</span>: #cb4b16 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.String.Symbol</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Literal.String */
+.codehilite .s { color: #2aa198 }
+.codehilite .sb { color: #2aa198 } /* Literal.String.Backtick */
+.codehilite .sc { color: #2aa198 } /* Literal.String.Char */
+.codehilite .sd { color: #2aa198 } /* Literal.String.Doc */
+.codehilite .s2 { color: #2aa198 } /* Literal.String.Double */
+.codehilite .se { color: #cb4b16 } /* Literal.String.Escape */
+.codehilite .sh { color: #2aa198 } /* Literal.String.Heredoc */
+.codehilite .si { color: #cb4b16 } /* Literal.String.Interpol */
+.codehilite .sx { color: #2aa198 } /* Literal.String.Other */
+.codehilite .sr { color: #cb4b16 } /* Literal.String.Regex */
+.codehilite .s1 { color: #2aa198 } /* Literal.String.Single */
+.codehilite .ss { color: #cb4b16 } /* Literal.String.Symbol */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Integer</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .il { <span style="color: #111111;">color</span>: #268bd2 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Literal.Number.Integer.Long</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Literal.Integer */
+.codehilite .il { color: #268bd2 } /* Literal.Number.Integer.Long */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Operator</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .o  { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .ow { <span style="color: #111111;">color</span>: #859900 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Operator.Word</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Operator */
+.codehilite .o  { color: #586e75 }
+.codehilite .ow { color: #859900 } /* Operator.Word */
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Punctuation</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .p  { <span style="color: #111111;">color</span>: #586e75 }
+/* Punctuation */
+.codehilite .p  { color: #586e75 }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .c { <span style="color: #111111;">color</span>: #93a1a1; font-style: italic }
-.codehilite .cm { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Multiline</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .cp { <span style="color: #111111;">color</span>: #93a1a1 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Preproc</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .c1 { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Single</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .cs { <span style="color: #111111;">color</span>: #93a1a1; } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Comment.Special</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Comment */
+.codehilite .c { color: #93a1a1; font-style: italic }
+.codehilite .cm { color: #93a1a1; } /* Comment.Multiline */
+.codehilite .cp { color: #93a1a1 } /* Comment.Preproc */
+.codehilite .c1 { color: #93a1a1; } /* Comment.Single */
+.codehilite .cs { color: #93a1a1; } /* Comment.Special */
 
 .codehilite .hll { background-color: #dc322f }
 
-<span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .g { <span style="color: #111111;">color</span>: #586e75 }
-.codehilite .gd { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Deleted</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .ge { font-style: italic } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Emph</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gr { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Error</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gh { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Heading</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gi { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Inserted</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .go { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Output</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gp { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Prompt</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gs { font-weight: 586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Strong</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gu { <span style="color: #111111;">color</span>: #586e75; font-weight: bold } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Subheading</span><span style="color: #111111; font-style: italic;"> */</span>
-.codehilite .gt { <span style="color: #111111;">color</span>: #586e75 } <span style="color: #111111; font-style: italic;">/* </span><span style="color: #111111; font-style: italic;">Generic.Traceback</span><span style="color: #111111; font-style: italic;"> */</span>
+/* Generic */
+.codehilite .g { color: #586e75 }
+.codehilite .gd { color: #586e75 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #586e75 } /* Generic.Error */
+.codehilite .gh { color: #586e75; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #586e75 } /* Generic.Inserted */
+.codehilite .go { color: #586e75 } /* Generic.Output */
+.codehilite .gp { color: #586e75 } /* Generic.Prompt */
+.codehilite .gs { font-weight: 586e75 } /* Generic.Strong */
+.codehilite .gu { color: #586e75; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #586e75 } /* Generic.Traceback */
 </pre>
 </div>
 
 <div class="org-src-container">
 <pre class="src src-c">code, pre {
-    <span style="color: #111111;">background</span>: #fdf6e3;
-    -webkit-box-shadow: inset 0 0 2px #000000;
-    -moz-box-shadow: inset 0 0 2px #000000;
-    box-shadow: inset 0 0 2px #000000;
-    <span style="color: #111111;">color</span>: #586e75;
-    margin-left: 0px;
-    font-family: <span style="color: #111111; font-weight: bold;">'</span>Droid Sans Mono<span style="color: #111111; font-weight: bold;">'</span>, monospace;
-    <span style="color: #111111;">padding</span>: 2px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
+	background: #fdf6e3;
+	-webkit-box-shadow: inset 0 0 2px #000000;
+	-moz-box-shadow: inset 0 0 2px #000000;
+	box-shadow: inset 0 0 2px #000000;
+	color: #586e75;
+	margin-left: 0px;
+	font-family: 'Droid Sans Mono', monospace;
+	padding: 2px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-moz-background-clip: padding;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
 }
 </pre>
 </div>

@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -42,17 +43,17 @@ Let's try it:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">x_prealloc <span style="color: #404040;">=</span> cell(10000<span style="color: #404040;">,</span> 1)<span style="color: #404040;">;</span>
-x_end <span style="color: #404040;">=</span> {}<span style="color: #404040;">;</span>
-x_append <span style="color: #404040;">=</span> {}<span style="color: #404040;">;</span>
-<span style="color: #111111; font-weight: bold;">for</span> n<span style="color: #404040;">=</span>1<span style="color: #404040;">:</span>10000
-    <span style="color: #111111; font-style: italic;">% variant 1: preallocate</span>
-    x_prealloc(n) <span style="color: #404040;">=</span> {42}<span style="color: #404040;">;</span>
-    <span style="color: #111111; font-style: italic;">% variant 2: end+1</span>
-    x_end(end<span style="color: #404040;">+</span>1) <span style="color: #404040;">=</span> {42}<span style="color: #404040;">;</span>
-    <span style="color: #111111; font-style: italic;">% variant 3: append</span>
-    x_append <span style="color: #404040;">=</span> [x_append {42}]<span style="color: #404040;">;</span>
-<span style="color: #111111; font-weight: bold;">end</span>
+<pre class="src src-octave">x_prealloc = cell(10000, 1);
+x_end = {};
+x_append = {};
+for n=1:10000
+    % variant 1: preallocate
+    x_prealloc(n) = {42};
+    % variant 2: end+1
+    x_end(end+1) = {42};
+    % variant 3: append
+    x_append = [x_append {42}];
+end
 </pre>
 </div>
 
@@ -61,7 +62,7 @@ Which variant do you think is fastest?
 </p>
 
 
-<figure>
+<figure id="org14b38cf">
 <img src="./static/2018-04/array_performance.png" alt="array_performance.png">
 
 </figure>
@@ -74,10 +75,7 @@ Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is
 <b>TL;DR:</b> Do not use <code>x = [x $something]</code>, ever. Instead, use <code>x(end+1) = $something</code>. Preallocation is generally overrated.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -86,6 +84,9 @@ Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

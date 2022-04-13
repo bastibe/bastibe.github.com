@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -44,9 +45,9 @@ Why would you want to use Python over Matlab?
 Let me qualify that a bit. Matlab is a very useful programming environment for numerical problems. For a very particular set of problems, Matlab is an awesome tool. For many other problems however, it is just about unusable. For example, you would not write a complex GUI program in Matlab, you would not write your blogging engine in Matlab and you would not write a web service in Matlab. You can do all that and more in Python.
 </p>
 
-<div id="outline-container-orgf3f657e" class="outline-2">
-<h2 id="orgf3f657e">Python as a Matlab replacement</h2>
-<div class="outline-text-2" id="text-orgf3f657e">
+<div id="outline-container-org2647147" class="outline-2">
+<h2 id="org2647147">Python as a Matlab replacement</h2>
+<div class="outline-text-2" id="text-org2647147">
 <p>
 The biggest strength of Matlab is its matrix engine. Most of the data you work with in Matlab are matrices and there is a host of functions available to manipulate and visualize those matrices. Python, by itself, does not have a convenient matrix engine. However, there are three packages (think Matlab Toolboxes) out there that will add this capability to Python:
 </p>
@@ -63,9 +64,9 @@ You can either grab the individual installers for <a href="http://python.org">Py
 </div>
 </div>
 
-<div id="outline-container-org6372678" class="outline-2">
-<h2 id="org6372678">A 30,000 foot overview</h2>
-<div class="outline-text-2" id="text-org6372678">
+<div id="outline-container-org998530d" class="outline-2">
+<h2 id="org998530d">A 30,000 foot overview</h2>
+<div class="outline-text-2" id="text-org998530d">
 <p>
 Like Matlab, Python is <i>interpreted</i>, that is, there is no need for a compiler and code can be executed at any time as long as Python is installed on the machine. Also, code can be copied from one machine to another and will run without change.
 </p>
@@ -75,10 +76,10 @@ Like Matlab, Python is <i>dynamically typed</i>, that is, every variable can hol
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #404040;">a</span> = 5         <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a number</span>
-    <span style="color: #404040;">a</span> = [1, 2, 3] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a list</span>
-    <span style="color: #404040;">a</span> = <span style="color: #606060;">'text'</span>    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a string</span>
+<pre class="src src-python">    # Python
+    a = 5         # a number
+    a = [1, 2, 3] # a list
+    a = 'text'    # a string
 </pre>
 </div>
 
@@ -87,10 +88,10 @@ Contrast this with C, where you can not assign different data types to the same 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c">    <span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">C</span>
-    <span style="color: #111111; text-decoration: underline;">int</span> <span style="color: #404040;">a</span> = 5;
-    <span style="color: #111111; text-decoration: underline;">float</span> <span style="color: #404040;">b</span>[3] = {1.0, 2.0, 3.0};
-    <span style="color: #111111; text-decoration: underline;">char</span> <span style="color: #404040;">c</span>[] = <span style="color: #606060;">"text"</span>;
+<pre class="src src-c">    // C
+    int a = 5;
+    float b[3] = {1.0, 2.0, 3.0};
+    char c[] = "text";
 </pre>
 </div>
 
@@ -100,16 +101,16 @@ In Matlab, adding a single number to a string will convert that string into an a
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
-    a <span style="color: #404040;">=</span> <span style="color: #606060;">'text'</span>
-    b <span style="color: #404040;">=</span> a <span style="color: #404040;">+</span> 5 <span style="color: #111111; font-style: italic;">% [121 106 125 121]</span>
+<pre class="src src-octave">    % Matlab
+    a = 'text'
+    b = a + 5 % [121 106 125 121]
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #404040;">a</span> = <span style="color: #606060;">'text'</span>
-    <span style="color: #404040;">b</span> = a + 5 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">TypeError: Can't convert 'int' object to str implicitly</span>
+<pre class="src src-python">    # Python
+    a = 'text'
+    b = a + 5 # TypeError: Can't convert 'int' object to str implicitly
 </pre>
 </div>
 
@@ -127,16 +128,16 @@ Unlike Matlab, the source code of Python is readily available. Every detail of P
 </div>
 </div>
 
-<div id="outline-container-org8e38fcb" class="outline-2">
-<h2 id="org8e38fcb">Reading Python</h2>
-<div class="outline-text-2" id="text-org8e38fcb">
+<div id="outline-container-orgacec82c" class="outline-2">
+<h2 id="orgacec82c">Reading Python</h2>
+<div class="outline-text-2" id="text-orgacec82c">
 <p>
 When you start up Python, it is a rather empty environment. In order to do anything useful, you first have to <code>import</code> some functionality into your workspace. Thus, you will see a few lines of <code>import</code> statements at the top of every Python file. Moreover, Python has <i>namespaces</i>, so if you <code>import numpy</code>, you will have to prefix every feature of Numpy with its name, like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">import</span> numpy
-    <span style="color: #404040;">a</span> = numpy.zeros(10, 1)
+<pre class="src src-python">    import numpy
+    a = numpy.zeros(10, 1)
 </pre>
 </div>
 
@@ -145,8 +146,8 @@ This is clearly cumbersome if you are planning to use Numpy all the time. So ins
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> numpy <span style="color: #111111; font-weight: bold;">import</span> *
-    <span style="color: #404040;">a</span> = ones(30, 1)
+<pre class="src src-python">    from numpy import *
+    a = ones(30, 1)
 </pre>
 </div>
 
@@ -155,8 +156,8 @@ Better yet, there is a pre-packaged namespace that contains the whole Numpy-Scip
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-weight: bold;">from</span> pylab <span style="color: #111111; font-weight: bold;">import</span> *
-    <span style="color: #404040;">a</span> = randn(100, 1)
+<pre class="src src-python">    from pylab import *
+    a = randn(100, 1)
     plot(a)
     show()
 </pre>
@@ -179,10 +180,10 @@ In Python, blocks of code are identified by indentation and they always start wi
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">sum</span> = 0
-    <span style="color: #111111; font-weight: bold;">for</span> n <span style="color: #111111; font-weight: bold;">in</span> [1, 2, 3, 4, 5]:
-        <span style="color: #404040;">sum</span> = <span style="color: #404040;">sum</span> + n
-    <span style="color: #111111; font-weight: bold;">print</span>(<span style="color: #404040;">sum</span>)
+<pre class="src src-python">    sum = 0
+    for n in [1, 2, 3, 4, 5]:
+        sum = sum + n
+    print(sum)
 </pre>
 </div>
 
@@ -193,24 +194,24 @@ You don't have to name the output variable names in the definition and instead u
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">Python</span>
-    <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number):
-        <span style="color: #111111; font-weight: bold;">if</span> number &gt; 0:
-            <span style="color: #111111; font-weight: bold;">return</span> number
-        <span style="color: #111111; font-weight: bold;">else</span>:
-            <span style="color: #111111; font-weight: bold;">return</span> -number
+<pre class="src src-python">    # Python
+    def abs(number):
+        if number &gt; 0:
+            return number
+        else:
+            return -number
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-octave">    <span style="color: #111111; font-style: italic;">% Matlab</span>
-    <span style="color: #111111; font-weight: bold;">function</span> [out] <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">abs</span>(number)
-        <span style="color: #111111; font-weight: bold;">if</span> number <span style="color: #404040;">&gt;</span> 0
-            out <span style="color: #404040;">=</span> number
-        <span style="color: #111111; font-weight: bold;">else</span>
-            out <span style="color: #404040;">=</span> <span style="color: #404040;">-</span>number
-        <span style="color: #111111; font-weight: bold;">end</span>
-    <span style="color: #111111; font-weight: bold;">end</span>
+<pre class="src src-octave">    % Matlab
+    function [out] = abs(number)
+        if number &gt; 0
+            out = number
+        else
+            out = -number
+        end
+    end
 </pre>
 </div>
 
@@ -220,12 +221,12 @@ Since Python only gains a matrix engine by importing Numpy, it does not have a c
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a numpy matrix:</span>
-    <span style="color: #404040;">m</span> = array([[1, 2, 3],
+<pre class="src src-python">    # create a numpy matrix:
+    m = array([[1, 2, 3],
                [4, 5, 6],
                [7, 8, 9]])
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">create a Python list:</span>
-    <span style="color: #404040;">l</span> = [1 2 3]
+    # create a Python list:
+    l = [1 2 3]
 </pre>
 </div>
 
@@ -236,31 +237,31 @@ Mostly, this just means that array access does not need any <code>+1</code> or <
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">a</span> = linspace(1, 10, 10)
-    <span style="color: #404040;">one</span> = a[0]
-    <span style="color: #404040;">two</span> = a[1]
+<pre class="src src-python">    a = linspace(1, 10, 10)
+    one = a[0]
+    two = a[1]
 
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">"6:8" is a range of two elements:</span>
-    <span style="color: #404040;">a</span>[6:8] = [70, 80] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">&lt;-- a Python list!</span>
+    # "6:8" is a range of two elements:
+    a[6:8] = [70, 80] # &lt;-- a Python list!
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org3050d22" class="outline-2">
-<h2 id="org3050d22">Common traps</h2>
-<div class="outline-text-2" id="text-org3050d22">
+<div id="outline-container-org2f8dadb" class="outline-2">
+<h2 id="org2f8dadb">Common traps</h2>
+<div class="outline-text-2" id="text-org2f8dadb">
 <ul class="org-ul">
 <li>Array slicing does not copy.</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #404040;">a</span> = array([1 2 3 4 5])
-    <span style="color: #404040;">b</span> = a[1:4] <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">[2 3 4]</span>
-    <span style="color: #404040;">b</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will change a and b!</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">make a copy like this:</span>
-    <span style="color: #404040;">c</span> = array(a[1:4], copy=<span style="color: #111111;">True</span>) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">copy=True can be omitted</span>
-    <span style="color: #404040;">c</span>[1] = rand() <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">changes only c</span>
+<pre class="src src-python">    a = array([1 2 3 4 5])
+    b = a[1:4] # [2 3 4]
+    b[1] = rand() # this will change a and b!
+    # make a copy like this:
+    c = array(a[1:4], copy=True) # copy=True can be omitted
+    c[1] = rand() # changes only c
 </pre>
 </div>
 <ul class="org-ul">
@@ -269,19 +270,19 @@ You can slice them, you can dice them, you can do math on them, but a 16 bit int
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-python">    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">pretend this came from a wave file:</span>
-    <span style="color: #404040;">a</span> = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
-    <span style="color: #404040;">a</span> = a * 10 <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">int16 only goes to 32768!</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">a is now [10000, 20000, 30000, -25536, -15536]</span>
+<pre class="src src-python">    # pretend this came from a wave file:
+    a = array([1000, 2000, 3000, 4000, 5000], dtype=int16)
+    a = a * 10 # int16 only goes to 32768!
+    # a is now [10000, 20000, 30000, -25536, -15536]
 </pre>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-org13591e3" class="outline-2">
-<h2 id="org13591e3">Going further</h2>
-<div class="outline-text-2" id="text-org13591e3">
+<div id="outline-container-org245d05e" class="outline-2">
+<h2 id="org245d05e">Going further</h2>
+<div class="outline-text-2" id="text-org245d05e">
 <p>
 Now you should be able to read Python code reasonably well. Numpy, Scipy and Matplotlib are actually modeled after Matlab in many ways, so many functions will have a very similar name and functionality. A lot of the numerical code you write in Python will look very similar to the equivalent code in Matlab. For a more in-depth comparison of Matlab and Python syntax, head over to <a href="http://www.scipy.org/NumPy_for_Matlab_Users">the Numpy documentation for Matlab users</a>.
 </p>
@@ -300,10 +301,7 @@ A great way to get to know any programming language is to solve the first few pr
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -312,6 +310,9 @@ A great way to get to know any programming language is to solve the first few pr
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

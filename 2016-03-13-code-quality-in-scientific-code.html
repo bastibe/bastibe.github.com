@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -42,18 +43,18 @@ But lately, I have come to struggle with these rules. I am now writing a lot of 
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">rectwin_spectrum</span>(angular_frequency, specsize):
-    <span style="color: #111111;">"""The spectrum of a rectangular window. [...]"""</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">In case of angular_frequency == 0, this will calculate NaN. Since</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">this will be corrected later, suppress the warning.</span>
-    <span style="color: #111111; font-weight: bold;">with</span> np.errstate(invalid=<span style="color: #606060;">'ignore'</span>):
-        <span style="color: #404040;">spectrum</span> = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
+<pre class="src src-python">def rectwin_spectrum(angular_frequency, specsize):
+    """The spectrum of a rectangular window. [...]"""
+    # In case of angular_frequency == 0, this will calculate NaN. Since
+    # this will be corrected later, suppress the warning.
+    with np.errstate(invalid='ignore'):
+        spectrum = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
                      np.sin(specsize*angular_frequency/2) /
                      np.sin(angular_frequency/2) )
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">since sin(x) == x for small x, the above expression</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">evaluates to specsize for angular_frequency == 0.</span>
-    <span style="color: #404040;">spectrum</span>[angular_frequency == 0.0] = specsize
-    <span style="color: #111111; font-weight: bold;">return</span> spectrum
+    # since sin(x) == x for small x, the above expression
+    # evaluates to specsize for angular_frequency == 0.
+    spectrum[angular_frequency == 0.0] = specsize
+    return spectrum
 </pre>
 </div>
 
@@ -66,38 +67,38 @@ On a related issue, how do you avoid long argument lists in heavily parametrized
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">classdef</span> SignalBlocks <span style="color: #404040;">&lt;</span> handle
-    <span style="color: #111111; font-weight: bold;">properties</span>
+<pre class="src src-octave">classdef SignalBlocks &lt; handle
+    properties
         data
         samplerate
         blocksize
         hopsize
-    <span style="color: #111111; font-weight: bold;">end</span>
-    <span style="color: #111111; font-weight: bold;">properties</span> (Dependent)
+    end
+    properties (Dependent)
         duration
-    <span style="color: #111111; font-weight: bold;">end</span>
-    <span style="color: #111111; font-weight: bold;">methods</span>
-        <span style="color: #111111; font-weight: bold;">function</span> obj <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">SignalBlock</span>(data<span style="color: #404040;">,</span> samplerate<span style="color: #404040;">,</span> blocksize<span style="color: #404040;">,</span> hopsize)
-            <span style="color: #111111; font-style: italic;">% blocksize and hopsize are optional. What a mess.</span>
-            narginchk(2<span style="color: #404040;">,</span> 4)<span style="color: #404040;">;</span>
-            obj.data <span style="color: #404040;">=</span> data<span style="color: #404040;">;</span>
-            obj.samplerate <span style="color: #404040;">=</span> samplerate<span style="color: #404040;">;</span>
-            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #404040;">&gt;=</span> 3
-                obj.blocksize <span style="color: #404040;">=</span> blocksize<span style="color: #404040;">;</span>
-            <span style="color: #111111; font-weight: bold;">else</span>
-                obj.blocksize <span style="color: #404040;">=</span> 2048<span style="color: #404040;">;</span>
-            <span style="color: #111111; font-weight: bold;">end</span>
-            <span style="color: #111111; font-weight: bold;">if</span> nargin <span style="color: #404040;">==</span> 4
-                obj.hopsize <span style="color: #404040;">=</span> hopsize<span style="color: #404040;">;</span>
-            <span style="color: #111111; font-weight: bold;">else</span>
-                obj.hopsize <span style="color: #404040;">=</span> 1024<span style="color: #404040;">;</span>
-            <span style="color: #111111; font-weight: bold;">end</span>
-        <span style="color: #111111; font-weight: bold;">end</span>
-        <span style="color: #111111; font-weight: bold;">function</span> time <span style="color: #404040;">=</span> <span style="color: #111111; text-decoration: underline;">get</span>.duration(obj)
-            time <span style="color: #404040;">=</span> length(obj.data)<span style="color: #404040;">/</span>obj.samplerate<span style="color: #404040;">;</span>
-        <span style="color: #111111; font-weight: bold;">end</span>
-    <span style="color: #111111; font-weight: bold;">end</span>
-<span style="color: #111111; font-weight: bold;">end</span>
+    end
+    methods
+        function obj = SignalBlock(data, samplerate, blocksize, hopsize)
+            % blocksize and hopsize are optional. What a mess.
+            narginchk(2, 4);
+            obj.data = data;
+            obj.samplerate = samplerate;
+            if nargin &gt;= 3
+                obj.blocksize = blocksize;
+            else
+                obj.blocksize = 2048;
+            end
+            if nargin == 4
+                obj.hopsize = hopsize;
+            else
+                obj.hopsize = 1024;
+            end
+        end
+        function time = get.duration(obj)
+            time = length(obj.data)/obj.samplerate;
+        end
+    end
+end
 </pre>
 </div>
 
@@ -113,10 +114,7 @@ The sad thing is, I don't know the answer to these questions. There have been a 
 Do you have any idea how to progress from here?
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -125,6 +123,9 @@ Do you have any idea how to progress from here?
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

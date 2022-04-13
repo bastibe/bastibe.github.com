@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -54,8 +55,8 @@ So, lets read some audio data, shall we?
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
-<span style="color: #404040;">data</span> = soundfile.read(<span style="color: #606060;">'sad_song.wav'</span>)
+<pre class="src src-python">import soundfile
+data = soundfile.read('sad_song.wav')
 </pre>
 </div>
 
@@ -72,9 +73,9 @@ OK, that was easy. So let's read only the first and last 100 frames!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> soundfile
-<span style="color: #404040;">first</span> = soundfile.read(<span style="color: #606060;">'long_song.flac'</span>, stop=100)
-<span style="color: #404040;">last</span> = soundfile.read(start=-100)
+<pre class="src src-python">import soundfile
+first = soundfile.read('long_song.flac', stop=100)
+last = soundfile.read(start=-100)
 </pre>
 </div>
 
@@ -91,14 +92,14 @@ Oh, but I want to use the sound card as well! I want to record audio to a file!
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pysoundcard <span style="color: #111111; font-weight: bold;">import</span> Stream
-<span style="color: #111111; font-weight: bold;">from</span> pysoundfile <span style="color: #111111; font-weight: bold;">import</span> SoundFile, ogg_file, write_mode
-<span style="color: #111111; font-weight: bold;">with</span> Stream() <span style="color: #111111; font-weight: bold;">as</span> s: <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">opens your default audio device</span>
-    <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">This is supposed to be a new file, so specify it completely</span>
-    <span style="color: #404040;">f</span> = SoundFile(<span style="color: #606060;">'happy_song.ogg'</span>, sample_rate=s.sample_rate,
-                  channels=s.channels, <span style="color: #404040;">format</span>=ogg_file,
+<pre class="src src-python">from pysoundcard import Stream
+from pysoundfile import SoundFile, ogg_file, write_mode
+with Stream() as s: # opens your default audio device
+    # This is supposed to be a new file, so specify it completely
+    f = SoundFile('happy_song.ogg', sample_rate=s.sample_rate,
+                  channels=s.channels, format=ogg_file,
                   mode=write_mode)
-    f.write(s.read(s.sample_rate)) <span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">one second</span>
+    f.write(s.read(s.sample_rate)) # one second
 </pre>
 </div>
 
@@ -128,10 +129,7 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
 [3] More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -140,6 +138,9 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

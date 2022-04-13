@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -50,18 +51,18 @@ So here goes, a very simple C library that adds two arrays:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-C"><span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.c:</span>
-<span style="color: #111111;">#include</span> test.h
+<pre class="src src-C">// test.c:
+#include test.h
 
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span>* <span style="color: #404040;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">length</span>) {
-    <span style="color: #111111; font-weight: bold;">for</span> (<span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">n</span>=0; n&lt;length; n++) {
+void add_arrays(float *out, float* in, size_t length) {
+    for (size_t n=0; n&lt;length; n++) {
         out[n] += in[n];
     }
 }
 
-<span style="color: #111111; font-style: italic;">// </span><span style="color: #111111; font-style: italic;">test.h:</span>
-<span style="color: #111111;">#include</span> <span style="color: #606060;">&lt;stddef.h&gt;</span>
-<span style="color: #111111; text-decoration: underline;">void</span> <span style="color: #111111; text-decoration: underline;">add_arrays</span>(<span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">out</span>, <span style="color: #111111; text-decoration: underline;">float</span> *<span style="color: #404040;">in</span>, <span style="color: #111111; text-decoration: underline;">size_t</span> <span style="color: #404040;">length</span>);
+// test.h:
+#include &lt;stddef.h&gt;
+void add_arrays(float *out, float *in, size_t length);
 </pre>
 </div>
 
@@ -74,10 +75,10 @@ Now, let's load that library into Matlab with <code>loadlibrary</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave"><span style="color: #111111; font-weight: bold;">if</span> not(libisloaded(<span style="color: #606060;">'test'</span>))
-    [notfound<span style="color: #404040;">,</span> warnings] <span style="color: #404040;">=</span> loadlibrary(<span style="color: #606060;">'test.so'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'test.h'</span>)<span style="color: #404040;">;</span>
-    assert(isempty(notfound)<span style="color: #404040;">,</span> <span style="color: #606060;">'could not load test library'</span>)
-<span style="color: #111111; font-weight: bold;">end</span>
+<pre class="src src-octave">if not(libisloaded('test'))
+    [notfound, warnings] = loadlibrary('test.so', 'test.h');
+    assert(isempty(notfound), 'could not load test library')
+end
 </pre>
 </div>
 
@@ -90,11 +91,11 @@ With that, we can call functions in that library using <code>calllib</code>. But
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">vector1 <span style="color: #404040;">=</span> [1 2 3 4 5]<span style="color: #404040;">;</span>
-vector2 <span style="color: #404040;">=</span> [9 8 7 6 5]<span style="color: #404040;">;</span>
+<pre class="src src-octave">vector1 = [1 2 3 4 5];
+vector2 = [9 8 7 6 5];
 
-vector1ptr <span style="color: #404040;">=</span> libpointer(<span style="color: #606060;">'singlePointer'</span><span style="color: #404040;">,</span> vector1)<span style="color: #404040;">;</span>
-vector2ptr <span style="color: #404040;">=</span> libpointer(<span style="color: #606060;">'singlePointer'</span><span style="color: #404040;">,</span> vector2)<span style="color: #404040;">;</span>
+vector1ptr = libpointer('singlePointer', vector1);
+vector2ptr = libpointer('singlePointer', vector2);
 </pre>
 </div>
 
@@ -107,7 +108,7 @@ Then, finally, let's call our function:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">calllib(<span style="color: #606060;">'test'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'add_arrays'</span><span style="color: #404040;">,</span> vector1ptr<span style="color: #404040;">,</span> vector2ptr<span style="color: #404040;">,</span> length(vector1))<span style="color: #404040;">;</span>
+<pre class="src src-octave">calllib('test', 'add_arrays', vector1ptr, vector2ptr, length(vector1));
 </pre>
 </div>
 
@@ -116,7 +117,7 @@ If you see no errors, everything went smoothly, and you will now have changed th
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">added_vectors <span style="color: #404040;">=</span> vector1ptr.Value<span style="color: #404040;">;</span>
+<pre class="src src-octave">added_vectors = vector1ptr.Value;
 </pre>
 </div>
 
@@ -125,12 +126,12 @@ Note that this didn't change the contents of <code>vector1</code>, only of the n
 </p>
 
 <div class="org-src-container">
-<pre class="src src-octave">timeit(@() calllib(<span style="color: #606060;">'test'</span><span style="color: #404040;">,</span> <span style="color: #606060;">'add_arrays'</span><span style="color: #404040;">,</span> vector1ptr<span style="color: #404040;">,</span> vector2ptr<span style="color: #404040;">,</span> length(vector1)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.9155e-05</span>
-timeit(@() the_same_thing_but_as_a_mex_file(single(vector1)<span style="color: #404040;">,</span> single(vector2)))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 4.6262e-05</span>
-timeit(@() the_same_thing_plus_argument_conversion(vector1<span style="color: #404040;">,</span> vector2))
-<span style="color: #111111; font-style: italic;">%   </span><span style="color: #111111; font-style: italic;">ans = 1.2326e-04</span>
+<pre class="src src-octave">timeit(@() calllib('test', 'add_arrays', vector1ptr, vector2ptr, length(vector1)))
+%   ans = 1.9155e-05
+timeit(@() the_same_thing_but_as_a_mex_file(single(vector1), single(vector2)))
+%   ans = 4.6262e-05
+timeit(@() the_same_thing_plus_argument_conversion(vector1, vector2))
+%   ans = 1.2326e-04
 </pre>
 </div>
 
@@ -142,10 +143,7 @@ So as you can see, the <code>calllib</code> is plenty fast. However, if you add 
 However, If I ask myself whether I would sacrifice 0.00007 seconds of computational overhead for hours of my life <i>not</i> spent with Mex, there really is no competition. I will choose Matlab's FFI over writing Mex files every time.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -154,6 +152,9 @@ However, If I ask myself whether I would sacrifice 0.00007 seconds of computatio
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -38,20 +39,20 @@ Well&#x2026; speed. If there is one thing I could criticize about Matplotlib, it
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #111111; font-weight: bold;">as</span> plt
-<span style="color: #111111; font-weight: bold;">import</span> numpy <span style="color: #111111; font-weight: bold;">as</span> np
-<span style="color: #111111; font-weight: bold;">import</span> time
+<pre class="src src-python">import matplotlib.pyplot as plt
+import numpy as np
+import time
 
-<span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
+fig, ax = plt.subplots()
 
-<span style="color: #404040;">tstart</span> = time.time()
-<span style="color: #404040;">num_plots</span> = 0
-<span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 1:
+tstart = time.time()
+num_plots = 0
+while time.time()-tstart &lt; 1:
     ax.clear()
     ax.plot(np.random.randn(100))
     plt.pause(0.001)
-    <span style="color: #404040;">num_plots</span> += 1
-<span style="color: #111111; font-weight: bold;">print</span>(num_plots)
+    num_plots += 1
+print(num_plots)
 </pre>
 </div>
 
@@ -72,16 +73,16 @@ Instead of calling <code>clear()</code> and then <code>plot()</code>, thus effec
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
+<pre class="src src-python">fig, ax = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #404040;">tstart</span> = time.time()
-<span style="color: #404040;">num_plots</span> = 0
-<span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 1:
+tstart = time.time()
+num_plots = 0
+while time.time()-tstart &lt; 1:
     line.set_ydata(np.random.randn(100))
     plt.pause(0.001)
-    <span style="color: #404040;">num_plots</span> += 1
-<span style="color: #111111; font-weight: bold;">print</span>(num_plots)
+    num_plots += 1
+print(num_plots)
 </pre>
 </div>
 
@@ -143,17 +144,17 @@ Putting this all together now yields:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
+<pre class="src src-python">fig, ax = plt.subplots()
 line, = ax.plot(np.random.randn(100))
 
-<span style="color: #404040;">tstart</span> = time.time()
-<span style="color: #404040;">num_plots</span> = 0
-<span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 1:
+tstart = time.time()
+num_plots = 0
+while time.time()-tstart &lt; 1:
     line.set_ydata(np.random.randn(100))
     fig.canvas.draw()
     fig.canvas.flush_events()
-    <span style="color: #404040;">num_plots</span> += 1
-<span style="color: #111111; font-weight: bold;">print</span>(num_plots)
+    num_plots += 1
+print(num_plots)
 </pre>
 </div>
 
@@ -177,20 +178,20 @@ What we can do here is to selectively draw only the parts that are actually chan
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #404040;">fig</span>, <span style="color: #404040;">ax</span> = plt.subplots()
+<pre class="src src-python">fig, ax = plt.subplots()
 line, = ax.plot(np.random.randn(100))
-plt.show(block=<span style="color: #111111;">False</span>)
+plt.show(block=False)
 
-<span style="color: #404040;">tstart</span> = time.time()
-<span style="color: #404040;">num_plots</span> = 0
-<span style="color: #111111; font-weight: bold;">while</span> time.time()-tstart &lt; 5:
+tstart = time.time()
+num_plots = 0
+while time.time()-tstart &lt; 5:
     line.set_ydata(np.random.randn(100))
     ax.draw_artist(ax.patch)
     ax.draw_artist(line)
     fig.canvas.update()
     fig.canvas.flush_events()
-    <span style="color: #404040;">num_plots</span> += 1
-<span style="color: #111111; font-weight: bold;">print</span>(num_plots/5)
+    num_plots += 1
+print(num_plots/5)
 </pre>
 </div>
 
@@ -218,10 +219,7 @@ In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotl
 <b>EDIT</b>: As it turns out, <code>fig.canvas.blit(ax.bbox)</code> is a bad idea since it leaks memory like crazy. What you should use instead is <code>fig.canvas.update()</code>, which is equally fast but does not leak memory.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -230,6 +228,9 @@ In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotl
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -34,15 +35,15 @@ As of Matlab 2014b, Matlab includes a <a href="http://mathworks.com/help/matlab/
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> numpy
-<span style="color: #111111; font-weight: bold;">import</span> matlab
-<span style="color: #111111; font-weight: bold;">import</span> matlab.engine
+<pre class="src src-python">import numpy
+import matlab
+import matlab.engine
 
-<span style="color: #404040;">eng</span> = matlab.engine.start_matlab()
-<span style="color: #404040;">random_data</span> = numpy.random.randn(100)
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">convert Numpy data to Matlab:</span>
-<span style="color: #404040;">matlab_data</span> = matlab.double(random_data.tolist())
-<span style="color: #404040;">data_sum</span> = eng.<span style="color: #404040;">sum</span>(matlab_data)
+eng = matlab.engine.start_matlab()
+random_data = numpy.random.randn(100)
+# convert Numpy data to Matlab:
+matlab_data = matlab.double(random_data.tolist())
+data_sum = eng.sum(matlab_data)
 </pre>
 </div>
 
@@ -63,12 +64,12 @@ Enter <a href="http://pythonhosted.org/Pympler/index.html">Pympler</a>, a memory
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> muppy, summary
+<pre class="src src-python">from pympler import muppy, summary
 summary.print_(summary.summarize(muppy.get_objects()))
 </pre>
 </div>
 
-<pre class="example">
+<pre class="example" id="org6040c44">
                                       types |   # objects |   total size
 =========================================== | =========== | ============
                         &lt;class 'array.array |        1076 |      2.77 GB
@@ -97,19 +98,19 @@ So let's get a reference to one of these objects, and see who they belong to. Th
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> array
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">get a list of all objects known to Python:</span>
-<span style="color: #404040;">all_objects</span> = muppy.get_objects()
-<span style="color: #111111; font-style: italic;"># </span><span style="color: #111111; font-style: italic;">sort out only `array.array` instances:</span>
-<span style="color: #404040;">all_arrays</span> = [obj <span style="color: #111111; font-weight: bold;">for</span> obj <span style="color: #111111; font-weight: bold;">in</span> all_objects <span style="color: #111111; font-weight: bold;">if</span> <span style="color: #404040;">isinstance</span>(obj, array.array)]
+<pre class="src src-python">import array
+# get a list of all objects known to Python:
+all_objects = muppy.get_objects()
+# sort out only `array.array` instances:
+all_arrays = [obj for obj in all_objects if isinstance(obj, array.array)]
 
-<span style="color: #111111; font-weight: bold;">import</span> objgraph
-objgraph.show_backrefs(all_arrays[0], filename=<span style="color: #606060;">'array.png'</span>)
+import objgraph
+objgraph.show_backrefs(all_arrays[0], filename='array.png')
 </pre>
 </div>
 
 
-<figure>
+<figure id="org50730ab">
 <img src="http://bastibe.de/static/2015-10/array.png" alt="array.png">
 
 </figure>
@@ -123,10 +124,10 @@ After a bit of experimentation, I found the culprit. To illustrate, here's an ex
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; text-decoration: underline;">leak</span>():
-    <span style="color: #404040;">test_data</span> = numpy.zeros(1024*1024)
-    <span style="color: #404040;">matlab_data</span> = matlab.double(test_data.tolist())
-    eng.<span style="color: #404040;">sum</span>(matlab_data)
+<pre class="src src-python">def leak():
+    test_data = numpy.zeros(1024*1024)
+    matlab_data = matlab.double(test_data.tolist())
+    eng.sum(matlab_data)
 </pre>
 </div>
 
@@ -135,15 +136,15 @@ Pympler has another great feature that can track allocations. The <code>SummaryT
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #111111; font-weight: bold;">from</span> pympler <span style="color: #111111; font-weight: bold;">import</span> tracker
-<span style="color: #404040;">tr</span> = tracker.SummaryTracker()
+<pre class="src src-python">from pympler import tracker
+tr = tracker.SummaryTracker()
 tr.print_diff()
 leak()
 tr.print_diff()
 </pre>
 </div>
 
-<pre class="example">
+<pre class="example" id="org4781114">
                      types |   # objects |   total size
 ========================== | =========== | ============
        &lt;class 'array.array |           1 |      8.00 MB
@@ -166,10 +167,7 @@ This data is not referenced from anywhere within Python, and is counted as <i>le
 I since posted a bug report on Mathworks, and received a patch that fixes the problem. Additionally, Mathworks said that the problem only occurs on Linux.
 </p>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -178,6 +176,9 @@ I since posted a bug report on Mathworks, and received a patch that fixes the pr
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>

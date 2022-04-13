@@ -16,6 +16,7 @@
 <link rel="msapplication-TitleColor" href="#0141ff">
 <script src="static/katex.min.js"></script>
 <script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
 <script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
@@ -24,7 +25,7 @@
 <div id="preamble" class="status"><div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
-    <a href="https://twitter.com/paperflyer">Twitter</a> | <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a>
   </div>
 </div></div>
 <div id="content">
@@ -33,9 +34,9 @@
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
 </p>
 
-<div id="outline-container-org18d2b13" class="outline-2">
-<h2 id="org18d2b13">Text</h2>
-<div class="outline-text-2" id="text-org18d2b13">
+<div id="outline-container-org24dc8a2" class="outline-2">
+<h2 id="org24dc8a2">Text</h2>
+<div class="outline-text-2" id="text-org24dc8a2">
 <p>
 For engineering or science work, my deliverables are PDFs, typically rendered from LaTeX. But writing LaTeX is not the most pleasant of writing environments. So I've tried my hand at org-mode and Markdown, compiled them to LaTeX, and then to PDF. In general, this worked well, but there always came a point where the abstraction broke, and the LaTeX leaked up the stack into my document. At which point I'd essentially write LaTeX anyway, just with a different syntax. After a few years of this, I decided to cut the middle-man, bite the bullet, and just write LaTeX.
 </p>
@@ -49,8 +50,8 @@ To render, I run a simple makefile in an infinite loop that recompiles my PDF wh
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #111111; text-decoration: underline;">diss.pdf</span>: diss.tex makefile $(<span style="color: #404040;">graph_pdfs</span>)
-    xelatex -interaction nonstopmode diss.tex
+<pre class="src src-makefile">diss.pdf: diss.tex makefile $(graph_pdfs)
+	xelatex -interaction nonstopmode diss.tex
 </pre>
 </div>
 
@@ -60,9 +61,9 @@ We'll get back to <code>$(graph_pdfs)</code> in a second.
 </div>
 </div>
 
-<div id="outline-container-org318c507" class="outline-2">
-<h2 id="org318c507">Graphs</h2>
-<div class="outline-text-2" id="text-org318c507">
+<div id="outline-container-org76b666a" class="outline-2">
+<h2 id="org76b666a">Graphs</h2>
+<div class="outline-text-2" id="text-org76b666a">
 <p>
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the <code>graphs</code> directory.
 </p>
@@ -76,11 +77,11 @@ Thus all graphs render into the main PDF and update automatically, just like the
 </p>
 
 <div class="org-src-container">
-<pre class="src src-makefile"><span style="color: #404040;">graph_sources</span> = $(<span style="color: #404040;">shell</span> find graphs -regex <span style="color: #606060;">"graphs/[0-9]-.*\.py"</span>)
-<span style="color: #404040;">graph_pdfs</span> = $(<span style="color: #404040;">patsubst</span> %.py,%.pdf,$(<span style="color: #404040;">graph_sources</span>))
+<pre class="src src-makefile">graph_sources = $(shell find graphs -regex "graphs/[0-9]-.*\.py")
+graph_pdfs = $(patsubst %.py,%.pdf,$(graph_sources))
 
-<span style="color: #111111; text-decoration: underline;">graphs/%.pdf</span>: graphs/%.py
-    cd graphs; .venv/bin/python $(<span style="color: #404040;">notdir</span> $<span style="color: #111111;">&lt;</span>)
+graphs/%.pdf: graphs/%.py
+	cd graphs; .venv/bin/python $(notdir $&lt;)
 </pre>
 </div>
 
@@ -94,9 +95,9 @@ This system is surprisingly flexible, and absolutely trivial to debug. For examp
 </div>
 </div>
 
-<div id="outline-container-org69a93d6" class="outline-2">
-<h2 id="org69a93d6">Data</h2>
-<div class="outline-text-2" id="text-org69a93d6">
+<div id="outline-container-org53f4df7" class="outline-2">
+<h2 id="org53f4df7">Data</h2>
+<div class="outline-text-2" id="text-org53f4df7">
 <p>
 All of the graph scripts and TeX are of course backed by a Git repository. But my dissertation also contains a number of databases that are far too big for Git. Instead, I rely on git-annex to synchronize data across machines from a simple webdav host.
 </p>
@@ -107,11 +108,11 @@ To set up a new writing environment from scratch, all I need is the following se
 
 <div class="org-src-container">
 <pre class="src src-shell">git clone git://mygitserver/dissertation.git dissertation
-<span style="color: #404040;">cd</span> dissertation
+cd dissertation
 git annex init
-env <span style="color: #404040;">WEBDAV_USERNAME</span>=xxx <span style="color: #404040;">WEBDAV_PASSWORD</span>=yyy git annex enableremote mywebdavserver
+env WEBDAV_USERNAME=xxx WEBDAV_PASSWORD=yyy git annex enableremote mywebdavserver
 git annex copy --from mywebdavserver
-(<span style="color: #404040;">cd</span> graphs; pipenv install)
+(cd graphs; pipenv install)
 make all
 </pre>
 </div>
@@ -126,10 +127,7 @@ And that is truly the key part; The last thing you want to do while writing is b
 </div>
 </div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
-<div id="comments"><div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-<div id="hyvor-talk-view"></div>
+<div id="comments"><div id="hyvor-talk-view"></div>
 <script type="text/javascript">
     var HYVOR_TALK_WEBSITE = 3390;
     var HYVOR_TALK_CONFIG = {
@@ -138,6 +136,9 @@ And that is truly the key part; The last thing you want to do while writing is b
     };
 </script>
 <script async type="text/javascript" src="//talk.hyvor.com/web-api/embed"></script></div></div>
-<div id="postamble" class="status"><center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://bastibe.de/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
 </body>
 </html>
