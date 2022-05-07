@@ -1,0 +1,65 @@
+#+title: Darktable for Fujifilm Cameras
+#+date: <2022-05-04 20:41>
+#+filetags: photography fujifilm darktable
+
+You know what I like to see when I import photos from my Fujifilm camera into Darktable?
+
+#+begin_export html
+<figure>
+<img src="/static/2022-05/darktable-fuji.png" alt="A screenshot of darktable, with RAF files, autocropped, auto-DR'd, with film simulation applied"/>
+<figcaption>Each RAF file has tags with the aspect ratio, DR mode, and film simulation, is exposed correctly, cropped correctly, and has the correct film simulation applied.</figcaption>
+</figure>
+#+end_export
+
+However, that is not the default. Darktable, like most raw developers, is camera-agnostic.
+
+#+begin_export html
+<div style="margin-left: 2em">
+<h3>agnostic</h3>
+ăg-nŏs′tĭk <br>
+<b>noun</b> </br>
+[...] <br>
+<ol start="3">
+<li>One who is doubtful or noncommittal about something.</li>
+</ol>
+</div>
+#+end_export
+
+Which means that Darktable does not know about any Fujifilm-specific raw file metadata, such as crop, dynamic range modes, or film simulations. Thus what you'd normally see in Darktable is more like this:
+
+#+begin_export html
+<figure>
+<img src="/static/2022-05/darktable-default.png" alt="A screenshot of default darktable, DR200/DR400 files are underexposed, no crops are applied, default rendering, no tags."/>
+<figcaption>Default darktable, DR200/DR400 files are underexposed, no crops are applied, colors don't quite match, no tags.</figcaption>
+</figure>
+#+end_export
+
+Notice how all the DR200/DR400 images are underexposed by one and two stops, how the first JPG is a square crop, but the RAF is 3:2, how the color of the grass and the train are subtly different in RAF and JPG.
+
+But thankfully, Darktable has a scripting interface for automating things. And what I've done here is a little script that uses [[https://www.exiftool.org/][exiftool]] to read the missing metadata from the RAF file and apply appropriate styles to get Darktable's default rendering close to the JPG.
+
+Here's the lua script in its entirety:
+
+
+#+begin_export html
+<div style="height: 20em; overflow: scroll; background-color: #eee; padding-left: 1em">
+#+end_export
+
+[[http:/static/2022-05/fujifilm_auto_settings.lua][fujifilm ̲auto ̲settings.lua]]
+
+#+include: ../static/2022-05/fujifilm_auto_settings.lua src lua
+
+#+begin_export html
+</div>
+#+end_export
+
+However, there's a catch: Scripts in Darktable can not modify darkroom state directly. But they /can/ load styles. So to make the script work, we need to define a number of styles that do the heavy lifting here:
+
+- Two styles ~DR200~ and ~DR400~ for the dynamic range modes that brighten the image by one and two stops, respectively (I like to use the Tone Equalizer [[http:/static/2022-05/DR200.png][like this]]).
+- Four styles ~square ̲crop_landscape~ and ~square ̲crop_portrait~ and ~sixteen ̲by ̲nine ̲crop_landscape~ and ~sixteen ̲by ̲nine ̲crop_portrait~ that crop landscape/portrait images to 1:1 and 16:9 ratio.
+- One style for each film simulation you use: ~provia~, ~astia~, ~velvia~, ~classic ̲chrome~, ~pro ̲neg ̲standard~, ~pro ̲neg ̲high~, ~eterna~, ~acros~, ~acros ̲green~, ~acros ̲red~, ~acros ̲yellow~, ~mono~, ~mono ̲green~, ~mono ̲red~, ~mono ̲yellow~, ~sepia~.
+  The linked styles use [[https://blog.sowerby.me/fuji-film-simulation-profiles/][Stuart Sowerby's Film Simulation LUTs]] as film simulations, which must be installed in ~$LUTs/Fujifilm XTrans III/$lut.3dl~.
+
+Download a zip file with all the above styles [[http:/static/2022-05/styles.zip][here]], and appropriately-renamed LUTs [[http:/static/2022-05/Fujifilm XTrans III.zip][here]]. (This section will be revised once I finish building my own set of LUTs).
+
+Then copy the lua script to ~~/.config/darktable/lua/contrib/~, activate it in the script manager (bottom left in the lighttable), and it should automatically run whenever you import new Fujifilm raf files! (Start Darktable with ~darktable -d opencl~ to see debug messages, and bind a keyboard shortcut to ~lua scripts/fujifilm_auto_settings~ to trigger the script manually.)

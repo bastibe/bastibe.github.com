@@ -1,10 +1,383 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><![CDATA[Bastibe.de]]></title>
 <description><![CDATA[Bastibe.de]]></description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Wed, 13 Apr 2022 10:18:29 +0200</lastBuildDate>
+<lastBuildDate>Sat, 07 May 2022 20:04:27 +0200</lastBuildDate>
+<item>
+  <title><![CDATA[Darktable for Fujifilm Cameras]]></title>
+  <description><![CDATA[
+<p>
+You know what I like to see when I import photos from my Fujifilm camera into Darktable?
+</p>
+
+<figure>
+<img src="/static/2022-05/darktable-fuji.png" alt="A screenshot of darktable, with RAF files, autocropped, auto-DR'd, with film simulation applied"/>
+<figcaption>Each RAF file has tags with the aspect ratio, DR mode, and film simulation, is exposed correctly, cropped correctly, and has the correct film simulation applied.</figcaption>
+</figure>
+
+<p>
+However, that is not the default. Darktable, like most raw developers, is camera-agnostic.
+</p>
+
+<div style="margin-left: 2em">
+<h3>agnostic</h3>
+ăg-nŏs′tĭk <br>
+<b>noun</b> </br>
+[...] <br>
+<ol start="3">
+<li>One who is doubtful or noncommittal about something.</li>
+</ol>
+</div>
+
+<p>
+Which means that Darktable does not know about any Fujifilm-specific raw file metadata, such as crop, dynamic range modes, or film simulations. Thus what you'd normally see in Darktable is more like this:
+</p>
+
+<figure>
+<img src="/static/2022-05/darktable-default.png" alt="A screenshot of default darktable, DR200/DR400 files are underexposed, no crops are applied, default rendering, no tags."/>
+<figcaption>Default darktable, DR200/DR400 files are underexposed, no crops are applied, colors don't quite match, no tags.</figcaption>
+</figure>
+
+<p>
+Notice how all the DR200/DR400 images are underexposed by one and two stops, how the first JPG is a square crop, but the RAF is 3:2, how the color of the grass and the train are subtly different in RAF and JPG.
+</p>
+
+<p>
+But thankfully, Darktable has a scripting interface for automating things. And what I've done here is a little script that uses <a href="https://www.exiftool.org/">exiftool</a> to read the missing metadata from the RAF file and apply appropriate styles to get Darktable's default rendering close to the JPG.
+</p>
+
+<p>
+Here's the lua script in its entirety:
+</p>
+
+
+<div style="height: 20em; overflow: scroll; background-color: #eee; padding-left: 1em">
+
+<p>
+<a href="http:/static/2022-05/fujifilm_auto_settings.lua">fujifilm ̲auto ̲settings.lua</a>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lua">--[[ fujifilm_auto_settings-0.2
+
+Apply Fujifilm film simulations, in-camera crop mode, and dynamic range.
+
+Copyright (C) 2022 Bastian Bechtold &lt;bastibe.dev@mailbox.org&gt;
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+--]]
+
+--[[About this Plugin
+Automatically applies styles that load Fujifilm film simulation LUTs,
+copy crop ratios from the JPG, and correct exposure according to the
+chosen dynamic range setting in camera.
+
+Dependencies:
+- exiftool (https://www.sno.phy.queensu.ca/~phil/exiftool/)
+- Fuji LUTs (https://blog.sowerby.me/fuji-film-simulation-profiles/)
+
+Based on fujifim_dynamic_range by Dan Torop.
+
+  Film Simulations
+  ----------------
+
+Fujifilm cameras are famous for their film simulations, such as Provia
+or Velvia or Classic Chrome. Indeed it is my experience that they rely
+on these film simulations for accurate colors.
+
+Darktable however does not know about or implement these film
+simulations. But they are available to download from Stuart Sowerby as
+3DL LUTs. (PNG LUTs are also available, but they show a strange
+posterization artifact when loaded in Darktable, which the 3DLs do
+not).
+
+In order to use this plugin, you must prepare a number of styles:
+- provia
+- astia
+- velvia
+- classic_chrome
+- pro_neg_standard
+- pro_neg_high
+- eterna
+- acros_green
+- acros_red
+- acros_yellow
+- acros
+- mono_green
+- mono_red
+- mono_yellow
+- mono
+- sepia
+
+These styles should apply the according film simulation in a method of
+your choosing.
+
+This plugin checks the image's "Film Mode" exif parameter, and applies
+the appropriate style. If no matching style exists, no action is taken
+and no harm is done.
+
+  Crop Factor
+  -----------
+
+Fujifilm cameras allow in-camera cropping to one of three aspect
+ratios: 2:3 (default), 16:9, and 1:1.
+
+This plugin checks the image's "Raw Image Aspect Ratio" exif
+parameter, and applies the appropriate style.
+
+To use, prepare another four styles:
+- square_crop_portrait
+- square_crop_landscape
+- sixteen_by_nine_crop_portrait
+- sixteen_by_nine_crop_landscape
+
+These styles should apply a square crop and a 16:9 crop to
+portrait/landscape images. If no matching style exists, no action is
+taken and no harm is done.
+
+  Dynamic Range
+  -------------
+
+Fujifilm cameras have a built-in dynamic range compensation, which
+(optionally automatically) reduce exposure by one or two stops, and
+compensate by raising the tone curve by one or two stops. These modes
+are called DR200 and DR400, respectively.
+
+The plugin reads the raw file's "Auto Dynamic Range" or "Development
+Dynamic Range" parameter, and applies one of two styles:
+- DR200
+- DR400
+
+These styles should raise exposure by one and two stops, respectively,
+and expand highlight latitude to make room for additional highlights.
+I like to implement them with the tone equalizer in eigf mode, raising
+exposure by one/two stops over the lower half of the sliders, then
+ramping to zero at 0 EV. If no matching styles exist, no action is
+taken and no harm is done.
+
+These tags have been checked on a Fujifilm X-T3 and X-Pro2. Other
+cameras may behave in other ways.
+
+--]]
+
+local dt = require "darktable"
+local du = require "lib/dtutils"
+local df = require "lib/dtutils.file"
+
+du.check_min_api_version("7.0.0", "fujifilm_auto_settings")
+
+-- return data structure for script_manager
+
+local script_data = {}
+
+script_data.destroy = nil -- function to destory the script
+script_data.destroy_method = nil -- set to hide for libs since we can't destroy them completely yet, otherwise leave as nil
+script_data.restart = nil -- how to restart the (lib) script after it's been hidden - i.e. make it visible again
+
+local function exiftool_get(exiftool_command, RAF_filename, flag)
+    local command = exiftool_command .. " " .. flag .. " -t " .. RAF_filename
+    dt.print_log(command)
+    local output = io.popen(command)
+    local exiftool_result = output:read("*all")
+    output:close()
+    if #exiftool_result == 0 then
+        dt.print_error("[fujifilm_auto_settings] no output returned by exiftool")
+        return
+    end
+    local exiftool_result = string.match(exiftool_result, "\t(.*)")
+    if not exiftool_result then
+        dt.print_error("[fujifilm_auto_settings] could not parse exiftool output")
+        return
+    end
+    exiftool_result = exiftool_result:match("^%s*(.-)%s*$") -- strip whitespace
+    return exiftool_result
+end
+
+local function apply_style(image, style_name)
+    for _, s in ipairs(dt.styles) do
+        if s.name == style_name then
+            dt.styles.apply(s, image)
+            return
+        end
+    end
+    dt.print_error("[fujifilm_auto_settings] could not find style " .. style_name)
+end
+
+local function apply_tag(image, tag_name)
+    local tagnum = dt.tags.find(tag_name)
+    if tagnum == nil then
+        -- create tag if it doesn't exist
+        tagnum = dt.tags.create(tag_name)
+        dt.print_log("[fujifilm_auto_settings] creating tag " .. tag_name)
+    end
+    dt.tags.attach(tagnum, image)
+end
+
+
+local function detect_auto_settings(event, image)
+    if image.exif_maker ~= "FUJIFILM" then
+        dt.print_log("[fujifilm_auto_settings] ignoring non-Fujifilm image")
+        return
+    end
+    -- it would be nice to check image.is_raw but this appears to not yet be set
+    if not string.match(image.filename, "%.RAF$") then
+        dt.print_log("[fujifilm_auto_settings] ignoring non-raw image")
+        return
+    end
+    local exiftool_command = df.check_if_bin_exists("exiftool")
+    if not exiftool_command then
+        dt.print_error("[fujifilm_auto_settings] exiftool not found")
+        return
+    end
+    local RAF_filename = df.sanitize_filename(tostring(image))
+
+    -- dynamic range mode
+    -- if in DR Auto, the value is saved to Auto Dynamic Range, with a % suffix:
+    local auto_dynamic_range = exiftool_get(exiftool_command, RAF_filename, "-AutoDynamicRange")
+    -- if manually chosen DR, the value is saved to Development Dynamic Range:
+    if auto_dynamic_range == nil then
+        auto_dynamic_range = exiftool_get(exiftool_command, RAF_filename, "-DevelopmentDynamicRange") .. '%'
+    end
+    if auto_dynamic_range == "100%" then
+        apply_tag(image, "DR100")
+        -- default; no need to change style
+    elseif auto_dynamic_range == "200%" then
+        apply_style(image, "DR200")
+        apply_tag(image, "DR200")
+        dt.print_log("[fujifilm_auto_settings] DR200")
+    elseif auto_dynamic_range == "400%" then
+        apply_style(image, "DR400")
+        apply_tag(image, "DR400")
+        dt.print_log("[fujifilm_auto_settings] DR400")
+    end
+
+    -- cropmode
+    local raw_aspect_ratio = exiftool_get(exiftool_command, RAF_filename, "-RawImageAspectRatio")
+    if raw_aspect_ratio == "3:2" then
+        apply_tag(image, "3:2")
+        -- default; no need to apply style
+    elseif raw_aspect_ratio == "1:1" then
+        if image.width &gt; image.height then
+            apply_style(image, "square_crop_landscape")
+        else
+            apply_style(image, "square_crop_portrait")
+        end
+        apply_tag(image, "1:1")
+        dt.print_log("[fujifilm_auto_settings] square crop")
+    elseif raw_aspect_ratio == "16:9" then
+        if image.width &gt; image.height then
+            apply_style(image, "sixteen_by_nine_crop_landscape")
+        else
+            apply_style(image, "sixteen_by_nine_crop_portrait")
+        end
+        apply_tag(image, "16:9")
+        dt.print_log("[fujifilm_auto_settings] 16:9 crop")
+    end
+
+    -- filmmode
+    local raw_filmmode = exiftool_get(exiftool_command, RAF_filename, "-FilmMode")
+    local style_map = {
+        ["Provia"] = "provia",
+        ["Astia"] = "astia",
+        ["Classic Chrome"] = "classic_chrome",
+        ["Eterna"] = "eterna",
+        ["Acros+G"] = "acros_green",
+        ["Acros+R"] = "acros_red",
+        ["Acros+Ye"] = "acros_yellow",
+        ["Acros"] = "acros",
+        ["Mono+G"] = "mono_green",
+        ["Mono+R"] = "mono_red",
+        ["Mono+Ye"] = "mono_yellow",
+        ["Mono"] = "mono",
+        ["Pro Neg Hi"] = "pro_neg_high",
+        ["Pro Neg Std"] = "pro_neg_standard",
+        ["Sepia"] = "sepia",
+        ["Velvia"] = "velvia",
+    }
+    for key, value in pairs(style_map) do
+        if string.find(raw_filmmode, key) then
+            apply_style(image, value)
+            apply_tag(image, key)
+            dt.print_log("[fujifilm_auto_settings] film simulation " .. key)
+        end
+    end
+end
+
+local function detect_auto_settings_multi(event, shortcut)
+    local images = dt.gui.selection()
+    if #images == 0 then
+        dt.print(_("Please select an image"))
+    else
+        for _, image in ipairs(images) do
+            detect_auto_settings(event, image)
+        end
+    end
+end
+
+local function destroy()
+    dt.destroy_event("fujifilm_auto_settings", "post-import-image")
+    dt.destroy_event("fujifilm_auto_settings", "shortcut")
+end
+
+if not df.check_if_bin_exists("exiftool") then
+    dt.print_log("Please install exiftool to use fujifilm_auto_settings")
+    error "[fujifilm_auto_settings] exiftool not found"
+end
+
+dt.register_event("fujifilm_auto_settings", "post-import-image", detect_auto_settings)
+
+dt.register_event("fujifilm_auto_settings", "shortcut", detect_auto_settings_multi, "fujifilm_auto_settings")
+
+dt.print_log("[fujifilm_auto_settings] loaded")
+
+script_data.destroy = destroy
+
+return script_data
+</pre>
+</div>
+
+</div>
+
+<p>
+However, there's a catch: Scripts in Darktable can not modify darkroom state directly. But they <i>can</i> load styles. So to make the script work, we need to define a number of styles that do the heavy lifting here:
+</p>
+
+<ul class="org-ul">
+<li>Two styles <code>DR200</code> and <code>DR400</code> for the dynamic range modes that brighten the image by one and two stops, respectively (I like to use the Tone Equalizer <a href="http:/static/2022-05/DR200.png">like this</a>).</li>
+<li>Four styles <code>square ̲crop_landscape</code> and <code>square ̲crop_portrait</code> and <code>sixteen ̲by ̲nine ̲crop_landscape</code> and <code>sixteen ̲by ̲nine ̲crop_portrait</code> that crop landscape/portrait images to 1:1 and 16:9 ratio.</li>
+<li>One style for each film simulation you use: <code>provia</code>, <code>astia</code>, <code>velvia</code>, <code>classic ̲chrome</code>, <code>pro ̲neg ̲standard</code>, <code>pro ̲neg ̲high</code>, <code>eterna</code>, <code>acros</code>, <code>acros ̲green</code>, <code>acros ̲red</code>, <code>acros ̲yellow</code>, <code>mono</code>, <code>mono ̲green</code>, <code>mono ̲red</code>, <code>mono ̲yellow</code>, <code>sepia</code>.
+The linked styles use <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's Film Simulation LUTs</a> as film simulations, which must be installed in <code>$LUTs/Fujifilm XTrans III/$lut.3dl</code>.</li>
+</ul>
+
+<p>
+Download a zip file with all the above styles <a href="http:/static/2022-05/styles.zip">here</a>, and appropriately-renamed LUTs <a href="http:/static/2022-05/Fujifilm%20XTrans%20III.zip">here</a>. (This section will be revised once I finish building my own set of LUTs).
+</p>
+
+<p>
+Then copy the lua script to <code>~/.config/darktable/lua/contrib/</code>, activate it in the script manager (bottom left in the lighttable), and it should automatically run whenever you import new Fujifilm raf files! (Start Darktable with <code>darktable -d opencl</code> to see debug messages, and bind a keyboard shortcut to <code>lua scripts/fujifilm_auto_settings</code> to trigger the script manually.)
+</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <a href="https://bastibe.de/tag-fujifilm.html">fujifilm</a> <a href="https://bastibe.de/tag-darktable.html">darktable</a> ]]></description>
+  <category><![CDATA[photography]]></category>
+  <category><![CDATA[fujifilm]]></category>
+  <category><![CDATA[darktable]]></category>
+  <link>https://bastibe.de/2022-05-04-customizing-darktable-for-fujifilm-cameras.html</link>
+  <guid>https://bastibe.de/2022-05-04-customizing-darktable-for-fujifilm-cameras.html</guid>
+  <pubDate>Wed, 04 May 2022 20:41:00 +0200</pubDate>
+</item>
 <item>
   <title><![CDATA[Converting Capture one Presets to LUTs]]></title>
   <description><![CDATA[
@@ -52,6 +425,7 @@ When applying the LUTs in Darktable's <i>lut 3D</i> module, there are a few more
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2022-01-09-converting-capture-one-presets-to-luts.html</link>
+  <guid>https://bastibe.de/2022-01-09-converting-capture-one-presets-to-luts.html</guid>
   <pubDate>Sun, 09 Jan 2022 14:37:00 +0100</pubDate>
 </item>
 <item>
@@ -115,6 +489,7 @@ The book describes two implementations of a simple programming language. The fir
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2022-01-04-books-of-2021.html</link>
+  <guid>https://bastibe.de/2022-01-04-books-of-2021.html</guid>
   <pubDate>Tue, 04 Jan 2022 09:40:00 +0100</pubDate>
 </item>
 <item>
@@ -143,6 +518,7 @@ With that, OpenCL was once again recognized by Darktable and the rest of my phot
   <category><![CDATA[computers]]></category>
   <category><![CDATA[windows]]></category>
   <link>https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html</link>
+  <guid>https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html</guid>
   <pubDate>Sat, 04 Dec 2021 09:19:00 +0100</pubDate>
 </item>
 <item>
@@ -289,6 +665,7 @@ That said, the differences in rendering and resolution are really very minor, an
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2021-10-09-fuji-travel-zooms.html</link>
+  <guid>https://bastibe.de/2021-10-09-fuji-travel-zooms.html</guid>
   <pubDate>Sat, 09 Oct 2021 15:16:00 +0200</pubDate>
 </item>
 <item>
@@ -362,6 +739,7 @@ So overall, I am very happy with Darktable in its latest iteration. As always, t
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2021-09-04-a-review-of-darktable.html</link>
+  <guid>https://bastibe.de/2021-09-04-a-review-of-darktable.html</guid>
   <pubDate>Sat, 04 Sep 2021 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -422,6 +800,7 @@ Overall, this experiment has taught me that all my lenses are high resolution, a
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2021-05-27-camera-resolution.html</link>
+  <guid>https://bastibe.de/2021-05-27-camera-resolution.html</guid>
   <pubDate>Thu, 27 May 2021 16:45:00 +0200</pubDate>
 </item>
 <item>
@@ -518,6 +897,7 @@ And it actually comes to a satisfying end in the third book, instead of methaste
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2021-05-05-books-of-2020.html</link>
+  <guid>https://bastibe.de/2021-05-05-books-of-2020.html</guid>
   <pubDate>Wed, 05 May 2021 17:14:00 +0200</pubDate>
 </item>
 <item>
@@ -621,6 +1001,7 @@ On the whole, I grew to quite like Capture One, despite its flaws, mostly for it
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2021-05-04-a-review-of-the-raw-photo-editor-capture-one.html</link>
+  <guid>https://bastibe.de/2021-05-04-a-review-of-the-raw-photo-editor-capture-one.html</guid>
   <pubDate>Tue, 04 May 2021 13:24:00 +0200</pubDate>
 </item>
 <item>
@@ -699,6 +1080,7 @@ So, in summary, the iPhone SE was not for me. Don't get me wrong, it's a nice en
   <category><![CDATA[computers]]></category>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2020-12-27-ios-and-android.html</link>
+  <guid>https://bastibe.de/2020-12-27-ios-and-android.html</guid>
   <pubDate>Sun, 27 Dec 2020 14:32:00 +0100</pubDate>
 </item>
 <item>
@@ -756,6 +1138,7 @@ I think I learned something from this experiment: There are indeed color differe
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2020-10-26-differences-between-cameras.html</link>
+  <guid>https://bastibe.de/2020-10-26-differences-between-cameras.html</guid>
   <pubDate>Tue, 27 Oct 2020 10:00:00 +0100</pubDate>
 </item>
 <item>
@@ -991,6 +1374,7 @@ What did however make a big difference was lens quality. Flare control, aperture
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2020-10-16-lenses-matter.html</link>
+  <guid>https://bastibe.de/2020-10-16-lenses-matter.html</guid>
   <pubDate>Fri, 16 Oct 2020 12:14:00 +0200</pubDate>
 </item>
 <item>
@@ -1124,6 +1508,7 @@ There is no joy in technology any more.
   <category><![CDATA[linux]]></category>
   <category><![CDATA[windows]]></category>
   <link>https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html</link>
+  <guid>https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html</guid>
   <pubDate>Thu, 17 Sep 2020 10:25:00 +0200</pubDate>
 </item>
 <item>
@@ -1230,6 +1615,7 @@ And that is truly the key part; The last thing you want to do while writing is b
   <category><![CDATA[emacs]]></category>
   <category><![CDATA[workflow]]></category>
   <link>https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html</link>
+  <guid>https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html</guid>
   <pubDate>Wed, 27 May 2020 18:11:00 +0200</pubDate>
 </item>
 <item>
@@ -1289,6 +1675,7 @@ In summary, this setup works very well for me. It is simple and efficient, and d
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2020-05-19-how-i-record-screen-casts.html</link>
+  <guid>https://bastibe.de/2020-05-19-how-i-record-screen-casts.html</guid>
   <pubDate>Tue, 19 May 2020 16:33:00 +0200</pubDate>
 </item>
 <item>
@@ -1538,6 +1925,7 @@ A summary of the topics discussed.
   <category><![CDATA[programming]]></category>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2020-05-14-file-parsing-tutorial.html</link>
+  <guid>https://bastibe.de/2020-05-14-file-parsing-tutorial.html</guid>
   <pubDate>Thu, 14 May 2020 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -2415,6 +2803,7 @@ There are surprisingly few non-superficial comparisons; most are just feature ma
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2020-05-01-raw-developer-comparison.html</link>
+  <guid>https://bastibe.de/2020-05-01-raw-developer-comparison.html</guid>
   <pubDate>Fri, 01 May 2020 19:15:00 +0200</pubDate>
 </item>
 <item>
@@ -2489,6 +2878,7 @@ So in summary, I have generally found Open Source Software to be <i>better</i> t
   <category><![CDATA[programming]]></category>
   <category><![CDATA[open-source]]></category>
   <link>https://bastibe.de/2020-03-27-the-value-proposition-of-open-source-software.html</link>
+  <guid>https://bastibe.de/2020-03-27-the-value-proposition-of-open-source-software.html</guid>
   <pubDate>Fri, 27 Mar 2020 08:17:00 +0100</pubDate>
 </item>
 <item>
@@ -2788,6 +3178,7 @@ Summary, and a few finishing touches.
   <category><![CDATA[programming]]></category>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2020-03-20-qt-for-python-tutorial.html</link>
+  <guid>https://bastibe.de/2020-03-20-qt-for-python-tutorial.html</guid>
   <pubDate>Fri, 20 Mar 2020 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -2895,6 +3286,7 @@ And as it turns out, humans are by and large pretty bad at killing each other. E
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2020-03-11-books-of-2019.html</link>
+  <guid>https://bastibe.de/2020-03-11-books-of-2019.html</guid>
   <pubDate>Wed, 11 Mar 2020 17:08:00 +0100</pubDate>
 </item>
 <item>
@@ -2959,6 +3351,7 @@ With these two steps you can develop your Fuji RAFs better than your camera, and
   <category><![CDATA[photography]]></category>
   <category><![CDATA[linux]]></category>
   <link>https://bastibe.de/2020-02-09-editing-fuji-photos-on-linux.html</link>
+  <guid>https://bastibe.de/2020-02-09-editing-fuji-photos-on-linux.html</guid>
   <pubDate>Sun, 09 Feb 2020 12:54:00 +0100</pubDate>
 </item>
 <item>
@@ -3011,6 +3404,7 @@ I should go play with my child now, and run around in the yard, or maybe read a 
   <category><![CDATA[computers]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2020-01-21-i-miss-my-mac.html</link>
+  <guid>https://bastibe.de/2020-01-21-i-miss-my-mac.html</guid>
   <pubDate>Tue, 21 Jan 2020 16:00:00 +0100</pubDate>
 </item>
 <item>
@@ -3039,6 +3433,7 @@ Which is quite the opposite of <i>Intuitive</i>. Quite the opposite of "easy to 
   <category><![CDATA[computers]]></category>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2019-12-29-efficiency-is-not-intuitive.html</link>
+  <guid>https://bastibe.de/2019-12-29-efficiency-is-not-intuitive.html</guid>
   <pubDate>Sun, 29 Dec 2019 12:06:00 +0100</pubDate>
 </item>
 <item>
@@ -3242,6 +3637,7 @@ Forget about the Fuji XF10. I tried it. It's a newer sensor, but so clumsy, so s
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2019-10-27-travel-cameras.html</link>
+  <guid>https://bastibe.de/2019-10-27-travel-cameras.html</guid>
   <pubDate>Sun, 27 Oct 2019 20:22:00 +0100</pubDate>
 </item>
 <item>
@@ -3334,6 +3730,7 @@ in the magnitude domain only; Phases, and different window functions, go beyond 
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-signal-processing.html">signal-processing</a> ]]></description>
   <category><![CDATA[signal-processing]]></category>
   <link>https://bastibe.de/2019-09-20-analyzing-speech-signals-in-time-and-frequency.html</link>
+  <guid>https://bastibe.de/2019-09-20-analyzing-speech-signals-in-time-and-frequency.html</guid>
   <pubDate>Fri, 20 Sep 2019 09:40:00 +0200</pubDate>
 </item>
 <item>
@@ -3397,6 +3794,7 @@ Even though each click has a uniform spectrum, adding multiple clicks together c
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-signal-processing.html">signal-processing</a> ]]></description>
   <category><![CDATA[signal-processing]]></category>
   <link>https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html</link>
+  <guid>https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html</guid>
   <pubDate>Thu, 19 Sep 2019 13:51:00 +0200</pubDate>
 </item>
 <item>
@@ -3444,6 +3842,7 @@ Bringing this back to the science of signal processing, I believe that most spee
   <category><![CDATA[signal-processing]]></category>
   <category><![CDATA[science]]></category>
   <link>https://bastibe.de/2019-09-11-how-we-perceive-speech.html</link>
+  <guid>https://bastibe.de/2019-09-11-how-we-perceive-speech.html</guid>
   <pubDate>Wed, 11 Sep 2019 16:35:00 +0200</pubDate>
 </item>
 <item>
@@ -3501,6 +3900,7 @@ After five years of dealing with this, I am thoroughly disheartened. Instead of 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-science.html">science</a> ]]></description>
   <category><![CDATA[science]]></category>
   <link>https://bastibe.de/2019-07-09-publish-or-perish.html</link>
+  <guid>https://bastibe.de/2019-07-09-publish-or-perish.html</guid>
   <pubDate>Tue, 09 Jul 2019 13:48:00 +0200</pubDate>
 </item>
 <item>
@@ -3740,6 +4140,7 @@ Autofocus speed. Is good. No need obsessing over it.
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2019-05-11-fuji-zoom-lenses.html</link>
+  <guid>https://bastibe.de/2019-05-11-fuji-zoom-lenses.html</guid>
   <pubDate>Sat, 11 May 2019 13:18:00 +0200</pubDate>
 </item>
 <item>
@@ -3779,6 +4180,7 @@ So in the end, it comes down to a compromize: If you want/need the best glass, i
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2019-03-25-on-camera-sensor-sizes.html</link>
+  <guid>https://bastibe.de/2019-03-25-on-camera-sensor-sizes.html</guid>
   <pubDate>Mon, 25 Mar 2019 20:20:00 +0100</pubDate>
 </item>
 <item>
@@ -3808,6 +4210,7 @@ In this picture, the sun was just barely peeking into the edge between the tree 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2019-03-13-learning-about-photography-sunstars.html</link>
+  <guid>https://bastibe.de/2019-03-13-learning-about-photography-sunstars.html</guid>
   <pubDate>Wed, 13 Mar 2019 20:17:00 +0100</pubDate>
 </item>
 <item>
@@ -3917,6 +4320,7 @@ to move closer on a wide lens.
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
   <category><![CDATA[photography]]></category>
   <link>https://bastibe.de/2019-02-24-what-i-learned-about-amateur-photography.html</link>
+  <guid>https://bastibe.de/2019-02-24-what-i-learned-about-amateur-photography.html</guid>
   <pubDate>Sun, 24 Feb 2019 10:50:00 +0100</pubDate>
 </item>
 <item>
@@ -4038,6 +4442,7 @@ You can read the first three chapters <a href="http://gingerhaze.com/nimona">onl
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2019-01-06-books-of-2018.html</link>
+  <guid>https://bastibe.de/2019-01-06-books-of-2018.html</guid>
   <pubDate>Sun, 06 Jan 2019 10:54:00 +0100</pubDate>
 </item>
 <item>
@@ -4075,6 +4480,7 @@ But beyond simplicity, resampy uses a clever implementation that is a far cry be
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2018-11-08-cool-python-libraries.html</link>
+  <guid>https://bastibe.de/2018-11-08-cool-python-libraries.html</guid>
   <pubDate>Thu, 08 Nov 2018 14:52:00 +0100</pubDate>
 </item>
 <item>
@@ -4131,6 +4537,7 @@ This is the nuclear option. I tried <code>SIGTERM</code> and <code>SIGHUP</code>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2018-10-26-dealing-with-unreliable-software.html</link>
+  <guid>https://bastibe.de/2018-10-26-dealing-with-unreliable-software.html</guid>
   <pubDate>Fri, 26 Oct 2018 09:45:00 +0200</pubDate>
 </item>
 <item>
@@ -4167,6 +4574,7 @@ I recently got my first github issue that was <a href="https://github.com/bastib
   <category><![CDATA[open-source]]></category>
   <category><![CDATA[thank-you]]></category>
   <link>https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html</link>
+  <guid>https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html</guid>
   <pubDate>Sun, 14 Oct 2018 10:20:00 +0200</pubDate>
 </item>
 <item>
@@ -4215,6 +4623,7 @@ I do this on my web server, with my journal files <a href="https://syncthing.net
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> ]]></description>
   <category><![CDATA[org-journal]]></category>
   <link>https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html</link>
+  <guid>https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html</guid>
   <pubDate>Sun, 03 Jun 2018 10:28:00 +0200</pubDate>
 </item>
 <item>
@@ -4245,6 +4654,7 @@ Unless <a href="https://github.com/Khan/KaTeX">katex.min.js</a> somehow is loadi
   <category><![CDATA[privacy]]></category>
   <category><![CDATA[blog]]></category>
   <link>https://bastibe.de/2018-05-25-gdpr-compliance.html</link>
+  <guid>https://bastibe.de/2018-05-25-gdpr-compliance.html</guid>
   <pubDate>Fri, 25 May 2018 17:21:00 +0200</pubDate>
 </item>
 <item>
@@ -4297,6 +4707,7 @@ Unsurprisingly, preallocation is indeed faster than growing an array. What <i>is
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2018-04-10-appending-to-matlab-arrays.html</link>
+  <guid>https://bastibe.de/2018-04-10-appending-to-matlab-arrays.html</guid>
   <pubDate>Tue, 10 Apr 2018 13:48:00 +0200</pubDate>
 </item>
 <item>
@@ -4374,6 +4785,7 @@ With this system, I never miss anything, but once I consume all the news in my f
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-workflow.html">workflow</a> ]]></description>
   <category><![CDATA[workflow]]></category>
   <link>https://bastibe.de/2018-04-07-defeating-news-addiction.html</link>
+  <guid>https://bastibe.de/2018-04-07-defeating-news-addiction.html</guid>
   <pubDate>Sat, 07 Apr 2018 10:02:00 +0200</pubDate>
 </item>
 <item>
@@ -4421,6 +4833,7 @@ Future journal entries are highlighted in <code>M-x calendar</code>, and you can
   <category><![CDATA[org-journal]]></category>
   <category><![CDATA[org-mode]]></category>
   <link>https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html</link>
+  <guid>https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html</guid>
   <pubDate>Mon, 02 Apr 2018 11:38:00 +0200</pubDate>
 </item>
 <item>
@@ -4444,6 +4857,7 @@ As <a href="https://github.com/kaushalmodi">Kaushal Modi</a> pointed out in the 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-blog.html">blog</a> ]]></description>
   <category><![CDATA[blog]]></category>
   <link>https://bastibe.de/2018-03-22-org-static-blog-gets-tags.html</link>
+  <guid>https://bastibe.de/2018-03-22-org-static-blog-gets-tags.html</guid>
   <pubDate>Thu, 22 Mar 2018 08:37:00 +0100</pubDate>
 </item>
 <item>
@@ -4469,6 +4883,7 @@ Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min
   <category><![CDATA[emacs]]></category>
   <category><![CDATA[blog]]></category>
   <link>https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html</link>
+  <guid>https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html</guid>
   <pubDate>Sat, 17 Mar 2018 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4506,6 +4921,7 @@ In summary, we should teach people about files and processes, and empower them t
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2018-01-24-files-and-processes.html</link>
+  <guid>https://bastibe.de/2018-01-24-files-and-processes.html</guid>
   <pubDate>Wed, 24 Jan 2018 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4758,6 +5174,7 @@ There are other possible solutions: ① You could modify the launchd entry such 
   <category><![CDATA[backup]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2017-12-29-rsnapshot-on-macos.html</link>
+  <guid>https://bastibe.de/2017-12-29-rsnapshot-on-macos.html</guid>
   <pubDate>Fri, 29 Dec 2017 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4781,6 +5198,7 @@ A few years ago, I had high hopes that <a href="http://bastibe.de/2009-03-14-get
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-backup.html">backup</a> ]]></description>
   <category><![CDATA[backup]]></category>
   <link>https://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html</link>
+  <guid>https://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html</guid>
   <pubDate>Thu, 28 Dec 2017 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4864,6 +5282,7 @@ But as much as I love aviation, my first love is still Science Fiction. We live 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2017-12-20-books-of-2017.html</link>
+  <guid>https://bastibe.de/2017-12-20-books-of-2017.html</guid>
   <pubDate>Wed, 20 Dec 2017 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4903,6 +5322,7 @@ Mind you, conda solved real problems back in the day (binary package distributio
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2017-11-20-pyenv.html</link>
+  <guid>https://bastibe.de/2017-11-20-pyenv.html</guid>
   <pubDate>Mon, 20 Nov 2017 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4923,6 +5343,7 @@ This situation is really a bit sad. Installing Emacs should not be this hard. Bu
   <category><![CDATA[emacs]]></category>
   <category><![CDATA[windows]]></category>
   <link>https://bastibe.de/2017-11-19-emacs-on-windows.html</link>
+  <guid>https://bastibe.de/2017-11-19-emacs-on-windows.html</guid>
   <pubDate>Sun, 19 Nov 2017 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -4966,6 +5387,7 @@ That's a thing I do: I write open source libraries. <i>Good</i> libraries, but a
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2017-10-24-the-long-game.html</link>
+  <guid>https://bastibe.de/2017-10-24-the-long-game.html</guid>
   <pubDate>Tue, 24 Oct 2017 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5025,6 +5447,7 @@ Still, I love the look of this! (Of course it won't work in a terminal, or most 
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> ]]></description>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2017-09-19-multi-font-themes.html</link>
+  <guid>https://bastibe.de/2017-09-19-multi-font-themes.html</guid>
   <pubDate>Tue, 19 Sep 2017 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5056,6 +5479,7 @@ In conclusion, EuroScipy 2017 was a ton of fun, and educational in many ways tha
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-event.html">event</a> ]]></description>
   <category><![CDATA[event]]></category>
   <link>https://bastibe.de/2017-09-01-euroscipy.html</link>
+  <guid>https://bastibe.de/2017-09-01-euroscipy.html</guid>
   <pubDate>Fri, 01 Sep 2017 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5091,6 +5515,7 @@ So, in summary, I learned a lot at WAC. I learned that web technologies are not 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-event.html">event</a> ]]></description>
   <category><![CDATA[event]]></category>
   <link>https://bastibe.de/2017-08-29-wac-and-javascript.html</link>
+  <guid>https://bastibe.de/2017-08-29-wac-and-javascript.html</guid>
   <pubDate>Sun, 27 Aug 2017 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5168,6 +5593,7 @@ In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praisi
   <category><![CDATA[programming]]></category>
   <category><![CDATA[windows]]></category>
   <link>https://bastibe.de/2017-07-10-audio-apis-wasapi.html</link>
+  <guid>https://bastibe.de/2017-07-10-audio-apis-wasapi.html</guid>
   <pubDate>Mon, 10 Jul 2017 14:12:00 +0200</pubDate>
 </item>
 <item>
@@ -5241,6 +5667,7 @@ In general, I found PulseAudio reasonably easy to use, though. The documentation
   <category><![CDATA[programming]]></category>
   <category><![CDATA[linux]]></category>
   <link>https://bastibe.de/2017-06-27-audio-apis-pulseaudio.html</link>
+  <guid>https://bastibe.de/2017-06-27-audio-apis-pulseaudio.html</guid>
   <pubDate>Tue, 27 Jun 2017 14:12:00 +0200</pubDate>
 </item>
 <item>
@@ -5318,6 +5745,7 @@ All of that said, once you know what to do and how to do it, the resulting code 
   <category><![CDATA[programming]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2017-06-17-audio-apis-coreaudio.html</link>
+  <guid>https://bastibe.de/2017-06-17-audio-apis-coreaudio.html</guid>
   <pubDate>Sat, 17 Jun 2017 14:45:00 +0200</pubDate>
 </item>
 <item>
@@ -5417,6 +5845,7 @@ However, more importantly than anything I said so far: <i>Do</i> release source 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2017-05-14-scientific-code.html</link>
+  <guid>https://bastibe.de/2017-05-14-scientific-code.html</guid>
   <pubDate>Sun, 14 May 2017 13:05:00 +0200</pubDate>
 </item>
 <item>
@@ -5448,6 +5877,7 @@ I could go on. The real power of code is abstraction. We use programming to repe
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2017-04-12-matlab-metaprogramming.html</link>
+  <guid>https://bastibe.de/2017-04-12-matlab-metaprogramming.html</guid>
   <pubDate>Wed, 12 Apr 2017 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5489,6 +5919,7 @@ Not because I dislike conda, just to simplify my development environment.
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2016-11-24-pip-is-great.html</link>
+  <guid>https://bastibe.de/2016-11-24-pip-is-great.html</guid>
   <pubDate>Thu, 24 Nov 2016 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -5516,6 +5947,7 @@ At any rate, I thoroughly enjoyed this experience, and can't wait for what this 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-games.html">games</a> ]]></description>
   <category><![CDATA[games]]></category>
   <link>https://bastibe.de/2016-11-22-soma.html</link>
+  <guid>https://bastibe.de/2016-11-22-soma.html</guid>
   <pubDate>Tue, 22 Nov 2016 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -5581,6 +6013,7 @@ If you want to save more than one value in a variable, you can use a collection 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2016-09-07-matlab-syntax.html</link>
+  <guid>https://bastibe.de/2016-09-07-matlab-syntax.html</guid>
   <pubDate>Wed, 07 Sep 2016 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5612,6 +6045,7 @@ There is no conflict, only light puzzles, and the story is developed only throug
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-games.html">games</a> ]]></description>
   <category><![CDATA[games]]></category>
   <link>https://bastibe.de/2016-06-26-pollen.html</link>
+  <guid>https://bastibe.de/2016-06-26-pollen.html</guid>
   <pubDate>Sun, 26 Jun 2016 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5796,6 +6230,7 @@ Here is the above data again in tabular form:
   <category><![CDATA[matlab]]></category>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2016-06-21-transplant-revisited.html</link>
+  <guid>https://bastibe.de/2016-06-21-transplant-revisited.html</guid>
   <pubDate>Tue, 21 Jun 2016 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5850,6 +6285,7 @@ Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. The
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2016-06-15-matlab-live-scripts.html</link>
+  <guid>https://bastibe.de/2016-06-15-matlab-live-scripts.html</guid>
   <pubDate>Wed, 15 Jun 2016 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -5970,6 +6406,7 @@ However, If I ask myself whether I would sacrifice 0.00007 seconds of computatio
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2016-05-31-Matlab-FFI.html</link>
+  <guid>https://bastibe.de/2016-05-31-Matlab-FFI.html</guid>
   <pubDate>Tue, 31 May 2016 11:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6009,6 +6446,7 @@ Happy Plotting!
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2016-05-30-matplotlib-font-cache.html</link>
+  <guid>https://bastibe.de/2016-05-30-matplotlib-font-cache.html</guid>
   <pubDate>Mon, 30 May 2016 16:30:00 +0200</pubDate>
 </item>
 <item>
@@ -6100,6 +6538,7 @@ Do you have any idea how to progress from here?
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2016-03-13-code-quality-in-scientific-code.html</link>
+  <guid>https://bastibe.de/2016-03-13-code-quality-in-scientific-code.html</guid>
   <pubDate>Sun, 13 Mar 2016 09:00:00 +0100</pubDate>
 </item>
 <item>
@@ -6123,6 +6562,7 @@ At just about two hours, Toren is not a long game. Instead of exploring one part
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-games.html">games</a> ]]></description>
   <category><![CDATA[games]]></category>
   <link>https://bastibe.de/2016-01-23-toren.html</link>
+  <guid>https://bastibe.de/2016-01-23-toren.html</guid>
   <pubDate>Sat, 23 Jan 2016 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -6180,6 +6620,7 @@ What happens when you take today's world, and add nanotech brain upgrades (Nexus
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2016-01-06-books-of-2015.html</link>
+  <guid>https://bastibe.de/2016-01-06-books-of-2015.html</guid>
   <pubDate>Wed, 06 Jan 2016 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -6305,6 +6746,7 @@ If you want to try Transplant, just head over to <a href="https://github.com/bas
   <category><![CDATA[matlab]]></category>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2015-11-03-matlab-engine-performance.html</link>
+  <guid>https://bastibe.de/2015-11-03-matlab-engine-performance.html</guid>
   <pubDate>Tue, 03 Nov 2015 15:05:00 +0100</pubDate>
 </item>
 <item>
@@ -6449,6 +6891,7 @@ I since posted a bug report on Mathworks, and received a patch that fixes the pr
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2015-10-29-matlab-engine-leaks.html</link>
+  <guid>https://bastibe.de/2015-10-29-matlab-engine-leaks.html</guid>
   <pubDate>Thu, 29 Oct 2015 12:18:00 +0100</pubDate>
 </item>
 <item>
@@ -6483,6 +6926,7 @@ So, good bye OS X. I updated my work laptop first, and I regret it. I never regr
   <category><![CDATA[macos]]></category>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2015-10-16-finder-woes.html</link>
+  <guid>https://bastibe.de/2015-10-16-finder-woes.html</guid>
   <pubDate>Fri, 16 Oct 2015 09:51:00 +0200</pubDate>
 </item>
 <item>
@@ -6529,6 +6973,7 @@ for index in range(426, 465):
   <category><![CDATA[programming]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2015-10-03-changing-file-creation-dates.html</link>
+  <guid>https://bastibe.de/2015-10-03-changing-file-creation-dates.html</guid>
   <pubDate>Sat, 03 Oct 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6566,6 +7011,7 @@ Note that this is <i>not</i> equivalent to multiplying every <i>element</i> as i
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2015-09-29-numpy-broadcasting-rules.html</link>
+  <guid>https://bastibe.de/2015-09-29-numpy-broadcasting-rules.html</guid>
   <pubDate>Tue, 29 Sep 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6726,6 +7172,7 @@ So why wouldn't you just always use Numba? After all, when it comes down to raw 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2015-09-28-python-performance.html</link>
+  <guid>https://bastibe.de/2015-09-28-python-performance.html</guid>
   <pubDate>Mon, 28 Sep 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6750,6 +7197,7 @@ In other words, Matlab is incapable of writing audio files larger than 4 Gb. It 
   <category><![CDATA[matlab]]></category>
   <category><![CDATA[audio]]></category>
   <link>https://bastibe.de/2015-04-22-matlab-and-audio-files.html</link>
+  <guid>https://bastibe.de/2015-04-22-matlab-and-audio-files.html</guid>
   <pubDate>Wed, 22 Apr 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6805,6 +7253,7 @@ You still can't type unicode characters to the command prompt, of course. But wh
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html</link>
+  <guid>https://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html</guid>
   <pubDate>Wed, 15 Apr 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6828,6 +7277,7 @@ From what I hear, Planescape Torment did offer such choices. As did many of <a h
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-games.html">games</a> ]]></description>
   <category><![CDATA[games]]></category>
   <link>https://bastibe.de/2015-04-12-decisions-in-poe.html</link>
+  <guid>https://bastibe.de/2015-04-12-decisions-in-poe.html</guid>
   <pubDate>Sun, 12 Apr 2015 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -6881,6 +7331,7 @@ At the end of the day, Julia clearly isn't mature yet, but very promising. Docum
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2015-01-12-julia.html</link>
+  <guid>https://bastibe.de/2015-01-12-julia.html</guid>
   <pubDate>Mon, 12 Jan 2015 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -6935,6 +7386,7 @@ The Congress is really unique. I can't recommend it enough. If you can free up t
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-event.html">event</a> ]]></description>
   <category><![CDATA[event]]></category>
   <link>https://bastibe.de/2015-01-01-31c3.html</link>
+  <guid>https://bastibe.de/2015-01-01-31c3.html</guid>
   <pubDate>Thu, 01 Jan 2015 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -6977,6 +7429,7 @@ This is about time travel from near-future Britain to the fifteenth century. But
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2014-12-30-books-of-2014.html</link>
+  <guid>https://bastibe.de/2014-12-30-books-of-2014.html</guid>
   <pubDate>Tue, 30 Dec 2014 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -7033,6 +7486,7 @@ This year, I got back into an old hobby of mine: Flight Simulation. In particula
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-thank-you.html">thank-you</a> ]]></description>
   <category><![CDATA[thank-you]]></category>
   <link>https://bastibe.de/2014-12-20-thanks.html</link>
+  <guid>https://bastibe.de/2014-12-20-thanks.html</guid>
   <pubDate>Sat, 20 Dec 2014 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -7078,6 +7532,7 @@ For the record, <a href="http://arstechnica.com/tech-policy/2014/09/judge-mulls-
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> ]]></description>
   <category><![CDATA[computers]]></category>
   <link>https://bastibe.de/2014-12-09-mailbox.html</link>
+  <guid>https://bastibe.de/2014-12-09-mailbox.html</guid>
   <pubDate>Tue, 09 Dec 2014 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -7192,6 +7647,7 @@ Previously, I implemented this in Org mode only (no CSS). While that worked as w
   <category><![CDATA[org-mode]]></category>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2014-12-03-org-numbering.html</link>
+  <guid>https://bastibe.de/2014-12-03-org-numbering.html</guid>
   <pubDate>Wed, 03 Dec 2014 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -7253,6 +7709,7 @@ At the end of the day, I am not sure whether Org mode is the right tool for writ
   <category><![CDATA[org-mode]]></category>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html</link>
+  <guid>https://bastibe.de/2014-11-19-writing-a-thesis-in-org-mode.html</guid>
   <pubDate>Wed, 19 Nov 2014 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -7300,6 +7757,7 @@ This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which
   <category><![CDATA[org-mode]]></category>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2014-09-23-org-cite.html</link>
+  <guid>https://bastibe.de/2014-09-23-org-cite.html</guid>
   <pubDate>Tue, 23 Sep 2014 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -7438,6 +7896,7 @@ At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I d
   <category><![CDATA[python]]></category>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2014-08-19-transplant.html</link>
+  <guid>https://bastibe.de/2014-08-19-transplant.html</guid>
   <pubDate>Tue, 19 Aug 2014 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -7626,6 +8085,7 @@ For the moment, I have no desire for being beholden to some company dictating my
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2014-07-20-working-and-learning.html</link>
+  <guid>https://bastibe.de/2014-07-20-working-and-learning.html</guid>
   <pubDate>Sun, 20 Jul 2014 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -7654,6 +8114,7 @@ But Emacs wouldn't be Emacs if this could not be fixed with a line or two of eli
   <category><![CDATA[org-mode]]></category>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2014-05-07-speeding-up-org-publishing.html</link>
+  <guid>https://bastibe.de/2014-05-07-speeding-up-org-publishing.html</guid>
   <pubDate>Wed, 07 May 2014 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -7687,6 +8148,7 @@ If you haven't already, go read this book!
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> ]]></description>
   <category><![CDATA[books]]></category>
   <link>https://bastibe.de/2014-05-03-snow-crash.html</link>
+  <guid>https://bastibe.de/2014-05-03-snow-crash.html</guid>
   <pubDate>Sat, 03 May 2014 00:00:00 +0200</pubDate>
 </item>
 <item>
@@ -7794,6 +8256,7 @@ You can download these libraries from <a href="https://pypi.python.org/pypi">PyP
   <category><![CDATA[python]]></category>
   <category><![CDATA[audio]]></category>
   <link>https://bastibe.de/2013-11-27-audio-in-python.html</link>
+  <guid>https://bastibe.de/2013-11-27-audio-in-python.html</guid>
   <pubDate>Wed, 27 Nov 2013 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -8100,6 +8563,7 @@ Now, the RSS feed includes the full text of all articles.
   <category><![CDATA[emacs]]></category>
   <category><![CDATA[blog]]></category>
   <link>https://bastibe.de/2013-11-13-blogging-with-emacs.html</link>
+  <guid>https://bastibe.de/2013-11-13-blogging-with-emacs.html</guid>
   <pubDate>Wed, 13 Nov 2013 00:00:00 +0100</pubDate>
 </item>
 <item>
@@ -8296,6 +8760,7 @@ In conclusion, I am quite impressed with the flexibility of Matplotlib. Matplotl
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2013-05-30-speeding-up-matplotlib.html</link>
+  <guid>https://bastibe.de/2013-05-30-speeding-up-matplotlib.html</guid>
   <pubDate>Thu, 30 May 2013 10:50:00 +0200</pubDate>
 </item>
 <item>
@@ -8575,6 +9040,7 @@ A great way to get to know any programming language is to solve the first few pr
   <category><![CDATA[python]]></category>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2013-01-20-a-python-primer-for-matlab-users.html</link>
+  <guid>https://bastibe.de/2013-01-20-a-python-primer-for-matlab-users.html</guid>
   <pubDate>Sun, 20 Jan 2013 10:55:00 +0100</pubDate>
 </item>
 <item>
@@ -8989,6 +9455,7 @@ You can find all the source code in this article at <a href="https://github.com/
   <category><![CDATA[python]]></category>
   <category><![CDATA[audio]]></category>
   <link>https://bastibe.de/2012-11-02-real-time-signal-processing-in-python.html</link>
+  <guid>https://bastibe.de/2012-11-02-real-time-signal-processing-in-python.html</guid>
   <pubDate>Fri, 02 Nov 2012 10:53:00 +0100</pubDate>
 </item>
 <item>
@@ -9015,6 +9482,7 @@ Finally, some forum or other pointed me to the correct solution: For some reason
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-apple-tv.html">apple-tv</a> ]]></description>
   <category><![CDATA[apple-tv]]></category>
   <link>https://bastibe.de/2012-11-01-apple-tv.html</link>
+  <guid>https://bastibe.de/2012-11-01-apple-tv.html</guid>
   <pubDate>Thu, 01 Nov 2012 18:26:00 +0100</pubDate>
 </item>
 <item>
@@ -9048,6 +9516,7 @@ If you like programming at all, I implore you to <a href="http://mitpress.mit.ed
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> ]]></description>
   <category><![CDATA[programming]]></category>
   <link>https://bastibe.de/2012-10-28-names.html</link>
+  <guid>https://bastibe.de/2012-10-28-names.html</guid>
   <pubDate>Sun, 28 Oct 2012 22:08:00 +0100</pubDate>
 </item>
 <item>
@@ -9144,6 +9613,7 @@ With those settings, the mex compiler should work and it should pick up any libr
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> ]]></description>
   <category><![CDATA[matlab]]></category>
   <link>https://bastibe.de/2012-10-20-matlab-mex-and-osx.html</link>
+  <guid>https://bastibe.de/2012-10-20-matlab-mex-and-osx.html</guid>
   <pubDate>Sat, 20 Oct 2012 10:12:00 +0200</pubDate>
 </item>
 <item>
@@ -9299,6 +9769,7 @@ This function will open or refresh a split window with the generated PDF file in
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> ]]></description>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2012-10-14-emacs-customizations.html</link>
+  <guid>https://bastibe.de/2012-10-14-emacs-customizations.html</guid>
   <pubDate>Sun, 14 Oct 2012 09:14:00 +0200</pubDate>
 </item>
 <item>
@@ -9392,6 +9863,7 @@ Again, enter Emacs: Emacs has this magical mode called <a href="http://magit.git
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> ]]></description>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2012-10-13-emacs.html</link>
+  <guid>https://bastibe.de/2012-10-13-emacs.html</guid>
   <pubDate>Sat, 13 Oct 2012 11:30:00 +0200</pubDate>
 </item>
 <item>
@@ -9470,6 +9942,7 @@ Difficult decision. Frankly, I don't have an answer. That said, I found <code>pl
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-scheme.html">scheme</a> ]]></description>
   <category><![CDATA[scheme]]></category>
   <link>https://bastibe.de/2012-09-20-story-about-schemes.html</link>
+  <guid>https://bastibe.de/2012-09-20-story-about-schemes.html</guid>
   <pubDate>Thu, 20 Sep 2012 20:21:00 +0200</pubDate>
 </item>
 <item>
@@ -9513,6 +9986,7 @@ Spelling is hard, it seems.
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> ]]></description>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2012-09-13-Kindle-app-does-not-start.html</link>
+  <guid>https://bastibe.de/2012-09-13-Kindle-app-does-not-start.html</guid>
   <pubDate>Thu, 13 Sep 2012 20:19:00 +0200</pubDate>
 </item>
 <item>
@@ -9564,6 +10038,7 @@ And during those weeks, I had my third, and biggest, revelation about Open Sourc
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-open-source.html">open-source</a> ]]></description>
   <category><![CDATA[open-source]]></category>
   <link>https://bastibe.de/2012-09-08-on-the-virtue-of-oss.html</link>
+  <guid>https://bastibe.de/2012-09-08-on-the-virtue-of-oss.html</guid>
   <pubDate>Sat, 08 Sep 2012 08:44:00 +0200</pubDate>
 </item>
 <item>
@@ -9627,6 +10102,7 @@ This should fix that problem.
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2012-08-28-errors-in-epydoc.html</link>
+  <guid>https://bastibe.de/2012-08-28-errors-in-epydoc.html</guid>
   <pubDate>Tue, 28 Aug 2012 12:14:00 +0200</pubDate>
 </item>
 <item>
@@ -9780,6 +10256,7 @@ This article heavily steals from these fine folks on the internet:
   <category><![CDATA[macos]]></category>
   <category><![CDATA[backup]]></category>
   <link>https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html</link>
+  <guid>https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html</guid>
   <pubDate>Sun, 29 Jul 2012 21:18:00 +0200</pubDate>
 </item>
 <item>
@@ -9966,6 +10443,7 @@ As a matter of fact, I would love to see well enough to see Retina at all, but t
 </div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> ]]></description>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2012-07-09-apple-is-failing-me.html</link>
+  <guid>https://bastibe.de/2012-07-09-apple-is-failing-me.html</guid>
   <pubDate>Thu, 19 Jul 2012 19:49:00 +0200</pubDate>
 </item>
 <item>
@@ -10013,6 +10491,7 @@ If you want to see my blog as a repo on Github, just <a href="https://github.com
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-blog.html">blog</a> ]]></description>
   <category><![CDATA[blog]]></category>
   <link>https://bastibe.de/2012-07-18-blogging-with-pelican.html</link>
+  <guid>https://bastibe.de/2012-07-18-blogging-with-pelican.html</guid>
   <pubDate>Wed, 18 Jul 2012 21:11:00 +0200</pubDate>
 </item>
 <item>
@@ -10148,6 +10627,7 @@ Keep in mind though that I have no formal knowledge of CSS whatsoever beyond wha
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-blog.html">blog</a> ]]></description>
   <category><![CDATA[blog]]></category>
   <link>https://bastibe.de/2012-07-15-solarized-for-pygments.html</link>
+  <guid>https://bastibe.de/2012-07-15-solarized-for-pygments.html</guid>
   <pubDate>Sun, 15 Jul 2012 14:33:00 +0200</pubDate>
 </item>
 <item>
@@ -10192,6 +10672,7 @@ Not exactly a beautiful solution, but it works.
   <category><![CDATA[compiling]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2012-02-22-how-to-gem-install-rlua-on-osx-slash-homebrew.html</link>
+  <guid>https://bastibe.de/2012-02-22-how-to-gem-install-rlua-on-osx-slash-homebrew.html</guid>
   <pubDate>Wed, 22 Feb 2012 11:43:00 +0100</pubDate>
 </item>
 <item>
@@ -10675,6 +11156,7 @@ skEdit supports a nice array of web development languages and offers a good rang
   <category><![CDATA[vim]]></category>
   <category><![CDATA[emacs]]></category>
   <link>https://bastibe.de/2012-02-03-text-editors.html</link>
+  <guid>https://bastibe.de/2012-02-03-text-editors.html</guid>
   <pubDate>Fri, 03 Feb 2012 18:22:00 +0100</pubDate>
 </item>
 <item>
@@ -10748,6 +11230,7 @@ Happy Vimming!
   <category><![CDATA[vim]]></category>
   <category><![CDATA[text-editor]]></category>
   <link>https://bastibe.de/2011-12-04-how-to-make-tagbar-work-with-objective-c.html</link>
+  <guid>https://bastibe.de/2011-12-04-how-to-make-tagbar-work-with-objective-c.html</guid>
   <pubDate>Sun, 04 Dec 2011 20:21:00 +0100</pubDate>
 </item>
 <item>
@@ -10772,6 +11255,7 @@ I must say, this is still a mess. But at least, it is getting less bad.
   <category><![CDATA[compiling]]></category>
   <category><![CDATA[python]]></category>
   <link>https://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html</link>
+  <guid>https://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html</guid>
   <pubDate>Thu, 13 Oct 2011 15:27:00 +0200</pubDate>
 </item>
 <item>
@@ -10813,6 +11297,7 @@ Dear Adobe, is it too much to ask to pretty please make your software work on a 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> ]]></description>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2011-09-03-adobe-air-application-crashes.html</link>
+  <guid>https://bastibe.de/2011-09-03-adobe-air-application-crashes.html</guid>
   <pubDate>Sat, 03 Sep 2011 13:08:00 +0200</pubDate>
 </item>
 <item>
@@ -10862,6 +11347,7 @@ Seriously though, these PyPi repos are in a very sorry state. Every time I insta
   <category><![CDATA[python]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html</link>
+  <guid>https://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html</guid>
   <pubDate>Mon, 01 Aug 2011 12:40:00 +0200</pubDate>
 </item>
 <item>
@@ -11013,6 +11499,7 @@ Great! That's it! Everything should work now!
   <category><![CDATA[python]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html</link>
+  <guid>https://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html</guid>
   <pubDate>Fri, 04 Mar 2011 14:16:00 +0100</pubDate>
 </item>
 <item>
@@ -11151,6 +11638,7 @@ Thank you for reading.
   <category><![CDATA[python]]></category>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html</link>
+  <guid>https://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html</guid>
   <pubDate>Thu, 03 Feb 2011 16:23:00 +0100</pubDate>
 </item>
 <item>
@@ -11196,6 +11684,7 @@ So if you are like me and appreciate every added line of text, do yourself a fav
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a> ]]></description>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2010-07-03-strangeness-of-widescreen-displays-in-modern-operating-systems.html</link>
+  <guid>https://bastibe.de/2010-07-03-strangeness-of-widescreen-displays-in-modern-operating-systems.html</guid>
   <pubDate>Sat, 03 Jul 2010 12:08:00 +0200</pubDate>
 </item>
 <item>
@@ -11255,6 +11744,7 @@ Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll eins
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a> ]]></description>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2009-04-25-gedanken-zu-user-interfaces.html</link>
+  <guid>https://bastibe.de/2009-04-25-gedanken-zu-user-interfaces.html</guid>
   <pubDate>Sat, 25 Apr 2009 14:15:00 +0200</pubDate>
 </item>
 <item>
@@ -11306,6 +11796,7 @@ Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfache
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a> ]]></description>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2009-04-19-tagged-file-system.html</link>
+  <guid>https://bastibe.de/2009-04-19-tagged-file-system.html</guid>
   <pubDate>Sun, 19 Apr 2009 09:41:00 +0200</pubDate>
 </item>
 <item>
@@ -11397,6 +11888,7 @@ Fazit: Es gibt noch viel zu tun, aber anscheinend ergibt sich langsam aber siche
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a> ]]></description>
   <category><![CDATA[ui]]></category>
   <link>https://bastibe.de/2009-03-31-es-geht-um-tabs.html</link>
+  <guid>https://bastibe.de/2009-03-31-es-geht-um-tabs.html</guid>
   <pubDate>Tue, 31 Mar 2009 20:09:00 +0200</pubDate>
 </item>
 <item>
@@ -11447,6 +11939,7 @@ Und was bleibt unterm Strich? Ich sage: Das Spiel ist es Wert. Es mag seine Män
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-games.html">games</a> ]]></description>
   <category><![CDATA[games]]></category>
   <link>https://bastibe.de/2009-03-29-mirrors-edge.html</link>
+  <guid>https://bastibe.de/2009-03-29-mirrors-edge.html</guid>
   <pubDate>Sun, 29 Mar 2009 22:22:00 +0200</pubDate>
 </item>
 <item>
@@ -11481,6 +11974,7 @@ Perfektioniert wird das alles aber erst durch Beihilfe von Google, welches durch
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> ]]></description>
   <category><![CDATA[computers]]></category>
   <link>https://bastibe.de/2009-03-28-synchronisieren-von-google.html</link>
+  <guid>https://bastibe.de/2009-03-28-synchronisieren-von-google.html</guid>
   <pubDate>Sat, 28 Mar 2009 17:18:00 +0100</pubDate>
 </item>
 <item>
@@ -11527,6 +12021,7 @@ Selbst ich, als eingefleischter Textmate-Benutzer halte E als meinen heimlichen 
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-text-editor.html">text-editor</a> ]]></description>
   <category><![CDATA[text-editor]]></category>
   <link>https://bastibe.de/2009-03-24-e-text-editor-goes-open-source.html</link>
+  <guid>https://bastibe.de/2009-03-24-e-text-editor-goes-open-source.html</guid>
   <pubDate>Tue, 24 Mar 2009 15:16:00 +0100</pubDate>
 </item>
 <item>
@@ -11564,6 +12059,7 @@ Faszinierend, so wünsche ich mir Kundenservice. Der einzige Wermutstropfen ist,
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> ]]></description>
   <category><![CDATA[computers]]></category>
   <link>https://bastibe.de/2009-03-19-western-digital-festplatten-umtausch-mit-uberraschungen.html</link>
+  <guid>https://bastibe.de/2009-03-19-western-digital-festplatten-umtausch-mit-uberraschungen.html</guid>
   <pubDate>Thu, 19 Mar 2009 21:17:00 +0100</pubDate>
 </item>
 <item>
@@ -11694,6 +12190,7 @@ Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sic
   <category><![CDATA[compiling]]></category>
   <category><![CDATA[windows]]></category>
   <link>https://bastibe.de/2009-03-15-debugging-und-gcc-auf-windows.html</link>
+  <guid>https://bastibe.de/2009-03-15-debugging-und-gcc-auf-windows.html</guid>
   <pubDate>Sun, 15 Mar 2009 15:10:00 +0100</pubDate>
 </item>
 <item>
@@ -11725,6 +12222,7 @@ Wens interessiert: Das ist eine sehr hübsche Einführung darin, warum Macs toll
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> ]]></description>
   <category><![CDATA[macos]]></category>
   <link>https://bastibe.de/2009-03-14-get-a-mac.html</link>
+  <guid>https://bastibe.de/2009-03-14-get-a-mac.html</guid>
   <pubDate>Sat, 14 Mar 2009 10:24:00 +0100</pubDate>
 </item>
 <item>
@@ -11760,6 +12258,7 @@ Eine Fortsetzung kommt noch&#x2026;
   <category><![CDATA[matlab]]></category>
   <category><![CDATA[windows]]></category>
   <link>https://bastibe.de/2009-03-12-kompilieren-auf-windows.html</link>
+  <guid>https://bastibe.de/2009-03-12-kompilieren-auf-windows.html</guid>
   <pubDate>Thu, 12 Mar 2009 17:14:00 +0100</pubDate>
 </item>
 <item>
@@ -11805,6 +12304,7 @@ To be continued&#x2026;
   <category><![CDATA[matlab]]></category>
   <category><![CDATA[compiling]]></category>
   <link>https://bastibe.de/2009-03-05-great-scott.html</link>
+  <guid>https://bastibe.de/2009-03-05-great-scott.html</guid>
   <pubDate>Thu, 05 Mar 2009 13:55:00 +0100</pubDate>
 </item>
 </channel>
