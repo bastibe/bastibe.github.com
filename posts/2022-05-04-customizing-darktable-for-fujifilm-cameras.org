@@ -45,7 +45,7 @@ Here's the lua script in its entirety:
 <div style="height: 20em; overflow: scroll; background-color: #eee; padding-left: 1em">
 #+end_export
 
-[[http:/static/2022-05/fujifilm_auto_settings.lua][fujifilm ̲auto ̲settings.lua]]
+[[https://bastibe.de/static/2022-05/fujifilm_auto_settings.lua][fujifilm ̲auto ̲settings.lua]]
 
 #+include: ../static/2022-05/fujifilm_auto_settings.lua src lua
 
@@ -55,11 +55,11 @@ Here's the lua script in its entirety:
 
 However, there's a catch: Scripts in Darktable can not modify darkroom state directly. But they /can/ load styles. So to make the script work, we need to define a number of styles that do the heavy lifting here:
 
-- Two styles ~DR200~ and ~DR400~ for the dynamic range modes that brighten the image by one and two stops, respectively (I like to use the Tone Equalizer [[http:/static/2022-05/DR200.png][like this]]).
+- Two styles ~DR200~ and ~DR400~ for the dynamic range modes that brighten the image by one and two stops, respectively (I like to use the Tone Equalizer [[https://bastibe.de/static/2022-05/DR200.png][like this]]).
 - Four styles ~square ̲crop_landscape~ and ~square ̲crop_portrait~ and ~sixteen ̲by ̲nine ̲crop_landscape~ and ~sixteen ̲by ̲nine ̲crop_portrait~ that crop landscape/portrait images to 1:1 and 16:9 ratio.
 - One style for each film simulation you use: ~provia~, ~astia~, ~velvia~, ~classic ̲chrome~, ~pro ̲neg ̲standard~, ~pro ̲neg ̲high~, ~eterna~, ~acros~, ~acros ̲green~, ~acros ̲red~, ~acros ̲yellow~, ~mono~, ~mono ̲green~, ~mono ̲red~, ~mono ̲yellow~, ~sepia~.
   The linked styles use [[https://blog.sowerby.me/fuji-film-simulation-profiles/][Stuart Sowerby's Film Simulation LUTs]] as film simulations, which must be installed in ~$LUTs/Fujifilm XTrans III/$lut.3dl~.
 
-Download a zip file with all the above styles [[http:/static/2022-05/styles.zip][here]], and appropriately-renamed LUTs [[http:/static/2022-05/Fujifilm XTrans III.zip][here]]. (This section will be revised once I finish building my own set of LUTs).
+Download a zip file with all the above styles [[https://bastibe.de/static/2022-05/styles.zip][here]], and appropriately-renamed LUTs [[https://bastibe.de/static/2022-05/Fujifilm XTrans III.zip][here]]. (This section will be revised once I finish building my own set of LUTs).
 
 Then copy the lua script to ~~/.config/darktable/lua/contrib/~, activate it in the script manager (bottom left in the lighttable), and it should automatically run whenever you import new Fujifilm raf files! (Start Darktable with ~darktable -d opencl~ to see debug messages, and bind a keyboard shortcut to ~lua scripts/fujifilm_auto_settings~ to trigger the script manually.)
