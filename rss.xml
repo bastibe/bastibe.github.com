@@ -4,7 +4,619 @@
 <title><![CDATA[Bastibe.de]]></title>
 <description><![CDATA[Bastibe.de]]></description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Sun, 08 May 2022 12:44:15 +0200</lastBuildDate>
+<lastBuildDate>Sun, 16 Oct 2022 11:17:43 +0200</lastBuildDate>
+<item>
+  <title><![CDATA[RAW Developer Comparison 2]]></title>
+  <description><![CDATA[
+<p>
+It's that time of the year again when all image editing programs come out with new versions. This comes at an inopportune time, as I feel restless of late. So, naturally, I had to try them all. Or maybe I just wanted a justification for buying DxO PhotoLab, because people on the internet speak so well of it 🙄.
+</p>
+
+<p>
+For the following comparison I downloaded trial versions of <a href="https://www.acdsee.com">ACDSee Photo Studio Ultimate 2023</a> (€155), <a href="https://www.captureone.com/">Capture One 22</a> (€350 or €220/a), <a href="https://www.darktable.org/">Darktable 4.0</a> (free), <a href="https://www.dxo.com/">DxO Photolab 6</a> (€220 + €140 for FilmPack 6 + €99 for ViewPoint), <a href="https://www.adobe.com/products/photoshop-lightroom-classic.html">Adobe Lightroom Classic 11.5</a> (€142/a), <a href="https://www.on1.com/">ON1 Photo Raw 2023</a> (€126), <a href="https://rawtherapee.com/">RawTherapee 5.8</a> (free), <a href="https://silkypix.isl.co.jp/en/">Silkypix Developer Studio Pro 11</a> (€155), <a href="https://exposure.software/">Exposure X7</a> (€165), and <a href="https://www.zoner.com/">Zoner Photo Studio X Fall 2022</a> (€60/a). I also installed <a href="https://skylum.com/luminar">Luminar Neo</a> (€120 or €80/a) and <a href="https://radiantimaginglabs.com/">Radiant Photo</a> (€140) but I disliked them so immediately and viscerally that I didn't include them in the comparison below.
+</p>
+
+<p>
+In order to put them through their paces, I took a random smattering of images from the last few years that I found difficult to work with for one reason or another, and checked how each of the programs dealt with them. Of course I am no expert in any of them except Darktable and Capture One, so my results are probably flawed. I tried to inject some objectivity by limiting my edits to the most obvious sliders wherever possible, especially in the programs I know better. Regardless, my comparison is probably less scientific than <a href="https://bastibe.de/2020-05-01-raw-developer-comparison.html">last time</a>, because my brain sort of broke after staring at too many renderings of the same images for too long. Don't try this at home, folks!
+</p>
+
+<div id="outline-container-org31d7a69" class="outline-2">
+<h2 id="org31d7a69">Test Case One: Fire</h2>
+<div class="outline-text-2" id="text-org31d7a69">
+<p>
+Fire is notoriously difficult to deal with, because it covers a large dynamic range, and we have strong associations of certain colors with heat. Thus a more yellow rendering usually suits fire very well, whereas a more neutral rendering quickly looks unnatural. In particular, we seem to expect highlights to twist to yellow, and midtones to remain orange.
+</p>
+
+<p>
+My editing goals for this picture are simple: raise <i>shadows</i> or <i>blacks</i> until the pan becomes faintly visible, and reign in highlights if necessary to prevent excessive clipping.
+</p>
+
+<br>
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2022-10/DSCF9359_acd.jpg">
+      <figcaption>ACDSee Photo Studio<br>
+      highlights turn strongly yellow</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_c1.jpg">
+      <figcaption>Capture One<br>
+      highlights turn yellow<br>
+      shadows adjusts unusally far into midtones</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_dt_v6.jpg">
+      <figcaption>Darktable (filmic v6)<br>
+      highlights turn desaturate<br>
+      weirdly salmon color<br>
+      filmic v6, zero latitude, no color preservation<br>
+      tone EQ very unusual re: shadows/blacks sliders</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_dt_v5.jpg">
+      <figcaption>Darktable (filmic v5)<br>
+      highlights turn yellow<br>
+      filmic v5, zero latitude, no color preservation<br>
+      tone EQ very unusual re: shadows/blacks sliders</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_dxo.jpg">
+      <figcaption>DxO PhotoLab<br>
+      highlights desaturate</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_lr.jpg">
+      <figcaption>Lightroom Classic<br>
+      highlights desaturate</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_on1.jpg">
+      <figcaption>ON1 Photo RAW<br>
+      highlights turn very yellow<br>
+      pan immediately visible without adjustments</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_rt.jpg">
+      <figcaption>RawTherapee<br>
+      highlights desaturate</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_sp.jpg">
+      <figcaption>Silkypix Developer<br>
+      highlights turn yellow, but lose all definition<br>
+      shadows slider not strong enough to show pan</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_x7.jpg">
+      <figcaption>Exposure X7<br>
+      highlights turn unpleasant white<br>
+      raising shadows turns background off-black</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF9359_zp.jpg">
+      <figcaption>Zoner Photo Studio<br>
+      highlights desaturate<br>
+      weird, clarity-like effect</figcaption>
+    </figure>
+  </div>
+<p>Fujifilm X-Pro2 with XF35mmF1.4 R 1/1000s f/2.2 ISO400<br><a href="/static/2022-10/DSCF9359.RAF">&#x1f4c2; DSCF9359.RAF</a> (23.0 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a></p>
+
+<p>
+There's a difficult tradeoff to be made here: Fire highlights physically don't change hue much compared to the fire body, but we visibly expect "hotter" fire to twist yellow. So a balance has to be struck between merely desaturating highlights, and twisting them yellow. You can see Darktable v6, DxO PhotoLab, RawTherapee, Exposure, and Zoner leaning towards desaturation, while the others render yellow color twists of some form or another. ACDSee and ON1 probably take the yellow a bit too far.
+</p>
+
+<p>
+However, there's a flip side to this: Every program that renders yellow highlights in fire, does the same for overexposed skin, twists overexposed skies cyan, and red flowers magenta. It's a difficult tradeoff to get right. This is especially tricky since color shifts in highlights are often baked deeply into the programs' color science, and hard to get rid off where they're unwanted.
+</p>
+
+<p>
+Anyway, to my eyes, the only fire-like renderings here come from Capture One, Darktable v5, PhotoLab, and Lightroom.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc526390" class="outline-2">
+<h2 id="orgc526390">A Hazy Mountain</h2>
+<div class="outline-text-2" id="text-orgc526390">
+<p>
+This lovely scene is a deep crop into an image taken at long distance on a hazy day. The challenge is therefore <i>dehazing</i> the mountains, chiseling out the contours with <i>clarity</i> and <i>texture</i> and <i>contrast</i>, and removing any extraneous noise.
+</p>
+
+<p>
+This is a difficult task, as emphasizing local contrast tends to produce halos near the horizon, dehazing tends to introduce unpleasant color shifts, and the deep crop necessitates a subtle balance between denoising and detail retention.
+</p>
+
+<br>
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2022-10/DSF4442_acd.jpg">
+      <figcaption>ACDSee Photo Studio<br>
+      strong halos from clarity/texture<br>
+      very inefficient/smeary denoising</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_c1.jpg">
+      <figcaption>Capture One<br>
+      very little dehaze used, as higher settings break tonality<br>
+      little definition in shadows</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_dt.jpg">
+      <figcaption>Darktable<br>
+      very little default saturation, easy to fix<br>
+      outstandingly subtle rendering to my eye</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_dxo.jpg">
+      <figcaption>DxO PhotoLab<br>
+      dehaze ("ClearView") produces strong hue shift<br>
+      clarity ("Microcontrast") is very slow<br>
+      contrast not enough editing range, added tone curve to help<br>
+      denoise ("DeepPrime") annoyingly only visible in mini viewer</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_lr.jpg">
+      <figcaption>Lightroom Classic<br>
+      dehaze works perfectly!<br>
+      denoise not very effective and slightly wormy<br>
+      tends to strong halos from clarity</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_on1.jpg">
+      <figcaption>ON1 Photo RAW<br>
+      dehaze produces strong hue shift<br>
+      strong halos on the horizon<br>
+      highlights tend to blow to pure white somehow</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_rt.jpg">
+      <figcaption>RawTherapee<br>
+      dehaze produces hue shift that is hard to fix<br>
+      does not hide cropped-out image?</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_sp.jpg">
+      <figcaption>Silkypix Developer<br>
+      pleasant rendering, but not very detailed<br>
+      there does not seem to be a clarity-like slider?</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_x7.jpg">
+      <figcaption>Exposure X7<br>
+      works very well in this image</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSF4442_zp.jpg">
+      <figcaption>Zoner Photo Studio<br>
+      weirdly ineffective dehaze<br>
+      contrast introduces strong saturation<br>
+      ineffective and wormy denoising</figcaption>
+    </figure>
+  </div>
+<p>Fujifilm X-T2 with XF70-300 @ 231mm 1/400s f/5.7 ISO200<br><a href="/static/2022-10/DSF4442.RAF">&#x1f4c2; DSF4442.RAF</a> (23.0 MB) <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a></p>
+
+<p>
+Overall, most of these renderings turned out fine. But there are pretty substantial differences in denoising, haloing, and detail retention of the shadows specifically. Halos especially are a personal bug-bear of mine, where the sky above the horizon line brightens and (worse) the mountains below the horizon line darken. This is especially visible in ACDSee, ON1, and Zoner, and to a lesser extent in DxO, Lightroom, and RawTherapee.
+</p>
+
+<p>
+There were also significant differences in noise removal. Especially ACDSee, Exposure, and Zoner had weirdly ineffective denoising, and were unusually difficult to balance against smearing and worms in Lightroom, ON1, and Silkypix. Colors were a bit difficult to control in ACDSee, ON1, and RawTherapee.
+</p>
+
+<p>
+The most pleasant renderings to my eye are DxO, Exposure, and Darktable in this round, although many of the others are very usable as well.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org77b1fef" class="outline-2">
+<h2 id="org77b1fef">High Key Rendering</h2>
+<div class="outline-text-2" id="text-org77b1fef">
+<p>
+Contrary to the popular style at moment, I sometimes like my highlights a little blown. I especially like a smooth, desaturated, film-like drop-off in my highlights, which seems strangely difficult to replicate in digital photography.
+</p>
+
+<p>
+So instead of turning the following picture into an HDR hellscape, I want to compress the bright background into the highlights, while expanding the dark foreground to fill the midtones. The capture actually has all highlight information intact, so I don't want to blow anything out completely, just gracefully fade it into pastels.
+</p>
+
+<br>
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2022-10/DSCF0190_acd_safe.jpg">
+      <figcaption>ACDSee Photo Studio<br>
+      nice highlight rendering<br>
+      very blotchy noise reduction in the shadows</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_c1_safe.jpg">
+      <figcaption>Capture One<br>
+      weirdly saturated trees<br>
+      very noisy foreground</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_dt_safe.jpg">
+      <figcaption>Darktable<br>
+      default rendering horrendous<br>
+      setting color preservation to luminance helps<br>
+      weirdly saturated trees<br>
+      very noisy foreground</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_dxo_safe.jpg">
+      <figcaption>DxO PhotoLab<br>
+      oversaturated by default (easy to fix)<br>
+      good foreground brightness by default<br>
+      strangly contrasty highlights</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_lr_safe.jpg">
+      <figcaption>Lightroom Classic<br>
+      trees remain unrealistically dark<br>
+      noisy foreground</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_on1_safe.jpg">
+      <figcaption>ON1 Photo RAW<br>
+      trees remain unrealistically dark<br>
+      unsightly HDR look</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_rt_safe.jpg">
+      <figcaption>RawTherapee<br>
+      terribly oversaturated trees</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_sp_safe.jpg">
+      <figcaption>Silkypix Developer<br>
+      shadows does not raise black point, remains dark<br>
+      weird color areas in the sky</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_x7_safe.jpg">
+      <figcaption>Exposure X7<br>
+      strange color fringes on trees<br>
+      highlights hard to deal with</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2022-10/DSCF0190_zp_safe.jpg">
+      <figcaption>Zoner Photo Studio<br>
+      noisy foreground</figcaption>
+    </figure>
+  </div>
+<p>Fujifilm X-Pro2 with XF16-80mm @ 16mm 1/400s f/9 ISO400<br>(no raw, for privacy reasons)</p>
+
+<p>
+The different renderings of this image are more of a matter of preference than any of the previous ones. To my eyes, I like the versions drawn by ACDSee, Capture One, Zoner Photo, and DxO PhotoLab best, and I recon that many of the other versions could have been improved with a little more manual tuning. The only problematic versions of this image were the strange HDR-like ON1 render, and the Silkypix variant with its lost black point.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1ce2ff6" class="outline-2">
+<h2 id="org1ce2ff6">Summary</h2>
+<div class="outline-text-2" id="text-org1ce2ff6">
+<p>
+Overall, all of these programs seem reasonable tools for image editing. Most of their differences can probably be overcome if you learn them better. That said, this comparison has left me with a few clear favorites. To be clear, the above comparison only showed the most decisive images of a much larger set which informs my opinion. It should also be noted that my tastes in image editing do not focus on detail recovery, detailed masking, nontrivial retouching, or scene-changing edits such as wholesale sky swapping.
+</p>
+
+<p>
+One area I am particularly interested in, however, is the inherent complexity of the editing tools: For example, I like my <i>saturation</i> slider to only change saturation and leave lightness alone. Similarly, <i>contrast</i> adjustments should not affect saturation. Another interesting part is the behavior of <i>highlights</i> adjustments. Ideally, I'd like <i>highlights</i> to be able to counteract <i>exposure</i> adjustments so I can balance them against one another. Better yet if the same can be done with the <i>tone curve</i>.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Editing is</th>
+<th scope="col" class="org-left">Export takes</th>
+<th scope="col" class="org-left">Saturation changes</th>
+<th scope="col" class="org-left">Contrast changes</th>
+<th scope="col" class="org-left">Highlights rescues</th>
+<th scope="col" class="org-left">Tonecurve rescues</th>
+</tr>
+
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">lightness?</th>
+<th scope="col" class="org-left">saturation?</th>
+<th scope="col" class="org-left">overexposure?</th>
+<th scope="col" class="org-left">overexposure?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ACDSee Photo Studio</td>
+<td class="org-left">realtime</td>
+<td class="org-left">25s</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+</tr>
+
+<tr>
+<td class="org-left">Capture On</td>
+<td class="org-left">realtime</td>
+<td class="org-left">15s</td>
+<td class="org-left">a little</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+</tr>
+
+<tr>
+<td class="org-left">Darktable</td>
+<td class="org-left">delayed</td>
+<td class="org-left">15s</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+</tr>
+
+<tr>
+<td class="org-left">DxO PhotoLab</td>
+<td class="org-left">delayed</td>
+<td class="org-left">45s</td>
+<td class="org-left">yes</td>
+<td class="org-left">a little</td>
+<td class="org-left">yes</td>
+<td class="org-left">a little</td>
+</tr>
+
+<tr>
+<td class="org-left">Lightroom Classic</td>
+<td class="org-left">realtime</td>
+<td class="org-left">15s</td>
+<td class="org-left">a little</td>
+<td class="org-left">a little</td>
+<td class="org-left">yes</td>
+<td class="org-left">a little</td>
+</tr>
+
+<tr>
+<td class="org-left">ON1 Photo RAW</td>
+<td class="org-left">realtime</td>
+<td class="org-left">30s</td>
+<td class="org-left">yes</td>
+<td class="org-left">a little</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+</tr>
+
+<tr>
+<td class="org-left">RawTherapee</td>
+<td class="org-left">wait and see</td>
+<td class="org-left">30s</td>
+<td class="org-left">a little</td>
+<td class="org-left">yes</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+</tr>
+
+<tr>
+<td class="org-left">Silkypix Developer</td>
+<td class="org-left">lo-res wait/see</td>
+<td class="org-left">80s</td>
+<td class="org-left">no</td>
+<td class="org-left">a little</td>
+<td class="org-left">no</td>
+<td class="org-left">no</td>
+</tr>
+
+<tr>
+<td class="org-left">Exposure X7</td>
+<td class="org-left">realtime</td>
+<td class="org-left">30s</td>
+<td class="org-left">yes</td>
+<td class="org-left">strongly</td>
+<td class="org-left">yes</td>
+<td class="org-left">a little</td>
+</tr>
+
+<tr>
+<td class="org-left">Zoner Photo Studio</td>
+<td class="org-left">lo-res realtime</td>
+<td class="org-left">30s</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">yes</td>
+<td class="org-left">a little</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+If <i>saturation</i> changes lightness and <i>contrast</i> changes saturation, editing can become rather more difficult, as the effect tends to be hard to counteract without complex luminosity masking. This is a reason for me to dislike my experience with ACDSee, ON1, Exposure, and Zoner particularly. The <i>highlights</i> slider issue also has a big influence on how you edit images. If highlights can be recovered after exposure adjustments, you can use <i>exposure</i> mostly for image brightness, and recover highlights later if needed. On the other hand, if highlights can't be recovered, then the <i>exposure</i> slider must instead be used to protect highlights, and image brightness has to be relegated to the tone curve or shadows/midtones sliders. This feels weirdly backwards to me, and is a reason for me to disregard ON1, RawTherapee, and Silkypix.
+</p>
+
+<p>
+You may also have noticed that the three examples pictures above were taken with Fujifilm cameras. These cameras are highly acclaimed for their film simulations. Of the tested software, Lightroom Classic, Silkypix Developer, Capture One, and ON1 Photo RAW natively support these film simulations. DxO PhotoLab can add them for an additional €139 <a href="https://www.dxo.com/dxo-filmpack/">FilmPack</a>. And ACDSee Photo Studio, RawTherapee, Darktable, and Exposure X7 at least support third-party LUTs which can retrofit film simulations. Funny how programs <i>either</i> charge money for native film simulations, <i>or</i> support generic LUTs. What a <i>coincidence</i>! (Only ON1 Photo RAW supports both film simulations and (ICC) LUTs, and only Zoner Photo Studio supports neither).
+</p>
+
+<p>
+So, after spending a few evenings with these programs, what is my verdict?
+</p>
+</div>
+
+<div id="outline-container-org20ffa5d" class="outline-3">
+<h3 id="org20ffa5d">ACDSee Photo Studio Ultimate 2023 ★★★☆☆</h3>
+<div class="outline-text-3" id="text-org20ffa5d">
+<p>
+Overall a rather good package. Fantastic organizational features, too. Even sports an API for extending its functionality! And pixel editing, a mobile app, and just a ton more.
+</p>
+
+<p>
+However, it does not suit my tastes. Something about the UI and some tools seems a bit unpolished. Particularly, <i>clarity</i> and <i>dehaze</i> produce too strong halos for me, and the denoising is unpleasantly ineffective and smeary. Panning sometimes breaks the image into a pixelated mess, and there's no Fuji film sim support. Still, when it works, it produced some of my favorite renders in this comparison!
+</p>
+
+<p>
+As another weird point, it's Windows only, and behaves oddly windowsy, too. For example, the library view by default shows all files and folders, not just images, and you actually need to reinstall the entire software if you want to change its language.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgac35941" class="outline-3">
+<h3 id="orgac35941">Capture One 22 ★★★★★</h3>
+<div class="outline-text-3" id="text-orgac35941">
+<p>
+A product I know well, and own a license for. This comparison has reinforced that choice. Capture One's image editing tools are somewhat basic, but they seem refined and flexible. There's a strong focus on workflow efficiency, too, with its <a href="https://learn.captureone.com/tutorials/speed-edit/">speed edit</a> shortcuts and <a href="https://learn.captureone.com/tutorials/style-brushes/">style brushes</a>.
+</p>
+
+<p>
+If there is a criticism to be leveled at Capture One, it's the high price and the somewhat slow pace of development. Many a competitors' feature is only included in Capture One years after they have become widespread. And many new features focus on the needs of working professional photographer instead of amateurs like me.
+</p>
+
+<p>
+Regardless, Capture One will remain my one-of-two raw developer of choice. And it runs on my rather slow Surface tablet for emergency vacation edits!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7820b9a" class="outline-3">
+<h3 id="org7820b9a">Darktable 4.0 ★★★★☆</h3>
+<div class="outline-text-3" id="text-org7820b9a">
+<p>
+Darktable is the other raw developer I know intimately. In a sense, it is the polar opposite of Capture One: all the algorithms, parameters, and details are laid bare; nothing is hidden or automated. Its editing tools are also by far the most unusual of this bunch, which must no doubt be bewildering to newcomers. But if you're interested in deep control and alternative editing workflows, there's just nothing like it. Personally, I have <a href="https://github.com/bastibe/Fujifilm-Auto-Settings-for-Darktable">scripted it</a> and <a href="https://bastibe.de/2022-05-04-customizing-darktable-for-fujifilm-cameras.html">molded it</a> extensively, which has made my Darktable similarly efficient and fast as Capture One. Such flexibility is actually rather rare in image editing software.
+</p>
+
+<p>
+But I seriously hope they fix that horrendous highlights rendering of filmic v6 in the next revision. That's currently a constant pain point to work around.
+</p>
+
+<p>
+Darktable will remain my one-of-two raw developer of choice. And it runs on Linux!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd5e3978" class="outline-3">
+<h3 id="orgd5e3978">DxO PhotoLab 6 ★★★★☆</h3>
+<div class="outline-text-3" id="text-orgd5e3978">
+<p>
+This program really is what prompted this entire ordeal. I heard so many good things about DxO PhotoLab, and was planning on replacing Capture One with it after this comparison.
+</p>
+
+<p>
+There truly is a lot to like about DxO PhotoLab. Its tools seem robust, its default rendering is often very close to a finished image, and its denoising is rather remarkable. However, the program just felt clunky to use. Things are organized inefficiently, some operations take annoyingly long to process, and some effects are only visible in a tiny preview window or indeed the exported file. The local adjustments also seemed unnecessarily cumbersome to use, with that weird radial menu and those awkwardly imprecise "Control Points".
+</p>
+
+<p>
+And what's with the weirdly branded sliders all over the program? Why is it "DxO Smart Lighting" instead of shadows, "DxO ClearView Plus" instead of dehaze, and "Microcontrast" instead of clarity, and "DxO DeepPrime XD" instead of denoising?
+</p>
+
+<p>
+Truthfully, I might still have bought a license for this program as it is powerful and fun to use, despite my complaints. But €220 for the main program <i>plus</i> €140 for the FilmPack (for Fujifilm film simulations, but also basics such as a vignette tool) <i>plus</i> €100 for ViewPoint (for cool distortion stuff, but also the keystone tool) is just a bit too much, thank you very much.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbbe6c94" class="outline-3">
+<h3 id="orgbbe6c94">Lightroom Classic 11.5 ★★★★☆</h3>
+<div class="outline-text-3" id="text-orgbbe6c94">
+<p>
+People like this program, and for good reason. Robust tools, a pleasant rendering, and just a staggering amount of tutorials and help online due to its popularity.
+</p>
+
+<p>
+Nevertheless, Lightroom does not appeal to me. I don't like how Lightroom seems to takes undue possession of my images on import, I am repelled by the weird old-fashioned UI with its bonkers conventions (hold Alt to show masks, crop moves image instead of rectangle, etc.). I don't like its yearly-subscription-only pricing structure, either, although the price and terms are actually rather reasonable. And I don't like that Adobe Creative Cloud mothership that's necessary to install and maintain Lightroom.
+</p>
+
+<p>
+But I do realize that this is actually good software. It's just not my favorite.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3317e59" class="outline-3">
+<h3 id="org3317e59">ON1 Photo RAW 2023 ★★☆☆☆</h3>
+<div class="outline-text-3" id="text-org3317e59">
+<p>
+The new AI denoising and sharpening produced only artifacts, the new AI masking completely missed my subjects, there were algorithm artifacts everywhere, such as halos, hue shifts, and clipping. Perhaps something about my version was broken, being a very recent release. Additionally, one time I wanted to do a 1:2 crop, which you have to create a new crop preset for. However, the preset will not be saved with a ":" in the name. It took me a few tries to figure out that that's what prevented me from cropping. It doesn't help that the UI is surprisingly slow, often taking a second or so to redraw a tool change. And the installer is 2.7 GB, three times the size of any other tool in this list!
+</p>
+
+<p>
+On the other hand, there are some cool tools in the effects panel, and some renders actually didn't look half bad. Perhaps it just needs a few bugfixes or more polish. But as it stands, I can not recommend this software.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgae83c87" class="outline-3">
+<h3 id="orgae83c87">RawTherapee 5.8 ★★★☆☆</h3>
+<div class="outline-text-3" id="text-orgae83c87">
+<p>
+I suppose RawTherapee should be regarded like Darktable, a killer program that requires deep study to wield well. I did not wield it well, but that probably says more about me than RawTherapee.
+</p>
+
+<p>
+Still, I don't like the somewhat busy program layout, and how some operations take a long time to process. The export workflow is also strangely unusual, but I'm sure that that's something I could get used to. And I hear the next version will come with local adjustments.
+</p>
+
+<p>
+Perhaps it is better-suited for a detail-oriented user than me. There's a lot to like here, but it's not what I'm looking for.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge69d60b" class="outline-3">
+<h3 id="orge69d60b">Silkypix Developer Studio Pro 11 ★☆☆☆☆</h3>
+<div class="outline-text-3" id="text-orge69d60b">
+<p>
+Something about this program is endearing to me. But in this comparison, it was just more cumbersome than useful. Many of its tools simply were not up to the task (can't raise shadows far enough, denoising produces only artifacts). And at some point, it slowed down to the point where it would take several seconds to see the effects of a single slider movement. This program did not work for me.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1ea5aa6" class="outline-3">
+<h3 id="org1ea5aa6">Exposure X7 ★★☆☆☆</h3>
+<div class="outline-text-3" id="text-org1ea5aa6">
+<p>
+Another strangely unpolished program on this list. Somehow, fonts everywhere are huge for no apparent reason, and sliders uncomfortably short. And I struggled preventing it from blowing highlights and clipping shadows. I don't see the appeal of this program.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1b4d24b" class="outline-3">
+<h3 id="org1b4d24b">Zoner Photo Studio X Fall 2022 ★★★★☆</h3>
+<div class="outline-text-3" id="text-org1b4d24b">
+<p>
+As of the most recent version, Zoner Photo finally added native support for some Fujifilm cameras. Not all of my cameras are included yet, but to their credit, Zoner Photo can still open the missing files through ACR, albeit a bit more slowly.
+</p>
+
+<p>
+Really, there is a lot to like about this program. Most tools work as advertised, with few issues (no local white balance, somewhat ineffective denoising), and a strong automatic mode. I also enjoy how it is unapologetically Windows-only, and uniquely feels <i>native</i> to Windows in a pleasant way.
+</p>
+
+<p>
+It's a somewhat basic program compared to some of these others, but it's appropriately affordable, and fast. Not exactly what I'm looking for, but highly recommended for what it is!</p>
+</div>
+</div>
+</div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> ]]></description>
+  <category><![CDATA[photography]]></category>
+  <link>https://bastibe.de/2022-10-12-raw-developer-comparison.html</link>
+  <guid>https://bastibe.de/2022-10-12-raw-developer-comparison.html</guid>
+  <pubDate>Tue, 11 Oct 2022 19:15:00 +0200</pubDate>
+</item>
 <item>
   <title><![CDATA[Darktable for Fujifilm Cameras]]></title>
   <description><![CDATA[
