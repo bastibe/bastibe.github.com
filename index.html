@@ -30,6 +30,329 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">21 Apr 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h1>
+<p>
+I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
+surely just using it wrong. Nowadays, I see things the other way around: We're not "holding it
+wrong", the computer is just defective. Computers should do our bidding, not vice versa. So here's a
+bunch of things that I do to my computers to mold them to my way of working.
+</p>
+
+<div id="outline-container-orga6f6339" class="outline-2">
+<h2 id="orga6f6339">Keyboard Layout</h2>
+<div class="outline-text-2" id="text-orga6f6339">
+<p>
+I switch constantly between a German and English keyboard layout, and regularly between various
+machines. My physical keyboards are German, and my fingers are used to the Windows-default German and
+(international) US keyboard layout. These are available by default on Windows and Linux, but MacOS
+goes its own way.
+</p>
+
+<p>
+However, keyboard layouts on MacOS are saved in relatively simple text files, and can be modified
+with relative ease. The process goes like this: Download <a href="https://software.sil.org/ukelele/">Ukelele (free)</a> to create a new keyboard
+layout bundle for your base layout<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Inside that bundle, there's a <i>*.keylayout</i> file,
+which is an XML file that defines the characters that each key-modifier combination produces. I
+changed that to create a Windows-like US keyboard layout. And I replaced the keyboard icon with
+something sane (not "A") by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
+saving to select the ICNS format. Save the keyboard bundle to <code>~/Library/Keyboard Layouts</code> and
+reboot. Then I remove the unremovable default ("A") German layout by selecting another one, then
+<code>plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist</code>, and delete the entry from
+<code>AppleEnabledInputSources</code>. Now reboot. Almost easy. Almost.
+</p>
+
+<p>
+One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
+Windows and Linux before, and for the life of me <i>could not do it</i>. So I actually think this is
+great!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org02f475a" class="outline-2">
+<h2 id="org02f475a">Keyboard Shortcuts</h2>
+<div class="outline-text-2" id="text-org02f475a">
+<p>
+My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of particular note are
+CTRL-A/E for going to the beginning/end of a line, and Alt-B/F for navigating forward/backwards by
+word. I have long wanted to use these shortcuts not just in Emacs and readline-enabled terminal
+applications, but everywhere else, too. And with MacOS, this is finally possible: Install
+<a href="https://folivora.ai/">BetterTouchTool ($22)</a>, and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
+put this in a new activation group that excludes Emacs. It may be necessary to remove the keyboard
+character for Alt-B/F from your keyboard layout before this works. I've spent an embarrassing number
+of hours trying to get this to work on Windows and Linux, and really got nowhere<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+Actually, however, most readline shortcuts such as Ctrl-A/E/B/F/K/Y already work out of the box on
+MacOS!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga52c334" class="outline-2">
+<h2 id="orga52c334">Mouse Configuration</h2>
+<div class="outline-text-2" id="text-orga52c334">
+<p>
+I generally use a trackpad, and occasionally a traditional mouse for image editing, and have used a
+trackball. I find that any one specific device will lead to wrist pain if used constantly, so I
+switch it up every now and then. The trackpad and trackball, however, need configuration to be
+usable.
+</p>
+
+<p>
+After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
+the market<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. On MacOS, they lacks a middle mouse click. So I created a trackpad
+shortcut in the aforementioned <a href="https://folivora.ai/">BetterTouchTool ($22)</a> to map the middle click on a three-finger tap
+(can also be had for free with <a href="https://github.com/artginzburg/MiddleClick-Ventura">MiddleClick (OSS)</a>). For Windows, <a href="https://magicutilities.net/">Magic Utilities ($17/y)</a> provides a
+wonderful third-party driver for Apple devices that also supports the three-finger tap. I have not
+gotten the Apple touch pad to pair reliably on Linux, and have generally found their touch pad
+driver <i>libinput</i> a bit lacking.
+</p>
+
+<p>
+My trackball is a Kensington SlimBlade. To scroll, you rotate the ball around its vertical axis.
+This is tedious for longer scroll distances, however. But there's an alternative scrolling method
+called "button scrolling", where you hold one button on the trackball, and move the ball to scroll.
+You need to install the Kensington driver to enable this on Windows and MacOS. Button scrolling is
+available on Linux as well using xinput<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>, but I haven't gotten the setting to stick across
+reboots or sleep cycles. So I wrote a background task that checks xinput every five seconds,
+which does the trick.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgee58501" class="outline-2">
+<h2 id="orgee58501">Window Management</h2>
+<div class="outline-text-2" id="text-orgee58501">
+<p>
+Frankly, Windows does window management correctly. Win-←/→ moves windows to the left and right edge
+of the screen, as does dragging the window to the screen border. Further Win-←/→ then moves the
+window to the next half-screen in that direction, even across display boundaries. KDE does this
+correctly out of the box as well, Gnome does not do the latter, and it drives me mad. MacOS doesn't
+do any of these things. But <a href="https://rectangleapp.com/">Rectangle (OSS)</a> does. Easy fix. (BetterTouchTool can do it, too, but
+Rectangle is prettier)
+</p>
+
+<p>
+Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
+CMD-Tab to switch between <i>apps</i>, now windows. And then there's another shortcut for switching
+between windows of the same app, but the shortcut really doesn't work at all on a German keyboard.
+Who came up with this nonsense? Anyway, <a href="https://manytricks.com/witch/">Witch ($14)</a> implements window switching properly.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org328c61c" class="outline-2">
+<h2 id="org328c61c">Application Management</h2>
+<div class="outline-text-2" id="text-org328c61c">
+<p>
+In Windows and Linux, I hit the Windows key and start typing to select and start an app. In MacOS,
+this is usually Cmd-Space, but BetterTouchTool can map it to a single short Cmd, if you prefer.
+</p>
+
+<p>
+More annoying are the various docks and task bars. I always shove the dock off to the right edge of
+the screen, where it stays out of the way. Windows 10 had a sane dock, but then 11 came and forced
+it to the bottom of the screen. Dear OS makers, every modern screen has plenty of horizontal space.
+But vertical space is somewhat limited. So why on earth would you make a rarely used menu such as
+the dock consume that precious vertical space by default? And Microsoft, specifically, <i>why not make
+it movable</i>? Thankfully, there's <a href="https://www.startallback.com/">StartAllBack ($5)</a>, which replaces the Windows task bar with
+something sensible, and additionally cleans up the start menu if you so desire. On KDE, I
+fractionally prefer <a href="https://github.com/KDE/latte-dock">Latte (OSS)</a> over KDE's native dock. The MacOS dock is uniquely dumb, offering no
+start menu, and allowing no window selections. But it's unobtrusive and can be moved to the right
+edge, so it's not much of a bother.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org92c217e" class="outline-2">
+<h2 id="org92c217e">File Management</h2>
+<div class="outline-text-2" id="text-org92c217e">
+<p>
+One of the most crucial tasks in computer work in general is file management. I am not satisfied
+with most file managers. Dolphin on KDE works pretty well, it has tabs, can bulk-rename files, can
+display large directories without crashing, and updates in real time when new files are added to the
+current directory. Gnome Nautilus is so bad it is the main reason I switched to KDE on my Linux
+machines. Finder on MacOS is passable, I suppose, although the left sidebar is unnecessarily
+restrictive (why can't I add a shortcut to a network drive?). Windows Explorer is really rather
+terrible, lacking a bulk-rename tool, and crucially, tabs. In Windows 10, these can be added with
+<a href="https://www.stardock.com/products/groupy/">Groupy ($12)</a> (set it to only apply to explorer.exe). Windows 11 has very recently added native tabs,
+which work OK, but can't be detached from the window.
+</p>
+
+<p>
+The sad thing is that there are plenty of very good file manager replacements out there, but none of
+the OSs have a mechanism for replacing their native file manager in a consistent way, so we're
+mostly stuck with the defaults.
+</p>
+
+<p>
+Oh, and I always remove the iCloud/OneDrive sidebar entries, which is <a href="https://www.howtogeek.com/225973/how-to-disable-onedrive-and-remove-it-from-file-explorer-on-windows-10/">surprisingly tedious</a> on
+Windows.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd9caebd" class="outline-2">
+<h2 id="orgd9caebd">Hardware Control</h2>
+<div class="outline-text-2" id="text-orgd9caebd">
+<p>
+On laptops, you can control screen brightness from your keyboard. On desktops, you can not. However,
+some clever hackers have put together <a href="https://github.com/waydabber/BetterDisplay#readme">BetterDisplay (OSS for screen brightness)</a>, which adds this
+capability to MacOS. That's actually a capability I have wanted for quite a while, and apparently it
+is only available in MacOS. Great stuff!
+</p>
+
+<p>
+Less great is that MacOS does not allow volume control on external sound cards. <a href="https://rogueamoeba.com/soundsource/">SoundSource ($47)</a>
+adds this rather crucial functionality back, once you go through the unnecessarily excruciating
+process of enabling custom kernel extensions. Windows and Linux of course natively support this.
+</p>
+
+<p>
+Another necessary functionality for me is access to a non-sucky (i.e. no FAT) cross-platform file
+system. At the moment, the most portable file system seems to be NTFS, of all things. Regrettably,
+MacOS only supports <i>reading</i> NTFS, but no writing. <a href="https://www.paragon-software.com/home/ntfs-mac/#">Paragon NTFS (€20)</a> adds this with another kernel
+extension, and promptly kernel-panicked my computer. Oh joy. At least it's only panicking for file
+transfers initiated by DigiKam, which I can work around. Paragon Support says they're working on it.
+I'm not holding my breath. Windows and Linux of course natively support NTFS.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org672cc57" class="outline-2">
+<h2 id="org672cc57">System Management</h2>
+<div class="outline-text-2" id="text-org672cc57">
+<p>
+I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
+eaten my backups many times already, and can not be trusted. But I have used <a href="https://www.borgbackup.org/">Borg (OSS)</a> for years,
+and it has so far performed flawlessly. Even more impressive, my Borg backups have a continuous
+history despite moving operating systems several times. It truly is wonderful software!
+</p>
+
+<p>
+On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
+Linux, I schedule them with systemd units. On MacOS, I install Borg with <a href="https://brew.sh/">Homebrew (OSS)</a> and schedule
+the backups with launchd tasks. It's all pretty equivalent. One nice thing about launchd, however,
+is how the OS immediately pops up a notification if there's a new task file added, and adds the task
+to the graphical system settings.
+</p>
+
+<p>
+I have to emphasize what a game-changer the WSL is on Windows. Where previously, such simple
+automations where a pain in the neck to do reliably, they're now the same simple shell scripts as on
+other OSes. And it perfectly integrates with Windows programs as well, including passing pipes
+between Linux and Windows programs. It's truly amazing! At the moment, I'd rate Windows a better
+Unix system than MacOS for this reason. Homebrew is a passable package manager on MacOS, but the way
+it's ill-integrated into the main system (not in system PATH) is a bit off-putting.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb305643" class="outline-2">
+<h2 id="orgb305643">App Compatibility</h2>
+<div class="outline-text-2" id="text-orgb305643">
+<p>
+I generally use my computer for three tasks: General document stuff, photo editing, and video games.
+</p>
+
+<p>
+One major downside of Apple computers is that video games aren't available. This has become less of
+a problem to me since I bought a Steam Deck, which has taken over gaming duties from my main PC.
+Absolutely astonishingly, the Steam Deck runs Windows games on <i>Linux</i> through emulation, which
+works almost flawlessly, making video games no longer a Windows-only proposition.
+</p>
+
+<p>
+What doesn't work well on Linux are commercial applications. Wine generally does not play well with
+them, and frustratingly for my photo editing, neither <a href="https://www.vmware.com/products/workstation-player.html">VMWare Workstation Player (free)</a> nor
+<a href="https://www.virtualbox.org/">VirtualBox (OSS)</a> support hardware-accelerated VMs on up-to-date Linux<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>. So where MacOS lacks
+games, Linux lacks Photoshop. Desktop applications in general tend to be unnecessarily cumbersome to
+manage and update on Linux. Flatpak is helping in this regard, by installing user-facing
+applications outside of the OS package managers, but it remains more work than on Windows or MacOS.
+The occasional scanner driver or camera interface app can also be troublesome on Linux, but that's
+easily handled with a VirtualBox VM (with the proprietary <i>Extension Pack</i> for USB2 support), and
+hasn't really bothered me too much.
+</p>
+
+<p>
+Luckily for me, my most-used apps are generally OSS tools such as <a href="https://www.darktable.org/">Darktable (OSS)</a> and <a href="https://www.digikam.org/">DigiKam (OSS)</a>,
+or cross-platform programs like <a href="https://fishshell.com/">Fish (OSS)</a>, <a href="https://git-scm.com/">Git (OSS)</a>, and <a href="https://www.gnu.org/software/emacs/">Emacs (OSS)</a>. This is however, where
+Windows has a bit of a sore spot, as these programs tend to perform noticeably worse on Windows than
+on other platforms. Emacs and git in particular are just terribly slow on Windows, taking several
+seconds for routine operations that are <i>instant</i> on other platforms. That's probably due to
+Windows' rather slow file system and malware scanner for the many-small-files style of file
+management that these Unix tools implement. It is very annoying.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc4dec82" class="outline-2">
+<h2 id="orgc4dec82">Conclusions</h2>
+<div class="outline-text-2" id="text-orgc4dec82">
+<p>
+So there's just no perfect solution. MacOS can't do games, Linux can't run commercial applications,
+and Windows is annoyingly slow for OSS applications. Regardless, I regularly use all three systems
+productively. My job is mostly done on Windows, my home computer runs MacOS, and my Steam Deck and
+automations run Linux.
+</p>
+
+<p>
+Overall, I currently prefer MacOS as my desktop OS. It is surprisingly flexible, and more scriptable
+than I thought, and in some ways is actually more functional than Linux or Windows. The integrated
+calendar and contacts apps are nice, too, and not nearly as terrible as their Windows/Linux
+counterparts. To say nothing of the amazing M1 hardware with its minuscule power draw and total
+silence, while maintaining astonishing performance.
+</p>
+
+<p>
+Linux is where I prefer to program, due to its sane command line and tremendously good
+compiler/debugger/library infrastructure. As a desktop OS, it does have some rough edges, however,
+especially for its lack of access to commercial applications. While Linux <i>should</i> be the most
+customizable of these three, I find things tend to break too easily, and customizations are often
+scattered widely between many different subsystems, making them very hard to get right.
+</p>
+
+<p>
+Theoretically, Windows is the most capable OS, supporting apps, OSS, and games. But it also feels
+the most user-hostile of these three, and the least performant. And then there's the intrusive ads
+everywhere, its spying on my every move, and at work there's inevitably a heavy-handed administrator
+security setup that gets in the way of productivity. It's honestly fine on my home computer, at
+least since they introduced the WSL. But using it for work every day is quite enough, so I don't
+want to use it at home, too.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+if there's an easier way to create a keyboard layout bundle, please let me know. I
+didn't use ukelele for anything but the bundle creation.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+It occurs to me that it might actually be possible to do something like on Windows
+this with <a href="https://www.autohotkey.com/">AutoHotkey (free)</a>. I'll have to try that!
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+The Logitech T650 is actually not bad, but the drivers are a travesty. Some Wacom
+tablets include touch, too, but they palm rejection is abysmal and they don't support gestures.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Scroll Method Enabled" 0, 0, 1 # button scrolling</code> <br>
+<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Button Scrolling Button" 8 # top-right button</code>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+VirtualBox does not have a good accelerated driver, and VMWare does not support recent
+kernels. Qemu <i>should</i> be able to solve this problem, but I couldn't get it to work reliably.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-windows.html">windows</a>
 <div class="post-date">12 Feb 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-02-12-books-of-2022.html">Media of 2022</a></h1>
 <p>
 Around this time of the year, I usually write a blog post about my
@@ -1118,64 +1441,7 @@ When applying the LUTs in Darktable's <i>lut 3D</i> module, there are a few more
 
 
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a>
-<div class="post-date">04 Jan 2022</div><h1 class="post-title"><a href="https://bastibe.de/2022-01-04-books-of-2021.html">Books of 2021</a></h1>
-
-<div id="outline-container-org654eb72" class="outline-2">
-<h2 id="org654eb72">Hologrammatica</h2>
-<div class="outline-text-2" id="text-org654eb72">
-<figure style="float:left">
-<img src="/static/2022-01/hologrammatica cover.jpg" alt="book cover for Hologrammatica" width="150px"/>
-</figure>
-
-<p>
-In the last years, I have almost exclusively read books in English. Science fiction, in particular, seems to happen exclusively in English (and perhaps <a href="https://www.goodreads.com/series/189931-remembrance-of-earth-s-past">Chinese</a>). So much so, that I have come to associate German only with bad translations and personal communications, whereas English was the language of science, engineering, and fiction. In 2021 however, to my surprise, I stumbled upon Tom Hillenbrand's <i>Hologrammatica</i>, an science fiction thriller in German. It was a peculiar experience, reading the familiar tropes of the genre in a different language. Somehow it made the story feel more immediate and approachable to me. Strange, what effect language can have.
-</p>
-
-<p>
-In the book, humanity has decided to hide reality behind holograms. Clothes and hairstyles can be altered on the fly, street lighting is replaced with projected advertisements. The twist is that in this semi-dystopian world, everyone knows that the holograms hide the truth, which is a collapsed society and dilapidated infrastructure. It is a smart, very current backdrop for a detective story with mind uploads, space elevators, and all the modern trappings of science fiction. A thoroughly enjoyable read!
-</p>
-
-<p>
-Sci-Fi honorable mentions: Andy Weir's pop sci-fi <i>Project Hail Mary</i> and Martha Well's first novel-length murderbot entry <i>Fugitive Telemetry</i>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org1461111" class="outline-2">
-<h2 id="org1461111">Not Much of an Engineer</h2>
-<div class="outline-text-2" id="text-org1461111">
-<figure style="float:left">
-<img src="/static/2022-01/not much of an engineer cover.jpg" alt="book cover for Not Much of an Engineer" width="150px"/>
-</figure>
-
-<p>
-I have always been fascinated with aviation, and the technology of warfare. But most of the non-fiction I have read about these topics focuses on the stories of pilots and companies and soldiers, not engineers. In these stories some of the most important plot points came from advances in technology, yet they didn't describe how those changes came about. In 2021, I finally found a good history of aviation technology: Sir Stanley Hooker's <i>Not Much of an Engineer</i> describes the work of the author as the principal engineer at Bristol and Rolls-Royce from the Merlin-era second world war engines to modern turbofans. I guess you need to be a bit of an aviation/engineering geek to enjoy this, but to me this book was an important missing link that I had always looked for.
-</p>
-
-<p>
-Non-fiction honorable mentions: David Goodsell's <i>The Machinery of Life</i> wonderfully illustrates the inner workings of cells.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgd1d88aa" class="outline-2">
-<h2 id="orgd1d88aa">Crafting Interpreters</h2>
-<div class="outline-text-2" id="text-orgd1d88aa">
-<figure style="float:left">
-<img src="/static/2022-01/crafting interpreters cover.jpg" alt="book cover for Crafting Interpreters" width="150px"/>
-</figure>
-
-<p>
-How do computers work? This question is surprisingly hard to answer. For me, the answer came in three books: Charles Petzold's <i>Code: The Hidden Language of Computer Hardware and Software</i> explained to me how processors work. The Arpaci-Dusseau's <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/"><i>Operating Systems: Three Easy Pieces</i></a> describes the infrastructure of operating systems that make processors and storage and network available to programs. And now, finally, Robert Nystrom's <a href="https://craftinginterpreters.com/"><i>Crafting Interpreters</i></a> filled in the last step, how a programming language is built.
-</p>
-
-<p>
-The book describes two implementations of a simple programming language. The first one is a high-level introductory scripting language implemented in Java, the second a high-performance reimplementation in C. Fascinatingly, the entire source code for these implementations is included in the book's text, such that you can entirely follow along (or program along) and have a working programming language at all times. A truly eye-opening glimpse into the innards of the tools we are using every day. The book requires familiarity with Java and C to enjoy.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-books.html">books</a> <div id="archive">
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
