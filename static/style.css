@@ -224,22 +224,16 @@ a:hover{
 }
 p a {
     position: relative;
-    z-index: 1;
+    text-decoration-color: #D6DDE4;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2pt;
+    text-decoration-skip-ink: none;
 }
-p a::after {
-    position: absolute;
-    z-index: -1;
-    background-color: #30557c;
-    left: 0;
-    width: 100%;
-    height: .15em;
-    bottom: .07em;
-    content: '';
-    display: inline-block;
-    opacity: 0.2;
-}
-p a:hover::after {
-    height: 100%;
+p a:hover {
+    background-color: #F0F2F5;
+    text-decoration-color: #F0F2F5;
+    transition: background-color 100ms linear;
+    transition: text-decoration-color 100ms linear;
 }
 a.article-title{
     margin:0;
