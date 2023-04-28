@@ -13,7 +13,7 @@ document.addEventListener('keyup', e => {
     }
 });
 
-function openLightboxCallback(event) {
+function enterLightboxCallback(event) {
     /*
     if (event.buttons !== 0) {
         return;
@@ -81,7 +81,7 @@ function enterLightbox(figure, image) {
     image.addEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '90%';
     image.style['max-height'] = '90%';
-    image.removeEventListener('click', openLightboxCallback);
+    image.removeEventListener('click', enterLightboxCallback);
     image.addEventListener('mousedown', lightboxMouseDownCallback);
     image.addEventListener('mousemove', lightboxMouseMoveCallback);
     image.addEventListener('mouseup', lightboxMouseUpCallback);
@@ -126,7 +126,7 @@ function exitLightbox(figure, image) {
     image.style['top'] = '';
     image.style['left'] = '';
     image.removeEventListener('click', exitLightboxCallback);
-    image.addEventListener('click', openLightboxCallback);
+    image.addEventListener('click', enterLightboxCallback);
     image.removeEventListener('mousedown', lightboxMouseDownCallback);
     image.removeEventListener('mousemove', lightboxMouseMoveCallback);
     image.removeEventListener('mouseup', lightboxMouseUpCallback);
@@ -245,20 +245,10 @@ function handleTouchMoveCallback(event) {
 function handleTouchEndCallback(event) {
     // if touchCoordinate still exists at touch end, it's a click:
     if (touchCoordinate.length == 2) {
-        // if the browser issues both click and touch events, ignore
-        // the later one:
-        if (event.timeStamp - lightboxTime < tapTimeout) {
-            return;
-        }
-        lightboxTime = event.timeStamp;
-
-        let image = event.target;
-        let figure = image.parentNode;
-        event.stopImmediatePropagation();
         if (figure.classList.contains('lightbox')) {
-            exitLightbox(figure, image);
+            exitLightboxCallback(event);
         } else {
-            enterLightbox(figure, image);
+            enterLightboxCallback(event);
         }
         touchCoordinate = [];
     }
@@ -274,7 +264,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     for (let figure of figures) {
         let images = figure.querySelectorAll('img');
         for (let image of images) {
-            image.addEventListener("click", openLightboxCallback);
+            image.addEventListener("click", enterLightboxCallback);
             // This is a workaround for image.ontap = opanLightbox:
             image.addEventListener("touchstart", handleTouchStartCallback);
             image.addEventListener("touchend", handleTouchEndCallback);
