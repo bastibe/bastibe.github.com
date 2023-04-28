@@ -143,8 +143,9 @@ function zoomLightbox(event) {
     image.style['max-height'] = `${zoomFactor*100}%`;
 
     // pan so the image does not move under cursor:
-    let newPositionX = -imageX*image.offsetWidth + event.clientX;
-    let newPositionY = -imageY*image.offsetHeight + event.clientY;
+    let newImageRect = image.getBoundingClientRect();
+    let newPositionX = -imageX*newImageRect.width + event.clientX;
+    let newPositionY = -imageY*newImageRect.height + event.clientY;
     image.style['left'] = `${newPositionX}px`;
     image.style['top'] = `${newPositionY}px`;
 
