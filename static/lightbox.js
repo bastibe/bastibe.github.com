@@ -14,12 +14,6 @@ document.addEventListener('keyup', e => {
 });
 
 function enterLightboxCallback(event) {
-    /*
-    if (event.buttons !== 0) {
-        return;
-    }
-    */
-    event.stopImmediatePropagation();
     // if the browser issues both click and touch events, ignore
     // the later one:
     if (event.timeStamp - lightboxTime < tapTimeout) {
@@ -30,10 +24,10 @@ function enterLightboxCallback(event) {
     let image = event.target;
     let figure = image.parentNode;
 
-    if (wasDragged === true) {
-        wasDragged = false;
-    }
+    // reset dragging state
+    wasDragged = false;
 
+    event.stopImmediatePropagation();
     enterLightbox(figure, image);
 }
 
@@ -43,15 +37,20 @@ function exitLightboxCallback(event) {
     }
     lightboxTime = event.timeStamp;
 
+    // don't exit if we came here from a drag
+    if (wasDragged === true) {
+        wasDragged = false;
+        return;
+    }
+
+    event.stopImmediatePropagation();
     if (event.target.tagName == "FIGURE") {
         let figure = event.target;
         let image = figure.getElementsByTagName('img')[0];
-        event.stopImmediatePropagation();
         exitLightbox(figure, image);
     } else if (event.target.tagName == "IMG") {
         let image = event.target;
         let figure = image.parentNode;
-        event.stopImmediatePropagation();
         exitLightbox(figure, image);
     }
 }
@@ -76,7 +75,7 @@ function enterLightbox(figure, image) {
     figure.parentNode.insertBefore(fakeFig, figure);
     // activate lightbox
     figure.classList.add('lightbox');
-    figure.addEventListener('click', exitLightboxCallback, true);
+    figure.addEventListener('click', exitLightboxCallback);
     image.classList.add('lightbox');
     image.addEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '90%';
@@ -118,7 +117,7 @@ function exitLightbox(figure, image) {
     fakeFig.remove();
     // disable lightbox
     figure.classList.remove('lightbox');
-    figure.removeEventListener('click', exitLightboxCallback, true);
+    figure.removeEventListener('click', exitLightboxCallback);
     image.classList.remove('lightbox');
     image.removeEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '';
