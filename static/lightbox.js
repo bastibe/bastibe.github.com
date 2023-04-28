@@ -2,6 +2,7 @@ let isDragging = false;
 let wasDragged = false;
 let touchCoordinate = [];
 let lightboxTime = undefined;
+let tapTimeout = 300;
 
 
 document.addEventListener('keyup', e => {
@@ -13,13 +14,15 @@ document.addEventListener('keyup', e => {
 });
 
 function openLightboxCallback(event) {
+    /*
     if (event.buttons !== 0) {
         return;
     }
-
+    */
+    event.stopImmediatePropagation();
     // if the browser issues both click and touch events, ignore
     // the later one:
-    if (event.timeStamp - lightboxTime < 100) {
+    if (event.timeStamp - lightboxTime < tapTimeout) {
         return;
     }
     lightboxTime = event.timeStamp;
@@ -35,6 +38,11 @@ function openLightboxCallback(event) {
 }
 
 function exitLightboxCallback(event) {
+    if (event.timeStamp - lightboxTime < tapTimeout) {
+        return;
+    }
+    lightboxTime = event.timeStamp;
+
     if (event.target.tagName == "FIGURE") {
         let figure = event.target;
         let image = figure.getElementsByTagName('img')[0];
@@ -239,13 +247,14 @@ function handleTouchEndCallback(event) {
     if (touchCoordinate.length == 2) {
         // if the browser issues both click and touch events, ignore
         // the later one:
-        if (event.timeStamp - lightboxTime < 100) {
+        if (event.timeStamp - lightboxTime < tapTimeout) {
             return;
         }
         lightboxTime = event.timeStamp;
 
         let image = event.target;
         let figure = image.parentNode;
+        event.stopImmediatePropagation();
         if (figure.classList.contains('lightbox')) {
             exitLightbox(figure, image);
         } else {
