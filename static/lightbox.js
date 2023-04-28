@@ -2,7 +2,6 @@ let isDragging = false;
 let wasDragged = false;
 let touchCoordinate = [];
 let lightboxTime = undefined;
-let tapTimeout = 300;
 
 
 document.addEventListener('keyup', e => {
@@ -13,47 +12,39 @@ document.addEventListener('keyup', e => {
     }
 });
 
-function enterLightboxCallback(event) {
+
+function lightboxClickCallback(event) {
     // if the browser issues both click and touch events, ignore
     // the later one:
-    if (event.timeStamp - lightboxTime < tapTimeout) {
+    if (event.timeStamp - lightboxTime < 300) {
         return;
     }
     lightboxTime = event.timeStamp;
 
-    let image = event.target;
-    let figure = image.parentNode;
-
-    // reset dragging state
-    wasDragged = false;
-
-    event.stopImmediatePropagation();
-    enterLightbox(figure, image);
-}
-
-function exitLightboxCallback(event) {
-    if (event.timeStamp - lightboxTime < tapTimeout) {
-        return;
-    }
-    lightboxTime = event.timeStamp;
-
-    // don't exit if we came here from a drag
-    if (wasDragged === true) {
-        wasDragged = false;
-        return;
-    }
-
-    event.stopImmediatePropagation();
+    let figure, image
     if (event.target.tagName == "FIGURE") {
-        let figure = event.target;
-        let image = figure.getElementsByTagName('img')[0];
-        exitLightbox(figure, image);
+        figure = event.target;
+        image = figure.getElementsByTagName('img')[0];
     } else if (event.target.tagName == "IMG") {
-        let image = event.target;
-        let figure = image.parentNode;
+        image = event.target;
+        figure = image.parentNode;
+    }
+
+    event.stopImmediatePropagation();
+    if (figure.classList.contains('lightbox')) {
+        // don't exit if we came here from a drag
+        if (wasDragged === true) {
+            wasDragged = false;
+            return;
+        }
         exitLightbox(figure, image);
+    } else {
+        // reset dragging state
+        wasDragged = false;
+        enterLightbox(figure, image);
     }
 }
+
 
 function enterLightbox(figure, image) {
     // fix body in place so it doesn't scroll when the lightbox is
@@ -75,16 +66,14 @@ function enterLightbox(figure, image) {
     figure.parentNode.insertBefore(fakeFig, figure);
     // activate lightbox
     figure.classList.add('lightbox');
-    figure.addEventListener('click', exitLightboxCallback);
     image.classList.add('lightbox');
-    image.addEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '90%';
     image.style['max-height'] = '90%';
-    image.removeEventListener('click', enterLightboxCallback);
+    image.setAttribute('draggable', false);
+    image.addEventListener('wheel', lightboxScrollCallback);
     image.addEventListener('mousedown', lightboxMouseDownCallback);
     image.addEventListener('mousemove', lightboxMouseMoveCallback);
     image.addEventListener('mouseup', lightboxMouseUpCallback);
-    image.setAttribute('draggable', false);
     // replace thumbnail with full-resolution image (if necessary):
     if (image.src.includes('thumb')) {
         image.src = image.src.replace('thumb.', '');
@@ -105,6 +94,7 @@ function enterLightbox(figure, image) {
     }
 }
 
+
 function exitLightbox(figure, image) {
     // release body
     let scrollY = parseInt(document.body.style['top']);
@@ -117,15 +107,12 @@ function exitLightbox(figure, image) {
     fakeFig.remove();
     // disable lightbox
     figure.classList.remove('lightbox');
-    figure.removeEventListener('click', exitLightboxCallback);
     image.classList.remove('lightbox');
-    image.removeEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '';
     image.style['max-height'] = '';
     image.style['top'] = '';
     image.style['left'] = '';
-    image.removeEventListener('click', exitLightboxCallback);
-    image.addEventListener('click', enterLightboxCallback);
+    image.removeEventListener('wheel', lightboxScrollCallback);
     image.removeEventListener('mousedown', lightboxMouseDownCallback);
     image.removeEventListener('mousemove', lightboxMouseMoveCallback);
     image.removeEventListener('mouseup', lightboxMouseUpCallback);
@@ -153,9 +140,11 @@ function lightboxMouseMoveCallback(event) {
     }
 }
 
+
 function lightboxMouseUpCallback(event) {
     isDragging = false;
 }
+
 
 function lightboxScrollCallback(event) {
     let image = event.target; // relative position on image:
@@ -183,6 +172,7 @@ function lightboxScrollCallback(event) {
     // do not scroll background
     event.preventDefault();
 }
+
 
 function moveImageIntoBorders(image) {
     // make sure the image stays within the viewport borders:
@@ -220,54 +210,12 @@ function moveImageIntoBorders(image) {
 }
 
 
-// these function implements a poor-man's 'onclick' for touch events:
-function handleTouchStartCallback(event) {
-    if (event.touches.length == 1 && touchCoordinate.length == 0) {
-        // remember where the touch started:
-        touchCoordinate = [event.touches[0].screenX, event.touches[0].screenY];
-    }
-}
-
-function handleTouchMoveCallback(event) {
-    // if the cursor moves too much during the touch, it's not a click:
-    if (event.touches.length == 1 && touchCoordinate.length == 2) {
-        if ((Math.abs(event.touches[0].screenX - touchCoordinate[0]) > 10) ||
-            (Math.abs(event.touches[0].screenY - touchCoordinate[1]) > 10)) {
-            touchCoordinate = [];
-        }
-    // if more than one finger touches the screen, it's not a click:
-    } else if (event.touches.length != 1) {
-        touchCoordinate = [];
-    }
-}
-
-function handleTouchEndCallback(event) {
-    // if touchCoordinate still exists at touch end, it's a click:
-    if (touchCoordinate.length == 2) {
-        if (figure.classList.contains('lightbox')) {
-            exitLightboxCallback(event);
-        } else {
-            enterLightboxCallback(event);
-        }
-        touchCoordinate = [];
-    }
-}
-
-function handleTouchCancelCallback(event) {
-    // if the touch is cancelled, it's not a click:
-    touchCoordinate = [];
-}
-
 window.addEventListener('DOMContentLoaded', (event) => {
     var figures = document.getElementsByTagName('figure');
     for (let figure of figures) {
+        figure.addEventListener("click", lightboxClickCallback);
         let images = figure.querySelectorAll('img');
         for (let image of images) {
-            image.addEventListener("click", enterLightboxCallback);
-            // This is a workaround for image.ontap = opanLightbox:
-            image.addEventListener("touchstart", handleTouchStartCallback);
-            image.addEventListener("touchend", handleTouchEndCallback);
-            image.addEventListener("touchmove", handleTouchMoveCallback);
-            image.addEventListener("touchcancel", handleTouchCancelCallback);
+            image.addEventListener("click", lightboxClickCallback);
         }
     }});
