@@ -12,7 +12,7 @@ document.addEventListener('keyup', e => {
     }
 });
 
-function openLightbox(event) {
+function openLightboxCallback(event) {
     if (event.buttons !== 0) {
         return;
     }
@@ -26,12 +26,25 @@ function openLightbox(event) {
 
     let image = event.target;
     let figure = image.parentNode;
+
     if (wasDragged === true) {
         wasDragged = false;
-    } else if (figure.classList.contains('lightbox')) {
+    }
+
+    enterLightbox(figure, image);
+}
+
+function exitLightboxCallback(event) {
+    if (event.target.tagName == "FIGURE") {
+        let figure = event.target;
+        let image = figure.getElementsByTagName('img')[0];
+        event.stopImmediatePropagation();
         exitLightbox(figure, image);
-    } else {
-        enterLightbox(figure, image);
+    } else if (event.target.tagName == "IMG") {
+        let image = event.target;
+        let figure = image.parentNode;
+        event.stopImmediatePropagation();
+        exitLightbox(figure, image);
     }
 }
 
@@ -47,17 +60,23 @@ function enterLightbox(figure, image) {
     fakeFig.id = 'fakefig';
     fakeFig.style['width'] = `${figure.offsetWidth}px`;
     fakeFig.style['height'] = `${figure.offsetHeight}px`;
-    fakeFig.style['background-color'] = '#f0f0f0';
+    fakeFig.style['background-color'] = '#c0c0c0';
+    fakeFig.style['opacity'] = 0.5;
+    fakeFig.style['position'] = figure.style['position'];
+    fakeFig.style['float'] = figure.style['float'];
+    fakeFig.style['display'] = figure.style['display'];
     figure.parentNode.insertBefore(fakeFig, figure);
     // activate lightbox
     figure.classList.add('lightbox');
+    figure.addEventListener('click', exitLightboxCallback, true);
     image.classList.add('lightbox');
-    image.onwheel = zoomLightbox;
+    image.addEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '90%';
     image.style['max-height'] = '90%';
-    image.addEventListener('mousedown', lightboxMouseDown);
-    image.addEventListener('mousemove', lightboxMouseMove);
-    image.addEventListener('mouseup', lightboxMouseUp);
+    image.removeEventListener('click', openLightboxCallback);
+    image.addEventListener('mousedown', lightboxMouseDownCallback);
+    image.addEventListener('mousemove', lightboxMouseMoveCallback);
+    image.addEventListener('mouseup', lightboxMouseUpCallback);
     image.setAttribute('draggable', false);
     // replace thumbnail with full-resolution image (if necessary):
     if (image.src.includes('thumb')) {
@@ -91,15 +110,18 @@ function exitLightbox(figure, image) {
     fakeFig.remove();
     // disable lightbox
     figure.classList.remove('lightbox');
+    figure.removeEventListener('click', exitLightboxCallback, true);
     image.classList.remove('lightbox');
-    image.onwheel = undefined;
+    image.removeEventListener('wheel', lightboxScrollCallback);
     image.style['max-width'] = '';
     image.style['max-height'] = '';
     image.style['top'] = '';
     image.style['left'] = '';
-    image.removeEventListener('mousedown', lightboxMouseDown);
-    image.removeEventListener('mousemove', lightboxMouseMove);
-    image.removeEventListener('mouseup', lightboxMouseUp);
+    image.removeEventListener('click', exitLightboxCallback);
+    image.addEventListener('click', openLightboxCallback);
+    image.removeEventListener('mousedown', lightboxMouseDownCallback);
+    image.removeEventListener('mousemove', lightboxMouseMoveCallback);
+    image.removeEventListener('mouseup', lightboxMouseUpCallback);
     image.setAttribute('draggable', true);
     // unhide all images in this figure:
     for (let otherImage of figure.querySelectorAll('img')) {
@@ -107,11 +129,11 @@ function exitLightbox(figure, image) {
     }
 }
 
-function lightboxMouseDown(event) {
+function lightboxMouseDownCallback(event) {
     isDragging = true;
 }
 
-function lightboxMouseMove(event) {
+function lightboxMouseMoveCallback(event) {
     if (isDragging === true) {
         let image = event.target;
         image.style['left'] = `${image.offsetLeft + event.movementX}px`;
@@ -124,11 +146,11 @@ function lightboxMouseMove(event) {
     }
 }
 
-function lightboxMouseUp(event) {
+function lightboxMouseUpCallback(event) {
     isDragging = false;
 }
 
-function zoomLightbox(event) {
+function lightboxScrollCallback(event) {
     let image = event.target; // relative position on image:
     let imageRect = image.getBoundingClientRect();
     let imageX = (event.clientX-imageRect.left)/imageRect.width;
@@ -192,14 +214,14 @@ function moveImageIntoBorders(image) {
 
 
 // these function implements a poor-man's 'onclick' for touch events:
-function handleTouchStart(event) {
+function handleTouchStartCallback(event) {
     if (event.touches.length == 1 && touchCoordinate.length == 0) {
         // remember where the touch started:
         touchCoordinate = [event.touches[0].screenX, event.touches[0].screenY];
     }
 }
 
-function handleTouchMove(event) {
+function handleTouchMoveCallback(event) {
     // if the cursor moves too much during the touch, it's not a click:
     if (event.touches.length == 1 && touchCoordinate.length == 2) {
         if ((Math.abs(event.touches[0].screenX - touchCoordinate[0]) > 10) ||
@@ -212,7 +234,7 @@ function handleTouchMove(event) {
     }
 }
 
-function handleTouchEnd(event) {
+function handleTouchEndCallback(event) {
     // if touchCoordinate still exists at touch end, it's a click:
     if (touchCoordinate.length == 2) {
         // if the browser issues both click and touch events, ignore
@@ -233,7 +255,7 @@ function handleTouchEnd(event) {
     }
 }
 
-function handleTouchCancel(event) {
+function handleTouchCancelCallback(event) {
     // if the touch is cancelled, it's not a click:
     touchCoordinate = [];
 }
@@ -243,11 +265,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     for (let figure of figures) {
         let images = figure.querySelectorAll('img');
         for (let image of images) {
-            image.onclick = openLightbox;
+            image.addEventListener("click", openLightboxCallback);
             // This is a workaround for image.ontap = opanLightbox:
-            image.addEventListener("touchstart", handleTouchStart);
-            image.addEventListener("touchend", handleTouchEnd);
-            image.addEventListener("touchmove", handleTouchMove);
-            image.addEventListener("touchcancel", handleTouchCancel);
+            image.addEventListener("touchstart", handleTouchStartCallback);
+            image.addEventListener("touchend", handleTouchEndCallback);
+            image.addEventListener("touchmove", handleTouchMoveCallback);
+            image.addEventListener("touchcancel", handleTouchCancelCallback);
         }
     }});
