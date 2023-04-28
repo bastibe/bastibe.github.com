@@ -135,7 +135,8 @@ function zoomLightbox(event) {
     let imageY = (event.clientY-imageRect.top)/imageRect.height;
 
     // zoom in:
-    let zoomFactor = imageRect.width / window.innerWidth;
+    let zoomFactor = Math.max(imageRect.width / window.innerWidth,
+                              imageRect.height / window.innerHeight);
     zoomFactor /= 1.0 - event.wheelDeltaY / 360;
     zoomFactor = Math.min(Math.max(zoomFactor, 0.9), 5);
     image.style['max-width'] = `${zoomFactor*100}%`;
