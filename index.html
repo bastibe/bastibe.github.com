@@ -30,6 +30,108 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">15 Oct 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-10-15-one-year-with-legacy-code.html">Two Years with Legacy Code</a></h1>
+<p>
+From January 2021 to the beginning of 2023, I worked on a legacy code base at Fraunhofer IDMT in Oldenburg. My task was the maintenance and development of a DNN-based speech recognition engine that had become terra incognita when its original developer had left the company a year before I started. The code had all the hallmarks of severe technical debt, with layers of half-used abstractions, many unused branches of unknown utility, and the handwriting of several concurrent programmers at odds with each other.
+</p>
+
+<p>
+The code had evidently been written in a mad dash to bring the product to market. And not to discredit its developers, had been in production for several years, with a core of robust algorithms surrounded by helper scripts that had allowed the company to build upon, even after the original developers had left.
+</p>
+
+<p>
+It was my job to clean it up. Having spent six years on my PhD recently, I welcomed the calmer waters of 'just' programming for a bit. This blog post is a summary of the sorts of challenges I faced during this time, and what kinds of techniques helped me overcome them.
+</p>
+
+<div id="outline-container-orgd38aa96" class="outline-2">
+<h2 id="orgd38aa96">The lay of the land</h2>
+<div class="outline-text-2" id="text-orgd38aa96">
+<p>
+I approached the task from the outside, sorting through the build scripts first. Evidently, at least three authors were involved: One old-school Unix geek that wrote an outdated dialect of CMake, one high-level Python scripter, and one shell scripter that deeply believed in abstraction-by-information-hiding. The result of this was&#x2026; interesting.
+</p>
+
+<p>
+For a good few weeks I "disassembled" these scripts by tracing their execution manually through their many layers, and writing down the necessary steps that were actually executed. My favorite piece of code was a Makefile that called a shell script that ran a Python program, which instantiated a few classes and data structures, which ultimately executed "configure; make; make install" on another underying Makefile. I derived great satisfaction from cutting out all of these middle-men, and consolidating several directories of scripts into a single Makefile.
+</p>
+
+<p>
+Similar simplifactions were implemented at the same time across several code bases by my colleagues. In due time, this concerted effort enabled us to implement continuous integration, automated benchmarking, and automated builds, but more on that later.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9562612" class="outline-2">
+<h2 id="org9562612">Data refactoring</h2>
+<div class="outline-text-2" id="text-org9562612">
+<p>
+The speech recognition software implemented a sort of interpreter for the DNN layers, originally encoded as a custom binary blob. Apparently, a custom binary approach had been taken to avoid dependencies on external parsing libraries. Yet the data had become so convoluted that both its compilation and its parsing were now considered unchangeable black boxes that impeded further development.
+</p>
+
+<p>
+Again, I traced through the execution of the compiling code, noted down the pieces of data it recorded, and rewrote the compiler to produce a MsgPack file. On the parsing side, I wrote a custom MsgPack parser in C. Looking back, every job I've had involved writing at least a couple of data dumpers/parsers, yet many developers seem intimidated by such tasks. But why write such a thing yourself instead of using an off-the-shelf solution? In an unrelated code review later in the year one colleague used the cJSON library for parsing JSON; in the event, cJSON was several magnitudes bigger and more complex than the code base it was serving, which is clearly absurd. Our job as developers is to manage complexity, including that of our dependencies. In cases such as these, I often find a simple, fit-for-purpose solution preferable to more generalized external libraries.
+</p>
+
+<p>
+A part of the DNN data came from the output of a training program. This output however was eternally unstable, often breaking unpredictably between version, and requiring complex workarounds to accommodate different versions of the program. The previous solution to this was a deeply nested decision tree for the various permutations the data could take. I simplified this code tremendously by calling directly into the other program's libraries, instead of trying to make sense of its output. This is another technique I had to rely on several times, hooking into C/C++ libraries from various Python scripts to bridge between data in a polyglot environment.
+</p>
+
+<p>
+Doing these deep dives into data structures often revealed unintended entanglements. In order to assemble one data structure, you had to grab pieces of multiple different source data. Interestingly, once data structures were cleaned up to no longer have such entanglements, algorithms seemed to fall into place effortlessly. However, this was not a one-step process, but instead an ongoing struggle to keep data structures minimal and orthogonal. While algorithms and functions often feel easier to refactor than data structures, I have learned from this that it is often the changes to data structures that have the greatest effect, and should therefore receive the greatest scrutiny.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orged905b7" class="outline-2">
+<h2 id="orged905b7">Code refactoring</h2>
+<div class="outline-text-2" id="text-orged905b7">
+<p>
+My predecessor had left me a few screen casts by way of documentation. While the core program was reasonably well-structured, it was embedded in an architectural curiosity that told the tale of a frustrated high-level programmer forced to do low-level gruntwork. There were poor-man's-classes implemented as C structs with function pointers, there were do-while-with-goto-loops for exception handling, there were sort-of-dynamically-typed data containers, accompanied by angry comments decrying the stupidity of C.
+</p>
+
+<p>
+Now I like my high-level-programming as much as the next guy, but forcing C to be something it isn't, is not my idea of fun. So over a few months I slowly removed most of these abstractions. Somewhat to my surprise, most of them turned out pure overhead that could simply be removed. Where a replacement was needed, I reverted to native C constructs. Tagged unions instead of casting, variable-length-arrays instead of dynamic arrays. Treating structs as values instead of references. This, alone, reduced the entire code base by a good 10%. The harder part was sorting out the jumble of headers and dependencies that had evidentally built up over time. Together with the removal of dead code paths, the overall code base shrank by almost half. There are few things more satisfying than excising and deleting unnecessary code.
+</p>
+
+<p>
+I stumbled upon one particularly interesting problem when trying to integrate another code base into ours. Within our own software, build times were small enough to make logging and printf-debugging easier than an interactive debugger such as GDB. The other code base however was too complex to recompile on a whim, and a different solution had to be found. Now I am a weird person who likes to touch the raw command line instead of an IDE. And in this case this turned out to be a huge blessing, as I found that GDB can not only be used interactively, but can also be scripted! So instead of putting logging into the other library, I wrote GDB scripts that augmented break points with a little <code>call printf(...)</code> or <code>print/d X</code>. These could get suprisingly complicated, where one breakpoint might enable or disable other breakpoints conditionally, and break point conditions could call functions on their own. It took some learning, but these debugging scripts were incredibly powerful, and a technique I will definitely refer to in the future.
+</p>
+
+<p>
+When adding new features to the software, I often found it impossible to work the required data flow into the existing program code without snowballing complexity. I usually took these situations as code smells that called for a refactoring. Invariably, each cleaning up of program flow or data structures inched the program closer and closer to allow my feature addition. After a while, this became an established modus operandi: independently clean the code until feature additions become easy and obvious, then do the obvious thing. Thus every task I finished also left the surrounding code in a better state. In the end, about 80% of the code base had gotten this treatment, and I strongly believe that this has left the project in a much better state than it was before. To say nothing of the added documentation and tests, of course.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org526d592" class="outline-2">
+<h2 id="org526d592">More velocity makes bigger craters</h2>
+<div class="outline-text-2" id="text-org526d592">
+<p>
+As I slowly shifted from cleanup work to new features, change management became a pressing issue. New features had to be evaluated, existing features had to be tested, and changes had to be documented and downstreamed. Fascinatingly, the continuous integration and evaluation tools we built for this purpose, soon unearthed a number of hidden problems in other parts of the product that we had not been aware of (including that the main task I had been hired to do was less worthwhile than thaught, LOL). That taught us all a valuable lesson about testing, and proving our assertions. That said, I never found bottom-level unit tests all that useful for our purposes; the truly useful tests invariably were higher-level integration tests.
+</p>
+
+<p>
+Eventually, my feature additions led to downstream changes by several other developers. While I took great care to present a stable API, and documenting all changes and behavior appropriately, at the end of the day my changes still amounted to a sizeable chunk of work for others. This was a particularly stark contrast to the previous years of perfect stagnation while nobody had maintained the library. My main objective at this point was to avoid the mess I had started out with, where changes had evidentally piled on changes until the whole lot had become unmaintainable.
+</p>
+
+<p>
+Thus a balance had to be struck between moving fast (and breaking things), and projecting stability and dependability. One crucial tool for this job turned out to be code reviews. By involving team members directly with the code in question, they could be made more aware of its constraints and edge cases. It took a few months to truly establish the practice, but by the end of a year everyone had clearly found great value in code reviews as a tool for communication.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org658ca5c" class="outline-2">
+<h2 id="org658ca5c">Conclusions</h2>
+<div class="outline-text-2" id="text-org658ca5c">
+<p>
+There is a lot more to be said about my time at Fraunhofer. The deep dive into the world of DNN engines was truly fascinating, as were the varied challenges of implementing these things on diverse platforms such as high-performance CPU servers, Laptops, Raspberry Pis, and embedded DSPs. I learned to value automation of developer tasks, and of interface stability and documentation for developer productivity.
+</p>
+
+<p>
+But most of all, I learned to appreciate legacy code. It would have been easy to call it a "mess", and advocate to rewrite it from scratch. But I found it much more interesting to try to understand the code's heritage, and tease out the algorithmic core from the abstractions and architectural supports. There were many gems to be found this way, and a lot to be learned from the programmers before you. I often felt a strange connection to my predecessor, as if we were talking to each other through this code base. And no doubt my successor feels the same way about my code now.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a>
 <div class="post-date">21 Apr 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h1>
 <p>
 I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
@@ -1398,50 +1500,7 @@ Download a zip file with all the above styles <a href="https://bastibe.de/static
 <p>
 Then copy the lua script to <code>~/.config/darktable/lua/contrib/</code>, activate it in the script manager (bottom left in the lighttable), and it should automatically run whenever you import new Fujifilm raf files! (Start Darktable with <code>darktable -d opencl</code> to see debug messages, and bind a keyboard shortcut to <code>lua scripts/fujifilm_auto_settings</code> to trigger the script manually.)
 </p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <a href="https://bastibe.de/tag-fujifilm.html">fujifilm</a> <a href="https://bastibe.de/tag-darktable.html">darktable</a>
-<div class="post-date">09 Jan 2022</div><h1 class="post-title"><a href="https://bastibe.de/2022-01-09-converting-capture-one-presets-to-luts.html">Converting Capture one Presets to LUTs</a></h1>
-<p>
-A while ago, I bought an <a href="https://www.reallyniceimages.com/">RNI film pack</a> for Capture One. That's a set of presets that makes your digital photos look similar to analog film scans. However, since then my <i>other</i> image editor, <a href="https://www.darktable.org/">Darktable</a> just released a new version, I'm now back to using Darktable instead of Capture One, thus without access to those presets.
-</p>
-
-<p>
-Here's how to export Capture One presets to LUTs, to make them accessable to other programs.
-</p>
-
-<p>
-The fun thing is, LUTs are just PNG files that contain a table of colors. You know, a "Look Up Table", of sorts. So, in order convert a preset to a LUT, all we need to do is apply the preset to a pristine "identity" LUT, and export it as a new PNG.
-</p>
-
-<ol class="org-ol">
-<li>Get yourself an identity LUT. <br>
-For example, the one included in <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's Fuji Film Simulation Profiles</a>. Choose the sRGB PNG LUTs, for RawTherapee and Affinity Photo.</li>
-<li>Open the LUT PNG in Capture One.</li>
-<li>Apply the preset you want. <br>
-Optionally lower <i>saturation</i> by -15, see below.</li>
-<li>Export as PNG. <br>
-Make sure the color space is sRGB, just like the original file.</li>
-</ol>
-
-<p>
-As easy as that.
-</p>
-
-<p>
-A few more adjustments: many Capture One presets expect to be working on raw data, which is less saturated than Darktable's default. So I export with -15 <i>saturation</i>. Also, many presets include spacial adjustments such as Highlights or Shadows that are bound to not play well with the LUT PNG. To disable them, delete the offending lines from the *.costyle files<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, or compensate the values with opposite slider movements.
-</p>
-
-<p>
-When applying the LUTs in Darktable's <i>lut 3D</i> module, there are a few more things you can do to fit them into your workflow. For example, you can lower the opacity of the <i>lut 3D</i> module to vary their effect. Or you can choose <i>chromaticity</i> as blend more to only apply their color transformation, but keep Darktable's tonal rendering. In <i>normal</i> blend mode, some LUTs prefer a flat rendering as their input, so lower <i>contrast</i> in <i>filmic rgb</i> to zero and use the auto-pickers to set the image black and white point.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">don't do this for RNI LUTs, it's forbidden by the User License Agreement that is hidden quite well in dark-grey-on-black at the very bottom of their website</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <a href="https://bastibe.de/tag-fujifilm.html">fujifilm</a> <a href="https://bastibe.de/tag-darktable.html">darktable</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>
