@@ -30,6 +30,61 @@
 </div></div>
 <div id="content">
 <h1 class="title">Posts tagged "emacs":</h1>
+<div class="post-date">24 Mar 2024</div><h1 class="post-title"><a href="https://bastibe.de/2024-03-24-rip-emacs-2011-2023.html">🪦 Emacs 2011-2023</a></h1>
+<p>
+For the last dozen years, I have used Emacs as my text editor and development environment. But this era ended. In this post, I outline how I went from using Emacs as a cornerstone of my digital life, to abandoning it.
+</p>
+
+<p>
+In an ironic twist of history, it was Visual Studio that drove me to Emacs in the first place, and what ultimately pulled me away from it: In 2011, I was working on the firmware of a digital mixing console. This was edited in Visual Studio, compiled with an embedded compiler software, and source-controlled with command-line Git. It was ultimately Emacs that allowed me to tie this hodgepodge of idiosyncratic C+<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, Git, and the proprietary compiler into a somewhat sane development environment.
+</p>
+
+<p>
+Over the years, my Emacs config grew, I learned Elisp, I published my own Emacs packages, and developed my own Emacs theme. I went back to university, did my PhD, worked both OSS and commercially, and almost all of this was done in Emacs. As particular standouts beyond traditional text editing, I used Emacs' <a href="https://magit.vc/">Git-client Magit</a> every single day, and my own <a href="https://github.com/bastibe/org-journal/">org-journal</a> was absolutely vital as my research/work journal.
+</p>
+
+<figure>
+<img src="/static/2024-03/Emacs Theme.png" alt="My monochrome Emacs theme"/>
+<figcaption>My custom Emacs theme, all monochrome, with varying fonts instead of colors</figcaption>
+</figure>
+
+<p>
+In 2023, however, I started a new job, once again with a Visual Studio codebase. This time, however, the code base and build system was tightly woven into the Visual Studio IDE, and only really navigable and editable therein. It thus made no sense to edit this code in Emacs, so I didn't. Perhaps I also needed a break.
+</p>
+
+<p>
+And as my Emacs usage waned, so its ancient keyboard shortcuts started to become a liability. I started mis-typing Emacs things in Visual Studio, and hitting Windows shortcuts in Emacs. Friction began to arise. At the same time, I started noticing how poorly Emacs runs on Windows. Startup takes many seconds, it does not integrate well into the task bar<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>, it doesn't handle resolution changes gracefully, and it's best I don't start talking about its horrendously broken mouse scrolling. And of course it can't scroll point out of the window<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
+</p>
+
+<p>
+My last use-case for Emacs was org-journal. I ended up porting a <a href="https://github.com/bastibe/vscode-org-journal">basic version of it to Visual Studio Code</a>. Having thus written a text editor plugin for both editors, I have to be blunt: both, the anachronistic bone-headedness of Elisp, and the utter insanity of TypeScript's node APIs, are terrible environments for writing plugins. A few years ago I did the same exercise in Sublime Text Python, which was a beautiful, simple, quick affair. But I do enjoy a programming puzzle, so here we are.
+</p>
+
+<p>
+The final nail in Emacs' coffin came from an unexpected corner: For all my professional life, I was a solo coder. My Emacs was <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/typo-theme.el">proudly black-and-white</a> (different fonts instead of different colors!), and my keyboard shortcuts were idiosyncratically my own. I did not merely <i>use</i> Emacs. I had built MY OWN Emacs. I like to think this built character, and API design experience. But it was of course a complete non-starter for pair programming. After having tasted Visual Studio (± Code) Live Sharing, there was simply no going back.
+</p>
+
+<p>
+And thus, I am saddened to see that I haven't started Emacs in several weeks. I guess this is goodbye. This blog is still rendered by Emacs, and I still maintain various Emacs modules. My journal is still written in org-mode. But it is now edited in Visual Studio Code.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+An eclectic subset of C++, intersected with the limitations of the embedded compiler. This was decidedly pre-"modern" C++, and probably less than the sum of its parts.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Usually, the program's taskbar button starts the program, and represents it while running. Emacs spawns a new button instead.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+This is emacs-speak for "it can't scroll the cursor outside the viewport"</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a>
 <div class="post-date">27 May 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-05-27-how-to-write-a-dissertation.html">How to Write a Dissertation</a></h1>
 <p>
 Assembling scientific documents is a complex task. My documents are a combination of graphs, data, and text, written in LaTeX. This post is about combining these elements, keeping them up to date, while not losing your mind. My techniques work on any Unix system on Linux, macOS, or the WSL.
