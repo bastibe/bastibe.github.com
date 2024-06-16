@@ -30,6 +30,103 @@
 </div></div>
 <div id="content">
 
+<div class="post-date">16 Jun 2024</div><h1 class="post-title"><a href="https://bastibe.de/2024-06-16-python-inception.html">Python Inception</a></h1>
+<p>
+At most companies I have worked for, there was some internal Python code base that relied on an old version of Python. But especially for data science, I'd often want to execute that code from an up-to-date Jupyter Notebook, to do some analysis on results.
+</p>
+
+<p>
+When this happened last time, I decided to do something about it. Here's a Jupyter cell magic that executes the cell's code in a different Python, pipes out all of STDOUT and STDERR, and imports any newly created variables into the host Python. Use it like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">%%py_magic /old/version/of/python
+<span style="color: #111111; font-weight: bold;">import</span> this
+<span style="color: #404040;">truth</span> = 42
+</pre>
+</div>
+
+<p>
+When this cell executes, you will see the Zen of Python in your output, just as if you had <code>import this</code> in the host Python, and the variable <code>truth</code> will now be 42 in the host Python.
+</p>
+
+<p>
+To get this magic, execute the following code in a preceding cell:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> subprocess
+<span style="color: #111111; font-weight: bold;">import</span> sys
+<span style="color: #111111; font-weight: bold;">import</span> pickle
+<span style="color: #111111; font-weight: bold;">import</span> textwrap
+<span style="color: #111111; font-weight: bold;">from</span> IPython.core.magic <span style="color: #111111; font-weight: bold;">import</span> needs_local_scope, register_cell_magic
+
+<span style="color: #111111; text-decoration: underline;">@register_cell_magic</span>
+<span style="color: #111111; text-decoration: underline;">@needs_local_scope</span>
+<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; font-weight: bold; text-decoration: underline;">py_magic</span>(line, cell, local_ns=<span style="color: #111111;">None</span>):
+    <span style="color: #404040;">proc</span> = subprocess.Popen([line <span style="color: #111111; font-weight: bold;">or</span> <span style="color: #606060;">'python'</span>],
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            encoding=<span style="color: #606060;">'UTF8'</span>)
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">send a preamble to the client python, and remember all pre-existing local variable names:</span>
+    proc.stdin.write(textwrap.dedent(<span style="color: #606060;">"""</span>
+<span style="color: #606060;">        import pickle as _pickle</span>
+<span style="color: #606060;">        import types as _types</span>
+<span style="color: #606060;">        _names_before = [k for k, v in locals().items()] + ['_f', '_names_before']</span>
+<span style="color: #606060;">        try:</span>
+<span style="color: #606060;">    """</span>))
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">send the cell's contents, indented to run in the try:</span>
+    <span style="color: #111111; font-weight: bold;">for</span> line <span style="color: #111111; font-weight: bold;">in</span> cell.splitlines():
+        proc.stdin.write(<span style="color: #606060;">"    "</span> + line + <span style="color: #606060;">"</span><span style="color: #111111;">\n</span><span style="color: #606060;">"</span>)  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">indent!</span>
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">send a postamble that pickles all new variables or thrown exceptions:</span>
+    proc.stdin.write(textwrap.dedent(<span style="color: #606060;">"""</span>
+<span style="color: #606060;">        # save results to result.pickle</span>
+<span style="color: #606060;">        except Exception as exc:</span>
+<span style="color: #606060;">            with open('result.pickle', 'wb') as _f:</span>
+<span style="color: #606060;">                _pickle.dump({'type':'error', 'value': exc}, _f)</span>
+<span style="color: #606060;">        else:</span>
+<span style="color: #606060;">            with open('result.pickle', 'wb') as _f:</span>
+<span style="color: #606060;">                _values = {k:v for k, v in locals().items()</span>
+<span style="color: #606060;">                               if not isinstance(v, _types.ModuleType) </span>
+<span style="color: #606060;">                                  and not k in _names_before}</span>
+<span style="color: #606060;">                _safe_values = {}  # skip any unpickleable variables</span>
+<span style="color: #606060;">                for k, v in _values.items():</span>
+<span style="color: #606060;">                    try:</span>
+<span style="color: #606060;">                        _pickle.dumps(v)</span>
+<span style="color: #606060;">                    except Exception as _exc:</span>
+<span style="color: #606060;">                        print(f'skipping dumping {k} because {_exc}')</span>
+<span style="color: #606060;">                    else:</span>
+<span style="color: #606060;">                        _safe_values[k] = v</span>
+<span style="color: #606060;">                _pickle.dump({'type':'result', 'value': _safe_values}, _f)</span>
+<span style="color: #606060;">        finally:</span>
+<span style="color: #606060;">            quit()</span>
+<span style="color: #606060;">    """</span>))
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">print any captured stdout or stderr:</span>
+    <span style="color: #404040;">stdout</span>, <span style="color: #404040;">stderr</span> = proc.communicate()
+    <span style="color: #111111; font-weight: bold;">if</span> stdout:
+        <span style="color: #404040;">print</span>(stdout, <span style="color: #404040;">file</span>=sys.stdout)
+    <span style="color: #111111; font-weight: bold;">if</span> stderr:
+        <span style="color: #404040;">print</span>(stderr, <span style="color: #404040;">file</span>=sys.stderr)
+
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">load new local variables or throw error:</span>
+    <span style="color: #111111; font-weight: bold;">with</span> <span style="color: #404040;">open</span>(<span style="color: #606060;">'result.pickle'</span>, <span style="color: #606060;">'rb'</span>) <span style="color: #111111; font-weight: bold;">as</span> f:
+        <span style="color: #404040;">result</span> = pickle.load(f)
+    <span style="color: #111111; font-weight: bold;">if</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'error'</span>:
+        <span style="color: #111111; font-weight: bold;">raise</span> result[<span style="color: #606060;">'value'</span>]
+    <span style="color: #111111; font-weight: bold;">elif</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'result'</span>:
+        <span style="color: #111111; font-weight: bold;">for</span> key, value <span style="color: #111111; font-weight: bold;">in</span> result[<span style="color: #606060;">'value'</span>].items():
+            <span style="color: #111111; font-weight: bold;">try</span>:
+                <span style="color: #404040;">local_ns</span>[key] = value
+            <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">Exception</span> <span style="color: #111111; font-weight: bold;">as</span> exc:
+                <span style="color: #404040;">print</span>(f<span style="color: #606060;">"skipping loading </span>{key}<span style="color: #606060;"> because </span>{exc}<span style="color: #606060;">"</span>)
+    pathlib.Path(<span style="color: #606060;">'result.pickle'</span>).unlink()  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">remove temporary file</span>
+
+<span style="color: #111111; font-weight: bold;">del</span> py_magic  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">otherwise the function overwrites the magic</span>
+</pre>
+</div>
+
+<p>
+I love how this sort of trickery is relatively easy in Python. Also, this is the first time I've used a <code>try</code> with <code>except</code>, <code>else</code>, <i>and</i> <code>finally</code>.</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-python.html">python</a>
 <div class="post-date">09 May 2024</div><h1 class="post-title"><a href="https://bastibe.de/2024-05-09-ai-predictions.html">AI Predictions</a></h1>
 <p>
 Meta just invested 30 Billion Dollars into AI accelerators<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. That's roughly equivalent to one Manhattan Project worth of money. Meta must expect a comparable return on that investment. But with that kind of money, that return must be disruptive.
@@ -299,330 +396,7 @@ But most of all, I learned to appreciate legacy code. It would have been easy to
 </p>
 </div>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a>
-<div class="post-date">21 Apr 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h1>
-<p>
-I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
-surely just using it wrong. Nowadays, I see things the other way around: We're not "holding it
-wrong", the computer is just defective. Computers should do our bidding, not vice versa. So here's a
-bunch of things that I do to my computers to mold them to my way of working.
-</p>
-
-<div id="outline-container-orga6f6339" class="outline-2">
-<h2 id="orga6f6339">Keyboard Layout</h2>
-<div class="outline-text-2" id="text-orga6f6339">
-<p>
-I switch constantly between a German and English keyboard layout, and regularly between various
-machines. My physical keyboards are German, and my fingers are used to the Windows-default German and
-(international) US keyboard layout. These are available by default on Windows and Linux, but MacOS
-goes its own way.
-</p>
-
-<p>
-However, keyboard layouts on MacOS are saved in relatively simple text files, and can be modified
-with relative ease. The process goes like this: Download <a href="https://software.sil.org/ukelele/">Ukelele (free)</a> to create a new keyboard
-layout bundle for your base layout<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Inside that bundle, there's a <i>*.keylayout</i> file,
-which is an XML file that defines the characters that each key-modifier combination produces. I
-changed that to create a Windows-like US keyboard layout. And I replaced the keyboard icon with
-something sane (not "A") by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
-saving to select the ICNS format. Save the keyboard bundle to <code>~/Library/Keyboard Layouts</code> and
-reboot. Then I remove the unremovable default ("A") German layout by selecting another one, then
-<code>plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist</code>, and delete the entry from
-<code>AppleEnabledInputSources</code>. Now reboot. Almost easy. Almost.
-</p>
-
-<p>
-One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
-Windows and Linux before, and for the life of me <i>could not do it</i>. So I actually think this is
-great!
-</p>
-</div>
-</div>
-
-<div id="outline-container-org02f475a" class="outline-2">
-<h2 id="org02f475a">Keyboard Shortcuts</h2>
-<div class="outline-text-2" id="text-org02f475a">
-<p>
-My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of particular note are
-CTRL-A/E for going to the beginning/end of a line, and Alt-B/F for navigating forward/backwards by
-word. I have long wanted to use these shortcuts not just in Emacs and readline-enabled terminal
-applications, but everywhere else, too. And with MacOS, this is finally possible: Install
-<a href="https://folivora.ai/">BetterTouchTool ($22)</a>, and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
-put this in a new activation group that excludes Emacs. It may be necessary to remove the keyboard
-character for Alt-B/F from your keyboard layout before this works. I've spent an embarrassing number
-of hours trying to get this to work on Windows and Linux, and really got nowhere<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
-Actually, however, most readline shortcuts such as Ctrl-A/E/B/F/K/Y already work out of the box on
-MacOS!
-</p>
-</div>
-</div>
-
-<div id="outline-container-orga52c334" class="outline-2">
-<h2 id="orga52c334">Mouse Configuration</h2>
-<div class="outline-text-2" id="text-orga52c334">
-<p>
-I generally use a trackpad, and occasionally a traditional mouse for image editing, and have used a
-trackball. I find that any one specific device will lead to wrist pain if used constantly, so I
-switch it up every now and then. The trackpad and trackball, however, need configuration to be
-usable.
-</p>
-
-<p>
-After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
-the market<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. On MacOS, they lacks a middle mouse click. So I created a trackpad
-shortcut in the aforementioned <a href="https://folivora.ai/">BetterTouchTool ($22)</a> to map the middle click on a three-finger tap
-(can also be had for free with <a href="https://github.com/artginzburg/MiddleClick-Ventura">MiddleClick (OSS)</a>). For Windows, <a href="https://magicutilities.net/">Magic Utilities ($17/y)</a> provides a
-wonderful third-party driver for Apple devices that also supports the three-finger tap. I have not
-gotten the Apple touch pad to pair reliably on Linux, and have generally found their touch pad
-driver <i>libinput</i> a bit lacking.
-</p>
-
-<p>
-My trackball is a Kensington SlimBlade. To scroll, you rotate the ball around its vertical axis.
-This is tedious for longer scroll distances, however. But there's an alternative scrolling method
-called "button scrolling", where you hold one button on the trackball, and move the ball to scroll.
-You need to install the Kensington driver to enable this on Windows and MacOS. Button scrolling is
-available on Linux as well using xinput<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>, but I haven't gotten the setting to stick across
-reboots or sleep cycles. So I wrote a background task that checks xinput every five seconds,
-which does the trick.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgee58501" class="outline-2">
-<h2 id="orgee58501">Window Management</h2>
-<div class="outline-text-2" id="text-orgee58501">
-<p>
-Frankly, Windows does window management correctly. Win-←/→ moves windows to the left and right edge
-of the screen, as does dragging the window to the screen border. Further Win-←/→ then moves the
-window to the next half-screen in that direction, even across display boundaries. KDE does this
-correctly out of the box as well, Gnome does not do the latter, and it drives me mad. MacOS doesn't
-do any of these things. But <a href="https://rectangleapp.com/">Rectangle (OSS)</a> does. Easy fix. (BetterTouchTool can do it, too, but
-Rectangle is prettier)
-</p>
-
-<p>
-Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
-CMD-Tab to switch between <i>apps</i>, now windows. And then there's another shortcut for switching
-between windows of the same app, but the shortcut really doesn't work at all on a German keyboard.
-Who came up with this nonsense? Anyway, <a href="https://manytricks.com/witch/">Witch ($14)</a> implements window switching properly.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org328c61c" class="outline-2">
-<h2 id="org328c61c">Application Management</h2>
-<div class="outline-text-2" id="text-org328c61c">
-<p>
-In Windows and Linux, I hit the Windows key and start typing to select and start an app. In MacOS,
-this is usually Cmd-Space, but BetterTouchTool can map it to a single short Cmd, if you prefer.
-</p>
-
-<p>
-More annoying are the various docks and task bars. I always shove the dock off to the right edge of
-the screen, where it stays out of the way. Windows 10 had a sane dock, but then 11 came and forced
-it to the bottom of the screen. Dear OS makers, every modern screen has plenty of horizontal space.
-But vertical space is somewhat limited. So why on earth would you make a rarely used menu such as
-the dock consume that precious vertical space by default? And Microsoft, specifically, <i>why not make
-it movable</i>? Thankfully, there's <a href="https://www.startallback.com/">StartAllBack ($5)</a>, which replaces the Windows task bar with
-something sensible, and additionally cleans up the start menu if you so desire. On KDE, I
-fractionally prefer <a href="https://github.com/KDE/latte-dock">Latte (OSS)</a> over KDE's native dock. The MacOS dock is uniquely dumb, offering no
-start menu, and allowing no window selections. But it's unobtrusive and can be moved to the right
-edge, so it's not much of a bother.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org92c217e" class="outline-2">
-<h2 id="org92c217e">File Management</h2>
-<div class="outline-text-2" id="text-org92c217e">
-<p>
-One of the most crucial tasks in computer work in general is file management. I am not satisfied
-with most file managers. Dolphin on KDE works pretty well, it has tabs, can bulk-rename files, can
-display large directories without crashing, and updates in real time when new files are added to the
-current directory. Gnome Nautilus is so bad it is the main reason I switched to KDE on my Linux
-machines. Finder on MacOS is passable, I suppose, although the left sidebar is unnecessarily
-restrictive (why can't I add a shortcut to a network drive?). Windows Explorer is really rather
-terrible, lacking a bulk-rename tool, and crucially, tabs. In Windows 10, these can be added with
-<a href="https://www.stardock.com/products/groupy/">Groupy ($12)</a> (set it to only apply to explorer.exe). Windows 11 has very recently added native tabs,
-which work OK, but can't be detached from the window.
-</p>
-
-<p>
-The sad thing is that there are plenty of very good file manager replacements out there, but none of
-the OSs have a mechanism for replacing their native file manager in a consistent way, so we're
-mostly stuck with the defaults.
-</p>
-
-<p>
-Oh, and I always remove the iCloud/OneDrive sidebar entries, which is <a href="https://www.howtogeek.com/225973/how-to-disable-onedrive-and-remove-it-from-file-explorer-on-windows-10/">surprisingly tedious</a> on
-Windows.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgd9caebd" class="outline-2">
-<h2 id="orgd9caebd">Hardware Control</h2>
-<div class="outline-text-2" id="text-orgd9caebd">
-<p>
-On laptops, you can control screen brightness from your keyboard. On desktops, you can not. However,
-some clever hackers have put together <a href="https://github.com/waydabber/BetterDisplay#readme">BetterDisplay (OSS for screen brightness)</a>, which adds this
-capability to MacOS. That's actually a capability I have wanted for quite a while, and apparently it
-is only available in MacOS. Great stuff!
-</p>
-
-<p>
-Less great is that MacOS does not allow volume control on external sound cards. <a href="https://rogueamoeba.com/soundsource/">SoundSource ($47)</a>
-adds this rather crucial functionality back, once you go through the unnecessarily excruciating
-process of enabling custom kernel extensions. Windows and Linux of course natively support this.
-</p>
-
-<p>
-Another necessary functionality for me is access to a non-sucky (i.e. no FAT) cross-platform file
-system. At the moment, the most portable file system seems to be NTFS, of all things. Regrettably,
-MacOS only supports <i>reading</i> NTFS, but no writing. <a href="https://www.paragon-software.com/home/ntfs-mac/#">Paragon NTFS (€20)</a> adds this with another kernel
-extension, and promptly kernel-panicked my computer. Oh joy. At least it's only panicking for file
-transfers initiated by DigiKam, which I can work around. Paragon Support says they're working on it.
-I'm not holding my breath. Windows and Linux of course natively support NTFS.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org672cc57" class="outline-2">
-<h2 id="org672cc57">System Management</h2>
-<div class="outline-text-2" id="text-org672cc57">
-<p>
-I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
-eaten my backups many times already, and can not be trusted. But I have used <a href="https://www.borgbackup.org/">Borg (OSS)</a> for years,
-and it has so far performed flawlessly. Even more impressive, my Borg backups have a continuous
-history despite moving operating systems several times. It truly is wonderful software!
-</p>
-
-<p>
-On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
-Linux, I schedule them with systemd units. On MacOS, I install Borg with <a href="https://brew.sh/">Homebrew (OSS)</a> and schedule
-the backups with launchd tasks. It's all pretty equivalent. One nice thing about launchd, however,
-is how the OS immediately pops up a notification if there's a new task file added, and adds the task
-to the graphical system settings.
-</p>
-
-<p>
-I have to emphasize what a game-changer the WSL is on Windows. Where previously, such simple
-automations where a pain in the neck to do reliably, they're now the same simple shell scripts as on
-other OSes. And it perfectly integrates with Windows programs as well, including passing pipes
-between Linux and Windows programs. It's truly amazing! At the moment, I'd rate Windows a better
-Unix system than MacOS for this reason. Homebrew is a passable package manager on MacOS, but the way
-it's ill-integrated into the main system (not in system PATH) is a bit off-putting.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgb305643" class="outline-2">
-<h2 id="orgb305643">App Compatibility</h2>
-<div class="outline-text-2" id="text-orgb305643">
-<p>
-I generally use my computer for three tasks: General document stuff, photo editing, and video games.
-</p>
-
-<p>
-One major downside of Apple computers is that video games aren't available. This has become less of
-a problem to me since I bought a Steam Deck, which has taken over gaming duties from my main PC.
-Absolutely astonishingly, the Steam Deck runs Windows games on <i>Linux</i> through emulation, which
-works almost flawlessly, making video games no longer a Windows-only proposition.
-</p>
-
-<p>
-What doesn't work well on Linux are commercial applications. Wine generally does not play well with
-them, and frustratingly for my photo editing, neither <a href="https://www.vmware.com/products/workstation-player.html">VMWare Workstation Player (free)</a> nor
-<a href="https://www.virtualbox.org/">VirtualBox (OSS)</a> support hardware-accelerated VMs on up-to-date Linux<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>. So where MacOS lacks
-games, Linux lacks Photoshop. Desktop applications in general tend to be unnecessarily cumbersome to
-manage and update on Linux. Flatpak is helping in this regard, by installing user-facing
-applications outside of the OS package managers, but it remains more work than on Windows or MacOS.
-The occasional scanner driver or camera interface app can also be troublesome on Linux, but that's
-easily handled with a VirtualBox VM (with the proprietary <i>Extension Pack</i> for USB2 support), and
-hasn't really bothered me too much.
-</p>
-
-<p>
-Luckily for me, my most-used apps are generally OSS tools such as <a href="https://www.darktable.org/">Darktable (OSS)</a> and <a href="https://www.digikam.org/">DigiKam (OSS)</a>,
-or cross-platform programs like <a href="https://fishshell.com/">Fish (OSS)</a>, <a href="https://git-scm.com/">Git (OSS)</a>, and <a href="https://www.gnu.org/software/emacs/">Emacs (OSS)</a>. This is however, where
-Windows has a bit of a sore spot, as these programs tend to perform noticeably worse on Windows than
-on other platforms. Emacs and git in particular are just terribly slow on Windows, taking several
-seconds for routine operations that are <i>instant</i> on other platforms. That's probably due to
-Windows' rather slow file system and malware scanner for the many-small-files style of file
-management that these Unix tools implement. It is very annoying.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgc4dec82" class="outline-2">
-<h2 id="orgc4dec82">Conclusions</h2>
-<div class="outline-text-2" id="text-orgc4dec82">
-<p>
-So there's just no perfect solution. MacOS can't do games, Linux can't run commercial applications,
-and Windows is annoyingly slow for OSS applications. Regardless, I regularly use all three systems
-productively. My job is mostly done on Windows, my home computer runs MacOS, and my Steam Deck and
-automations run Linux.
-</p>
-
-<p>
-Overall, I currently prefer MacOS as my desktop OS. It is surprisingly flexible, and more scriptable
-than I thought, and in some ways is actually more functional than Linux or Windows. The integrated
-calendar and contacts apps are nice, too, and not nearly as terrible as their Windows/Linux
-counterparts. To say nothing of the amazing M1 hardware with its minuscule power draw and total
-silence, while maintaining astonishing performance.
-</p>
-
-<p>
-Linux is where I prefer to program, due to its sane command line and tremendously good
-compiler/debugger/library infrastructure. As a desktop OS, it does have some rough edges, however,
-especially for its lack of access to commercial applications. While Linux <i>should</i> be the most
-customizable of these three, I find things tend to break too easily, and customizations are often
-scattered widely between many different subsystems, making them very hard to get right.
-</p>
-
-<p>
-Theoretically, Windows is the most capable OS, supporting apps, OSS, and games. But it also feels
-the most user-hostile of these three, and the least performant. And then there's the intrusive ads
-everywhere, its spying on my every move, and at work there's inevitably a heavy-handed administrator
-security setup that gets in the way of productivity. It's honestly fine on my home computer, at
-least since they introduced the WSL. But using it for work every day is quite enough, so I don't
-want to use it at home, too.
-</p>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-if there's an easier way to create a keyboard layout bundle, please let me know. I
-didn't use ukelele for anything but the bundle creation.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-It occurs to me that it might actually be possible to do something like on Windows
-this with <a href="https://www.autohotkey.com/">AutoHotkey (free)</a>. I'll have to try that!
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-The Logitech T650 is actually not bad, but the drivers are a travesty. Some Wacom
-tablets include touch, too, but they palm rejection is abysmal and they don't support gestures.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Scroll Method Enabled" 0, 0, 1 # button scrolling</code> <br>
-<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Button Scrolling Button" 8 # top-right button</code>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-VirtualBox does not have a good accelerated driver, and VMWare does not support recent
-kernels. Qemu <i>should</i> be able to solve this problem, but I couldn't get it to work reliably.
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-windows.html">windows</a> <div id="archive">
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <div id="archive">
 <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
 </div>

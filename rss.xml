@@ -4,7 +4,112 @@
 <title><![CDATA[bastibe.de]]></title>
 <description><![CDATA[bastibe.de]]></description>
 <link>https://bastibe.de/</link>
-<lastBuildDate>Thu, 09 May 2024 10:50:22 +0200</lastBuildDate>
+<lastBuildDate>Sun, 16 Jun 2024 11:29:49 +0200</lastBuildDate>
+<item>
+  <title><![CDATA[Python Inception]]></title>
+  <description><![CDATA[
+<p>
+At most companies I have worked for, there was some internal Python code base that relied on an old version of Python. But especially for data science, I'd often want to execute that code from an up-to-date Jupyter Notebook, to do some analysis on results.
+</p>
+
+<p>
+When this happened last time, I decided to do something about it. Here's a Jupyter cell magic that executes the cell's code in a different Python, pipes out all of STDOUT and STDERR, and imports any newly created variables into the host Python. Use it like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">%%py_magic /old/version/of/python
+<span style="color: #111111; font-weight: bold;">import</span> this
+<span style="color: #404040;">truth</span> = 42
+</pre>
+</div>
+
+<p>
+When this cell executes, you will see the Zen of Python in your output, just as if you had <code>import this</code> in the host Python, and the variable <code>truth</code> will now be 42 in the host Python.
+</p>
+
+<p>
+To get this magic, execute the following code in a preceding cell:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #111111; font-weight: bold;">import</span> subprocess
+<span style="color: #111111; font-weight: bold;">import</span> sys
+<span style="color: #111111; font-weight: bold;">import</span> pickle
+<span style="color: #111111; font-weight: bold;">import</span> textwrap
+<span style="color: #111111; font-weight: bold;">from</span> IPython.core.magic <span style="color: #111111; font-weight: bold;">import</span> needs_local_scope, register_cell_magic
+
+<span style="color: #111111; text-decoration: underline;">@register_cell_magic</span>
+<span style="color: #111111; text-decoration: underline;">@needs_local_scope</span>
+<span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; font-weight: bold; text-decoration: underline;">py_magic</span>(line, cell, local_ns=<span style="color: #111111;">None</span>):
+    <span style="color: #404040;">proc</span> = subprocess.Popen([line <span style="color: #111111; font-weight: bold;">or</span> <span style="color: #606060;">'python'</span>],
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            encoding=<span style="color: #606060;">'UTF8'</span>)
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">send a preamble to the client python, and remember all pre-existing local variable names:</span>
+    proc.stdin.write(textwrap.dedent(<span style="color: #606060;">"""</span>
+<span style="color: #606060;">        import pickle as _pickle</span>
+<span style="color: #606060;">        import types as _types</span>
+<span style="color: #606060;">        _names_before = [k for k, v in locals().items()] + ['_f', '_names_before']</span>
+<span style="color: #606060;">        try:</span>
+<span style="color: #606060;">    """</span>))
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">send the cell's contents, indented to run in the try:</span>
+    <span style="color: #111111; font-weight: bold;">for</span> line <span style="color: #111111; font-weight: bold;">in</span> cell.splitlines():
+        proc.stdin.write(<span style="color: #606060;">"    "</span> + line + <span style="color: #606060;">"</span><span style="color: #111111;">\n</span><span style="color: #606060;">"</span>)  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">indent!</span>
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">send a postamble that pickles all new variables or thrown exceptions:</span>
+    proc.stdin.write(textwrap.dedent(<span style="color: #606060;">"""</span>
+<span style="color: #606060;">        # save results to result.pickle</span>
+<span style="color: #606060;">        except Exception as exc:</span>
+<span style="color: #606060;">            with open('result.pickle', 'wb') as _f:</span>
+<span style="color: #606060;">                _pickle.dump({'type':'error', 'value': exc}, _f)</span>
+<span style="color: #606060;">        else:</span>
+<span style="color: #606060;">            with open('result.pickle', 'wb') as _f:</span>
+<span style="color: #606060;">                _values = {k:v for k, v in locals().items()</span>
+<span style="color: #606060;">                               if not isinstance(v, _types.ModuleType) </span>
+<span style="color: #606060;">                                  and not k in _names_before}</span>
+<span style="color: #606060;">                _safe_values = {}  # skip any unpickleable variables</span>
+<span style="color: #606060;">                for k, v in _values.items():</span>
+<span style="color: #606060;">                    try:</span>
+<span style="color: #606060;">                        _pickle.dumps(v)</span>
+<span style="color: #606060;">                    except Exception as _exc:</span>
+<span style="color: #606060;">                        print(f'skipping dumping {k} because {_exc}')</span>
+<span style="color: #606060;">                    else:</span>
+<span style="color: #606060;">                        _safe_values[k] = v</span>
+<span style="color: #606060;">                _pickle.dump({'type':'result', 'value': _safe_values}, _f)</span>
+<span style="color: #606060;">        finally:</span>
+<span style="color: #606060;">            quit()</span>
+<span style="color: #606060;">    """</span>))
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">print any captured stdout or stderr:</span>
+    <span style="color: #404040;">stdout</span>, <span style="color: #404040;">stderr</span> = proc.communicate()
+    <span style="color: #111111; font-weight: bold;">if</span> stdout:
+        <span style="color: #404040;">print</span>(stdout, <span style="color: #404040;">file</span>=sys.stdout)
+    <span style="color: #111111; font-weight: bold;">if</span> stderr:
+        <span style="color: #404040;">print</span>(stderr, <span style="color: #404040;">file</span>=sys.stderr)
+
+    <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">load new local variables or throw error:</span>
+    <span style="color: #111111; font-weight: bold;">with</span> <span style="color: #404040;">open</span>(<span style="color: #606060;">'result.pickle'</span>, <span style="color: #606060;">'rb'</span>) <span style="color: #111111; font-weight: bold;">as</span> f:
+        <span style="color: #404040;">result</span> = pickle.load(f)
+    <span style="color: #111111; font-weight: bold;">if</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'error'</span>:
+        <span style="color: #111111; font-weight: bold;">raise</span> result[<span style="color: #606060;">'value'</span>]
+    <span style="color: #111111; font-weight: bold;">elif</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'result'</span>:
+        <span style="color: #111111; font-weight: bold;">for</span> key, value <span style="color: #111111; font-weight: bold;">in</span> result[<span style="color: #606060;">'value'</span>].items():
+            <span style="color: #111111; font-weight: bold;">try</span>:
+                <span style="color: #404040;">local_ns</span>[key] = value
+            <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">Exception</span> <span style="color: #111111; font-weight: bold;">as</span> exc:
+                <span style="color: #404040;">print</span>(f<span style="color: #606060;">"skipping loading </span>{key}<span style="color: #606060;"> because </span>{exc}<span style="color: #606060;">"</span>)
+    pathlib.Path(<span style="color: #606060;">'result.pickle'</span>).unlink()  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">remove temporary file</span>
+
+<span style="color: #111111; font-weight: bold;">del</span> py_magic  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">otherwise the function overwrites the magic</span>
+</pre>
+</div>
+
+<p>
+I love how this sort of trickery is relatively easy in Python. Also, this is the first time I've used a <code>try</code> with <code>except</code>, <code>else</code>, <i>and</i> <code>finally</code>.</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-python.html">python</a> ]]></description>
+  <category><![CDATA[computers]]></category>
+  <category><![CDATA[python]]></category>
+  <link>https://bastibe.de/2024-06-16-python-inception.html</link>
+  <guid>https://bastibe.de/2024-06-16-python-inception.html</guid>
+  <pubDate>Sun, 16 Jun 2024 10:35:00 +0200</pubDate>
+</item>
 <item>
   <title><![CDATA[AI Predictions]]></title>
   <description><![CDATA[

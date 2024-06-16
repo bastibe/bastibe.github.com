@@ -1,0 +1,89 @@
+#+title: Python Inception
+#+date: <2024-06-16 10:35>
+#+description: Call another python from a jupyter notebook cell
+#+filetags: computers python
+
+At most companies I have worked for, there was some internal Python code base that relied on an old version of Python. But especially for data science, I'd often want to execute that code from an up-to-date Jupyter Notebook, to do some analysis on results.
+
+When this happened last time, I decided to do something about it. Here's a Jupyter cell magic that executes the cell's code in a different Python, pipes out all of STDOUT and STDERR, and imports any newly created variables into the host Python. Use it like this:
+
+#+begin_src python
+%%py_magic /old/version/of/python
+import this
+truth = 42
+#+end_src
+
+When this cell executes, you will see the Zen of Python in your output, just as if you had ~import this~ in the host Python, and the variable ~truth~ will now be 42 in the host Python.
+
+To get this magic, execute the following code in a preceding cell:
+
+#+begin_src python
+import subprocess
+import sys
+import pickle
+import textwrap
+from IPython.core.magic import needs_local_scope, register_cell_magic
+ 
+@register_cell_magic
+@needs_local_scope
+def py_magic(line, cell, local_ns=None):
+    proc = subprocess.Popen([line or 'python'],
+                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            encoding='UTF8')
+    # send a preamble to the client python, and remember all pre-existing local variable names:
+    proc.stdin.write(textwrap.dedent("""
+        import pickle as _pickle
+        import types as _types
+        _names_before = [k for k, v in locals().items()] + ['_f', '_names_before']
+        try:
+    """))
+    # send the cell's contents, indented to run in the try:
+    for line in cell.splitlines():
+        proc.stdin.write("    " + line + "\n")  # indent!
+    # send a postamble that pickles all new variables or thrown exceptions:
+    proc.stdin.write(textwrap.dedent("""
+        # save results to result.pickle
+        except Exception as exc:
+            with open('result.pickle', 'wb') as _f:
+                _pickle.dump({'type':'error', 'value': exc}, _f)
+        else:
+            with open('result.pickle', 'wb') as _f:
+                _values = {k:v for k, v in locals().items()
+                               if not isinstance(v, _types.ModuleType) 
+                                  and not k in _names_before}
+                _safe_values = {}  # skip any unpickleable variables
+                for k, v in _values.items():
+                    try:
+                        _pickle.dumps(v)
+                    except Exception as _exc:
+                        print(f'skipping dumping {k} because {_exc}')
+                    else:
+                        _safe_values[k] = v
+                _pickle.dump({'type':'result', 'value': _safe_values}, _f)
+        finally:
+            quit()
+    """))
+    # print any captured stdout or stderr:
+    stdout, stderr = proc.communicate()
+    if stdout:
+        print(stdout, file=sys.stdout)
+    if stderr:
+        print(stderr, file=sys.stderr)
+
+    # load new local variables or throw error:
+    with open('result.pickle', 'rb') as f:
+        result = pickle.load(f)
+    if result['type'] == 'error':
+        raise result['value']
+    elif result['type'] == 'result':
+        for key, value in result['value'].items():
+            try:
+                local_ns[key] = value
+            except Exception as exc:
+                print(f"skipping loading {key} because {exc}")
+    pathlib.Path('result.pickle').unlink()  # remove temporary file
+  
+del py_magic  # otherwise the function overwrites the magic
+#+end_src
+
+I love how this sort of trickery is relatively easy in Python. Also, this is the first time I've used a ~try~ with ~except~, ~else~, /and/ ~finally~.
