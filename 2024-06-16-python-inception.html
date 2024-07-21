@@ -60,7 +60,7 @@ To get this magic, execute the following code in a preceding cell:
 <span style="color: #111111; font-weight: bold;">import</span> pickle
 <span style="color: #111111; font-weight: bold;">import</span> textwrap
 <span style="color: #111111; font-weight: bold;">from</span> IPython.core.magic <span style="color: #111111; font-weight: bold;">import</span> needs_local_scope, register_cell_magic
-
+ 
 <span style="color: #111111; text-decoration: underline;">@register_cell_magic</span>
 <span style="color: #111111; text-decoration: underline;">@needs_local_scope</span>
 <span style="color: #111111; font-weight: bold;">def</span> <span style="color: #111111; font-weight: bold; text-decoration: underline;">py_magic</span>(line, cell, local_ns=<span style="color: #111111;">None</span>):
@@ -108,18 +108,20 @@ To get this magic, execute the following code in a preceding cell:
         <span style="color: #404040;">print</span>(stderr, <span style="color: #404040;">file</span>=sys.stderr)
 
     <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">load new local variables or throw error:</span>
-    <span style="color: #111111; font-weight: bold;">with</span> <span style="color: #404040;">open</span>(<span style="color: #606060;">'result.pickle'</span>, <span style="color: #606060;">'rb'</span>) <span style="color: #111111; font-weight: bold;">as</span> f:
-        <span style="color: #404040;">result</span> = pickle.load(f)
-    <span style="color: #111111; font-weight: bold;">if</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'error'</span>:
-        <span style="color: #111111; font-weight: bold;">raise</span> result[<span style="color: #606060;">'value'</span>]
-    <span style="color: #111111; font-weight: bold;">elif</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'result'</span>:
-        <span style="color: #111111; font-weight: bold;">for</span> key, value <span style="color: #111111; font-weight: bold;">in</span> result[<span style="color: #606060;">'value'</span>].items():
-            <span style="color: #111111; font-weight: bold;">try</span>:
-                <span style="color: #404040;">local_ns</span>[key] = value
-            <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">Exception</span> <span style="color: #111111; font-weight: bold;">as</span> exc:
-                <span style="color: #404040;">print</span>(f<span style="color: #606060;">"skipping loading </span>{key}<span style="color: #606060;"> because </span>{exc}<span style="color: #606060;">"</span>)
-    pathlib.Path(<span style="color: #606060;">'result.pickle'</span>).unlink()  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">remove temporary file</span>
-
+    <span style="color: #111111; font-weight: bold;">try</span>:
+        <span style="color: #111111; font-weight: bold;">with</span> <span style="color: #404040;">open</span>(<span style="color: #606060;">'result.pickle'</span>, <span style="color: #606060;">'rb'</span>) <span style="color: #111111; font-weight: bold;">as</span> f:
+            <span style="color: #404040;">result</span> = pickle.load(f)
+        <span style="color: #111111; font-weight: bold;">if</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'error'</span>:
+            <span style="color: #111111; font-weight: bold;">raise</span> result[<span style="color: #606060;">'value'</span>]
+        <span style="color: #111111; font-weight: bold;">elif</span> result[<span style="color: #606060;">'type'</span>] == <span style="color: #606060;">'result'</span>:
+            <span style="color: #111111; font-weight: bold;">for</span> key, value <span style="color: #111111; font-weight: bold;">in</span> result[<span style="color: #606060;">'value'</span>].items():
+                <span style="color: #111111; font-weight: bold;">try</span>:
+                    <span style="color: #404040;">local_ns</span>[key] = value
+                <span style="color: #111111; font-weight: bold;">except</span> <span style="color: #111111; text-decoration: underline;">Exception</span> <span style="color: #111111; font-weight: bold;">as</span> exc:
+                    <span style="color: #404040;">print</span>(f<span style="color: #606060;">"skipping loading </span>{key}<span style="color: #606060;"> because </span>{exc}<span style="color: #606060;">"</span>)
+    <span style="color: #111111; font-weight: bold;">finally</span>:
+        pathlib.Path(<span style="color: #606060;">'result.pickle'</span>).unlink()  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">remove temporary file</span>
+  
 <span style="color: #111111; font-weight: bold;">del</span> py_magic  <span style="color: #404040; font-style: italic;"># </span><span style="color: #404040; font-style: italic;">otherwise the function overwrites the magic</span>
 </pre>
 </div>

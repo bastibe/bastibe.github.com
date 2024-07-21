@@ -71,17 +71,19 @@ def py_magic(line, cell, local_ns=None):
         print(stderr, file=sys.stderr)
 
     # load new local variables or throw error:
-    with open('result.pickle', 'rb') as f:
-        result = pickle.load(f)
-    if result['type'] == 'error':
-        raise result['value']
-    elif result['type'] == 'result':
-        for key, value in result['value'].items():
-            try:
-                local_ns[key] = value
-            except Exception as exc:
-                print(f"skipping loading {key} because {exc}")
-    pathlib.Path('result.pickle').unlink()  # remove temporary file
+    try:
+        with open('result.pickle', 'rb') as f:
+            result = pickle.load(f)
+        if result['type'] == 'error':
+            raise result['value']
+        elif result['type'] == 'result':
+            for key, value in result['value'].items():
+                try:
+                    local_ns[key] = value
+                except Exception as exc:
+                    print(f"skipping loading {key} because {exc}")
+    finally:
+        pathlib.Path('result.pickle').unlink()  # remove temporary file
   
 del py_magic  # otherwise the function overwrites the magic
 #+end_src
