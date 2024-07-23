@@ -24,7 +24,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar my-packages '(org-static-blog)
+(defvar my-packages '(org-static-blog htmlize)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
