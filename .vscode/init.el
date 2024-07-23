@@ -8,18 +8,16 @@
 
 (require 'package)
 (setq package-archive-exclude-alist '(("melpa")))
-(dolist (source '(("elpa" . "http://tromey.com/elpa/")
-                  ("gnu" . "http://elpa.gnu.org/packages/")
+(dolist (source '(("gnu" . "http://elpa.gnu.org/packages/")
                   ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-                  ("melpa-stable" . "https://stable.melpa.org/packages/")))
+                  ("melpa" . "https://melpa.org/packages/")))
   (add-to-list 'package-archives source t))
 (package-initialize)
 
 (setq package-archive-priorities
       '(("nongnu" . 10)
-        ("melpa-stable" . 9)
-        ("gnu" . 8)
-        ("elpa" . 7)))
+        ("melpa" . 9)
+        ("gnu" . 8)))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
