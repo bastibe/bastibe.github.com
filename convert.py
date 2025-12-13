@@ -22,6 +22,7 @@ for org_file in pathlib.Path('posts').glob('*.org'):
                     continue
                 line = re.sub(r"^\*+", lambda s: '#'*len(s[0]), line)
                 line = re.sub(r"^: ", "    ", line)
+                line = re.sub(r"\*[^*]+\*", lambda s: '**'+s[0].strip('*')+'**', line)
                 line = re.sub(r"^#\+begin_src ?", "```", line)
                 line = re.sub(r"^#\+end_src", "```", line)
                 line = re.sub(r"~[^~]+~", lambda s: '`'+s[0].strip('~')+'`', line)

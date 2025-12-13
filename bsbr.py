@@ -41,6 +41,12 @@ def main():
     index_path = root_path / 'index.html'
     index_path.write_text(html, encoding='utf-8')
 
+    # create rss.xml file
+    xml = assemble_rss(config, posts, base_url)
+    rss_path = root_path / 'rss.xml'
+    rss_path.write_text(xml, encoding='utf-8')
+
+
 def split_frontmatter(text):
     front_matter_start = text.find('---')
     front_matter_end = text.find('---', front_matter_start + 3)
@@ -119,6 +125,33 @@ def assemble_index(config, posts, base_url, num_posts=5):
 
     return assemble_post(config, {'title': 'Home', 'date': time.strftime('%Y-%m-%d'), 'filetags': ''}, 
                          f"{base_url}/index.html", html, base_url, is_index=True)
+
+
+def assemble_rss(config, posts, base_url):
+    items = []
+    for post_path, metadata, body in posts:
+        post_url = f"{base_url}/posts/{post_path.stem}.html"
+        pub_date = time.strftime('%a, %d %b %Y %H:%M:%S +0000', time.strptime(metadata['date'], '%Y-%m-%d'))
+        items.append(f"""<item>
+<title>{metadata['title']}</title>
+<description><![CDATA[{body}]]></description>
+<category>{metadata['filetags']}</category>
+<link>{post_url}</link>
+<guid>{post_url}</guid>
+<pubDate>{pub_date}</pubDate>
+</item>""")
+
+    rss = f"""<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+<title>{config['site_title']}</title>
+<description>{config['site_title']}</description>
+<link>{config['base_url']}</link>
+<lastBuildDate>{time.strftime('%a, %d %b %Y %H:%M:%S +0000', time.gmtime())}</lastBuildDate>
+{'\n'.join(items)}
+</channel>
+</rss>"""
+    return rss
 
 
 if __name__ == "__main__":
