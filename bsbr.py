@@ -37,7 +37,7 @@ def main():
     archive_path.write_text(html, encoding='utf-8')
     
     # create index.html page
-    html = assemble_index(config, posts, base_url, num_posts=config['index_num_posts'])
+    html = assemble_index(config, posts[:config['index_num_posts']], base_url)
     index_path = root_path / 'index.html'
     index_path.write_text(html, encoding='utf-8')
 
@@ -45,6 +45,16 @@ def main():
     xml = assemble_rss(config, posts, base_url)
     rss_path = root_path / 'rss.xml'
     rss_path.write_text(xml, encoding='utf-8')
+
+    # create tag pages
+    tags = sort_posts_by_tag(posts)
+    for tag, tagged_posts in tags:
+        html = assemble_index(config, tagged_posts, base_url, title=f'Posts tagged "{tag}"')
+        tag_path = root_path / f'tag-{tag}.html'
+        tag_path.write_text(html, encoding='utf-8')
+    html = assemble_tag_archive(config, tags, base_url)
+    tags_path = root_path / 'tags.html'
+    tags_path.write_text(html, encoding='utf-8')
 
 
 def split_frontmatter(text):
@@ -112,9 +122,11 @@ def assemble_archive(config, posts, base_url):
                          f"{base_url}/archive.html", html, base_url, is_index=True)
 
 
-def assemble_index(config, posts, base_url, num_posts=5):
+def assemble_index(config, posts, base_url, title=''):
     content = []
-    for post_path, metadata, body in posts[:num_posts]:
+    if title:
+        content.append(f'<h1>{title}</h1>')
+    for post_path, metadata, body in posts:
         post_url = f"{base_url}/posts/{post_path.stem}.html"
         date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
         content.append(f"""
@@ -152,6 +164,33 @@ def assemble_rss(config, posts, base_url):
 </channel>
 </rss>"""
     return rss
+
+
+def sort_posts_by_tag(posts):
+    tag_dict = collections.defaultdict(list)
+    for post in posts:
+        tags = [tag.strip() for tag in post.metadata['filetags'].split(' ')]
+        for tag in tags:
+            if tag not in tag_dict:
+                tag_dict[tag] = []
+            tag_dict[tag].append(post)
+    for tag in tag_dict:
+        tag_dict[tag] = sorted(tag_dict[tag], key=lambda post: post.metadata['date'], reverse=False)
+    return sorted(tag_dict.items())
+
+
+def assemble_tag_archive(config, tagged_posts, base_url):
+    content = ['<h1 class="title">Tags</h1>']
+    for tag, posts in tagged_posts:
+        content.append(f'<h1 class="tags-title">Posts tagged "{tag}":</h1>')
+        for post_path, metadata, body in posts:
+            post_url = f"{base_url}/posts/{post_path.stem}.html"
+            date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
+            content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
+    html = '\n'.join(content)
+
+    return assemble_post(config, {'title': 'Archive', 'date': time.strftime('%Y-%m-%d'), 'filetags': ''}, 
+                         f"{base_url}/archive.html", html, base_url, is_index=True)
 
 
 if __name__ == "__main__":
