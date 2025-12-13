@@ -14,7 +14,7 @@ def main():
     base_url = config['base_url']    
 
     # Create a Markdown parser
-    markdown_parser = mistune.create_markdown()
+    markdown_parser = mistune.create_markdown(escape=False)
 
     # Iterate through all files in the drafts directory
     Post = collections.namedtuple('Post', ['path', 'metadata', 'body'])
