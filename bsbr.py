@@ -5,32 +5,27 @@ import collections
 
 import mistune
 
+Post = collections.namedtuple('Post', ['path', 'metadata', 'body'])
+
+
 def main():
     root_path = pathlib.Path(__file__).parent
     config_path = root_path / 'bsbr.toml'
     config = tomllib.loads(config_path.read_text(encoding='utf-8'))
     drafts_path = root_path / config['drafts_folder']
     posts_path = root_path / config['posts_folder']
-    base_url = config['base_url']    
+    base_url = config['base_url']
 
-    # Create a Markdown parser
-    markdown_parser = mistune.create_markdown(escape=False)
+    posts = collect_posts(config, posts_path, root_path, base_url)
+    drafts = collect_posts(config, drafts_path, root_path, base_url)
 
-    # Iterate through all files in the drafts directory
-    Post = collections.namedtuple('Post', ['path', 'metadata', 'body'])
-    posts = []
-    for file in posts_path.glob('*.md'):
-        markdown = file.read_text(encoding='utf-8')
-        front_matter, markdown = split_frontmatter(markdown)
-        metadata = parse_frontmatter(front_matter)
-        page_url = f"{base_url}/posts/{file.stem}.html"
-        body = markdown_parser(markdown)
+    # create post pages
+    for path, metadata, body in posts + drafts:
+        page_url = f"{base_url}/posts/{path.stem}.html"
         html = assemble_post(config, metadata, page_url, body, base_url)
-        output_path = root_path / f"{file.stem}.html"
+        output_path = root_path / f"{path.stem}.html"
         output_path.write_text(html, encoding='utf-8')
-        posts.append(Post(output_path, metadata, body))
-    posts = sorted(posts, key=lambda post: post.metadata['date'], reverse=True)
-    
+        
     # create archive.html page
     html = assemble_archive(config, posts, base_url)
     archive_path = root_path / 'archive.html'
@@ -57,12 +52,16 @@ def main():
     tags_path.write_text(html, encoding='utf-8')
 
 
-def split_frontmatter(text):
-    front_matter_start = text.find('---')
-    front_matter_end = text.find('---', front_matter_start + 3)
-    front_matter = text[front_matter_start + 3:front_matter_end]
-    markdown = text[front_matter_end + 3:]
-    return front_matter, markdown
+def collect_posts(config, posts_path, root_path, base_url):
+    markdown_parser = mistune.create_markdown(escape=False)
+    posts = []
+    for file in posts_path.glob('*.md'):
+        text = file.read_text(encoding='utf-8')
+        metadata, markdown = parse_frontmatter(text)
+        body = markdown_parser(markdown)
+        posts.append(Post(file, metadata, body))
+    posts = sorted(posts, key=lambda post: post.metadata['date'], reverse=True)
+    return posts
 
 
 def parse_frontmatter(text):
@@ -73,13 +72,18 @@ def parse_frontmatter(text):
             key = key.strip()
             value = value.strip().strip('"').strip("'")
             frontmatter[key] = value
-    return frontmatter
+        if line.strip() == '---' and frontmatter:
+            break
+    front_matter_end = text.find('---', text.find('---') + 3)
+    markdown = text[front_matter_end + 3:]
+    return frontmatter, markdown
 
 
 def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
     date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
-    tags = [tag.strip() for tag in metadata['filetags'].split(',')]
-    taglist = ', '.join(f'<a href="{base_url}/tag-{tag}.html">{tag}</a>' for tag in tags)
+    tags = [tag.strip() for tag in metadata['filetags'].split(' ')]
+    taglist = ', '.join(f'<a href="{base_url}/tag-{tag}.html">{tag}</a>' for tag in tags if tag != 'nocomments')
+    no_comments = 'nocomments' in tags
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -99,8 +103,8 @@ def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
 {f'<div class="post-date">{date}</div>' if not is_index else ''}
 {f'<h1 class="post-title"><a href="{page_url}">{metadata["title"]}</a></h1>' if not is_index else ''}
 {body}
-<div class="taglist"><a href="{base_url}/tags.html">Tags</a>: {taglist}</div>
-{f'<div id="comments">\n{config["page_comments"]}\n</div>' if not is_index else ''}
+<div class="taglist"><a href="{base_url}/tags.html">Tags</a>: {taglist or 'none'}</div>
+{f'<div id="comments">\n{config["page_comments"]}\n</div>' if (not is_index) and (not no_comments) else ''}
 </div>
 <div id="postamble" class="status">
 {config['page_footer']}
@@ -152,7 +156,6 @@ def assemble_rss(config, posts, base_url):
 <guid>{post_url}</guid>
 <pubDate>{pub_date}</pubDate>
 </item>""")
-
     rss = f"""<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>

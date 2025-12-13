@@ -1,0 +1,62 @@
+---
+title: Uses
+date: 2024-07-25
+filetags: nocomments
+---
+
+This page is an overview of tools I like to use, and technologies I enjoy, as of mid-2024. Find the previous edition from mid 2022 [here](https:_bastibe.de_uses-2022.html).
+
+## Core Technologies
+- **Personal Operating System: MacOS, and all the rest**   
+  Nine out of ten software engineers agree, it is a miracle that anything works at all. I use Windows daily at work, and know how to work with its many flaws. When I come home from work, I want to see something different, and something I don't need to actively maintain. So I run MacOS, warts and all. Except on my Surface tablet (see below), which runs Windows. And expect on my Steam Deck (see below), which runs Arch Linux, BTW. And except on my servers (see below), which also run various flavors of Linux...
+- **Browser: Firefox, mostly**   
+  The only truly free browser left. At this point, mostly my choice out of inertia, due to a number of extensions I like. On mobile, I'm quite fond of Kiwi Browser, and I'm still looking for a good desktop Chrome-derivative for the Surface tablet, because Firefox isn't perfectly touch-friendly.
+- **Code Editor: Visual Studio Code, begrudgingly**   
+  I used to live and breathe Emacs. I loved the soothing anachronistic simplicity of it. But on my job, I work in VSCode and Visual Studio, so I adapted. VSCode is not a bad tool. I'm writing this blog in VSCode. But it does not fill my heart with joy the way Emacs did. But life is too short to maintain currency in all the keyboard shortcut systems, so hard choices needed to be made.
+- **Image Editor: Darktable, most of the time**   
+  Really more of a toolkit for building image editing pipelines than a streamlined editing tool. But I am a signal processing scientist after all, and being able to delve into the intricacies of its algorithms and parameters gives me joy. To say nothing of the stellar community around it.   
+  That said, I tend to become annoyed with image editing regularly, and then switch to Lightroom, or Capture One, or DxO Photo Labs for a while. And when my mood has calmed, I come back to Darktable.
+
+## Programming
+I like to write my own things instead of relying on ill-fitting panaceas. Professionally: I have implemented my own scripting systems, DNN engines, parsers, file formats, databases, batch processors, audio libraries, language interop. Casually: my own journal, blogging system, photo editing software, data analyses. I believe programming to be fundamentally simple, but complicated by APIs and technologies. Less stuff in a program is usually better.
+
+- **Python**   
+  When I need to automate, script, or explore, Python is a pragmatic choice. Fast enough for most tasks, with libraries for everything imaginable. And where libraries are lacking, I've built my own. I am deeply familiar with the scientific Python ecosystem, and all things audio and image processing, as well as tons of automation, file-level, and bit-level programming. I've taught Python for almost a decade as well. It has treated me well.
+- **C++**   
+  I love myself a programming puzzle, and C++ is the puzzle to end all puzzles. It can be beautiful. It is often messy. It is too true to be good. But it does improve upon so many things that C lacks, and provides pragmatic, ugly, raw capability. And sometimes that is just what's needed. There is a strange beauty in its unfettered pragmatism. But it is a chainsaw: it perfectly cuts both trees and legs.
+- **C**   
+  I love C for its simplicity and portability. There is nothing you can't do in C, but loads of things you shouldn't. My specialty is dissecting legacy code bases, and boiling them down to their naked core. Once everything unnecessary has been taken out, C can truly shine. Just don't try to write Python in C. Please.
+- **Lua**   
+  It still blows my mind how tiny Lua is, yet how flexible. Every time I go back into my Lua code bases, I am taken aback by its oddities, yet there is something delightfully composable in its building blocks, that ultimately more than makes up for it. And its source code is a marvel of clean design.
+
+## Blogging
+- **Org-Static-Blog**   
+  My own blogging system written in Emacs Lisp, for this very blog. Apparently useful to other people as well. I can't say it's my most elegant invention, but it serves its purpose, and I built it myself. Now it's remote-controlled from VSCode, and still works.
+- **Publii**   
+  A static site generator with a UI, what a radical idea! A joy to use for my private family blog. I wish more software was as neatly simple as this one.
+
+## Web Services
+- **Bookmark Manager: Raindrop**   
+  I like to keep an infinite backlog, both as a watch/read list, and as a bookmark history. I used to use Pinboard for this, but it became too unstable for daily use, and raindrop is nicer and slicker, and free.
+- **Feed Reader: Feedbin**   
+  When GReader went away, I went to Feedbin, and it is completely delightful! I use it to subscribe to RSS, but also Youtube, Reddit, HN, Twitter, and even mailing lists. Well worth the subscription price!
+- **Search Engine: Duckduckgo**   
+  There was a time when Google worked for me. But nowadays it seems practically unusable due to SEO spam and ads. Mindblowingly, you can type words into DuckDuckGo, and it will actually search for those words, not “did you mean”, nor “we've also included”. And its bang-searches are plain awesome!
+- **Email: Mailbox.org**   
+  A dependable, affordable, privacy-preserving German email provider. I use it for contacts, calendar and email as well, and it works well.
+- **Hosting: Uberspace and Hetzner**   
+  I host my websites on Uberspace, because they're simple and powerful. I host my backups on Hetzner, because their storage boxes are cheap and reliable.
+
+## Hardware
+- **Camera: Fujifilm and Ricoh**   
+  A Ricoh GR III in my pocket, and a Fuji X-T5 on a sling, is how I like to roll. These are deeply personal devices, and my creative outlet for capturing the way I see the world. They are wonders of technology, and a haptic joy. I love cameras, have tried many dozens, and these are the ones that struck a nerve.
+- **Tablet: Surface Pro**   
+  I love my Surface. It is a terrific media consumption device, but with a real desktop web browser with extensions and ad blockers and everything. And in fact, it is also a real laptop if it needs to be, with a command line and programming tools. I am writing this post on it as we speak.   
+  I thought I'd miss the iPad and its purpose-built apps. But it turns out I had it the wrong way around. I missed a file system on the iPad, I missed floating windows and true multi tasking, I missed USB accessories. It's the iPad that now feels gimped and restrictive, not the Surface.
+- **Gaming: Steam Deck**   
+  I work from home, at my desk. I do all of life's bureaucratic business from that desk, too. I edit my photos at that desk. For recreational video games, I don't want to sit at my desk. The Steam Deck set my games free from the desk. It has revitalized my love for video games. The only limitations of this wonderful device is most modern games are too cluttered to be readable on small screens, and first person games are just not meant for controllers. Nevertheless, the Steam Deck is a wonderful, glorious device, without a doubt one of my best purchases in the last few years.
+- **Ereader: Kobo**   
+  It's such a simple device. A paper-like screen with text on it, to read books on. I love books! But reading from dead trees at night is challenging, and carrying many of them on vacation too cumbersome. My Kobo is a joy to use, and can open standard ePubs. I love it!
+- **Smartphone: Android**   
+  Much like with desktop operating systems, I am not thrilled about my choices. But I fractionally prefer Androids hackability and price point too Apple's devices. I wish Google's software was less intrusive, though. At least the software update story is no longer quite as big a mess as it was a few years ago.
+
