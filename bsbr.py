@@ -16,6 +16,7 @@ def main():
     markdown_parser = mistune.create_markdown()
 
     # Iterate through all files in the drafts directory
+    posts = {}
     for file in posts_path.glob('*.md'):
         markdown = file.read_text(encoding='utf-8')
         front_matter, markdown = split_frontmatter(markdown)
@@ -25,7 +26,13 @@ def main():
         html = assemble_post(config, metadata, page_url, body, base_url)
         output_path = root_path / f"{file.stem}.html"
         output_path.write_text(html, encoding='utf-8')
-
+        posts[output_path] = metadata
+    
+    # create archive.html page
+    html = assemble_archive(config, posts, base_url, root_path)
+    archive_path = root_path / 'archive.html'
+    archive_path.write_text(html, encoding='utf-8')
+    
 
 def split_frontmatter(text):
     front_matter_start = text.find('---')
@@ -46,7 +53,7 @@ def parse_frontmatter(text):
     return frontmatter
 
 
-def assemble_post(config, metadata, page_url, body, base_url):
+def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
     date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
     tags = [tag.strip() for tag in metadata['filetags'].split(',')]
     taglist = ', '.join(f'<a href="{base_url}/tag-{tag}.html">{tag}</a>' for tag in tags)
@@ -66,13 +73,11 @@ def assemble_post(config, metadata, page_url, body, base_url):
 <body>
 {config['page_header']}
 <div id="content">
-<div class="post-date">{date}</div>
+{f'<div class="post-date">{date}</div>' if not is_index else ''}
 <h1 class="post-title"><a href="{page_url}">{metadata['title']}</a></h1>
 {body}
 <div class="taglist"><a href="{base_url}/tags.html">Tags</a>: {taglist}</div>
-<div id="comments">
-{config['page_comments']}
-</div>
+{f'<div id="comments">\n{config["page_comments"]}\n</div>' if not is_index else ''}
 </div>
 <div id="postamble" class="status">
 {config['page_footer']}
@@ -80,6 +85,19 @@ def assemble_post(config, metadata, page_url, body, base_url):
 </body>
 </html>
 """
+
+
+def assemble_archive(config, posts, base_url, root_path):
+    posts = dict(sorted(posts.items(), key=lambda item: item[1]['date'], reverse=True))
+    content = []
+    for post_path, metadata in posts.items():
+        post_url = f"{base_url}/posts/{post_path.stem}.html"
+        date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
+        content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
+    html = '\n'.join(content)
+
+    return assemble_post(config, {'title': 'Archive', 'date': time.strftime('%Y-%m-%d'), 'filetags': ''}, 
+                         f"{base_url}/archive.html", html, base_url, is_index=True)
 
 
 if __name__ == "__main__":
