@@ -1,0 +1,33 @@
+---
+title: Appending to Matlab Arrays
+date: 2018-04-10 13:48
+filetags: matlab
+---
+
+/The variable $var appears to change size on every loop iteration. Consider preallocating for speed./
+
+So sayeth Matlab.
+
+Let's try it:
+
+```octave
+x_prealloc = cell(10000, 1);
+x_end = {};
+x_append = {};
+for n=1:10000
+    % variant 1: preallocate
+    x_prealloc(n) = {42};
+    % variant 2: end+1
+    x_end(end+1) = {42};
+    % variant 3: append
+    x_append = [x_append {42}];
+end
+```
+
+Which variant do you think is fastest?
+
+![array_performance](./static/2018-04/array_performance.png)
+
+Unsurprisingly, preallocation is indeed faster than growing an array. What _is_ surprising is that it is faster by a constant factor of about 2 instead of scaling with the array length. Only appending by `x = [x {42}]` actually becomes slower for larger arrays. (The same thing happens for numerical arrays, struct arrays, and object arrays.)
+
+*TL;DR:* Do not use `x = [x $something]`, ever. Instead, use `x(end+1) = $something`. Preallocation is generally overrated.

@@ -16,7 +16,7 @@ diss.pdf: diss.tex makefile $(graph_pdfs)
 	xelatex -interaction nonstopmode diss.tex
 #+end_src
 
-We'll get back to ~$(graph_pdfs)~ in a second.
+We'll get back to ~graph_pdfs~ in a second.
 
 ** Graphs
 A major challenge in writing a technical document is keeping all the source data in sync with the document. To make sure that all graphs are up to date, I plug them into the same makefile as above, but with a twist: All my graphs are created from Python scripts of the same name in the ~graphs~ directory.

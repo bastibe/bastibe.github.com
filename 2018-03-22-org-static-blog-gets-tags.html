@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Blogging with org-static-blog (Updated)</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,42 +19,49 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">22 Mar 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-03-22-org-static-blog-gets-tags.html">Blogging with org-static-blog (Updated)</a></h1>
-<p>
-A while ago, I scratched an old itch and wrote my own static site generator, called <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. It is a simple thing: You hand it a directory full of *.org files with a <code>#+title:</code> and <code>#+date:</code>, and it assembles a bunch of HTML pages and an RSS feed from them. There are no external dependencies beyond Emacs.
-</p>
+<div class="post-date">22 Mar 2018</div>
+<h1 class="post-title"><a href="https://bastibe.de/2018-03-22-org-static-blog-gets-tags.html">Blogging with org-static-blog (Updated)</a></h1>
+<p>A while ago, I scratched an old itch and wrote my own static site generator, called <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. It is a simple thing: You hand it a directory full of *.org files with a <code>#+title:</code> and <code>#+date:</code>, and it assembles a bunch of HTML pages and an RSS feed from them. There are no external dependencies beyond Emacs.</p>
+<p>Today, I <a href="http:_melpa-stable.milkbox.net_#_org-static-blog">released</a> version 1.1.0 of org-static-blog, which introduces two new features: <a href="http:_/bastibe.de/2018-03-17-speeding-up-org-static-blog.html">speed</a>, and tags. You can now—optionally—add <code>#+filetags:</code> to your *.org files, <code>(setq org-static-blog-enable-tags t)</code>, and org-static-blog will add tag links to every blog post, create tag indices, and add <code>&lt;category&gt;</code> tags to the RSS feed.</p>
+<p><em>Update:</em></p>
+<p>As <a href="https://github.com/kaushalmodi">Kaushal Modi</a> pointed out in the comments, org-mode uses <code>#+filetags:</code> to set tags for entire files. My first implementation used <code>#+tags:</code>. This is now deprecated. <code>#+tags:</code> still works, but issues a warning, and will be removed in the future. Sorry for the inconvenience.</p>
 
-<p>
-Today, I <a href="http://melpa-stable.milkbox.net/#/org-static-blog">released</a> version 1.1.0 of org-static-blog, which introduces two new features: <a href="http://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">speed</a>, and tags. You can now—optionally—add <code>#+filetags:</code> to your *.org files, <code>(setq org-static-blog-enable-tags t)</code>, and org-static-blog will add tag links to every blog post, create tag indices, and add <code>&lt;category&gt;</code> tags to the RSS feed.
-</p>
-
-<p>
-<b>Update:</b>
-</p>
-
-<p>
-As <a href="https://github.com/kaushalmodi">Kaushal Modi</a> pointed out in the comments, org-mode uses <code>#+filetags:</code> to set tags for entire files. My first implementation used <code>#+tags:</code>. This is now deprecated. <code>#+tags:</code> still works, but issues a warning, and will be removed in the future. Sorry for the inconvenience.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-blog.html">blog</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

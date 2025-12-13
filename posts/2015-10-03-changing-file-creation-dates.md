@@ -1,0 +1,32 @@
+---
+title: Changing File Creation Dates in OSX
+date: 2015-10-03 00:00
+filetags: programming macos
+---
+
+On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
+
+For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of [command](http:_www.sentex.net_~mwandel/jhead/) [line](http:_owl.phy.queensu.ca_~phil/exiftool/) [utilities](http:_www.exiv2.org_#util) that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
+
+So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
+
+If you have XCode installed, this will come with `SetFile`, a command line utility that can change file creation dates. Note that `SetFile` can change _either_ the file creation date, _or_ the file modification date, but not both at the same time, as any normal Unix utility would. Also note that `SetFile` expects dates in American notation, which is about as nonsensical as date formats come.
+
+Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
+
+```python
+import os.path
+import os
+import datetime
+# I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4
+for index in range(426, 465):
+    filename = 'GOPR0{}.MP4'.format(index)
+    # extract old date:
+    date = datetime.datetime.fromtimestamp(os.path.getctime(filename))
+    # create a new date with the same time, but on 2015-08-22
+    new_date = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
+    # set the file creation date with the "-d" switch, which presumably stands for "dodification"
+    os.system('SetFile -d "{}" {}'.format(new_date.strftime('%m/%d/%Y %H:%M:%S'), filename))
+    # set the file modification date with the "-m" switch
+    os.system('SetFile -m "{}" {}'.format(new_date.strftime('%m/%d/%Y %H:%M:%S'), filename))
+```

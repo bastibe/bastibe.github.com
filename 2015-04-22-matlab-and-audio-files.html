@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Matlab and Audio Files</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,42 +19,49 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">22 Apr 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h1>
-<p>
-So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
-</p>
+<div class="post-date">22 Apr 2015</div>
+<h1 class="post-title"><a href="https://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h1>
+<p>So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <em>*.au</em> and <em>*.wav</em> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <em>*.wav</em>, <em>*.ogg</em>, <em>*.flac</em>, <em>*.au</em>, <em>*.mp3</em>, and <em>*.mp4</em>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.</p>
+<p>Of these file formats, only <em>*.au</em> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <em>actually</em> read more data formats than documented: it reads <em>*.w64</em>, <em>*.rf64</em>, and <em>*.caf</em> no problem. And these can store more than 4 Gb as well.</p>
+<p>It's just that, while <code>audioread</code> supports all of these nice file formats, <a href="http://mathworks.com/help/matlab/ref/audiowrite.html"><code>audiowrite</code></a> is more limited, and only supports <em>*.wav</em>, <em>*.ogg</em>, <em>*.flac</em>, and <em>*.mp4</em>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.</p>
+<p>In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.</p>
 
-<p>
-Of these file formats, only <i>*.au</i> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <i>actually</i> read more data formats than documented: it reads <i>*.w64</i>, <i>*.rf64</i>, and <i>*.caf</i> no problem. And these can store more than 4 Gb as well.
-</p>
-
-<p>
-It's just that, while <code>audioread</code> supports all of these nice file formats, <a href="http://mathworks.com/help/matlab/ref/audiowrite.html"><code>audiowrite</code></a> is more limited, and only supports <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, and <i>*.mp4</i>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
-</p>
-
-<p>
-In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a>, <a href="https://bastibe.de/tag-audio.html">audio</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

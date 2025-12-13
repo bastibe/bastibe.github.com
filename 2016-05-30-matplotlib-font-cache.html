@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Updating the Matplotlib Font Cache</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,58 +19,56 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">30 May 2016</div><h1 class="post-title"><a href="https://bastibe.de/2016-05-30-matplotlib-font-cache.html">Updating the Matplotlib Font Cache</a></h1>
-<p>
-When publishing papers or articles, I want my plots to integrate with the text surrounding them. I want them to use the correct font size, and the correct font.
-</p>
+<div class="post-date">30 May 2016</div>
+<h1 class="post-title"><a href="https://bastibe.de/2016-05-30-matplotlib-font-cache.html">Updating the Matplotlib Font Cache</a></h1>
+<p>When publishing papers or articles, I want my plots to integrate with the text surrounding them. I want them to use the correct font size, and the correct font.</p>
+<p>This is easy to do with Matplotlib:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Calibri&#39;</span>
+</pre></div>
+<p>However, sometimes, Matplotlib won't find the correct, even though it is clearly installed. This happens when Matplotlib's internal font cache is out of date.</p>
+<p>To refresh the font cache, use</p>
+<div class="highlight"><pre><span></span><span class="n">matplotlib</span><span class="o">.</span><span class="n">font_manager</span><span class="o">.</span><span class="n">_rebuild</span><span class="p">()</span>
+</pre></div>
+<p>Happy Plotting!</p>
 
-<p>
-This is easy to do with Matplotlib:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import matplotlib
-matplotlib.rcParams['font.size'] = 12
-matplotlib.rcParams['font.family'] = 'Calibri'
-</pre>
-</div>
-
-<p>
-However, sometimes, Matplotlib won't find the correct, even though it is clearly installed. This happens when Matplotlib's internal font cache is out of date.
-</p>
-
-<p>
-To refresh the font cache, use
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">matplotlib.font_manager._rebuild()
-</pre>
-</div>
-
-<p>
-Happy Plotting!
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

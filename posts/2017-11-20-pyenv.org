@@ -10,10 +10,10 @@ So why would I choose PyEnv over the more popular Anaconda? Because Anaconda is 
 
 As an aside, many of these complaints are just as true for package-manager-provided Python packages (which often [[https://askubuntu.com/questions/879437/ensurepip-is-disabled-in-debian-ubuntu-for-the-system-python#897004][break pip]], too!). Just like Anaconda, package managers want to be the true and only source of packages, and don't like to interact with Python's own package manager.
 
-In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine [1]. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
+In contrast, with PyEnv, you install a Python. This can be a version of CPython, PyPy, IronPython, Jython, Pyston, stackless, miniconda, or even Anaconda. It downloads the sources from the official repos, and compiles them on your machine [fn:1]. Plus, it provides an easy and transparent way of switching between installed versions (including any system-installed versions). After that, you use Python's own venv and pip.
 
 I find this process much simpler, and easier to manage, because it relies on small, orthogonal tools (pyenv, venv, pip) instead of one integrated conda that kind of does everything. I also like to use these official tools and packages instead of conda's parallel universe of mostly-open, mostly-free, mostly-standard replacements.
 
 Mind you, conda solved real problems back in the day (binary package distributions, Python version management, and environment management), and arguably still does (MKL et al, paid packages). But ever since wheels became [[https://pythonwheels.com/][ubiquitous and painless]], and virtualenv was [[https://docs.python.org/3/library/venv.html][integrated into Python]], and the development of PyEnv, these issues now have better solutions, and conda is no longer needed for my applications.
 
-[1] the downside of compilation is: no Windows support.
+[fn:1] the downside of compilation is: no Windows support.

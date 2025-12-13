@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
-<title>bastibe.de</title>
+      title="RSS feed for https://bastibe.de">
+<title>Home</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -18,485 +19,59 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<h1 class="title">Posts tagged "linux":</h1>
-<div class="post-date">21 Apr 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h1>
-<p>
-I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
-surely just using it wrong. Nowadays, I see things the other way around: We're not "holding it
-wrong", the computer is just defective. Computers should do our bidding, not vice versa. So here's a
-bunch of things that I do to my computers to mold them to my way of working.
-</p>
 
-<div id="outline-container-orga6f6339" class="outline-2">
-<h2 id="orga6f6339">Keyboard Layout</h2>
-<div class="outline-text-2" id="text-orga6f6339">
-<p>
-I switch constantly between a German and English keyboard layout, and regularly between various
-machines. My physical keyboards are German, and my fingers are used to the Windows-default German and
-(international) US keyboard layout. These are available by default on Windows and Linux, but MacOS
-goes its own way.
-</p>
 
-<p>
-However, keyboard layouts on MacOS are saved in relatively simple text files, and can be modified
-with relative ease. The process goes like this: Download <a href="https://software.sil.org/ukelele/">Ukelele (free)</a> to create a new keyboard
-layout bundle for your base layout<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Inside that bundle, there's a <i>*.keylayout</i> file,
-which is an XML file that defines the characters that each key-modifier combination produces. I
-changed that to create a Windows-like US keyboard layout. And I replaced the keyboard icon with
-something sane (not "A") by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
-saving to select the ICNS format. Save the keyboard bundle to <code>~/Library/Keyboard Layouts</code> and
-reboot. Then I remove the unremovable default ("A") German layout by selecting another one, then
-<code>plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist</code>, and delete the entry from
-<code>AppleEnabledInputSources</code>. Now reboot. Almost easy. Almost.
-</p>
-
-<p>
-One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
-Windows and Linux before, and for the life of me <i>could not do it</i>. So I actually think this is
-great!
-</p>
-</div>
-</div>
-
-<div id="outline-container-org02f475a" class="outline-2">
-<h2 id="org02f475a">Keyboard Shortcuts</h2>
-<div class="outline-text-2" id="text-org02f475a">
-<p>
-My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of particular note are
-CTRL-A/E for going to the beginning/end of a line, and Alt-B/F for navigating forward/backwards by
-word. I have long wanted to use these shortcuts not just in Emacs and readline-enabled terminal
-applications, but everywhere else, too. And with MacOS, this is finally possible: Install
-<a href="https://folivora.ai/">BetterTouchTool ($22)</a>, and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
-put this in a new activation group that excludes Emacs. It may be necessary to remove the keyboard
-character for Alt-B/F from your keyboard layout before this works. I've spent an embarrassing number
-of hours trying to get this to work on Windows and Linux, and really got nowhere<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
-Actually, however, most readline shortcuts such as Ctrl-A/E/B/F/K/Y already work out of the box on
-MacOS!
-</p>
-</div>
-</div>
-
-<div id="outline-container-orga52c334" class="outline-2">
-<h2 id="orga52c334">Mouse Configuration</h2>
-<div class="outline-text-2" id="text-orga52c334">
-<p>
-I generally use a trackpad, and occasionally a traditional mouse for image editing, and have used a
-trackball. I find that any one specific device will lead to wrist pain if used constantly, so I
-switch it up every now and then. The trackpad and trackball, however, need configuration to be
-usable.
-</p>
-
-<p>
-After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
-the market<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. On MacOS, they lacks a middle mouse click. So I created a trackpad
-shortcut in the aforementioned <a href="https://folivora.ai/">BetterTouchTool ($22)</a> to map the middle click on a three-finger tap
-(can also be had for free with <a href="https://github.com/artginzburg/MiddleClick-Ventura">MiddleClick (OSS)</a>). For Windows, <a href="https://magicutilities.net/">Magic Utilities ($17/y)</a> provides a
-wonderful third-party driver for Apple devices that also supports the three-finger tap. I have not
-gotten the Apple touch pad to pair reliably on Linux, and have generally found their touch pad
-driver <i>libinput</i> a bit lacking.
-</p>
-
-<p>
-My trackball is a Kensington SlimBlade. To scroll, you rotate the ball around its vertical axis.
-This is tedious for longer scroll distances, however. But there's an alternative scrolling method
-called "button scrolling", where you hold one button on the trackball, and move the ball to scroll.
-You need to install the Kensington driver to enable this on Windows and MacOS. Button scrolling is
-available on Linux as well using xinput<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>, but I haven't gotten the setting to stick across
-reboots or sleep cycles. So I wrote a background task that checks xinput every five seconds,
-which does the trick.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgee58501" class="outline-2">
-<h2 id="orgee58501">Window Management</h2>
-<div class="outline-text-2" id="text-orgee58501">
-<p>
-Frankly, Windows does window management correctly. Win-←/→ moves windows to the left and right edge
-of the screen, as does dragging the window to the screen border. Further Win-←/→ then moves the
-window to the next half-screen in that direction, even across display boundaries. KDE does this
-correctly out of the box as well, Gnome does not do the latter, and it drives me mad. MacOS doesn't
-do any of these things. But <a href="https://rectangleapp.com/">Rectangle (OSS)</a> does. Easy fix. (BetterTouchTool can do it, too, but
-Rectangle is prettier)
-</p>
-
-<p>
-Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
-CMD-Tab to switch between <i>apps</i>, now windows. And then there's another shortcut for switching
-between windows of the same app, but the shortcut really doesn't work at all on a German keyboard.
-Who came up with this nonsense? Anyway, <a href="https://manytricks.com/witch/">Witch ($14)</a> implements window switching properly.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org328c61c" class="outline-2">
-<h2 id="org328c61c">Application Management</h2>
-<div class="outline-text-2" id="text-org328c61c">
-<p>
-In Windows and Linux, I hit the Windows key and start typing to select and start an app. In MacOS,
-this is usually Cmd-Space, but BetterTouchTool can map it to a single short Cmd, if you prefer.
-</p>
-
-<p>
-More annoying are the various docks and task bars. I always shove the dock off to the right edge of
-the screen, where it stays out of the way. Windows 10 had a sane dock, but then 11 came and forced
-it to the bottom of the screen. Dear OS makers, every modern screen has plenty of horizontal space.
-But vertical space is somewhat limited. So why on earth would you make a rarely used menu such as
-the dock consume that precious vertical space by default? And Microsoft, specifically, <i>why not make
-it movable</i>? Thankfully, there's <a href="https://www.startallback.com/">StartAllBack ($5)</a>, which replaces the Windows task bar with
-something sensible, and additionally cleans up the start menu if you so desire. On KDE, I
-fractionally prefer <a href="https://github.com/KDE/latte-dock">Latte (OSS)</a> over KDE's native dock. The MacOS dock is uniquely dumb, offering no
-start menu, and allowing no window selections. But it's unobtrusive and can be moved to the right
-edge, so it's not much of a bother.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org92c217e" class="outline-2">
-<h2 id="org92c217e">File Management</h2>
-<div class="outline-text-2" id="text-org92c217e">
-<p>
-One of the most crucial tasks in computer work in general is file management. I am not satisfied
-with most file managers. Dolphin on KDE works pretty well, it has tabs, can bulk-rename files, can
-display large directories without crashing, and updates in real time when new files are added to the
-current directory. Gnome Nautilus is so bad it is the main reason I switched to KDE on my Linux
-machines. Finder on MacOS is passable, I suppose, although the left sidebar is unnecessarily
-restrictive (why can't I add a shortcut to a network drive?). Windows Explorer is really rather
-terrible, lacking a bulk-rename tool, and crucially, tabs. In Windows 10, these can be added with
-<a href="https://www.stardock.com/products/groupy/">Groupy ($12)</a> (set it to only apply to explorer.exe). Windows 11 has very recently added native tabs,
-which work OK, but can't be detached from the window.
-</p>
-
-<p>
-The sad thing is that there are plenty of very good file manager replacements out there, but none of
-the OSs have a mechanism for replacing their native file manager in a consistent way, so we're
-mostly stuck with the defaults.
-</p>
-
-<p>
-Oh, and I always remove the iCloud/OneDrive sidebar entries, which is <a href="https://www.howtogeek.com/225973/how-to-disable-onedrive-and-remove-it-from-file-explorer-on-windows-10/">surprisingly tedious</a> on
-Windows.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgd9caebd" class="outline-2">
-<h2 id="orgd9caebd">Hardware Control</h2>
-<div class="outline-text-2" id="text-orgd9caebd">
-<p>
-On laptops, you can control screen brightness from your keyboard. On desktops, you can not. However,
-some clever hackers have put together <a href="https://github.com/waydabber/BetterDisplay#readme">BetterDisplay (OSS for screen brightness)</a>, which adds this
-capability to MacOS. That's actually a capability I have wanted for quite a while, and apparently it
-is only available in MacOS. Great stuff!
-</p>
-
-<p>
-Less great is that MacOS does not allow volume control on external sound cards. <a href="https://rogueamoeba.com/soundsource/">SoundSource ($47)</a>
-adds this rather crucial functionality back, once you go through the unnecessarily excruciating
-process of enabling custom kernel extensions. Windows and Linux of course natively support this.
-</p>
-
-<p>
-Another necessary functionality for me is access to a non-sucky (i.e. no FAT) cross-platform file
-system. At the moment, the most portable file system seems to be NTFS, of all things. Regrettably,
-MacOS only supports <i>reading</i> NTFS, but no writing. <a href="https://www.paragon-software.com/home/ntfs-mac/#">Paragon NTFS (€20)</a> adds this with another kernel
-extension, and promptly kernel-panicked my computer. Oh joy. At least it's only panicking for file
-transfers initiated by DigiKam, which I can work around. Paragon Support says they're working on it.
-I'm not holding my breath. Windows and Linux of course natively support NTFS.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org672cc57" class="outline-2">
-<h2 id="org672cc57">System Management</h2>
-<div class="outline-text-2" id="text-org672cc57">
-<p>
-I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
-eaten my backups many times already, and can not be trusted. But I have used <a href="https://www.borgbackup.org/">Borg (OSS)</a> for years,
-and it has so far performed flawlessly. Even more impressive, my Borg backups have a continuous
-history despite moving operating systems several times. It truly is wonderful software!
-</p>
-
-<p>
-On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
-Linux, I schedule them with systemd units. On MacOS, I install Borg with <a href="https://brew.sh/">Homebrew (OSS)</a> and schedule
-the backups with launchd tasks. It's all pretty equivalent. One nice thing about launchd, however,
-is how the OS immediately pops up a notification if there's a new task file added, and adds the task
-to the graphical system settings.
-</p>
-
-<p>
-I have to emphasize what a game-changer the WSL is on Windows. Where previously, such simple
-automations where a pain in the neck to do reliably, they're now the same simple shell scripts as on
-other OSes. And it perfectly integrates with Windows programs as well, including passing pipes
-between Linux and Windows programs. It's truly amazing! At the moment, I'd rate Windows a better
-Unix system than MacOS for this reason. Homebrew is a passable package manager on MacOS, but the way
-it's ill-integrated into the main system (not in system PATH) is a bit off-putting.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgb305643" class="outline-2">
-<h2 id="orgb305643">App Compatibility</h2>
-<div class="outline-text-2" id="text-orgb305643">
-<p>
-I generally use my computer for three tasks: General document stuff, photo editing, and video games.
-</p>
-
-<p>
-One major downside of Apple computers is that video games aren't available. This has become less of
-a problem to me since I bought a Steam Deck, which has taken over gaming duties from my main PC.
-Absolutely astonishingly, the Steam Deck runs Windows games on <i>Linux</i> through emulation, which
-works almost flawlessly, making video games no longer a Windows-only proposition.
-</p>
-
-<p>
-What doesn't work well on Linux are commercial applications. Wine generally does not play well with
-them, and frustratingly for my photo editing, neither <a href="https://www.vmware.com/products/workstation-player.html">VMWare Workstation Player (free)</a> nor
-<a href="https://www.virtualbox.org/">VirtualBox (OSS)</a> support hardware-accelerated VMs on up-to-date Linux<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>. So where MacOS lacks
-games, Linux lacks Photoshop. Desktop applications in general tend to be unnecessarily cumbersome to
-manage and update on Linux. Flatpak is helping in this regard, by installing user-facing
-applications outside of the OS package managers, but it remains more work than on Windows or MacOS.
-The occasional scanner driver or camera interface app can also be troublesome on Linux, but that's
-easily handled with a VirtualBox VM (with the proprietary <i>Extension Pack</i> for USB2 support), and
-hasn't really bothered me too much.
-</p>
-
-<p>
-Luckily for me, my most-used apps are generally OSS tools such as <a href="https://www.darktable.org/">Darktable (OSS)</a> and <a href="https://www.digikam.org/">DigiKam (OSS)</a>,
-or cross-platform programs like <a href="https://fishshell.com/">Fish (OSS)</a>, <a href="https://git-scm.com/">Git (OSS)</a>, and <a href="https://www.gnu.org/software/emacs/">Emacs (OSS)</a>. This is however, where
-Windows has a bit of a sore spot, as these programs tend to perform noticeably worse on Windows than
-on other platforms. Emacs and git in particular are just terribly slow on Windows, taking several
-seconds for routine operations that are <i>instant</i> on other platforms. That's probably due to
-Windows' rather slow file system and malware scanner for the many-small-files style of file
-management that these Unix tools implement. It is very annoying.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgc4dec82" class="outline-2">
-<h2 id="orgc4dec82">Conclusions</h2>
-<div class="outline-text-2" id="text-orgc4dec82">
-<p>
-So there's just no perfect solution. MacOS can't do games, Linux can't run commercial applications,
-and Windows is annoyingly slow for OSS applications. Regardless, I regularly use all three systems
-productively. My job is mostly done on Windows, my home computer runs MacOS, and my Steam Deck and
-automations run Linux.
-</p>
-
-<p>
-Overall, I currently prefer MacOS as my desktop OS. It is surprisingly flexible, and more scriptable
-than I thought, and in some ways is actually more functional than Linux or Windows. The integrated
-calendar and contacts apps are nice, too, and not nearly as terrible as their Windows/Linux
-counterparts. To say nothing of the amazing M1 hardware with its minuscule power draw and total
-silence, while maintaining astonishing performance.
-</p>
-
-<p>
-Linux is where I prefer to program, due to its sane command line and tremendously good
-compiler/debugger/library infrastructure. As a desktop OS, it does have some rough edges, however,
-especially for its lack of access to commercial applications. While Linux <i>should</i> be the most
-customizable of these three, I find things tend to break too easily, and customizations are often
-scattered widely between many different subsystems, making them very hard to get right.
-</p>
-
-<p>
-Theoretically, Windows is the most capable OS, supporting apps, OSS, and games. But it also feels
-the most user-hostile of these three, and the least performant. And then there's the intrusive ads
-everywhere, its spying on my every move, and at work there's inevitably a heavy-handed administrator
-security setup that gets in the way of productivity. It's honestly fine on my home computer, at
-least since they introduced the WSL. But using it for work every day is quite enough, so I don't
-want to use it at home, too.
-</p>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-if there's an easier way to create a keyboard layout bundle, please let me know. I
-didn't use ukelele for anything but the bundle creation.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-It occurs to me that it might actually be possible to do something like on Windows
-this with <a href="https://www.autohotkey.com/">AutoHotkey (free)</a>. I'll have to try that!
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-The Logitech T650 is actually not bad, but the drivers are a travesty. Some Wacom
-tablets include touch, too, but they palm rejection is abysmal and they don't support gestures.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Scroll Method Enabled" 0, 0, 1 # button scrolling</code> <br>
-<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Button Scrolling Button" 8 # top-right button</code>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-VirtualBox does not have a good accelerated driver, and VMWare does not support recent
-kernels. Qemu <i>should</i> be able to solve this problem, but I couldn't get it to work reliably.
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">17 Sep 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">Dear Computer, We Need to Talk</a></h1>
-<p>
-After years of using Linux on my desktop, I decided to install Windows on my computer, to get access to a few commercial photo editing applications. I'll go into my grievances with Linux later, but for now:
-</p>
-
-<div id="outline-container-orgb926e7a" class="outline-2">
-<h2 id="orgb926e7a">I tried to install Windows, you won't believe what happened next</h2>
-<div class="outline-text-2" id="text-orgb926e7a">
-<p>
-Like I have done many times with Linux, I download a Windows image from my university, and write it to a USB drive, then reboot into the USB drive. The USB drive can't be booted. A quick internet search leads me to a Microsoft Support page on how to <a href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive">Install Windows from a USB Flash Drive</a>, which says that
-</p>
-
-<img style="width:50%;padding-left:25%" src="/static/2020-09/one does not simply.jpg">
-
-<p>
-Instead, one has to format the stick as FAT32, make it <i>active</i>, then copy the files from the image to it. So I follow the instructions and open the Disk Management program. It does not offer an option of FAT32, nor for making the partition <i>active</i>. I settle on (inactive) exFAT instead. It doesn't boot.
-</p>
-
-<p>
-I switch over to Linux, where I can indeed make a FAT32 partition, and I can mark it as <i>bootable</i>, which I take as the equivalent of <i>active</i>. But Linux can not open the Windows image to copy the files onto the USB stick. So back to Windows, for copying the files. Except they can't be copied, because some of them are larger than 4Gb, which can't be written to a FAT32 partition. What now?
-</p>
-
-<p>
-While researching how to download a different version of Windows 10, I stumble upon the <a href="https://www.microsoft.com/de-de/software-download/windows10">Media Creation Tool</a>, which automatically downloads Windows 10 and writes it to the USB stick correctly. Why was this not pointed out in the article above? Who knows. At any rate, it works. I can finally install Windows.
-</p>
-
-<p>
-The installation process requires the usual dozen-or-so refusals of tracking, ads, privacy intrusions, and voice assistants. I wish I could simply reject them all at once. And then the install hangs, while "polishing up a few things". Pressing the helpful back button, and then immediately the forward button unhangs it, and the installation completes.
-</p>
-
-<p>
-Next up are drivers. It feels anachronistic to have to install drivers manually in this day and age, but oh well. The new GPU driver to make screen tearing go away, a driver for my trackball to recognize the third mouse button, a wacom driver, ten or so Intel drivers of unknown utility. The trackball driver is not signed. I install it anyway. The GPU driver does not recognize my GPU and can't be installed. A quick Internet search reveals that my particular AMD/Intel GPU/CPU was discontinued from support by both AMD and Intel, and does not have a current driver. But fora suggest that up to version 20.2.1 of the AMD driver work fine. They don't, the driver crashes when I open images in my photo editor. An even older version published by Intel does work correctly. So now I am running an AMD GPU with an Intel driver from 2018.
-</p>
-
-<img style="width:50%;padding-left:25%" src="/static/2020-09/this is fine.png">
-
-<p>
-Installing and setting up Firefox and my photo editors works without issue, thank goodness. Emacs has a Windows installer now, which is greatly appreciated. OpenCL and network shares just work. This is why I'm installing Windows next to my Linux.
-</p>
-
-<p>
-But Windows is still not activated. I copy my university's product key in the appropriate text box, but hesitate: That's for Windows Enterprise, and I'd be just fine with Home. So I cancel the activation without activating. A helpful link in the activation systems sends me to the Microsoft Store to get my very own version of Windows Home for €145, which normally retails for around €95, so that's a no-go. Whatever, I'll go with my university's Enterprise edition. Except the activation box now says my product key is invalid. And the Store now literally says "We don't know how you got here but you shouldn't be here" instead of selling me Windows. After a restart it installs and activates Windows Enterprise, even though I never actually completed the activation.
-</p>
-
-<img style="width:70%;padding-left:15%" src="/static/2020-09/this is fine 2.jpg">
-
-<p>
-I install Git, but in order to access my Github I need to copy over my SSH key from the Linux install. Which I can't boot at the moment, because installing Windows overwrites the boot loader. This is normal. So I download Ubuntu, write it to the USB stick, boot into it, recover the bootloader, boot into my old install, reformat the stick, copy the files to the stick, boot back into Windows, and the files aren't on the stick. Tough. Boot back into Linux, copy the files onto the stick, <i>eject the stick</i>, boot back into Windows, copy the files to the computer. Great user experience.
-</p>
-
-<p>
-Now that I have my SSH key, I open a Git Bash to download a project. It says my credentials are incorrect. I execute the same commands in a regular CMD instead of Git Bash, and now my credentials are correct. Obviously.
-</p>
-
-<p>
-There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!
-</p>
-
-<p>
-I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many "solutions" are offered <a href="https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1">in the support fora</a>. What works for me is to first set the lock screen to "Windows Spotlight", then to "Slideshow". Only in that order will my pictures be shown.
-</p>
-
-<p>
-I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org1688e83" class="outline-2">
-<h2 id="org1688e83">Why install Windows in the first place?</h2>
-<div class="outline-text-2" id="text-org1688e83">
-<p>
-Part of the reason for installing Windows was my growing frustration with Linux. I have been a happy user of KDE of various flavors for about seven years now. But ever since I got into photo editing, things began to become problematic:
-</p>
-
-<p>
-My photo editor requires OpenCL, but the graphics driver situation on Linux is problematic, to say the least. I generally managed to get RocM running most of the time, but kernel updates frequently broke it, or required down- or upgrading RocM. It was a constant struggle.
-</p>
-
-<p>
-I wanted to work with some of my data on a network share, but KDE's implementation of network shares does not simply mount them for applications to use, but instead requires each application to be able to open network locations on their own. Needless to say, this worked almost never, requiring many unnecessary file copies. Perhaps Gnome handles network shares better, but let's not open that can of worms.
-</p>
-
-<p>
-Printing photos simply never worked right for me. The colors were off, photo papers were not supported, the networked printer was rarely recognized. Both for a Samsung printer and an Epson and a Canon. One time a <a href="https://turboprint.info/">commercial printer driver for Linux</a> printed with so much ink it dripped off the paper afterwards. Neither Darktable nor Gimp nor Digikam have a robust printing mode. I generally resorted to Windows for printing.
-</p>
-
-<p>
-I ran that Windows in a virtual machine. With Virtualbox, the virtual machine would be extremely slow, to the point where it had a delay of several seconds between typing and seeing letters on the screen. VMWare did better, but would suddenly freeze and hang for minutes at a time. Disabling hugepages helped sometimes, for a short while. The virtual machine network was extremely unreliable. Some of these issues were probably related to my using a 4K screen.
-</p>
-
-<p>
-Speaking of screens, I have two screens, one HighDPI 4k and one normal 1440p. Using X, the system can be either in HighDPI mode, or in normal mode. But it can't drive the two displays in different modes. Thus the second monitor was almost useless and I generally worked only on the 4k screen. With Wayland I would have been able to use both screens in different modes, but not be able to color-calibrate them or record screen casts. Which is completely unacceptable. So I stuck with one screen and X. In Windows, I can use both screens and calibrate them.
-</p>
-
-<img style="width:50%;padding-left:25%" src="/static/2020-09/wtf.jpg">
-
-
-<p>
-Additionally, Linux hardware support is still a bit spotty. My SD card reader couldn't read some SD cards because of driver issues. It would sometimes corrupt the SD card's file systems. USB-connected cameras were generally not accessible. The web cam did not work reliably. The CPU fan ran too hot most of the time.
-</p>
-
-<p>
-So there had been numerous grievances in Linux that had no solutions. Still I stuck with it because so many more smaller issues were actually fixable if I put in the work. In fact I had accumulated quite a number of small hacks and scripts for various issues. I feared that Windows would leave me without recourse in these situations. And it doesn't. But at least the bigger features generally work as advertised.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org4190bb5" class="outline-2">
-<h2 id="org4190bb5">Where do we go from here?</h2>
-<div class="outline-text-2" id="text-org4190bb5">
-<p>
-Just for completion's sake, I should really find an Apple computer and run it through its paces. From my experience of occasionally using a Macbook for teaching over the last few years, I am confident that it fares no better than Linux or Windows.
-</p>
-
-<p>
-Were things always this broken? How are normal people expected to deal with these things? No wonder every sane person now prefers a smartphone or tablet to their computers. Limited as they may be, at least they generally <i>work</i>.
-</p>
-
-<p>
-There is no joy in technology any more.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">09 Feb 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-02-09-editing-fuji-photos-on-linux.html">Editing Fuji Photos on Linux</a></h1>
-<p>
-Darktable is my favorite RAW editor. It's a program for developing digital negatives ("RAW files") to JPEGs. But, I've long struggled with matching the quality of the out-of-camera JPEGs of my Fuji camera. Let me explain.
-</p>
-
-<p>
-Today's cameras capture an astounding amount of detail, far more than monitors can display or printers can print. And then they crush it down to a printable and viewable JPEG file. But that crushing operation is idiomatic for each camera, irreversible, and not always appropriate to the image. And at those inappropriate times, when you want a wider dynamic range or different colors, a RAW editor like Darktable can take a digital sensor dump ("RAW file"), and render it differently. The challenge is that the camera's own JPEGs are already very, very good, and it's a fine line to walk between fixing a particular flaw with the image, while retaining as much detail as possible.
-</p>
-
-<p>
-Fuji cameras produce notoriously difficult RAW files, as their internal processing is (said to be) particularly elaborate, and they use an <a href="https://en.wikipedia.org/wiki/Fujifilm_X-Trans_sensor">unusual image sensor</a>. This post is about matching the quality of Fuji's JPEGs in Darktable, while maintaining the fidelity and malleability of the RAW files.
-</p>
-
-<p>
-Here are a few renditions of a photograph I took, the first created with my revised process, the second is Fuji's JPEG, and the third is Darktable's default rendition. First the entire picture, the a zoomed view so you can see each pixel:
-</p>
-
+<h1>Posts tagged "linux"</h1>
+
+<div class="post-date">27 Jun 2017</div><h2 class="post-title"><a href="https://bastibe.de/2017-06-27-audio-apis-pulseaudio.html">Audio APIs, Part 2: Pulseaudio / Linux</a></h2>
+<p>This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.</p>
+<p>It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http:_www.portaudio.com_">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:</p>
+<p>Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85">WASAPI</a>.aspx)<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> on Windows.</p>
+<p>This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).</p>
+<hr />
+<h1>PulseAudio</h1>
+<p>PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.</p>
+<p>The very nice thing about PulseAudio is that it is a native C API. It provides several levels of abstraction, the highest of which takes only a handful of lines of C to get audio playing. For the purposes of PythonAudio however, I had to look at the more in-depth <a href="https://freedesktop.org/software/pulseaudio/doxygen/async.html">asynchronous API</a>. Still, the API itself is relatively simple, and compactly defined in one simple header file.</p>
+<p>It all starts with a <code>mainloop</code> and an associated <code>context</code>. While the <code>mainloop</code> is running, you can query the <code>context</code> for sources and sinks (aka microphones and speakers). The <code>context</code> can also create a <code>stream</code> that can be read or written (aka recorded or played). From a high level, this is all there is to it.</p>
+<p>Most PulseAudio functions are asynchronous: Function calls return immediately, and call user-provided callback functions when they are ready to return results. While this may be a good structure for high-performance multithreaded C-code, it is somewhat cumbersome in Python. For PythonAudio, I wrapped this structure in regular Python functions that wait for the callback and return its data as normal return values.</p>
+<p>Doing this shows just how old Python really is. Python is old-school in that it still thinks that concurrency is better solved with multiple, communicating processes, than with shared-memory threads. With such a mind set, there is a certain impedance mismatch to overcome when using PulseAudio. Every function call has to lock the main loop, and block while waiting for the callback to be called. After that, clean up by decrementing a reference count. This procedure is cumbersome, but not difficult.</p>
+<p>What is difficult however, is the documentation. The API documentation is fine, as far as it goes. It could go into more detail with regards to edge cases and error conditions; But it truly lacks high-level overviews and examples. It took an unnecessarily long time to figure out the code path for audio playback and recording, simply because there is no document anywhere that details the sequence of events needed to get there. In the end, I followed some marginally-related example on the internet to get to that point, because the <em>two</em> examples provided by PulseAudio don't even use the asynchronous API.</p>
+<p>Perhaps I am missing something, but it strikes me as strange that an API meant for audio recording and playback would not include an example that plays back and records audio.</p>
+<p>On an application level, it can be problematic that PulseAudio seems to only value block sizes and latency requirements approximately. In particular, if computing resources become scarce, PulseAudio would rather increase latency/block sizes in the background than risk skipping. This might be convenient for a desktop application, but it is not ideal for signal processing, where latency can be crucial. It seems that I can work around these issues to an extent, but this is an inconvenience nontheless.</p>
+<p>In general, I found PulseAudio reasonably easy to use, though. The documentation could use some work, and I don't particularly <em>like</em> the asynchronous programming style, but the API is simple and functional. Out of the three APIs of WASAPI/Windows, Core Audio/macOS, and PulseAudio/Linux, this one was probably the easiest to get working.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Core Audio</a>.aspx) APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+
+<div class="post-date">09 Feb 2020</div><h2 class="post-title"><a href="https://bastibe.de/2020-02-09-editing-fuji-photos-on-linux.html">Editing Fuji Photos on Linux</a></h2>
+<p>Darktable is my favorite RAW editor. It's a program for developing digital negatives (&quot;RAW files&quot;) to JPEGs. But, I've long struggled with matching the quality of the out-of-camera JPEGs of my Fuji camera. Let me explain.</p>
+<p>Today's cameras capture an astounding amount of detail, far more than monitors can display or printers can print. And then they crush it down to a printable and viewable JPEG file. But that crushing operation is idiomatic for each camera, irreversible, and not always appropriate to the image. And at those inappropriate times, when you want a wider dynamic range or different colors, a RAW editor like Darktable can take a digital sensor dump (&quot;RAW file&quot;), and render it differently. The challenge is that the camera's own JPEGs are already very, very good, and it's a fine line to walk between fixing a particular flaw with the image, while retaining as much detail as possible.</p>
+<p>Fuji cameras produce notoriously difficult RAW files, as their internal processing is (said to be) particularly elaborate, and they use an <a href="https://en.wikipedia.org/wiki/Fujifilm_X-Trans_sensor">unusual image sensor</a>. This post is about matching the quality of Fuji's JPEGs in Darktable, while maintaining the fidelity and malleability of the RAW files.</p>
+<p>Here are a few renditions of a photograph I took, the first created with my revised process, the second is Fuji's JPEG, and the third is Darktable's default rendition. First the entire picture, the a zoomed view so you can see each pixel:</p>
 <br>
 <a href="/static/2020-02/darktable-lightbox.html" target="_blank">
   <div class="lightbox" style="height: 200px">
@@ -510,106 +85,248 @@ Here are a few renditions of a photograph I took, the first created with my revi
 </a>
 <br>
 
-<p>
-While contrast and saturation don't match 100% in my version and Fuji's, the colors are close enough for further processing. Darktable's default version does not match those colors at all. The zoomed-in version highlights even worse problems with sharpness and detail retention. After working with Fuji files in Darktable for about a year, and editing about 3500 Fuji files, I finally found a workflow that reliably produces results on par with Fuji's JPEGs:
-</p>
-
-<ol class="org-ol">
-<li>Use the <a href="https://www.iridientdigital.com/products/xtransformer.html">Iridient X-Transformer</a> to convert Fuji's RAF RAW-files to DNG RAW-files, and have the X-Transformer do the "More Detailed" demosaicing, and the full lens correction.</li>
+<p>While contrast and saturation don't match 100% in my version and Fuji's, the colors are close enough for further processing. Darktable's default version does not match those colors at all. The zoomed-in version highlights even worse problems with sharpness and detail retention. After working with Fuji files in Darktable for about a year, and editing about 3500 Fuji files, I finally found a workflow that reliably produces results on par with Fuji's JPEGs:</p>
+<ol>
+<li>Use the <a href="https://www.iridientdigital.com/products/xtransformer.html">Iridient X-Transformer</a> to convert Fuji's RAF RAW-files to DNG RAW-files, and have the X-Transformer do the &quot;More Detailed&quot; demosaicing, and the full lens correction.</li>
 <li>Use <a href="https://blog.sowerby.me/fuji-film-simulation-profiles/">Stuart Sowerby's LUTs</a> instead of Darktable's Base Curve or Filmic RGB.</li>
 </ol>
-
-<p>
-My first gripe with Darktable's rendering of Fuji files is that the demosaicing and lens corrections are not particularly great. Pictures simply come out softer than with other tools, and chromatic aberrations remain an issue. The Iridient X-Transformer completely fixes this issue for me. The X-Transformer can also do sharpening and denoising, but I find those are better relegated to Darktable where needed. "But&#x2026; that's proprietary Windows software!!!". Yes, it is. And it works beautifully in Wine.
-</p>
-
-<p>
-My second issue is colors. Darktable needs a lot of massaging to produce Fuji-like colors. The Base Curve module (shown above) really does not do Fuji files justice most of the time. And while Filmic RGB is much better, it requires a lot of tedious adjustments even in simple cases. So instead, I use LUTs extracted with a color chart and some fancy math to replicate Fuji's colors. At the moment (v3.0), Darktable understands only .cube and .png LUTs. But Stuart Sowerby's website has them in .3dl. So for now, you need to install a <a href="https://grossgrade.com/en/2019/08/14/batch-3d-lut-converter/">3D LUT converter</a>, and convert them to .cube manually. On Windows.
-</p>
-
-<p>
-With these two steps you can develop your Fuji RAFs better than your camera, and with relatively little fuss. I'll leave you with a finished render of the image above:
-</p>
+<p>My first gripe with Darktable's rendering of Fuji files is that the demosaicing and lens corrections are not particularly great. Pictures simply come out softer than with other tools, and chromatic aberrations remain an issue. The Iridient X-Transformer completely fixes this issue for me. The X-Transformer can also do sharpening and denoising, but I find those are better relegated to Darktable where needed. &quot;But... that's proprietary Windows software!!!&quot;. Yes, it is. And it works beautifully in Wine.</p>
+<p>My second issue is colors. Darktable needs a lot of massaging to produce Fuji-like colors. The Base Curve module (shown above) really does not do Fuji files justice most of the time. And while Filmic RGB is much better, it requires a lot of tedious adjustments even in simple cases. So instead, I use LUTs extracted with a color chart and some fancy math to replicate Fuji's colors. At the moment (v3.0), Darktable understands only .cube and .png LUTs. But Stuart Sowerby's website has them in .3dl. So for now, you need to install a <a href="https://grossgrade.com/en/2019/08/14/batch-3d-lut-converter/">3D LUT converter</a>, and convert them to .cube manually. On Windows.</p>
+<p>With these two steps you can develop your Fuji RAFs better than your camera, and with relatively little fuss. I'll leave you with a finished render of the image above:</p>
+<p><img src="https://bastibe.de/static/2020-02/mine.jpg" alt="mine" /></p>
 
 
-<figure id="orge33cbbe">
-<img src="https://bastibe.de/static/2020-02/mine.jpg" alt="mine.jpg">
 
-</figure>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> <a href="https://bastibe.de/tag-linux.html">linux</a> </div>
+<div class="post-date">17 Sep 2020</div><h2 class="post-title"><a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">Dear Computer, We Need to Talk</a></h2>
+<p>After years of using Linux on my desktop, I decided to install Windows on my computer, to get access to a few commercial photo editing applications. I'll go into my grievances with Linux later, but for now:</p>
+<h2>I tried to install Windows, you won't believe what happened next</h2>
+<p>Like I have done many times with Linux, I download a Windows image from my university, and write it to a USB drive, then reboot into the USB drive. The USB drive can't be booted. A quick internet search leads me to a Microsoft Support page on how to <a href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive">Install Windows from a USB Flash Drive</a>, which says that</p>
+<img style="width:50%;padding-left:25%" src="/static/2020-09/one does not simply.jpg">
 
-<div class="post-date">27 Jun 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-06-27-audio-apis-pulseaudio.html">Audio APIs, Part 2: Pulseaudio / Linux</a></h1>
-<p>
-This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.
-</p>
+<p>Instead, one has to format the stick as FAT32, make it <em>active</em>, then copy the files from the image to it. So I follow the instructions and open the Disk Management program. It does not offer an option of FAT32, nor for making the partition <em>active</em>. I settle on (inactive) exFAT instead. It doesn't boot.</p>
+<p>I switch over to Linux, where I can indeed make a FAT32 partition, and I can mark it as <em>bootable</em>, which I take as the equivalent of <em>active</em>. But Linux can not open the Windows image to copy the files onto the USB stick. So back to Windows, for copying the files. Except they can't be copied, because some of them are larger than 4Gb, which can't be written to a FAT32 partition. What now?</p>
+<p>While researching how to download a different version of Windows 10, I stumble upon the <a href="https://www.microsoft.com/de-de/software-download/windows10">Media Creation Tool</a>, which automatically downloads Windows 10 and writes it to the USB stick correctly. Why was this not pointed out in the article above? Who knows. At any rate, it works. I can finally install Windows.</p>
+<p>The installation process requires the usual dozen-or-so refusals of tracking, ads, privacy intrusions, and voice assistants. I wish I could simply reject them all at once. And then the install hangs, while &quot;polishing up a few things&quot;. Pressing the helpful back button, and then immediately the forward button unhangs it, and the installation completes.</p>
+<p>Next up are drivers. It feels anachronistic to have to install drivers manually in this day and age, but oh well. The new GPU driver to make screen tearing go away, a driver for my trackball to recognize the third mouse button, a wacom driver, ten or so Intel drivers of unknown utility. The trackball driver is not signed. I install it anyway. The GPU driver does not recognize my GPU and can't be installed. A quick Internet search reveals that my particular AMD/Intel GPU/CPU was discontinued from support by both AMD and Intel, and does not have a current driver. But fora suggest that up to version 20.2.1 of the AMD driver work fine. They don't, the driver crashes when I open images in my photo editor. An even older version published by Intel does work correctly. So now I am running an AMD GPU with an Intel driver from 2018.</p>
+<img style="width:50%;padding-left:25%" src="/static/2020-09/this is fine.png">
 
-<p>
-It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
-</p>
+<p>Installing and setting up Firefox and my photo editors works without issue, thank goodness. Emacs has a Windows installer now, which is greatly appreciated. OpenCL and network shares just work. This is why I'm installing Windows next to my Linux.</p>
+<p>But Windows is still not activated. I copy my university's product key in the appropriate text box, but hesitate: That's for Windows Enterprise, and I'd be just fine with Home. So I cancel the activation without activating. A helpful link in the activation systems sends me to the Microsoft Store to get my very own version of Windows Home for €145, which normally retails for around €95, so that's a no-go. Whatever, I'll go with my university's Enterprise edition. Except the activation box now says my product key is invalid. And the Store now literally says &quot;We don't know how you got here but you shouldn't be here&quot; instead of selling me Windows. After a restart it installs and activates Windows Enterprise, even though I never actually completed the activation.</p>
+<img style="width:70%;padding-left:15%" src="/static/2020-09/this is fine 2.jpg">
 
-<p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a>[1] on Windows.
-</p>
+<p>I install Git, but in order to access my Github I need to copy over my SSH key from the Linux install. Which I can't boot at the moment, because installing Windows overwrites the boot loader. This is normal. So I download Ubuntu, write it to the USB stick, boot into it, recover the bootloader, boot into my old install, reformat the stick, copy the files to the stick, boot back into Windows, and the files aren't on the stick. Tough. Boot back into Linux, copy the files onto the stick, <em>eject the stick</em>, boot back into Windows, copy the files to the computer. Great user experience.</p>
+<p>Now that I have my SSH key, I open a Git Bash to download a project. It says my credentials are incorrect. I execute the same commands in a regular CMD instead of Git Bash, and now my credentials are correct. Obviously.</p>
+<p>There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!</p>
+<p>I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many &quot;solutions&quot; are offered <a href="https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1">in the support fora</a>. What works for me is to first set the lock screen to &quot;Windows Spotlight&quot;, then to &quot;Slideshow&quot;. Only in that order will my pictures be shown.</p>
+<p>I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.</p>
+<h2>Why install Windows in the first place?</h2>
+<p>Part of the reason for installing Windows was my growing frustration with Linux. I have been a happy user of KDE of various flavors for about seven years now. But ever since I got into photo editing, things began to become problematic:</p>
+<p>My photo editor requires OpenCL, but the graphics driver situation on Linux is problematic, to say the least. I generally managed to get RocM running most of the time, but kernel updates frequently broke it, or required down- or upgrading RocM. It was a constant struggle.</p>
+<p>I wanted to work with some of my data on a network share, but KDE's implementation of network shares does not simply mount them for applications to use, but instead requires each application to be able to open network locations on their own. Needless to say, this worked almost never, requiring many unnecessary file copies. Perhaps Gnome handles network shares better, but let's not open that can of worms.</p>
+<p>Printing photos simply never worked right for me. The colors were off, photo papers were not supported, the networked printer was rarely recognized. Both for a Samsung printer and an Epson and a Canon. One time a <a href="https:_turboprint.info_">commercial printer driver for Linux</a> printed with so much ink it dripped off the paper afterwards. Neither Darktable nor Gimp nor Digikam have a robust printing mode. I generally resorted to Windows for printing.</p>
+<p>I ran that Windows in a virtual machine. With Virtualbox, the virtual machine would be extremely slow, to the point where it had a delay of several seconds between typing and seeing letters on the screen. VMWare did better, but would suddenly freeze and hang for minutes at a time. Disabling hugepages helped sometimes, for a short while. The virtual machine network was extremely unreliable. Some of these issues were probably related to my using a 4K screen.</p>
+<p>Speaking of screens, I have two screens, one HighDPI 4k and one normal 1440p. Using X, the system can be either in HighDPI mode, or in normal mode. But it can't drive the two displays in different modes. Thus the second monitor was almost useless and I generally worked only on the 4k screen. With Wayland I would have been able to use both screens in different modes, but not be able to color-calibrate them or record screen casts. Which is completely unacceptable. So I stuck with one screen and X. In Windows, I can use both screens and calibrate them.</p>
+<img style="width:50%;padding-left:25%" src="/static/2020-09/wtf.jpg">
 
-<p>
-This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
-</p>
+<p>Additionally, Linux hardware support is still a bit spotty. My SD card reader couldn't read some SD cards because of driver issues. It would sometimes corrupt the SD card's file systems. USB-connected cameras were generally not accessible. The web cam did not work reliably. The CPU fan ran too hot most of the time.</p>
+<p>So there had been numerous grievances in Linux that had no solutions. Still I stuck with it because so many more smaller issues were actually fixable if I put in the work. In fact I had accumulated quite a number of small hacks and scripts for various issues. I feared that Windows would leave me without recourse in these situations. And it doesn't. But at least the bigger features generally work as advertised.</p>
+<h2>Where do we go from here?</h2>
+<p>Just for completion's sake, I should really find an Apple computer and run it through its paces. From my experience of occasionally using a Macbook for teaching over the last few years, I am confident that it fares no better than Linux or Windows.</p>
+<p>Were things always this broken? How are normal people expected to deal with these things? No wonder every sane person now prefers a smartphone or tablet to their computers. Limited as they may be, at least they generally <em>work</em>.</p>
+<p>There is no joy in technology any more.</p>
 
-<p>
-[1]: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p>
 
 
-<hr>
+<div class="post-date">21 Apr 2023</div><h2 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h2>
+<p>I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
+surely just using it wrong. Nowadays, I see things the other way around: We're not &quot;holding it
+wrong&quot;, the computer is just defective. Computers should do our bidding, not vice versa. So here's a
+bunch of things that I do to my computers to mold them to my way of working.</p>
+<h2>Keyboard Layout</h2>
+<p>I switch constantly between a German and English keyboard layout, and regularly between various
+machines. My physical keyboards are German, and my fingers are used to the Windows-default German and
+(international) US keyboard layout. These are available by default on Windows and Linux, but MacOS
+goes its own way.</p>
+<p>However, keyboard layouts on MacOS are saved in relatively simple text files, and can be modified
+with relative ease. The process goes like this: Download <a href="https://software.sil.org/ukelele/">Ukelele (free)</a> to create a new keyboard
+layout bundle for your base layout<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>. Inside that bundle, there's a <em>*.keylayout</em> file,
+which is an XML file that defines the characters that each key-modifier combination produces. I
+changed that to create a Windows-like US keyboard layout. And I replaced the keyboard icon with
+something sane (not &quot;A&quot;) by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
+saving to select the ICNS format. Save the keyboard bundle to <code>~/Library/Keyboard Layouts</code> and
+reboot. Then I remove the unremovable default (&quot;A&quot;) German layout by selecting another one, then
+<code>plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist</code>, and delete the entry from
+<code>AppleEnabledInputSources</code>. Now reboot. Almost easy. Almost.</p>
+<p>One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
+Windows and Linux before, and for the life of me <em>could not do it</em>. So I actually think this is
+great!</p>
+<p>didn't use ukelele for anything but the bundle creation.</p>
+<h2>Keyboard Shortcuts</h2>
+<p>My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of particular note are
+CTRL-A/E for going to the beginning/end of a line, and Alt-B/F for navigating forward/backwards by
+word. I have long wanted to use these shortcuts not just in Emacs and readline-enabled terminal
+applications, but everywhere else, too. And with MacOS, this is finally possible: Install
+<a href="https:_folivora.ai_">BetterTouchTool ($22)</a>, and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
+put this in a new activation group that excludes Emacs. It may be necessary to remove the keyboard
+character for Alt-B/F from your keyboard layout before this works. I've spent an embarrassing number
+of hours trying to get this to work on Windows and Linux, and really got nowhere<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>.
+Actually, however, most readline shortcuts such as Ctrl-A/E/B/F/K/Y already work out of the box on
+MacOS!</p>
+<p>this with <a href="https:_www.autohotkey.com_">AutoHotkey (free)</a>. I'll have to try that!</p>
+<h2>Mouse Configuration</h2>
+<p>I generally use a trackpad, and occasionally a traditional mouse for image editing, and have used a
+trackball. I find that any one specific device will lead to wrist pain if used constantly, so I
+switch it up every now and then. The trackpad and trackball, however, need configuration to be
+usable.</p>
+<p>After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
+the market<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>. On MacOS, they lacks a middle mouse click. So I created a trackpad
+shortcut in the aforementioned <a href="https:_folivora.ai_">BetterTouchTool ($22)</a> to map the middle click on a three-finger tap
+(can also be had for free with <a href="https://github.com/artginzburg/MiddleClick-Ventura">MiddleClick (OSS)</a>). For Windows, <a href="https:_magicutilities.net_">Magic Utilities ($17/y)</a> provides a
+wonderful third-party driver for Apple devices that also supports the three-finger tap. I have not
+gotten the Apple touch pad to pair reliably on Linux, and have generally found their touch pad
+driver <em>libinput</em> a bit lacking.</p>
+<p>My trackball is a Kensington SlimBlade. To scroll, you rotate the ball around its vertical axis.
+This is tedious for longer scroll distances, however. But there's an alternative scrolling method
+called &quot;button scrolling&quot;, where you hold one button on the trackball, and move the ball to scroll.
+You need to install the Kensington driver to enable this on Windows and MacOS. Button scrolling is
+available on Linux as well using xinput<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup>, but I haven't gotten the setting to stick across
+reboots or sleep cycles. So I wrote a background task that checks xinput every five seconds,
+which does the trick.</p>
+<p>tablets include touch, too, but they palm rejection is abysmal and they don't support gestures.</p>
+<p>~xinput set-prop &quot;Kensington Slimblade Trackball&quot; &quot;libinput Button Scrolling Button&quot; 8 # top-right button~</p>
+<h2>Window Management</h2>
+<p>Frankly, Windows does window management correctly. Win-←/→ moves windows to the left and right edge
+of the screen, as does dragging the window to the screen border. Further Win-←/→ then moves the
+window to the next half-screen in that direction, even across display boundaries. KDE does this
+correctly out of the box as well, Gnome does not do the latter, and it drives me mad. MacOS doesn't
+do any of these things. But <a href="https:_rectangleapp.com_">Rectangle (OSS)</a> does. Easy fix. (BetterTouchTool can do it, too, but
+Rectangle is prettier)</p>
+<p>Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
+CMD-Tab to switch between <em>apps</em>, now windows. And then there's another shortcut for switching
+between windows of the same app, but the shortcut really doesn't work at all on a German keyboard.
+Who came up with this nonsense? Anyway, <a href="https://manytricks.com/witch/">Witch ($14)</a> implements window switching properly.</p>
+<h2>Application Management</h2>
+<p>In Windows and Linux, I hit the Windows key and start typing to select and start an app. In MacOS,
+this is usually Cmd-Space, but BetterTouchTool can map it to a single short Cmd, if you prefer.</p>
+<p>More annoying are the various docks and task bars. I always shove the dock off to the right edge of
+the screen, where it stays out of the way. Windows 10 had a sane dock, but then 11 came and forced
+it to the bottom of the screen. Dear OS makers, every modern screen has plenty of horizontal space.
+But vertical space is somewhat limited. So why on earth would you make a rarely used menu such as
+the dock consume that precious vertical space by default? And Microsoft, specifically, /why not make
+it movable/? Thankfully, there's <a href="https:_www.startallback.com_">StartAllBack ($5)</a>, which replaces the Windows task bar with
+something sensible, and additionally cleans up the start menu if you so desire. On KDE, I
+fractionally prefer <a href="https://github.com/KDE/latte-dock">Latte (OSS)</a> over KDE's native dock. The MacOS dock is uniquely dumb, offering no
+start menu, and allowing no window selections. But it's unobtrusive and can be moved to the right
+edge, so it's not much of a bother.</p>
+<h2>File Management</h2>
+<p>One of the most crucial tasks in computer work in general is file management. I am not satisfied
+with most file managers. Dolphin on KDE works pretty well, it has tabs, can bulk-rename files, can
+display large directories without crashing, and updates in real time when new files are added to the
+current directory. Gnome Nautilus is so bad it is the main reason I switched to KDE on my Linux
+machines. Finder on MacOS is passable, I suppose, although the left sidebar is unnecessarily
+restrictive (why can't I add a shortcut to a network drive?). Windows Explorer is really rather
+terrible, lacking a bulk-rename tool, and crucially, tabs. In Windows 10, these can be added with
+<a href="https://www.stardock.com/products/groupy/">Groupy ($12)</a> (set it to only apply to explorer.exe). Windows 11 has very recently added native tabs,
+which work OK, but can't be detached from the window.</p>
+<p>The sad thing is that there are plenty of very good file manager replacements out there, but none of
+the OSs have a mechanism for replacing their native file manager in a consistent way, so we're
+mostly stuck with the defaults.</p>
+<p>Oh, and I always remove the iCloud/OneDrive sidebar entries, which is <a href="https://www.howtogeek.com/225973/how-to-disable-onedrive-and-remove-it-from-file-explorer-on-windows-10/">surprisingly tedious</a> on
+Windows.</p>
+<h2>Hardware Control</h2>
+<p>On laptops, you can control screen brightness from your keyboard. On desktops, you can not. However,
+some clever hackers have put together <a href="https://github.com/waydabber/BetterDisplay#readme">BetterDisplay (OSS for screen brightness)</a>, which adds this
+capability to MacOS. That's actually a capability I have wanted for quite a while, and apparently it
+is only available in MacOS. Great stuff!</p>
+<p>Less great is that MacOS does not allow volume control on external sound cards. <a href="https://rogueamoeba.com/soundsource/">SoundSource ($47)</a>
+adds this rather crucial functionality back, once you go through the unnecessarily excruciating
+process of enabling custom kernel extensions. Windows and Linux of course natively support this.</p>
+<p>Another necessary functionality for me is access to a non-sucky (i.e. no FAT) cross-platform file
+system. At the moment, the most portable file system seems to be NTFS, of all things. Regrettably,
+MacOS only supports <em>reading</em> NTFS, but no writing. <a href="https://www.paragon-software.com/home/ntfs-mac/#">Paragon NTFS (€20)</a> adds this with another kernel
+extension, and promptly kernel-panicked my computer. Oh joy. At least it's only panicking for file
+transfers initiated by DigiKam, which I can work around. Paragon Support says they're working on it.
+I'm not holding my breath. Windows and Linux of course natively support NTFS.</p>
+<h2>System Management</h2>
+<p>I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
+eaten my backups many times already, and can not be trusted. But I have used <a href="https:_www.borgbackup.org_">Borg (OSS)</a> for years,
+and it has so far performed flawlessly. Even more impressive, my Borg backups have a continuous
+history despite moving operating systems several times. It truly is wonderful software!</p>
+<p>On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
+Linux, I schedule them with systemd units. On MacOS, I install Borg with <a href="https:_brew.sh_">Homebrew (OSS)</a> and schedule
+the backups with launchd tasks. It's all pretty equivalent. One nice thing about launchd, however,
+is how the OS immediately pops up a notification if there's a new task file added, and adds the task
+to the graphical system settings.</p>
+<p>I have to emphasize what a game-changer the WSL is on Windows. Where previously, such simple
+automations where a pain in the neck to do reliably, they're now the same simple shell scripts as on
+other OSes. And it perfectly integrates with Windows programs as well, including passing pipes
+between Linux and Windows programs. It's truly amazing! At the moment, I'd rate Windows a better
+Unix system than MacOS for this reason. Homebrew is a passable package manager on MacOS, but the way
+it's ill-integrated into the main system (not in system PATH) is a bit off-putting.</p>
+<h2>App Compatibility</h2>
+<p>I generally use my computer for three tasks: General document stuff, photo editing, and video games.</p>
+<p>One major downside of Apple computers is that video games aren't available. This has become less of
+a problem to me since I bought a Steam Deck, which has taken over gaming duties from my main PC.
+Absolutely astonishingly, the Steam Deck runs Windows games on <em>Linux</em> through emulation, which
+works almost flawlessly, making video games no longer a Windows-only proposition.</p>
+<p>What doesn't work well on Linux are commercial applications. Wine generally does not play well with
+them, and frustratingly for my photo editing, neither <a href="https://www.vmware.com/products/workstation-player.html">VMWare Workstation Player (free)</a> nor
+<a href="https:_www.virtualbox.org_">VirtualBox (OSS)</a> support hardware-accelerated VMs on up-to-date Linux<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup>. So where MacOS lacks
+games, Linux lacks Photoshop. Desktop applications in general tend to be unnecessarily cumbersome to
+manage and update on Linux. Flatpak is helping in this regard, by installing user-facing
+applications outside of the OS package managers, but it remains more work than on Windows or MacOS.
+The occasional scanner driver or camera interface app can also be troublesome on Linux, but that's
+easily handled with a VirtualBox VM (with the proprietary <em>Extension Pack</em> for USB2 support), and
+hasn't really bothered me too much.</p>
+<p>Luckily for me, my most-used apps are generally OSS tools such as <a href="https:_www.darktable.org_">Darktable (OSS)</a> and <a href="https:_www.digikam.org_">DigiKam (OSS)</a>,
+or cross-platform programs like <a href="https:_fishshell.com_">Fish (OSS)</a>, <a href="https:_git-scm.com_">Git (OSS)</a>, and <a href="https://www.gnu.org/software/emacs/">Emacs (OSS)</a>. This is however, where
+Windows has a bit of a sore spot, as these programs tend to perform noticeably worse on Windows than
+on other platforms. Emacs and git in particular are just terribly slow on Windows, taking several
+seconds for routine operations that are <em>instant</em> on other platforms. That's probably due to
+Windows' rather slow file system and malware scanner for the many-small-files style of file
+management that these Unix tools implement. It is very annoying.</p>
+<p>kernels. Qemu <em>should</em> be able to solve this problem, but I couldn't get it to work reliably.</p>
+<h2>Conclusions</h2>
+<p>So there's just no perfect solution. MacOS can't do games, Linux can't run commercial applications,
+and Windows is annoyingly slow for OSS applications. Regardless, I regularly use all three systems
+productively. My job is mostly done on Windows, my home computer runs MacOS, and my Steam Deck and
+automations run Linux.</p>
+<p>Overall, I currently prefer MacOS as my desktop OS. It is surprisingly flexible, and more scriptable
+than I thought, and in some ways is actually more functional than Linux or Windows. The integrated
+calendar and contacts apps are nice, too, and not nearly as terrible as their Windows/Linux
+counterparts. To say nothing of the amazing M1 hardware with its minuscule power draw and total
+silence, while maintaining astonishing performance.</p>
+<p>Linux is where I prefer to program, due to its sane command line and tremendously good
+compiler/debugger/library infrastructure. As a desktop OS, it does have some rough edges, however,
+especially for its lack of access to commercial applications. While Linux <em>should</em> be the most
+customizable of these three, I find things tend to break too easily, and customizations are often
+scattered widely between many different subsystems, making them very hard to get right.</p>
+<p>Theoretically, Windows is the most capable OS, supporting apps, OSS, and games. But it also feels
+the most user-hostile of these three, and the least performant. And then there's the intrusive ads
+everywhere, its spying on my every move, and at work there's inevitably a heavy-handed administrator
+security setup that gets in the way of productivity. It's honestly fine on my home computer, at
+least since they introduced the WSL. But using it for work every day is quite enough, so I don't
+want to use it at home, too.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>if there's an easier way to create a keyboard layout bundle, please let me know. I<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>It occurs to me that it might actually be possible to do something like on Windows<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>The Logitech T650 is actually not bad, but the drivers are a travesty. Some Wacom<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+<li id="fn-4"><p><code>xinput set-prop &quot;Kensington Slimblade Trackball&quot; &quot;libinput Scroll Method Enabled&quot; 0, 0, 1 # button scrolling</code><a href="#fnref-4" class="footnote">&#8617;</a></p></li>
+<li id="fn-5"><p>VirtualBox does not have a good accelerated driver, and VMWare does not support recent<a href="#fnref-5" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
 
-<div id="outline-container-org9d147b2" class="outline-2">
-<h2 id="org9d147b2">PulseAudio</h2>
-<div class="outline-text-2" id="text-org9d147b2">
-<p>
-PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
-</p>
 
-<p>
-The very nice thing about PulseAudio is that it is a native C API. It provides several levels of abstraction, the highest of which takes only a handful of lines of C to get audio playing. For the purposes of PythonAudio however, I had to look at the more in-depth <a href="https://freedesktop.org/software/pulseaudio/doxygen/async.html">asynchronous API</a>. Still, the API itself is relatively simple, and compactly defined in one simple header file.
-</p>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
 
-<p>
-It all starts with a <code>mainloop</code> and an associated <code>context</code>. While the <code>mainloop</code> is running, you can query the <code>context</code> for sources and sinks (aka microphones and speakers). The <code>context</code> can also create a <code>stream</code> that can be read or written (aka recorded or played). From a high level, this is all there is to it.
-</p>
-
-<p>
-Most PulseAudio functions are asynchronous: Function calls return immediately, and call user-provided callback functions when they are ready to return results. While this may be a good structure for high-performance multithreaded C-code, it is somewhat cumbersome in Python. For PythonAudio, I wrapped this structure in regular Python functions that wait for the callback and return its data as normal return values.
-</p>
-
-<p>
-Doing this shows just how old Python really is. Python is old-school in that it still thinks that concurrency is better solved with multiple, communicating processes, than with shared-memory threads. With such a mind set, there is a certain impedance mismatch to overcome when using PulseAudio. Every function call has to lock the main loop, and block while waiting for the callback to be called. After that, clean up by decrementing a reference count. This procedure is cumbersome, but not difficult.
-</p>
-
-<p>
-What is difficult however, is the documentation. The API documentation is fine, as far as it goes. It could go into more detail with regards to edge cases and error conditions; But it truly lacks high-level overviews and examples. It took an unnecessarily long time to figure out the code path for audio playback and recording, simply because there is no document anywhere that details the sequence of events needed to get there. In the end, I followed some marginally-related example on the internet to get to that point, because the <i>two</i> examples provided by PulseAudio don't even use the asynchronous API.
-</p>
-
-<p>
-Perhaps I am missing something, but it strikes me as strange that an API meant for audio recording and playback would not include an example that plays back and records audio.
-</p>
-
-<p>
-On an application level, it can be problematic that PulseAudio seems to only value block sizes and latency requirements approximately. In particular, if computing resources become scarce, PulseAudio would rather increase latency/block sizes in the background than risk skipping. This might be convenient for a desktop application, but it is not ideal for signal processing, where latency can be crucial. It seems that I can work around these issues to an extent, but this is an inconvenience nontheless.
-</p>
-
-<p>
-In general, I found PulseAudio reasonably easy to use, though. The documentation could use some work, and I don't particularly <i>like</i> the asynchronous programming style, but the API is simple and functional. Out of the three APIs of WASAPI/Windows, Core Audio/macOS, and PulseAudio/Linux, this one was probably the easiest to get working.
-</p>
 </div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-linux.html">linux</a> </div>
+<div id="postamble" class="status">
 <div id="archive">
-<a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-</div>
-<div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

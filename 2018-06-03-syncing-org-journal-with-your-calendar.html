@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Syncing Org-Journal with your Calendar</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,67 +19,65 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<div class="post-date">03 Jun 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
-<p>
-<a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http://www.orgzly.com/">Orgzly</a> does <i>not</i> work with my 1k-file journal directory).
-</p>
-
-<p>
-But, as I keep re-discovering, org-mode already has a solution for this: org-mode can export your agenda to an iCalendar file! Most calendar applications can then subscribe to that file, and show your future journal entries right in your calendar. And if you set it up right, this will even sync changes to your calendar!
-</p>
-
-<p>
-First, you need to set up some kind of regular export job. I use a cron job that regularly runs an Emacs batch job <code>emacs --batch --script ~/bin/calendar_init.el</code> with the following code in <i>calendar​_init.el</i>:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-elisp">;; no init file is loaded, so provide everything here:
-(add-to-list 'load-path "~/etc/org-journal/")
-(setq org-journal-dir "~/journal/"            ; where my journal files are
-      org-journal-file-format "%Y-%m-%d.org"  ; their file names
-      org-journal-enable-agenda-integration t ; so entries are on the agenda
-      org-icalendar-store-UID t               ; so changes sync correctly
-      org-icalendar-include-todo "all"        ; include TODOs and DONEs
-      org-icalendar-combined-agenda-file "~/calendar/org-journal.ics")
-
-(require 'org-journal)
-(org-journal-update-org-agenda-files) ; put future entries on the agenda
-(org-icalendar-combine-agenda-files)  ; export the ICS file
-(save-buffers-kill-emacs t)           ; save all modified files and exit
-</pre>
 </div>
 
-<p>
-It is important to set <code>org-icalendar-store-UID</code>, as otherwise every change to a future entry would result in a duplicated calendar entry. It will clutter up your journal entries with an <code>UID</code> property, though.
-</p>
+<div id="content">
+<div class="post-date">03 Jun 2018</div>
+<h1 class="post-title"><a href="https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
+<p><a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http:_www.orgzly.com_">Orgzly</a> does <em>not</em> work with my 1k-file journal directory).</p>
+<p>But, as I keep re-discovering, org-mode already has a solution for this: org-mode can export your agenda to an iCalendar file! Most calendar applications can then subscribe to that file, and show your future journal entries right in your calendar. And if you set it up right, this will even sync changes to your calendar!</p>
+<p>First, you need to set up some kind of regular export job. I use a cron job that regularly runs an Emacs batch job <code>emacs --batch --script ~/bin/calendar_init.el</code> with the following code in <em>calendar​_init.el</em>:</p>
+<div class="highlight"><pre><span></span><span class="c1">;; no init file is loaded, so provide everything here:</span>
+<span class="p">(</span><span class="nv">add-to-list</span><span class="w"> </span><span class="ss">&#39;load-path</span><span class="w"> </span><span class="s">&quot;~/etc/org-journal/&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">org-journal-dir</span><span class="w"> </span><span class="s">&quot;~/journal/&quot;</span><span class="w">            </span><span class="c1">; where my journal files are</span>
+<span class="w">      </span><span class="nv">org-journal-file-format</span><span class="w"> </span><span class="s">&quot;%Y-%m-%d.org&quot;</span><span class="w">  </span><span class="c1">; their file names</span>
+<span class="w">      </span><span class="nv">org-journal-enable-agenda-integration</span><span class="w"> </span><span class="no">t</span><span class="w"> </span><span class="c1">; so entries are on the agenda</span>
+<span class="w">      </span><span class="nv">org-icalendar-store-UID</span><span class="w"> </span><span class="no">t</span><span class="w">               </span><span class="c1">; so changes sync correctly</span>
+<span class="w">      </span><span class="nv">org-icalendar-include-todo</span><span class="w"> </span><span class="s">&quot;all&quot;</span><span class="w">        </span><span class="c1">; include TODOs and DONEs</span>
+<span class="w">      </span><span class="nv">org-icalendar-combined-agenda-file</span><span class="w"> </span><span class="s">&quot;~/calendar/org-journal.ics&quot;</span><span class="p">)</span>
 
-<p>
-I do this on my web server, with my journal files <a href="https://syncthing.net/">syncthing</a>ed from my other computers. With that, I can subscribe to the calendar file from any internet-connected computer or mobile phone (using <a href="https://icsdroid.bitfire.at/">ICSdroid</a>). But you could just as well sync only the ICS file, or just subscribe to the local file, if you don't want to upload your complete yournal to a web server.
-</p>
+<span class="p">(</span><span class="nb">require</span><span class="w"> </span><span class="ss">&#39;org-journal</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">org-journal-update-org-agenda-files</span><span class="p">)</span><span class="w"> </span><span class="c1">; put future entries on the agenda</span>
+<span class="p">(</span><span class="nv">org-icalendar-combine-agenda-files</span><span class="p">)</span><span class="w">  </span><span class="c1">; export the ICS file</span>
+<span class="p">(</span><span class="nv">save-buffers-kill-emacs</span><span class="w"> </span><span class="no">t</span><span class="p">)</span><span class="w">           </span><span class="c1">; save all modified files and exit</span>
+</pre></div>
+<p>It is important to set <code>org-icalendar-store-UID</code>, as otherwise every change to a future entry would result in a duplicated calendar entry. It will clutter up your journal entries with an <code>UID</code> property, though.</p>
+<p>I do this on my web server, with my journal files <a href="https:_syncthing.net_">syncthing</a>ed from my other computers. With that, I can subscribe to the calendar file from any internet-connected computer or mobile phone (using <a href="https:_icsdroid.bitfire.at_">ICSdroid</a>). But you could just as well sync only the ICS file, or just subscribe to the local file, if you don't want to upload your complete yournal to a web server.</p>
+<p>(Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)</p>
 
-<p>
-(Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

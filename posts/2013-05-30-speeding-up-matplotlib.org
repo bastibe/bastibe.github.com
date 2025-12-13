@@ -49,6 +49,7 @@ which yields about 26 plots per second. Not bad for a simple change like this. T
 Profiling this yields some interesting results:
 
 | ncalls | tottime | percall | cumtime | percall | filename:lineno(function) |
+|--------+---------+---------+---------+---------+---------------------------|
 |     15 |   0.167 |   0.011 |   0.167 |   0.011 | {built-in method sleep)   |
 
 The one function that uses the biggest chunk of runtime is ~sleep()~, of all things. Clearly, this is not what we want. Delving deeper into the profiler shows that this is indeed happening in the call do ~pause()~. Then again, I /was/ wondering if using /pause/ really was a great idea for performance...

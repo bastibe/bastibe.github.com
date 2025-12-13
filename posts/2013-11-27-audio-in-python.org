@@ -52,12 +52,12 @@ Read from the stream, write to a file. It works the other way round, too!
 
 And that's really all there is to it. Working with audio data in Python is easy now!
 
-Of course, there is much more you could do. You could create a callback function and be called every four[1] frames with new audio data to process. You could request your audio data as ~int16~, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[3].
+Of course, there is much more you could do. You could create a callback function and be called every four[fn:1] frames with new audio data to process. You could request your audio data as ~int16~, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[fn:2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[fn:3].
 
 You can download these libraries from [[https://pypi.python.org/pypi][PyPi]], or use the binary Windows installers on Github. Or you can look at the source on Github ([[https://github.com/bastibe/PySoundFile][PySoundFile]], [[https://github.com/bastibe/PySoundCard][PySoundCard]]), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
 
 *UPDATE:* It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
 
-[1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-[2] More precisely: Everything that [[http://www.portaudio.com/][portaudio]] supports.
-[3] More precisely: Everything that [[http://www.mega-nerd.com/libsndfile/][libsndfile]] supports.
+[fn:1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
+[fn:2] More precisely: Everything that [[http://www.portaudio.com/][portaudio]] supports.
+[fn:3] More precisely: Everything that [[http://www.mega-nerd.com/libsndfile/][libsndfile]] supports.

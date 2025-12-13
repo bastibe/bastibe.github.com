@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Compiling Scipy and Matplotlib using pip on Lion</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,66 +19,58 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">01 Aug 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">Compiling Scipy and Matplotlib using pip on Lion</a></h1>
-<p>
-So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.
-</p>
+<div class="post-date">01 Aug 2011</div>
+<h1 class="post-title"><a href="https://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">Compiling Scipy and Matplotlib using pip on Lion</a></h1>
+<p>So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, <code>pip</code> stopped working. After a bit of messing around with <code>brew</code>, <code>pip</code> and <code>easy_install</code>, I found out it was almost entirely my own fault. I messed up my <code>PATH</code>.</p>
+<p>In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html">round of googling</a> reveals:</p>
+<p>In order to get Scipy to compile, you need to insert <code>#include &lt;complex.h&gt;</code> in</p>
+<div class="highlight"><pre><span></span>./scipy/lib/blas/fblaswrap_veclib_c.c.src
+<span class="w">    </span>./scipy/linalg/src/fblaswrap_veclib_c.c
+<span class="w">    </span>./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
+</pre></div>
+<p>That done, Scipy compiles perfectly fine.</p>
+<p>But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/07/21/installing-matplotlib-on-os-x-10-7-with-homebrew/">this blogpost</a> outlines, Matplotlib is not currently compatible with <code>libpng</code> 1.5, which ships with Lion. Fortunately, this is already fixed in the most recent source on the Matplotlib repo, so you just have to checkout that:</p>
+<div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>git+https://github.com/matplotlib/matplotlib.git#egg<span class="o">=</span>matplotlib
+</pre></div>
+<p>By doing that, Matplotlib should install just fine.</p>
+<p>Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?</p>
 
-<p>
-In the meantime, I had uninstalled all of <code>brew</code>'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some <code>veclib_cabi_c.c</code> would report errors. A quick <a href="http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html">round of googling</a> reveals:
-</p>
-
-<p>
-In order to get Scipy to compile, you need to insert <code>#include &lt;complex.h&gt;</code> in
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sh">    ./scipy/lib/blas/fblaswrap_veclib_c.c.src
-    ./scipy/linalg/src/fblaswrap_veclib_c.c
-    ./scipy/sparse/linalg/eigen/arpack/ARPACK/FWRAPPERS/veclib_cabi_c.c
-</pre>
-</div>
-
-<p>
-That done, Scipy compiles perfectly fine.
-</p>
-
-<p>
-But, that is not enough yet. As <a href="http://jholewinski.wordpress.com/2011/07/21/installing-matplotlib-on-os-x-10-7-with-homebrew/">this blogpost</a> outlines, Matplotlib is not currently compatible with <code>libpng</code> 1.5, which ships with Lion. Fortunately, this is already fixed in the most recent source on the Matplotlib repo, so you just have to checkout that:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sh">    pip install -e git+https://github.com/matplotlib/matplotlib.git#egg=matplotlib
-</pre>
-</div>
-
-<p>
-By doing that, Matplotlib should install just fine.
-</p>
-
-<p>
-Seriously though, these PyPi repos are in a very sorry state. Every time I install one of these packages, I have to jump through hoops and spend hours debugging packages that really should work right out of the box. After all, <code>brew</code>, <code>rvm</code> and <code>gem</code> can do it just fine. Why is <code>pip</code> such a horrible mess?
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a>, <a href="https://bastibe.de/tag-python.html">python</a>, <a href="https://bastibe.de/tag-macos.html">macos</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

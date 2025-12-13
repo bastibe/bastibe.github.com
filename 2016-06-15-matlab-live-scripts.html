@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Teaching with Matlab Live Scripts</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,73 +19,61 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">15 Jun 2016</div><h1 class="post-title"><a href="https://bastibe.de/2016-06-15-matlab-live-scripts.html">Teaching with Matlab Live Scripts</a></h1>
-<p>
-For a few years now, I have been teaching programming courses using <i>notebooks</i>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:
-</p>
-
-<p>
-You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.
-</p>
-
-<p>
-The first time I saw this was with the <a href="http://jupyter.org/">Jupyter notebook</a> (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
-</p>
-
-<p>
-Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
-</p>
-
-<p>
-Now, with 2016a, Matlab introduced <a href="http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html">Live Scripts</a>, which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
-</p>
-
-<p>
-First off, Live Scripts <i>work</i>. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.
-</p>
-
-<p>
-However, Live Scripts are new, and still contain a number of bugs. You can't customize figure sizes, formatting options are very basic, image rendering is terrible, and math rendering using LaTeX is of poor quality and limited. Also, using Live Scripts on a retina Mac is borderline impossible: Matlab crashes on screen resolution changes (i.e. connecting a projector), Live Scripts render REALLY slowly (type a word, watch the characters crawl onto the screen one by one), and all figures export in twice their intended size (fixed in 2016b). You can work around some of these issues by starting Matlab in <a href="https://support.apple.com/en-us/HT202471">Low Resolution Mode</a>.
-</p>
-
-<p>
-No doubt some of these issues are going to get addressed in future releases. 2016b added script-local functions, which I read mostly as "you can now write functions in Live Scripts", and autocorrection-like text replacements that convert Markdown formatting into formatted text. This is highly appreciated.
-</p>
-
-<p>
-Additionally though, here are a few features I would love to see:
-</p>
-
-<ul class="org-ul">
+<div class="post-date">15 Jun 2016</div>
+<h1 class="post-title"><a href="https://bastibe.de/2016-06-15-matlab-live-scripts.html">Teaching with Matlab Live Scripts</a></h1>
+<p>For a few years now, I have been teaching programming courses using <em>notebooks</em>. A notebook is an interactive document that can contain code, results, graphs, math, and prose. It is the perfect teaching tool:</p>
+<p>You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.</p>
+<p>The first time I saw this was with the <a href="http:_jupyter.org_">Jupyter notebook</a> (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.</p>
+<p>Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.</p>
+<p>Now, with 2016a, Matlab introduced <a href="http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html">Live Scripts</a>, which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.</p>
+<p>First off, Live Scripts <em>work</em>. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.</p>
+<p>However, Live Scripts are new, and still contain a number of bugs. You can't customize figure sizes, formatting options are very basic, image rendering is terrible, and math rendering using LaTeX is of poor quality and limited. Also, using Live Scripts on a retina Mac is borderline impossible: Matlab crashes on screen resolution changes (i.e. connecting a projector), Live Scripts render REALLY slowly (type a word, watch the characters crawl onto the screen one by one), and all figures export in twice their intended size (fixed in 2016b). You can work around some of these issues by starting Matlab in <a href="https://support.apple.com/en-us/HT202471">Low Resolution Mode</a>.</p>
+<p>No doubt some of these issues are going to get addressed in future releases. 2016b added script-local functions, which I read mostly as &quot;you can now write functions in Live Scripts&quot;, and autocorrection-like text replacements that convert Markdown formatting into formatted text. This is highly appreciated.</p>
+<p>Additionally though, here are a few features I would love to see:</p>
+<ul>
 <li>Nested lists, and lists entries that contain newlines (i.e. differentiate between line breaks and paragraph breaks).</li>
 <li>Indented text, for quoting things, or to work around the lack of multi-line list entries.</li>
 <li>More headline levels.</li>
 <li>Magics. This is probably a long shot, but line/cell magics in Jupyter notebooks are really useful.</li>
 </ul>
+<p>Still, all griping aside, I want to reiterate that Live Scripts <em>work</em>. They aren't quite as nice as Jupyter notebooks, but they serve their purpose, and are a tremendously useful teaching tool.</p>
 
-<p>
-Still, all griping aside, I want to reiterate that Live Scripts <i>work</i>. They aren't quite as nice as Jupyter notebooks, but they serve their purpose, and are a tremendously useful teaching tool.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

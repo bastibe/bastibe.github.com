@@ -53,7 +53,7 @@ def find_tracks_python(cost_matrix, delta_x):
 
 I'm not going into the details of what this algorithm does, but note that it iterates over every column and row of the matrix ~cost_matrix~, and then iterates over another range ~previous_y_range~ for each of the values in ~cost_matrix~. On the way, it does a lot of basic arithmetic and some algebra.
 
-The problem is, this is very slow. For a \(90 \times 200\) ~cost_matrix~, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for [[http://www.numpy.org/][Numpy]]!
+The problem is, this is very slow. For a $90 \times 200$ ~cost_matrix~, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for [[http://www.numpy.org/][Numpy]]!
 
 If you can express your code in terms of linear algebra, Numpy will execute them in highly-optimized C code. The problem is, translating loops into linear algebra is not always easy. In this case, it took some effort:
 
@@ -94,7 +94,7 @@ def find_frequency_tracks_numpy(cost_matrix, delta_x):
     return tracks, cum_corrs
 #+end_src
 
-This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a \(90 \times 200\) ~cost_matrix~, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.
+This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a $90 \times 200$ ~cost_matrix~, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.
 
 Another avenue for performance optimization is [[http://numba.pydata.org/][Numba]]. Numba applies dark and powerful magic to compile humble Python functions into blazingly fast machine code. It is proper magic, if you ask me. Simply add an innocuous little decorator to your functions, and let Numba do it's thing. If all goes well, your code will work just as before, except with unheard-of performance:
 

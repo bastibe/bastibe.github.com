@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Defeating News Addiction</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,52 +19,47 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">07 Apr 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-04-07-defeating-news-addiction.html">Defeating News Addiction</a></h1>
-<p>
-I want to consume the news, both because it is genuinely relevant for my work, and because conversations about news are part of my social life. But I do not want to be consumed by news, and end up scanning news websites over and over for new content, even though you know that the likelihood of finding anything interesting is small.
-</p>
-
-<p>
-Over the last few months, I have tried hard to find all instances of this repeated-scanning behavior, and eliminate it. The key is to automate the scanning such that I am only ever presented with new content, but do not get hooked on the addictive variable-reward cycle of checking websites for changes over and over again.
-</p>
-
-<p>
-And it all works thank to the magic of RSS:
-</p>
-
-<ul class="org-ul">
-<li><b>News Sources:</b>
-I read several blogs, newspapers, and webcomics. All of them have RSS feeds. Easy.</li>
-
-<li><b>Hacker News:</b>
-The brilliant service <a href="https://hnrss.org/">hnrss.org</a> provides RSS feeds for Hacker News, and filters them to for example only include posts that made it to the front page, and have accumulated <a href="https://hnrss.org/frontpage?points=100">at least 100 points</a>.</li>
-
-<li><b>Reddit:</b>
-Every subreddit has its own feed, at <a href="https://www.reddit.com/r/emacs.rss">reddit.com/r/subreddit.rss</a>. Sadly there is no way to filter for a minimum number of upvotes.</li>
-
-<li><b>YouTube:</b>
-Again, every YouTube channel has its own RSS feed, but Google is trying very hard to make it as cumbersome as possible to get at those feeds. You need to go to your <a href="https://www.youtube.com/subscription_manager">Subscription Manager</a>, then scroll all the way down, and "Export Subscriptions". The resulting file helpfully does not have a file extension, which you will have to add before you can import it into your RSS reader. I honestly can't reconstruct how I found that subscription manager, either, but presumably there is some series of clicks that would take you there.</li>
+<div class="post-date">07 Apr 2018</div>
+<h1 class="post-title"><a href="https://bastibe.de/2018-04-07-defeating-news-addiction.html">Defeating News Addiction</a></h1>
+<p>I want to consume the news, both because it is genuinely relevant for my work, and because conversations about news are part of my social life. But I do not want to be consumed by news, and end up scanning news websites over and over for new content, even though you know that the likelihood of finding anything interesting is small.</p>
+<p>Over the last few months, I have tried hard to find all instances of this repeated-scanning behavior, and eliminate it. The key is to automate the scanning such that I am only ever presented with new content, but do not get hooked on the addictive variable-reward cycle of checking websites for changes over and over again.</p>
+<p>And it all works thank to the magic of RSS:</p>
+<ul>
+<li><p><strong>News Sources:</strong>
+I read several blogs, newspapers, and webcomics. All of them have RSS feeds. Easy.</p>
+</li>
+<li><p><strong>Hacker News:</strong>
+The brilliant service <a href="https:_hnrss.org_">hnrss.org</a> provides RSS feeds for Hacker News, and filters them to for example only include posts that made it to the front page, and have accumulated <a href="https://hnrss.org/frontpage?points=100">at least 100 points</a>.</p>
+</li>
+<li><p><strong>Reddit:</strong>
+Every subreddit has its own feed, at <a href="https://www.reddit.com/r/emacs.rss">reddit.com/r/subreddit.rss</a>. Sadly there is no way to filter for a minimum number of upvotes.</p>
+</li>
+<li><p><strong>YouTube:</strong>
+Again, every YouTube channel has its own RSS feed, but Google is trying very hard to make it as cumbersome as possible to get at those feeds. You need to go to your <a href="https://www.youtube.com/subscription_manager">Subscription Manager</a>, then scroll all the way down, and &quot;Export Subscriptions&quot;. The resulting file helpfully does not have a file extension, which you will have to add before you can import it into your RSS reader. I honestly can't reconstruct how I found that subscription manager, either, but presumably there is some series of clicks that would take you there.</p>
+</li>
 </ul>
-
-<p>
-With all this settled, I have a veritable firehose of news every day. I estimate that only 1 % of this is actually worth reading. So in the next step, I filter this list for spam. For this purpose, I use <a href="https://feedbin.com/">Feedbin</a>, which aggegates all these feeds, and remembers whether I have read an article. The remaining ham I either read immediately, or forward it to <a href="http://pinboard.in/">Pinboard</a> for later consumption.
-</p>
-
-<p>
-With this system, I never miss anything, but once I consume all the news in my feed reader, I know I am done, and there is no point in checking and re-checking various websites over and over again.
-</p>
-
+<p>With all this settled, I have a veritable firehose of news every day. I estimate that only 1 % of this is actually worth reading. So in the next step, I filter this list for spam. For this purpose, I use <a href="https:_feedbin.com_">Feedbin</a>, which aggegates all these feeds, and remembers whether I have read an article. The remaining ham I either read immediately, or forward it to <a href="http:_pinboard.in_">Pinboard</a> for later consumption.</p>
+<p>With this system, I never miss anything, but once I consume all the news in my feed reader, I know I am done, and there is no point in checking and re-checking various websites over and over again.</p>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="422" height="70">
   <!-- grey achievement box: -->
   <rect x="0" y="1" rx="32" ry="32" width="422" height="64" fill="#3A3E3F" />
@@ -99,15 +95,24 @@ With this system, I never miss anything, but once I consume all the news in my f
   <text x="76" y="27" font-family="Verdana" font-size="13px" fill="#E1E6E7">ACHIEVEMENT UNLOCKED</text>
   <text x="76" y="48" font-family="Verdana" font-size="13px" fill="#E1E6E7">Defeated News Addiction!</text>
 </svg>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-workflow.html">workflow</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-workflow.html">workflow</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

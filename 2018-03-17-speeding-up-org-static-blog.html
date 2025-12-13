@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Speeding up org-static-blog</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,42 +19,49 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">17 Mar 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
-<p>
-Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <i>simple</i>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.
-</p>
+<div class="post-date">17 Mar 2018</div>
+<h1 class="post-title"><a href="https://bastibe.de/2018-03-17-speeding-up-org-static-blog.html">Speeding up org-static-blog</a></h1>
+<p>Three years ago, I had enough of all the static site generators out there. Over the life of this blog, I had used <a href="http://bastibe.de/2012-07-18-blogging-with-pelican.html">Octopress, then Pelican</a>, then <a href="http://bastibe.de/2013-11-13-blogging-with-emacs.html">Coleslaw</a>, then <a href="http://bastibe.de/2014-05-07-speeding-up-org-publishing.html">org-mode</a>, and then wrote my own static site generator, <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a>. Above all, org-static-blog is <em>simple</em>. It iterates over all *.org files in <code>org-static-blog-posts-directory</code>, and then exports all of these files to HTML. Simple is good. Simple is reliable. Simple means I can fix things.</p>
+<p>However, simple can also mean inefficient. Most glaringly, org-static-blog exports every single blog post three times every time you publish: Once to render the HTML, then once to render the RSS feed, then once to render the Index and Archive pages.</p>
+<p>Today, I finally tackled this problem: Now, org-static-blog only exports each post once, when the *.org file changes. The RSS feed, the Index page, and the Archive page simply read the already-rendered HTML instead of exporting again.</p>
+<p>Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!</p>
 
-<p>
-However, simple can also mean inefficient. Most glaringly, org-static-blog exports every single blog post three times every time you publish: Once to render the HTML, then once to render the RSS feed, then once to render the Index and Archive pages.
-</p>
-
-<p>
-Today, I finally tackled this problem: Now, org-static-blog only exports each post once, when the *.org file changes. The RSS feed, the Index page, and the Archive page simply read the already-rendered HTML instead of exporting again.
-</p>
-
-<p>
-Thus, a full rebuild of this blog and all of its 85 posts used to take 2:12 min, and now takes 42 s. More importantly, if only one org file changed, the rebuild used to take 1:08 min, and now takes 1.5 s. Things like this are hugely satisfying to me!
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-blog.html">blog</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a>, <a href="https://bastibe.de/tag-emacs.html">emacs</a>, <a href="https://bastibe.de/tag-blog.html">blog</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

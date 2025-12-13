@@ -6,9 +6,13 @@
 
 Most cameras have the option to capture /raw/ images, i.e. un-processed image data right from the image sensor. In theory, these images are pure physical measurements of light, and should therefore be very comparable between cameras. But are they? To investigate, I took a /raw/ picture of [[https://en.wikipedia.org/wiki/ColorChecker][a color target]] with each of my five cameras, and compared their output.
 
-Capturing accurate colors is a surprisingly intricate matter, as the color depends on the spectrum of the illumination, the reflective spectrum of the colored object, and the color filters in the camera. I normalized the illumination by taking pictures on an overcast day outside[fn::any kind of artificial light is comparatively terrible for color reproduction!], and used a standard color target with 24 colored patches of a certified color.
+Capturing accurate colors is a surprisingly intricate matter, as the color depends on the spectrum of the illumination, the reflective spectrum of the colored object, and the color filters in the camera. I normalized the illumination by taking pictures on an overcast day outside[fn:1], and used a standard color target with 24 colored patches of a certified color.
 
-The resulting colored spectra are captured on the camera sensor by photon counters behind three color filters “red”, “green”, and “blue”[fn::in quotes, because colors are three-channel information, and we're talking about single channels here.], which differ from camera to camera in their spectral sensitivity. The recorded colors then get projected on a computer screen with another set of “red”, “green”, and “blue” LEDs of some different spectral makeup, or printed in three or more inks on paper. And this is then seen with eyes of yet another set of “red”, “green”, and “blue” retinal cells. Let's leave it at /color is complicated/.
+[fn:1] any kind of artificial light is comparatively terrible for color reproduction!
+
+The resulting colored spectra are captured on the camera sensor by photon counters behind three color filters “red”, “green”, and “blue”[fn:2], which differ from camera to camera in their spectral sensitivity. The recorded colors then get projected on a computer screen with another set of “red”, “green”, and “blue” LEDs of some different spectral makeup, or printed in three or more inks on paper. And this is then seen with eyes of yet another set of “red”, “green”, and “blue” retinal cells. Let's leave it at /color is complicated/.
+
+[fn:2] in quotes, because colors are three-channel information, and we're talking about single channels here.
 
 At any rate, I took pictures at base ISO in /raw/, white-balanced and exposed for the third grey patch, and adjusted in saturation on the red patch. Here are the colors on the color checker and the recorded colors of my cameras:
 
@@ -16,7 +20,9 @@ At any rate, I took pictures at base ISO in /raw/, white-balanced and exposed fo
 <img style="width:70%;padding-left:15%;padding-top:5px;padding-bottom:10px" src="/static/2020-10/Colorchecker.svg">
 #+end_export
 
-The image shows the 24 colored patches of the color target[fn::encoded as sRGB, which might or might not be displayed correctly on your screen, depending on your OS, your browser, your settings, your room's illumination, and your screen. Color is complicated.]. Within each patch, five rectangles show the recorded color of (in reading order) the Pentax Q7, the Ricoh GR, the Panasonic LX100, the Fujifilm X-T2, and the Google Pixel 2.
+The image shows the 24 colored patches of the color target[fn:3]. Within each patch, five rectangles show the recorded color of (in reading order) the Pentax Q7, the Ricoh GR, the Panasonic LX100, the Fujifilm X-T2, and the Google Pixel 2.
+
+[fn:3] encoded as sRGB, which might or might not be displayed correctly on your screen, depending on your OS, your browser, your settings, your room's illumination, and your screen. Color is complicated.
 
 Due to my exposure and white balance calibration, the third grey patch is completely equalized and shows no difference between the cameras and the target. The “Light Skin” patch (second on the first row) is also very close to equal, which is an important sanity check for my measurement procedure, as skin tones are optimized by all cameras. Seeing that the skin color patch is one of the most similar hopefully indicates that I did not do anything gravely wrong.
 

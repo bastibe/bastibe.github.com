@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>The Style of Scientific Code</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,110 +19,99 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">13 Mar 2016</div><h1 class="post-title"><a href="https://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
-<p>
-What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: "The first rule of functions is that they should be small", on the order of less than ten lines. "Functions should not be large enough to hold nested structures". "The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible".
-</p>
+<div class="post-date">13 Mar 2016</div>
+<h1 class="post-title"><a href="https://bastibe.de/2016-03-13-code-quality-in-scientific-code.html">The Style of Scientific Code</a></h1>
+<p>What does quality code look like? One common school of thought focuses on small, descriptive functions that take few arguments. To quote from <a href="https://en.wikipedia.org/wiki/Robert_Cecil_Martin">Clean Code</a>: &quot;The first rule of functions is that they should be small&quot;, on the order of less than ten lines. &quot;Functions should not be large enough to hold nested structures&quot;. &quot;The ideal number of arguments for a function is zero [, one, or two]. Three [or more] arguments should be avoided where possible&quot;.</p>
+<p>A few years ago, when I was working mostly on user interaction and data management, all of this made sense to me. What is the overhead of a few function calls and class lookups here and there if it makes the code more readable? In other words: Readability counts, and is usually more important than performance.</p>
+<p>But lately, I have come to struggle with these rules. I am now writing a lot of scientific code, where algorithms are intrinsically complex beyond the syntactic complexity of the code. How do you &quot;Express yourself in code [instead of comments]&quot;, when that code only consists of linear algebra and matrix multiplications?</p>
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rectwin_spectrum</span><span class="p">(</span><span class="n">angular_frequency</span><span class="p">,</span> <span class="n">specsize</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The spectrum of a rectangular window. [...]&quot;&quot;&quot;</span>
+    <span class="c1"># In case of angular_frequency == 0, this will calculate NaN. Since</span>
+    <span class="c1"># this will be corrected later, suppress the warning.</span>
+    <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
+        <span class="n">spectrum</span> <span class="o">=</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">angular_frequency</span><span class="o">*</span><span class="p">(</span><span class="n">specsize</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">specsize</span><span class="o">*</span><span class="n">angular_frequency</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angular_frequency</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+    <span class="c1"># since sin(x) == x for small x, the above expression</span>
+    <span class="c1"># evaluates to specsize for angular_frequency == 0.</span>
+    <span class="n">spectrum</span><span class="p">[</span><span class="n">angular_frequency</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="n">specsize</span>
+    <span class="k">return</span> <span class="n">spectrum</span>
+</pre></div>
+<p>A lot of my scientific code ends up quite compact like that. Maybe a hundred lines of dense numeric expressions, plus a few hundred lines of explanations and documentation. The point is, scientific code often does not decompose into easily understood extractable functions.</p>
+<p>On a related issue, how do you avoid long argument lists in heavily parametrized equations? As Clean Code states, &quot;when a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped in a class of their own&quot;. However, in Matlab in particular, it is quite unusual to create small one-trick classes to encapsulate a few function arguments:</p>
+<div class="highlight"><pre><span></span><span class="k">classdef</span> <span class="n">SignalBlocks</span> <span class="o">&lt;</span> <span class="n">handle</span>
+    <span class="k">properties</span>
+        <span class="n">data</span>
+        <span class="n">samplerate</span>
+        <span class="n">blocksize</span>
+        <span class="n">hopsize</span>
+    <span class="k">end</span>
+    <span class="k">properties</span> <span class="p">(</span><span class="n">Dependent</span><span class="p">)</span>
+        <span class="n">duration</span>
+    <span class="k">end</span>
+    <span class="k">methods</span>
+        <span class="k">function</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">SignalBlock</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">samplerate</span><span class="p">,</span> <span class="n">blocksize</span><span class="p">,</span> <span class="n">hopsize</span><span class="p">)</span>
+            <span class="c">% blocksize and hopsize are optional. What a mess.</span>
+            <span class="n">narginchk</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+            <span class="n">obj</span><span class="p">.</span><span class="n">data</span> <span class="p">=</span> <span class="n">data</span><span class="p">;</span>
+            <span class="n">obj</span><span class="p">.</span><span class="n">samplerate</span> <span class="p">=</span> <span class="n">samplerate</span><span class="p">;</span>
+            <span class="k">if</span> <span class="nb">nargin</span> <span class="o">&gt;</span><span class="p">=</span> <span class="mi">3</span>
+                <span class="n">obj</span><span class="p">.</span><span class="n">blocksize</span> <span class="p">=</span> <span class="n">blocksize</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">obj</span><span class="p">.</span><span class="n">blocksize</span> <span class="p">=</span> <span class="mi">2048</span><span class="p">;</span>
+            <span class="k">end</span>
+            <span class="k">if</span> <span class="nb">nargin</span> <span class="o">==</span> <span class="mi">4</span>
+                <span class="n">obj</span><span class="p">.</span><span class="n">hopsize</span> <span class="p">=</span> <span class="n">hopsize</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">obj</span><span class="p">.</span><span class="n">hopsize</span> <span class="p">=</span> <span class="mi">1024</span><span class="p">;</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+        <span class="k">function</span> <span class="nb">time</span> <span class="p">=</span> <span class="k">get</span><span class="p">.</span><span class="n">duration</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="nb">time</span> <span class="p">=</span> <span class="nb">length</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">data</span><span class="p">)</span><span class="o">/</span><span class="n">obj</span><span class="p">.</span><span class="n">samplerate</span><span class="p">;</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+<p>This is not just cumbersome to write and maintain, it is also slower than passing <code>data</code>, <code>samplerate</code>, <code>blocksize</code>, and <code>hopsize</code> to each function call individually (although the overhead has gotten considerably smaller in newer versions of Matlab). Additionally, there is often a large performance benefit of <em>not</em> extracting every function and <em>not</em> keeping intermediate values in variables. Thus, it's not just readability that is hard to maintain in scientific code. Performance is a problem, too.</p>
+<p>The sad thing is, I don't know the answer to these questions. There have been a lot of discussions about coding style and code quality in our department lately, with the clear objective to clean up our code. But common code quality criteria don't seem to apply to scientific code all that well.</p>
+<p>Do you have any idea how to progress from here?</p>
 
-<p>
-A few years ago, when I was working mostly on user interaction and data management, all of this made sense to me. What is the overhead of a few function calls and class lookups here and there if it makes the code more readable? In other words: Readability counts, and is usually more important than performance.
-</p>
-
-<p>
-But lately, I have come to struggle with these rules. I am now writing a lot of scientific code, where algorithms are intrinsically complex beyond the syntactic complexity of the code. How do you "Express yourself in code [instead of comments]", when that code only consists of linear algebra and matrix multiplications?
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">def rectwin_spectrum(angular_frequency, specsize):
-    """The spectrum of a rectangular window. [...]"""
-    # In case of angular_frequency == 0, this will calculate NaN. Since
-    # this will be corrected later, suppress the warning.
-    with np.errstate(invalid='ignore'):
-        spectrum = ( np.exp(-1j*angular_frequency*(specsize-1)/2) *
-                     np.sin(specsize*angular_frequency/2) /
-                     np.sin(angular_frequency/2) )
-    # since sin(x) == x for small x, the above expression
-    # evaluates to specsize for angular_frequency == 0.
-    spectrum[angular_frequency == 0.0] = specsize
-    return spectrum
-</pre>
-</div>
-
-<p>
-A lot of my scientific code ends up quite compact like that. Maybe a hundred lines of dense numeric expressions, plus a few hundred lines of explanations and documentation. The point is, scientific code often does not decompose into easily understood extractable functions.
-</p>
-
-<p>
-On a related issue, how do you avoid long argument lists in heavily parametrized equations? As Clean Code states, "when a function seems to need more than two or three arguments, it is likely that some of those arguments ought to be wrapped in a class of their own". However, in Matlab in particular, it is quite unusual to create small one-trick classes to encapsulate a few function arguments:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-octave">classdef SignalBlocks &lt; handle
-    properties
-        data
-        samplerate
-        blocksize
-        hopsize
-    end
-    properties (Dependent)
-        duration
-    end
-    methods
-        function obj = SignalBlock(data, samplerate, blocksize, hopsize)
-            % blocksize and hopsize are optional. What a mess.
-            narginchk(2, 4);
-            obj.data = data;
-            obj.samplerate = samplerate;
-            if nargin &gt;= 3
-                obj.blocksize = blocksize;
-            else
-                obj.blocksize = 2048;
-            end
-            if nargin == 4
-                obj.hopsize = hopsize;
-            else
-                obj.hopsize = 1024;
-            end
-        end
-        function time = get.duration(obj)
-            time = length(obj.data)/obj.samplerate;
-        end
-    end
-end
-</pre>
-</div>
-
-<p>
-This is not just cumbersome to write and maintain, it is also slower than passing <code>data</code>, <code>samplerate</code>, <code>blocksize</code>, and <code>hopsize</code> to each function call individually (although the overhead has gotten considerably smaller in newer versions of Matlab). Additionally, there is often a large performance benefit of <i>not</i> extracting every function and <i>not</i> keeping intermediate values in variables. Thus, it's not just readability that is hard to maintain in scientific code. Performance is a problem, too.
-</p>
-
-<p>
-The sad thing is, I don't know the answer to these questions. There have been a lot of discussions about coding style and code quality in our department lately, with the clear objective to clean up our code. But common code quality criteria don't seem to apply to scientific code all that well.
-</p>
-
-<p>
-Do you have any idea how to progress from here?
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

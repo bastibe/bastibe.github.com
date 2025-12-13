@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
-<title>bastibe.de</title>
+      title="RSS feed for https://bastibe.de">
+<title>Home</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -18,168 +19,90 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<h1 class="title">Posts tagged "open-source":</h1>
-<div class="post-date">27 Mar 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-03-27-the-value-proposition-of-open-source-software.html">The Value Proposition of Open Source Software</a></h1>
-<p>
-To <a href="https://en.wikipedia.org/wiki/Open-source_software">quote Wikipedia</a>:
-</p>
 
+
+<h1>Posts tagged "open-source"</h1>
+
+<div class="post-date">08 Sep 2012</div><h2 class="post-title"><a href="https://bastibe.de/2012-09-08-on-the-virtue-of-oss.html">On the Virtue of Contributing to and Using Open Source Software</a></h2>
+<p>I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.</p>
+<p>About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http:_numpy.scipy.org_">numpy</a> <a href="http:_scipy.org_">scipy</a> and <a href="http:_matplotlib.sourceforge.net_">matplotlib</a> that, for my particular purposes, rivals Matlab.</p>
+<p>However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used <a href="http:_playrec.co.uk_">Playrec</a> for that purpose, which implements <a href="http:_www.portaudio.com_">PortAudio</a> bindings for Matlab. Luckily, there was a similar package available for Python, called <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>.</p>
+<p>But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.</p>
+<p>At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!</p>
+<p>This was a revelation to me: I could not only <em>use</em> a piece of software, I could also <em>change</em> it and mold it to my special needs!</p>
+<p>Thus, I put up my changes on <a href="https://github.com/bastibe/PyAudio">github</a> and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!</p>
+<p>This, again, was a revelation to me: Not only could /I/ change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!</p>
+<p>Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.</p>
+<p>And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.</p>
+<p><em>By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.</em></p>
+
+
+
+<div class="post-date">14 Oct 2018</div><h2 class="post-title"><a href="https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html">Appreciation for Open Source and Commercial Software</a></h2>
+<p>I recently released my first-ever piece of commercial software, a <a href="https:_missiongenerator.eu_">plugin</a> for the <a href="https:_www.x-plane.com_">X-Plane</a> flight simulator. I wrote this primarily to scratch my own itch, but thought other users might like it, too, so I put it up on <a href="https://store.x-plane.org/Mission-Generator_p_877.html">the store</a>. What struck me however, were the stark difference between the kinds of responses I got to this, as compared to my open source projects: They were astonishingly, resoundingly, <em>positive</em>!</p>
+<p>You see, I have a bunch of open source projects, with a few thousand downloads per month, and a dozen or so issues on Github per week. Most of my interactions with my users are utilitarian, and efficient. Someone reports a bug or asks for help, I ask for clarification or a pull request, we iterate a few times until the issue is resolved. The process is mechanical and the tone of our conversation is equally unemotional. This is as it should be.</p>
+<p>After having released my flight simulator plugin, however, people <em>thanked me</em>! They <em>congratulated me</em>! They extolled about the greatness of what I had built! And they did this despite the fact that the initial release had quite a few major bugs, and even flat-out did not work for some people. Yet even people who couldn't get it to work were <em>grateful</em> for my help in resolving their issue!</p>
+<p>This <em>blew my mind</em>, in comparison with the drab &quot;I found a bug&quot;, &quot;Could you implement…&quot; I was used to from my open source work. There, the feedback I got was mostly neutral (bug reports, feature requests), and sometimes even negative (&quot;You broke something!&quot;). So I release my software <em>for free</em>, as a gift, and get average-negative feedback. My commercial work, in contrast, <em>costs money</em>, and yet the feedback I get is resoundingly positive! I can not overstate how motivating it is to get praise, and love, from my users.</p>
+<p>I think this is a huge problem for our Open Source community. I had my run-ins with burnout, when all the pull requests came to be too much, and I started dreading the little notification icon on Github. And I think the negativity inherent in bug reports and feature requests has a huge part to do with this. In the future, I will try to add more praise to my bug reports from now on, just to put things into perspective.</p>
+<p>But I think we should go further than that. We should create tools for praising stuff, beyond the impersonal Stars on Github. We should be able to write reviews on Github, and recommendations, and blog posts about cool libraries we find.</p>
+<p>I recently got my first github issue that was <a href="https://github.com/bastibe/org-static-blog/issues/12">just a thank-you note</a>. I loved it! We need more positivity like that.</p>
+
+
+
+<div class="post-date">27 Mar 2020</div><h2 class="post-title"><a href="https://bastibe.de/2020-03-27-the-value-proposition-of-open-source-software.html">The Value Proposition of Open Source Software</a></h2>
+<p>To <a href="https://en.wikipedia.org/wiki/Open-source_software">quote Wikipedia</a>:</p>
 <blockquote>
-<p>
-Open Source Open-source software (OSS) is a type of computer software in which source code is released under a license in which the copyright holder grants users the rights to study, change, and distribute the software to anyone and for any purpose.
-</p>
+<p>Open Source Open-source software (OSS) is a type of computer software in which source code is released under a license in which the copyright holder grants users the rights to study, change, and distribute the software to anyone and for any purpose.</p>
 </blockquote>
+<p>In practice, this generally means software developed by hobbyists in their free time, as opposed to professionals at a company.</p>
+<p>But why should such software be preferable to commercial products? I shall ignore price, for the moment. While open source software generally does not cost money, I have no qualms about paying money for software, and can easily afford to, as well. So if it's not price, what then?</p>
+<p>Richard Stallman makes an argument that it's <a href="https://www.gnu.org/philosophy/open-source-misses-the-point.html">all about Freedom</a>. But I have a suspicion that he really wants the <em>code</em> to be free, not its users<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>. He argues that &quot;free&quot; licenses make the program's source code available to users. Presumably, to read it and change it. However, I don't do that, generally. And neither do I redistribute software, which is another &quot;freedom&quot; granted by Stallman-style free software. Also, <a href="https://discourse.ardour.org/t/is-open-source-a-diversion-from-what-users-really-want/102665">you don't need access to the source code to change a software</a>. But I still prefer Open Source Software to commercial software, in most cases.</p>
+<p>And the reason is, that in my experience, Open Source Software is generally better software. And I believe the reason for this is incentives:</p>
+<p>Open Source Software is generally created to scratch an itch. One single developer was sufficiently disgruntled to throw all caution into the wind, and solve the problem him/herself. Which means that at least one person was dissatisfied with the commercial offerings at the time.</p>
+<p>And there are plenty of reasons to be dissatisfied with commercial software. Commercial software needs to make money. And to justify recurring sales, it must keep adding features, often beyond the usefulness to users. Thus, big changes and new features are incentivized, while continued refinement and bug fixing are merely cost centers.</p>
+<p>Contrast this with Open Source Software, which is quite content to simply <em>work</em>. No new features need to be added if the software is complete as it is, and no new effort needs to be invested if there aren't any bugs remaining. Such software is a joy to use.</p>
+<p>In the commercial world, such software is not <em>stable</em>, but <em>stagnant</em>. A sign of death, not maturity. And when commercial software dies, it is buried, never to be used again. And all the work its users have created with it over the years, <a href="https://en.wikipedia.org/wiki/Aperture_(software">becomes inaccessible and obsolete with it</a>). In the same way, today's online-only subscription-based software distributions are essentially protection rackets that require a monthly ransom just to keep access to your existing work. The moment you stop paying, all your previous work becomes inaccessible. Such moves are indeed Stallman-worthy invasions of freedom that are unacceptable to me<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>.</p>
+<p>Of course, Open Source Software allows users to contribute to the product. But In my own projects, I have found this to vary greatly between cultures. Some communities seem to be naturally tinker-friendly, such as <a href="https://github.com/bastibe/org-journal">Emacs</a> or <a href="https://github.com/darktable-org/darktable">Darktable</a>. Others, such as <a href="https://github.com/bastibe/SoundCard">Python's</a> or <a href="https://github.com/bastibe/Violinplot-Matlab">Matlab's</a>, are strangely reluctant to help one another, with more users creating bug reports than contributors creating pull requests.</p>
+<p>Funny enough, price does not enter this equation. Because what you need to use Open Source Software is often not money, but time. And only rich people have that. If you're poor, and paying for software is a problem, you're far more likely to pirate &quot;professional&quot; software with a known value proposition, than to spend time on an unknown quantity. Open Source Software is a <a href="https://discuss.pixls.us/t/darktable-user-survey/16824">toy for the rich</a>, and paradoxically unattractive to people in need<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>.</p>
+<p>So in summary, I have generally found Open Source Software to be <em>better</em> than commercial software in most circumstances. Perhaps as a next step, we should try to figure out how to get payed for creating it, and how to keep monetary incentives from ruining products.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>See <a href="https:_louigiverona.com_?page=projects&amp;s=writings&amp;t=philosophy&amp;a=philosophy_freedoms">this link</a> for an exhaustive discussion of that topic. It's an amazing article!<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>Except for video games, which I only consume once, and which result in experiences, not artifacts. Strange, how this distinction is surprisingly hard to justify.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>User-facing software, that is. Linux web servers are for everyone<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
 
-<p>
-In practice, this generally means software developed by hobbyists in their free time, as opposed to professionals at a company.
-</p>
 
-<p>
-But why should such software be preferable to commercial products? I shall ignore price, for the moment. While open source software generally does not cost money, I have no qualms about paying money for software, and can easily afford to, as well. So if it's not price, what then?
-</p>
-
-<p>
-Richard Stallman makes an argument that it's <a href="https://www.gnu.org/philosophy/open-source-misses-the-point.html">all about Freedom</a>. But I have a suspicion that he really wants the <i>code</i> to be free, not its users<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. He argues that "free" licenses make the program's source code available to users. Presumably, to read it and change it. However, I don't do that, generally. And neither do I redistribute software, which is another "freedom" granted by Stallman-style free software. Also, <a href="https://discourse.ardour.org/t/is-open-source-a-diversion-from-what-users-really-want/102665">you don't need access to the source code to change a software</a>. But I still prefer Open Source Software to commercial software, in most cases.
-</p>
-
-<p>
-And the reason is, that in my experience, Open Source Software is generally better software. And I believe the reason for this is incentives:
-</p>
-
-<p>
-Open Source Software is generally created to scratch an itch. One single developer was sufficiently disgruntled to throw all caution into the wind, and solve the problem him/herself. Which means that at least one person was dissatisfied with the commercial offerings at the time.
-</p>
-
-<p>
-And there are plenty of reasons to be dissatisfied with commercial software. Commercial software needs to make money. And to justify recurring sales, it must keep adding features, often beyond the usefulness to users. Thus, big changes and new features are incentivized, while continued refinement and bug fixing are merely cost centers.
-</p>
-
-<p>
-Contrast this with Open Source Software, which is quite content to simply <i>work</i>. No new features need to be added if the software is complete as it is, and no new effort needs to be invested if there aren't any bugs remaining. Such software is a joy to use.
-</p>
-
-<p>
-In the commercial world, such software is not <i>stable</i>, but <i>stagnant</i>. A sign of death, not maturity. And when commercial software dies, it is buried, never to be used again. And all the work its users have created with it over the years, <a href="https://en.wikipedia.org/wiki/Aperture_(software)">becomes inaccessible and obsolete with it</a>. In the same way, today's online-only subscription-based software distributions are essentially protection rackets that require a monthly ransom just to keep access to your existing work. The moment you stop paying, all your previous work becomes inaccessible. Such moves are indeed Stallman-worthy invasions of freedom that are unacceptable to me<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
-</p>
-
-<p>
-Of course, Open Source Software allows users to contribute to the product. But In my own projects, I have found this to vary greatly between cultures. Some communities seem to be naturally tinker-friendly, such as <a href="https://github.com/bastibe/org-journal">Emacs</a> or <a href="https://github.com/darktable-org/darktable">Darktable</a>. Others, such as <a href="https://github.com/bastibe/SoundCard">Python's</a> or <a href="https://github.com/bastibe/Violinplot-Matlab">Matlab's</a>, are strangely reluctant to help one another, with more users creating bug reports than contributors creating pull requests.
-</p>
-
-<p>
-Funny enough, price does not enter this equation. Because what you need to use Open Source Software is often not money, but time. And only rich people have that. If you're poor, and paying for software is a problem, you're far more likely to pirate "professional" software with a known value proposition, than to spend time on an unknown quantity. Open Source Software is a <a href="https://discuss.pixls.us/t/darktable-user-survey/16824">toy for the rich</a>, and paradoxically unattractive to people in need<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
-</p>
-
-<p>
-So in summary, I have generally found Open Source Software to be <i>better</i> than commercial software in most circumstances. Perhaps as a next step, we should try to figure out how to get payed for creating it, and how to keep monetary incentives from ruining products.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">See <a href="https://louigiverona.com/?page=projects&amp;s=writings&amp;t=philosophy&amp;a=philosophy_freedoms">this link</a> for an exhaustive discussion of that topic. It's an amazing article!</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Except for video games, which I only consume once, and which result in experiences, not artifacts. Strange, how this distinction is surprisingly hard to justify.</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">User-facing software, that is. Linux web servers are for everyone</p></div></div>
-
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
 
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-open-source.html">open-source</a> </div>
-
-<div class="post-date">14 Oct 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html">Appreciation for Open Source and Commercial Software</a></h1>
-<p>
-I recently released my first-ever piece of commercial software, a <a href="https://missiongenerator.eu/">plugin</a> for the <a href="https://www.x-plane.com/">X-Plane</a> flight simulator. I wrote this primarily to scratch my own itch, but thought other users might like it, too, so I put it up on <a href="https://store.x-plane.org/Mission-Generator_p_877.html">the store</a>. What struck me however, were the stark difference between the kinds of responses I got to this, as compared to my open source projects: They were astonishingly, resoundingly, <i>positive</i>!
-</p>
-
-<p>
-You see, I have a bunch of open source projects, with a few thousand downloads per month, and a dozen or so issues on Github per week. Most of my interactions with my users are utilitarian, and efficient. Someone reports a bug or asks for help, I ask for clarification or a pull request, we iterate a few times until the issue is resolved. The process is mechanical and the tone of our conversation is equally unemotional. This is as it should be.
-</p>
-
-<p>
-After having released my flight simulator plugin, however, people <i>thanked me</i>! They <i>congratulated me</i>! They extolled about the greatness of what I had built! And they did this despite the fact that the initial release had quite a few major bugs, and even flat-out did not work for some people. Yet even people who couldn't get it to work were <i>grateful</i> for my help in resolving their issue!
-</p>
-
-<p>
-This <i>blew my mind</i>, in comparison with the drab "I found a bug", "Could you implement…" I was used to from my open source work. There, the feedback I got was mostly neutral (bug reports, feature requests), and sometimes even negative ("You broke something!"). So I release my software <i>for free</i>, as a gift, and get average-negative feedback. My commercial work, in contrast, <i>costs money</i>, and yet the feedback I get is resoundingly positive! I can not overstate how motivating it is to get praise, and love, from my users.
-</p>
-
-<p>
-I think this is a huge problem for our Open Source community. I had my run-ins with burnout, when all the pull requests came to be too much, and I started dreading the little notification icon on Github. And I think the negativity inherent in bug reports and feature requests has a huge part to do with this. In the future, I will try to add more praise to my bug reports from now on, just to put things into perspective.
-</p>
-
-<p>
-But I think we should go further than that. We should create tools for praising stuff, beyond the impersonal Stars on Github. We should be able to write reviews on Github, and recommendations, and blog posts about cool libraries we find.
-</p>
-
-<p>
-I recently got my first github issue that was <a href="https://github.com/bastibe/org-static-blog/issues/12">just a thank-you note</a>. I loved it! We need more positivity like that.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-open-source.html">open-source</a> <a href="https://bastibe.de/tag-thank-you.html">thank-you</a> </div>
-
-<div class="post-date">08 Sep 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-09-08-on-the-virtue-of-oss.html">On the Virtue of Contributing to and Using Open Source Software</a></h1>
-<p>
-I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
-</p>
-
-<p>
-About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for <a href="http://numpy.scipy.org/">numpy</a> <a href="http://scipy.org/">scipy</a> and <a href="http://matplotlib.sourceforge.net/">matplotlib</a> that, for my particular purposes, rivals Matlab.
-</p>
-
-<p>
-However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used <a href="http://playrec.co.uk/">Playrec</a> for that purpose, which implements <a href="http://www.portaudio.com/">PortAudio</a> bindings for Matlab. Luckily, there was a similar package available for Python, called <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>.
-</p>
-
-<p>
-But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.
-</p>
-
-<p>
-At the time, I knew nothing of the Python C API (or Python, really), so those first attempts were riddled with subtle bugs and memory leaks. Nevertheless, it got the job done. I could play back audio in real time using Python!
-</p>
-
-<p>
-This was a revelation to me: I could not only <i>use</i> a piece of software, I could also <i>change</i> it and mold it to my special needs!
-</p>
-
-<p>
-Thus, I put up my changes on <a href="https://github.com/bastibe/PyAudio">github</a> and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!
-</p>
-
-<p>
-This, again, was a revelation to me: Not only could <i>I</i> change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!
-</p>
-
-<p>
-Then, finally, I decided to take the plunge to Python 3. The main obstacle for this was that PyAudio did not support Python 3. So, again, I dove in and figured out how to make it compatible with Python 3. Again, I put the changes up on github and emailed the official PyAudio maintainer. This time, he took immediate notice and we started working on an official release of PyAudio including Python 3 support and non-blocking I/O.
-</p>
-
-<p>
-And during those weeks, I had my third, and biggest, revelation about Open Source Software: The PyAudio maintainer is a brilliant mind, and I was humbled to find that I could learn a lot from this man.
-</p>
-
-<p>
-<b>By working on Open Source Software, you can work with really smart people, and learn from them. And the fruits of that labor can serve as instructions to yet more people to learn from.</b>
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-open-source.html">open-source</a> </div>
+<div id="postamble" class="status">
 <div id="archive">
-<a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-</div>
-<div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

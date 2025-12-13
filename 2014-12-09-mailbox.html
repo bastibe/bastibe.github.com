@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Choosing a German Email Provider</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,64 +19,57 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<div class="post-date">09 Dec 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-12-09-mailbox.html">Choosing a German Email Provider</a></h1>
-<p>
-Why not just use Gmail<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>? Because if you're not paying for the service, you <i>are</i> the service. Google gives you Gmail for free, and in return they analyze and market your data. That's a fair deal, as far as I am concerned. But not a deal I want to make.
-</p>
-
-<p>
-For one thing, I just don't like the idea of someone else reading through my email. Furthermore, I'd like my emails to be hosted in the same country I live in<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>, so that all the laws that protect the privacy of my letters are just as valid for my emails. So a German email provider it is.
-</p>
-
-<p>
-First, I tried <a href="http://mail.de">mail.de</a>. They show ads, even if you pay them. Also, their web interface is surprisingly ugly. No thank you.
-</p>
-
-<p>
-Then, I found <a href="http://posteo.de">posteo.de</a>, and they seemed to be doing everything right! Hosted in Germany, a buck a month, with a focus on security and privacy, and seemingly developed by friendly people. They even try to be environmentally friendly. In summary: perfect!
-</p>
-
-<p>
-After half a year of using Posteo, though, I have found a few niggles. The web interface can't search mailboxes with a lot of emails&#x2013;I have an archive directory with 14k emails and the search wouldn't work. Their support says that's because there are too many messages in that directory. Also, they have had a bit too much down time for my taste: I experienced three outages of about two hours each in the last half year. Not a deal breaker, but it doesn't exactly instill confidence in their infrastructure.
-</p>
-
-<p>
-Enter <a href="http://mailbox.org">mailbox.org</a>. Also German, also a buck a month, also friendly and safe and eco-conscious. But with a much nicer web interface, support for custom domains, and a working search box. They even support ActiveSync, which you'll like if you use Outlook or Windows Phone. In other words, Posteo done right. I'm sold.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Or <a href="http://outlook.com">outlook.com</a>, which is the same deal from Microsoft. Use this if you don't like Google's "priority" inbox and wonky IMAP support.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-For the record, <a href="http://arstechnica.com/tech-policy/2014/09/judge-mulls-contempt-charges-in-microsofts-e-mail-privacy-fight-with-us/">Microsoft</a> has made a point of having servers in each user's country and abiding by that country's law.
-</p></div></div>
-
-
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+
+<div id="content">
+<div class="post-date">09 Dec 2014</div>
+<h1 class="post-title"><a href="https://bastibe.de/2014-12-09-mailbox.html">Choosing a German Email Provider</a></h1>
+<p>Why not just use Gmail<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>? Because if you're not paying for the service, you <em>are</em> the service. Google gives you Gmail for free, and in return they analyze and market your data. That's a fair deal, as far as I am concerned. But not a deal I want to make.</p>
+<p>For one thing, I just don't like the idea of someone else reading through my email. Furthermore, I'd like my emails to be hosted in the same country I live in<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>, so that all the laws that protect the privacy of my letters are just as valid for my emails. So a German email provider it is.</p>
+<p>First, I tried <a href="http://mail.de">mail.de</a>. They show ads, even if you pay them. Also, their web interface is surprisingly ugly. No thank you.</p>
+<p>Then, I found <a href="http://posteo.de">posteo.de</a>, and they seemed to be doing everything right! Hosted in Germany, a buck a month, with a focus on security and privacy, and seemingly developed by friendly people. They even try to be environmentally friendly. In summary: perfect!</p>
+<p>After half a year of using Posteo, though, I have found a few niggles. The web interface can't search mailboxes with a lot of emails--I have an archive directory with 14k emails and the search wouldn't work. Their support says that's because there are too many messages in that directory. Also, they have had a bit too much down time for my taste: I experienced three outages of about two hours each in the last half year. Not a deal breaker, but it doesn't exactly instill confidence in their infrastructure.</p>
+<p>Enter <a href="http://mailbox.org">mailbox.org</a>. Also German, also a buck a month, also friendly and safe and eco-conscious. But with a much nicer web interface, support for custom domains, and a working search box. They even support ActiveSync, which you'll like if you use Outlook or Windows Phone. In other words, Posteo done right. I'm sold.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>Or <a href="http://outlook.com">outlook.com</a>, which is the same deal from Microsoft. Use this if you don't like Google's &quot;priority&quot; inbox and wonky IMAP support.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>For the record, <a href="http://arstechnica.com/tech-policy/2014/09/judge-mulls-contempt-charges-in-microsofts-e-mail-privacy-fight-with-us/">Microsoft</a> has made a point of having servers in each user's country and abiding by that country's law.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

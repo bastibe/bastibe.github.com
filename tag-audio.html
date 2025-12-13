@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
-<title>bastibe.de</title>
+      title="RSS feed for https://bastibe.de">
+<title>Home</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -18,757 +19,397 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<h1 class="title">Posts tagged "audio":</h1>
-<div class="post-date">10 Jul 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-07-10-audio-apis-wasapi.html">Audio APIs, Part 3: WASAPI / Windows</a></h1>
-<p>
-This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.
-</p>
 
-<p>
-It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio's C API a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
-</p>
 
-<p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a>[1] on Windows.
-</p>
-
-<p>
-This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
-</p>
-
-<p>
-[1]: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p>
-
-
-<hr>
-
-<div id="outline-container-orgf320333" class="outline-2">
-<h2 id="orgf320333">WASAPI</h2>
-<div class="outline-text-2" id="text-orgf320333">
-<p>
-WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
-</p>
-
-<p>
-In other words, audio on Windows has a long and troubled history, and has had a lot of opportunity for experimentation. It should then be no surprise that WASAPI is a clean and well-documented audio API that avoids many of the pitfalls of its predecessors and brethren. After having experienced the audio APIs of Windows, Linux, and macOS, I am beginning to understand why some programmers love Windows.
-</p>
-
-<p>
-But let's take a step back, and give an overview over the API. First of all, this is a cross-language API that is meant to be used from C#, with a solid bridge for C++, and a somewhat funky bridge for C. This is crucial to understand. The whole API is designed for a high-level, object-oriented runtime, but I am accessing it from a low-level language that has no concept of objects, methods, or exceptions.
-</p>
-
-<p>
-Objects are implemented as pointers to opaque structs, with an associated list of function pointers to methods. Every method accepts the object pointer as its first argument, and returns an error value if an exception occurred. Both inputs and outputs are function arguments, with outputs being implemented as pointer-to-pointer values. While this looks convoluted to a C programmer, it is actually a very clean mapping of object oriented concepts to C that never gave me any headaches.
-</p>
-
-<p>
-However, there are a few edge cases that did take me a while to understand: Since the C API is inherently not polymorphic, you sometimes have to manually specify types as cryptic UUID structs. Figuring out how to convert the UUID strings from the header files to such structs was not easy.  Similarly, it took me a while to reverse-engineer that strings in Windows are actually <code>uint16</code>, despite being declared <code>char</code>. But issues such as these are to be expected in a cross-language API.
-</p>
-
-<p>
-In general, I did not find a good overview on how to interpret high-level C#-concepts in C. For example, it took a long time until I learned that objects in C# are reference counted, and that I would have to manage reference counts manually. Similarly, I had one rather thorny issue with memory allocations: in rare occasions (<code>PROPVARIANT</code>), C# is expected to re-allocate memory of an object if the object does not have enough memory when passed into a method. This does not work as intended if you don't use C#'s memory allocator to create the memory. <i>This</i> was really painful to figure out.
-</p>
-
-<p>
-Another result of the API's cross-language heritage are its headers: There are <i>hundreds</i>. And they all contain both the C API and the C++ API, separated by the occasional <code>#ifdef __cplusplus</code> and <code>extern C</code>. Worse yet, pretty much every data type and declaration is wrapped in multiple levels of preprocessor macros and <code>typedef</code>. There are no doubt good reasons and a rich history for this, but it took me many hours to assemble all the necessary symbols from dozens of header files to even begin to call WASAPI functions.
-</p>
-
-<p>
-Nevertheless, once these hurdles are overcome, the actual WASAPI API itself is well-structured and reasonably simple. You acquire an <code>IMMDeviceEnumerator</code>, which returns <code>IMMDeviceCollections</code> for microphones and speakers. These contain <code>IMMDevices</code>, which represent sound cards and their properties. You activate an <code>IMMDevice</code> with a desired data format to get an <code>IAudioClient</code>, which in turns produces an <code>IAudioRenderClient</code> or <code>IAudioCaptureClient</code> for playback or recording, respectively. Playback and recording themselves are done by requesting a buffer, and reading or writing raw data to that buffer. This is about as straight-forward as APIs get.
-</p>
-
-<p>
-The documentation deserves even more praise: I have rarely seen such a well-documented API. There are high-level overview articles, there is commented example code, every object is described abstractly, and every method is described in detail and in reference to related methods and example code. There is no corner case that is left undescribed, and no error code without a detailed explanation. Truly, this is <i>exceptional</i> documentation that is a joy to work with!
-</p>
-
-<p>
-In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praising Windows. There is a non-trivial impedance mismatch between C and C# that has to be overcome to <i>use</i> WASAPI from C. But once I understood this, the API itself and its documentation were easy to use and understand. Impressive!
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">27 Jun 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-06-27-audio-apis-pulseaudio.html">Audio APIs, Part 2: Pulseaudio / Linux</a></h1>
-<p>
-This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.
-</p>
-
-<p>
-It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
-</p>
-
-<p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a>[1] on Windows.
-</p>
-
-<p>
-This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
-</p>
-
-<p>
-[1]: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p>
-
-
-<hr>
-
-<div id="outline-container-org9d147b2" class="outline-2">
-<h2 id="org9d147b2">PulseAudio</h2>
-<div class="outline-text-2" id="text-org9d147b2">
-<p>
-PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.
-</p>
-
-<p>
-The very nice thing about PulseAudio is that it is a native C API. It provides several levels of abstraction, the highest of which takes only a handful of lines of C to get audio playing. For the purposes of PythonAudio however, I had to look at the more in-depth <a href="https://freedesktop.org/software/pulseaudio/doxygen/async.html">asynchronous API</a>. Still, the API itself is relatively simple, and compactly defined in one simple header file.
-</p>
-
-<p>
-It all starts with a <code>mainloop</code> and an associated <code>context</code>. While the <code>mainloop</code> is running, you can query the <code>context</code> for sources and sinks (aka microphones and speakers). The <code>context</code> can also create a <code>stream</code> that can be read or written (aka recorded or played). From a high level, this is all there is to it.
-</p>
-
-<p>
-Most PulseAudio functions are asynchronous: Function calls return immediately, and call user-provided callback functions when they are ready to return results. While this may be a good structure for high-performance multithreaded C-code, it is somewhat cumbersome in Python. For PythonAudio, I wrapped this structure in regular Python functions that wait for the callback and return its data as normal return values.
-</p>
-
-<p>
-Doing this shows just how old Python really is. Python is old-school in that it still thinks that concurrency is better solved with multiple, communicating processes, than with shared-memory threads. With such a mind set, there is a certain impedance mismatch to overcome when using PulseAudio. Every function call has to lock the main loop, and block while waiting for the callback to be called. After that, clean up by decrementing a reference count. This procedure is cumbersome, but not difficult.
-</p>
-
-<p>
-What is difficult however, is the documentation. The API documentation is fine, as far as it goes. It could go into more detail with regards to edge cases and error conditions; But it truly lacks high-level overviews and examples. It took an unnecessarily long time to figure out the code path for audio playback and recording, simply because there is no document anywhere that details the sequence of events needed to get there. In the end, I followed some marginally-related example on the internet to get to that point, because the <i>two</i> examples provided by PulseAudio don't even use the asynchronous API.
-</p>
-
-<p>
-Perhaps I am missing something, but it strikes me as strange that an API meant for audio recording and playback would not include an example that plays back and records audio.
-</p>
-
-<p>
-On an application level, it can be problematic that PulseAudio seems to only value block sizes and latency requirements approximately. In particular, if computing resources become scarce, PulseAudio would rather increase latency/block sizes in the background than risk skipping. This might be convenient for a desktop application, but it is not ideal for signal processing, where latency can be crucial. It seems that I can work around these issues to an extent, but this is an inconvenience nontheless.
-</p>
-
-<p>
-In general, I found PulseAudio reasonably easy to use, though. The documentation could use some work, and I don't particularly <i>like</i> the asynchronous programming style, but the API is simple and functional. Out of the three APIs of WASAPI/Windows, Core Audio/macOS, and PulseAudio/Linux, this one was probably the easiest to get working.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-linux.html">linux</a> </div>
-
-<div class="post-date">17 Jun 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h1>
-<p>
-This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.
-</p>
-
-<p>
-It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation were a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
-</p>
-
-<p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a>[1] on Windows.
-</p>
-
-<p>
-This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is playing/recording of short blocks of <code>float</code> data at arbitrary sampling rates and block sizes. All connected sound cards should be listable and selectable, with correct detection of the system default sound card (a feature that is very unreliable in PortAudio).
-</p>
-
-<p>
-[1]: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p>
-
-
-<hr>
-
-<div id="outline-container-orgac5956a" class="outline-2">
-<h2 id="orgac5956a">CoreAudio, or the Mac's best kept secret</h2>
-<div class="outline-text-2" id="text-orgac5956a">
-<p>
-CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <i>by far</i> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.
-</p>
-
-<p>
-The basic unit of any CoreAudio program is the audio unit. An audio unit can be a source (aka microphone), a sink (aka speaker) or an audio processor (both sink and source). Each audio unit can have several input <i>buses</i>, and several output <i>buses</i>, each of which can have several <i>channels</i>. The meaning of these buses varies wildly and is often underdocumented. Furthermore, every audio unit has several <i>properties</i>, such as a sample rate, block sizes, and a data format, and <i>parameters</i>, which are like properties, but presumably different in some undocumented way.
-</p>
-
-<p>
-In order to use an audio unit, you create an <code>AudioComponentDescription</code> that describes whether you want a source or sink unit, or an effect unit, and what kind of effect you want (AudioComponent is an alternative name for audio unit). With the description, you can create an <code>AudioComponentInstance</code>, which is then an opaque struct pointer to your newly created audio unit. So far so good.
-</p>
-
-<p>
-The next step is then to configure the audio unit using <code>AudioUnitGetProperty</code> and <code>AudioUnitSetProperty</code>. This is surprisingly hard, since every property can be configured for every bus (sometimes called element) of every input or output of every unit, and the documentation is extremely terse on which of these combinations are valid. Some invalid combinations return error codes, while others only lead to errors during playback/recording. Furthermore, the definition of what constitutes an input or output is interpreted quite differently in different places: One place calls a microphone an <i>input</i>, since it records audio; another place will call it an <i>output</i>, since it outputs audio data to the system. In one crazy example, you have to configure a microphone unit by disabling its output bus 0, and enabling its input bus 1, but then read audio data from its ostensibly disabled output bus 0.
-</p>
-
-<p>
-The property interface is untyped, meaning that every property has to be given an identifier, a void pointer that points to a matching data structure, and the size of that data structure. Sometimes the setter allocates additional memory, in which case the documentation does not contain any information on who should free this memory. Most objects are passed around as opaque struct pointers with dedicated constructor and destructor functions. All of this does not strike me as particularly C-like, even though CoreAudio is supposedly a native C library.
-</p>
-
-<p>
-Once your audio unit is configured, you set a render callback function, and start the audio unit. All important interaction now happens within that callback function. In a strange reversal of typical control flow, input data to the callback function needs to be fetched by calling <code>AudioUnitRender</code> (evoked on the unit itself) from within the callback, while output is written to memory provided as callback function arguments. Many times during development, <code>AudioUnitRender</code> would return error codes because of an invalid property setting during initialization. Of course, it won't tell <i>which</i> property is actually at fault, just that it can't fulfill the render request at the moment.
-</p>
-
-<p>
-Error codes in general are a difficult topic in CoreAudio. Most functions return an error code as an <code>OSStatus</code> value (aka <code>uint32</code>), and the header files usually contain a definition of some, but not all, possible error codes. Sometimes these error codes are descriptive and nice, but often they are way too general. My favorite is the frequent <code>kAudioUnitErr_CannotDoInCurrentContext</code>, which is just about as useless an error description as possible. Worse, some error codes are not defined as numeric constants, but as <code>int err = 'abcd'</code>, which makes them un-searchable in the source file. Luckily, this madness can be averted using <a href="https://osstatus.com/">https://osstatus.com/</a>, which is a dedicated database for <code>OSStatus</code> error codes.
-</p>
-
-<p>
-By far the worst part of the CoreAudio API is that some properties are silently ignored. For example, you can set the sample rate or priming information on a microphone unit, and it will accept that property change and it will report that property as changed, but it will still use its default value when recording (aka "rendering" in CoreAudio). A speaker unit, in contrast, will honor the sample rate property, and resample as necessary. If you still need to resample your microphone recordings, you have to use a separate <code>AudioConverter</code> unit, which is its own bag of fun (and only documented in <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">a remark</a> in one overview document).
-</p>
-
-<p>
-Lastly, all the online documentation is written for Swift and Objective-C, while the implementation is C. Worse, the C headers contain vastly more information than the online documentation, and the online documentation often does not even reference the C header file name. Of course header files are spread into the CoreAudio framework, the AudioToolkit framework, and the AudioUnit framework, which makes even grepping a joy.
-</p>
-
-<p>
-All of that said, once you know what to do and how to do it, the resulting code is relatively compact and readable. The API does contain inconsistencies and questionable design choices, but the real problem is the documentation. I spent way too much time reading the header files over and over again, and searching through (often outdated or misleading) <a href="https://developer.apple.com/library/content/samplecode/AVCaptureToAudioUnitOSX/Listings/CaptureSessionController_mm.html#//apple_ref/doc/uid/DTS40012879-CaptureSessionController_mm-DontLinkElementID_4">example projects</a> and <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">vague</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html#//apple_ref/doc/uid/TP40003278-CH7-SW12">high-level</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003278-CH1-SW2">overviews</a> for clues on how to interpret error messages and API documentation. I had somewhat better luck with a few <a href="http://kaniini.dereferenced.org/2014/08/31/CoreAudio-sucks.html">blog</a> <a href="http://subfurther.com/blog/2009/04/28/an-iphone-core-audio-brain-dump/">posts</a> on the subject, but the general consensus seems to be that the main concepts of CoreAudio are woefully under-explained, and documentation about edge cases is almost nonexistent. Needless to say, I did not enjoy my experience with CoreAudio.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
-
-<div class="post-date">22 Apr 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h1>
-<p>
-So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <i>*.au</i> and <i>*.wav</i> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, <i>*.au</i>, <i>*.mp3</i>, and <i>*.mp4</i>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.
-</p>
-
-<p>
-Of these file formats, only <i>*.au</i> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <i>actually</i> read more data formats than documented: it reads <i>*.w64</i>, <i>*.rf64</i>, and <i>*.caf</i> no problem. And these can store more than 4 Gb as well.
-</p>
-
-<p>
-It's just that, while <code>audioread</code> supports all of these nice file formats, <a href="http://mathworks.com/help/matlab/ref/audiowrite.html"><code>audiowrite</code></a> is more limited, and only supports <i>*.wav</i>, <i>*.ogg</i>, <i>*.flac</i>, and <i>*.mp4</i>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.
-</p>
-
-<p>
-In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
-
-<div class="post-date">27 Nov 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-11-27-audio-in-python.html">Sound in Python</a></h1>
-<p>
-Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
-</p>
-
-<p>
-It's not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
-</p>
-
-<p>
-The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http://www.portaudio.com/">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.
-</p>
-
-<p>
-But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!
-</p>
-
-<p>
-So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.
-</p>
-
-<p>
-So, lets read some audio data, shall we?
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import soundfile
-data = soundfile.read('sad_song.wav')
-</pre>
-</div>
-
-<p>
-done. All the audio data is now available as a NumPy array in <code>data</code>. Just like that.
-</p>
-
-<p>
-Awesome, isn't it?
-</p>
-
-<p>
-OK, that was easy. So let's read only the first and last 100 frames!
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import soundfile
-first = soundfile.read('long_song.flac', stop=100)
-last = soundfile.read(start=-100)
-</pre>
-</div>
-
-<p>
-This really only read the first and last bit. Not everything in between!
-</p>
-
-<p>
-Note that at no point I did explicitly open or close a file! This is Python! We can do that! When the <code>SoundFile</code> object is created, it opens the file. When it goes out of scope, it closes the file. It's as simple as that. Or just use <code>SoundFile</code> in a context manager. That works as well.
-</p>
-
-<p>
-Oh, but I want to use the sound card as well! I want to record audio to a file!
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">from pysoundcard import Stream
-from pysoundfile import SoundFile, ogg_file, write_mode
-with Stream() as s: # opens your default audio device
-    # This is supposed to be a new file, so specify it completely
-    f = SoundFile('happy_song.ogg', sample_rate=s.sample_rate,
-                  channels=s.channels, format=ogg_file,
-                  mode=write_mode)
-    f.write(s.read(s.sample_rate)) # one second
-</pre>
-</div>
-
-<p>
-Read from the stream, write to a file. It works the other way round, too!
-</p>
-
-<p>
-And that's really all there is to it. Working with audio data in Python is easy now!
-</p>
-
-<p>
-Of course, there is much more you could do. You could create a callback function and be called every four[1] frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[3].
-</p>
-
-<p>
-You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
-</p>
-
-<p>
-<b>UPDATE:</b> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
-</p>
-
-<p>
-[1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-[2] More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
-[3] More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
-
-<div class="post-date">02 Nov 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-11-02-real-time-signal-processing-in-python.html">Real Time Signal Processing in Python</a></h1>
-<p>
-Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.
-</p>
-
-<p>
-But this is not going to be about Matlab. This is going to be about Python. Combine Python with Numpy (and Scipy and Matplotlib) and you have a signal processing system very comparable to Matlab. Additionally, you can do real-time audio input/output using PyAudio. PyAudio is a wrapper around PortAudio and provides cross platform audio recording/playback in a nice, pythonic way. (Real time capabilities were added in 0.2.6 with the help of yours truly).
-</p>
-
-<p>
-However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:
-</p>
-
-<div id="outline-container-org90a6a5a" class="outline-2">
-<h2 id="org90a6a5a">A Simple Limiter</h2>
-<div class="outline-text-2" id="text-org90a6a5a">
-<p>
-A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <i>smoothly</i>, since otherwise it would introduce a lot of distortion.
-</p>
-
-<p>
-If a signal peak is detected, the limiter will thus need a certain amount of time to reduce the gain accordingly. If you still want to prevent all peaks, the limiter will have to know of the peaks in advance, which is of course impossible in a real time system. Instead, the signal is delayed by a short time to give the limiter time to adjust the system gain before the peak is actually played. To keep this delay as short as possible, this "attack" phase where the gain is decreased should be very short, too. "Releasing" the gain back up to its original value can be done more slowly, thus introducing less distortion.
-</p>
-
-<p>
-With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope \(e[n]\) that catches all the peaks and smoothly decays after them:
-</p>
-
-<p>
-\[
+<h1>Posts tagged "audio"</h1>
+
+<div class="post-date">02 Nov 2012</div><h2 class="post-title"><a href="https://bastibe.de/2012-11-02-real-time-signal-processing-in-python.html">Real Time Signal Processing in Python</a></h2>
+<p>Wouldn't it be nice if you could do real time audio processing in a convenient programming language? Matlab comes to mind as a convenient language for signal processing. But while Matlab is pretty fast, it is really only fast for algorithms that can be vectorized. In audio however, we have many algorithms that need knowledge about the previous sample to calculate the next one, so they can't be vectorized.</p>
+<p>But this is not going to be about Matlab. This is going to be about Python. Combine Python with Numpy (and Scipy and Matplotlib) and you have a signal processing system very comparable to Matlab. Additionally, you can do real-time audio input/output using PyAudio. PyAudio is a wrapper around PortAudio and provides cross platform audio recording/playback in a nice, pythonic way. (Real time capabilities were added in 0.2.6 with the help of yours truly).</p>
+<p>However, this does not solve the problem with vectorization. Just like Matlab, Python/Numpy is only fast for vectorizable algorithms. So as an example, let's define an iterative algorithm that is not vectorizable:</p>
+<h3>A Simple Limiter</h3>
+<p>A limiter is an audio effect that controls the system gain so that it does not exceed a certain threshold level. One could do this by simply cutting off any signal peaks above that level, but that sounds awful. So instead, the whole system gain is reduced smoothly if the signal gets too loud and is amplified back to its original gain again when it does not exceed the threshold any more. The important part is that the gain change is done <em>smoothly</em>, since otherwise it would introduce a lot of distortion.</p>
+<p>If a signal peak is detected, the limiter will thus need a certain amount of time to reduce the gain accordingly. If you still want to prevent all peaks, the limiter will have to know of the peaks in advance, which is of course impossible in a real time system. Instead, the signal is delayed by a short time to give the limiter time to adjust the system gain before the peak is actually played. To keep this delay as short as possible, this &quot;attack&quot; phase where the gain is decreased should be very short, too. &quot;Releasing&quot; the gain back up to its original value can be done more slowly, thus introducing less distortion.</p>
+<p>With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope <span class="math">\(e[n]\)</span> that catches all the peaks and smoothly decays after them:</p>
+<div class="math">$$
 e[n] = \max( |s[n]|, e[n-1] \cdot f_r )
-\]
-</p>
-
-<p>
-where \(s[n]\) is the current signal and \(0 < f_r < 1\) is a release factor.
-</p>
-
-<p>
-If this is applied to a signal, it will create an envelope like this:
-</p>
-
-
-<figure id="orga3d5d04">
-<img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope.png">
-
-</figure>
-
-<p>
-Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain \(g_t[n]\) can be calculated using
-</p>
-
-<p>
-\[
+$$</div>
+<p>where <span class="math">\(s[n]\)</span> is the current signal and <span class="math">\(0 < f_r < 1\)</span> is a release factor.</p>
+<p>If this is applied to a signal, it will create an envelope like this:</p>
+<p><img src="http://bastibe.de/static/2012-11/envelope.png" alt="envelope" /></p>
+<p>Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain <span class="math">\(g_t[n]\)</span> can be calculated using</p>
+<div class="math">$$
 g_t[n] = \begin{cases}
     1 & e[n] < t \\
-    1 + t - e[n] & e[n] > t
+    1 + t - e[n] & e[n] > t \\
 \end{cases}
-\]
-</p>
-
-<p>
-Now, the output gain \(g[n]\) can smoothly move towards that target gain using
-</p>
-
-<p>
-\[
+$$</div>
+<p>Now, the output gain <span class="math">\(g[n]\)</span> can smoothly move towards that target gain using</p>
+<div class="math">$$
 g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a)
-\]
-</p>
+$$</div>
+<p>where <span class="math">\(0 < f_a \ll f_r\)</span> is the attack factor.</p>
+<p>Here you can see how that would look in practice:</p>
+<p><img src="http://bastibe.de/static/2012-11/gain.png" alt="gain" /></p>
+<p>Zooming in on one of the limited section reveals that the gain is actually moving smoothly.</p>
+<p><img src="http://bastibe.de/static/2012-11/detail.png" alt="detail" /></p>
+<p>This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.</p>
+<p>In Python, this might look like this:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Limiter</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack_coeff</span><span class="p">,</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gain</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">release_coeff</span> <span class="o">=</span> <span class="n">release_coeff</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attack_coeff</span> <span class="o">=</span> <span class="n">attack_coeff</span>
 
-<p>
-where \(0 < f_a \ll f_r\) is the attack factor.
-</p>
+        <span class="k">def</span><span class="w"> </span><span class="nf">limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
 
-<p>
-Here you can see how that would look in practice:
-</p>
+                <span class="c1"># calculate an envelope of the signal</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">release_coeff</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span><span class="p">)</span>
 
+                <span class="c1"># have self.gain go towards a desired limiter gain</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">envelope</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+                    <span class="n">target_gain</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">threshold</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">envelope</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">target_gain</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gain</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">gain</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">attack_coeff</span> <span class="o">+</span>
+                              <span class="n">target_gain</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">attack_coeff</span><span class="p">)</span> <span class="p">)</span>
 
-<figure id="orge0e1ef9">
-<img src="http://bastibe.de/static/2012-11/gain.png" alt="gain.png">
+                <span class="c1"># limit the delayed signal</span>
+                <span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_index</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gain</span>
+</pre></div>
+<p>Note that this limiter does not <em>actually</em> clip all peaks completely, since the envelope for a single peak will have decayed a bit before the target gain will have reached it. Thus, the output gain will actually be slightly higher than what would be necessary to limit the output to the threshold. Since the attack factor is supposed to be significantly smaller than the release factor, this does not matter much though.</p>
+<p>Also, it would probably be more useful to define the factors <span class="math">\(f_a\)</span> and <span class="math">\(f_r\)</span> in terms of the time they take to reach their target and the threshold <span class="math">\(t\)</span> in dB FS.</p>
+<h3>Implementing audio processing in Python</h3>
+<p>A real-time audio processing framework using PyAudio would look like this:</p>
+<p>(<code>callback</code> is a function that will be defined shortly)</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyaudio</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyAudio</span><span class="p">,</span> <span class="n">paFloat32</span>
 
-</figure>
+    <span class="n">pa</span> <span class="o">=</span> <span class="n">PyAudio</span><span class="p">()</span>
 
-<p>
-Zooming in on one of the limited section reveals that the gain is actually moving smoothly.
-</p>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">format</span> <span class="o">=</span> <span class="n">paFloat32</span><span class="p">,</span>
+                     <span class="n">channels</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                     <span class="n">rate</span> <span class="o">=</span> <span class="mi">44100</span><span class="p">,</span>
+                     <span class="n">output</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                     <span class="n">frames_per_buffer</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span>
+                     <span class="n">stream_callback</span> <span class="o">=</span> <span class="n">callback</span><span class="p">)</span>
 
+    <span class="k">while</span> <span class="n">stream</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 
-<figure id="orgd494a34">
-<img src="http://bastibe.de/static/2012-11/detail.png" alt="detail.png">
+    <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pa</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+<p>This will open a <code>stream</code>, which is a PyAudio construct that manages input and output to/from one sound device. In this case, it is configured to use <code>float</code> values, only open one channel, play audio at a sample rate of 44100 Hz, have that one channel be output only and call the function <code>callback</code> every 1024 samples.</p>
+<p>Since the <code>callback</code> will be executed on a different thread, control flow will continue immediately after <code>pa.open()</code>. In order to analyze the resulting signal, the <code>while stream.is_active()</code> loop waits until the signal has been processed completely.</p>
+<p>Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:</p>
+<div class="highlight"><pre><span></span><span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">attack_coeff</span><span class="p">,</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
 
-</figure>
+    <span class="k">def</span><span class="w"> </span><span class="nf">callback</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">frame_count</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Playback Error: </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">flag</span><span class="p">)</span>
+        <span class="n">played_frames</span> <span class="o">=</span> <span class="n">counter</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="n">frame_count</span>
+        <span class="n">limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">played_frames</span><span class="p">:</span><span class="n">counter</span><span class="p">],</span> <span class="n">threshold</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">signal</span><span class="p">[</span><span class="n">played_frames</span><span class="p">:</span><span class="n">counter</span><span class="p">],</span> <span class="n">paContinue</span>
+</pre></div>
+<p>The <code>paContinue</code> at the end is a flag signifying that the audio processing is not done yet and the <code>callback</code> wants to be called again. Returning <code>paComplete</code> or an insufficient number of samples instead would stop audio processing after the current block and thus invalidate <code>stream.is_active()</code> and resume control flow in the snippet above.</p>
+<p>Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).</p>
+<h3>Speeding up execution using Cython</h3>
+<p>The limiter defined above could be rewritten in C like this:</p>
+<div class="highlight"><pre><span></span><span class="c1">// this corresponds to the Python Limiter class.</span>
+<span class="w">    </span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">limiter_state_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">delay_index</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">delay_length</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">envelope</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">current_gain</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">attack_coeff</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">release_coeff</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">limiter_state</span><span class="p">;</span>
 
-<p>
-This gain can now be multiplied on the delayed input signal and will safely keep that below the threshold.
-</p>
+<span class="w">    </span><span class="cp">#define MAX(x,y) ((x)&gt;(y)?(x):(y))</span>
 
-<p>
-In Python, this might look like this:
-</p>
+<span class="w">    </span><span class="c1">// this corresponds to the Python __init__ function.</span>
+<span class="w">    </span><span class="n">limiter_state</span><span class="w"> </span><span class="nf">init_limiter</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">attack_coeff</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">release_coeff</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">delay_len</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">limiter_state</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="n">attack_coeff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attack_coeff</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="n">release_coeff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">release_coeff</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="n">delay_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="n">envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="n">current_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="p">.</span><span class="n">delay_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">delay_len</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 
-<div class="org-src-container">
-<pre class="src src-python">    class Limiter:
-        def __init__(self, attack_coeff, release_coeff, delay, dtype=float32):
-            self.delay_index = 0
-            self.envelope = 0
-            self.gain = 1
-            self.delay = delay
-            self.delay_line = zeros(delay, dtype=dtype)
-            self.release_coeff = release_coeff
-            self.attack_coeff = attack_coeff
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">limit</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">signal</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">block_length</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">threshold</span><span class="p">,</span>
+<span class="w">               </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">delay_line</span><span class="p">,</span><span class="w"> </span><span class="n">limiter_state</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">block_length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">delay_line</span><span class="p">[</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">            </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_length</span><span class="p">;</span>
 
-        def limit(self, signal, threshold):
-            for i in arange(len(signal)):
-                self.delay_line[self.delay_index] = signal[i]
-                self.delay_index = (self.delay_index + 1) % self.delay
+<span class="w">            </span><span class="c1">// calculate an envelope of the signal</span>
+<span class="w">            </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">release_coeff</span><span class="p">;</span>
+<span class="w">            </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAX</span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="p">);</span>
 
-                # calculate an envelope of the signal
-                self.envelope *= self.release_coeff
-                self.envelope  = max(abs(signal[i]), self.envelope)
+<span class="w">            </span><span class="c1">// have current_gain go towards a desired limiter target_gain</span>
+<span class="w">            </span><span class="kt">float</span><span class="w"> </span><span class="n">target_gain</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">threshold</span><span class="p">)</span>
+<span class="w">                </span><span class="n">target_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">threshold</span><span class="o">-</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">envelope</span><span class="p">);</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">                </span><span class="n">target_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">            </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">current_gain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">current_gain</span><span class="o">*</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">attack_coeff</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                </span><span class="n">target_gain</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">attack_coeff</span><span class="p">);</span>
 
-                # have self.gain go towards a desired limiter gain
-                if self.envelope &gt; threshold:
-                    target_gain = (1+threshold-self.envelope)
-                else:
-                    target_gain = 1.0
-                self.gain = ( self.gain*self.attack_coeff +
-                              target_gain*(1-self.attack_coeff) )
+<span class="w">            </span><span class="c1">// limit the delayed signal</span>
+<span class="w">            </span><span class="n">signal</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">delay_line</span><span class="p">[</span><span class="n">state</span><span class="o">-&gt;</span><span class="n">delay_index</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">state</span><span class="o">-&gt;</span><span class="n">current_gain</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+</pre></div>
+<p>In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.</p>
+<p>Now in order to plug this code into Python I will use Cython. First of all, a &quot;Cython header&quot; file has to be created that declares all exported types and functions to Cython:</p>
+<div class="highlight"><pre><span></span><span class="n">cdef</span> <span class="n">extern</span> <span class="kn">from</span><span class="w"> </span><span class="s2">&quot;limiter.h&quot;</span><span class="p">:</span>
+        <span class="n">ctypedef</span> <span class="n">struct</span> <span class="n">limiter_state</span><span class="p">:</span>
+            <span class="nb">int</span> <span class="n">delay_index</span>
+            <span class="nb">int</span> <span class="n">delay_length</span>
+            <span class="nb">float</span> <span class="n">envelope</span>
+            <span class="nb">float</span> <span class="n">current_gain</span>
+            <span class="nb">float</span> <span class="n">attack_coeff</span>
+            <span class="nb">float</span> <span class="n">release_coeff</span>
 
-                # limit the delayed signal
-                signal[i] = self.delay_line[self.delay_index] * self.gain
-</pre>
-</div>
+        <span class="n">limiter_state</span> <span class="n">init_limiter</span><span class="p">(</span><span class="nb">float</span> <span class="n">attack_factor</span><span class="p">,</span> <span class="nb">float</span> <span class="n">release_factor</span><span class="p">,</span> <span class="nb">int</span> <span class="n">delay_len</span><span class="p">)</span>
+        <span class="n">void</span> <span class="n">limit</span><span class="p">(</span><span class="nb">float</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span> <span class="nb">int</span> <span class="n">block_length</span><span class="p">,</span> <span class="nb">float</span> <span class="n">threshold</span><span class="p">,</span>
+                   <span class="nb">float</span> <span class="o">*</span><span class="n">delay_line</span><span class="p">,</span> <span class="n">limiter_state</span> <span class="o">*</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+<p>This is very similar to the C header file of the limiter:</p>
+<div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">limiter_state_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">delay_index</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">delay_length</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">envelope</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">current_gain</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">attack_coeff</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">release_coeff</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">limiter_state</span><span class="p">;</span>
 
-<p>
-Note that this limiter does not <i>actually</i> clip all peaks completely, since the envelope for a single peak will have decayed a bit before the target gain will have reached it. Thus, the output gain will actually be slightly higher than what would be necessary to limit the output to the threshold. Since the attack factor is supposed to be significantly smaller than the release factor, this does not matter much though.
-</p>
+<span class="w">    </span><span class="n">limiter_state</span><span class="w"> </span><span class="nf">init_limiter</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">attack_factor</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">release_factor</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">delay_len</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">limit</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">signal</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">block_length</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">threshold</span><span class="p">,</span>
+<span class="w">               </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">delay_line</span><span class="p">,</span><span class="w"> </span><span class="n">limiter_state</span><span class="w"> </span><span class="o">*</span><span class="n">state</span><span class="p">);</span>
+</pre></div>
+<p>With that squared away, the C functions are accessible for Cython. Now, we only need a small Python wrapper around this code so it becomes usable from Python:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="n">cimport</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+    <span class="n">cimport</span> <span class="n">limiter</span>
 
-<p>
-Also, it would probably be more useful to define the factors \(f_a\) and \(f_r\) in terms of the time they take to reach their target and the threshold \(t\) in dB FS.
-</p>
-</div>
-</div>
+    <span class="n">DTYPE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
+    <span class="n">ctypedef</span> <span class="n">np</span><span class="o">.</span><span class="n">float32_t</span> <span class="n">DTYPE_t</span>
 
-<div id="outline-container-orgf6d84f1" class="outline-2">
-<h2 id="orgf6d84f1">Implementing audio processing in Python</h2>
-<div class="outline-text-2" id="text-orgf6d84f1">
-<p>
-A real-time audio processing framework using PyAudio would look like this:
-</p>
+    <span class="n">cdef</span> <span class="k">class</span><span class="w"> </span><span class="nc">Limiter</span><span class="p">:</span>
+        <span class="n">cdef</span> <span class="n">limiter</span><span class="o">.</span><span class="n">limiter_state</span> <span class="n">state</span>
+        <span class="n">cdef</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="n">delay_line</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">float</span> <span class="n">attack_coeff</span><span class="p">,</span> <span class="nb">float</span> <span class="n">release_coeff</span><span class="p">,</span>
+                     <span class="nb">int</span> <span class="n">delay_length</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">limiter</span><span class="o">.</span><span class="n">init_limiter</span><span class="p">(</span><span class="n">attack_coeff</span><span class="p">,</span> <span class="n">release_coeff</span><span class="p">,</span> <span class="n">delay_length</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">delay_length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
 
-<p>
-(<code>callback</code> is a function that will be defined shortly)
-</p>
+        <span class="k">def</span><span class="w"> </span><span class="nf">limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">[</span><span class="n">DTYPE_t</span><span class="p">,</span><span class="n">ndim</span><span class="o">=</span><span class="mi">1</span><span class="p">]</span> <span class="n">signal</span><span class="p">,</span> <span class="nb">float</span> <span class="n">threshold</span><span class="p">):</span>
+            <span class="n">limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="o">&lt;</span><span class="nb">float</span><span class="o">*&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">PyArray_DATA</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span>
+                       <span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="n">threshold</span><span class="p">,</span>
+                       <span class="o">&lt;</span><span class="nb">float</span><span class="o">*&gt;</span><span class="n">np</span><span class="o">.</span><span class="n">PyArray_DATA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay_line</span><span class="p">),</span>
+                       <span class="o">&lt;</span><span class="n">limiter</span><span class="o">.</span><span class="n">limiter_state</span><span class="o">*&gt;&amp;</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+<p>The first two lines set this file up to access Numpy arrays both from the Python domain and the C domain, thus bridging the gap. The <code>cimport limiter</code> imports the C functions and types from above. The <code>DTYPE</code> stuff is advertising the Numpy <code>float32</code> type to C.</p>
+<p>The class is defined using <code>cdef</code> as a C data structure for speed. Also, Cython would naturally translate every C struct into a Python dict and vice versa, but we need to pass the struct to <code>limit</code> <em>and</em> have <code>limit</code> modify it. Thus, <code>cdef limiter.limiter_state state</code> makes Cython treat it as a C struct only. Finally, the <code>np.PyArray_DATA()</code> expressions expose the C arrays underlying the Numpy vectors. This is really handy since we don't have to copy any data around in order to modify the vectors from C.</p>
+<p>As can be seen, the Cython implementation behaves nearly identically to the initial Python implementation (except for passing the <code>dtype</code> to the constructor) and can be used as a plug-in replacement (with the aforementioned caveat).</p>
+<p>Finally, we need to build the whole contraption. The easiest way to do this is to use a setup file like this:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">distutils.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">distutils.extension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extension</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">Cython.Distutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_ext</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_include</span>
 
-<div class="org-src-container">
-<pre class="src src-python">    from pyaudio import PyAudio, paFloat32
+    <span class="n">ext_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">Extension</span><span class="p">(</span><span class="s2">&quot;cython_limiter&quot;</span><span class="p">,</span>
+                             <span class="n">sources</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cython_limiter.pyx&quot;</span><span class="p">,</span>
+                                      <span class="s2">&quot;limiter.c&quot;</span><span class="p">],</span>
+                             <span class="n">include_dirs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">get_include</span><span class="p">()])]</span>
 
-    pa = PyAudio()
-
-    stream = pa.open(format = paFloat32,
-                     channels = 1,
-                     rate = 44100,
-                     output = True,
-                     frames_per_buffer = 1024,
-                     stream_callback = callback)
-
-    while stream.is_active():
-        sleep(0.1)
-
-    stream.close()
-    pa.terminate()
-</pre>
-</div>
-
-<p>
-This will open a <code>stream</code>, which is a PyAudio construct that manages input and output to/from one sound device. In this case, it is configured to use <code>float</code> values, only open one channel, play audio at a sample rate of 44100 Hz, have that one channel be output only and call the function <code>callback</code> every 1024 samples.
-</p>
-
-<p>
-Since the <code>callback</code> will be executed on a different thread, control flow will continue immediately after <code>pa.open()</code>. In order to analyze the resulting signal, the <code>while stream.is_active()</code> loop waits until the signal has been processed completely.
-</p>
-
-<p>
-Every time the <code>callback</code> is called, it will have to return 1024 samples of audio data. Using the class <code>Limiter</code> above, a sample counter <code>counter</code> and an audio signal <code>signal</code>, this can be implemented like this:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">    limiter = Limiter(attack_coeff, release_coeff, delay, dtype)
-
-    def callback(in_data, frame_count, time_info, flag):
-        if flag:
-            print("Playback Error: %i" % flag)
-        played_frames = counter
-        counter += frame_count
-        limiter.limit(signal[played_frames:counter], threshold)
-        return signal[played_frames:counter], paContinue
-</pre>
-</div>
-
-<p>
-The <code>paContinue</code> at the end is a flag signifying that the audio processing is not done yet and the <code>callback</code> wants to be called again. Returning <code>paComplete</code> or an insufficient number of samples instead would stop audio processing after the current block and thus invalidate <code>stream.is_active()</code> and resume control flow in the snippet above.
-</p>
-
-<p>
-Now this will run the limiter and play back the result. Sadly however, Python is just a bit too slow to make this work reliably. Even with a long block size of 1024 samples, this will result in occasional hickups and discontinuities. (Which the <code>callback</code> will display in the <code>print(...)</code> statement).
-</p>
-</div>
-</div>
-
-<div id="outline-container-org557fe10" class="outline-2">
-<h2 id="org557fe10">Speeding up execution using Cython</h2>
-<div class="outline-text-2" id="text-org557fe10">
-<p>
-The limiter defined above could be rewritten in C like this:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-c">    // this corresponds to the Python Limiter class.
-    typedef struct limiter_state_t {
-        int delay_index;
-        int delay_length;
-        float envelope;
-        float current_gain;
-        float attack_coeff;
-        float release_coeff;
-    } limiter_state;
-
-    #define MAX(x,y) ((x)&gt;(y)?(x):(y))
-
-    // this corresponds to the Python __init__ function.
-    limiter_state init_limiter(float attack_coeff, float release_coeff, int delay_len) {
-        limiter_state state;
-        state.attack_coeff = attack_coeff;
-        state.release_coeff = release_coeff;
-        state.delay_index = 0;
-        state.envelope = 0;
-        state.current_gain = 1;
-        state.delay_length = delay_len;
-        return state;
-    }
-
-    void limit(float *signal, int block_length, float threshold,
-               float *delay_line, limiter_state *state) {
-        for(int i=0; i&lt;block_length; i++) {
-            delay_line[state-&gt;delay_index] = signal[i];
-            state-&gt;delay_index = (state-&gt;delay_index + 1) % state-&gt;delay_length;
-
-            // calculate an envelope of the signal
-            state-&gt;envelope *= state-&gt;release_coeff;
-            state-&gt;envelope = MAX(fabs(signal[i]), state-&gt;envelope);
-
-            // have current_gain go towards a desired limiter target_gain
-            float target_gain;
-            if (state-&gt;envelope &gt; threshold)
-                target_gain = (1+threshold-state-&gt;envelope);
-            else
-                target_gain = 1.0;
-            state-&gt;current_gain = state-&gt;current_gain*state-&gt;attack_coeff +
-                target_gain*(1-state-&gt;attack_coeff);
-
-            // limit the delayed signal
-            signal[i] = delay_line[state-&gt;delay_index] * state-&gt;current_gain;
-        }
-    }
-</pre>
-</div>
-
-<p>
-In contrast to the Python version, the delay line will be passed to the <code>limit</code> function. This is advantageous because now all audio buffers can be managed by Python instead of manually allocating and deallocating them in C.
-</p>
-
-<p>
-Now in order to plug this code into Python I will use Cython. First of all, a "Cython header" file has to be created that declares all exported types and functions to Cython:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">    cdef extern from "limiter.h":
-        ctypedef struct limiter_state:
-            int delay_index
-            int delay_length
-            float envelope
-            float current_gain
-            float attack_coeff
-            float release_coeff
-
-        limiter_state init_limiter(float attack_factor, float release_factor, int delay_len)
-        void limit(float *signal, int block_length, float threshold,
-                   float *delay_line, limiter_state *state)
-</pre>
-</div>
-
-<p>
-This is very similar to the C header file of the limiter:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-c">    typedef struct limiter_state_t {
-        int delay_index;
-        int delay_length;
-        float envelope;
-        float current_gain;
-        float attack_coeff;
-        float release_coeff;
-    } limiter_state;
-
-    limiter_state init_limiter(float attack_factor, float release_factor, int delay_len);
-    void limit(float *signal, int block_length, float threshold,
-               float *delay_line, limiter_state *state);
-</pre>
-</div>
-
-<p>
-With that squared away, the C functions are accessible for Cython. Now, we only need a small Python wrapper around this code so it becomes usable from Python:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">    import numpy as np
-    cimport numpy as np
-    cimport limiter
-
-    DTYPE = np.float32
-    ctypedef np.float32_t DTYPE_t
-
-    cdef class Limiter:
-        cdef limiter.limiter_state state
-        cdef np.ndarray delay_line
-        def __init__(self, float attack_coeff, float release_coeff,
-                     int delay_length):
-            self.state = limiter.init_limiter(attack_coeff, release_coeff, delay_length)
-            self.delay_line = np.zeros(delay_length, dtype=DTYPE)
-
-        def limit(self, np.ndarray[DTYPE_t,ndim=1] signal, float threshold):
-            limiter.limit(&lt;float*&gt;np.PyArray_DATA(signal),
-                       &lt;int&gt;len(signal), threshold,
-                       &lt;float*&gt;np.PyArray_DATA(self.delay_line),
-                       &lt;limiter.limiter_state*&gt;&amp;self.state)
-</pre>
-</div>
-
-<p>
-The first two lines set this file up to access Numpy arrays both from the Python domain and the C domain, thus bridging the gap. The <code>cimport limiter</code> imports the C functions and types from above. The <code>DTYPE</code> stuff is advertising the Numpy <code>float32</code> type to C.
-</p>
-
-<p>
-The class is defined using <code>cdef</code> as a C data structure for speed. Also, Cython would naturally translate every C struct into a Python dict and vice versa, but we need to pass the struct to <code>limit</code> <i>and</i> have <code>limit</code> modify it. Thus, <code>cdef limiter.limiter_state state</code> makes Cython treat it as a C struct only. Finally, the <code>np.PyArray_DATA()</code> expressions expose the C arrays underlying the Numpy vectors. This is really handy since we don't have to copy any data around in order to modify the vectors from C.
-</p>
-
-<p>
-As can be seen, the Cython implementation behaves nearly identically to the initial Python implementation (except for passing the <code>dtype</code> to the constructor) and can be used as a plug-in replacement (with the aforementioned caveat).
-</p>
-
-<p>
-Finally, we need to build the whole contraption. The easiest way to do this is to use a setup file like this:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">    from distutils.core import setup
-    from distutils.extension import Extension
-    from Cython.Distutils import build_ext
-    from numpy import get_include
-
-    ext_modules = [Extension("cython_limiter",
-                             sources=["cython_limiter.pyx",
-                                      "limiter.c"],
-                             include_dirs=['.', get_include()])]
-
-    setup(
-        name = "cython_limiter",
-        cmdclass = {'build_ext': build_ext},
-        ext_modules = ext_modules
-        )
-</pre>
-</div>
-
-<p>
-With that saved as <i>setup.py</i>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org16f1975" class="outline-2">
-<h2 id="org16f1975">Conclusion</h2>
-<div class="outline-text-2" id="text-org16f1975">
-<p>
-In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.
-</p>
-
-<p>
-You can find all the source code in this article at <a href="https://github.com/bastibe/simple-cython-limiter">https://github.com/bastibe/simple-cython-limiter</a>
-</p>
-</div>
-</div>
-
-<div id="outline-container-org2b31577" class="outline-2">
-<h2 id="org2b31577">Disclaimer</h2>
-<div class="outline-text-2" id="text-org2b31577">
-<ol class="org-ol">
+    <span class="n">setup</span><span class="p">(</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;cython_limiter&quot;</span><span class="p">,</span>
+        <span class="n">cmdclass</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;build_ext&#39;</span><span class="p">:</span> <span class="n">build_ext</span><span class="p">},</span>
+        <span class="n">ext_modules</span> <span class="o">=</span> <span class="n">ext_modules</span>
+        <span class="p">)</span>
+</pre></div>
+<p>With that saved as <em>setup.py</em>, <code>python setup.py build_ext --inplace</code> will convert the Cython code to C, and then compile both the converted Cython code and C code into a binary Python module.</p>
+<h3>Conclusion</h3>
+<p>In this article, I developed a simple limiter and how to implement it in both C and Python. Then, I showed how to use the C implementation from Python. Where the Python implementation is struggling to keep a steady frame rate going even at large block sizes, the Cython version runs smoothly down to 2-4 samples per block on a 2 Ghz Core i7. Thus, real-time audio processing is clearly feasable using Python, Cython, Numpy and PyAudio.</p>
+<p>You can find all the source code in this article at https://github.com/bastibe/simple-cython-limiter</p>
+<h3>Disclaimer</h3>
+<ol>
 <li>I invented this limiter myself. I could invent a better sounding limiter, but this article is more about how to combine Python, Numpy, PyAudio and Cython for real-time signal processing than about limiter design.</li>
 <li>I recently worked on something similar at my day job. They agreed that I could write about it so long as I don't divulge any company secrets. This limiter is not a descendant of any code I worked on.</li>
 <li>Whoever wants to use any piece of code here, feel free to do so. I am hereby placing it in the public domain. Feel free to contact me if you have questions.</li>
 </ol>
+
+
+
+<div class="post-date">27 Nov 2013</div><h2 class="post-title"><a href="https://bastibe.de/2013-11-27-audio-in-python.html">Sound in Python</a></h2>
+<p>Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.</p>
+<p>It's not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.</p>
+<p>The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http:_www.portaudio.com_">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.</p>
+<p>But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!</p>
+<p>So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.</p>
+<p>So, lets read some audio data, shall we?</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">soundfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;sad_song.wav&#39;</span><span class="p">)</span>
+</pre></div>
+<p>done. All the audio data is now available as a NumPy array in <code>data</code>. Just like that.</p>
+<p>Awesome, isn't it?</p>
+<p>OK, that was easy. So let's read only the first and last 100 frames!</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span>
+<span class="n">first</span> <span class="o">=</span> <span class="n">soundfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;long_song.flac&#39;</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">last</span> <span class="o">=</span> <span class="n">soundfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">start</span><span class="o">=-</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+<p>This really only read the first and last bit. Not everything in between!</p>
+<p>Note that at no point I did explicitly open or close a file! This is Python! We can do that! When the <code>SoundFile</code> object is created, it opens the file. When it goes out of scope, it closes the file. It's as simple as that. Or just use <code>SoundFile</code> in a context manager. That works as well.</p>
+<p>Oh, but I want to use the sound card as well! I want to record audio to a file!</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysoundcard</span><span class="w"> </span><span class="kn">import</span> <span class="n">Stream</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysoundfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundFile</span><span class="p">,</span> <span class="n">ogg_file</span><span class="p">,</span> <span class="n">write_mode</span>
+<span class="k">with</span> <span class="n">Stream</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span> <span class="c1"># opens your default audio device</span>
+    <span class="c1"># This is supposed to be a new file, so specify it completely</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">SoundFile</span><span class="p">(</span><span class="s1">&#39;happy_song.ogg&#39;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">sample_rate</span><span class="p">,</span>
+                  <span class="n">channels</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">channels</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ogg_file</span><span class="p">,</span>
+                  <span class="n">mode</span><span class="o">=</span><span class="n">write_mode</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">sample_rate</span><span class="p">))</span> <span class="c1"># one second</span>
+</pre></div>
+<p>Read from the stream, write to a file. It works the other way round, too!</p>
+<p>And that's really all there is to it. Working with audio data in Python is easy now!</p>
+<p>Of course, there is much more you could do. You could create a callback function and be called every four<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>.</p>
+<p>You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.</p>
+<p><em>UPDATE:</em> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>More precisely: Everything that <a href="http:_www.portaudio.com_">portaudio</a> supports.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+
+<div class="post-date">22 Apr 2015</div><h2 class="post-title"><a href="https://bastibe.de/2015-04-22-matlab-and-audio-files.html">Matlab and Audio Files</a></h2>
+<p>So I wanted to work with audio files in Matlab. In the past, Matlab could only do this with <code>auread</code> and <code>wavread</code>, which can read <em>*.au</em> and <em>*.wav</em> files. With 2012b, Matlab introduced <a href="http://mathworks.com/help/matlab/ref/audioread.html"><code>audioread</code></a>, which claims to support <em>*.wav</em>, <em>*.ogg</em>, <em>*.flac</em>, <em>*.au</em>, <em>*.mp3</em>, and <em>*.mp4</em>, and simultaneously deprecated <code>auread</code> and <code>wavread</code>.</p>
+<p>Of these file formats, only <em>*.au</em> is capable of storing more than 4 Gb of audio data. But the documentation is actually wrong: <code>audioread</code> can <em>actually</em> read more data formats than documented: it reads <em>*.w64</em>, <em>*.rf64</em>, and <em>*.caf</em> no problem. And these can store more than 4 Gb as well.</p>
+<p>It's just that, while <code>audioread</code> supports all of these nice file formats, <a href="http://mathworks.com/help/matlab/ref/audiowrite.html"><code>audiowrite</code></a> is more limited, and only supports <em>*.wav</em>, <em>*.ogg</em>, <em>*.flac</em>, and <em>*.mp4</em>. And it does not support any undocumented formats, either. So it seems that there is no way of writing files larger than 4 Gb. But for the time being, <code>auwrite</code> is still available, even though deprecated. I tried it, though, and it didn't finish writing 4.8 Gb in half an hour.</p>
+<p>In other words, Matlab is incapable of writing audio files larger than 4 Gb. It just can't do it.</p>
+
+
+
+<div class="post-date">17 Jun 2017</div><h2 class="post-title"><a href="https://bastibe.de/2017-06-17-audio-apis-coreaudio.html">Audio APIs, Part 1: Core Audio / macOS</a></h2>
+<p>This is part one of a three-part series on the native audio APIs for Windows, Linux, and macOS. This first part is about Core Audio on macOS.</p>
+<p>It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation were a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http:_www.portaudio.com_">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:</p>
+<p>Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85">WASAPI</a>.aspx)<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> on Windows.</p>
+<p>This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is playing/recording of short blocks of <code>float</code> data at arbitrary sampling rates and block sizes. All connected sound cards should be listable and selectable, with correct detection of the system default sound card (a feature that is very unreliable in PortAudio).</p>
+<hr />
+<h2>CoreAudio, or the Mac's best kept secret</h2>
+<p>CoreAudio is the native audio library for macOS. It is known for its high performance, low latency, and horrible documentation. After having used the native audio APIs on all three platforms, CoreAudio was <em>by far</em> the hardest one to use. The main problem is lack of documentation and lack of feedback, and plain missing or broken features. Let's get started.</p>
+<p>The basic unit of any CoreAudio program is the audio unit. An audio unit can be a source (aka microphone), a sink (aka speaker) or an audio processor (both sink and source). Each audio unit can have several input <em>buses</em>, and several output <em>buses</em>, each of which can have several <em>channels</em>. The meaning of these buses varies wildly and is often underdocumented. Furthermore, every audio unit has several <em>properties</em>, such as a sample rate, block sizes, and a data format, and <em>parameters</em>, which are like properties, but presumably different in some undocumented way.</p>
+<p>In order to use an audio unit, you create an <code>AudioComponentDescription</code> that describes whether you want a source or sink unit, or an effect unit, and what kind of effect you want (AudioComponent is an alternative name for audio unit). With the description, you can create an <code>AudioComponentInstance</code>, which is then an opaque struct pointer to your newly created audio unit. So far so good.</p>
+<p>The next step is then to configure the audio unit using <code>AudioUnitGetProperty</code> and <code>AudioUnitSetProperty</code>. This is surprisingly hard, since every property can be configured for every bus (sometimes called element) of every input or output of every unit, and the documentation is extremely terse on which of these combinations are valid. Some invalid combinations return error codes, while others only lead to errors during playback/recording. Furthermore, the definition of what constitutes an input or output is interpreted quite differently in different places: One place calls a microphone an <em>input</em>, since it records audio; another place will call it an <em>output</em>, since it outputs audio data to the system. In one crazy example, you have to configure a microphone unit by disabling its output bus 0, and enabling its input bus 1, but then read audio data from its ostensibly disabled output bus 0.</p>
+<p>The property interface is untyped, meaning that every property has to be given an identifier, a void pointer that points to a matching data structure, and the size of that data structure. Sometimes the setter allocates additional memory, in which case the documentation does not contain any information on who should free this memory. Most objects are passed around as opaque struct pointers with dedicated constructor and destructor functions. All of this does not strike me as particularly C-like, even though CoreAudio is supposedly a native C library.</p>
+<p>Once your audio unit is configured, you set a render callback function, and start the audio unit. All important interaction now happens within that callback function. In a strange reversal of typical control flow, input data to the callback function needs to be fetched by calling <code>AudioUnitRender</code> (evoked on the unit itself) from within the callback, while output is written to memory provided as callback function arguments. Many times during development, <code>AudioUnitRender</code> would return error codes because of an invalid property setting during initialization. Of course, it won't tell <em>which</em> property is actually at fault, just that it can't fulfill the render request at the moment.</p>
+<p>Error codes in general are a difficult topic in CoreAudio. Most functions return an error code as an <code>OSStatus</code> value (aka <code>uint32</code>), and the header files usually contain a definition of some, but not all, possible error codes. Sometimes these error codes are descriptive and nice, but often they are way too general. My favorite is the frequent <code>kAudioUnitErr_CannotDoInCurrentContext</code>, which is just about as useless an error description as possible. Worse, some error codes are not defined as numeric constants, but as <code>int err = 'abcd'</code>, which makes them un-searchable in the source file. Luckily, this madness can be averted using <img src="https:_osstatus.com_" alt="https:_osstatus" />, which is a dedicated database for <code>OSStatus</code> error codes.</p>
+<p>By far the worst part of the CoreAudio API is that some properties are silently ignored. For example, you can set the sample rate or priming information on a microphone unit, and it will accept that property change and it will report that property as changed, but it will still use its default value when recording (aka &quot;rendering&quot; in CoreAudio). A speaker unit, in contrast, will honor the sample rate property, and resample as necessary. If you still need to resample your microphone recordings, you have to use a separate <code>AudioConverter</code> unit, which is its own bag of fun (and only documented in <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">a remark</a> in one overview document).</p>
+<p>Lastly, all the online documentation is written for Swift and Objective-C, while the implementation is C. Worse, the C headers contain vastly more information than the online documentation, and the online documentation often does not even reference the C header file name. Of course header files are spread into the CoreAudio framework, the AudioToolkit framework, and the AudioUnit framework, which makes even grepping a joy.</p>
+<p>All of that said, once you know what to do and how to do it, the resulting code is relatively compact and readable. The API does contain inconsistencies and questionable design choices, but the real problem is the documentation. I spent way too much time reading the header files over and over again, and searching through (often outdated or misleading) <a href="https://developer.apple.com/library/content/samplecode/AVCaptureToAudioUnitOSX/Listings/CaptureSessionController_mm.html#//apple_ref/doc/uid/DTS40012879-CaptureSessionController_mm-DontLinkElementID_4">example projects</a> and <a href="https://developer.apple.com/library/content/technotes/tn2091/_index.html#//apple_ref/doc/uid/DTS10003118-CH1-FORMATS">vague</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html#//apple_ref/doc/uid/TP40003278-CH7-SW12">high-level</a> <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003278-CH1-SW2">overviews</a> for clues on how to interpret error messages and API documentation. I had somewhat better luck with a few <a href="http://kaniini.dereferenced.org/2014/08/31/CoreAudio-sucks.html">blog</a> <a href="http://subfurther.com/blog/2009/04/28/an-iphone-core-audio-brain-dump/">posts</a> on the subject, but the general consensus seems to be that the main concepts of CoreAudio are woefully under-explained, and documentation about edge cases is almost nonexistent. Needless to say, I did not enjoy my experience with CoreAudio.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Core Audio</a>.aspx) APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+
+<div class="post-date">27 Jun 2017</div><h2 class="post-title"><a href="https://bastibe.de/2017-06-27-audio-apis-pulseaudio.html">Audio APIs, Part 2: Pulseaudio / Linux</a></h2>
+<p>This is part two of a three-part series on the native audio APIs for Windows, Linux, and macOS. This second part is about PulseAudio on Linux.</p>
+<p>It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http:_www.portaudio.com_">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:</p>
+<p>Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85">WASAPI</a>.aspx)<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> on Windows.</p>
+<p>This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).</p>
+<hr />
+<h1>PulseAudio</h1>
+<p>PulseAudio is not the only audio API on Linux. There is the grandfather <a href="https://en.wikipedia.org/wiki/Open_Sound_System">OSS</a>, the more modern <a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">ALSA</a>, the more pro-focused <a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK</a>, and the user-focused <a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>. Under the hood, PulseAudio uses ALSA for its actual audio input/output, but presents the user and applications with a much nicer API and UI.</p>
+<p>The very nice thing about PulseAudio is that it is a native C API. It provides several levels of abstraction, the highest of which takes only a handful of lines of C to get audio playing. For the purposes of PythonAudio however, I had to look at the more in-depth <a href="https://freedesktop.org/software/pulseaudio/doxygen/async.html">asynchronous API</a>. Still, the API itself is relatively simple, and compactly defined in one simple header file.</p>
+<p>It all starts with a <code>mainloop</code> and an associated <code>context</code>. While the <code>mainloop</code> is running, you can query the <code>context</code> for sources and sinks (aka microphones and speakers). The <code>context</code> can also create a <code>stream</code> that can be read or written (aka recorded or played). From a high level, this is all there is to it.</p>
+<p>Most PulseAudio functions are asynchronous: Function calls return immediately, and call user-provided callback functions when they are ready to return results. While this may be a good structure for high-performance multithreaded C-code, it is somewhat cumbersome in Python. For PythonAudio, I wrapped this structure in regular Python functions that wait for the callback and return its data as normal return values.</p>
+<p>Doing this shows just how old Python really is. Python is old-school in that it still thinks that concurrency is better solved with multiple, communicating processes, than with shared-memory threads. With such a mind set, there is a certain impedance mismatch to overcome when using PulseAudio. Every function call has to lock the main loop, and block while waiting for the callback to be called. After that, clean up by decrementing a reference count. This procedure is cumbersome, but not difficult.</p>
+<p>What is difficult however, is the documentation. The API documentation is fine, as far as it goes. It could go into more detail with regards to edge cases and error conditions; But it truly lacks high-level overviews and examples. It took an unnecessarily long time to figure out the code path for audio playback and recording, simply because there is no document anywhere that details the sequence of events needed to get there. In the end, I followed some marginally-related example on the internet to get to that point, because the <em>two</em> examples provided by PulseAudio don't even use the asynchronous API.</p>
+<p>Perhaps I am missing something, but it strikes me as strange that an API meant for audio recording and playback would not include an example that plays back and records audio.</p>
+<p>On an application level, it can be problematic that PulseAudio seems to only value block sizes and latency requirements approximately. In particular, if computing resources become scarce, PulseAudio would rather increase latency/block sizes in the background than risk skipping. This might be convenient for a desktop application, but it is not ideal for signal processing, where latency can be crucial. It seems that I can work around these issues to an extent, but this is an inconvenience nontheless.</p>
+<p>In general, I found PulseAudio reasonably easy to use, though. The documentation could use some work, and I don't particularly <em>like</em> the asynchronous programming style, but the API is simple and functional. Out of the three APIs of WASAPI/Windows, Core Audio/macOS, and PulseAudio/Linux, this one was probably the easiest to get working.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Core Audio</a>.aspx) APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+
+<div class="post-date">10 Jul 2017</div><h2 class="post-title"><a href="https://bastibe.de/2017-07-10-audio-apis-wasapi.html">Audio APIs, Part 3: WASAPI / Windows</a></h2>
+<p>This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.</p>
+<p>It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http:_www.portaudio.com_">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio's C API a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:</p>
+<p>Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85">WASAPI</a>.aspx)<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> on Windows.</p>
+<p>This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).</p>
+<hr />
+<h1>WASAPI</h1>
+<p>WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85">Windows Multimedia (MME)</a>.aspx), the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85">DirectSound</a>.aspx), the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Windows Audio Session API (WASAPI)</a>.aspx), introduced in Windows Vista to bring a modern audio API to Windows.</p>
+<p>In other words, audio on Windows has a long and troubled history, and has had a lot of opportunity for experimentation. It should then be no surprise that WASAPI is a clean and well-documented audio API that avoids many of the pitfalls of its predecessors and brethren. After having experienced the audio APIs of Windows, Linux, and macOS, I am beginning to understand why some programmers love Windows.</p>
+<p>But let's take a step back, and give an overview over the API. First of all, this is a cross-language API that is meant to be used from C#, with a solid bridge for C++, and a somewhat funky bridge for C. This is crucial to understand. The whole API is designed for a high-level, object-oriented runtime, but I am accessing it from a low-level language that has no concept of objects, methods, or exceptions.</p>
+<p>Objects are implemented as pointers to opaque structs, with an associated list of function pointers to methods. Every method accepts the object pointer as its first argument, and returns an error value if an exception occurred. Both inputs and outputs are function arguments, with outputs being implemented as pointer-to-pointer values. While this looks convoluted to a C programmer, it is actually a very clean mapping of object oriented concepts to C that never gave me any headaches.</p>
+<p>However, there are a few edge cases that did take me a while to understand: Since the C API is inherently not polymorphic, you sometimes have to manually specify types as cryptic UUID structs. Figuring out how to convert the UUID strings from the header files to such structs was not easy.  Similarly, it took me a while to reverse-engineer that strings in Windows are actually <code>uint16</code>, despite being declared <code>char</code>. But issues such as these are to be expected in a cross-language API.</p>
+<p>In general, I did not find a good overview on how to interpret high-level C#-concepts in C. For example, it took a long time until I learned that objects in C# are reference counted, and that I would have to manage reference counts manually. Similarly, I had one rather thorny issue with memory allocations: in rare occasions (<code>PROPVARIANT</code>), C# is expected to re-allocate memory of an object if the object does not have enough memory when passed into a method. This does not work as intended if you don't use C#'s memory allocator to create the memory. <em>This</em> was really painful to figure out.</p>
+<p>Another result of the API's cross-language heritage are its headers: There are <em>hundreds</em>. And they all contain both the C API and the C++ API, separated by the occasional <code>#ifdef __cplusplus</code> and <code>extern C</code>. Worse yet, pretty much every data type and declaration is wrapped in multiple levels of preprocessor macros and <code>typedef</code>. There are no doubt good reasons and a rich history for this, but it took me many hours to assemble all the necessary symbols from dozens of header files to even begin to call WASAPI functions.</p>
+<p>Nevertheless, once these hurdles are overcome, the actual WASAPI API itself is well-structured and reasonably simple. You acquire an <code>IMMDeviceEnumerator</code>, which returns <code>IMMDeviceCollections</code> for microphones and speakers. These contain <code>IMMDevices</code>, which represent sound cards and their properties. You activate an <code>IMMDevice</code> with a desired data format to get an <code>IAudioClient</code>, which in turns produces an <code>IAudioRenderClient</code> or <code>IAudioCaptureClient</code> for playback or recording, respectively. Playback and recording themselves are done by requesting a buffer, and reading or writing raw data to that buffer. This is about as straight-forward as APIs get.</p>
+<p>The documentation deserves even more praise: I have rarely seen such a well-documented API. There are high-level overview articles, there is commented example code, every object is described abstractly, and every method is described in detail and in reference to related methods and example code. There is no corner case that is left undescribed, and no error code without a detailed explanation. Truly, this is <em>exceptional</em> documentation that is a joy to work with!</p>
+<p>In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praising Windows. There is a non-trivial impedance mismatch between C and C# that has to be overcome to <em>use</em> WASAPI from C. But once I understood this, the API itself and its documentation were easy to use and understand. Impressive!</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Core Audio</a>.aspx) APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
+
 </div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
+<div id="postamble" class="status">
 <div id="archive">
-<a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-</div>
-<div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

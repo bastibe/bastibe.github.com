@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Transplant</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,156 +19,101 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">19 Aug 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-08-19-transplant.html">Transplant</a></h1>
-<p>
-In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.
-</p>
-
-<p>
-But I still need to use Matlab code. There are <a href="http://stackoverflow.com/a/23762412/1034">a few ways</a> of interacting with Matlab out there already. Most of them focus on being able to eval strings in Matlab. Boring. The most interesting one is <a href="https://github.com/ewiger/mlab">mlab</a>, a full-fledget bridge between Python and Matlab! Had I found this earlier, I would probably not have written my own.
-</p>
-
-<p>
-But write my own I did: <a href="https://github.com/bastibe/transplant">Transplant</a>. Transplant is a very simple bridge for calling Matlab functions from Python. Here is how you start Matlab from Python:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import transplant
-matlab = transplant.Matlab()
-</pre>
-</div>
-
-<p>
-This <code>matlab</code> object starts a Matlab interpreter in the background and connects to it. You can call Matlab functions on it!
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">matlab.eye(3)
-&gt;&gt;&gt; array([[ 1.,  0.,  0.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.]])
-</pre>
-</div>
-
-<p>
-As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">matlab.randi(255, 1, 4, 'uint8')
-&gt;&gt;&gt; array([[246,    2, 198, 209]], dtype=uint8)
-</pre>
-</div>
-
-<p>
-All matrix data is actually transferred in binary, so both Matlab and Python work on bit-identical data. This is very important if you are working with precise data! Most other bridges do some amount of type conversion at this point.
-</p>
-
-<p>
-This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">data = matlab.randn(1, 4)
-matlab.max(data)
-&gt;&gt;&gt; [1.5326, 3] # Matlab: x, n = max(...)
-matlab.max(data, nargout=1)
-&gt;&gt;&gt; 1.5326      # Matlab: x = max(...)
-</pre>
-</div>
-
-<p>
-If no <code>nargout</code> is given, functions behave according to <code>nargout(@function)</code>. If even that fails, they return the content of <code>ans</code> after their execution.
-</p>
-
-<p>
-Calling Matlab functions is the most important feature of Transplant. But there is a more:
-</p>
-
-<ul class="org-ul">
-<li><p>
-You can save/retrieve variables in the global workspace:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">  matlab.value = 5 # Matlab: value = 5
-  x = matlab.value # Matlab: x = value
-</pre>
-</div></li>
-
-<li><p>
-You van eval some code:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">  matlab.eval('class(value)')
-  &gt;&gt;&gt; ans =
-  &gt;&gt;&gt;
-  &gt;&gt;&gt; double
-  &gt;&gt;&gt;
-</pre>
-</div></li>
-
+<div class="post-date">19 Aug 2014</div>
+<h1 class="post-title"><a href="https://bastibe.de/2014-08-19-transplant.html">Transplant</a></h1>
+<p>In academia, a lot of programming is done in Matlab. Many very interesting algorithms are only available in Matlab. Personally, I prefer to use tools that are more widely applicable, and less proprietary, than Matlab. My weapon of choice at the moment is Python.</p>
+<p>But I still need to use Matlab code. There are <a href="http://stackoverflow.com/a/23762412/1034">a few ways</a> of interacting with Matlab out there already. Most of them focus on being able to eval strings in Matlab. Boring. The most interesting one is <a href="https://github.com/ewiger/mlab">mlab</a>, a full-fledget bridge between Python and Matlab! Had I found this earlier, I would probably not have written my own.</p>
+<p>But write my own I did: <a href="https://github.com/bastibe/transplant">Transplant</a>. Transplant is a very simple bridge for calling Matlab functions from Python. Here is how you start Matlab from Python:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">transplant</span>
+<span class="n">matlab</span> <span class="o">=</span> <span class="n">transplant</span><span class="o">.</span><span class="n">Matlab</span><span class="p">()</span>
+</pre></div>
+<p>This <code>matlab</code> object starts a Matlab interpreter in the background and connects to it. You can call Matlab functions on it!</p>
+<div class="highlight"><pre><span></span><span class="n">matlab</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">array</span><span class="p">([[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+           <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">],</span>
+           <span class="p">[</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">]])</span>
+</pre></div>
+<p>As you can see, Matlab matrices are converted to Numpy matrices. In contrast to most other Python/Matlab bridges, matrix types are preserved<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>:</p>
+<div class="highlight"><pre><span></span><span class="n">matlab</span><span class="o">.</span><span class="n">randi</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">array</span><span class="p">([[</span><span class="mi">246</span><span class="p">,</span>    <span class="mi">2</span><span class="p">,</span> <span class="mi">198</span><span class="p">,</span> <span class="mi">209</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">uint8</span><span class="p">)</span>
+</pre></div>
+<p>All matrix data is actually transferred in binary, so both Matlab and Python work on bit-identical data. This is very important if you are working with precise data! Most other bridges do some amount of type conversion at this point.</p>
+<p>This alone accounts for a large percentage of Matlab code out there. But not every Matlab function can be called this easily from Python: Matlab functions behave differently depending the number of output arguments! To emulate this in Python, every function has a keyword argument <code>nargout</code> <sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. For example, the Matlab function <code>max</code> by default returns both the maximum value and the index of that value. If given <code>nargout=1</code> it will only return the maximum value:</p>
+<div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">matlab</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mf">1.5326</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c1"># Matlab: x, n = max(...)</span>
+<span class="n">matlab</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nargout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mf">1.5326</span>      <span class="c1"># Matlab: x = max(...)</span>
+</pre></div>
+<p>If no <code>nargout</code> is given, functions behave according to <code>nargout(@function)</code>. If even that fails, they return the content of <code>ans</code> after their execution.</p>
+<p>Calling Matlab functions is the most important feature of Transplant. But there is a more:</p>
+<ul>
+<li>You can save/retrieve variables in the global workspace:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">matlab</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># Matlab: value = 5</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">matlab</span><span class="o">.</span><span class="n">value</span> <span class="c1"># Matlab: x = value</span>
+</pre></div>
+<ul>
+<li>You van eval some code:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">matlab</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="s1">&#39;class(value)&#39;</span><span class="p">)</span>
+  <span class="o">&gt;&gt;&gt;</span> <span class="n">ans</span> <span class="o">=</span>
+  <span class="o">&gt;&gt;&gt;</span>
+  <span class="o">&gt;&gt;&gt;</span> <span class="n">double</span>
+  <span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+<ul>
 <li>The help text for functions is automatically assigned as docstring. In IPython, this means that <code>matlab.magic?</code> displays the same thing <code>help magic</code> would display in Matlab.</li>
 </ul>
+<p>Under the hood, Transplant is using a very simple messaging protocol based on <a href="http:_zeromq.org_">0MQ</a>, <a href="https://en.wikipedia.org/wiki/Json">JSON</a>, and some <a href="https://en.wikipedia.org/wiki/Base64">base64</a>-encoded binary data. Sadly, Matlab can deal with none of these technologies by itself. Transplant therefore contains a full-featured JSON <a href="https://github.com/bastibe/transplant/blob/master/parsejson.m">parser</a>_<a href="https:_/github.com/bastibe/transplant/blob/master/dumpjson.m">serializer</a> and base64 <a href="https://github.com/bastibe/transplant/blob/master/base64encode.m">encoder</a>_<a href="https:_/github.com/bastibe/transplant/blob/master/base64decode.m">decoder</a> in pure Matlab. It also contains a minimal <a href="https://github.com/bastibe/transplant/blob/master/messenger.c">mex-file</a> for interfacing with 0MQ.</p>
+<p>There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonlab">JSON parsers</a> available for Matlab, but virtually all of them try parse JSON arrays as matrices. This means that these parsers have no way of differentiating between a list of vectors and a matrix (want to call a function with three vectors or a matrix? No can do). Transplant's JSON parser parses JSON arrays as cell arrays and JSON objects as structs. While somewhat less convenient in general, this is a much better fit for transferring data structures between programming languages.</p>
+<p>Similarly, there are a few <a href="http:_home.online.no_~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.</p>
+<p>All of this has been about Matlab, but my actual goal is bigger: I want transplant to become a library for interacting between more than just Python and Matlab. In particular, Julia and PyPy would be very interesting targets. Also, it would be useful to reverse roles and call Python from Matlab as well! But that will be in the future.</p>
+<p>For now, head over to <a href="https://github.com/bastibe/transplant">Github.com/bastibe/transplant</a> and have fun! Also, if you find any bugs or have any suggestions, please open an issue on Github!</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>Except for integer complex numbers, since those are not supported by Numpy.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>Like the Matlab function <code>nargout</code><a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
 
-<p>
-Under the hood, Transplant is using a very simple messaging protocol based on <a href="http://zeromq.org/">0MQ</a>, <a href="https://en.wikipedia.org/wiki/Json">JSON</a>, and some <a href="https://en.wikipedia.org/wiki/Base64">base64</a>-encoded binary data. Sadly, Matlab can deal with none of these technologies by itself. Transplant therefore contains a full-featured JSON <a href="https://github.com/bastibe/transplant/blob/master/parsejson.m">parser</a>/<a href="https://github.com/bastibe/transplant/blob/master/dumpjson.m">serializer</a> and base64 <a href="https://github.com/bastibe/transplant/blob/master/base64encode.m">encoder</a>/<a href="https://github.com/bastibe/transplant/blob/master/base64decode.m">decoder</a> in pure Matlab. It also contains a minimal <a href="https://github.com/bastibe/transplant/blob/master/messenger.c">mex-file</a> for interfacing with 0MQ.
-</p>
-
-<p>
-There are a few <a href="http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?jsonlab">JSON parsers</a> available for Matlab, but virtually all of them try parse JSON arrays as matrices. This means that these parsers have no way of differentiating between a list of vectors and a matrix (want to call a function with three vectors or a matrix? No can do). Transplant's JSON parser parses JSON arrays as cell arrays and JSON objects as structs. While somewhat less convenient in general, this is a much better fit for transferring data structures between programming languages.
-</p>
-
-<p>
-Similarly, there are a few <a href="http://home.online.no/~pjacklam/matlab/software/util/datautil/">base64 encoders</a> available. Most of them actually use Matlab's built-in Java interface to encode/decode base64 strings. I tried this, but it has two downsides: Firstly, it is pretty slow for short strings since the data has to be copied over to the Java side and then back. Secondly, it is limited by the Java heap space. I was not able to reliably encode/decode more than about 64 Mb using this<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. My base64 encoder/decoder is written in pure Matlab, and works for arbitrarily large data.
-</p>
-
-<p>
-All of this has been about Matlab, but my actual goal is bigger: I want transplant to become a library for interacting between more than just Python and Matlab. In particular, Julia and PyPy would be very interesting targets. Also, it would be useful to reverse roles and call Python from Matlab as well! But that will be in the future.
-</p>
-
-<p>
-For now, head over to <a href="https://github.com/bastibe/transplant">Github.com/bastibe/transplant</a> and have fun! Also, if you find any bugs or have any suggestions, please open an issue on Github!
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Except for integer complex numbers, since those are not supported by Numpy.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Like the Matlab function <code>nargout</code>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-At 192 Mb of Java heap space. And even those 64 Mb were pretty unreliable if I didn't call <code>java.lang.Runtime.getRuntime.gc</code> all the time.
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a>, <a href="https://bastibe.de/tag-matlab.html">matlab</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

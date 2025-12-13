@@ -1,0 +1,26 @@
+---
+title: Phone Reliability
+date: 2025-07-26 14:00
+description: All our recent phone replacements were due to reliability issues, so I'm buying a Fairphone.
+filetags: computers
+---
+
+One of our Pixel 6a phones recently had its battery bricked by a [mandatory software update](https://support.google.com/pixelphone/answer/16340779). Conveniently, Google only "found out" about this issue a few months after the warranty period ended for anyone who bought the phone when it was new. Lucky for us, we had bought ours later, when its predecessor broke on vacation and couldn't be repaired. So ours was still covered by its warranty, and we got a full refund.
+
+I noticed that issues such as this have caused all our phone replacements in the last years:
+- This Pixel 6a got a mandatory update that bricked its battery, and can't be repaired before we go on vacation. So we now have to buy a new phone.
+- A Pixel 5a's screen broke on vacation and local repair shops refused to repair foreign devices. So we had to buy a new phone.
+- A Pixel 4a suddenly refused to charge, and I didn't want to wait two weeks to get it repaired. So I bought a new phone.
+- ***Added:*** The other Pixel 6a's power button fell out, and the repair broke the screen.
+
+However, before we used Pixel phones, we had Fairphones, which had quite a different record:
+- A screen broke when I dropped it face-first on a radiator. I got a replacement screen fast-shipped within 24h, one day before we left on a trip. The replacement screen with priority shipping cost €98.
+- A battery became very weak, and we got a replacement part for €27.
+- A charging port became unreliable and we got a replacement part under warranty.
+- We replaced a broken headphone socket. The replacement part cost €36.
+
+Whenever we had to replace a phone, it was because the old one could not be repaired in time. With the Fairphone, we could repair the phone easily, and thus didn't have to replace it. Needless to say, the next replacement phone will be a Fairphone.
+
+## Addendum
+
+As it happened, I was able to buy a replacement battery for the Pixel 6a from IFixit, and was able to repair the phone. However, two weeks later, the power button fell out of the other Pixel 6a. The replacement part was cheap, but the repair required prying off the display again, which caused a tiny preexisting crack to shatter the entire screen. A replacement screen was neither available nor economical, so the phone had to be replaced. 

@@ -6,16 +6,22 @@
         {
             "label": "publish-file",
             "type": "shell",
-            "command": 
-                // needs to be passed to a script for backslash handling
-                // so as to not confuse Emacs' cmd parser with backslashes
-                ".vscode\\publishfile.cmd ${file}",            
-            
+            "command": ".vscode\\publishfile.cmd ${file}"
         },
         {
-            "label": "publish-blog",
+            "label": "publish-blog-emacs",
             "type": "shell",
             "command": "emacs -batch -script .vscode/init.el -eval '(org-static-blog-publish)'",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "publish-blog-py",
+            "type": "shell",
+            "command": ".venv/bin/python3 bsbr.py",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

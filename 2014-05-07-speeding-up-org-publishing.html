@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Speeding Up Org Mode Publishing</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,46 +19,50 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">07 May 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
-<p>
-I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <i>minute</i> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.
-</p>
+<div class="post-date">07 May 2014</div>
+<h1 class="post-title"><a href="https://bastibe.de/2014-05-07-speeding-up-org-publishing.html">Speeding Up Org Mode Publishing</a></h1>
+<p>I use <code>org-mode</code> to write my blog, and <code>org-publish</code> as my static site generator. While this system works great, I have found it to be really really slow. At this point, my blog has 39 posts, and <code>org-publish</code> will take upwards of a <em>minute</em> to re-generate all of them. To make matters worse, my workflow usually involves several re-generations per post. This gets old pretty quickly.</p>
+<p>Since I am on a long train ride today, I decided to have a go at this problem. By the way, train rides and hacking on Emacs are a perfect match: Internet connectivity on trains is usually terrible, but Emacs is self-documenting, so internet access doesn't matter as much. It is sobering to work without an internet connection every once in a while, and Emacs is a perfect target for this kind of work.</p>
+<p>One of the many things I learned on train rides is that Emacs in fact contains its own profiler! So, I ran <code>(progn (profiler-start 'cpu) (org-publish &quot;blog&quot;) (profiler-report))</code> to get a hierarchical list of where <code>org-publish</code> was spending its time. Turns out, most of its total run time was spent in functions relating to version control (starting with <code>vc-</code>).</p>
+<p>Some package in my configuration set up <code>vc-find-file-hook</code> as part of <code>find-file-hook</code>. This means that every time <code>org-publish</code> opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use <code>vc-git</code> at all. All my git interaction is done through <code>magit</code>.</p>
+<p>But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!</p>
 
-<p>
-Since I am on a long train ride today, I decided to have a go at this problem. By the way, train rides and hacking on Emacs are a perfect match: Internet connectivity on trains is usually terrible, but Emacs is self-documenting, so internet access doesn't matter as much. It is sobering to work without an internet connection every once in a while, and Emacs is a perfect target for this kind of work.
-</p>
-
-<p>
-One of the many things I learned on train rides is that Emacs in fact contains its own profiler! So, I ran <code>(progn (profiler-start 'cpu) (org-publish "blog") (profiler-report))</code> to get a hierarchical list of where <code>org-publish</code> was spending its time. Turns out, most of its total run time was spent in functions relating to version control (starting with <code>vc-</code>).
-</p>
-
-<p>
-Some package in my configuration set up <code>vc-find-file-hook</code> as part of <code>find-file-hook</code>. This means that every time <code>org-publish</code> opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use <code>vc-git</code> at all. All my git interaction is done through <code>magit</code>.
-</p>
-
-<p>
-But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a>, <a href="https://bastibe.de/tag-emacs.html">emacs</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

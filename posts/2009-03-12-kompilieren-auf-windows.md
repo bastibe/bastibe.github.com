@@ -1,0 +1,17 @@
+---
+title: Kompilieren auf Windows
+date: 2009-03-12 17:14
+filetags: compiling matlab windows
+---
+
+![open_source_rules](http://bastibe.de/static/2009-03/open_source_rules.png)
+
+Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion [wavread()](http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html), Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt [VLC](http://www.videolan.org/vlc/), den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf [FFmpeg](http://de.wikipedia.org/wiki/FFmpeg), einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.
+
+Und da FFmpeg freie Software ist, kann man sie auch für andere Dinge verwenden, etwa, um mit Matlab Audiodateien zu öffnen. Fehlt noch eine Verbindung zwischen Matlab und den FFmpeg-C-Bibliotheken, und die gibt es in Form von [Mex](http://www.mathworks.com/support/tech-notes/1600/1605.html#intro), der C-Schnittstelle von Matlab. Feine Sache, zwar hat es eine Weile gedauert, bis ich mich in libavformat und libavcodec eingearbeitet hatte (die beiden wichtigsten FFmpeg-Bibliotheken), aber im Endeffekt lief das alles sehr schmerzfrei -- und das, obwohl ich bisher Mex-Kompilieren mit Matlab immer als eine grausige Beschäftigung in Erinnerung hatte, gespickt von kryptischen Kompiler-Fehlern und hässlichen Notlösungen.
+
+Bumms, Zack, kaum hatte ich mich versehen, hatte ich ein lauffähiges, tadellos funktionierendes [Mex-File](http://en.wikipedia.org/wiki/MATLAB#Calling_C_and_Fortran_functions) auf meinem Mac liegen. Damit hatte ich nicht gerechnet. Also sofort die momentane Euphorie ausnutzen und weiter zu Schritt 2, das Ganze nochmal auf Windows. Meine Probleme, Windows so einzurichten, dass ich endlich Kompilieren kann, [hatte ich ja schon berichtet](http://www.daskrachen.com/2009/03/great-scott.html). Ich hatte also Visual Studio 2005 installiert, um Matlab zufrieden zu stellen und einen anständigen Kompiler auf dem System zu haben. Aber war ja klar, MSVC macht wieder sein eigenes Ding und nichts ist mit Standardkonformität und Trallalla: Keine [C99](http://de.wikipedia.org/wiki/C99#C99)-Unterstützung, also keine Variablendeklarationen mitten im Code und keine stdint.h oder inttype.h. Ein Glück, es gibt wieder ein wenig mehr Free Software, die wenigstens [letztere Lücke schließt](http://code.google.com/p/msinttypes/). Dennoch; Ich bekomme mein mex-File nicht zum Laufen. Es ist wie verflucht, kaum setze ich mich an eine Windows-Maschine zum Programmieren, fällt meine Produktivität auf das Niveau eines Backsteins.
+
+Enter [gnumex](http://sourceforge.net/projects/gnumex), noch ein weiteres Stück FOSS, das es ermöglicht, GCC als Mex-Kompiler zu verwenden, AUF WINDOWS. Um die Dinge zu vereinfachen, verwendete ich die [MinGW](http:_www.mingw.org_)-Variante und kaum war diese Hürde genommen... lief alles. Einfach so. Wahrscheinlich bin ich ein Dickschädel und habe einfach nicht die Geistesschärfe, mit Windows-Kompilern zu arbeiten, aber mir scheint, alles was ich diesbezüglich anfasse und das nicht GCC heißt ist zum Scheitern verurteilt. Ein Glück, dass es die vielen klugen Jungen und Mädchen gibt, die so wunderbare freie Software schreiben, die mir das Leben so viel einfacher macht!
+
+Eine Fortsetzung kommt noch...

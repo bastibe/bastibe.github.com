@@ -15,11 +15,13 @@ Here are my house rules:
 
 In contrast to most other comparisons on the 'net[fn:1], I won't concern myself too much with sharpness and noise reduction and demosaicing. I have yet to see a photograph that was ruined by them, and most RAW developers seem to do a sufficient job at them.
 
-I would prefer a file-based workflow with edits stored alongside the RAW files[fn::Makes it much easier to share edits between computers, and back them up], and I would prefer a perpetual license instead of a rental contract, but I'm willing to compromize on both if it's worth it[fn::I don't like rental software, as it locks away all past edits once I stop paying.].
+I would prefer a file-based workflow with edits stored alongside the RAW files[fn:2], and I would prefer a perpetual license instead of a rental contract, but I'm willing to compromize on both if it's worth it[fn:3].
 
 Obviously, I am a lot more proficient in my current tool, Darktable, than in any of the others. But for this test, I'm explicitly not doing anything particularly artistic; merely some highlight recovery, shadow recovery, and local white balance adjustments. By limiting myself to these edits, I hope to get an unbiased idea of the various RAW developer's implementations, without needing to ask the endless “what if” of what /else/ I could have done. That said, I will leave all other adjustments on their default settings, to still get an impression of the general look of the programs.
 
 [fn:1] There are surprisingly few non-superficial comparisons; most are just feature matrix comparisons. The best ones I could find are a fantastic, in-depth comparison on [[http://www.nomadlens.com/raw-converters-comparison][nomadlens]], A Fuji-centric discussion of detail extraction on [[https://www.fujivsfuji.com/best-xtrans-raw-converter][Fuji vs. Fuji]], one by [[https://www.andybellphotography.com/blog/2018/06/23/raw-converter-shootout-part-1/][Andy Bell]] that might be sponsored/biased by Luminar, a pretty good one on [[https://petapixel.com/2018/03/01/raw-processors-compared-theres-lot-image-quality/][PetaPixel]], an older one on [[https://www.dpreview.com/articles/8219582047/raw-converter-showdown-capture-one-pro-7-dxo-optics-pro-8-and-lightroom-4][DPReview]], and a Nikon-centered one on [[https://wypictures.wordpress.com/2015/08/07/comparison-of-raw-converters-for-nikon/][WY Pictures]].
+[fn:2] Makes it much easier to share edits between computers, and back them up
+[fn:3] I don't like rental software, as it locks away all past edits once I stop paying.
 
 * The Contestants
 - Darktable 3.0.2 ([[https://www.darktable.org/][Free]]) \\
@@ -638,38 +640,47 @@ Yet, in direct comparison, I find Darktable's tools equally efficient at solving
 
 No doubt other programs have cool features, too, but Darktable (and RawTherapee) seem uniquely open about their inner workings. And this brings joy to me, on a level the closed, artistic programs can't match. I /like/ graphs, and maths. I'm weird like that.
 
-But what really prompted this whole comparison blog post was my frustration with Darktable's speed. Particularly on my 4K screen, it is not the fastest program out there. And the AMD/OpenCL situation on Linux is still a travesty, which doesn't help. But I learned a thing during this experiment: You must work bottom-up through the rendering chain, if you want Darktable to be fast[fn::because lower stages in the pipeline are cached, but higher stages need to be recalculated after every edit.]. Which, in my case, usually means working through /Lens Correction/ → /Crop and Rotate/ → /Exposure/ → /Tone Equalizer/ → /Contrast Equalizer/ → /Color Balance/ → /Filmic RGB/ → /Color Zones/. As long as I (mostly) edit things in this order, Darktable is fast enough, even on my Surface tablet.
+But what really prompted this whole comparison blog post was my frustration with Darktable's speed. Particularly on my 4K screen, it is not the fastest program out there. And the AMD/OpenCL situation on Linux is still a travesty, which doesn't help. But I learned a thing during this experiment: You must work bottom-up through the rendering chain, if you want Darktable to be fast[fn:4]. Which, in my case, usually means working through /Lens Correction/ → /Crop and Rotate/ → /Exposure/ → /Tone Equalizer/ → /Contrast Equalizer/ → /Color Balance/ → /Filmic RGB/ → /Color Zones/. As long as I (mostly) edit things in this order, Darktable is fast enough, even on my Surface tablet.
 
-Lastly, I have to say a few words about file management. Most programs here work on some kind of local library that stores all edits. The downside of this is that these libraries are hard to sync between computers, are hard to back up, and need to manually be kept in sync when file locations change. Notable exceptions here are Lightroom, Darktable, Exposure[fn:subdir:in an unnecessary subdirectory], Silkypix[fn:subdir], RawTherapee, ON1, DxO, and Zoner, which keep their edits alongside the RAW files in little text “sidecar” files[fn::Capture One saves sidecar files, too, but only for metadata, not edits]. Thus even if their library goes out of sync or is lost, at least the edits are still there. To be honest, this is quite an important factor for me.
+[fn:4] because lower stages in the pipeline are cached, but higher stages need to be recalculated after every edit.
+
+Lastly, I have to say a few words about file management. Most programs here work on some kind of local library that stores all edits. The downside of this is that these libraries are hard to sync between computers, are hard to back up, and need to manually be kept in sync when file locations change. Notable exceptions here are Lightroom, Darktable, Exposure[fn:subdir], Silkypix[fn:subdir], RawTherapee, ON1, DxO, and Zoner, which keep their edits alongside the RAW files in little text “sidecar” files[fn:5]. Thus even if their library goes out of sync or is lost, at least the edits are still there. To be honest, this is quite an important factor for me.
+
+[fn:subdir] in an unnecessary subdirectory
+[fn:5] Capture One saves sidecar files, too, but only for metadata, not edits
 
 As for library management, my requirements are small: I want to filter by date, rating, and maybe camera or lens. These needs are met by all programs except possibly Luminar and Photo Ninja. I do most of my file management in external programs on camera import, and with the exported JPEGs, so this area of the RAW developers is not very important to me.
 
-However, this comparison also highlighted just how useful sidecar files are to photo management. I might choose different RAW developers over the years, and my photo management solutions might change over time as well. But as long as all edits are stored in simple text files next to the RAW file, I can rest safe in the knowledge that my edits will never be lost. This is a serious downside to ACDSee, Capture One, Luminar, and Photo Ninja, who keep edits secretly[fn::They would say, "securely"] in their opaque databases.
+However, this comparison also highlighted just how useful sidecar files are to photo management. I might choose different RAW developers over the years, and my photo management solutions might change over time as well. But as long as all edits are stored in simple text files next to the RAW file, I can rest safe in the knowledge that my edits will never be lost. This is a serious downside to ACDSee, Capture One, Luminar, and Photo Ninja, who keep edits secretly[fn:6] in their opaque databases.
+
+[fn:6] They would say, "securely"
 
 I also timed my work with every one of these programs. Quite surprisingly, I couldn't find any significant differences between programs. Darktable's workflows, for example, are sometimes entirely different from other tools; but if you know what you're doing the path from identifying a problem to fixing it is still similarly straight-forward and fast. And there is no less experimentation until I arrive at a look I like.
 
 Thus, I am left with Darktable, Lightroom, and ON1. And theoretically Capture One, but that price is just too high for me. If Capture One were $100 instead of $350, I would probably switch to it. Even educational pricing is only available for rentals. I'll have to decline that. And despite all my praise for Lightroom, I still don't like it.
 
-I'll probably buy ON1 at its current, discounted price ($50), and see how I like it in actual daily use[fn::not really daily, but you know what I mean]. But at the same time. I'll also stick with Darktable on my Linux machine, at least for more complicated edits. I now know that Darktable can dance with the best of them, which is mighty impressive for a piece of free software.
+I'll probably buy ON1 at its current, discounted price ($50), and see how I like it in actual daily use[fn:7]. But at the same time. I'll also stick with Darktable on my Linux machine, at least for more complicated edits. I now know that Darktable can dance with the best of them, which is mighty impressive for a piece of free software.
+
+[fn:7] not really daily, but you know what I mean
 
 With all that said and done, I have learned a lot about RAW development during this experiment. Regardless of which tool I end up sticking with, this has been a fascinating comparison. We'll see how long I can resist the urge to compare this time.
 
-*Addendum: Customer Support*
+ *Addendum: Customer Support*
 
 So far, I have been in contact with the Customer Support people of ON1, Capture One, and Zoner. And I must say, ON1 and Zoner were incredibly pleasant and quick and helpful, while Capture One seemed almost reluctant to help. This is actually a big plus for ON1 and Zoner, and kind of big turnoff for Capture One.
 
-*Update: Silkypix*
+ *Update: Silkypix*
 
 I added Silkypix to the comparison, thanks to kind comments underneath this post.
 
-*Update: Luminar Local Adjustments*
+ *Update: Luminar Local Adjustments*
 
 I was made aware that Luminar does indeed have local adjustments, they were merely in such an uncommon place that I hadn't found the initially.
 
-*Update: Zoner Photo*
+ *Update: Zoner Photo*
 
 One year after the original post, I added Zoner Photo to the comparison.
 
-*Update: DxO PhotoLab*
+ *Update: DxO PhotoLab*
 
 One-and-a-half years after the original post, DxO Photo Labs added support for Fuji files, so I added them to the comparison.

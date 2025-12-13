@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Multi-Font Themes in Emacs</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,78 +19,60 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<div class="post-date">19 Sep 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
-<p>
-Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.
-</p>
-
-<p>
-I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>.
-</p>
-
-<p>
-It all started about a year ago, when I fell in love with a font called <a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a>. One of the coolest features of Pragmata was its native bold and italic letters, and its wide support for unicode symbols. I had to find a use for these features! And so, down the rabbit hole I went. <b>Keywords</b> should be bold! <i># Comments</i> should be italic! And while we're at it, why not add some <span class="underline">underlines</span>? And so on.
-</p>
-
-<p>
-The logical next step was then to get rid of colors altogether. At first, as an experiment. Do I really <i>need</i> colors in code? The very pretty <a href="https://github.com/maio/eink-emacs">eink theme</a> seemed to claim otherwise. After a few months of this lunacy, I realized that while I didn't strictly <i>need</i> colors, the stylistic variations of just one font aren't quite sufficient for source code. In particular, it wasn't always easy to distinguish between italic and roman type in PragmataPro, which lead to some confusion.
-</p>
-
-<p>
-But then, inspiration hit me: Who says that I could only use one single font? No one!
-</p>
-
-
-<figure id="org8c82e7f">
-<img src="http://bastibe.de/static/2017-09/color%20theme.png" alt="color%20theme.png">
-
-</figure>
-
-<p>
-The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> for strings, and oblique<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup> Iosevka for comments. <a href="http://font.ubuntu.com/">Ubuntu Mono</a> and <a href="http://input.fontbureau.com/">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
-</p>
-
-<p>
-Still, I love the look of this! (Of course it won't work in a terminal, or most other text editors.)
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-: Can other text editors do this? I honestly have no idea.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-: I just love the look of the slab-serif characters in Iosevka! Look at the beautiful <code>"}"</code> in the screenshot!
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-: not to be confused with <i>italic</i>, which changes glyphs in addition to slanting.
-</p></div></div>
-
-
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+
+<div id="content">
+<div class="post-date">19 Sep 2017</div>
+<h1 class="post-title"><a href="https://bastibe.de/2017-09-19-multi-font-themes.html">Multi-Font Themes in Emacs</a></h1>
+<p>Traditionally, text editor themes are all about colors, right? In programming, we use color to tell variables from type declarations, comments, or strings. However, any other text document uses typography instead of color to distinguish between headlines, list items, and keywords. I think that our current approach to highlighting code is misguided.</p>
+<p>I think that color themes are an accident of history. Terminal text editors are unable to switch fonts. All they can do is switch colors, so colors is all we use. But in todays graphical world, we are no longer bound by the shackles of terminals, and Emacs can switch fonts just as easily as colors<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>.</p>
+<p>It all started about a year ago, when I fell in love with a font called <a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a>. One of the coolest features of Pragmata was its native bold and italic letters, and its wide support for unicode symbols. I had to find a use for these features! And so, down the rabbit hole I went. <strong>Keywords</strong> should be bold! <em># Comments</em> should be italic! And while we're at it, why not add some <em>underlines</em>? And so on.</p>
+<p>The logical next step was then to get rid of colors altogether. At first, as an experiment. Do I really <em>need</em> colors in code? The very pretty <a href="https://github.com/maio/eink-emacs">eink theme</a> seemed to claim otherwise. After a few months of this lunacy, I realized that while I didn't strictly <em>need</em> colors, the stylistic variations of just one font aren't quite sufficient for source code. In particular, it wasn't always easy to distinguish between italic and roman type in PragmataPro, which lead to some confusion.</p>
+<p>But then, inspiration hit me: Who says that I could only use one single font? No one!</p>
+<p><img src="http://bastibe.de/static/2017-09/color%20theme.png" alt="color%20theme" /></p>
+<p>The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, <a href="https://be5invis.github.io/Iosevka/">Iosevka</a> Slab<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup> for strings, and oblique<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup> Iosevka for comments. <a href="http:_font.ubuntu.com_">Ubuntu Mono</a> and <a href="http:_input.fontbureau.com_">InputCompressed</a> work well, too. You can find my current theme <a href="https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el">on Github</a>. The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.</p>
+<p>Still, I love the look of this! (Of course it won't work in a terminal, or most other text editors.)</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>Can other text editors do this? I honestly have no idea.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>I just love the look of the slab-serif characters in Iosevka! Look at the beautiful <code>&quot;}&quot;</code> in the screenshot!<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>not to be confused with <em>italic</em>, which changes glyphs in addition to slanting.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

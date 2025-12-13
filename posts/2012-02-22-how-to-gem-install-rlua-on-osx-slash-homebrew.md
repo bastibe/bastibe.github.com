@@ -1,0 +1,26 @@
+---
+title: How to gem install rlua on OSX/homebrew
+date: 2012-02-22 11:43
+filetags: compiling macos
+---
+
+If you want to use rlua, you need to have Lua installed. However, OSX does not come with Lua preinstalled, so you install it using
+
+#+begin src sh
+    brew install lua
+#end_src
+
+Oh, would it be nice if everyone agreed on how to install stuff like this. Case in point, homebrew installs liblua (quite reasonable) in `/usr/local/lib/liblua.[5.1[.4]].dylib`
+
+rlua however expects it to be called `liblua5.1.dylib` (notice the missing `.`).
+
+Similarly, the headers are installed plainly into `/usr/local/include`, whereas rlua expects them to be in a folder called `lua5.1`.
+
+Hence, here is how you get rlua to install:
+
+```sh
+    ln -s /usr/local/Cellar/lua/5.1.4/lib/liblua.5.1.4.dylib /usr/local/lib/liblua5.1.dylib
+    ln -s /usr/local/Cellar/lua/5.1.4/include/ /usr/local/include/lua5.1
+```
+
+Not exactly a beautiful solution, but it works.

@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
-<title>bastibe.de</title>
+      title="RSS feed for https://bastibe.de">
+<title>Home</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -18,74 +19,34 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<h1 class="title">Posts tagged "org-journal":</h1>
-<div class="post-date">03 Jun 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h1>
-<p>
-<a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http://www.orgzly.com/">Orgzly</a> does <i>not</i> work with my 1k-file journal directory).
-</p>
-
-<p>
-But, as I keep re-discovering, org-mode already has a solution for this: org-mode can export your agenda to an iCalendar file! Most calendar applications can then subscribe to that file, and show your future journal entries right in your calendar. And if you set it up right, this will even sync changes to your calendar!
-</p>
-
-<p>
-First, you need to set up some kind of regular export job. I use a cron job that regularly runs an Emacs batch job <code>emacs --batch --script ~/bin/calendar_init.el</code> with the following code in <i>calendar​_init.el</i>:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-elisp">;; no init file is loaded, so provide everything here:
-(add-to-list 'load-path "~/etc/org-journal/")
-(setq org-journal-dir "~/journal/"            ; where my journal files are
-      org-journal-file-format "%Y-%m-%d.org"  ; their file names
-      org-journal-enable-agenda-integration t ; so entries are on the agenda
-      org-icalendar-store-UID t               ; so changes sync correctly
-      org-icalendar-include-todo "all"        ; include TODOs and DONEs
-      org-icalendar-combined-agenda-file "~/calendar/org-journal.ics")
-
-(require 'org-journal)
-(org-journal-update-org-agenda-files) ; put future entries on the agenda
-(org-icalendar-combine-agenda-files)  ; export the ICS file
-(save-buffers-kill-emacs t)           ; save all modified files and exit
-</pre>
 </div>
 
-<p>
-It is important to set <code>org-icalendar-store-UID</code>, as otherwise every change to a future entry would result in a duplicated calendar entry. It will clutter up your journal entries with an <code>UID</code> property, though.
-</p>
+<div id="content">
 
-<p>
-I do this on my web server, with my journal files <a href="https://syncthing.net/">syncthing</a>ed from my other computers. With that, I can subscribe to the calendar file from any internet-connected computer or mobile phone (using <a href="https://icsdroid.bitfire.at/">ICSdroid</a>). But you could just as well sync only the ICS file, or just subscribe to the local file, if you don't want to upload your complete yournal to a web server.
-</p>
 
-<p>
-(Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> </div>
+<h1>Posts tagged "org-journal"</h1>
 
-<div class="post-date">02 Apr 2018</div><h1 class="post-title"><a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h1>
-<p>
-I keep a simple journal in <a href="https://github.com/bastibe/org-journal">org-journal</a>: One text file per day, in <a href="https://orgmode.org/">org-mode</a>. But over the years, org-journal has grown somewhat beyond this simple use case. <a href="https://github.com/bastibe/org-journal/releases/tag/1.7.1">About three years ago</a>, a gentleman named <a href="https://github.com/vkazanov">Vladimir Kazanov</a> implemented a very fast text search. Thus, my journal became an information archive. <a href="https://github.com/bastibe/org-journal/releases/tag/1.11.0">About two years ago</a>, org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And <a href="https://github.com/bastibe/org-journal/releases/tag/1.13.1">today</a>, org-journal gained the ability to work with future journal entries, thus becoming a calendar.
-</p>
-
-<p>
-Despite all of these features however, org-journal remains one org file per day, with fancy functions to do fancy things if you want them—or ignore them, if the journal is all you need.
-</p>
-
-<p>
-Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:
-</p>
-
+<div class="post-date">02 Apr 2018</div><h2 class="post-title"><a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">Scheduling Future TODOs in org-journal</a></h2>
+<p>I keep a simple journal in <a href="https://github.com/bastibe/org-journal">org-journal</a>: One text file per day, in <a href="https:_orgmode.org_">org-mode</a>. But over the years, org-journal has grown somewhat beyond this simple use case. <a href="https://github.com/bastibe/org-journal/releases/tag/1.7.1">About three years ago</a>, a gentleman named <a href="https://github.com/vkazanov">Vladimir Kazanov</a> implemented a very fast text search. Thus, my journal became an information archive. <a href="https://github.com/bastibe/org-journal/releases/tag/1.11.0">About two years ago</a>, org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And <a href="https://github.com/bastibe/org-journal/releases/tag/1.13.1">today</a>, org-journal gained the ability to work with future journal entries, thus becoming a calendar.</p>
+<p>Despite all of these features however, org-journal remains one org file per day, with fancy functions to do fancy things if you want them—or ignore them, if the journal is all you need.</p>
+<p>Back to scheduling: This work was prompted by <a href="https:_zngguvnf.org_">my colleague</a>, who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:</p>
 <pre>
 <span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>
 <span style="color: #111111; font-weight: bold; font-style: italic;">Monday     2 April 2018 W14</span>
@@ -101,25 +62,44 @@ Back to scheduling: This work was prompted by <a href="https://zngguvnf.org/">my
 <span style="color: #111111;">  2018-04-08: Scheduled:  </span><span style="color: #111111;">TODO</span><span style="color: #111111;"> Celebrate Sunday</span>
 </pre>
 
-<p>
-And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing <code>i j</code> in <code>M-x calendar</code> or by calling <code>org-journal-new-scheduled-entry</code>, and org-journal will create an entry with a <code>SCHEDULED</code> property of the appropriate date (prefix to suppress <code>TODO</code>). When the current day reaches that entry, it will incorporate it into the daily journal.
-</p>
+<p>And lo and behold, this now works in org-journal as well! Just create a new journal entry in the future, either by pressing <code>i j</code> in <code>M-x calendar</code> or by calling <code>org-journal-new-scheduled-entry</code>, and org-journal will create an entry with a <code>SCHEDULED</code> property of the appropriate date (prefix to suppress <code>TODO</code>). When the current day reaches that entry, it will incorporate it into the daily journal.</p>
+<p>Future journal entries are highlighted in <code>M-x calendar</code>, and you can get an overview of them with <code>org-journal-schedule-view</code>, or, if you enable <code>org-journal-enable-agenda-integration</code>, through the ordinary <code>org-agenda</code>, as shown above. The agenda integration does not include past journal entries in the agenda, since agenda searches tend to become very slow if they have to traverse the hundreds of files in my journal.</p>
+<p>[1]: This is of course not <em>his</em> calendar, but mine.</p>
 
-<p>
-Future journal entries are highlighted in <code>M-x calendar</code>, and you can get an overview of them with <code>org-journal-schedule-view</code>, or, if you enable <code>org-journal-enable-agenda-integration</code>, through the ordinary <code>org-agenda</code>, as shown above. The agenda integration does not include past journal entries in the agenda, since agenda searches tend to become very slow if they have to traverse the hundreds of files in my journal.
-</p>
 
-<p>
-[1]: This is of course not <i>his</i> calendar, but mine.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-journal.html">org-journal</a> <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> </div>
+
+<div class="post-date">03 Jun 2018</div><h2 class="post-title"><a href="https://bastibe.de/2018-06-03-syncing-org-journal-with-your-calendar.html">Syncing Org-Journal with your Calendar</a></h2>
+<p><a href="https://bastibe.de/2018-04-02-scheduling-future-todos-in-org-journal.html">A month ago</a>, org-journal learned to deal with future journal entries. I use future journal entries for appointments or not-yet-actionable tasks that I don't want in my current TODO list just yet. This works really well while I am at my computer, and really does not work at all when I am not (<a href="http:_www.orgzly.com_">Orgzly</a> does <em>not</em> work with my 1k-file journal directory).</p>
+<p>But, as I keep re-discovering, org-mode already has a solution for this: org-mode can export your agenda to an iCalendar file! Most calendar applications can then subscribe to that file, and show your future journal entries right in your calendar. And if you set it up right, this will even sync changes to your calendar!</p>
+<p>First, you need to set up some kind of regular export job. I use a cron job that regularly runs an Emacs batch job <code>emacs --batch --script ~/bin/calendar_init.el</code> with the following code in <em>calendar​_init.el</em>:</p>
+<div class="highlight"><pre><span></span><span class="c1">;; no init file is loaded, so provide everything here:</span>
+<span class="p">(</span><span class="nv">add-to-list</span><span class="w"> </span><span class="ss">&#39;load-path</span><span class="w"> </span><span class="s">&quot;~/etc/org-journal/&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">org-journal-dir</span><span class="w"> </span><span class="s">&quot;~/journal/&quot;</span><span class="w">            </span><span class="c1">; where my journal files are</span>
+<span class="w">      </span><span class="nv">org-journal-file-format</span><span class="w"> </span><span class="s">&quot;%Y-%m-%d.org&quot;</span><span class="w">  </span><span class="c1">; their file names</span>
+<span class="w">      </span><span class="nv">org-journal-enable-agenda-integration</span><span class="w"> </span><span class="no">t</span><span class="w"> </span><span class="c1">; so entries are on the agenda</span>
+<span class="w">      </span><span class="nv">org-icalendar-store-UID</span><span class="w"> </span><span class="no">t</span><span class="w">               </span><span class="c1">; so changes sync correctly</span>
+<span class="w">      </span><span class="nv">org-icalendar-include-todo</span><span class="w"> </span><span class="s">&quot;all&quot;</span><span class="w">        </span><span class="c1">; include TODOs and DONEs</span>
+<span class="w">      </span><span class="nv">org-icalendar-combined-agenda-file</span><span class="w"> </span><span class="s">&quot;~/calendar/org-journal.ics&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">require</span><span class="w"> </span><span class="ss">&#39;org-journal</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">org-journal-update-org-agenda-files</span><span class="p">)</span><span class="w"> </span><span class="c1">; put future entries on the agenda</span>
+<span class="p">(</span><span class="nv">org-icalendar-combine-agenda-files</span><span class="p">)</span><span class="w">  </span><span class="c1">; export the ICS file</span>
+<span class="p">(</span><span class="nv">save-buffers-kill-emacs</span><span class="w"> </span><span class="no">t</span><span class="p">)</span><span class="w">           </span><span class="c1">; save all modified files and exit</span>
+</pre></div>
+<p>It is important to set <code>org-icalendar-store-UID</code>, as otherwise every change to a future entry would result in a duplicated calendar entry. It will clutter up your journal entries with an <code>UID</code> property, though.</p>
+<p>I do this on my web server, with my journal files <a href="https:_syncthing.net_">syncthing</a>ed from my other computers. With that, I can subscribe to the calendar file from any internet-connected computer or mobile phone (using <a href="https:_icsdroid.bitfire.at_">ICSdroid</a>). But you could just as well sync only the ICS file, or just subscribe to the local file, if you don't want to upload your complete yournal to a web server.</p>
+<p>(Incidentally, I first implemented my own ICS export, before realizing that this functionality already existed in org-mode. It was a fun little project, and I learned a lot about org-mode's internal data structures and the weirdness that are iCalendar files.)</p>
+
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
+
+</div>
+<div id="postamble" class="status">
 <div id="archive">
-<a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-</div>
-<div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

@@ -6,9 +6,9 @@ Now that I am a student again, I have to use Matlab again. Among the many joys o
 
 Because it does not work. So angry.
 
-Basically, ~mex~ does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had ~gcc-4.2~ and your system SDK was stored in /\/Developer\/SDKs\/MacOSX10.6.sdk/. However, as of 10.7 (I think), the /\/Developer/ directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, ~gcc~ has been deprecated in favor of ~clang~. While a ~gcc~ binary is still provided, ~gcc-4.2~ is not. Of course, that is what ~mex~ relies on. Lastly, ~mex~ of course completely disregards common system paths such as, say, /\/usr\/local\/bin/, so compiling against some homebrew library won't work.
+Basically, ~mex~ does not work because it assumes that you have OS X 10.6 installed. In OS X 10.6 you had ~gcc-4.2~ and your system SDK was stored in =/Developer/SDKs/MacOSX10.6.sdk/=. However, as of 10.7 (I think), the =/Developer/= directory has been deprecated in favor of distributing the whole development environment within the App package of XCode. Also, ~gcc~ has been deprecated in favor of ~clang~. While a ~gcc~ binary is still provided, ~gcc-4.2~ is not. Of course, that is what ~mex~ relies on. Lastly, ~mex~ of course completely disregards common system paths such as, say, =/usr/local/bin/=, so compiling against some homebrew library won't work.
 
-At least these things are rather easy to fix, since all these settings are saved in a file called /mexopts.sh/, which is saved to /~\/.matlab\/R2012a\// by default. The relevant section on 64-bit OS X begins after ~maci64)~ and should look like this: (changes are marked by comments)
+At least these things are rather easy to fix, since all these settings are saved in a file called /mexopts.sh/, which is saved to =~/.matlab/R2012a/= by default. The relevant section on 64-bit OS X begins after =maci64)= and should look like this: (changes are marked by comments)
 
 #+begin_src makefile
     #----------------------------------------------------------------------------

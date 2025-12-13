@@ -6,7 +6,7 @@ For my latest experiments, I needed to run both Python functions and Matlab func
 
 ** Usage
 
-As it's name suggests, Matlab is a @@html:<b>mat</b>rix <b>lab</b>oratory@@, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as ~matlab.double~ et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called [[http://scipy.org/][Numpy]], and just uses that instead.
+As it's name suggests, Matlab is a *mat*rix *lab*oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as ~matlab.double~ et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called [[http://scipy.org/][Numpy]], and just uses that instead.
 
 #+begin_example
        Matlab Engine for Python        |              Transplant
@@ -62,7 +62,7 @@ The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transpla
 
 More interesting is the time it takes to call a Matlab function from Python. Have a look:
 
-[[http://bastibe.de/static/2015-11/execution time.png]]
+[[http://bastibe.de/static/2015-11/execution-time.png]]
 
 This is running ~sum(randn(n,1))~ from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.
 

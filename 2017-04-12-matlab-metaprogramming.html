@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Matlab Metaprogramming</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,50 +19,51 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">12 Apr 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-04-12-matlab-metaprogramming.html">Matlab Metaprogramming</a></h1>
-<p>
-Why is it, that I find Matlab to be a fine teaching tool and a fine tool for solving engineering problems, but at the same time, extremely cumbersome for my own work? Recently, the answer struck me: <i>metaprogramming in Matlab sucks</i>.
-</p>
+<div class="post-date">12 Apr 2017</div>
+<h1 class="post-title"><a href="https://bastibe.de/2017-04-12-matlab-metaprogramming.html">Matlab Metaprogramming</a></h1>
+<p>Why is it, that I find Matlab to be a fine teaching tool and a fine tool for solving engineering problems, but at the same time, extremely cumbersome for my own work? Recently, the answer struck me: <em>metaprogramming in Matlab sucks</em>.</p>
+<p>Matlab is marketed as a tool for engineers to solve engineering problems. There are convenient data structures for numerical data (arrays, tables), less convenient data structures for non-numeric data (cells, structs, chars), and a host of expensive but powerful functions and methods for working with this kind of data. This is the happy path.</p>
+<p>But don't stray too far from the happy path; horrors lurk where The Mathworks don't dare going. Basic stuff like talking to sockets or interacting with other programs is very cumbersome in Matlab, and sometimes even downright impossible for the lack of threads, pipes, and similar infrastructure. But this is common knowledge, and consistent with Matlab's goals as an engineering tool, not a general purpose programming language. These are first-order problems, and they are rarely insurmountable.</p>
+<p>The more insidious problem is metaprogramming, i.e. when the objects of your code are code objects themselves. The first order use of programming is to solve real-world problems. If these problems are numeric in nature, Matlab has got you covered. But as every programmer discovers at some point, the second order use of programming is to solve programming problems. And by golly, will Matlab let you down when you try that!</p>
+<p>As soon as you climb that ladder of abstraction, and the objects of your code become code objects themselves, you will enter weird country. You think <code>exist</code> will tell you whether a variable name is taken? Try calling it on a method. You think <code>nargout</code> will always give you a number? Again, methods will enlighten you. Quick, how do you capture all output arguments of a function call in a variable? <code>x = cell(nargout(fun), 1); [x{:}] = fun(...)</code>, obviously (this sometimes fails). And don't even think of trying to overload <code>subsref</code> to create something generic. Those <code>subsref</code> semantics are <a href="https://mathworks.com/help/matlab/matlab_oop/code-patterns-for-subsref-and-subsasgn-methods.html">crazy talk</a>!</p>
+<p>I could go on. The real power of code is abstraction. We use programming to repeatedly and reliably solve similar problems. The logical next step is to use those same programming tools to solve similar <em>kinds</em> of problems. This happens to all of us, and Matlab makes it extremely hard to deal with. Thus, it puts a ceiling on the level of abstraction that is reasonably achievable, and limits engineers to first-order solutions. And after a few years of acclimatization, it will put that same ceiling on those engineers' thinking, because you can't reason about what you can't express.</p>
 
-<p>
-Matlab is marketed as a tool for engineers to solve engineering problems. There are convenient data structures for numerical data (arrays, tables), less convenient data structures for non-numeric data (cells, structs, chars), and a host of expensive but powerful functions and methods for working with this kind of data. This is the happy path.
-</p>
-
-<p>
-But don't stray too far from the happy path; horrors lurk where The Mathworks don't dare going. Basic stuff like talking to sockets or interacting with other programs is very cumbersome in Matlab, and sometimes even downright impossible for the lack of threads, pipes, and similar infrastructure. But this is common knowledge, and consistent with Matlab's goals as an engineering tool, not a general purpose programming language. These are first-order problems, and they are rarely insurmountable.
-</p>
-
-<p>
-The more insidious problem is metaprogramming, i.e. when the objects of your code are code objects themselves. The first order use of programming is to solve real-world problems. If these problems are numeric in nature, Matlab has got you covered. But as every programmer discovers at some point, the second order use of programming is to solve programming problems. And by golly, will Matlab let you down when you try that!
-</p>
-
-<p>
-As soon as you climb that ladder of abstraction, and the objects of your code become code objects themselves, you will enter weird country. You think <code>exist</code> will tell you whether a variable name is taken? Try calling it on a method. You think <code>nargout</code> will always give you a number? Again, methods will enlighten you. Quick, how do you capture all output arguments of a function call in a variable? <code>x = cell(nargout(fun), 1); [x{:}] = fun(...)</code>, obviously (this sometimes fails). And don't even think of trying to overload <code>subsref</code> to create something generic. Those <code>subsref</code> semantics are <a href="https://mathworks.com/help/matlab/matlab_oop/code-patterns-for-subsref-and-subsasgn-methods.html">crazy talk</a>!
-</p>
-
-<p>
-I could go on. The real power of code is abstraction. We use programming to repeatedly and reliably solve similar problems. The logical next step is to use those same programming tools to solve similar <i>kinds</i> of problems. This happens to all of us, and Matlab makes it extremely hard to deal with. Thus, it puts a ceiling on the level of abstraction that is reasonably achievable, and limits engineers to first-order solutions. And after a few years of acclimatization, it will put that same ceiling on those engineers' thinking, because you can't reason about what you can't express.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

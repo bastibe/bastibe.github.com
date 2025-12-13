@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Org Mode Citation Links</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,65 +19,69 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<div class="post-date">23 Sep 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
-<p>
-I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.
-</p>
-
-<p>
-But not everything is perfect. For one thing, citations do not work well. Sure, you can always write <code>\cite{cohen93}</code>, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but <code>\cite{cohen93}</code> is just inline LaTeX.
-</p>
-
-<p>
-But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-elisp">(org-add-link-type "cite"
-     (defun follow-cite (name)
-       "Open bibliography and jump to appropriate entry.
-        The document must contain \bibliography{filename} somewhere
-        for this to work"
-       (find-file-other-window
-        (save-excursion
-          (beginning-of-buffer)
-          (save-match-data
-            (re-search-forward "\\\\bibliography{\\([^}]+\\)}")
-            (concat (match-string 1) ".bib"))))
-       (beginning-of-buffer)
-       (search-forward name))
-     (defun export-cite (path desc format)
-       "Export [[cite:cohen93]] as \cite{cohen93} in LaTeX."
-       (if (eq format 'latex)
-           (if (or (not desc) (equal 0 (search "cite:" desc)))
-               (format "\\cite{%s}" path)
-             (format "\\cite[%s]{%s}" desc path)))))
-</pre>
 </div>
 
-<p>
-This registers a new link type in Org Mode: <code>[[cite:cohen93]]</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div id="content">
+<div class="post-date">23 Sep 2014</div>
+<h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
+<p>I am writing my master's thesis in <a href="http:_orgmode.org_">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.</p>
+<p>But not everything is perfect. For one thing, citations do not work well. Sure, you can always write <code>\cite{cohen93}</code>, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but <code>\cite{cohen93}</code> is just inline LaTeX.</p>
+<p>But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">org-add-link-type</span><span class="w"> </span><span class="s">&quot;cite&quot;</span>
+<span class="w">     </span><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">follow-cite</span><span class="w"> </span><span class="p">(</span><span class="nv">name</span><span class="p">)</span>
+<span class="w">       </span><span class="s">&quot;Open bibliography and jump to appropriate entry.</span>
+<span class="s">        The document must contain \bibliography{filename} somewhere</span>
+<span class="s">        for this to work&quot;</span>
+<span class="w">       </span><span class="p">(</span><span class="nv">find-file-other-window</span>
+<span class="w">        </span><span class="p">(</span><span class="k">save-excursion</span>
+<span class="w">          </span><span class="p">(</span><span class="nv">beginning-of-buffer</span><span class="p">)</span>
+<span class="w">          </span><span class="p">(</span><span class="nb">save-match-data</span>
+<span class="w">            </span><span class="p">(</span><span class="nf">re-search-forward</span><span class="w"> </span><span class="s">&quot;\\\\bibliography{\\([^}]+\\)}&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="p">(</span><span class="nf">concat</span><span class="w"> </span><span class="p">(</span><span class="nv">match-string</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="s">&quot;.bib&quot;</span><span class="p">))))</span>
+<span class="w">       </span><span class="p">(</span><span class="nv">beginning-of-buffer</span><span class="p">)</span>
+<span class="w">       </span><span class="p">(</span><span class="nf">search-forward</span><span class="w"> </span><span class="nv">name</span><span class="p">))</span>
+<span class="w">     </span><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">export-cite</span><span class="w"> </span><span class="p">(</span><span class="nv">path</span><span class="w"> </span><span class="nv">desc</span><span class="w"> </span><span class="nf">format</span><span class="p">)</span>
+<span class="w">       </span><span class="s">&quot;Export [[cite:cohen93]] as \cite{cohen93} in LaTeX.&quot;</span>
+<span class="w">       </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">eq</span><span class="w"> </span><span class="nf">format</span><span class="w"> </span><span class="ss">&#39;latex</span><span class="p">)</span>
+<span class="w">           </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">or</span><span class="w"> </span><span class="p">(</span><span class="nv">not</span><span class="w"> </span><span class="nv">desc</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">equal</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">(</span><span class="nv">search</span><span class="w"> </span><span class="s">&quot;cite:&quot;</span><span class="w"> </span><span class="nv">desc</span><span class="p">)))</span>
+<span class="w">               </span><span class="p">(</span><span class="nf">format</span><span class="w"> </span><span class="s">&quot;\\cite{%s}&quot;</span><span class="w"> </span><span class="nv">path</span><span class="p">)</span>
+<span class="w">             </span><span class="p">(</span><span class="nf">format</span><span class="w"> </span><span class="s">&quot;\\cite[%s]{%s}&quot;</span><span class="w"> </span><span class="nv">desc</span><span class="w"> </span><span class="nv">path</span><span class="p">)))))</span>
+</pre></div>
+<p>This registers a new link type in Org Mode: <code>![cite:cohen93](cite:cohen93)</code>, which will jump to the appropriate bibliography entry when clicked, and get exported as <code>\cite{cohen93}</code> in LaTeX. Awesome!</p>
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a>, <a href="https://bastibe.de/tag-emacs.html">emacs</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Tagged File System</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,70 +19,56 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">19 Apr 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-04-19-tagged-file-system.html">Tagged File System</a></h1>
-<p>
-Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff "Ordner" wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen "Verzeichnis" wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für "Verzeichnis"&#x2026;)
-</p>
+<div class="post-date">19 Apr 2009</div>
+<h1 class="post-title"><a href="https://bastibe.de/2009-04-19-tagged-file-system.html">Tagged File System</a></h1>
+<p>Ein großes Problem bei der Benutzung von Computern ist, dass unerfahrene Benutzer oftmals kein Verständnis für Ordnerstrukturen haben. Das ist im Grunde auch klar, denn die Ordner-Metapher legt nahe, dass sich Ordner auf dem Computer wie echte Aktenordner verhalten, also dass jeder Ordner mehrere Dateien, jedoch nicht andere Ordner enthalten kann. Ganz im Gegenteil dazu basiert aber eine normale Verzeichnisstruktur meist aus vielen, tief ineinander geschachtelten Ordnern. Von einem Usablitity-Standpunkt aus ist daher der Begriff &quot;Ordner&quot; wahrscheinlich schlecht gewählt. Vielleicht würde es schon reichen, den älteren Namen &quot;Verzeichnis&quot; wieder einzuführen. (Dann bräuchten wir nur noch ein passendes Piktogramm für &quot;Verzeichnis&quot;...)</p>
+<p><img src="http://bastibe.de/static/2009-04/standard_finder_small.png" alt="standard_finder_small" /></p>
+<p>Es wäre daher wünschenswert, eine einfacher zu verstehende Alternative zu Ordnerhierarchien zu haben. Die gibt es auch schon, in Form der bekannten Verzeichnisse &quot;Meine Bilder&quot;, &quot;Meine Dokumente&quot;, etc.
+Diese Ordner wollen den Benutzer mit einfachen Piktogrammen und klaren Namen dazu animieren, einen natürlichen Ort für seine Dateien zu wählen und so ein wenig Ordnung zu schaffen. Tatsächlich ist dieses Konzept einer Tag-Struktur schon relativ ähnlich, da auch hier nicht davon ausgegangen wird, dass sich der Benutzer selbst um eine tief geschachtelte Orderhierarchie kümmert, sondern nur wenige, einfach zu verstehende Markierungsmöglichkeiten (&quot;Bilder&quot;, &quot;Dokumente&quot;) geboten werden.</p>
+<p>Ein echtes Tag-basiertes System könnte vollkommen ohne Verzeichnisse auskommen, wobei man dann eben beim Speichern einer Datei nicht mehr aus einer hierarchischen Liste von Ordnern den Speicherort auswählen würde, sondern von einer flachen Liste von Tags. Die Usability-Kosten davon wären vernachlässigbar.</p>
+<p><img src="http://bastibe.de/static/2009-04/tagged_finder_small.png" alt="tagged_finder_small" /></p>
+<p>Ähnlich würde das Finden von Dateien funktionieren: Statt eine hierarchische Liste von Ordnern nacheinander anzuklicken, würde man eine flache Liste von Tags nacheinander anklicken, jedoch mit dem Bonus, dass man die gesuchte Datei nicht erst bei Anklicken aller Tags, sondern mit großer Wahrscheinlichkeit schon nach ein oder zwei Tags gefunden hätte.</p>
+<p>Ein Problem würde jedoch mit Projekten entstehen, die aus mehreren Dateien bestehen. Hier müsste man sicher stellen, dass sie im Dateisystem nur als einzelne große Projektdatei auftauchen und nicht jede einzelne Unterdatei gelistet wird. Das ließe sich zum Beispiel durch &quot;Bundles&quot; lösen, wie sie heute schon in OSX vorkommen (Ordner mit definierter Namesendung und Inhalt werden wie Dateien behandelt) oder einfach durch einen speziellen Tag, der die einzelnen Dateien vor der normalen Suche versteckt.
+Dieses Konzept wird übrigens heute schon vielfach verwendet, so ist etwa eine aktuelle Word-Datei nur eine ZIP-Datei, die eine definierte Verzeichnisstruktur mit allen Bildern, dem Text (als XML), einer Vorschau-Grafik etc. enthält.</p>
+<p><img src="http://bastibe.de/static/2009-04/bundles_small.png" alt="bundles_small" /></p>
+<p>Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfacher arbeiten könnte als mit den heute üblichen Verzeichnisstrukturen. Tja, jetzt fehlt nur noch eine innovative Firma, die sich um die Umsetzung kümmert...</p>
 
-
-<figure id="orge167c9e">
-<img src="http://bastibe.de/static/2009-04/standard_finder_small.png" alt="standard_finder_small.png">
-
-</figure>
-
-<p>
-Es wäre daher wünschenswert, eine einfacher zu verstehende Alternative zu Ordnerhierarchien zu haben. Die gibt es auch schon, in Form der bekannten Verzeichnisse "Meine Bilder", "Meine Dokumente", etc.
-Diese Ordner wollen den Benutzer mit einfachen Piktogrammen und klaren Namen dazu animieren, einen natürlichen Ort für seine Dateien zu wählen und so ein wenig Ordnung zu schaffen. Tatsächlich ist dieses Konzept einer Tag-Struktur schon relativ ähnlich, da auch hier nicht davon ausgegangen wird, dass sich der Benutzer selbst um eine tief geschachtelte Orderhierarchie kümmert, sondern nur wenige, einfach zu verstehende Markierungsmöglichkeiten ("Bilder", "Dokumente") geboten werden.
-</p>
-
-<p>
-Ein echtes Tag-basiertes System könnte vollkommen ohne Verzeichnisse auskommen, wobei man dann eben beim Speichern einer Datei nicht mehr aus einer hierarchischen Liste von Ordnern den Speicherort auswählen würde, sondern von einer flachen Liste von Tags. Die Usability-Kosten davon wären vernachlässigbar.
-</p>
-
-
-<figure id="orgd876086">
-<img src="http://bastibe.de/static/2009-04/tagged_finder_small.png" alt="tagged_finder_small.png">
-
-</figure>
-
-<p>
-Ähnlich würde das Finden von Dateien funktionieren: Statt eine hierarchische Liste von Ordnern nacheinander anzuklicken, würde man eine flache Liste von Tags nacheinander anklicken, jedoch mit dem Bonus, dass man die gesuchte Datei nicht erst bei Anklicken aller Tags, sondern mit großer Wahrscheinlichkeit schon nach ein oder zwei Tags gefunden hätte.
-</p>
-
-<p>
-Ein Problem würde jedoch mit Projekten entstehen, die aus mehreren Dateien bestehen. Hier müsste man sicher stellen, dass sie im Dateisystem nur als einzelne große Projektdatei auftauchen und nicht jede einzelne Unterdatei gelistet wird. Das ließe sich zum Beispiel durch "Bundles" lösen, wie sie heute schon in OSX vorkommen (Ordner mit definierter Namesendung und Inhalt werden wie Dateien behandelt) oder einfach durch einen speziellen Tag, der die einzelnen Dateien vor der normalen Suche versteckt.
-Dieses Konzept wird übrigens heute schon vielfach verwendet, so ist etwa eine aktuelle Word-Datei nur eine ZIP-Datei, die eine definierte Verzeichnisstruktur mit allen Bildern, dem Text (als XML), einer Vorschau-Grafik etc. enthält.
-</p>
-
-
-<figure id="orgafcbc06">
-<img src="http://bastibe.de/static/2009-04/bundles_small.png" alt="bundles_small.png">
-
-</figure>
-
-<p>
-Ich glaube, dass man mit solch einem Tag-basierten Dateisystem deutlich einfacher arbeiten könnte als mit den heute üblichen Verzeichnisstrukturen. Tja, jetzt fehlt nur noch eine innovative Firma, die sich um die Umsetzung kümmert&#x2026;
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

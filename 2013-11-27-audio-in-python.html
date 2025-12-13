@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Sound in Python</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,125 +19,85 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">27 Nov 2013</div><h1 class="post-title"><a href="https://bastibe.de/2013-11-27-audio-in-python.html">Sound in Python</a></h1>
-<p>
-Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
-</p>
+<div class="post-date">27 Nov 2013</div>
+<h1 class="post-title"><a href="https://bastibe.de/2013-11-27-audio-in-python.html">Sound in Python</a></h1>
+<p>Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.</p>
+<p>It's not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.</p>
+<p>The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http:_www.portaudio.com_">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.</p>
+<p>But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!</p>
+<p>So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.</p>
+<p>So, lets read some audio data, shall we?</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">soundfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;sad_song.wav&#39;</span><span class="p">)</span>
+</pre></div>
+<p>done. All the audio data is now available as a NumPy array in <code>data</code>. Just like that.</p>
+<p>Awesome, isn't it?</p>
+<p>OK, that was easy. So let's read only the first and last 100 frames!</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span>
+<span class="n">first</span> <span class="o">=</span> <span class="n">soundfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;long_song.flac&#39;</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">last</span> <span class="o">=</span> <span class="n">soundfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">start</span><span class="o">=-</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+<p>This really only read the first and last bit. Not everything in between!</p>
+<p>Note that at no point I did explicitly open or close a file! This is Python! We can do that! When the <code>SoundFile</code> object is created, it opens the file. When it goes out of scope, it closes the file. It's as simple as that. Or just use <code>SoundFile</code> in a context manager. That works as well.</p>
+<p>Oh, but I want to use the sound card as well! I want to record audio to a file!</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pysoundcard</span><span class="w"> </span><span class="kn">import</span> <span class="n">Stream</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pysoundfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundFile</span><span class="p">,</span> <span class="n">ogg_file</span><span class="p">,</span> <span class="n">write_mode</span>
+<span class="k">with</span> <span class="n">Stream</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span> <span class="c1"># opens your default audio device</span>
+    <span class="c1"># This is supposed to be a new file, so specify it completely</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">SoundFile</span><span class="p">(</span><span class="s1">&#39;happy_song.ogg&#39;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">sample_rate</span><span class="p">,</span>
+                  <span class="n">channels</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">channels</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ogg_file</span><span class="p">,</span>
+                  <span class="n">mode</span><span class="o">=</span><span class="n">write_mode</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">sample_rate</span><span class="p">))</span> <span class="c1"># one second</span>
+</pre></div>
+<p>Read from the stream, write to a file. It works the other way round, too!</p>
+<p>And that's really all there is to it. Working with audio data in Python is easy now!</p>
+<p>Of course, there is much more you could do. You could create a callback function and be called every four<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. And you already saw that you can read Wave files, OGG, FLAC or MAT-files<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>.</p>
+<p>You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.</p>
+<p><em>UPDATE:</em> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>More precisely: Everything that <a href="http:_www.portaudio.com_">portaudio</a> supports.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
 
-<p>
-It's not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
-</p>
-
-<p>
-The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http://www.portaudio.com/">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.
-</p>
-
-<p>
-But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!
-</p>
-
-<p>
-So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.
-</p>
-
-<p>
-So, lets read some audio data, shall we?
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import soundfile
-data = soundfile.read('sad_song.wav')
-</pre>
-</div>
-
-<p>
-done. All the audio data is now available as a NumPy array in <code>data</code>. Just like that.
-</p>
-
-<p>
-Awesome, isn't it?
-</p>
-
-<p>
-OK, that was easy. So let's read only the first and last 100 frames!
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import soundfile
-first = soundfile.read('long_song.flac', stop=100)
-last = soundfile.read(start=-100)
-</pre>
-</div>
-
-<p>
-This really only read the first and last bit. Not everything in between!
-</p>
-
-<p>
-Note that at no point I did explicitly open or close a file! This is Python! We can do that! When the <code>SoundFile</code> object is created, it opens the file. When it goes out of scope, it closes the file. It's as simple as that. Or just use <code>SoundFile</code> in a context manager. That works as well.
-</p>
-
-<p>
-Oh, but I want to use the sound card as well! I want to record audio to a file!
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">from pysoundcard import Stream
-from pysoundfile import SoundFile, ogg_file, write_mode
-with Stream() as s: # opens your default audio device
-    # This is supposed to be a new file, so specify it completely
-    f = SoundFile('happy_song.ogg', sample_rate=s.sample_rate,
-                  channels=s.channels, format=ogg_file,
-                  mode=write_mode)
-    f.write(s.read(s.sample_rate)) # one second
-</pre>
-</div>
-
-<p>
-Read from the stream, write to a file. It works the other way round, too!
-</p>
-
-<p>
-And that's really all there is to it. Working with audio data in Python is easy now!
-</p>
-
-<p>
-Of course, there is much more you could do. You could create a callback function and be called every four[1] frames with new audio data to process. You could request your audio data as <code>int16</code>, because that would be totally awesome! You could use many different sound cards at the same time, and route stuff to and fro to your hearts desire! And you can run all this on Linux using ALSA or Jack, or on Windows using DirectSound or ASIO, or on Mac using CoreAudio[2]. And you already saw that you can read Wave files, OGG, FLAC or MAT-files[3].
-</p>
-
-<p>
-You can download these libraries from <a href="https://pypi.python.org/pypi">PyPi</a>, or use the binary Windows installers on Github. Or you can look at the source on Github (<a href="https://github.com/bastibe/PySoundFile">PySoundFile</a>, <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>), because Open Source is awesome like that! Also, you might find some bugs, because I haven't found them all yet. Then, I would like you to open an issue on Github. Or if have a great idea of how to improve things, please let me know as well.
-</p>
-
-<p>
-<b>UPDATE:</b> It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
-</p>
-
-<p>
-[1] You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-[2] More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.
-[3] More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> <a href="https://bastibe.de/tag-audio.html">audio</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a>, <a href="https://bastibe.de/tag-audio.html">audio</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

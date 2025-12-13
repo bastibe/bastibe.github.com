@@ -18,6 +18,8 @@ The fun thing is, LUTs are just PNG files that contain a table of colors. You kn
 
 As easy as that.
 
-A few more adjustments: many Capture One presets expect to be working on raw data, which is less saturated than Darktable's default. So I export with -15 /saturation/. Also, many presets include spacial adjustments such as Highlights or Shadows that are bound to not play well with the LUT PNG. To disable them, delete the offending lines from the *.costyle files[fn:: don't do this for RNI LUTs, it's forbidden by the User License Agreement that is hidden quite well in dark-grey-on-black at the very bottom of their website], or compensate the values with opposite slider movements.
+A few more adjustments: many Capture One presets expect to be working on raw data, which is less saturated than Darktable's default. So I export with -15 /saturation/. Also, many presets include spacial adjustments such as Highlights or Shadows that are bound to not play well with the LUT PNG. To disable them, delete the offending lines from the *.costyle files[fn:1], or compensate the values with opposite slider movements.
+
+[fn:1] don't do this for RNI LUTs, it's forbidden by the User License Agreement that is hidden quite well in dark-grey-on-black at the very bottom of their website
 
 When applying the LUTs in Darktable's /lut 3D/ module, there are a few more things you can do to fit them into your workflow. For example, you can lower the opacity of the /lut 3D/ module to vary their effect. Or you can choose /chromaticity/ as blend more to only apply their color transformation, but keep Darktable's tonal rendering. In /normal/ blend mode, some LUTs prefer a flat rendering as their input, so lower /contrast/ in /filmic rgb/ to zero and use the auto-pickers to set the image black and white point.

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Differences Between Camera Sensors</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,76 +19,64 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">27 Oct 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-10-26-differences-between-cameras.html">Differences Between Camera Sensors</a></h1>
-<p>
-Most cameras have the option to capture <i>raw</i> images, i.e. un-processed image data right from the image sensor. In theory, these images are pure physical measurements of light, and should therefore be very comparable between cameras. But are they? To investigate, I took a <i>raw</i> picture of <a href="https://en.wikipedia.org/wiki/ColorChecker">a color target</a> with each of my five cameras, and compared their output.
-</p>
-
-<p>
-Capturing accurate colors is a surprisingly intricate matter, as the color depends on the spectrum of the illumination, the reflective spectrum of the colored object, and the color filters in the camera. I normalized the illumination by taking pictures on an overcast day outside<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, and used a standard color target with 24 colored patches of a certified color.
-</p>
-
-<p>
-The resulting colored spectra are captured on the camera sensor by photon counters behind three color filters “red”, “green”, and “blue”<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>, which differ from camera to camera in their spectral sensitivity. The recorded colors then get projected on a computer screen with another set of “red”, “green”, and “blue” LEDs of some different spectral makeup, or printed in three or more inks on paper. And this is then seen with eyes of yet another set of “red”, “green”, and “blue” retinal cells. Let's leave it at <i>color is complicated</i>.
-</p>
-
-<p>
-At any rate, I took pictures at base ISO in <i>raw</i>, white-balanced and exposed for the third grey patch, and adjusted in saturation on the red patch. Here are the colors on the color checker and the recorded colors of my cameras:
-</p>
-
+<div class="post-date">27 Oct 2020</div>
+<h1 class="post-title"><a href="https://bastibe.de/2020-10-26-differences-between-cameras.html">Differences Between Camera Sensors</a></h1>
+<h1>get sRGB coordinates here: https://www.babelcolor.com/index_htm_files/RGB%20Coordinates%20of%20the%20Macbeth%20ColorChecker.pdf</h1>
+<p>Most cameras have the option to capture <em>raw</em> images, i.e. un-processed image data right from the image sensor. In theory, these images are pure physical measurements of light, and should therefore be very comparable between cameras. But are they? To investigate, I took a <em>raw</em> picture of <a href="https://en.wikipedia.org/wiki/ColorChecker">a color target</a> with each of my five cameras, and compared their output.</p>
+<p>Capturing accurate colors is a surprisingly intricate matter, as the color depends on the spectrum of the illumination, the reflective spectrum of the colored object, and the color filters in the camera. I normalized the illumination by taking pictures on an overcast day outside<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>, and used a standard color target with 24 colored patches of a certified color.</p>
+<p>The resulting colored spectra are captured on the camera sensor by photon counters behind three color filters “red”, “green”, and “blue”<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>, which differ from camera to camera in their spectral sensitivity. The recorded colors then get projected on a computer screen with another set of “red”, “green”, and “blue” LEDs of some different spectral makeup, or printed in three or more inks on paper. And this is then seen with eyes of yet another set of “red”, “green”, and “blue” retinal cells. Let's leave it at <em>color is complicated</em>.</p>
+<p>At any rate, I took pictures at base ISO in <em>raw</em>, white-balanced and exposed for the third grey patch, and adjusted in saturation on the red patch. Here are the colors on the color checker and the recorded colors of my cameras:</p>
 <img style="width:70%;padding-left:15%;padding-top:5px;padding-bottom:10px" src="/static/2020-10/Colorchecker.svg">
 
-<p>
-The image shows the 24 colored patches of the color target<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. Within each patch, five rectangles show the recorded color of (in reading order) the Pentax Q7, the Ricoh GR, the Panasonic LX100, the Fujifilm X-T2, and the Google Pixel 2.
-</p>
+<p>The image shows the 24 colored patches of the color target<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>. Within each patch, five rectangles show the recorded color of (in reading order) the Pentax Q7, the Ricoh GR, the Panasonic LX100, the Fujifilm X-T2, and the Google Pixel 2.</p>
+<p>Due to my exposure and white balance calibration, the third grey patch is completely equalized and shows no difference between the cameras and the target. The “Light Skin” patch (second on the first row) is also very close to equal, which is an important sanity check for my measurement procedure, as skin tones are optimized by all cameras. Seeing that the skin color patch is one of the most similar hopefully indicates that I did not do anything gravely wrong.</p>
+<p>The last row shows greys, which are very similar across cameras (excluding the white patch for now). This indicates that RAW values indeed correspond to photon counts, with little additional processing. I have no idea why the white patch is off. Perhaps due to specular reflections on the white patch? Color is complicated.</p>
+<p>As for the other colors, the Panasonic LX100 (center) and the Fujifilm X-T2 (bottom left) seem to record somewhat more accurate colors than the other three cameras. The Pentax Q7 (top left) and Ricoh GR (top right) seem comparatively weak across the board. The Panasonic (center) is great in darker blues and reds and greens, but somewhat weaker in yellows and pastels. The Fujifilm (bottom left) is very good in almost all colors, with pastels somewhat weaker than darker colors. The Google Pixel 2 (bottom right) is better in reds and greens and yellows than in blues and oranges. Pastel colors in general seem weaker than darker colors, which might be due to the same process that affected the white patch as well.</p>
+<p>I think I learned something from this experiment: There are indeed color differences between cameras even when shooting RAW, but they are relatively minor. Whenever I see larger differences in my pictures, they are likely (easily correctible) white balance differences, and not sensor differences. When in doubt however, my Panasonic LX100 and Fujifilm X-T2 do capture more lifelike colors than my other cameras.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>any kind of artificial light is comparatively terrible for color reproduction!<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>in quotes, because colors are three-channel information, and we're talking about single channels here.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>encoded as sRGB, which might or might not be displayed correctly on your screen, depending on your OS, your browser, your settings, your room's illumination, and your screen. Color is complicated.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
 
-<p>
-Due to my exposure and white balance calibration, the third grey patch is completely equalized and shows no difference between the cameras and the target. The “Light Skin” patch (second on the first row) is also very close to equal, which is an important sanity check for my measurement procedure, as skin tones are optimized by all cameras. Seeing that the skin color patch is one of the most similar hopefully indicates that I did not do anything gravely wrong.
-</p>
-
-<p>
-The last row shows greys, which are very similar across cameras (excluding the white patch for now). This indicates that RAW values indeed correspond to photon counts, with little additional processing. I have no idea why the white patch is off. Perhaps due to specular reflections on the white patch? Color is complicated.
-</p>
-
-<p>
-As for the other colors, the Panasonic LX100 (center) and the Fujifilm X-T2 (bottom left) seem to record somewhat more accurate colors than the other three cameras. The Pentax Q7 (top left) and Ricoh GR (top right) seem comparatively weak across the board. The Panasonic (center) is great in darker blues and reds and greens, but somewhat weaker in yellows and pastels. The Fujifilm (bottom left) is very good in almost all colors, with pastels somewhat weaker than darker colors. The Google Pixel 2 (bottom right) is better in reds and greens and yellows than in blues and oranges. Pastel colors in general seem weaker than darker colors, which might be due to the same process that affected the white patch as well.
-</p>
-
-<p>
-I think I learned something from this experiment: There are indeed color differences between cameras even when shooting RAW, but they are relatively minor. Whenever I see larger differences in my pictures, they are likely (easily correctible) white balance differences, and not sensor differences. When in doubt however, my Panasonic LX100 and Fujifilm X-T2 do capture more lifelike colors than my other cameras.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">any kind of artificial light is comparatively terrible for color reproduction!</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">in quotes, because colors are three-channel information, and we're talking about single channels here.</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">encoded as sRGB, which might or might not be displayed correctly on your screen, depending on your OS, your browser, your settings, your room's illumination, and your screen. Color is complicated.</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-photography.html">photography</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

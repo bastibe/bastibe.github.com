@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Python Numeric Performance</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,179 +19,156 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">28 Sep 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-09-28-python-performance.html">Python Numeric Performance</a></h1>
-<p>
-Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:
-</p>
+<div class="post-date">28 Sep 2015</div>
+<h1 class="post-title"><a href="https://bastibe.de/2015-09-28-python-performance.html">Python Numeric Performance</a></h1>
+<p>Recently, I was working on a dynamic programming algorithm that involves a lot of number crunching in nested loops. The algorithm looks like this:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">y_change_probability_python</span><span class="p">(</span><span class="n">oct_per_sec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ... &quot;&quot;&quot;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">1.781</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.301</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">oct_per_sec</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">/</span><span class="n">b</span><span class="p">)</span>
 
-<div class="org-src-container">
-<pre class="src src-python">def y_change_probability_python(oct_per_sec):
-    """ ... """
-    b = 1.781
-    mu = -0.301
-    return 1/(2*b)*math.exp(-abs(oct_per_sec-mu)/b)
+<span class="k">def</span><span class="w"> </span><span class="nf">y_idx_range_python</span><span class="p">(</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">max_y_factor</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ... &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_idx</span><span class="o">/</span><span class="n">height</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">+</span><span class="n">min_y</span>
+    <span class="n">y_lo</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">max_y_factor</span><span class="p">,</span> <span class="n">min_y</span><span class="p">)</span>
+    <span class="n">y_hi</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">max_y_factor</span><span class="p">,</span> <span class="n">max_y</span><span class="p">)</span>
+    <span class="n">y_lo_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">y_lo</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">*</span><span class="n">height</span><span class="p">)</span>
+    <span class="n">y_hi_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">y_hi</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">*</span><span class="n">height</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y_lo_idx</span><span class="p">,</span> <span class="n">y_hi_idx</span>
 
-def y_idx_range_python(y_idx, max_y_factor, height):
-    """ ... """
-    y = (y_idx/height)*(max_y-min_y)+min_y
-    y_lo = max(y/max_y_factor, min_y)
-    y_hi = min(y*max_y_factor, max_y)
-    y_lo_idx = int((y_lo-min_y)/(max_y-min_y)*height)
-    y_hi_idx = int((y_hi-min_y)/(max_y-min_y)*height)
-    return y_lo_idx, y_hi_idx
+<span class="k">def</span><span class="w"> </span><span class="nf">find_tracks_python</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">,</span> <span class="n">delta_x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ... &quot;&quot;&quot;</span>
+    <span class="n">tracks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">correlogram</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">cum_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">correlogram</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-def find_tracks_python(cost_matrix, delta_x):
-    """ ... """
-    tracks = np.zeros(correlogram.shape, dtype=np.int64)
-    cum_cost = np.zeros(correlogram.shape)
+    <span class="n">max_y_factor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">delta_x</span><span class="p">)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">correlogram</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    max_y_factor = (2**5)**(delta_x)
-    height = correlogram.shape[1]
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">y_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_idx</span><span class="o">/</span><span class="n">height</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">+</span><span class="n">min_y</span>
+        <span class="k">for</span> <span class="n">y_pre_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">y_idx_range_numba</span><span class="p">(</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">max_y_factor</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+            <span class="n">y_pre</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pre_idx</span><span class="o">/</span><span class="n">height</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">+</span><span class="n">min_y</span>
+            <span class="n">doubles_per_x</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">((</span><span class="n">y</span><span class="o">/</span><span class="n">y_pre</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">delta_x</span><span class="p">))</span>
+            <span class="n">probabilities</span><span class="p">[</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">y_pre_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_change_probability_numba</span><span class="p">(</span><span class="n">doubles_per_x</span><span class="p">)</span>
 
-    probabilities = np.empty((height, height))
-    for y_idx in range(height):
-        y = (y_idx/height)*(max_y-min_y)+min_y
-        for y_pre_idx in range(*y_idx_range_numba(y_idx, max_y_factor, height)):
-            y_pre = (y_pre_idx/height)*(max_y-min_y)+min_y
-            doubles_per_x = math.log2((y/y_pre)**(1/delta_x))
-            probabilities[y_idx, y_pre_idx] = y_change_probability_numba(doubles_per_x)
+    <span class="k">for</span> <span class="n">x_idx</span><span class="p">,</span> <span class="n">cost_column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost_column</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">y_idx</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cost_column</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">y_pre_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">y_idx_range_numba</span><span class="p">(</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">max_y_factor</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+                <span class="n">weighted_cum_cost</span> <span class="o">=</span> <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y_pre_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">cost</span><span class="o">*</span><span class="n">probabilities</span><span class="p">[</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">y_pre_idx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">weighted_cum_cost</span> <span class="o">&gt;</span> <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]:</span>
+                    <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">weighted_cum_cost</span>
+                    <span class="n">tracks</span><span class="p">[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pre_idx</span>
+            <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tracks</span><span class="p">[</span><span class="n">x_idx</span><span class="p">,</span> <span class="n">y_idx</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost</span>
 
-    for x_idx, cost_column in enumerate(cost_matrix):
-        if x_idx == 0:
-            cum_cost[x_idx] = cost_column
-            continue
-        for y_idx, cost in enumerate(cost_column):
-            for y_pre_idx in range(*y_idx_range_numba(y_idx, max_y_factor, height)):
-                weighted_cum_cost = cum_cost[x_idx-1, y_pre_idx] + cost*probabilities[y_idx, y_pre_idx]
-                if weighted_cum_cost &gt; cum_cost[x_idx, y_idx]:
-                    cum_cost[x_idx, y_idx] = weighted_cum_cost
-                    tracks[x_idx, y_idx] = y_pre_idx
-            cum_cost[x_idx, y_idx] = cum_cost[x_idx-1, tracks[x_idx, y_idx]] + cost
+    <span class="k">return</span> <span class="n">tracks</span><span class="p">,</span> <span class="n">cum_cost</span>
+</pre></div>
+<p>I'm not going into the details of what this algorithm does, but note that it iterates over every column and row of the matrix <code>cost_matrix</code>, and then iterates over another range <code>previous_y_range</code> for each of the values in <code>cost_matrix</code>. On the way, it does a lot of basic arithmetic and some algebra.</p>
+<p>The problem is, this is very slow. For a <span class="math">\(90 \times 200\)</span> <code>cost_matrix</code>, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for <a href="http:_www.numpy.org_">Numpy</a>!</p>
+<p>If you can express your code in terms of linear algebra, Numpy will execute them in highly-optimized C code. The problem is, translating loops into linear algebra is not always easy. In this case, it took some effort:</p>
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">y_change_probability_numpy</span><span class="p">(</span><span class="n">doubles_per_x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ... &quot;&quot;&quot;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">1.781</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.301</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">doubles_per_x</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">/</span><span class="n">b</span><span class="p">)</span>
 
-    return tracks, cum_cost
-</pre>
-</div>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_frequency_tracks_numpy</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">,</span> <span class="n">delta_x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ... &quot;&quot;&quot;</span>
+    <span class="n">tracks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">cost_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">cum_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">cost_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<p>
-I'm not going into the details of what this algorithm does, but note that it iterates over every column and row of the matrix <code>cost_matrix</code>, and then iterates over another range <code>previous_y_range</code> for each of the values in <code>cost_matrix</code>. On the way, it does a lot of basic arithmetic and some algebra.
-</p>
+    <span class="n">max_y_factor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">delta_t</span><span class="p">)</span> <span class="c1"># allow at most 5 octaves per second (3 sigma)</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">cost_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-<p>
-The problem is, this is very slow. For a \(90 \times 200\) <code>cost_matrix</code>, this takes about 260 ms. Lots of loops? Lots of simple mathematics? Slow? That sounds like a perfect match for <a href="http://www.numpy.org/">Numpy</a>!
-</p>
+    <span class="c1"># pre-allocate probabilities matrix as minus infinity. This matrix</span>
+    <span class="c1"># will be sparsely filled with positive probability values, and</span>
+    <span class="c1"># empty values will have minus infinite probability.</span>
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">for</span> <span class="n">y_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">probabilities</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_idx</span><span class="o">/</span><span class="n">height</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">+</span><span class="n">min_y</span>
+        <span class="n">y_pre_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">max_y_factor</span><span class="p">,</span> <span class="n">min_y</span><span class="p">)</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">*</span><span class="n">height</span><span class="p">),</span>
+                              <span class="nb">int</span><span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">max_y_factor</span><span class="p">,</span> <span class="n">max_y</span><span class="p">)</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">*</span><span class="n">height</span><span class="p">))</span>
+        <span class="n">y_pre</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pre_idx</span><span class="o">/</span><span class="n">height</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">max_y</span><span class="o">-</span><span class="n">min_y</span><span class="p">)</span><span class="o">+</span><span class="n">min_y</span>
+        <span class="n">doubles_per_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">((</span><span class="n">y</span><span class="o">/</span><span class="n">y_pre</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">delta_x</span><span class="p">))</span>
+        <span class="n">probabilities</span><span class="p">[</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">y_pre_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_change_probability</span><span class="p">(</span><span class="n">doubles_per_x</span><span class="p">)</span>
 
-<p>
-If you can express your code in terms of linear algebra, Numpy will execute them in highly-optimized C code. The problem is, translating loops into linear algebra is not always easy. In this case, it took some effort:
-</p>
+    <span class="n">cum_cost</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">x_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">)):</span>
+        <span class="n">cost_column</span> <span class="o">=</span> <span class="n">cost_matrix</span><span class="p">[</span><span class="n">x_idx</span><span class="p">:</span><span class="n">x_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># extract cost_column as 2d-vector!</span>
+        <span class="n">weighted_cum_cost</span> <span class="o">=</span> <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">cost_column</span><span class="o">.</span><span class="n">T</span><span class="o">*</span><span class="n">probabilities</span>
+        <span class="n">tracks</span><span class="p">[</span><span class="n">x_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">weighted_cum_cost</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cum_cost</span><span class="p">[</span><span class="n">x_idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">tracks</span><span class="p">[</span><span class="n">x_idx</span><span class="p">]]</span> <span class="o">+</span> <span class="n">cost_column</span>
 
-<div class="org-src-container">
-<pre class="src src-python">def y_change_probability_numpy(doubles_per_x):
-    """ ... """
-    b = 1.781
-    mu = -0.301
-    return 1/(2*b)*np.exp(-np.abs(doubles_per_x-mu)/b)
+    <span class="k">return</span> <span class="n">tracks</span><span class="p">,</span> <span class="n">cum_corrs</span>
+</pre></div>
+<p>This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a <span class="math">\(90 \times 200\)</span> <code>cost_matrix</code>, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.</p>
+<p>Another avenue for performance optimization is <a href="http:_numba.pydata.org_">Numba</a>. Numba applies dark and powerful magic to compile humble Python functions into blazingly fast machine code. It is proper magic, if you ask me. Simply add an innocuous little decorator to your functions, and let Numba do it's thing. If all goes well, your code will work just as before, except with unheard-of performance:</p>
+<div class="highlight"><pre><span></span><span class="nd">@jit</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">y_change_probability_numba</span><span class="p">(</span><span class="n">doubles_per_x</span><span class="p">):</span>
+    <span class="o">...</span>
 
-def find_frequency_tracks_numpy(cost_matrix, delta_x):
-    """ ... """
-    tracks = np.zeros(cost_matrix.shape, dtype=np.int)
-    cum_cost = np.zeros(cost_matrix.shape)
+<span class="nd">@jit</span><span class="p">((</span><span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">y_idx_range_numba</span><span class="p">(</span><span class="n">y_idx</span><span class="p">,</span> <span class="n">max_y_factor</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="o">...</span>
 
-    max_y_factor = (2**5)**(delta_t) # allow at most 5 octaves per second (3 sigma)
-    height = cost_matrix.shape[1]
+<span class="nd">@jit</span><span class="p">((</span><span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">[:,:],</span> <span class="n">numba</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_tracks_numba</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+<p>However, Numba is no silver bullet, and does not support all of Python yet. In the present case, it is missing support for <code>enumerate</code> for Numpy matrices. Thus, I had to rewrite the first two loops like this:</p>
+<div class="highlight"><pre><span></span><span class="c1"># python version</span>
+<span class="k">for</span> <span class="n">x_idx</span><span class="p">,</span> <span class="n">cost_column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">):</span>
+    <span class="o">...</span>
 
-    # pre-allocate probabilities matrix as minus infinity. This matrix
-    # will be sparsely filled with positive probability values, and
-    # empty values will have minus infinite probability.
-    probabilities = -np.ones((height, height))*np.inf
-    for y_idx in range(probabilities.shape[0]):
-        y = (y_idx/height)*(max_y-min_y)+min_y
-        y_pre_idx = np.arange(int((max(y/max_y_factor, min_y)-min_y)/(max_y-min_y)*height),
-                              int((min(y*max_y_factor, max_y)-min_y)/(max_y-min_y)*height))
-        y_pre = (y_pre_idx/height)*(max_y-min_y)+min_y
-        doubles_per_x = np.log2((y/y_pre)**(1/delta_x))
-        probabilities[y_idx, y_pre_idx] = y_change_probability(doubles_per_x)
+<span class="c1"># numba version</span>
+<span class="k">for</span> <span class="n">x_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cost_matrix</span><span class="p">)):</span>
+    <span class="n">cost_column</span> <span class="o">=</span> <span class="n">cost_matrix</span><span class="p">[</span><span class="n">x_idx</span><span class="p">]</span>
+    <span class="o">...</span>
+</pre></div>
+<p>Another area that proved problematic is N-D slice writing. Instead of using expressions like <code>m1[x,y:y+3] = m2</code>, you have to write <code>for idx in range(3): m1[x,y+idx] = m2[idx]</code>. Not a difficult transformation, but it basically forced me to unroll all the nice vectorized code of the Numpy version back to their original pure-Python form. That said, Numba is getting better and better, and many constructs that used to be uncompilable (<code>yield</code>) are not a problem any more.</p>
+<p>Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This is a 120-fold increase in performance, and still seven times faster than Numpy, with minimal code changes. This is proper magic!</p>
+<p>So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code <em>more beautiful</em>. Numba on the other hand often requires you to make your code <em>less beautiful</em> to conform to it's subset of compilable Python.</p>
 
-    cum_cost[0] = cost_matrix[0]
-    for x_idx in range(1, len(cost_matrix)):
-        cost_column = cost_matrix[x_idx:x_idx+1] # extract cost_column as 2d-vector!
-        weighted_cum_cost = cum_cost[x_idx-1] + cost_column.T*probabilities
-        tracks[x_idx] = np.argmax(weighted_cum_cost, axis=1)
-        cum_cost[x_idx] = cum_cost[x_idx-1, tracks[x_idx]] + cost_column
-
-    return tracks, cum_corrs
-</pre>
-</div>
-
-<p>
-This code does not look much like the original, but calculates exactly the same thing. This takes about 15 ms for a \(90 \times 200\) <code>cost_matrix</code>, which is about 17 times faster than the original code! Yay Numpy! And furthermore, this code is arguably more readable than the original, since it is written at a higher level of abstraction.
-</p>
-
-<p>
-Another avenue for performance optimization is <a href="http://numba.pydata.org/">Numba</a>. Numba applies dark and powerful magic to compile humble Python functions into blazingly fast machine code. It is proper magic, if you ask me. Simply add an innocuous little decorator to your functions, and let Numba do it's thing. If all goes well, your code will work just as before, except with unheard-of performance:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">@jit(numba.float64(numba.float64), nopython=True)
-def y_change_probability_numba(doubles_per_x):
-    ...
-
-@jit((numba.int64, numba.float64, numba.int64), nopython=True)
-def y_idx_range_numba(y_idx, max_y_factor, height):
-    ...
-
-@jit((numba.float64[:,:], numba.float64), nopython=True)
-def find_tracks_numba(cost_matrix, delta_t):
-    ...
-</pre>
-</div>
-
-<p>
-However, Numba is no silver bullet, and does not support all of Python yet. In the present case, it is missing support for <code>enumerate</code> for Numpy matrices. Thus, I had to rewrite the first two loops like this:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python"># python version
-for x_idx, cost_column in enumerate(cost_matrix):
-    ...
-
-# numba version
-for x_idx in range(len(cost_matrix)):
-    cost_column = cost_matrix[x_idx]
-    ...
-</pre>
-</div>
-
-<p>
-Another area that proved problematic is N-D slice writing. Instead of using expressions like <code>m1[x,y:y+3] = m2</code>, you have to write <code>for idx in range(3): m1[x,y+idx] = m2[idx]</code>. Not a difficult transformation, but it basically forced me to unroll all the nice vectorized code of the Numpy version back to their original pure-Python form. That said, Numba is getting better and better, and many constructs that used to be uncompilable (<code>yield</code>) are not a problem any more.
-</p>
-
-<p>
-Anyway, with that done, the above code went down from 260 ms to 2.2 ms. This is a 120-fold increase in performance, and still seven times faster than Numpy, with minimal code changes. This is proper magic!
-</p>
-
-<p>
-So why wouldn't you just always use Numba? After all, when it comes down to raw performance, Numba is the clear winner. The big difference between performance optimization using Numpy and Numba is that properly vectorizing your code for Numpy often reveals simplifications and abstractions that make it easier to reason about your code. Numpy forces you to think in terms of vectors, matrices, and linear algebra, and this often makes your code <i>more beautiful</i>. Numba on the other hand often requires you to make your code <i>less beautiful</i> to conform to it's subset of compilable Python.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

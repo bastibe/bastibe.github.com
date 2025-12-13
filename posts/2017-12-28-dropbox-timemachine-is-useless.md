@@ -1,0 +1,13 @@
+---
+title: Dropbox deleted my pictures and Time Machine didn't backup
+date: 2017-12-28 00:00
+filetags: backup
+---
+
+Dropbox deleted some of my favorite photos. Have you looked at all your old pictures lately and checked if they are still there? I have, and they were not. Of course Dropbox denies it is their fault, but no other program routinely accessed my pictures. [I am not alone with this problem](https://www.dropboxforum.com/t5/Missing-files-and-folders/Randomly-deleted-files-and-folders/td-p/203952). It must have happened some time between the summer of 2015, when I put my pictures on Dropbox, and the summer of 2016, when Time Machine last corrupted its backups and had to start over, thereby deleting my last chance of recovering my pictures. The pictures are gone for good.
+
+So, what have I learned? Dropbox loses your data, and Time Machine can't restore it. These programs are obviously no good for backups. Let me repeat this: **Dropbox and Time Machine are not a backup!** A true backup needs to be reliable, keep an infinite history, and _never_, _never_, _never_ accidentally delete files.
+
+From now on, I will use [rsnapshot](http:_rsnapshot.org_) for backups. [Here](https://rayed.com/wordpress/?p=1693)'s a tutorial on how to set it up on a Mac. I have used rsnapshot for years at work, and it has never let me down. For syncronizing things between computers, I now use [syncthing](https:_syncthing.net_). Both of these programs are not as user-friendly as Dropbox or Time Machine, but that is a small price to pay for a working backup.
+
+A few years ago, I had high hopes that [Apple](http://bastibe.de/2009-03-14-get-a-mac.html) and [Dropbox](http://bastibe.de/2009-03-28-synchronisieren-von-google.html) and Google and Amazon would lead us to a bright future of computers that "just work", and could solve our daily chores ever more conveniently and reliably. But I was proven wrong. [So](http://bastibe.de/2012-07-09-apple-is-failing-me.html). [Many](http://bastibe.de/2012-11-01-apple-tv.html). [Times](http://bastibe.de/2015-10-16-finder-woes.html). It seems that for-profit software inevitably becomes less dependable as it adds ever more features to attract ever more users. In contrast, free software can focus on [incremental improvements and steadily increasing reliability](http://bastibe.de/2017-10-24-the-long-game.html).

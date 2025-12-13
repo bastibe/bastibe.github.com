@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>How to make Tagbar work with Objective-C</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,39 +19,36 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">04 Dec 2011</div><h1 class="post-title"><a href="https://bastibe.de/2011-12-04-how-to-make-tagbar-work-with-objective-c.html">How to make Tagbar work with Objective-C</a></h1>
-<p>
-For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)
-</p>
-
-<p>
-Recently however, ctags finally gained support for Objective-C! Huzzah!
-As of today, Objective-C support is not in the stable branch yet, but thanks to the magic of homebrew, an Obj-C ready ctags is only a <code>brew install ctags --HEAD</code> away!
-</p>
-
-<p>
-With that, tag navigation in Vim works for Objective-C. Awesome!
+<div class="post-date">04 Dec 2011</div>
+<h1 class="post-title"><a href="https://bastibe.de/2011-12-04-how-to-make-tagbar-work-with-objective-c.html">How to make Tagbar work with Objective-C</a></h1>
+<p>For the longest time, ctags did not support Objective-C. Without tags, many of the cool programming-related features of Vim simply didn't work. (There are ways to coax other programs to output tags, but this is usually painful)</p>
+<p>Recently however, ctags finally gained support for Objective-C! Huzzah!
+As of today, Objective-C support is not in the stable branch yet, but thanks to the magic of homebrew, an Obj-C ready ctags is only a <code>brew install ctags --HEAD</code> away!</p>
+<p>With that, tag navigation in Vim works for Objective-C. Awesome!
 However, Tagbar does not work yet. There used to be <a href="http://stackoverflow.com/a/5790832/1034">a workaround</a> that apparently worked for some people, but it did not work for me.
-Things like this drive me nuts. I can see that tags are being generated, but Tagbar won't show them. What is going wrong?
-</p>
-
-<p>
-Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:
-</p>
-
-<pre class="example" id="org61221c8">
-    " add a definition for Objective-C to tagbar
+Things like this drive me nuts. I can see that tags are being generated, but Tagbar won't show them. What is going wrong?</p>
+<p>Some investigation proved: There is simply no template in Tagbar for Objective-C! Luckily, that can be fixed quite easily: Simply put this code in your .vimrc:</p>
+<pre><code>    &quot; add a definition for Objective-C to tagbar
     let g:tagbar_type_objc = {
         \ 'ctagstype' : 'ObjectiveC',
         \ 'kinds'     : [
@@ -84,25 +82,25 @@ Some investigation proved: There is simply no template in Tagbar for Objective-C
             \ 'enumeration'    : 'e'
         \ }
     \ }
-</pre>
+</code></pre><p>With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!</p>
+<p>Happy Vimming!</p>
 
-<p>
-With that, Tagbar should work. Admittedly, it won't work perfectly yet. Class definitions will show up in addition to their contents and the contents of all categories will go into the same list. Also, you won't get much more than a flat list of functions with no way to distinguish between class methods and object methods. This can be confusing at times, but by and large, it does the job!
-</p>
-
-
-<p>
-Happy Vimming!
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-vim.html">vim</a> <a href="https://bastibe.de/tag-text-editor.html">text-editor</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-vim.html">vim</a>, <a href="https://bastibe.de/tag-text-editor.html">text-editor</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

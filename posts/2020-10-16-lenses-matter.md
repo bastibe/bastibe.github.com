@@ -1,0 +1,186 @@
+---
+title: Lenses Matter
+date: 2020-10-16 12:14
+filetags: photography
+---
+
+A common trope in discussions about cameras on the internet is: “sensor size trumps all”, and as a corollary, “smartphone cameras suck”. Which is obviously false to anyone who has ever taken a good picture on a smartphone (with its tiny sensor).
+
+The argument, however, goes like this: Bigger pixels[^1] can capture a greater dynamic range, and bigger sensors are made from bigger pixels. Therefore, and here is the dangerous leap, cameras with bigger sensors take better pictures.
+
+[^1]: technically, “sensor elements”, not “picture elements”, i.e. “sensels”
+
+But I currently have a bit of time on my hands, and way too many cameras, so let's try it out, shall we?
+
+My five contestants are:
+
+<img style="width:70%;padding-left:15%;padding-top:5px;padding-bottom:10px" src="/static/2020-10/cameras.jpg">
+
+- A [Google Pixel 2](https://en.wikipedia.org/wiki/Pixel_2), with a 12.2 MP 5.75 × 4.32 mm “1/2.55 in” sensor from 2017, and a 3.8 mm f/1.8 lens (27 mm f/13 equivalent, crop 7.14),
+- A [Pentax Q7](https://en.wikipedia.org/wiki/Pentax_Q7), with a 12 MP 7.44 × 5.58 mm “1/1.7 in” sensor from 2013, and a 5-15 mm f/2.8-4.5 lens (24-70 mm f/13-22 equivalent, crop 4.76),
+- A [Panasonic LX100](https://en.wikipedia.org/wiki/Panasonic_Lumix_DMC-LX100), with a 13 MP, cropped 17.3 × 13 mm “micro four thirds” sensor from 2014, and a 11-34 mm f/1.7-2.8 lens (24-75 mm f/3.8-6 equivalent, crop 2.2),
+- A [Ricoh GR](https://en.wikipedia.org/wiki/Ricoh_GR_(large_sensor_compact_camera)), with a 16 MP 23.7 × 15.7 mm “APS-C” sensor from 2013, and a 28 mm f/2.8 lens (27 mm f/4.2 equivalent, crop 1.5),
+- A [Fujifilm X-T2](https://en.wikipedia.org/wiki/Fujifilm_X-T2), with a 24 MP 23.6 × 15.6 mm “APS-C” sensor from 2016, and a 18-135 mm f/3.5-5.6 lens (27-200 mm f/5.25-8.4 equivalent, crop 1.5).
+
+So I went for a walk around the neighborhood, and took a few pictures with a bag full of cameras. In particular, I was looking for a high dynamic range scene, in the form of a sunset. All pictures were taken at a low ISO[^2] and underexposed by two stops to account for the backlighting. All images were taken at 27 mm (equivalent[^3]) focal length.
+
+[^2]: lower ISO → less noise.
+[^3]: the focal length a lens on a 35 mm film camera would need to cover the same angle of view.
+
+[Measurements predict](https://photonstophotos.net/Charts/PDR.htm#FujiFilm%20X-T2,Google%20Pixel%202,Panasonic%20Lumix%20DMC-LX100,Pentax%20Q7,Ricoh%20GR) that the dynamic range and noise levels of these cameras should get better as the sensor size increases.
+
+<br>
+<a href="/static/2020-10/scene-1-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2020-10/Scene 1 Google Pixel 2.thumb.jpg">
+      <figcaption>Google Pixel 2</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 1 Pentax Q7.thumb.jpg">
+      <figcaption>Pentax Q7</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 1 Panasonic DMC-LX100.thumb.jpg">
+      <figcaption>Panasonic LX100</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 1 Ricoh GR.thumb.jpg">
+      <figcaption>Ricoh GR</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 1 Fujifilm X-T2.thumb.jpg">
+      <figcaption>Fujifilm X-T2</figcaption>
+    </figure>
+  </div>
+</a>
+
+The first scene was taken essentially in auto mode, and adjusted in Darktable to match roughly in tonality (exposure adjustments of ±0.25EV), but not color. In general, all cameras were able to capture the entire dynamic range of this scene, from the brightest almost-white area around the sun, to the darkest patches in the shade near the waterline.
+
+This, right off the bat, is the most important result of this experiment: _Most scenes do not have enough dynamic range to matter_.
+
+Differences appear in the noise levels, which are fairly constant across all cameras, with only the X-T2 being noticeably less noisy than the rest. However, this advantage of the X-T2 is not one of sensor size (the Ricoh GR has a same-size sensor), but simply of being two-generations _newer_.
+
+The largest difference between these photos is instead in flare: The Pixel 2, Pentax Q7 and Ricoh GR are flaring across the entire image, while the LX100 and X-T2 are far more controlled. This is probably because the Pixel 2 and Ricoh GR have collected dust and scratches from my pockets, and the Pentax Q7 lens being somewhat mediocre. The LX100 and X-T2 are in a better condition, and a better design, too. All lenses also show some amount of colorful lens flares to the bottom-right of the sun, particularly in the LX100 and Pentax Q7, and strange, colored rings around the edge of the Ricoh GR's frame.
+
+<br>
+<a href="/static/2020-10/scene-2-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2020-10/Scene 2 Google Pixel 2.thumb.jpg">
+      <figcaption>Google Pixel 2</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Pentax Q7.thumb.jpg">
+      <figcaption>Pentax Q7</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Panasonic DMC-LX100.thumb.jpg">
+      <figcaption>Panasonic LX100</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Ricoh GR.thumb.jpg">
+      <figcaption>Ricoh GR</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Fujifilm X-T2.thumb.jpg">
+      <figcaption>Fujifilm X-T2</figcaption>
+    </figure>
+  </div>
+</a>
+
+To look into these differences between lenses in more detail, the second scene was taken from a slightly different spot, with the lenses stopped down (if possible). This image includes two bright sun spots, one from the sun itself, and one in the reflection on the water.
+
+Notably, the Pixel 2, like most smartphones, can not change its aperture. And it produces a bright red flare towards the left edge of the image. The Pentax Q7 again flares dramatically and colorful, and my Ricoh GR's lens is probably beyond cleaning at this point, judging from the massive flare it produces. Again, the standout pictures here are the X-T2 and LX100, with well-defined sun stars and comparatively little flaring. (Note the red dots in the X-T2: these are the phase-detection pixels on the X-T2's sensor reflecting light back into the lens and back on the image.)
+
+<br>
+<a href="/static/2020-10/scene-2-crop-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2020-10/Scene 2 Crop Google Pixel 2.thumb.jpg">
+      <figcaption>Google Pixel 2</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Crop Pentax Q7.thumb.jpg">
+      <figcaption>Pentax Q7</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Crop Panasonic DMC-LX100.thumb.jpg">
+      <figcaption>Panasonic LX100</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Crop Ricoh GR.thumb.jpg">
+      <figcaption>Ricoh GR</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 2 Crop Fujifilm X-T2.thumb.jpg">
+      <figcaption>Fujifilm X-T2</figcaption>
+    </figure>
+  </div>
+</a>
+
+Here is an enlargement of the dark patch at the right edge of the second scene, to judge noise levels and detail in the shadow. Perhaps surprisingly, the differences between these images are not big at all. The X-T2 clearly wins in terms of both shadow detail and noise levels, but by a rather small margin, and only really visible when enlarged. The Pentax Q7 resolves almost no detail in the shadow, but neither does the Ricoh GR. So sensor size does not seem to affect this round.
+
+<br>
+<a href="/static/2020-10/scene-3-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2020-10/Scene 3 Google Pixel 2.thumb.jpg">
+      <figcaption>Google Pixel 2</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Pentax Q7.thumb.jpg">
+      <figcaption>Pentax Q7</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Panasonic DMC-LX100.thumb.jpg">
+      <figcaption>Panasonic LX100</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Ricoh GR.thumb.jpg">
+      <figcaption>Ricoh GR</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Fujifilm X-T2.thumb.jpg">
+      <figcaption>Fujifilm X-T2</figcaption>
+    </figure>
+  </div>
+</a>
+
+This third scene was shot one day later, with settings optimized for optimal image quality: Base ISO, aperture one stop closed from wide open, focused on a high-contrast part of the scene. I processed these images with white balance from a grey card, then edited exposure, contrast, and saturation to match across images. Chromatic aberrations and vignetting were corrected using a profile or by hand. No sharpening was applied, but the highest-quality deinterlacing was selected (AMaZe for Bayer sensors, Markensteijn 3-pass for X-Trans sensors).
+
+At this magnification, even my 24in/4K screen only barely hints at differences in sharpness. Which implies that prints up to A3 should be possible from all of these cameras without much difference in perceived sharpness.
+
+<br>
+<a href="/static/2020-10/scene-3-crop-lightbox.html" target="_blank">
+  <div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2020-10/Scene 3 Crop Google Pixel 2.thumb.jpg">
+      <figcaption>Google Pixel 2</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Crop Pentax Q7.thumb.jpg">
+      <figcaption>Pentax Q7</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Crop Panasonic DMC-LX100.thumb.jpg">
+      <figcaption>Panasonic LX100</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Crop Ricoh GR.thumb.jpg">
+      <figcaption>Ricoh GR</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2020-10/Scene 3 Crop Fujifilm X-T2.thumb.jpg">
+      <figcaption>Fujifilm X-T2</figcaption>
+    </figure>
+  </div>
+</a>
+
+If we crop into these images, differences in detail resolution indeed become apparent. The Pentax Q7 is definitely the least detailed, on account of its soft lens. The Pixel 2 and LX100 show a very similar amount of details, which is a testament to how good modern smart phone cameras truly have become. While the two cameras with the biggest sensors, the Ricoh GR and the X-T2, do resolve visibly more detail, the differences are not dramatic.
+
+So does sensor size trump all? From these experiments, I wouldn't say so. Essentially, all of these cameras took decent images. The X-T2 clearly was better than the rest, but not hugely so, while being _much_ bigger and more expensive and newer.
+
+While the measured dynamic range differences surely exist, they did not manifest even in a sunrise, so I'm inclined to discount their importance. This is, frankly, not what I expected. The miniscule differences in resolution were equally unexpected.
+
+What did however make a big difference was lens quality. Flare control, aperture range, and focal range play a huge role in the resulting image quality. Zooming in (and stopping down) are still the most effective way of extracting more detail from a scene. And having a camera with a secure grip that is quick to operate helps, too. I think I am growing out of sensor size snobbery, is what I'm saying.

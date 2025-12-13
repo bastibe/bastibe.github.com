@@ -21,10 +21,10 @@ layout bundle for your base layout[fn:ukelele]. Inside that bundle, there's a /*
 which is an XML file that defines the characters that each key-modifier combination produces. I
 changed that to create a Windows-like US keyboard layout. And I replaced the keyboard icon with
 something sane (not "A") by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
-saving to select the ICNS format. Save the keyboard bundle to ~~/Library/Keyboard Layouts~ and
+saving to select the ICNS format. Save the keyboard bundle to =~/Library/Keyboard Layouts= and
 reboot. Then I remove the unremovable default ("A") German layout by selecting another one, then
-~plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist~, and delete the entry from
-~AppleEnabledInputSources~. Now reboot. Almost easy. Almost.
+ =plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist=, and delete the entry from
+ ~AppleEnabledInputSources~. Now reboot. Almost easy. Almost.
 
 One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
 Windows and Linux before, and for the life of me /could not do it/. So I actually think this is

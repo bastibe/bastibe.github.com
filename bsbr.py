@@ -65,7 +65,7 @@ def main():
 
 
 def collect_posts(config, posts_path, root_path, base_url):
-    markdown_parser = mistune.create_markdown(renderer=CodeHighlightRenderer(), escape=False, plugins=['footnotes'])
+    markdown_parser = mistune.create_markdown(renderer=CodeHighlightRenderer(escape=False), plugins=['footnotes', 'table', 'math', 'strikethrough'])
     posts = []
     for file in posts_path.glob('*.md'):
         text = file.read_text(encoding='utf-8')
@@ -86,13 +86,14 @@ def parse_frontmatter(text):
             frontmatter[key] = value
         if line.strip() == '---' and frontmatter:
             break
+    frontmatter['date'] = time.strptime(frontmatter['date'], '%Y-%m-%d %H:%M') if ' ' in frontmatter['date'] else time.strptime(frontmatter['date'], '%Y-%m-%d')
     front_matter_end = text.find('---', text.find('---') + 3)
     markdown = text[front_matter_end + 3:]
     return frontmatter, markdown
 
 
 def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
-    date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
+    date = time.strftime(config['date_format'], metadata['date'])
     tags = [tag.strip() for tag in metadata['filetags'].split(' ')]
     taglist = ', '.join(f'<a href="{base_url}/tag-{tag}.html">{tag}</a>' for tag in tags if tag != 'nocomments')
     no_comments = 'nocomments' in tags
@@ -129,12 +130,12 @@ def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
 def assemble_archive(config, posts, base_url):
     content = ['<h1>Archive</h1>']
     for post_path, metadata, body in posts:
-        post_url = f"/{post_path.stem}.html"
-        date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
+        post_url = f"{base_url}/{post_path.stem}.html"
+        date = time.strftime(config['date_format'], metadata['date'])
         content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
     html = '\n'.join(content)
 
-    return assemble_post(config, {'title': 'Archive', 'date': time.strftime('%Y-%m-%d'), 'filetags': ''}, 
+    return assemble_post(config, {'title': 'Archive', 'date': time.localtime(), 'filetags': ''}, 
                          f"{base_url}/archive.html", html, base_url, is_index=True)
 
 
@@ -144,14 +145,14 @@ def assemble_index(config, posts, base_url, title=''):
         content.append(f'<h1>{title}</h1>')
     for post_path, metadata, body in posts:
         post_url = f"{base_url}/{post_path.stem}.html"
-        date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
+        date = time.strftime(config['date_format'], metadata['date'])
         content.append(f"""
 <div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>
 {body}
 """)
     html = '\n'.join(content)
 
-    return assemble_post(config, {'title': 'Home', 'date': time.strftime('%Y-%m-%d'), 'filetags': ''}, 
+    return assemble_post(config, {'title': 'Home', 'date': time.localtime(), 'filetags': ''}, 
                          f"{base_url}/index.html", html, base_url, is_index=True)
 
 
@@ -159,7 +160,7 @@ def assemble_rss(config, posts, base_url):
     items = []
     for post_path, metadata, body in posts:
         post_url = f"{base_url}/{post_path.stem}.html"
-        pub_date = time.strftime('%a, %d %b %Y %H:%M:%S +0000', time.strptime(metadata['date'], '%Y-%m-%d'))
+        pub_date = time.strftime('%a, %d %b %Y %H:%M:%S +0000', metadata['date'])
         items.append(f"""<item>
 <title>{metadata['title']}</title>
 <description><![CDATA[{body}]]></description>
@@ -174,7 +175,7 @@ def assemble_rss(config, posts, base_url):
 <title>{config['site_title']}</title>
 <description>{config['site_title']}</description>
 <link>{config['base_url']}</link>
-<lastBuildDate>{time.strftime('%a, %d %b %Y %H:%M:%S +0000', time.gmtime())}</lastBuildDate>
+<lastBuildDate>{time.strftime('%a, %d %b %Y %H:%M:%S +0000', time.localtime())}</lastBuildDate>
 {'\n'.join(items)}
 </channel>
 </rss>"""
@@ -200,11 +201,11 @@ def assemble_tag_archive(config, tagged_posts, base_url):
         content.append(f'<h1 class="tags-title">Posts tagged "{tag}":</h1>')
         for post_path, metadata, body in posts:
             post_url = f"{base_url}/{post_path.stem}.html"
-            date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
+            date = time.strftime(config['date_format'], metadata['date'])
             content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
     html = '\n'.join(content)
 
-    return assemble_post(config, {'title': 'Archive', 'date': time.strftime('%Y-%m-%d'), 'filetags': ''}, 
+    return assemble_post(config, {'title': 'Archive', 'date': time.localtime(), 'filetags': ''}, 
                          f"{base_url}/archive.html", html, base_url, is_index=True)
 
 

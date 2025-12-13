@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Unicode and Matlab on the command line</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,74 +19,60 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">15 Apr 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
-<p>
-As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <i>the</i> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.
-</p>
+<div class="post-date">15 Apr 2015</div>
+<h1 class="post-title"><a href="https://bastibe.de/2015-04-15-unicode-in-the-matlab-command-line.html">Unicode and Matlab on the command line</a></h1>
+<p>As per the latest <a href="http://stackoverflow.com/research/developer-survey-2015#techSuper-dreaded">Stackoverflow Developer Survey</a>, Matlab is one of <em>the</em> most dreaded tools out there. I run into Matlab-related trouble daily. In all honesty, I have never seen a programming language as user-hostile and as badly designed as this.</p>
+<p>So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).</p>
+<p>I say &quot;(on OSX)&quot;, because on Windows, it does not print a damn thing. Nope, no <code>disp</code> output for Windows users.</p>
+<p>More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as <code>0x1a</code> aka <code>SUB</code> aka <em>substitute character</em>. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with <code>SUB</code>. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.</p>
+<p>To see why Matlab would do such a dastardly deed, you can use <code>feature('locale')</code> to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either <code>ISO-8859-1</code> (when your locale is pure <code>de_DE</code> or <code>en_US</code>) or <code>US-ASCII</code>, if it is something impure. In my case, German dates but English text. Because <code>US-ASCII</code> is obviously the most all-encompassing choice for such mixed-languages environments.</p>
+<p>But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit <code>%MATLABROOT%/bin/lcdata.xml</code>, and look for the entry for your locale. For me, this is one of</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;locale</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;de_DE&quot;</span><span class="w"> </span><span class="na">encoding=</span><span class="s">&quot;ISO-8859-1&quot;</span><span class="w"> </span><span class="na">xpg_name=</span><span class="s">&quot;de_DE.ISO8859-1&quot;</span><span class="nt">&gt;</span><span class="w"> </span>...
+<span class="nt">&lt;locale</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;en_US&quot;</span><span class="w"> </span><span class="na">encoding=</span><span class="s">&quot;ISO-8859-1&quot;</span><span class="w"> </span><span class="na">xpg_name=</span><span class="s">&quot;en_US.ISO8859-1&quot;</span><span class="nt">&gt;</span><span class="w"> </span>...
+</pre></div>
+<p>In order to make Matlab's encoding default to UTF-8, change the entry for your locale to</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;locale</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;de_DE&quot;</span><span class="w"> </span><span class="na">encoding=</span><span class="s">&quot;UTF-8&quot;</span><span class="w"> </span><span class="na">xpg_name=</span><span class="s">&quot;de_DE.UTF-8&quot;</span><span class="nt">&gt;</span><span class="w"> </span>...
+<span class="nt">&lt;locale</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;en_US&quot;</span><span class="w"> </span><span class="na">encoding=</span><span class="s">&quot;UTF-8&quot;</span><span class="w"> </span><span class="na">xpg_name=</span><span class="s">&quot;en_US.UTF-8&quot;</span><span class="nt">&gt;</span><span class="w"> </span>...
+</pre></div>
+<p>With that, Matlab will print UTF-8 to the terminal.</p>
+<p>You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily...</p>
 
-<p>
-So here is today's problem: When run from the command line, Matlab does not render unicode characters (on OSX).
-</p>
-
-<p>
-I say "(on OSX)", because on Windows, it does not print a damn thing. Nope, no <code>disp</code> output for Windows users.
-</p>
-
-<p>
-More analysis: It's not that Matlab does not render unicode characters at all when run from the command line. Instead, it renders them as <code>0x1a</code> aka <code>SUB</code> aka <i>substitute character</i>. In other words, it tries to render unicode as ASCII (which doesn't work), and then replaces all non-ASCII characters with <code>SUB</code>. This is actually reasonable if Matlab were running on a machine that can't handle unicode. This is not a correct assessment of post-90s Macs, though.
-</p>
-
-<p>
-To see why Matlab would do such a dastardly deed, you can use <code>feature('locale')</code> to get information about the encoding Matlab uses. On Windows and OS X, this defaults to either <code>ISO-8859-1</code> (when your locale is pure <code>de_DE</code> or <code>en_US</code>) or <code>US-ASCII</code>, if it is something impure. In my case, German dates but English text. Because <code>US-ASCII</code> is obviously the most all-encompassing choice for such mixed-languages environments.
-</p>
-
-<p>
-But luckily, there is help. Matlab has a widely documented (not) and easily discoverable (not) configuration option to change this: To change Matlab's encoding settings, edit <code>%MATLABROOT%/bin/lcdata.xml</code>, and look for the entry for your locale. For me, this is one of
-</p>
-
-<div class="org-src-container">
-<pre class="src src-xml">&lt;locale name="de_DE" encoding="ISO-8859-1" xpg_name="de_DE.ISO8859-1"&gt; ...
-&lt;locale name="en_US" encoding="ISO-8859-1" xpg_name="en_US.ISO8859-1"&gt; ...
-</pre>
-</div>
-
-<p>
-In order to make Matlab's encoding default to UTF-8, change the entry for your locale to
-</p>
-
-<div class="org-src-container">
-<pre class="src src-xml">&lt;locale name="de_DE" encoding="UTF-8" xpg_name="de_DE.UTF-8"&gt; ...
-&lt;locale name="en_US" encoding="UTF-8" xpg_name="en_US.UTF-8"&gt; ...
-</pre>
-</div>
-
-<p>
-With that, Matlab will print UTF-8 to the terminal.
-</p>
-
-<p>
-You still can't type unicode characters to the command prompt, of course. But who would want that anyway, I dare ask. Of course, what with Matlab being basically free, and frequently updated, we can forgive such foibles easily&#x2026;
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

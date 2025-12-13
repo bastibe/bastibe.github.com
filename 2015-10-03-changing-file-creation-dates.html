@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Changing File Creation Dates in OSX</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,64 +19,65 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<div class="post-date">03 Oct 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
-<p>
-On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
-</p>
-
-<p>
-For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http://www.sentex.net/~mwandel/jhead/">command</a> <a href="http://owl.phy.queensu.ca/~phil/exiftool/">line</a> <a href="http://www.exiv2.org/#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
-</p>
-
-<p>
-So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
-</p>
-
-<p>
-If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <i>either</i> the file creation date, <i>or</i> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.
-</p>
-
-<p>
-Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">import os.path
-import os
-import datetime
-# I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4
-for index in range(426, 465):
-    filename = 'GOPR0{}.MP4'.format(index)
-    # extract old date:
-    date = datetime.datetime.fromtimestamp(os.path.getctime(filename))
-    # create a new date with the same time, but on 2015-08-22
-    new_date = datetime.datetime(2015,  8, 22, date.hour, date.minute, date.second)
-    # set the file creation date with the "-d" switch, which presumably stands for "dodification"
-    os.system('SetFile -d "{}" {}'.format(new_date.strftime('%m/%d/%Y %H:%M:%S'), filename))
-    # set the file modification date with the "-m" switch
-    os.system('SetFile -m "{}" {}'.format(new_date.strftime('%m/%d/%Y %H:%M:%S'), filename))
-</pre>
 </div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-macos.html">macos</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+
+<div id="content">
+<div class="post-date">03 Oct 2015</div>
+<h1 class="post-title"><a href="https://bastibe.de/2015-10-03-changing-file-creation-dates.html">Changing File Creation Dates in OSX</a></h1>
+<p>On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.</p>
+<p>For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of <a href="http:_www.sentex.net_~mwandel/jhead/">command</a> <a href="http:_owl.phy.queensu.ca_~phil/exiftool/">line</a> <a href="http:_www.exiv2.org_#util">utilities</a> that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).</p>
+<p>So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.</p>
+<p>If you have XCode installed, this will come with <code>SetFile</code>, a command line utility that can change file creation dates. Note that <code>SetFile</code> can change <em>either</em> the file creation date, <em>or</em> the file modification date, but not both at the same time, as any normal Unix utility would. Also note that <code>SetFile</code> expects dates in American notation, which is about as nonsensical as date formats come.</p>
+<p>Anyway, here's a small Python script that changes the file creation date (but not the time) of a bunch of video files:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="c1"># I want to change the dates on the files GOPR0246.MP4-GOPR0264.MP4</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">426</span><span class="p">,</span> <span class="mi">465</span><span class="p">):</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GOPR0</span><span class="si">{}</span><span class="s1">.MP4&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+    <span class="c1"># extract old date:</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="c1"># create a new date with the same time, but on 2015-08-22</span>
+    <span class="n">new_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span>  <span class="mi">8</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">second</span><span class="p">)</span>
+    <span class="c1"># set the file creation date with the &quot;-d&quot; switch, which presumably stands for &quot;dodification&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;SetFile -d &quot;</span><span class="si">{}</span><span class="s1">&quot; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/</span><span class="si">%d</span><span class="s1">/%Y %H:%M:%S&#39;</span><span class="p">),</span> <span class="n">filename</span><span class="p">))</span>
+    <span class="c1"># set the file modification date with the &quot;-m&quot; switch</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;SetFile -m &quot;</span><span class="si">{}</span><span class="s1">&quot; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m/</span><span class="si">%d</span><span class="s1">/%Y %H:%M:%S&#39;</span><span class="p">),</span> <span class="n">filename</span><span class="p">))</span>
+</pre></div>
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-programming.html">programming</a>, <a href="https://bastibe.de/tag-macos.html">macos</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

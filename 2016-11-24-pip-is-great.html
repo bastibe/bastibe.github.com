@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Pip is great</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,60 +19,56 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<div class="post-date">24 Nov 2016</div><h1 class="post-title"><a href="https://bastibe.de/2016-11-24-pip-is-great.html">Pip is great</a></h1>
-<p>
-<a href="http://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing</a> <a href="http://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Python</a> <a href="http://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">packages</a> <a href="http://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html">used</a> to be a pain. Very surprisingly, this is no longer the case. Nowadays, <code>pip install whatever</code> will reliably install pretty much anything without any trouble.
-</p>
-
-<p>
-To recap, the problem is that many Python packages rely on C code, which needs to be compiled before installation. In the past, this burden was mostly on the user. Depending on the user's knowledge of C and compilers, and the user's operating system, this could become almost arbitrarily hairy.
-</p>
-
-<p>
-This problem was solved, to some extent, using pre-compiled packages, first as <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">binary installers</a> on the package websites, then pre-packaged <a href="http://winpython.github.io/">Python</a> <a href="https://www.continuum.io/anaconda-overview">distributions</a>, and later through third-party package managers such as <a href="http://conda.pydata.org/docs/">conda</a>.
-</p>
-
-<p>
-This worked well, but it fractured the ecosystem into several different mostly-compatible package sources. This was no big problem, but users had to decide on a package-by-package basis whether to download an installer, use conda, or use pip.
-</p>
-
-<p>
-But I am happy to announce that these dark days are behind us now. Pip now automatically installs binary Python packages called <a href="http://wheel.readthedocs.io/en/latest/">wheels</a>, and most package developers <a href="http://pythonwheels.com/">do now provide</a> wheels on <a href="https://pypi.python.org/pypi">PyPI</a>. This is so obviously superior to the past that many high-profile packages don't even provide binary installers any more.
-</p>
-
-<p>
-For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-Not because I dislike conda, just to simplify my development environment.
-</p></div></div>
-
-
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+
+<div id="content">
+<div class="post-date">24 Nov 2016</div>
+<h1 class="post-title"><a href="https://bastibe.de/2016-11-24-pip-is-great.html">Pip is great</a></h1>
+<p><a href="http://bastibe.de/2011-02-03-installing-python-slash-numpy-slash-scipy-slash-matplotlib-on-osx.html">Installing</a> <a href="http://bastibe.de/2011-03-04-installing-pygame-using-homebrew.html">Python</a> <a href="http://bastibe.de/2011-08-01-compiling-scipy-and-matplotlib-using-pip-on-lion.html">packages</a> <a href="http://bastibe.de/2011-10-13-compiling-scipy-and-matplotlib-again.html">used</a> to be a pain. Very surprisingly, this is no longer the case. Nowadays, <code>pip install whatever</code> will reliably install pretty much anything without any trouble.</p>
+<p>To recap, the problem is that many Python packages rely on C code, which needs to be compiled before installation. In the past, this burden was mostly on the user. Depending on the user's knowledge of C and compilers, and the user's operating system, this could become almost arbitrarily hairy.</p>
+<p>This problem was solved, to some extent, using pre-compiled packages, first as <a href="http:_www.lfd.uci.edu_~gohlke/pythonlibs/">binary installers</a> on the package websites, then pre-packaged <a href="http:_winpython.github.io_">Python</a> <a href="https://www.continuum.io/anaconda-overview">distributions</a>, and later through third-party package managers such as <a href="http://conda.pydata.org/docs/">conda</a>.</p>
+<p>This worked well, but it fractured the ecosystem into several different mostly-compatible package sources. This was no big problem, but users had to decide on a package-by-package basis whether to download an installer, use conda, or use pip.</p>
+<p>But I am happy to announce that these dark days are behind us now. Pip now automatically installs binary Python packages called <a href="http://wheel.readthedocs.io/en/latest/">wheels</a>, and most package developers <a href="http:_pythonwheels.com_">do now provide</a> wheels on <a href="https://pypi.python.org/pypi">PyPI</a>. This is so obviously superior to the past that many high-profile packages don't even provide binary installers any more.</p>
+<p>For me, this means I don't have to rely on conda any longer. I don't have to keep a mental list of which packages to install though conda and which packages to install through pip any longer. I can go back to using virtualenv instead of conda-envs<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> again. I don't have to tell students to download pre-packaged Python distributions any longer. Pip is great!</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>Not because I dislike conda, just to simplify my development environment.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

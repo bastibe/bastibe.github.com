@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Org Mode Selective Section Numbering</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,132 +19,121 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">03 Dec 2014</div><h1 class="post-title"><a href="https://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
-<p>
-This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.
-</p>
+<div class="post-date">03 Dec 2014</div>
+<h1 class="post-title"><a href="https://bastibe.de/2014-12-03-org-numbering.html">Org Mode Selective Section Numbering</a></h1>
+<p>This is the third revision of a post about selective headline numbering in Org mode. On its own, Org mode can either number all headlines, or none. For scientific writing, this is a non-starter. In a scientific paper, the abstract should not be numbered, the main body should be numbered, and appendices should not be numbered.</p>
+<p>In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headline, while <code>\section*{}</code> creates an unnumbered section. Org mode does not have any facility to control this on a per-headline basis, but it can be taught:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">headline-numbering-filter</span><span class="w"> </span><span class="p">(</span><span class="nv">data</span><span class="w"> </span><span class="nv">backend</span><span class="w"> </span><span class="nv">info</span><span class="p">)</span>
+<span class="w">  </span><span class="s">&quot;No numbering in headlines that have a property :numbers: no&quot;</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let*</span><span class="w"> </span><span class="p">((</span><span class="nv">beg</span><span class="w"> </span><span class="p">(</span><span class="nf">next-property-change</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nv">data</span><span class="p">))</span>
+<span class="w">         </span><span class="p">(</span><span class="nv">headline</span><span class="w"> </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="nv">beg</span><span class="w"> </span><span class="p">(</span><span class="nf">get-text-property</span><span class="w"> </span><span class="nv">beg</span><span class="w"> </span><span class="nb">:parent</span><span class="w"> </span><span class="nv">data</span><span class="p">))))</span>
+<span class="w">    </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">and</span><span class="w"> </span><span class="p">(</span><span class="nf">eq</span><span class="w"> </span><span class="nv">backend</span><span class="w"> </span><span class="ss">&#39;latex</span><span class="p">)</span>
+<span class="w">         </span><span class="p">(</span><span class="nf">string=</span><span class="w"> </span><span class="p">(</span><span class="nv">org-element-property</span><span class="w"> </span><span class="nb">:NUMBERS</span><span class="w"> </span><span class="nv">headline</span><span class="p">)</span><span class="w"> </span><span class="s">&quot;no&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="p">(</span><span class="nv">replace-regexp-in-string</span>
+<span class="w">         </span><span class="s">&quot;\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)&quot;</span>
+<span class="w">         </span><span class="s">&quot;\\1*&quot;</span><span class="w"> </span><span class="nv">data</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">      </span><span class="nv">data</span><span class="p">)))</span>
 
-<p>
-In LaTeX, this is easy to do: <code>\section{}</code> creates a numbered headline, while <code>\section*{}</code> creates an unnumbered section. Org mode does not have any facility to control this on a per-headline basis, but it can be taught:
-</p>
+<span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">org-export-filter-headline-functions</span><span class="w"> </span><span class="o">&#39;</span><span class="p">(</span><span class="nv">headline-numbering-filter</span><span class="p">))</span>
+</pre></div>
+<p>This creates a filter (an Org mode convention similar to a hook), which appends the asterisk to LaTeX headlines if the headline has a property <code>:NUMBERS: no</code>. If all you do is export to LaTeX, this works well.</p>
+<p>If you need to export to HTML as well, things get more complicated. Since HTML does not have native numbering support, Org is forced to manually create section numbers. But times have changed, and with CSS3, HTML now indeed <em>does</em> support native numbering!</p>
+<p>Here is some CSS that uses CSS3 counters to number all headlines and hide Org's numbers:</p>
+<div class="highlight"><pre><span></span><span class="c">/* hide Org-mode&#39;s section numbers */</span>
+<span class="nt">span</span><span class="p">.</span><span class="nc">section-number-2</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">span</span><span class="p">.</span><span class="nc">section-number-3</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">span</span><span class="p">.</span><span class="nc">section-number-4</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">span</span><span class="p">.</span><span class="nc">section-number-5</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">span</span><span class="p">.</span><span class="nc">section-number-6</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<div class="org-src-container">
-<pre class="src src-elisp">(defun headline-numbering-filter (data backend info)
-  "No numbering in headlines that have a property :numbers: no"
-  (let* ((beg (next-property-change 0 data))
-         (headline (if beg (get-text-property beg :parent data))))
-    (if (and (eq backend 'latex)
-         (string= (org-element-property :NUMBERS headline) "no"))
-        (replace-regexp-in-string
-         "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
-         "\\1*" data nil nil 1)
-      data)))
+<span class="c">/* define counters for the different headline levels */</span>
+<span class="nt">h1</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">counter-reset</span><span class="p">:</span><span class="w"> </span><span class="n">section</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">h2</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">counter-reset</span><span class="p">:</span><span class="w"> </span><span class="n">subsection</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">h3</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">counter-reset</span><span class="p">:</span><span class="w"> </span><span class="n">subsubsection</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">h4</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">counter-reset</span><span class="p">:</span><span class="w"> </span><span class="n">paragraph</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">h5</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">counter-reset</span><span class="p">:</span><span class="w"> </span><span class="n">subparagraph</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-(setq org-export-filter-headline-functions '(headline-numbering-filter))
-</pre>
-</div>
+<span class="c">/* prepend section numbers before headlines */</span>
+<span class="nt">h2</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">section</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">counter-increment</span><span class="p">:</span><span class="w"> </span><span class="n">section</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h3</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">section</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">counter-increment</span><span class="p">:</span><span class="w"> </span><span class="n">subsection</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h4</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">section</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsubsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">counter-increment</span><span class="p">:</span><span class="w"> </span><span class="n">subsubsection</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h5</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">section</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsubsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">counter-increment</span><span class="p">:</span><span class="w"> </span><span class="n">paragraph</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h6</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">section</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subsubsection</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">paragraph</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="nb">counter</span><span class="p">(</span><span class="n">subparagraph</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">counter-increment</span><span class="p">:</span><span class="w"> </span><span class="n">subparagraph</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>
-This creates a filter (an Org mode convention similar to a hook), which appends the asterisk to LaTeX headlines if the headline has a property <code>:NUMBERS: no</code>. If all you do is export to LaTeX, this works well.
-</p>
+<span class="c">/* suppress numbering for headlines with class=&quot;nonumber&quot; */</span>
+<span class="p">.</span><span class="nc">nonumber</span><span class="p">::</span><span class="nd">before</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+<p>With this in place, we can extend the previous filter to work for HTML as well as LaTeX:</p>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">headline-numbering-filter</span><span class="w"> </span><span class="p">(</span><span class="nv">data</span><span class="w"> </span><span class="nv">backend</span><span class="w"> </span><span class="nv">info</span><span class="p">)</span>
+<span class="w">  </span><span class="s">&quot;No numbering in headlines that have a property :numbers: no&quot;</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let*</span><span class="w"> </span><span class="p">((</span><span class="nv">beg</span><span class="w"> </span><span class="p">(</span><span class="nf">next-property-change</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nv">data</span><span class="p">))</span>
+<span class="w">         </span><span class="p">(</span><span class="nv">headline</span><span class="w"> </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="nv">beg</span><span class="w"> </span><span class="p">(</span><span class="nf">get-text-property</span><span class="w"> </span><span class="nv">beg</span><span class="w"> </span><span class="nb">:parent</span><span class="w"> </span><span class="nv">data</span><span class="p">))))</span>
+<span class="w">    </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">string=</span><span class="w"> </span><span class="p">(</span><span class="nv">org-element-property</span><span class="w"> </span><span class="nb">:NUMBERS</span><span class="w"> </span><span class="nv">headline</span><span class="p">)</span><span class="w"> </span><span class="s">&quot;no&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="k">cond</span><span class="w"> </span><span class="p">((</span><span class="nf">eq</span><span class="w"> </span><span class="nv">backend</span><span class="w"> </span><span class="ss">&#39;latex</span><span class="p">)</span>
+<span class="w">               </span><span class="p">(</span><span class="nv">replace-regexp-in-string</span>
+<span class="w">                </span><span class="s">&quot;\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)&quot;</span>
+<span class="w">                </span><span class="s">&quot;\\1*&quot;</span><span class="w"> </span><span class="nv">data</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+<span class="w">              </span><span class="p">((</span><span class="nf">eq</span><span class="w"> </span><span class="nv">backend</span><span class="w"> </span><span class="ss">&#39;html</span><span class="p">)</span>
+<span class="w">               </span><span class="p">(</span><span class="nv">replace-regexp-in-string</span>
+<span class="w">                </span><span class="s">&quot;\\(&lt;h[1-6]\\)\\([^&gt;]*&gt;\\)&quot;</span>
+<span class="w">                </span><span class="s">&quot;\\1 class=\&quot;nonumber\&quot;\\2&quot;</span><span class="w"> </span><span class="nv">data</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">nil</span><span class="p">)))</span>
+<span class="w">      </span><span class="nv">data</span><span class="p">)))</span>
 
-<p>
-If you need to export to HTML as well, things get more complicated. Since HTML does not have native numbering support, Org is forced to manually create section numbers. But times have changed, and with CSS3, HTML now indeed <i>does</i> support native numbering!
-</p>
+<span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">org-export-filter-headline-functions</span><span class="w"> </span><span class="o">&#39;</span><span class="p">(</span><span class="nv">headline-numbering-filter</span><span class="p">))</span>
+</pre></div>
+<p>Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.</p>
 
-<p>
-Here is some CSS that uses CSS3 counters to number all headlines and hide Org's numbers:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-css">/* hide Org-mode's section numbers */
-span.section-number-2 { display: none; }
-span.section-number-3 { display: none; }
-span.section-number-4 { display: none; }
-span.section-number-5 { display: none; }
-span.section-number-6 { display: none; }
-
-/* define counters for the different headline levels */
-h1 { counter-reset: section; }
-h2 { counter-reset: subsection; }
-h3 { counter-reset: subsubsection; }
-h4 { counter-reset: paragraph; }
-h5 { counter-reset: subparagraph; }
-
-/* prepend section numbers before headlines */
-h2::before {
-    content: counter(section) " ";
-    counter-increment: section;
-}
-h3::before {
-    content: counter(section) "." counter(subsection) " ";
-    counter-increment: subsection;
-}
-h4::before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) " ";
-    counter-increment: subsubsection;
-}
-h5::before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) " ";
-    counter-increment: paragraph;
-}
-h6::before {
-    content: counter(section) "." counter(subsection) "." counter(subsubsection) "." counter(paragraph) "." counter(subparagraph) " ";
-    counter-increment: subparagraph;
-}
-
-/* suppress numbering for headlines with class="nonumber" */
-.nonumber::before { content: none; }
-</pre>
-</div>
-
-<p>
-With this in place, we can extend the previous filter to work for HTML as well as LaTeX:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-elisp">(defun headline-numbering-filter (data backend info)
-  "No numbering in headlines that have a property :numbers: no"
-  (let* ((beg (next-property-change 0 data))
-         (headline (if beg (get-text-property beg :parent data))))
-    (if (string= (org-element-property :NUMBERS headline) "no")
-        (cond ((eq backend 'latex)
-               (replace-regexp-in-string
-                "\\(part\\|chapter\\|\\(?:sub\\)*section\\|\\(?:sub\\)?paragraph\\)"
-                "\\1*" data nil nil 1))
-              ((eq backend 'html)
-               (replace-regexp-in-string
-                "\\(&lt;h[1-6]\\)\\([^&gt;]*&gt;\\)"
-                "\\1 class=\"nonumber\"\\2" data nil nil)))
-      data)))
-
-(setq org-export-filter-headline-functions '(headline-numbering-filter))
-</pre>
-</div>
-
-<p>
-Previously, I implemented this in Org mode only (no CSS). While that worked as well, it required the modification of some fairly low-level Org functions. The CSS-based solution is much simpler, and should be much easier to maintain and adapt.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a> <a href="https://bastibe.de/tag-emacs.html">emacs</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a>, <a href="https://bastibe.de/tag-emacs.html">emacs</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Using a Raspberry Pi as a Time Capsule for Mountain Lion</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,171 +19,94 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">29 Jul 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
-<p>
-A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.
-</p>
-
-<p>
-This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
-</p>
-
-<div id="outline-container-org85f242c" class="outline-2">
-<h2 id="org85f242c">Ingredients: <a href="http://www.raspberrypi.org/">A Raspberry Pi</a>, an external hard drive, some patience</h2>
-<div class="outline-text-2" id="text-org85f242c">
-<p>
-Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.
-</p>
-
-<p>
-Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi's HDMI output to the LED display's Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.
-</p>
-
-<p>
-After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <i>Internet Sharing</i> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgc089e71" class="outline-2">
-<h2 id="orgc089e71">Setting up the hard drive</h2>
-<div class="outline-text-2" id="text-orgc089e71">
-<p>
-First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir ~/TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending this to <i>/etc/fstab</i>
-</p>
-
-<pre class="example" id="org555ea67">
-    /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
-</pre>
-
-<p>
-Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org8a9d2df" class="outline-2">
-<h2 id="org8a9d2df">Setting up the shared folder</h2>
-<div class="outline-text-2" id="text-org8a9d2df">
-<p>
-First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to <i>/etc/netatalk/AppleVolumes.default</i>:
-</p>
-
-<pre class="example" id="orge43fdab">
-    /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
-</pre>
-
-<p>
-Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to <i>/etc/netatalk/afpd.conf</i>:
-</p>
-
-<pre class="example" id="org95af516">
-    - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
-</pre>
-
-<p>
-<del>(maybe append <code>mdns</code> to the hosts in <i>/etc/nsswitch.conf</i>? Probably not necessary.)</del>
-</p>
-
-<p>
-<del>I am also not quite sure whether I actually had to create a new file <i>/etc/avahi/services/afpd.service</i> and write into it:</del>
-</p>
-
-<div class="org-src-container">
-<pre class="src src-xml">    &lt;?xml version="1.0" standalone='no'?&gt;&lt;!--*-nxml-*--&gt;
-    &lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
-    &lt;service-group&gt;
-		&lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;
-		&lt;service&gt;
-			&lt;type&gt;_afpovertcp._tcp&lt;/type&gt;
-			&lt;port&gt;548&lt;/port&gt;
-		&lt;/service&gt;
-		&lt;service&gt;
-			&lt;type&gt;_device-info._tcp&lt;/type&gt;
-			&lt;port&gt;0&lt;/port&gt;
-			&lt;txt-record&gt;model=Xserve&lt;/txt-record&gt;
-		&lt;/service&gt;
-	&lt;/service-group&gt;
-</pre>
-</div>
-
-<p>
-<del>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch ~/TimeMachine/.com.apple.timemachine.supported</code>.</del>
-</p>
-
-<p>
-<b>Edit:</b> Turns out, all these were not necessary. Thank you, reader Philipp, for trying them out!
-</p>
-
-<p>
-I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.
-</p>
-
-<p>
-Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgc93e2ef" class="outline-2">
-<h2 id="orgc93e2ef">Setting up the Time Machine</h2>
-<div class="outline-text-2" id="text-orgc93e2ef">
-<p>
-<del>Now, back to the Mac. In order to make Time Machine accept the new network share, run</del>
-</p>
-
-<p>
-<del><code>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1</code></del>
-</p>
-
-
-<p>
-<b>Edit:</b> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.
-</p>
-
-<p>
-Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!
-</p>
-
-<p>
-Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.
-</p>
-
-<p>
-Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!
-</p>
-
-<p>
-This article heavily steals from these fine folks on the internet:
-</p>
-
-<ul class="org-ul">
+<div class="post-date">29 Jul 2012</div>
+<h1 class="post-title"><a href="https://bastibe.de/2012-07-29-using-raspberry-pi-as-time-machine.html">Using a Raspberry Pi as a Time Capsule for Mountain Lion</a></h1>
+<p>A while ago, I bought a Time Capsule to take care of my backups. I can't say it has been smooth sailing. Every now and then, the Time Capsule would claim that the backup did fail. Sometimes a reboot would help, sometimes not. Sometimes <code>hdiutil</code> would be able to salvage the backups, sometimes not. Sometimes, the backup disk image would simply be corrupted and the only option would be to delete it and start over.</p>
+<p>This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:</p>
+<h2>Ingredients: <a href="http:_www.raspberrypi.org_">A Raspberry Pi</a>, an external hard drive, some patience</h2>
+<p>Format an SD card as described <a href="http://elinux.org/RPi_Easy_SD_Card_Setup">in the wiki</a>. I just installed the version of Debian that is provided on <a href="http://www.raspberrypi.org/downloads">the official website</a>. Now just boot up.</p>
+<p>Next, I was stumped because I only have an Apple LED display and no convenient way of connecting the Raspberry Pi's HDMI output to the LED display's Mini Display Port. After some searching and a combination of three adapter cables, I finally got it connected and could see it boot. Really, I have no use whatsoever for the HDMI port on the Raspberry pi. So the first thing I did was to enable SSH, which luckily is available right there in the configuration utility that starts when you boot the thing for the first time.</p>
+<p>After that, I disconnected the display and immediately was stumped because I now had no way of finding the Pi's IP address. Actually, I did not even have a network to connect it to. So I strung an ethernet cable from my laptop to the Pi and enabled <em>Internet Sharing</em> in order to (1) start the DHCP server and (2) give the Pi internet access. The IP address was then easily found using <code>arp -a</code>.</p>
+<h2>Setting up the hard drive</h2>
+<p>First off, I needed to format and mount my external hard drive to be usable as a Time Machine volume. <code>ls /dev</code> showed the hard drive as <code>/dev/sda</code>. Thus, I installed <code>parted</code> using <code>sudo apt-get install parted</code> and used it <code>sudo parted</code>. In parted, <code>select /dev/sda</code> sets it up to modify the external hard drive, <code>rm 1</code> deleted its main partition, <code>q</code> to quit parted. Next, creating a new partition: <code>sudo fdisk</code>, then in there <code>n</code> with <code>p</code> and <code>1</code> to create a new primary partition, then <code>w</code> to apply the changes and exit. Lastly, I created the file system with <code>sudo mkfs -t ext4 /dev/sda1</code> with the whole partition as its size. Now lastly, I created a mount point for it using <code>mkdir /TimeMachine</code> (don't use <code>sudo</code>!) and auto-mounted it by appending
+this to <code>//etc/fstab/</code></p>
+<pre><code>    /dev/sda1 /home/pi/TimeMachine ext4 rw,auto,user,exec,sync 0 0
+</code></pre><p>Note: <code>sync</code> specifies that all file system changes have to be written to disk immediately, without caching. This might be bad for performance, but on the other hand, this behavior is probably a good idea for a backup system. I once read something somewhere that Apple is enforcing a similar behavior on their Time Capsules and that this is the reason why they won't allow any other network drive as Time Capsules.</p>
+<h2>Setting up the shared folder</h2>
+<p>First up, this requires <code>netatalk</code>, so I did <code>sudo apt-get update</code> and <code>sudo apt-get install netatalk</code> to install it. Next, netatalk has to be configured to actually share the drive on the network. This is accomplished by appending this line to //etc/netatalk/AppleVolumes.default/:</p>
+<pre><code>    /home/pi/TimeMachine TimeMachine allow:pi cnidscheme:dbd options:upriv,usedot,tm
+</code></pre><p>Also, the afp daemon should be configured to use the proper authentification schemes. Thus, add this to //etc/netatalk/afpd.conf/:</p>
+<pre><code>    - -transall -uamlist uams_randnum.so,uams_dhx.so,uams_dhx2.so -nosavepassword -advertise_ssh
+</code></pre><p><del>(maybe append <code>mdns</code> to the hosts in //etc/nsswitch.conf/? Probably not necessary.)</del></p>
+<p><del>I am also not quite sure whether I actually had to create a new file //etc/avahi/services/afpd.service/ and write into it:</del></p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; standalone=&#39;no&#39;?&gt;</span><span class="cm">&lt;!--*-nxml-*--&gt;</span>
+<span class="w">    </span><span class="cp">&lt;!DOCTYPE service-group SYSTEM &quot;avahi-service.dtd&quot;&gt;</span>
+<span class="w">    </span><span class="nt">&lt;service-group&gt;</span>
+<span class="w">		</span><span class="nt">&lt;name</span><span class="w"> </span><span class="na">replace-wildcards=</span><span class="s">&quot;yes&quot;</span><span class="nt">&gt;</span>%h<span class="nt">&lt;/name&gt;</span>
+<span class="w">		</span><span class="nt">&lt;service&gt;</span>
+<span class="w">			</span><span class="nt">&lt;type&gt;</span>_afpovertcp._tcp<span class="nt">&lt;/type&gt;</span>
+<span class="w">			</span><span class="nt">&lt;port&gt;</span>548<span class="nt">&lt;/port&gt;</span>
+<span class="w">		</span><span class="nt">&lt;/service&gt;</span>
+<span class="w">		</span><span class="nt">&lt;service&gt;</span>
+<span class="w">			</span><span class="nt">&lt;type&gt;</span>_device-info._tcp<span class="nt">&lt;/type&gt;</span>
+<span class="w">			</span><span class="nt">&lt;port&gt;</span>0<span class="nt">&lt;/port&gt;</span>
+<span class="w">			</span><span class="nt">&lt;txt-record&gt;</span>model=Xserve<span class="nt">&lt;/txt-record&gt;</span>
+<span class="w">		</span><span class="nt">&lt;/service&gt;</span>
+<span class="w">	</span><span class="nt">&lt;/service-group&gt;</span>
+</pre></div>
+<p><del>And maybe, you have to create an empty file that signifies the drive as Time Machine compatible using <code>touch </code><em>TimeMachine</em>.com.apple.timemachine.supported~.</del></p>
+<p><em>Edit:</em> Turns out, all these were not necessary. Thank you, reader Philipp, for trying them out!</p>
+<p>I certainly did all that, but I am not quite sure which of these steps were strictly necessary. If you know, please let me, too.</p>
+<p>Anyway, with all that done, restart both the netatalk and the Bonjour daemon using <code>sudo /etc/init.d/netatalk restart</code> and <code>sudo /etc/init.d/avahi-daemon restart</code>.</p>
+<h2>Setting up the Time Machine</h2>
+<p>+Now, back to the Mac. In order to make Time Machine accept the new network share, run+</p>
+<pre><code>~~`defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1`~~</code></pre><p><em>Edit:</em> Turns out, this setting is not necessary. OSX just picks the Raspberry Pi as a usable Time Machine drive by default.</p>
+<p>Finally, the TimeMachine folder on the Raspberry Pi was available as one of the backup drives. Halleluja!</p>
+<p>Now transfer speeds for the initial backup are not exactly what I would call fast, but this might not be the Pi's fault. For one thing, the Pi is reporting to only run at half load. For another thing, the external hard drive and its USB connection is probably not very speedy. And lastly, I seem to remember that initial backups always were slow. But really, only time will tell how well this thing can do the job of a Time Capsule.</p>
+<p>Further testing shows that transfer speeds are very comparable to the Time Capsule. Thus, I declare this a raging success!</p>
+<p>This article heavily steals from these fine folks on the internet:</p>
+<ul>
 <li><a href="http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/">Matthias Kretschmann</a></li>
 <li><a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a></li>
 <li><a href="http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/">Mike Palmer</a></li>
 </ul>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-backup.html">backup</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-macos.html">macos</a>, <a href="https://bastibe.de/tag-backup.html">backup</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

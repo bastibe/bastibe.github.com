@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
-<title>bastibe.de</title>
+      title="RSS feed for https://bastibe.de">
+<title>Home</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -18,156 +19,279 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
-<div id="content">
-<h1 class="title">Posts tagged "windows":</h1>
-<div class="post-date">21 Apr 2023</div><h1 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h1>
-<p>
-I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
-surely just using it wrong. Nowadays, I see things the other way around: We're not "holding it
-wrong", the computer is just defective. Computers should do our bidding, not vice versa. So here's a
-bunch of things that I do to my computers to mold them to my way of working.
-</p>
+</div>
 
-<div id="outline-container-orga6f6339" class="outline-2">
-<h2 id="orga6f6339">Keyboard Layout</h2>
-<div class="outline-text-2" id="text-orga6f6339">
-<p>
-I switch constantly between a German and English keyboard layout, and regularly between various
+<div id="content">
+
+
+<h1>Posts tagged "windows"</h1>
+
+<div class="post-date">12 Mar 2009</div><h2 class="post-title"><a href="https://bastibe.de/2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h2>
+<p><img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules" /></p>
+<p>Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.</p>
+<p>Und da FFmpeg freie Software ist, kann man sie auch für andere Dinge verwenden, etwa, um mit Matlab Audiodateien zu öffnen. Fehlt noch eine Verbindung zwischen Matlab und den FFmpeg-C-Bibliotheken, und die gibt es in Form von <a href="http://www.mathworks.com/support/tech-notes/1600/1605.html#intro">Mex</a>, der C-Schnittstelle von Matlab. Feine Sache, zwar hat es eine Weile gedauert, bis ich mich in libavformat und libavcodec eingearbeitet hatte (die beiden wichtigsten FFmpeg-Bibliotheken), aber im Endeffekt lief das alles sehr schmerzfrei -- und das, obwohl ich bisher Mex-Kompilieren mit Matlab immer als eine grausige Beschäftigung in Erinnerung hatte, gespickt von kryptischen Kompiler-Fehlern und hässlichen Notlösungen.</p>
+<p>Bumms, Zack, kaum hatte ich mich versehen, hatte ich ein lauffähiges, tadellos funktionierendes <a href="http://en.wikipedia.org/wiki/MATLAB#Calling_C_and_Fortran_functions">Mex-File</a> auf meinem Mac liegen. Damit hatte ich nicht gerechnet. Also sofort die momentane Euphorie ausnutzen und weiter zu Schritt 2, das Ganze nochmal auf Windows. Meine Probleme, Windows so einzurichten, dass ich endlich Kompilieren kann, <a href="http://www.daskrachen.com/2009/03/great-scott.html">hatte ich ja schon berichtet</a>. Ich hatte also Visual Studio 2005 installiert, um Matlab zufrieden zu stellen und einen anständigen Kompiler auf dem System zu haben. Aber war ja klar, MSVC macht wieder sein eigenes Ding und nichts ist mit Standardkonformität und Trallalla: Keine <a href="http://de.wikipedia.org/wiki/C99#C99">C99</a>-Unterstützung, also keine Variablendeklarationen mitten im Code und keine stdint.h oder inttype.h. Ein Glück, es gibt wieder ein wenig mehr Free Software, die wenigstens <a href="http://code.google.com/p/msinttypes/">letztere Lücke schließt</a>. Dennoch; Ich bekomme mein mex-File nicht zum Laufen. Es ist wie verflucht, kaum setze ich mich an eine Windows-Maschine zum Programmieren, fällt meine Produktivität auf das Niveau eines Backsteins.</p>
+<p>Enter <a href="http://sourceforge.net/projects/gnumex">gnumex</a>, noch ein weiteres Stück FOSS, das es ermöglicht, GCC als Mex-Kompiler zu verwenden, AUF WINDOWS. Um die Dinge zu vereinfachen, verwendete ich die <a href="http:_www.mingw.org_">MinGW</a>-Variante und kaum war diese Hürde genommen... lief alles. Einfach so. Wahrscheinlich bin ich ein Dickschädel und habe einfach nicht die Geistesschärfe, mit Windows-Kompilern zu arbeiten, aber mir scheint, alles was ich diesbezüglich anfasse und das nicht GCC heißt ist zum Scheitern verurteilt. Ein Glück, dass es die vielen klugen Jungen und Mädchen gibt, die so wunderbare freie Software schreiben, die mir das Leben so viel einfacher macht!</p>
+<p>Eine Fortsetzung kommt noch...</p>
+
+
+
+<div class="post-date">15 Mar 2009</div><h2 class="post-title"><a href="https://bastibe.de/2009-03-15-debugging-und-gcc-auf-windows.html">Debugging und GCC auf Windows</a></h2>
+<p><img src="http://bastibe.de/static/2009-03/code.png" alt="code" /></p>
+<p>So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.</p>
+<p><a href="http://en.wikipedia.org/wiki/State_of_the_Union">The State of The Union</a>: Kleine Dateien einlesen, kein Problem. Exotische Formate einlesen, kein Problem. Metadaten auslesen, kein Problem. Dateigröße, Bitrate und Samplerate auslesen, ein kleines Problem, da diese Parameter bei komprimierten Formaten nicht unbedingt fest stehen. Große Dateien einlösen, auf dem Mac kein Problem, auf Windows… nun ja, es dauert. Eine WAV-Datei von 5:30 min einzulesen, dauert mit Windows momentan ca. eine Stunde. Das kann nicht sein, in der Zeit habe ich die Datei dem Programm vorgelesen, wenn es sein muss.</p>
+<p>Also, was ist da faul? Jetzt heißt es debuggen: <a href="http://de.wikipedia.org/wiki/GNU_Debugger">GDB</a> ist mein Freund, aber leider spreche ich seine Sprache nicht, also Oldschool-Debugging mit <a href="http://www.cplusplus.com/reference/clibrary/cstdio/printf.html">printf()</a> (bzw. <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexprintf.html">mexPrintf()</a>; Aber da <code>#define printf mexPrintf</code> ist das das selbe). Blöd nur, dass Matlab selbst entscheidet, wann es meine Printfs auf den Bildschirm schreibt und es sich dazu entschlossen hat, dies immer erst nach dem Ausführen der Datei, also erst nachdem es bereits eine Stunde gearbeitet hat, zu tun. Einiges Hirnen später konnte ich Matlab endlich über eine Kombination aus <a href="http://de.wikipedia.org/wiki/Typumwandlung">Typecasts</a>, <a href="http://www.cplusplus.com/reference/clibrary/cstdio/sprintf.html">sprintf</a> und <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexwarnmsgtxt.html">mexWarnMsgTxt</a> dazu überreden, wenigstens sporadisch ein paar Informationen herauszugeben.</p>
+<p>Das Ergebnis:</p>
+<ol>
+<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)</li>
+<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html">Realloc</a> ist schuld!</li>
+</ol>
+<p>Das kam überraschend! Offenbar ist realloc auf dem Mac um mehrere Größenordnungen performanter als auf <a href="http:_www.mingw.org_">MinGW</a>_Windows, denn die selbe Anwendung, die auf dem Mac ca. eine Sekunde braucht, braucht auf Windows eine Stunde! Und das allein wegen realloc! (Eigentlich: eine halbe Stunde wegen realloc, der Rest ist der Tatsache geschuldet, dass Windows in einer <a href="http:_/www.vmware.com/de/products/fusion/">VM</a> läuft)</p>
+<p>Bei WAV-Dateien werden immer 2048 Samples an einem Stück ausgelesen. Danach verwende ich ein realloc, um meinen haupt-Speicherpuffer um diese Größe zu vergrößern und kopiere die neuen Daten dort hinein. Bei meinen 5:30 min macht das bei einer Samplerate von 44100 kHz und zwei Kanälen ca. 15000 Aufrufe von realloc. Komprimierte Datenformate haben üblicherweise kleinere Frames und damit noch einmal wesentlich mehr realloc-Aufrufe.
+Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, größere Aufrufe zu machen. Zeit für ein paar Experimente:</p>
+<table>
+<thead>
+<tr>
+  <th>realloc()-Größe</th>
+  <th>realloc()-Aufrufe</th>
+  <th>benötigte   Zeit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>2^11 =    2048</td>
+  <td>15000</td>
+  <td>~1 h</td>
+</tr>
+<tr>
+  <td>2^16 =   65536</td>
+  <td>470</td>
+  <td>~2 min</td>
+</tr>
+<tr>
+  <td>2^17 =  131072</td>
+  <td>240</td>
+  <td>~1 min</td>
+</tr>
+<tr>
+  <td>2^18 =  262144</td>
+  <td>120</td>
+  <td>30 s</td>
+</tr>
+<tr>
+  <td>2^19 =  524288</td>
+  <td>60</td>
+  <td>18 s</td>
+</tr>
+<tr>
+  <td>2^20 = 1048576</td>
+  <td>30</td>
+  <td>10.5 s</td>
+</tr>
+<tr>
+  <td>2^21 = 2097152</td>
+  <td>15</td>
+  <td>7.3 s</td>
+</tr>
+<tr>
+  <td>2^22 = 4194304</td>
+  <td>7</td>
+  <td>5.1 s</td>
+</tr>
+<tr>
+  <td>2^23 = 8388608</td>
+  <td>3</td>
+  <td>4.2 s</td>
+</tr>
+</tbody>
+</table>
+<p>Das Spannende ist: Ich ändere durch meine Methodik praktisch nichts außer der Anzahl und Größe der realloc-Aufrufe, aber man erkennt einen eindeutigen Zusammenhang zwischen Performance und Anzahl der Aufrufe, ergo ist realloc der alleinige Schuldige für mein Performanceproblem auf Windows.</p>
+<p>An dieser Stelle fiel mir ein, dass ich bereits an früherer Stelle einmal die gesamte Länge des Audio-Streams anhand der Metadaten geschätzt hatte. Durch eine somit vorgenommene Prä-Allokation des gesamten Speichers lässt sie die Laufzeit weiter auf 2.2 s drücken. Das ist immernoch nicht einmal halb so schnell wie auf OSX (0.9 s), aber das mag auch an der virtuellen Maschine liegen.</p>
+<p>Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sicher, dass ich ab jetzt die Finger von inkrementiellen Speichervergrößerungen auf MinGW/Windows lassen werde. Ist das in MSVC ähnlich schlimm, oder habe ich da etwa einen Bug entdeckt?</p>
+
+
+
+<div class="post-date">10 Jul 2017</div><h2 class="post-title"><a href="https://bastibe.de/2017-07-10-audio-apis-wasapi.html">Audio APIs, Part 3: WASAPI / Windows</a></h2>
+<p>This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.</p>
+<p>It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http:_www.portaudio.com_">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio's C API a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:</p>
+<p>Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85">WASAPI</a>.aspx)<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> on Windows.</p>
+<p>This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).</p>
+<hr />
+<h1>WASAPI</h1>
+<p>WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85">Windows Multimedia (MME)</a>.aspx), the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85">DirectSound</a>.aspx), the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Windows Audio Session API (WASAPI)</a>.aspx), introduced in Windows Vista to bring a modern audio API to Windows.</p>
+<p>In other words, audio on Windows has a long and troubled history, and has had a lot of opportunity for experimentation. It should then be no surprise that WASAPI is a clean and well-documented audio API that avoids many of the pitfalls of its predecessors and brethren. After having experienced the audio APIs of Windows, Linux, and macOS, I am beginning to understand why some programmers love Windows.</p>
+<p>But let's take a step back, and give an overview over the API. First of all, this is a cross-language API that is meant to be used from C#, with a solid bridge for C++, and a somewhat funky bridge for C. This is crucial to understand. The whole API is designed for a high-level, object-oriented runtime, but I am accessing it from a low-level language that has no concept of objects, methods, or exceptions.</p>
+<p>Objects are implemented as pointers to opaque structs, with an associated list of function pointers to methods. Every method accepts the object pointer as its first argument, and returns an error value if an exception occurred. Both inputs and outputs are function arguments, with outputs being implemented as pointer-to-pointer values. While this looks convoluted to a C programmer, it is actually a very clean mapping of object oriented concepts to C that never gave me any headaches.</p>
+<p>However, there are a few edge cases that did take me a while to understand: Since the C API is inherently not polymorphic, you sometimes have to manually specify types as cryptic UUID structs. Figuring out how to convert the UUID strings from the header files to such structs was not easy.  Similarly, it took me a while to reverse-engineer that strings in Windows are actually <code>uint16</code>, despite being declared <code>char</code>. But issues such as these are to be expected in a cross-language API.</p>
+<p>In general, I did not find a good overview on how to interpret high-level C#-concepts in C. For example, it took a long time until I learned that objects in C# are reference counted, and that I would have to manage reference counts manually. Similarly, I had one rather thorny issue with memory allocations: in rare occasions (<code>PROPVARIANT</code>), C# is expected to re-allocate memory of an object if the object does not have enough memory when passed into a method. This does not work as intended if you don't use C#'s memory allocator to create the memory. <em>This</em> was really painful to figure out.</p>
+<p>Another result of the API's cross-language heritage are its headers: There are <em>hundreds</em>. And they all contain both the C API and the C++ API, separated by the occasional <code>#ifdef __cplusplus</code> and <code>extern C</code>. Worse yet, pretty much every data type and declaration is wrapped in multiple levels of preprocessor macros and <code>typedef</code>. There are no doubt good reasons and a rich history for this, but it took me many hours to assemble all the necessary symbols from dozens of header files to even begin to call WASAPI functions.</p>
+<p>Nevertheless, once these hurdles are overcome, the actual WASAPI API itself is well-structured and reasonably simple. You acquire an <code>IMMDeviceEnumerator</code>, which returns <code>IMMDeviceCollections</code> for microphones and speakers. These contain <code>IMMDevices</code>, which represent sound cards and their properties. You activate an <code>IMMDevice</code> with a desired data format to get an <code>IAudioClient</code>, which in turns produces an <code>IAudioRenderClient</code> or <code>IAudioCaptureClient</code> for playback or recording, respectively. Playback and recording themselves are done by requesting a buffer, and reading or writing raw data to that buffer. This is about as straight-forward as APIs get.</p>
+<p>The documentation deserves even more praise: I have rarely seen such a well-documented API. There are high-level overview articles, there is commented example code, every object is described abstractly, and every method is described in detail and in reference to related methods and example code. There is no corner case that is left undescribed, and no error code without a detailed explanation. Truly, this is <em>exceptional</em> documentation that is a joy to work with!</p>
+<p>In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praising Windows. There is a non-trivial impedance mismatch between C and C# that has to be overcome to <em>use</em> WASAPI from C. But once I understood this, the API itself and its documentation were easy to use and understand. Impressive!</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85">Core Audio</a>.aspx) APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+
+<div class="post-date">19 Nov 2017</div><h2 class="post-title"><a href="https://bastibe.de/2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h2>
+<p>The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http:_melpa-stable.milkbox.net_#_">melpa</a> or <a href="https:__marmalade-repo.org_">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.</p>
+<p>However, I have found that this does not work any more: As of Emacs 25, Emacs is available in 64 bit, but ezwinport only supplies 32 bit binaries. I had to search a bit, but the (in retrospect, obvious) solution is to download the required binaries from <a href="https://gnutls.org/download.html">GnuTLS's website</a>, directly. Then unpack all <code>*.dll</code> from the <code>bin</code> directory to your Emacs's <code>bin</code> directory, and you are good to go.</p>
+<p>This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.</p>
+
+
+
+<div class="post-date">17 Sep 2020</div><h2 class="post-title"><a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">Dear Computer, We Need to Talk</a></h2>
+<p>After years of using Linux on my desktop, I decided to install Windows on my computer, to get access to a few commercial photo editing applications. I'll go into my grievances with Linux later, but for now:</p>
+<h2>I tried to install Windows, you won't believe what happened next</h2>
+<p>Like I have done many times with Linux, I download a Windows image from my university, and write it to a USB drive, then reboot into the USB drive. The USB drive can't be booted. A quick internet search leads me to a Microsoft Support page on how to <a href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive">Install Windows from a USB Flash Drive</a>, which says that</p>
+<img style="width:50%;padding-left:25%" src="/static/2020-09/one does not simply.jpg">
+
+<p>Instead, one has to format the stick as FAT32, make it <em>active</em>, then copy the files from the image to it. So I follow the instructions and open the Disk Management program. It does not offer an option of FAT32, nor for making the partition <em>active</em>. I settle on (inactive) exFAT instead. It doesn't boot.</p>
+<p>I switch over to Linux, where I can indeed make a FAT32 partition, and I can mark it as <em>bootable</em>, which I take as the equivalent of <em>active</em>. But Linux can not open the Windows image to copy the files onto the USB stick. So back to Windows, for copying the files. Except they can't be copied, because some of them are larger than 4Gb, which can't be written to a FAT32 partition. What now?</p>
+<p>While researching how to download a different version of Windows 10, I stumble upon the <a href="https://www.microsoft.com/de-de/software-download/windows10">Media Creation Tool</a>, which automatically downloads Windows 10 and writes it to the USB stick correctly. Why was this not pointed out in the article above? Who knows. At any rate, it works. I can finally install Windows.</p>
+<p>The installation process requires the usual dozen-or-so refusals of tracking, ads, privacy intrusions, and voice assistants. I wish I could simply reject them all at once. And then the install hangs, while &quot;polishing up a few things&quot;. Pressing the helpful back button, and then immediately the forward button unhangs it, and the installation completes.</p>
+<p>Next up are drivers. It feels anachronistic to have to install drivers manually in this day and age, but oh well. The new GPU driver to make screen tearing go away, a driver for my trackball to recognize the third mouse button, a wacom driver, ten or so Intel drivers of unknown utility. The trackball driver is not signed. I install it anyway. The GPU driver does not recognize my GPU and can't be installed. A quick Internet search reveals that my particular AMD/Intel GPU/CPU was discontinued from support by both AMD and Intel, and does not have a current driver. But fora suggest that up to version 20.2.1 of the AMD driver work fine. They don't, the driver crashes when I open images in my photo editor. An even older version published by Intel does work correctly. So now I am running an AMD GPU with an Intel driver from 2018.</p>
+<img style="width:50%;padding-left:25%" src="/static/2020-09/this is fine.png">
+
+<p>Installing and setting up Firefox and my photo editors works without issue, thank goodness. Emacs has a Windows installer now, which is greatly appreciated. OpenCL and network shares just work. This is why I'm installing Windows next to my Linux.</p>
+<p>But Windows is still not activated. I copy my university's product key in the appropriate text box, but hesitate: That's for Windows Enterprise, and I'd be just fine with Home. So I cancel the activation without activating. A helpful link in the activation systems sends me to the Microsoft Store to get my very own version of Windows Home for €145, which normally retails for around €95, so that's a no-go. Whatever, I'll go with my university's Enterprise edition. Except the activation box now says my product key is invalid. And the Store now literally says &quot;We don't know how you got here but you shouldn't be here&quot; instead of selling me Windows. After a restart it installs and activates Windows Enterprise, even though I never actually completed the activation.</p>
+<img style="width:70%;padding-left:15%" src="/static/2020-09/this is fine 2.jpg">
+
+<p>I install Git, but in order to access my Github I need to copy over my SSH key from the Linux install. Which I can't boot at the moment, because installing Windows overwrites the boot loader. This is normal. So I download Ubuntu, write it to the USB stick, boot into it, recover the bootloader, boot into my old install, reformat the stick, copy the files to the stick, boot back into Windows, and the files aren't on the stick. Tough. Boot back into Linux, copy the files onto the stick, <em>eject the stick</em>, boot back into Windows, copy the files to the computer. Great user experience.</p>
+<p>Now that I have my SSH key, I open a Git Bash to download a project. It says my credentials are incorrect. I execute the same commands in a regular CMD instead of Git Bash, and now my credentials are correct. Obviously.</p>
+<p>There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!</p>
+<p>I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many &quot;solutions&quot; are offered <a href="https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1">in the support fora</a>. What works for me is to first set the lock screen to &quot;Windows Spotlight&quot;, then to &quot;Slideshow&quot;. Only in that order will my pictures be shown.</p>
+<p>I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.</p>
+<h2>Why install Windows in the first place?</h2>
+<p>Part of the reason for installing Windows was my growing frustration with Linux. I have been a happy user of KDE of various flavors for about seven years now. But ever since I got into photo editing, things began to become problematic:</p>
+<p>My photo editor requires OpenCL, but the graphics driver situation on Linux is problematic, to say the least. I generally managed to get RocM running most of the time, but kernel updates frequently broke it, or required down- or upgrading RocM. It was a constant struggle.</p>
+<p>I wanted to work with some of my data on a network share, but KDE's implementation of network shares does not simply mount them for applications to use, but instead requires each application to be able to open network locations on their own. Needless to say, this worked almost never, requiring many unnecessary file copies. Perhaps Gnome handles network shares better, but let's not open that can of worms.</p>
+<p>Printing photos simply never worked right for me. The colors were off, photo papers were not supported, the networked printer was rarely recognized. Both for a Samsung printer and an Epson and a Canon. One time a <a href="https:_turboprint.info_">commercial printer driver for Linux</a> printed with so much ink it dripped off the paper afterwards. Neither Darktable nor Gimp nor Digikam have a robust printing mode. I generally resorted to Windows for printing.</p>
+<p>I ran that Windows in a virtual machine. With Virtualbox, the virtual machine would be extremely slow, to the point where it had a delay of several seconds between typing and seeing letters on the screen. VMWare did better, but would suddenly freeze and hang for minutes at a time. Disabling hugepages helped sometimes, for a short while. The virtual machine network was extremely unreliable. Some of these issues were probably related to my using a 4K screen.</p>
+<p>Speaking of screens, I have two screens, one HighDPI 4k and one normal 1440p. Using X, the system can be either in HighDPI mode, or in normal mode. But it can't drive the two displays in different modes. Thus the second monitor was almost useless and I generally worked only on the 4k screen. With Wayland I would have been able to use both screens in different modes, but not be able to color-calibrate them or record screen casts. Which is completely unacceptable. So I stuck with one screen and X. In Windows, I can use both screens and calibrate them.</p>
+<img style="width:50%;padding-left:25%" src="/static/2020-09/wtf.jpg">
+
+<p>Additionally, Linux hardware support is still a bit spotty. My SD card reader couldn't read some SD cards because of driver issues. It would sometimes corrupt the SD card's file systems. USB-connected cameras were generally not accessible. The web cam did not work reliably. The CPU fan ran too hot most of the time.</p>
+<p>So there had been numerous grievances in Linux that had no solutions. Still I stuck with it because so many more smaller issues were actually fixable if I put in the work. In fact I had accumulated quite a number of small hacks and scripts for various issues. I feared that Windows would leave me without recourse in these situations. And it doesn't. But at least the bigger features generally work as advertised.</p>
+<h2>Where do we go from here?</h2>
+<p>Just for completion's sake, I should really find an Apple computer and run it through its paces. From my experience of occasionally using a Macbook for teaching over the last few years, I am confident that it fares no better than Linux or Windows.</p>
+<p>Were things always this broken? How are normal people expected to deal with these things? No wonder every sane person now prefers a smartphone or tablet to their computers. Limited as they may be, at least they generally <em>work</em>.</p>
+<p>There is no joy in technology any more.</p>
+
+
+
+<div class="post-date">04 Dec 2021</div><h2 class="post-title"><a href="https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html">Fixing AMD OpenCL on Windows</a></h2>
+<p>When I recently installed Windows 11 on my desktop, my photo editor Darktable suddenly got much slower than it used to be. When I looked into its preferences, I noticed OpenCL was no longer available.</p>
+<p>As it turns out, some versions of the AMD graphics driver apparently no longer ship with OpenCL support on Windows. However, they <em>do</em> ship with the necessary libraries, it's just that these libraries are not registered any longer.</p>
+<p>To register them, open the Registry Editor (aka <em>regedit.exe</em>), navigate to the key <code>HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\OpenCL\Vendors</code> (if the key does not exist, create it), and create a new DWORD of Value <code>0</code>. Now rename the DWORD to be the path to your <em>amdocl64.dll</em>. Mine is <code>C:\Windows\System32\DriverStore\FileRepository\u0344717.inf_amd64_d38cec78c83eee99\B343886\amdocl64.dll</code>. Search <em>C:\Windows\System32\</em> for <em>amdocl64.dll</em> to find the correct path on your computer.</p>
+<p>With that, OpenCL was once again recognized by Darktable and the rest of my photo editing programs.</p>
+<p>(<a href="https://github.com/ethereum-mining/ethminer/issues/2001#issuecomment-662288143">source</a>)</p>
+
+
+
+<div class="post-date">21 Apr 2023</div><h2 class="post-title"><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">OS Customization and MacOS</a></h2>
+<p>I was an Apple fanboy some years ago. Back then, whenever something was odd on my computer, I was
+surely just using it wrong. Nowadays, I see things the other way around: We're not &quot;holding it
+wrong&quot;, the computer is just defective. Computers should do our bidding, not vice versa. So here's a
+bunch of things that I do to my computers to mold them to my way of working.</p>
+<h2>Keyboard Layout</h2>
+<p>I switch constantly between a German and English keyboard layout, and regularly between various
 machines. My physical keyboards are German, and my fingers are used to the Windows-default German and
 (international) US keyboard layout. These are available by default on Windows and Linux, but MacOS
-goes its own way.
-</p>
-
-<p>
-However, keyboard layouts on MacOS are saved in relatively simple text files, and can be modified
+goes its own way.</p>
+<p>However, keyboard layouts on MacOS are saved in relatively simple text files, and can be modified
 with relative ease. The process goes like this: Download <a href="https://software.sil.org/ukelele/">Ukelele (free)</a> to create a new keyboard
-layout bundle for your base layout<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>. Inside that bundle, there's a <i>*.keylayout</i> file,
+layout bundle for your base layout<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>. Inside that bundle, there's a <em>*.keylayout</em> file,
 which is an XML file that defines the characters that each key-modifier combination produces. I
 changed that to create a Windows-like US keyboard layout. And I replaced the keyboard icon with
-something sane (not "A") by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
+something sane (not &quot;A&quot;) by creating a 256x256 pixel PNG, opening it in Preview, holding alt while
 saving to select the ICNS format. Save the keyboard bundle to <code>~/Library/Keyboard Layouts</code> and
-reboot. Then I remove the unremovable default ("A") German layout by selecting another one, then
+reboot. Then I remove the unremovable default (&quot;A&quot;) German layout by selecting another one, then
 <code>plutil -convert xml1 ~/Library/Preferences/com.apple.HIToolbox.plist</code>, and delete the entry from
-<code>AppleEnabledInputSources</code>. Now reboot. Almost easy. Almost.
-</p>
-
-<p>
-One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
-Windows and Linux before, and for the life of me <i>could not do it</i>. So I actually think this is
-great!
-</p>
-</div>
-</div>
-
-<div id="outline-container-org02f475a" class="outline-2">
-<h2 id="org02f475a">Keyboard Shortcuts</h2>
-<div class="outline-text-2" id="text-org02f475a">
-<p>
-My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of particular note are
+<code>AppleEnabledInputSources</code>. Now reboot. Almost easy. Almost.</p>
+<p>One the one hand, this was quite the ordeal. On the other, I have tried to do this sort of thing on
+Windows and Linux before, and for the life of me <em>could not do it</em>. So I actually think this is
+great!</p>
+<p>didn't use ukelele for anything but the bundle creation.</p>
+<h2>Keyboard Shortcuts</h2>
+<p>My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of particular note are
 CTRL-A/E for going to the beginning/end of a line, and Alt-B/F for navigating forward/backwards by
 word. I have long wanted to use these shortcuts not just in Emacs and readline-enabled terminal
 applications, but everywhere else, too. And with MacOS, this is finally possible: Install
-<a href="https://folivora.ai/">BetterTouchTool ($22)</a>, and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
+<a href="https:_folivora.ai_">BetterTouchTool ($22)</a>, and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
 put this in a new activation group that excludes Emacs. It may be necessary to remove the keyboard
 character for Alt-B/F from your keyboard layout before this works. I've spent an embarrassing number
-of hours trying to get this to work on Windows and Linux, and really got nowhere<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+of hours trying to get this to work on Windows and Linux, and really got nowhere<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>.
 Actually, however, most readline shortcuts such as Ctrl-A/E/B/F/K/Y already work out of the box on
-MacOS!
-</p>
-</div>
-</div>
-
-<div id="outline-container-orga52c334" class="outline-2">
-<h2 id="orga52c334">Mouse Configuration</h2>
-<div class="outline-text-2" id="text-orga52c334">
-<p>
-I generally use a trackpad, and occasionally a traditional mouse for image editing, and have used a
+MacOS!</p>
+<p>this with <a href="https:_www.autohotkey.com_">AutoHotkey (free)</a>. I'll have to try that!</p>
+<h2>Mouse Configuration</h2>
+<p>I generally use a trackpad, and occasionally a traditional mouse for image editing, and have used a
 trackball. I find that any one specific device will lead to wrist pain if used constantly, so I
 switch it up every now and then. The trackpad and trackball, however, need configuration to be
-usable.
-</p>
-
-<p>
-After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
-the market<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>. On MacOS, they lacks a middle mouse click. So I created a trackpad
-shortcut in the aforementioned <a href="https://folivora.ai/">BetterTouchTool ($22)</a> to map the middle click on a three-finger tap
-(can also be had for free with <a href="https://github.com/artginzburg/MiddleClick-Ventura">MiddleClick (OSS)</a>). For Windows, <a href="https://magicutilities.net/">Magic Utilities ($17/y)</a> provides a
+usable.</p>
+<p>After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
+the market<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>. On MacOS, they lacks a middle mouse click. So I created a trackpad
+shortcut in the aforementioned <a href="https:_folivora.ai_">BetterTouchTool ($22)</a> to map the middle click on a three-finger tap
+(can also be had for free with <a href="https://github.com/artginzburg/MiddleClick-Ventura">MiddleClick (OSS)</a>). For Windows, <a href="https:_magicutilities.net_">Magic Utilities ($17/y)</a> provides a
 wonderful third-party driver for Apple devices that also supports the three-finger tap. I have not
 gotten the Apple touch pad to pair reliably on Linux, and have generally found their touch pad
-driver <i>libinput</i> a bit lacking.
-</p>
-
-<p>
-My trackball is a Kensington SlimBlade. To scroll, you rotate the ball around its vertical axis.
+driver <em>libinput</em> a bit lacking.</p>
+<p>My trackball is a Kensington SlimBlade. To scroll, you rotate the ball around its vertical axis.
 This is tedious for longer scroll distances, however. But there's an alternative scrolling method
-called "button scrolling", where you hold one button on the trackball, and move the ball to scroll.
+called &quot;button scrolling&quot;, where you hold one button on the trackball, and move the ball to scroll.
 You need to install the Kensington driver to enable this on Windows and MacOS. Button scrolling is
-available on Linux as well using xinput<sup><a id="fnr.4" class="footref" href="#fn.4" role="doc-backlink">4</a></sup>, but I haven't gotten the setting to stick across
+available on Linux as well using xinput<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup>, but I haven't gotten the setting to stick across
 reboots or sleep cycles. So I wrote a background task that checks xinput every five seconds,
-which does the trick.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgee58501" class="outline-2">
-<h2 id="orgee58501">Window Management</h2>
-<div class="outline-text-2" id="text-orgee58501">
-<p>
-Frankly, Windows does window management correctly. Win-←/→ moves windows to the left and right edge
+which does the trick.</p>
+<p>tablets include touch, too, but they palm rejection is abysmal and they don't support gestures.</p>
+<p>~xinput set-prop &quot;Kensington Slimblade Trackball&quot; &quot;libinput Button Scrolling Button&quot; 8 # top-right button~</p>
+<h2>Window Management</h2>
+<p>Frankly, Windows does window management correctly. Win-←/→ moves windows to the left and right edge
 of the screen, as does dragging the window to the screen border. Further Win-←/→ then moves the
 window to the next half-screen in that direction, even across display boundaries. KDE does this
 correctly out of the box as well, Gnome does not do the latter, and it drives me mad. MacOS doesn't
-do any of these things. But <a href="https://rectangleapp.com/">Rectangle (OSS)</a> does. Easy fix. (BetterTouchTool can do it, too, but
-Rectangle is prettier)
-</p>
-
-<p>
-Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
-CMD-Tab to switch between <i>apps</i>, now windows. And then there's another shortcut for switching
+do any of these things. But <a href="https:_rectangleapp.com_">Rectangle (OSS)</a> does. Easy fix. (BetterTouchTool can do it, too, but
+Rectangle is prettier)</p>
+<p>Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
+CMD-Tab to switch between <em>apps</em>, now windows. And then there's another shortcut for switching
 between windows of the same app, but the shortcut really doesn't work at all on a German keyboard.
-Who came up with this nonsense? Anyway, <a href="https://manytricks.com/witch/">Witch ($14)</a> implements window switching properly.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org328c61c" class="outline-2">
-<h2 id="org328c61c">Application Management</h2>
-<div class="outline-text-2" id="text-org328c61c">
-<p>
-In Windows and Linux, I hit the Windows key and start typing to select and start an app. In MacOS,
-this is usually Cmd-Space, but BetterTouchTool can map it to a single short Cmd, if you prefer.
-</p>
-
-<p>
-More annoying are the various docks and task bars. I always shove the dock off to the right edge of
+Who came up with this nonsense? Anyway, <a href="https://manytricks.com/witch/">Witch ($14)</a> implements window switching properly.</p>
+<h2>Application Management</h2>
+<p>In Windows and Linux, I hit the Windows key and start typing to select and start an app. In MacOS,
+this is usually Cmd-Space, but BetterTouchTool can map it to a single short Cmd, if you prefer.</p>
+<p>More annoying are the various docks and task bars. I always shove the dock off to the right edge of
 the screen, where it stays out of the way. Windows 10 had a sane dock, but then 11 came and forced
 it to the bottom of the screen. Dear OS makers, every modern screen has plenty of horizontal space.
 But vertical space is somewhat limited. So why on earth would you make a rarely used menu such as
-the dock consume that precious vertical space by default? And Microsoft, specifically, <i>why not make
-it movable</i>? Thankfully, there's <a href="https://www.startallback.com/">StartAllBack ($5)</a>, which replaces the Windows task bar with
+the dock consume that precious vertical space by default? And Microsoft, specifically, /why not make
+it movable/? Thankfully, there's <a href="https:_www.startallback.com_">StartAllBack ($5)</a>, which replaces the Windows task bar with
 something sensible, and additionally cleans up the start menu if you so desire. On KDE, I
 fractionally prefer <a href="https://github.com/KDE/latte-dock">Latte (OSS)</a> over KDE's native dock. The MacOS dock is uniquely dumb, offering no
 start menu, and allowing no window selections. But it's unobtrusive and can be moved to the right
-edge, so it's not much of a bother.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org92c217e" class="outline-2">
-<h2 id="org92c217e">File Management</h2>
-<div class="outline-text-2" id="text-org92c217e">
-<p>
-One of the most crucial tasks in computer work in general is file management. I am not satisfied
+edge, so it's not much of a bother.</p>
+<h2>File Management</h2>
+<p>One of the most crucial tasks in computer work in general is file management. I am not satisfied
 with most file managers. Dolphin on KDE works pretty well, it has tabs, can bulk-rename files, can
 display large directories without crashing, and updates in real time when new files are added to the
 current directory. Gnome Nautilus is so bad it is the main reason I switched to KDE on my Linux
@@ -175,575 +299,106 @@ machines. Finder on MacOS is passable, I suppose, although the left sidebar is u
 restrictive (why can't I add a shortcut to a network drive?). Windows Explorer is really rather
 terrible, lacking a bulk-rename tool, and crucially, tabs. In Windows 10, these can be added with
 <a href="https://www.stardock.com/products/groupy/">Groupy ($12)</a> (set it to only apply to explorer.exe). Windows 11 has very recently added native tabs,
-which work OK, but can't be detached from the window.
-</p>
-
-<p>
-The sad thing is that there are plenty of very good file manager replacements out there, but none of
+which work OK, but can't be detached from the window.</p>
+<p>The sad thing is that there are plenty of very good file manager replacements out there, but none of
 the OSs have a mechanism for replacing their native file manager in a consistent way, so we're
-mostly stuck with the defaults.
-</p>
-
-<p>
-Oh, and I always remove the iCloud/OneDrive sidebar entries, which is <a href="https://www.howtogeek.com/225973/how-to-disable-onedrive-and-remove-it-from-file-explorer-on-windows-10/">surprisingly tedious</a> on
-Windows.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgd9caebd" class="outline-2">
-<h2 id="orgd9caebd">Hardware Control</h2>
-<div class="outline-text-2" id="text-orgd9caebd">
-<p>
-On laptops, you can control screen brightness from your keyboard. On desktops, you can not. However,
+mostly stuck with the defaults.</p>
+<p>Oh, and I always remove the iCloud/OneDrive sidebar entries, which is <a href="https://www.howtogeek.com/225973/how-to-disable-onedrive-and-remove-it-from-file-explorer-on-windows-10/">surprisingly tedious</a> on
+Windows.</p>
+<h2>Hardware Control</h2>
+<p>On laptops, you can control screen brightness from your keyboard. On desktops, you can not. However,
 some clever hackers have put together <a href="https://github.com/waydabber/BetterDisplay#readme">BetterDisplay (OSS for screen brightness)</a>, which adds this
 capability to MacOS. That's actually a capability I have wanted for quite a while, and apparently it
-is only available in MacOS. Great stuff!
-</p>
-
-<p>
-Less great is that MacOS does not allow volume control on external sound cards. <a href="https://rogueamoeba.com/soundsource/">SoundSource ($47)</a>
+is only available in MacOS. Great stuff!</p>
+<p>Less great is that MacOS does not allow volume control on external sound cards. <a href="https://rogueamoeba.com/soundsource/">SoundSource ($47)</a>
 adds this rather crucial functionality back, once you go through the unnecessarily excruciating
-process of enabling custom kernel extensions. Windows and Linux of course natively support this.
-</p>
-
-<p>
-Another necessary functionality for me is access to a non-sucky (i.e. no FAT) cross-platform file
+process of enabling custom kernel extensions. Windows and Linux of course natively support this.</p>
+<p>Another necessary functionality for me is access to a non-sucky (i.e. no FAT) cross-platform file
 system. At the moment, the most portable file system seems to be NTFS, of all things. Regrettably,
-MacOS only supports <i>reading</i> NTFS, but no writing. <a href="https://www.paragon-software.com/home/ntfs-mac/#">Paragon NTFS (€20)</a> adds this with another kernel
+MacOS only supports <em>reading</em> NTFS, but no writing. <a href="https://www.paragon-software.com/home/ntfs-mac/#">Paragon NTFS (€20)</a> adds this with another kernel
 extension, and promptly kernel-panicked my computer. Oh joy. At least it's only panicking for file
 transfers initiated by DigiKam, which I can work around. Paragon Support says they're working on it.
-I'm not holding my breath. Windows and Linux of course natively support NTFS.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org672cc57" class="outline-2">
-<h2 id="org672cc57">System Management</h2>
-<div class="outline-text-2" id="text-org672cc57">
-<p>
-I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
-eaten my backups many times already, and can not be trusted. But I have used <a href="https://www.borgbackup.org/">Borg (OSS)</a> for years,
+I'm not holding my breath. Windows and Linux of course natively support NTFS.</p>
+<h2>System Management</h2>
+<p>I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
+eaten my backups many times already, and can not be trusted. But I have used <a href="https:_www.borgbackup.org_">Borg (OSS)</a> for years,
 and it has so far performed flawlessly. Even more impressive, my Borg backups have a continuous
-history despite moving operating systems several times. It truly is wonderful software!
-</p>
-
-<p>
-On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
-Linux, I schedule them with systemd units. On MacOS, I install Borg with <a href="https://brew.sh/">Homebrew (OSS)</a> and schedule
+history despite moving operating systems several times. It truly is wonderful software!</p>
+<p>On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
+Linux, I schedule them with systemd units. On MacOS, I install Borg with <a href="https:_brew.sh_">Homebrew (OSS)</a> and schedule
 the backups with launchd tasks. It's all pretty equivalent. One nice thing about launchd, however,
 is how the OS immediately pops up a notification if there's a new task file added, and adds the task
-to the graphical system settings.
-</p>
-
-<p>
-I have to emphasize what a game-changer the WSL is on Windows. Where previously, such simple
+to the graphical system settings.</p>
+<p>I have to emphasize what a game-changer the WSL is on Windows. Where previously, such simple
 automations where a pain in the neck to do reliably, they're now the same simple shell scripts as on
 other OSes. And it perfectly integrates with Windows programs as well, including passing pipes
 between Linux and Windows programs. It's truly amazing! At the moment, I'd rate Windows a better
 Unix system than MacOS for this reason. Homebrew is a passable package manager on MacOS, but the way
-it's ill-integrated into the main system (not in system PATH) is a bit off-putting.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgb305643" class="outline-2">
-<h2 id="orgb305643">App Compatibility</h2>
-<div class="outline-text-2" id="text-orgb305643">
-<p>
-I generally use my computer for three tasks: General document stuff, photo editing, and video games.
-</p>
-
-<p>
-One major downside of Apple computers is that video games aren't available. This has become less of
+it's ill-integrated into the main system (not in system PATH) is a bit off-putting.</p>
+<h2>App Compatibility</h2>
+<p>I generally use my computer for three tasks: General document stuff, photo editing, and video games.</p>
+<p>One major downside of Apple computers is that video games aren't available. This has become less of
 a problem to me since I bought a Steam Deck, which has taken over gaming duties from my main PC.
-Absolutely astonishingly, the Steam Deck runs Windows games on <i>Linux</i> through emulation, which
-works almost flawlessly, making video games no longer a Windows-only proposition.
-</p>
-
-<p>
-What doesn't work well on Linux are commercial applications. Wine generally does not play well with
+Absolutely astonishingly, the Steam Deck runs Windows games on <em>Linux</em> through emulation, which
+works almost flawlessly, making video games no longer a Windows-only proposition.</p>
+<p>What doesn't work well on Linux are commercial applications. Wine generally does not play well with
 them, and frustratingly for my photo editing, neither <a href="https://www.vmware.com/products/workstation-player.html">VMWare Workstation Player (free)</a> nor
-<a href="https://www.virtualbox.org/">VirtualBox (OSS)</a> support hardware-accelerated VMs on up-to-date Linux<sup><a id="fnr.5" class="footref" href="#fn.5" role="doc-backlink">5</a></sup>. So where MacOS lacks
+<a href="https:_www.virtualbox.org_">VirtualBox (OSS)</a> support hardware-accelerated VMs on up-to-date Linux<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup>. So where MacOS lacks
 games, Linux lacks Photoshop. Desktop applications in general tend to be unnecessarily cumbersome to
 manage and update on Linux. Flatpak is helping in this regard, by installing user-facing
 applications outside of the OS package managers, but it remains more work than on Windows or MacOS.
 The occasional scanner driver or camera interface app can also be troublesome on Linux, but that's
-easily handled with a VirtualBox VM (with the proprietary <i>Extension Pack</i> for USB2 support), and
-hasn't really bothered me too much.
-</p>
-
-<p>
-Luckily for me, my most-used apps are generally OSS tools such as <a href="https://www.darktable.org/">Darktable (OSS)</a> and <a href="https://www.digikam.org/">DigiKam (OSS)</a>,
-or cross-platform programs like <a href="https://fishshell.com/">Fish (OSS)</a>, <a href="https://git-scm.com/">Git (OSS)</a>, and <a href="https://www.gnu.org/software/emacs/">Emacs (OSS)</a>. This is however, where
+easily handled with a VirtualBox VM (with the proprietary <em>Extension Pack</em> for USB2 support), and
+hasn't really bothered me too much.</p>
+<p>Luckily for me, my most-used apps are generally OSS tools such as <a href="https:_www.darktable.org_">Darktable (OSS)</a> and <a href="https:_www.digikam.org_">DigiKam (OSS)</a>,
+or cross-platform programs like <a href="https:_fishshell.com_">Fish (OSS)</a>, <a href="https:_git-scm.com_">Git (OSS)</a>, and <a href="https://www.gnu.org/software/emacs/">Emacs (OSS)</a>. This is however, where
 Windows has a bit of a sore spot, as these programs tend to perform noticeably worse on Windows than
 on other platforms. Emacs and git in particular are just terribly slow on Windows, taking several
-seconds for routine operations that are <i>instant</i> on other platforms. That's probably due to
+seconds for routine operations that are <em>instant</em> on other platforms. That's probably due to
 Windows' rather slow file system and malware scanner for the many-small-files style of file
-management that these Unix tools implement. It is very annoying.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgc4dec82" class="outline-2">
-<h2 id="orgc4dec82">Conclusions</h2>
-<div class="outline-text-2" id="text-orgc4dec82">
-<p>
-So there's just no perfect solution. MacOS can't do games, Linux can't run commercial applications,
+management that these Unix tools implement. It is very annoying.</p>
+<p>kernels. Qemu <em>should</em> be able to solve this problem, but I couldn't get it to work reliably.</p>
+<h2>Conclusions</h2>
+<p>So there's just no perfect solution. MacOS can't do games, Linux can't run commercial applications,
 and Windows is annoyingly slow for OSS applications. Regardless, I regularly use all three systems
 productively. My job is mostly done on Windows, my home computer runs MacOS, and my Steam Deck and
-automations run Linux.
-</p>
-
-<p>
-Overall, I currently prefer MacOS as my desktop OS. It is surprisingly flexible, and more scriptable
+automations run Linux.</p>
+<p>Overall, I currently prefer MacOS as my desktop OS. It is surprisingly flexible, and more scriptable
 than I thought, and in some ways is actually more functional than Linux or Windows. The integrated
 calendar and contacts apps are nice, too, and not nearly as terrible as their Windows/Linux
 counterparts. To say nothing of the amazing M1 hardware with its minuscule power draw and total
-silence, while maintaining astonishing performance.
-</p>
-
-<p>
-Linux is where I prefer to program, due to its sane command line and tremendously good
+silence, while maintaining astonishing performance.</p>
+<p>Linux is where I prefer to program, due to its sane command line and tremendously good
 compiler/debugger/library infrastructure. As a desktop OS, it does have some rough edges, however,
-especially for its lack of access to commercial applications. While Linux <i>should</i> be the most
+especially for its lack of access to commercial applications. While Linux <em>should</em> be the most
 customizable of these three, I find things tend to break too easily, and customizations are often
-scattered widely between many different subsystems, making them very hard to get right.
-</p>
-
-<p>
-Theoretically, Windows is the most capable OS, supporting apps, OSS, and games. But it also feels
+scattered widely between many different subsystems, making them very hard to get right.</p>
+<p>Theoretically, Windows is the most capable OS, supporting apps, OSS, and games. But it also feels
 the most user-hostile of these three, and the least performant. And then there's the intrusive ads
 everywhere, its spying on my every move, and at work there's inevitably a heavy-handed administrator
 security setup that gets in the way of productivity. It's honestly fine on my home computer, at
 least since they introduced the WSL. But using it for work every day is quite enough, so I don't
-want to use it at home, too.
-</p>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-if there's an easier way to create a keyboard layout bundle, please let me know. I
-didn't use ukelele for anything but the bundle creation.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-It occurs to me that it might actually be possible to do something like on Windows
-this with <a href="https://www.autohotkey.com/">AutoHotkey (free)</a>. I'll have to try that!
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-The Logitech T650 is actually not bad, but the drivers are a travesty. Some Wacom
-tablets include touch, too, but they palm rejection is abysmal and they don't support gestures.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4" role="doc-backlink">4</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Scroll Method Enabled" 0, 0, 1 # button scrolling</code> <br>
-<code>xinput set-prop "Kensington Slimblade Trackball" "libinput Button Scrolling Button" 8 # top-right button</code>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5" role="doc-backlink">5</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-VirtualBox does not have a good accelerated driver, and VMWare does not support recent
-kernels. Qemu <i>should</i> be able to solve this problem, but I couldn't get it to work reliably.
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-macos.html">macos</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">04 Dec 2021</div><h1 class="post-title"><a href="https://bastibe.de/2021-12-04-fixing-amd-opencl-on-windows.html">Fixing AMD OpenCL on Windows</a></h1>
-<p>
-When I recently installed Windows 11 on my desktop, my photo editor Darktable suddenly got much slower than it used to be. When I looked into its preferences, I noticed OpenCL was no longer available.
-</p>
-
-<p>
-As it turns out, some versions of the AMD graphics driver apparently no longer ship with OpenCL support on Windows. However, they <i>do</i> ship with the necessary libraries, it's just that these libraries are not registered any longer.
-</p>
-
-<p>
-To register them, open the Registry Editor (aka <i>regedit.exe</i>), navigate to the key <code>HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\OpenCL\Vendors</code> (if the key does not exist, create it), and create a new DWORD of Value <code>0</code>. Now rename the DWORD to be the path to your <i>amdocl64.dll</i>. Mine is <code>C:\Windows\System32\DriverStore\FileRepository\u0344717.inf_amd64_d38cec78c83eee99\B343886\amdocl64.dll</code>. Search <i>C:\Windows\System32\</i> for <i>amdocl64.dll</i> to find the correct path on your computer.
-</p>
-
-<p>
-With that, OpenCL was once again recognized by Darktable and the rest of my photo editing programs.
-</p>
-
-<p>
-(<a href="https://github.com/ethereum-mining/ethminer/issues/2001#issuecomment-662288143">source</a>)
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">17 Sep 2020</div><h1 class="post-title"><a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">Dear Computer, We Need to Talk</a></h1>
-<p>
-After years of using Linux on my desktop, I decided to install Windows on my computer, to get access to a few commercial photo editing applications. I'll go into my grievances with Linux later, but for now:
-</p>
-
-<div id="outline-container-orgb926e7a" class="outline-2">
-<h2 id="orgb926e7a">I tried to install Windows, you won't believe what happened next</h2>
-<div class="outline-text-2" id="text-orgb926e7a">
-<p>
-Like I have done many times with Linux, I download a Windows image from my university, and write it to a USB drive, then reboot into the USB drive. The USB drive can't be booted. A quick internet search leads me to a Microsoft Support page on how to <a href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive">Install Windows from a USB Flash Drive</a>, which says that
-</p>
-
-<img style="width:50%;padding-left:25%" src="/static/2020-09/one does not simply.jpg">
-
-<p>
-Instead, one has to format the stick as FAT32, make it <i>active</i>, then copy the files from the image to it. So I follow the instructions and open the Disk Management program. It does not offer an option of FAT32, nor for making the partition <i>active</i>. I settle on (inactive) exFAT instead. It doesn't boot.
-</p>
-
-<p>
-I switch over to Linux, where I can indeed make a FAT32 partition, and I can mark it as <i>bootable</i>, which I take as the equivalent of <i>active</i>. But Linux can not open the Windows image to copy the files onto the USB stick. So back to Windows, for copying the files. Except they can't be copied, because some of them are larger than 4Gb, which can't be written to a FAT32 partition. What now?
-</p>
-
-<p>
-While researching how to download a different version of Windows 10, I stumble upon the <a href="https://www.microsoft.com/de-de/software-download/windows10">Media Creation Tool</a>, which automatically downloads Windows 10 and writes it to the USB stick correctly. Why was this not pointed out in the article above? Who knows. At any rate, it works. I can finally install Windows.
-</p>
-
-<p>
-The installation process requires the usual dozen-or-so refusals of tracking, ads, privacy intrusions, and voice assistants. I wish I could simply reject them all at once. And then the install hangs, while "polishing up a few things". Pressing the helpful back button, and then immediately the forward button unhangs it, and the installation completes.
-</p>
-
-<p>
-Next up are drivers. It feels anachronistic to have to install drivers manually in this day and age, but oh well. The new GPU driver to make screen tearing go away, a driver for my trackball to recognize the third mouse button, a wacom driver, ten or so Intel drivers of unknown utility. The trackball driver is not signed. I install it anyway. The GPU driver does not recognize my GPU and can't be installed. A quick Internet search reveals that my particular AMD/Intel GPU/CPU was discontinued from support by both AMD and Intel, and does not have a current driver. But fora suggest that up to version 20.2.1 of the AMD driver work fine. They don't, the driver crashes when I open images in my photo editor. An even older version published by Intel does work correctly. So now I am running an AMD GPU with an Intel driver from 2018.
-</p>
-
-<img style="width:50%;padding-left:25%" src="/static/2020-09/this is fine.png">
-
-<p>
-Installing and setting up Firefox and my photo editors works without issue, thank goodness. Emacs has a Windows installer now, which is greatly appreciated. OpenCL and network shares just work. This is why I'm installing Windows next to my Linux.
-</p>
-
-<p>
-But Windows is still not activated. I copy my university's product key in the appropriate text box, but hesitate: That's for Windows Enterprise, and I'd be just fine with Home. So I cancel the activation without activating. A helpful link in the activation systems sends me to the Microsoft Store to get my very own version of Windows Home for €145, which normally retails for around €95, so that's a no-go. Whatever, I'll go with my university's Enterprise edition. Except the activation box now says my product key is invalid. And the Store now literally says "We don't know how you got here but you shouldn't be here" instead of selling me Windows. After a restart it installs and activates Windows Enterprise, even though I never actually completed the activation.
-</p>
-
-<img style="width:70%;padding-left:15%" src="/static/2020-09/this is fine 2.jpg">
-
-<p>
-I install Git, but in order to access my Github I need to copy over my SSH key from the Linux install. Which I can't boot at the moment, because installing Windows overwrites the boot loader. This is normal. So I download Ubuntu, write it to the USB stick, boot into it, recover the bootloader, boot into my old install, reformat the stick, copy the files to the stick, boot back into Windows, and the files aren't on the stick. Tough. Boot back into Linux, copy the files onto the stick, <i>eject the stick</i>, boot back into Windows, copy the files to the computer. Great user experience.
-</p>
-
-<p>
-Now that I have my SSH key, I open a Git Bash to download a project. It says my credentials are incorrect. I execute the same commands in a regular CMD instead of Git Bash, and now my credentials are correct. Obviously.
-</p>
-
-<p>
-There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!
-</p>
-
-<p>
-I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many "solutions" are offered <a href="https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1">in the support fora</a>. What works for me is to first set the lock screen to "Windows Spotlight", then to "Slideshow". Only in that order will my pictures be shown.
-</p>
-
-<p>
-I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org1688e83" class="outline-2">
-<h2 id="org1688e83">Why install Windows in the first place?</h2>
-<div class="outline-text-2" id="text-org1688e83">
-<p>
-Part of the reason for installing Windows was my growing frustration with Linux. I have been a happy user of KDE of various flavors for about seven years now. But ever since I got into photo editing, things began to become problematic:
-</p>
-
-<p>
-My photo editor requires OpenCL, but the graphics driver situation on Linux is problematic, to say the least. I generally managed to get RocM running most of the time, but kernel updates frequently broke it, or required down- or upgrading RocM. It was a constant struggle.
-</p>
-
-<p>
-I wanted to work with some of my data on a network share, but KDE's implementation of network shares does not simply mount them for applications to use, but instead requires each application to be able to open network locations on their own. Needless to say, this worked almost never, requiring many unnecessary file copies. Perhaps Gnome handles network shares better, but let's not open that can of worms.
-</p>
-
-<p>
-Printing photos simply never worked right for me. The colors were off, photo papers were not supported, the networked printer was rarely recognized. Both for a Samsung printer and an Epson and a Canon. One time a <a href="https://turboprint.info/">commercial printer driver for Linux</a> printed with so much ink it dripped off the paper afterwards. Neither Darktable nor Gimp nor Digikam have a robust printing mode. I generally resorted to Windows for printing.
-</p>
-
-<p>
-I ran that Windows in a virtual machine. With Virtualbox, the virtual machine would be extremely slow, to the point where it had a delay of several seconds between typing and seeing letters on the screen. VMWare did better, but would suddenly freeze and hang for minutes at a time. Disabling hugepages helped sometimes, for a short while. The virtual machine network was extremely unreliable. Some of these issues were probably related to my using a 4K screen.
-</p>
-
-<p>
-Speaking of screens, I have two screens, one HighDPI 4k and one normal 1440p. Using X, the system can be either in HighDPI mode, or in normal mode. But it can't drive the two displays in different modes. Thus the second monitor was almost useless and I generally worked only on the 4k screen. With Wayland I would have been able to use both screens in different modes, but not be able to color-calibrate them or record screen casts. Which is completely unacceptable. So I stuck with one screen and X. In Windows, I can use both screens and calibrate them.
-</p>
-
-<img style="width:50%;padding-left:25%" src="/static/2020-09/wtf.jpg">
-
-
-<p>
-Additionally, Linux hardware support is still a bit spotty. My SD card reader couldn't read some SD cards because of driver issues. It would sometimes corrupt the SD card's file systems. USB-connected cameras were generally not accessible. The web cam did not work reliably. The CPU fan ran too hot most of the time.
-</p>
-
-<p>
-So there had been numerous grievances in Linux that had no solutions. Still I stuck with it because so many more smaller issues were actually fixable if I put in the work. In fact I had accumulated quite a number of small hacks and scripts for various issues. I feared that Windows would leave me without recourse in these situations. And it doesn't. But at least the bigger features generally work as advertised.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org4190bb5" class="outline-2">
-<h2 id="org4190bb5">Where do we go from here?</h2>
-<div class="outline-text-2" id="text-org4190bb5">
-<p>
-Just for completion's sake, I should really find an Apple computer and run it through its paces. From my experience of occasionally using a Macbook for teaching over the last few years, I am confident that it fares no better than Linux or Windows.
-</p>
-
-<p>
-Were things always this broken? How are normal people expected to deal with these things? No wonder every sane person now prefers a smartphone or tablet to their computers. Limited as they may be, at least they generally <i>work</i>.
-</p>
-
-<p>
-There is no joy in technology any more.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a> <a href="https://bastibe.de/tag-linux.html">linux</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">19 Nov 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-11-19-emacs-on-windows.html">Installing Emacs on Windows</a></h1>
-<p>
-The <a href="https://www.gnu.org/software/emacs/download.html#windows">official website</a> states that you need to download Emacs from a <a href="http://ftpmirror.gnu.org/emacs/windows">nearby GNU mirror</a>. However, this does not install gnutls, which is required for installing packages from <a href="http://melpa-stable.milkbox.net/#/">melpa</a> or <a href="https://marmalade-repo.org/">marmalade</a>. The <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs-gnutls/Help-For-Users.html">documentation</a> says that this can be obtained from <a href="https://sourceforge.net/projects/ezwinports/files/">ezwinports</a>.
-</p>
-
-<p>
-However, I have found that this does not work any more: As of Emacs 25, Emacs is available in 64 bit, but ezwinport only supplies 32 bit binaries. I had to search a bit, but the (in retrospect, obvious) solution is to download the required binaries from <a href="https://gnutls.org/download.html">GnuTLS's website</a>, directly. Then unpack all <code>*.dll</code> from the <code>bin</code> directory to your Emacs's <code>bin</code> directory, and you are good to go.
-</p>
-
-<p>
-This situation is really a bit sad. Installing Emacs should not be this hard. But there is <a href="https://lists.gnu.org/archive/html/emacs-devel/2017-10/msg00805.html">talk</a> about providing a Windows installer for Emacs in one of the next versions, which will hopefully fix these issues.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-emacs.html">emacs</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">10 Jul 2017</div><h1 class="post-title"><a href="https://bastibe.de/2017-07-10-audio-apis-wasapi.html">Audio APIs, Part 3: WASAPI / Windows</a></h1>
-<p>
-This is part three of a three-part series on the native audio APIs for Windows, Linux, and macOS. This third part is about WASAPI on Windows.
-</p>
-
-<p>
-It has long been a major frustration for my work that Python does not have a great package for playing and recording audio. My first step to improve this situation was a small contribution to <a href="https://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a>, a CPython extension that exposes the C library <a href="http://www.portaudio.com/">PortAudio</a> to Python. However, I soon realized that PyAudio mirrors PortAudio's C API a bit too closely for comfort. Thus, I set out to write <a href="https://github.com/bastibe/PySoundCard">PySoundCard</a>, which is a higher-level wrapper for PortAudio that tries to be more pythonic and uses NumPy arrays instead of untyped <code>bytes</code> buffers for audio data. However, I then realized that PortAudio itself had some inherent problems that a wrapper would not be able to solve, and a truly great solution would need to do it the hard way:
-</p>
-
-<p>
-Instead of relying on PortAudio, I would have to use the native audio APIs of the three major platforms directly, and implement a simple, cross-platform, high-level, NumPy-aware Python API myself. This effort resulted in <a href="https://github.com/bastibe/Python-Audio">PythonAudio</a>, a new pure-Python package that uses <a href="http://cffi.readthedocs.io/en/latest/">CFFI</a> to talk to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">PulseAudio</a> on Linux, <a href="https://developer.apple.com/library/content/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html">Core Audio</a> on macOS, and <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd371455(v=vs.85).aspx">WASAPI</a>[1] on Windows.
-</p>
-
-<p>
-This series of blog posts summarizes my experiences with these three APIs and outlines the basic structure of how to use them. For reference, the singular use case in PythonAudio is block-wise playing/recording of <code>float</code> data at arbitrary sampling rates and block sizes. All available sound cards should be listable and selectable, with correct detection of the system default sound cards (a feature that is very unreliable in PortAudio).
-</p>
-
-<p>
-[1]: WASAPI is part of the Windows <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Core Audio</a> APIs. To avoid confusion with the macOS API of the same name, I will always to refer to it as WASAPI.
-</p>
-
-
-<hr>
-
-<div id="outline-container-orgf320333" class="outline-2">
-<h2 id="orgf320333">WASAPI</h2>
-<div class="outline-text-2" id="text-orgf320333">
-<p>
-WASAPI is one of several native audio libraries in Windows. PortAudio actually <a href="http://portaudio.com/docs/v19-doxydocs/compile_windows.html">supports five of them</a>: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd743883(v=vs.85).aspx">Windows Multimedia (MME)</a>, the first built-in audio API for Windows 3.1x; <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee416960(v=vs.85).aspx">DirectSound</a>, the audio subsystem of DirectX for Windows 95;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/stream/kernel-streaming">Windows Driver Model / Kernel Streaming (WDM/KS)</a>, the improved audio system for Windows 98; <a href="https://en.wikipedia.org/wiki/Audio_Stream_Input/Output">ASIO</a>, a third-party API developed by Steinberg to make pro audio possible on Windows; and finally, <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd370784(v=vs.85).aspx">Windows Audio Session API (WASAPI)</a>, introduced in Windows Vista to bring a modern audio API to Windows.
-</p>
-
-<p>
-In other words, audio on Windows has a long and troubled history, and has had a lot of opportunity for experimentation. It should then be no surprise that WASAPI is a clean and well-documented audio API that avoids many of the pitfalls of its predecessors and brethren. After having experienced the audio APIs of Windows, Linux, and macOS, I am beginning to understand why some programmers love Windows.
-</p>
-
-<p>
-But let's take a step back, and give an overview over the API. First of all, this is a cross-language API that is meant to be used from C#, with a solid bridge for C++, and a somewhat funky bridge for C. This is crucial to understand. The whole API is designed for a high-level, object-oriented runtime, but I am accessing it from a low-level language that has no concept of objects, methods, or exceptions.
-</p>
-
-<p>
-Objects are implemented as pointers to opaque structs, with an associated list of function pointers to methods. Every method accepts the object pointer as its first argument, and returns an error value if an exception occurred. Both inputs and outputs are function arguments, with outputs being implemented as pointer-to-pointer values. While this looks convoluted to a C programmer, it is actually a very clean mapping of object oriented concepts to C that never gave me any headaches.
-</p>
-
-<p>
-However, there are a few edge cases that did take me a while to understand: Since the C API is inherently not polymorphic, you sometimes have to manually specify types as cryptic UUID structs. Figuring out how to convert the UUID strings from the header files to such structs was not easy.  Similarly, it took me a while to reverse-engineer that strings in Windows are actually <code>uint16</code>, despite being declared <code>char</code>. But issues such as these are to be expected in a cross-language API.
-</p>
-
-<p>
-In general, I did not find a good overview on how to interpret high-level C#-concepts in C. For example, it took a long time until I learned that objects in C# are reference counted, and that I would have to manage reference counts manually. Similarly, I had one rather thorny issue with memory allocations: in rare occasions (<code>PROPVARIANT</code>), C# is expected to re-allocate memory of an object if the object does not have enough memory when passed into a method. This does not work as intended if you don't use C#'s memory allocator to create the memory. <i>This</i> was really painful to figure out.
-</p>
-
-<p>
-Another result of the API's cross-language heritage are its headers: There are <i>hundreds</i>. And they all contain both the C API and the C++ API, separated by the occasional <code>#ifdef __cplusplus</code> and <code>extern C</code>. Worse yet, pretty much every data type and declaration is wrapped in multiple levels of preprocessor macros and <code>typedef</code>. There are no doubt good reasons and a rich history for this, but it took me many hours to assemble all the necessary symbols from dozens of header files to even begin to call WASAPI functions.
-</p>
-
-<p>
-Nevertheless, once these hurdles are overcome, the actual WASAPI API itself is well-structured and reasonably simple. You acquire an <code>IMMDeviceEnumerator</code>, which returns <code>IMMDeviceCollections</code> for microphones and speakers. These contain <code>IMMDevices</code>, which represent sound cards and their properties. You activate an <code>IMMDevice</code> with a desired data format to get an <code>IAudioClient</code>, which in turns produces an <code>IAudioRenderClient</code> or <code>IAudioCaptureClient</code> for playback or recording, respectively. Playback and recording themselves are done by requesting a buffer, and reading or writing raw data to that buffer. This is about as straight-forward as APIs get.
-</p>
-
-<p>
-The documentation deserves even more praise: I have rarely seen such a well-documented API. There are high-level overview articles, there is commented example code, every object is described abstractly, and every method is described in detail and in reference to related methods and example code. There is no corner case that is left undescribed, and no error code without a detailed explanation. Truly, this is <i>exceptional</i> documentation that is a joy to work with!
-</p>
-
-<p>
-In conclusion, WASAPI leaves me in a situation I am very unfamiliar with: praising Windows. There is a non-trivial impedance mismatch between C and C# that has to be overcome to <i>use</i> WASAPI from C. But once I understood this, the API itself and its documentation were easy to use and understand. Impressive!
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-audio.html">audio</a> <a href="https://bastibe.de/tag-programming.html">programming</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">15 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-15-debugging-und-gcc-auf-windows.html">Debugging und GCC auf Windows</a></h1>
-
-<figure id="org851f261">
-<img src="http://bastibe.de/static/2009-03/code.png" alt="code.png">
-
-</figure>
-
-<p>
-So, jetzt habe ich mein Mex-File zum Einlesen beliebiger Audiodateien endlich lauffähig auf Windows und Mac. Leider werde ich nicht dafür bezahlt, auch noch eine Linux-Version zu bauen, aber falls Interesse besteht, versuche ich mich vielleicht einmal daran.
-</p>
-
-<p>
-<a href="http://en.wikipedia.org/wiki/State_of_the_Union">The State of The Union</a>: Kleine Dateien einlesen, kein Problem. Exotische Formate einlesen, kein Problem. Metadaten auslesen, kein Problem. Dateigröße, Bitrate und Samplerate auslesen, ein kleines Problem, da diese Parameter bei komprimierten Formaten nicht unbedingt fest stehen. Große Dateien einlösen, auf dem Mac kein Problem, auf Windows… nun ja, es dauert. Eine WAV-Datei von 5:30 min einzulesen, dauert mit Windows momentan ca. eine Stunde. Das kann nicht sein, in der Zeit habe ich die Datei dem Programm vorgelesen, wenn es sein muss.
-</p>
-
-<p>
-Also, was ist da faul? Jetzt heißt es debuggen: <a href="http://de.wikipedia.org/wiki/GNU_Debugger">GDB</a> ist mein Freund, aber leider spreche ich seine Sprache nicht, also Oldschool-Debugging mit <a href="http://www.cplusplus.com/reference/clibrary/cstdio/printf.html">printf()</a> (bzw. <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexprintf.html">mexPrintf()</a>; Aber da `#define printf mexPrintf` ist das das selbe). Blöd nur, dass Matlab selbst entscheidet, wann es meine Printfs auf den Bildschirm schreibt und es sich dazu entschlossen hat, dies immer erst nach dem Ausführen der Datei, also erst nachdem es bereits eine Stunde gearbeitet hat, zu tun. Einiges Hirnen später konnte ich Matlab endlich über eine Kombination aus <a href="http://de.wikipedia.org/wiki/Typumwandlung">Typecasts</a>, <a href="http://www.cplusplus.com/reference/clibrary/cstdio/sprintf.html">sprintf</a> und <a href="http://www.mathworks.com/access/helpdesk/help/techdoc/index.html?/access/helpdesk/help/techdoc/apiref/mexwarnmsgtxt.html">mexWarnMsgTxt</a> dazu überreden, wenigstens sporadisch ein paar Informationen herauszugeben.
-</p>
-
-<p>
-Das Ergebnis:
-</p>
-
-<ol class="org-ol">
-<li>Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)</li>
-<li>Wer ist schuld? <a href="http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html">Realloc</a> ist schuld!</li>
+want to use it at home, too.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>if there's an easier way to create a keyboard layout bundle, please let me know. I<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>It occurs to me that it might actually be possible to do something like on Windows<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>The Logitech T650 is actually not bad, but the drivers are a travesty. Some Wacom<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+<li id="fn-4"><p><code>xinput set-prop &quot;Kensington Slimblade Trackball&quot; &quot;libinput Scroll Method Enabled&quot; 0, 0, 1 # button scrolling</code><a href="#fnref-4" class="footnote">&#8617;</a></p></li>
+<li id="fn-5"><p>VirtualBox does not have a good accelerated driver, and VMWare does not support recent<a href="#fnref-5" class="footnote">&#8617;</a></p></li>
 </ol>
-
-<p>
-Das kam überraschend! Offenbar ist realloc auf dem Mac um mehrere Größenordnungen performanter als auf <a href="http://www.mingw.org/">MinGW</a>/Windows, denn die selbe Anwendung, die auf dem Mac ca. eine Sekunde braucht, braucht auf Windows eine Stunde! Und das allein wegen realloc! (Eigentlich: eine halbe Stunde wegen realloc, der Rest ist der Tatsache geschuldet, dass Windows in einer <a href="http://www.vmware.com/de/products/fusion/">VM</a> läuft)
-</p>
-
-<p>
-Bei WAV-Dateien werden immer 2048 Samples an einem Stück ausgelesen. Danach verwende ich ein realloc, um meinen haupt-Speicherpuffer um diese Größe zu vergrößern und kopiere die neuen Daten dort hinein. Bei meinen 5:30 min macht das bei einer Samplerate von 44100 kHz und zwei Kanälen ca. 15000 Aufrufe von realloc. Komprimierte Datenformate haben üblicherweise kleinere Frames und damit noch einmal wesentlich mehr realloc-Aufrufe.
-Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, größere Aufrufe zu machen. Zeit für ein paar Experimente:
-</p>
+</section>
 
 
-<table>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
 
-
-<colgroup>
-<col  class="org-left">
-
-<col  class="org-right">
-
-<col  class="org-left">
-</colgroup>
-<tbody>
-<tr>
-<td class="org-left">realloc()-Größe</td>
-<td class="org-right">realloc()-Aufrufe</td>
-<td class="org-left">benötigte   Zeit</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>11</sup> =    2048</td>
-<td class="org-right">15000</td>
-<td class="org-left">~1 h</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>16</sup> =   65536</td>
-<td class="org-right">470</td>
-<td class="org-left">~2 min</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>17</sup> =  131072</td>
-<td class="org-right">240</td>
-<td class="org-left">~1 min</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>18</sup> =  262144</td>
-<td class="org-right">120</td>
-<td class="org-left">30 s</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>19</sup> =  524288</td>
-<td class="org-right">60</td>
-<td class="org-left">18 s</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>20</sup> = 1048576</td>
-<td class="org-right">30</td>
-<td class="org-left">10.5 s</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>21</sup> = 2097152</td>
-<td class="org-right">15</td>
-<td class="org-left">7.3 s</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>22</sup> = 4194304</td>
-<td class="org-right">7</td>
-<td class="org-left">5.1 s</td>
-</tr>
-
-<tr>
-<td class="org-left">2<sup>23</sup> = 8388608</td>
-<td class="org-right">3</td>
-<td class="org-left">4.2 s</td>
-</tr>
-</tbody>
-</table>
-
-<p>
-Das Spannende ist: Ich ändere durch meine Methodik praktisch nichts außer der Anzahl und Größe der realloc-Aufrufe, aber man erkennt einen eindeutigen Zusammenhang zwischen Performance und Anzahl der Aufrufe, ergo ist realloc der alleinige Schuldige für mein Performanceproblem auf Windows.
-</p>
-
-<p>
-An dieser Stelle fiel mir ein, dass ich bereits an früherer Stelle einmal die gesamte Länge des Audio-Streams anhand der Metadaten geschätzt hatte. Durch eine somit vorgenommene Prä-Allokation des gesamten Speichers lässt sie die Laufzeit weiter auf 2.2 s drücken. Das ist immernoch nicht einmal halb so schnell wie auf OSX (0.9 s), aber das mag auch an der virtuellen Maschine liegen.
-</p>
-
-<p>
-Mehr als diesen anecdotal Evidence kann ich nicht anbieten, aber ich bin mir sicher, dass ich ab jetzt die Finger von inkrementiellen Speichervergrößerungen auf MinGW/Windows lassen werde. Ist das in MSVC ähnlich schlimm, oder habe ich da etwa einen Bug entdeckt?
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
-
-<div class="post-date">12 Mar 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-03-12-kompilieren-auf-windows.html">Kompilieren auf Windows</a></h1>
-
-<figure id="org2d5fa12">
-<img src="http://bastibe.de/static/2009-03/open_source_rules.png" alt="open_source_rules.png">
-
-</figure>
-
-<p>
-Seit einigen Wochen arbeite ich an einem kleinen Projekt: Eine Matlab-Funktion, die, ähnlich wie die standard-Funktion <a href="http://www.mathworks.com/access/helpdesk_r13/help/techdoc/ref/wavread.html">wavread()</a>, Audiodateien einlesen kann. Aber nicht irgendwelche Audiofiles, sondern ALLE MÖGLICHEN Audiofiles. Wie geht das? Jeder kennt <a href="http://www.videolan.org/vlc/">VLC</a>, den Video-Player, der so ziemlich jedes Video öffnen kann, das man ihm vorsetzt, selbst wenn man überhaupt keine Codecs installiert hat. VLC basiert auf <a href="http://de.wikipedia.org/wiki/FFmpeg">FFmpeg</a>, einem Open-Source Programm, welches Funktionen bereit stellt, um eben alle möglichen Mediendaten zu öffnen.
-</p>
-
-<p>
-Und da FFmpeg freie Software ist, kann man sie auch für andere Dinge verwenden, etwa, um mit Matlab Audiodateien zu öffnen. Fehlt noch eine Verbindung zwischen Matlab und den FFmpeg-C-Bibliotheken, und die gibt es in Form von <a href="http://www.mathworks.com/support/tech-notes/1600/1605.html#intro">Mex</a>, der C-Schnittstelle von Matlab. Feine Sache, zwar hat es eine Weile gedauert, bis ich mich in libavformat und libavcodec eingearbeitet hatte (die beiden wichtigsten FFmpeg-Bibliotheken), aber im Endeffekt lief das alles sehr schmerzfrei &#x2013; und das, obwohl ich bisher Mex-Kompilieren mit Matlab immer als eine grausige Beschäftigung in Erinnerung hatte, gespickt von kryptischen Kompiler-Fehlern und hässlichen Notlösungen.
-</p>
-
-<p>
-Bumms, Zack, kaum hatte ich mich versehen, hatte ich ein lauffähiges, tadellos funktionierendes <a href="http://en.wikipedia.org/wiki/MATLAB#Calling_C_and_Fortran_functions">Mex-File</a> auf meinem Mac liegen. Damit hatte ich nicht gerechnet. Also sofort die momentane Euphorie ausnutzen und weiter zu Schritt 2, das Ganze nochmal auf Windows. Meine Probleme, Windows so einzurichten, dass ich endlich Kompilieren kann, <a href="http://www.daskrachen.com/2009/03/great-scott.html">hatte ich ja schon berichtet</a>. Ich hatte also Visual Studio 2005 installiert, um Matlab zufrieden zu stellen und einen anständigen Kompiler auf dem System zu haben. Aber war ja klar, MSVC macht wieder sein eigenes Ding und nichts ist mit Standardkonformität und Trallalla: Keine <a href="http://de.wikipedia.org/wiki/C99#C99">C99</a>-Unterstützung, also keine Variablendeklarationen mitten im Code und keine stdint.h oder inttype.h. Ein Glück, es gibt wieder ein wenig mehr Free Software, die wenigstens <a href="http://code.google.com/p/msinttypes/">letztere Lücke schließt</a>. Dennoch; Ich bekomme mein mex-File nicht zum Laufen. Es ist wie verflucht, kaum setze ich mich an eine Windows-Maschine zum Programmieren, fällt meine Produktivität auf das Niveau eines Backsteins.
-</p>
-
-<p>
-Enter <a href="http://sourceforge.net/projects/gnumex">gnumex</a>, noch ein weiteres Stück FOSS, das es ermöglicht, GCC als Mex-Kompiler zu verwenden, AUF WINDOWS. Um die Dinge zu vereinfachen, verwendete ich die <a href="http://www.mingw.org/">MinGW</a>-Variante und kaum war diese Hürde genommen&#x2026; lief alles. Einfach so. Wahrscheinlich bin ich ein Dickschädel und habe einfach nicht die Geistesschärfe, mit Windows-Kompilern zu arbeiten, aber mir scheint, alles was ich diesbezüglich anfasse und das nicht GCC heißt ist zum Scheitern verurteilt. Ein Glück, dass es die vielen klugen Jungen und Mädchen gibt, die so wunderbare freie Software schreiben, die mir das Leben so viel einfacher macht!
-</p>
-
-<p>
-Eine Fortsetzung kommt noch&#x2026;
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-compiling.html">compiling</a> <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-windows.html">windows</a> </div>
+</div>
+<div id="postamble" class="status">
 <div id="archive">
-<a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-</div>
-<div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

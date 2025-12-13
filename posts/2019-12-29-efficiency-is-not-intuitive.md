@@ -1,0 +1,15 @@
+---
+title: Efficiency is not Intuitive
+date: 2019-12-29 12:06
+filetags: computers ui
+---
+
+A few days ago, a [new version of Darktable](https://www.darktable.org/2019/12/darktable-30/) was released. Darktable is an Open Source RAW image processor, and one of my favorite pieces of software of all time. It may be THE most powerful RAW processor on the market, far exceeding its proprietary brothers. But in the social media discussions following the release, it got dismissed for being _unintuitive_.
+
+Which is silly, ironic, sad; why should _Intuition_ be a measure of quality for professional software? Because in contrast to a transient app on your phone, RAW processing is a complex task that requires months of study to do well. Like most nontrivial things, it is fundamentally not an intuitive process. In fact, most of my favorite tools are like this: _Efficient_, but not _Intuitive_; like Darktable, Scientific Python, the Unix Command Line, Emacs.
+
+These tools empower me to do my job quickly and directly. They provide sharp tools for intelligent users, which can be composed easily and infinitely. Their power derives from clean metaphors and clear semantics, instead of "intuitive", "smart", magics. They require _learning_ to use well, but reward that effort with efficiency. They are _professional_, and treat their users as adults.
+
+In my career as a software developer, I know these ideas as traits of good APIs: Orthogonal, minimal, composable. APIs are great not when they are as expansive and convenient as possible, but when they are most constrained and recombinable. In other words, "don't optimize for stupid". That's what I understand as good design in both programming, and in professional UIs.
+
+Which is quite the opposite of _Intuitive_. Quite the opposite of "easy to grasp without reading the manual". That's a description of a video game, not a professional tool. As professionals, we should seek and build empowering, efficient tools for adults, not intuitive games maskerading as professional software.

@@ -16,9 +16,9 @@ If a signal peak is detected, the limiter will thus need a certain amount of tim
 
 With that out of the way, let me present you a simple implementation of such a limiter. First, lets define a signal envelope $e[n]$ that catches all the peaks and smoothly decays after them:
 
-\[
+$$
 e[n] = \max( |s[n]|, e[n-1] \cdot f_r )
-\]
+$$
 
 where $s[n]$ is the current signal and $0 < f_r < 1$ is a release factor.
 
@@ -28,18 +28,18 @@ If this is applied to a signal, it will create an envelope like this:
 
 Based on that envelope, and assuming that the signal ranges from -1 to 1, the target gain $g_t[n]$ can be calculated using
 
-\[
+$$
 g_t[n] = \begin{cases}
     1 & e[n] < t \\
-    1 + t - e[n] & e[n] > t
+    1 + t - e[n] & e[n] > t \\
 \end{cases}
-\]
+$$
 
 Now, the output gain $g[n]$ can smoothly move towards that target gain using
 
-\[
+$$
 g[n] = g[n-1] \cdot f_a + g_t[n] \cdot (1-f_a)
-\]
+$$
 
 where $0 < f_a \ll f_r$ is the attack factor.
 

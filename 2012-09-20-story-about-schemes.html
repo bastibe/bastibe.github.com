@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>A Story about Schemes</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,97 +19,88 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">20 Sep 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-09-20-story-about-schemes.html">A Story about Schemes</a></h1>
-<p>
-<b>Disclaimer:</b> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)
-</p>
-
-<p>
-I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and how it should be done.
-</p>
-
-<p>
-However, this is not about SICP, it is about Scheme, which happens to be the programming language that SICP uses to preach its sermons. Above all, Scheme beautiful. It is an astounding marriage of simplicity and power. It is also a mess in terms of implementations. There are dozens of implementations and they all implement a different, partly overlapping set of features that may or may not be part of the canonical Scheme&#x2013;if there is such a thing.
-</p>
-
-<p>
-So, how to select the correct Scheme? Naively, I first chose the one SICP uses, <a href="http://www.gnu.org/software/mit-scheme/">MIT-Scheme</a>. However, I soon found out that it does not work well with Emacs (that is, it did not work at all with <code>scheme-mode</code> and <code>run-scheme</code>). Also, its prompt is weird: <code>]=&gt;</code>. Whatever.
-</p>
-
-<p>
-So next, I tried <a href="http://dynamo.iro.umontreal.ca/~gambit/wiki/index.php/Main_Page">Gambit Scheme</a>, which works a lot better with Emacs. But then, I soon found out that it does not support functions like <code>filter</code>, which are kind of essential. I was quick to write my own version of that, but really, this stuff should be provided. Turns out, <code>filter</code> is part of a Scheme Request For Implementation, or SRFI. <code>filter</code> is part of SRFI1. There is a <a href="http://srfi.schemers.org/srfi-implementers.html">huge list</a> of different Schemes and the SRFIs they support. Also, there is a list of <a href="http://www.cs.utah.edu/~mflatt/benchmarks-20100126/log3/Benchmarks.html">Schemes sorted by performance</a>. With <a href="http://www.cs.utah.edu/%7Emflatt/benchmarks-20100126/log3/Benchmarks-plot.html">plots</a>, even. It's a mess.
-</p>
-
-<p>
-So this left me profoundly confused. What Scheme would I use? Ideally, it should be fast, work with Emacs and implement a reasonable set of SRFIs. Homebrew lists these:
-</p>
-
+<div class="post-date">20 Sep 2012</div>
+<h1 class="post-title"><a href="https://bastibe.de/2012-09-20-story-about-schemes.html">A Story about Schemes</a></h1>
+<p><em>Disclaimer:</em> If you are a programmer, or wanting to be a programmer, or interested in programming, or, well, reading this, you should absolutely, positively watch the 1986 MIT lecture about <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/">The Structure and Interpretation of Computer Programs</a>. (Most conveniently available <a href="http://ia600401.us.archive.org/8/items/MIT_Structure_of_Computer_Programs_1986/">here</a>)</p>
+<p>I tried reading <a href="http://mitpress.mit.edu/sicp/full-text/book/book.html">the book</a> numerous times, but it was too dry for my taste. The lecture however is juicy, brain-bending bliss. Especially if you don't know much functional programming yet. It certainly blew my mind. Frequently. Like, every ten minutes. Basically, I feel reborn as a programmer, with a new sense of what I am doing and how it should be done.</p>
+<p>However, this is not about SICP, it is about Scheme, which happens to be the programming language that SICP uses to preach its sermons. Above all, Scheme beautiful. It is an astounding marriage of simplicity and power. It is also a mess in terms of implementations. There are dozens of implementations and they all implement a different, partly overlapping set of features that may or may not be part of the canonical Scheme--if there is such a thing.</p>
+<p>So, how to select the correct Scheme? Naively, I first chose the one SICP uses, <a href="http://www.gnu.org/software/mit-scheme/">MIT-Scheme</a>. However, I soon found out that it does not work well with Emacs (that is, it did not work at all with <code>scheme-mode</code> and <code>run-scheme</code>). Also, its prompt is weird: <code>]=&gt;</code>. Whatever.</p>
+<p>So next, I tried <a href="http:_dynamo.iro.umontreal.ca_~gambit/wiki/index.php/Main_Page">Gambit Scheme</a>, which works a lot better with Emacs. But then, I soon found out that it does not support functions like <code>filter</code>, which are kind of essential. I was quick to write my own version of that, but really, this stuff should be provided. Turns out, <code>filter</code> is part of a Scheme Request For Implementation, or SRFI. <code>filter</code> is part of SRFI1. There is a <a href="http://srfi.schemers.org/srfi-implementers.html">huge list</a> of different Schemes and the SRFIs they support. Also, there is a list of <a href="http:_www.cs.utah.edu_~mflatt/benchmarks-20100126/log3/Benchmarks.html">Schemes sorted by performance</a>. With <a href="http:_www.cs.utah.edu_%7Emflatt/benchmarks-20100126/log3/Benchmarks-plot.html">plots</a>, even. It's a mess.</p>
+<p>So this left me profoundly confused. What Scheme would I use? Ideally, it should be fast, work with Emacs and implement a reasonable set of SRFIs. Homebrew lists these:</p>
 <table>
-
-
-<colgroup>
-<col  class="org-left">
-
-<col  class="org-left">
-
-<col  class="org-left">
-</colgroup>
+<thead>
+<tr>
+  <th></th>
+  <th></th>
+  <th></th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="org-left">bigloo</td>
-<td class="org-left">chibi-scheme</td>
-<td class="org-left">chicken</td>
+  <td>bigloo</td>
+  <td>chibi-scheme</td>
+  <td>chicken</td>
 </tr>
-
 <tr>
-<td class="org-left">gambit-scheme</td>
-<td class="org-left">gauche</td>
-<td class="org-left">guile</td>
+  <td>gambit-scheme</td>
+  <td>gauche</td>
+  <td>guile</td>
 </tr>
-
 <tr>
-<td class="org-left">kawa</td>
-<td class="org-left">mit-scheme</td>
-<td class="org-left">plt-racket</td>
+  <td>kawa</td>
+  <td>mit-scheme</td>
+  <td>plt-racket</td>
 </tr>
-
 <tr>
-<td class="org-left">scheme48</td>
-<td class="org-left">scsh</td>
-<td class="org-left">sisc-scheme</td>
+  <td>scheme48</td>
+  <td>scsh</td>
+  <td>sisc-scheme</td>
 </tr>
-
 <tr>
-<td class="org-left">stklos</td>
-<td class="org-left">tinyscheme</td>
-<td class="org-left">&#xa0;</td>
+  <td>stklos</td>
+  <td>tinyscheme</td>
+  <td></td>
 </tr>
 </tbody>
 </table>
+<p>Difficult decision. Frankly, I don't have an answer. That said, I found <code>plt-racket</code> to be a joy to work with. <code>(help filter)</code> will open your browser with the appropriate help page for <code>filter</code>. Amazing. Also, it implements <a href="http://srfi.schemers.org/srfi-implementers.html">a long list</a> of SRFIs that will probably satisfy my simplistic needs. And the <a href="http:_docs.racket-lang.org_">documentation</a> is excellent. And then there is DrRacket, which is a nice REPL that comes right with <a href="http:_racket-lang.org_">Racket</a>. I like it.</p>
 
-<p>
-Difficult decision. Frankly, I don't have an answer. That said, I found <code>plt-racket</code> to be a joy to work with. <code>(help filter)</code> will open your browser with the appropriate help page for <code>filter</code>. Amazing. Also, it implements <a href="http://srfi.schemers.org/srfi-implementers.html">a long list</a> of SRFIs that will probably satisfy my simplistic needs. And the <a href="http://docs.racket-lang.org/">documentation</a> is excellent. And then there is DrRacket, which is a nice REPL that comes right with <a href="http://racket-lang.org/">Racket</a>. I like it.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-scheme.html">scheme</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-scheme.html">scheme</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

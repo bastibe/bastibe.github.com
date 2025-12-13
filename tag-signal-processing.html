@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
-<title>bastibe.de</title>
+      title="RSS feed for https://bastibe.de">
+<title>Home</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
 <link href= "static/style.css" rel="stylesheet" type="text/css" />
@@ -18,210 +19,130 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<h1 class="title">Posts tagged "signal-processing":</h1>
-<div class="post-date">20 Sep 2019</div><h1 class="post-title"><a href="https://bastibe.de/2019-09-20-analyzing-speech-signals-in-time-and-frequency.html">Analyzing Speech Signals in Time and Frequency</a></h1>
-<p>
-Our first stop in speech analysis is usually the short-time Fourier transform, or STFT<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>:
-</p>
 
 
-<figure id="org54e6d3d">
-<img src="https://bastibe.de/static/2019-09/stft.png" alt="stft.png">
+<h1>Posts tagged "signal-processing"</h1>
 
-<figcaption><span class="figure-number">Figure 1: </span>Top: an STFT of speech (it's me, saying: "Es war einmal ein Mann"). Bottom: the signal's waveform.</figcaption>
+<div class="post-date">11 Sep 2019</div><h2 class="post-title"><a href="https://bastibe.de/2019-09-11-how-we-perceive-speech.html">How we perceive Speech</a></h2>
+<p>Now that I am officially a <a href="https://bastibe.de/2019-07-09-publish-or-perish.html">failed scientist</a>, I might as well talk about my research in public. I spent the last few years analyzing speech recordings. Particularly, <em>voiced speech</em>, where vibrations in the vocal folds excite resonances in the vocal tract, and a tonal sound leaves our mouths and noses.</p>
+<p>As humans, we are particularly tuned to recognizing these kinds of sounds. Even in loud background noise, even with dozens of people talking at the same time, we can clearly identify the sound of a human voice (even if we might not be able to understand the words).</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/spectrogram.png" />
+<caption>A spectrogram of speech (it's me, saying: "Es war einmal ein Mann")</caption>
 </figure>
 
-<p>
-As we can see, this speech signal has a strong fundamental frequency track around 120 Hz, and harmonics at integer multiples of the fundamental frequency. We perceive the frequency of the fundamental as the speech's pitch. The magnitude of the harmonics varies over time, which we perceive as the sounds of different vowels.
-</p>
+<p>Looking at these sounds from a physical point of view, we can see that it is made up of a fundamental frequency at the voice's pitch, and harmonics at integer multiples of the fundamental. And even though the sound is clearly composed of multiple harmonics, we perceive it as a single sound with a single pitch. Even more perplexing, we attribute all of these harmonics to a single voice, even if they criss-cross with tonal sounds from different sources.</p>
+<p>Yet, speech recognition systems regularly struggle with such tasks, unless we feed them unholy amounts of data and processing power. In other words, there has to be more to speech than the simple figure above indicates.</p>
+<p>One area is definitely time resolution. Obviously, when the vocal folds open to admit a puff of air into the vocal tract, phases align, and loudness is higher than when the vocal folds have closed again and phases go out of sync. This happens several hundreds of times per second, at the frequency of the fundamental. Yet, this phase coherence is invisible in most of our visualizations, such as the spectrogram above, or the MFCCs usually used in speech recognition, as they are too coarse for such short-time detail.</p>
+<p>An even more interesting detail emerges from fMRI scans of people who are speaking, and people who are listening to speech: their activation patterns are strikingly similar. As in, motor groups are activating when listening, just as if actual speech muscles were moved. To me, this indicates that when we listen to speech, we <em>simulate speaking</em>. And I find it highly likely that we understand speech mostly in terms of the movements we would have to make to imitate it. In other words, we do not internalize speech as an <em>audio</em> signal, but as <em>muscle movements</em>.</p>
+<p>This matches another observation from a different area: When learning a foreign language, we can not hear what we can not produce. If you didn't learn how to speak an Ö and Ü (two German umlauts) as a child, you will have a hard time hearing the difference as an adult. Yet they sound completely distinct to me. In a production model, this makes a lot of sense, as we wouldn't know how to simulate a sound we can not produce.</p>
+<p>Bringing this back to the science of signal processing, I believe that most speech analysis algorithms are currently lacking a production model of speech. Speech can not be fully understood as an audio signal. It needs to be understood in terms of the variables and limitations of a human vocal tract. I believe that if we integrated such a physiological production model into our machine learning models, we wouldn't need to feed them such vast amounts of data and electricity, and might even get by without them.</p>
 
-<p>
-All of this is clearly visible in this STFT. To calculate the STFT, we chop up the audio signal into short, overlapping blocks, apply a <i>window function</i> <sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> to each of these blocks, and Fourier-transform each windowed block into the frequency domain:
-</p>
 
 
-<figure id="org3034e77">
-<img src="https://bastibe.de/static/2019-09/block-processing.png" alt="block-processing.png">
-
-<figcaption><span class="figure-number">Figure 2: </span>The STFT is a two-dimensional graph of short-time spectra. Window functions and corresponding spectra of some blocks are highlighted.</figcaption>
+<div class="post-date">19 Sep 2019</div><h2 class="post-title"><a href="https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html">Periodicity and Harmonicity</a></h2>
+<p>A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum:</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/comb.png" />
+<caption>A click train (left), and its corresponding comb spectrum (right).</caption>
 </figure>
 
-<p>
-We zoomed in a bit to make this visible. At this zoom level, an <a href="https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html">old friend</a> becomes visible in the waveform: The waveform of our harmonic spectra is clearly periodic. We also see that each of our blocks contain multiple periods of the speech signal. So what happens if we make our blocks shorter?
-</p>
-
-
-<figure id="org5c6c56d">
-<img src="https://bastibe.de/static/2019-09/short-blocks.png" alt="short-blocks.png">
-
-<figcaption><span class="figure-number">Figure 3: </span>STFT with shorter blocks (graph shows a shorter time, too). Each window now covers roughly one period of the signal.</figcaption>
+<p>But why? After all, a solitary click has a uniform spectrum. So why should the sum of multiple clicks have a non-uniform spectrum?</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/click.png" />
+<caption>A click (left), and its corresponding spectrum (right).</caption>
 </figure>
 
-<p>
-As we make our blocks shorter, such that they only contain a single period of the signal, a funny thing happens: the harmonic structure vanishes. Why? Because the harmonic structure is caused by the interference between neighboring clicks; As soon as each block is restricted to a single period, there is no interference any longer, and no harmonic structure.
-</p>
-
-<p>
-But instead of a harmonic structure, we see the periodicity of the waveform emerge in the STFT! To look at this phenomenon in a bit more detail, we will have to leave the classical STFT domain, and look at a close sibling, the Constant Q Transform, or CQT. The CQT is simply an STFT with different block sizes for different frequencies:
-</p>
-
-
-<figure id="org24e6504">
-<img src="https://bastibe.de/static/2019-09/cqt.png" alt="cqt.png">
-
-<figcaption><span class="figure-number">Figure 4: </span>The CQT uses shorter block sizes for higher frequencies and longer block sizes for lower frequencies.</figcaption>
+<p>The answer exposes a lot of detail of how spectra work, and gives us a glimpse into the inner workings of spectral phases. Let's start with that click: In that spectrum, we see that we can decompose a click into a sum of sine waves:</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/click_sum.png" />
+<caption>A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.</caption>
 </figure>
 
-<p>
-The periodic structure of the signal is now perfectly apparent. Each period of the signal gives rise to a skewed click-like spectrum that repeats at the fundamental frequency. Interestingly, however, the fundamental itself shows no periodicity. To see why this is so, and to finally get a grasp of how the short-time Fourier transforms interprets signals, we have to turn to our last graph, a gamma-tone filterbank:
-</p>
-
-
-<figure id="org3151ed0">
-<img src="https://bastibe.de/static/2019-09/gammatone.png" alt="gammatone.png">
-
-<figcaption><span class="figure-number">Figure 5: </span>A gamma-tone filterbank is a series of band-pass filters. Each horizontal line is now a frequency-constrained waveform.</figcaption>
+<p>As we have seen in the spectrum of the click earlier, it is composed of all frequencies (uniform spectrum). But we see here that the individual sine waves are delayed <em>just so</em>, that they all add constructively at exactly one time, and form the click. At all other times, they cancel each other out. This per-sine delay is called the phase of that frequency.</p>
+<p>But what happens if we have more than one click? How does that change things?</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/click_train.png" />
+<caption>A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.</caption>
 </figure>
 
-<p>
-The fundamental frequency is now clearly a visible as a single sinusoid, rotating its merry way at 120 Hz. Each harmonic is its own sinusoid at an integer multiple of the fundamental frequency, but changing in amplitude in lockstep with the findamental. Thus in this graph, we see both the harmonicity and the periodicity at the same time, and can finally appreciate the complex interplay of magnitudes and phases that give rise to the beautiful and simple sound of the human voice<sup><a id="fnr.3" class="footref" href="#fn.3" role="doc-backlink">3</a></sup>.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
+<p>In a click train, odd frequencies in the Fourier series of the individual clicks cancel each other out (red/blue), and only harmonic frequencies (brown) remain. And this is exactly what our first spectrum showed: A periodic click train results in a harmonic spectrum.</p>
+<p>Even though each click has a uniform spectrum, adding multiple clicks together cancels out all non-harmonic parts, and only a harmonic comb spectrum remains.</p>
 
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-also known as "spectrogram"
-</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-a Hann window, in this case
-</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3" role="doc-backlink">3</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
-in the magnitude domain only; Phases, and different window functions, go beyond the scope of this article.
-</p></div></div>
+<div class="post-date">20 Sep 2019</div><h2 class="post-title"><a href="https://bastibe.de/2019-09-20-analyzing-speech-signals-in-time-and-frequency.html">Analyzing Speech Signals in Time and Frequency</a></h2>
+<p>Our first stop in speech analysis is usually the short-time Fourier transform, or STFT<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>:</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/stft.png" />
+<caption>Top: an STFT of speech (it's me, saying: "Es war einmal ein Mann"). Bottom: the signal's waveform.</caption>
+</figure>
 
+<p>As we can see, this speech signal has a strong fundamental frequency track around 120 Hz, and harmonics at integer multiples of the fundamental frequency. We perceive the frequency of the fundamental as the speech's pitch. The magnitude of the harmonics varies over time, which we perceive as the sounds of different vowels.</p>
+<p>All of this is clearly visible in this STFT. To calculate the STFT, we chop up the audio signal into short, overlapping blocks, apply a <em>window function</em> <sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup> to each of these blocks, and Fourier-transform each windowed block into the frequency domain:</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/block-processing.png" />
+<caption>The STFT is a two-dimensional graph of short-time spectra. Window functions and corresponding spectra of some blocks are highlighted.</caption>
+</figure>
+
+<p>We zoomed in a bit to make this visible. At this zoom level, an <a href="https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html">old friend</a> becomes visible in the waveform: The waveform of our harmonic spectra is clearly periodic. We also see that each of our blocks contain multiple periods of the speech signal. So what happens if we make our blocks shorter?</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/short-blocks.png" />
+<caption>STFT with shorter blocks (graph shows a shorter time, too). Each window now covers roughly one period of the signal.</caption>
+</figure>
+
+<p>As we make our blocks shorter, such that they only contain a single period of the signal, a funny thing happens: the harmonic structure vanishes. Why? Because the harmonic structure is caused by the interference between neighboring clicks; As soon as each block is restricted to a single period, there is no interference any longer, and no harmonic structure.</p>
+<p>But instead of a harmonic structure, we see the periodicity of the waveform emerge in the STFT! To look at this phenomenon in a bit more detail, we will have to leave the classical STFT domain, and look at a close sibling, the Constant Q Transform, or CQT. The CQT is simply an STFT with different block sizes for different frequencies:</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/cqt.png" />
+<caption>The CQT uses shorter block sizes for higher frequencies and longer block sizes for lower frequencies.</caption>
+</figure>
+
+<p>The periodic structure of the signal is now perfectly apparent. Each period of the signal gives rise to a skewed click-like spectrum that repeats at the fundamental frequency. Interestingly, however, the fundamental itself shows no periodicity. To see why this is so, and to finally get a grasp of how the short-time Fourier transforms interprets signals, we have to turn to our last graph, a gamma-tone filterbank:</p>
+<figure>
+<img src="https://bastibe.de/static/2019-09/gammatone.png" />
+<caption>A gamma-tone filterbank is a series of band-pass filters. Each horizontal line is now a frequency-constrained waveform.</caption>
+</figure>
+
+<p>The fundamental frequency is now clearly a visible as a single sinusoid, rotating its merry way at 120 Hz. Each harmonic is its own sinusoid at an integer multiple of the fundamental frequency, but changing in amplitude in lockstep with the findamental. Thus in this graph, we see both the harmonicity and the periodicity at the same time, and can finally appreciate the complex interplay of magnitudes and phases that give rise to the beautiful and simple sound of the human voice<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>also known as &quot;spectrogram&quot;<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>a Hann window, in this case<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>in the magnitude domain only; Phases, and different window functions, go beyond the scope of this article.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
 
 </div>
-</div><div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-signal-processing.html">signal-processing</a> </div>
-
-<div class="post-date">19 Sep 2019</div><h1 class="post-title"><a href="https://bastibe.de/2019-09-19-periodicity-and-harmonicity.html">Periodicity and Harmonicity</a></h1>
-<p>
-A periodic signal has a harmonic spectrum. In the extreme case, a click train signal has a comb spectrum:
-</p>
-
-
-<figure id="org713372f">
-<img src="https://bastibe.de/static/2019-09/comb.png" alt="comb.png">
-
-<figcaption><span class="figure-number">Figure 1: </span>A click train (left), and its corresponding comb spectrum (right).</figcaption>
-</figure>
-
-<p>
-But why? After all, a solitary click has a uniform spectrum. So why should the sum of multiple clicks have a non-uniform spectrum?
-</p>
-
-
-<figure id="orgf02c194">
-<img src="https://bastibe.de/static/2019-09/click.png" alt="click.png">
-
-<figcaption><span class="figure-number">Figure 2: </span>A click (left), and its corresponding spectrum (right).</figcaption>
-</figure>
-
-<p>
-The answer exposes a lot of detail of how spectra work, and gives us a glimpse into the inner workings of spectral phases. Let's start with that click: In that spectrum, we see that we can decompose a click into a sum of sine waves:
-</p>
-
-
-<figure id="org5552b7c">
-<img src="https://bastibe.de/static/2019-09/click_sum.png" alt="click_sum.png">
-
-<figcaption><span class="figure-number">Figure 3: </span>A click (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown.</figcaption>
-</figure>
-
-<p>
-As we have seen in the spectrum of the click earlier, it is composed of all frequencies (uniform spectrum). But we see here that the individual sine waves are delayed <i>just so</i>, that they all add constructively at exactly one time, and form the click. At all other times, they cancel each other out. This per-sine delay is called the phase of that frequency.
-</p>
-
-<p>
-But what happens if we have more than one click? How does that change things?
-</p>
-
-
-<figure id="org8f68aa7">
-<img src="https://bastibe.de/static/2019-09/click_train.png" alt="click_train.png">
-
-<figcaption><span class="figure-number">Figure 4: </span>A click train (left), and its Fourier series (right). For simplicity, not all frequencies of the Fourier series are shown. The contributions of each click are shown in different colors.</figcaption>
-</figure>
-
-<p>
-In a click train, odd frequencies in the Fourier series of the individual clicks cancel each other out (red/blue), and only harmonic frequencies (brown) remain. And this is exactly what our first spectrum showed: A periodic click train results in a harmonic spectrum.
-</p>
-
-<p>
-Even though each click has a uniform spectrum, adding multiple clicks together cancels out all non-harmonic parts, and only a harmonic comb spectrum remains.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-signal-processing.html">signal-processing</a> </div>
-
-<div class="post-date">11 Sep 2019</div><h1 class="post-title"><a href="https://bastibe.de/2019-09-11-how-we-perceive-speech.html">How we perceive Speech</a></h1>
-<p>
-Now that I am officially a <a href="https://bastibe.de/2019-07-09-publish-or-perish.html">failed scientist</a>, I might as well talk about my research in public. I spent the last few years analyzing speech recordings. Particularly, <i>voiced speech</i>, where vibrations in the vocal folds excite resonances in the vocal tract, and a tonal sound leaves our mouths and noses.
-</p>
-
-<p>
-As humans, we are particularly tuned to recognizing these kinds of sounds. Even in loud background noise, even with dozens of people talking at the same time, we can clearly identify the sound of a human voice (even if we might not be able to understand the words).
-</p>
-
-
-<figure id="org4bc83a9">
-<img src="https://bastibe.de/static/2019-09/spectrogram.png" alt="spectrogram.png">
-
-<figcaption><span class="figure-number">Figure 1: </span>A spectrogram of speech (it's me, saying: "Es war einmal ein Mann")</figcaption>
-</figure>
-
-<p>
-Looking at these sounds from a physical point of view, we can see that it is made up of a fundamental frequency at the voice's pitch, and harmonics at integer multiples of the fundamental. And even though the sound is clearly composed of multiple harmonics, we perceive it as a single sound with a single pitch. Even more perplexing, we attribute all of these harmonics to a single voice, even if they criss-cross with tonal sounds from different sources.
-</p>
-
-<p>
-Yet, speech recognition systems regularly struggle with such tasks, unless we feed them unholy amounts of data and processing power. In other words, there has to be more to speech than the simple figure above indicates.
-</p>
-
-<p>
-One area is definitely time resolution. Obviously, when the vocal folds open to admit a puff of air into the vocal tract, phases align, and loudness is higher than when the vocal folds have closed again and phases go out of sync. This happens several hundreds of times per second, at the frequency of the fundamental. Yet, this phase coherence is invisible in most of our visualizations, such as the spectrogram above, or the MFCCs usually used in speech recognition, as they are too coarse for such short-time detail.
-</p>
-
-<p>
-An even more interesting detail emerges from fMRI scans of people who are speaking, and people who are listening to speech: their activation patterns are strikingly similar. As in, motor groups are activating when listening, just as if actual speech muscles were moved. To me, this indicates that when we listen to speech, we <i>simulate speaking</i>. And I find it highly likely that we understand speech mostly in terms of the movements we would have to make to imitate it. In other words, we do not internalize speech as an <i>audio</i> signal, but as <i>muscle movements</i>.
-</p>
-
-<p>
-This matches another observation from a different area: When learning a foreign language, we can not hear what we can not produce. If you didn't learn how to speak an Ö and Ü (two German umlauts) as a child, you will have a hard time hearing the difference as an adult. Yet they sound completely distinct to me. In a production model, this makes a lot of sense, as we wouldn't know how to simulate a sound we can not produce.
-</p>
-
-<p>
-Bringing this back to the science of signal processing, I believe that most speech analysis algorithms are currently lacking a production model of speech. Speech can not be fully understood as an audio signal. It needs to be understood in terms of the variables and limitations of a human vocal tract. I believe that if we integrated such a physiological production model into our machine learning models, we wouldn't need to feed them such vast amounts of data and electricity, and might even get by without them.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-signal-processing.html">signal-processing</a> <a href="https://bastibe.de/tag-science.html">science</a> </div>
+<div id="postamble" class="status">
 <div id="archive">
-<a href="https://bastibe.de/archive.html">Other posts</a>
-</div>
-</div>
-<div id="postamble" class="status"><div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

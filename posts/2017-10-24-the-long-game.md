@@ -1,0 +1,23 @@
+---
+title: The Long Game
+date: 2017-10-24 00:00
+filetags: programming
+---
+
+Here's a thing I do: I write open source libraries that solve my problems. _Bad_ libraries. And then, over the course of a year or two, I slowly improve them, until they are not so bad any more.
+
+I have gone through this pattern a few times now. [SoundFile](https://github.com/bastibe/PySoundFile) started out buggy and slow. [Transplant](https://github.com/bastibe/transplant) crashed and froze very often. [Org-Journal](https://github.com/bastibe/org-journal) deleted journal entries every now and then. But then users found errors, and errors were fixed. And slowly, over time, these libraries transformed from buggy prototypes into dependable tools. After a year or so, I saw Github Issues gradually drying up, and feedback changing from "X is broken" to "How can I do X?". It is an oddly gratifying process.
+
+Interestingly though, I rarely hear people talking about this, that building a thing is only the beginning, and the meat of open source development is sticking with it for a long time, and gradually, slowly, weeding out the bugs. All great open source libraries I know evolved this way, yet it is rarely written about.
+
+Playing the long game means anticipating and managing the amount of maintenance I am going to do on a project. When releasing a new library, the first few months and users will shake out bugs, and create work for the maintainers. This can be a dangerous source of stress and anxiety. I've had my brush with burnout in the past, and my only defense to this is to be honest about my availability. Often, this means stating outright that I probably won't have the time to work on a thing.
+
+However, I have also learned that it is OK to defer issues to the future. There have been many problems that I didn't have the time to address when they first came up, but _did_ address a few months later, probably in response to a separate bug report. Important problems have a way of getting fixed eventually. Other times, a solution just takes a long time to mature. There have been multiple issues that lay dormant for months until I stumbled upon a good solution.
+
+And good solutions are important for open source software: If a bug fix adds too much complexity, it will inevitably lead to _more_ bugs. This can easily snowball into a situation where each hour I invest into a project creates _more hours_ of future maintenance burden. A situation like this feels hopeless and terrible. It feels like work. It is therefore important for my sanity to control the complexity of my projects, even if that means not adding features or not addressing problems. Open source development is not beholden to the dollar sign, and gives you the freedom to do it _right_.
+
+This is not universally understood by programmers or users. And it doesn't just involve technical questions: Some users have expected me to provide commercial-grade support, and got surprisingly unpleasant when I didn't. But it is crucial to realize that publishing open source software _does not imply an obligation to fix every issue right now_. Quite on the contrary, many open source developers necessarily work on their own schedule, and part of the enjoyment of open source development is derived from this exact freedom!
+
+At this point, my Github lists a bunch of open source projects. Some of them have gotten attention, which lead to bug reports, and, over time, let them grow to maturity. Some turned out to be [useful](https://github.com/bastibe/annotate.el) [to](https://github.com/bastibe/twilight) [me](https://github.com/bastibe/org-static-blog), but not to others. Some are useful [to](https://github.com/bastibe/Violinplot-Matlab) [others](https://github.com/bastibe/lunatic-python), but not to me. Some turned out to be not useful [at all](https://github.com/bastibe/MatlabCodeAnalyzer), and are now largely abandoned. And some of them, like [RunForrest](https://github.com/bastibe/RunForrest) and [SoundCard](https://github.com/bastibe/SoundCard), are still new and raw and terrible, but will mature over time.
+
+That's a thing I do: I write open source libraries. _Good_ libraries, but as a [wise man](https://en.wikiquote.org/wiki/Piet_Hein) once said "When you feel how depressingly / slowly you climb, / it's well to remember that / Things Take Time". Working on open source grants you this freedom, and is joyful for it.

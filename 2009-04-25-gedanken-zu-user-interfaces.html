@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Gedanken zu User Interfaces</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,78 +19,58 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">25 Apr 2009</div><h1 class="post-title"><a href="https://bastibe.de/2009-04-25-gedanken-zu-user-interfaces.html">Gedanken zu User Interfaces</a></h1>
-<p>
-Jeder kennt dieses Fenster:
-</p>
+<div class="post-date">25 Apr 2009</div>
+<h1 class="post-title"><a href="https://bastibe.de/2009-04-25-gedanken-zu-user-interfaces.html">Gedanken zu User Interfaces</a></h1>
+<p>Jeder kennt dieses Fenster:</p>
+<p><img src="http://bastibe.de/static/2009-04/delete_file.png" alt="delete_file" /></p>
+<p>Dieses Fenster ist eine ziemlich schlechte Idee, denn jeder geübte Benutzer hat irgendwann gelernt, dass die Aktion &quot;Dateien Löschen&quot; aus drei Gesten besteht: (1) Dateien auswählen, (2) Die Löschaktion einleiten, (3) Den Löschdialog bestätigen. Leider hat man schon vor mehr als zwanzig Jahren nachgewiesen, dass solche zusammengehörigen Gesten von den Benutzern als einzelne &quot;Datei-Löschen&quot; Geste abstrahiert werden. Man kennt das vom Tippen: Man tippt Worte nicht, indem man einzelne Buchstaben aneinander hängt, sondern man tippt Worte fast immer am Stück; Hat man erst einmal angefangen, ein falsches Wort zu tippen, kann man damit nicht aufhören, bis das gesamte Wort getippt ist. Auf ähnliche Weise ist es dem Benutzer auch nicht möglich, auf den Löschdialog sinnvoll zu reagieren, da das Bestätigen der Sicherheitsfrage vollkommen automatisiert ist und daher nicht einmal verhindert werden könnte, wenn man wollte.
+Die Alternative ist ein alter Bekannter: Undo. Statt den Benutzer im Vorfeld zu fragen, ob er die Datei wirklich löschen möchte (was er durch Einleiten der Löschaktion bereits bejaht hat) gibt man ihm die Möglichkeit, die Aktion im Nachhinein wieder rückgängig zu machen. Das ist wesentlich effektiver und kommt ohne nerviger Dialogbox aus. Übrigens funktioniert Dateiaktion-Undo bereits heute in allen Betriebssystem außer Linux, jedoch ohne Menüicon und zumeist nur für die letzte Aktion. Wäre es nicht schön, wenn dies noch weiter ausgebaut würde?</p>
+<p>Noch ein gefährlicher Dialog:</p>
+<p><img src="http://bastibe.de/static/2009-04/ja_nein_abbrechen.png" alt="ja_nein_abbrechen" /></p>
+<p>Das ist ebenfalls ein alter Bekannter, der immer dann erscheint, wenn man ein Programm schließen will, welches noch ungesichte Änderungen enthält: Abgesehen von dem offensichtlichen Problem, dass &quot;Abbrechen&quot; keinen wirklichen Sinn ergibt (Was abbrechen? Das Programm?) erfordert diese Frage jedes Mal das komplette Lesen der Meldung, bis man entschlüsseln kann, was &quot;Ja&quot; und &quot;Nein&quot; in diesem Kontext bedeuten. Um das noch einmal zu verdeutlichen, hier ein besonders schlimmes Beispiel:</p>
+<p><img src="http://bastibe.de/static/2009-04/bad_gui.png" alt="bad_gui" /></p>
+<p>Es leuchtet ein, dass hier ein eindeutigerer Dialog wesentlich sinnvoller wäre, bei dem sofort ersichtlich ist, was welcher Button tun wird: (Merke: Auf Buttons gehören immer Verben)</p>
+<p>http://bastibe.de/static/2009-04/speichern_windows.png]]
+<img src="http://bastibe.de/static/2009-04/speichern_mac.png" alt="speichern_mac" /></p>
+<p>Aber warum eigentlich überhaupt speichern? Warum muss ich mich persönlich darum kümmern, meine Arbeit zu speichern? Ich dachte, ich würde mit einer Datei arbeiten -- aber wenn diese Datei nicht geändert wird, wenn ich nicht zuerst &quot;Speichern&quot; anklicke, habe ich wohl eigentlich doch nicht mit dieser Datei, sondern mit einer heimlichen Kopie gearbeitet. Wäre es nicht viel sinnvoller, immer automatisch zu speichern, und statt des &quot;Speichern&quot;-Buttons eine &quot;auf Urzustand zurücksetzen&quot;-Funktion bereitzustellen? Ich bin mir auf jeden Fall sicher, dass man den &quot;Undo all changes&quot;-Button wesentlich seltener bräuchte als den &quot;Speichern&quot;-Button, denn wenn der Benutzer nicht vorgehabt hätte, neuen Text in eine Datei zu schreiben, dann hätte er keinen neuen Text in die Datei geschrieben. Hat er dennoch &quot;versehentlich&quot; Text eingegeben, ist das ein klarer &quot;Benutzerfehler&quot;, also der logische Einsatzzweck für Undo.</p>
+<p>Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll einsetzen könnte, um das Arbeiten am Computer angenehmer zu gestalten. Ich wünschte, mehr Leute würden sich mit diesen Dingen auseinander setzen...</p>
 
-
-<figure id="org8fb4668">
-<img src="http://bastibe.de/static/2009-04/delete_file.png" alt="delete_file.png">
-
-</figure>
-
-<p>
-Dieses Fenster ist eine ziemlich schlechte Idee, denn jeder geübte Benutzer hat irgendwann gelernt, dass die Aktion "Dateien Löschen" aus drei Gesten besteht: (1) Dateien auswählen, (2) Die Löschaktion einleiten, (3) Den Löschdialog bestätigen. Leider hat man schon vor mehr als zwanzig Jahren nachgewiesen, dass solche zusammengehörigen Gesten von den Benutzern als einzelne "Datei-Löschen" Geste abstrahiert werden. Man kennt das vom Tippen: Man tippt Worte nicht, indem man einzelne Buchstaben aneinander hängt, sondern man tippt Worte fast immer am Stück; Hat man erst einmal angefangen, ein falsches Wort zu tippen, kann man damit nicht aufhören, bis das gesamte Wort getippt ist. Auf ähnliche Weise ist es dem Benutzer auch nicht möglich, auf den Löschdialog sinnvoll zu reagieren, da das Bestätigen der Sicherheitsfrage vollkommen automatisiert ist und daher nicht einmal verhindert werden könnte, wenn man wollte.
-Die Alternative ist ein alter Bekannter: Undo. Statt den Benutzer im Vorfeld zu fragen, ob er die Datei wirklich löschen möchte (was er durch Einleiten der Löschaktion bereits bejaht hat) gibt man ihm die Möglichkeit, die Aktion im Nachhinein wieder rückgängig zu machen. Das ist wesentlich effektiver und kommt ohne nerviger Dialogbox aus. Übrigens funktioniert Dateiaktion-Undo bereits heute in allen Betriebssystem außer Linux, jedoch ohne Menüicon und zumeist nur für die letzte Aktion. Wäre es nicht schön, wenn dies noch weiter ausgebaut würde?
-</p>
-
-<p>
-Noch ein gefährlicher Dialog:
-</p>
-
-
-<figure id="orge374b19">
-<img src="http://bastibe.de/static/2009-04/ja_nein_abbrechen.png" alt="ja_nein_abbrechen.png">
-
-</figure>
-
-<p>
-Das ist ebenfalls ein alter Bekannter, der immer dann erscheint, wenn man ein Programm schließen will, welches noch ungesichte Änderungen enthält: Abgesehen von dem offensichtlichen Problem, dass "Abbrechen" keinen wirklichen Sinn ergibt (Was abbrechen? Das Programm?) erfordert diese Frage jedes Mal das komplette Lesen der Meldung, bis man entschlüsseln kann, was "Ja" und "Nein" in diesem Kontext bedeuten. Um das noch einmal zu verdeutlichen, hier ein besonders schlimmes Beispiel:
-</p>
-
-
-<figure id="org0b88bd6">
-<img src="http://bastibe.de/static/2009-04/bad_gui.png" alt="bad_gui.png">
-
-</figure>
-
-<p>
-Es leuchtet ein, dass hier ein eindeutigerer Dialog wesentlich sinnvoller wäre, bei dem sofort ersichtlich ist, was welcher Button tun wird: (Merke: Auf Buttons gehören immer Verben)
-</p>
-
-<p>
-<img src="http://bastibe.de/static/2009-04/speichern_windows.png" alt="speichern_windows.png">]]
-<img src="http://bastibe.de/static/2009-04/speichern_mac.png" alt="speichern_mac.png">
-</p>
-
-<p>
-Aber warum eigentlich überhaupt speichern? Warum muss ich mich persönlich darum kümmern, meine Arbeit zu speichern? Ich dachte, ich würde mit einer Datei arbeiten &#x2013; aber wenn diese Datei nicht geändert wird, wenn ich nicht zuerst "Speichern" anklicke, habe ich wohl eigentlich doch nicht mit dieser Datei, sondern mit einer heimlichen Kopie gearbeitet. Wäre es nicht viel sinnvoller, immer automatisch zu speichern, und statt des "Speichern"-Buttons eine "auf Urzustand zurücksetzen"-Funktion bereitzustellen? Ich bin mir auf jeden Fall sicher, dass man den "Undo all changes"-Button wesentlich seltener bräuchte als den "Speichern"-Button, denn wenn der Benutzer nicht vorgehabt hätte, neuen Text in eine Datei zu schreiben, dann hätte er keinen neuen Text in die Datei geschrieben. Hat er dennoch "versehentlich" Text eingegeben, ist das ein klarer "Benutzerfehler", also der logische Einsatzzweck für Undo.
-</p>
-
-<p>
-Das sind nur zwei Beispiele, wie man intelligente Undo-Mechanismen sinnvoll einsetzen könnte, um das Arbeiten am Computer angenehmer zu gestalten. Ich wünschte, mehr Leute würden sich mit diesen Dingen auseinander setzen&#x2026;
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-ui.html">ui</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Calling Matlab from Python</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,31 +19,32 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">03 Nov 2015</div><h1 class="post-title"><a href="https://bastibe.de/2015-11-03-matlab-engine-performance.html">Calling Matlab from Python</a></h1>
-<p>
-For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?
-</p>
-
-<div id="outline-container-org87e0c1c" class="outline-2">
-<h2 id="org87e0c1c">Usage</h2>
-<div class="outline-text-2" id="text-org87e0c1c">
-<p>
-As it's name suggests, Matlab is a <b>mat</b>rix <b>lab</b>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http://scipy.org/">Numpy</a>, and just uses that instead.
-</p>
-
-<pre class="example" id="org10399bc">
-       Matlab Engine for Python        |              Transplant
+<div class="post-date">03 Nov 2015</div>
+<h1 class="post-title"><a href="https://bastibe.de/2015-11-03-matlab-engine-performance.html">Calling Matlab from Python</a></h1>
+<p>For my latest experiments, I needed to run both Python functions and Matlab functions as part of the same program. As I <a href="http://bastibe.de/2015-10-29-matlab-engine-leaks.html">noted earlier</a>, Matlab includes the <a href="http://mathworks.com/help/matlab/matlab-engine-for-python.html">Matlab Engine for Python</a> (MEfP), which can call Matlab functions from Python. Before I knew about this, I created <a href="https://github.com/bastibe/transplant">Transplant</a>, which does the very same thing. So, how do they compare?</p>
+<h2>Usage</h2>
+<p>As it's name suggests, Matlab is a <strong>mat</strong>rix <strong>lab</strong>oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as <code>matlab.double</code> et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called <a href="http:_scipy.org_">Numpy</a>, and just uses that instead.</p>
+<pre><code>       Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 import numpy                           | import numpy
 import matlab                          | import transplant
@@ -53,14 +55,8 @@ numpy_data = numpy.random.randn(100)   | numpy_data = numpy.random.randn(100)
 list_data = numpy_data.tolist()        |
 matlab_data = matlab.double(list_data) |
 data_sum = eng.sum(matlab_data)        | data_sum = eng.sum(numpy_data)
-</pre>
-
-<p>
-Aside from this difference, both libraries work almost identical. Even the handling of the number of output arguments is (accidentally) almost the same:
-</p>
-
-<pre class="example" id="org2579892">
-       Matlab Engine for Python        |              Transplant
+</code></pre><p>Aside from this difference, both libraries work almost identical. Even the handling of the number of output arguments is (accidentally) almost the same:</p>
+<pre><code>       Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 eng.max(matlab_data)                   | eng.max(numpy_data)
 &gt;&gt;&gt; 4.533                              | &gt;&gt;&gt; [4.533 537635]
@@ -68,27 +64,16 @@ eng.max(matlab_data, nargout=1)        | eng.max(numpy_data, nargout=1)
 &gt;&gt;&gt; 4.533                              | &gt;&gt;&gt; 4.533
 eng.max(matlab_data, nargout=2)        | eng.max(numpy_data, nargout=2)
 &gt;&gt;&gt; (4.533, 537635.0)                  | &gt;&gt;&gt; [4.533 537635]
-</pre>
-
-<p>
-Similarly, both libraries can interact with Matlab objects in Python, although the MEfP can't access object properties:
-</p>
-
-<pre class="example" id="org6693143">
-       Matlab Engine for Python        |              Transplant
+</code></pre><p>Similarly, both libraries can interact with Matlab objects in Python, although the MEfP can't access object properties:</p>
+<pre><code>       Matlab Engine for Python        |              Transplant
 ---------------------------------------|---------------------------------------
 f = eng.figure()                       | f = eng.figure()
 eng.get(f, 'Position')                 | eng.get(f, 'Position')
 &gt;&gt;&gt; matlab.double([[ ... ]])           | &gt;&gt;&gt; array([[ ... ]])
 f.Position                             | f.Position
 &gt;&gt;&gt; AttributeError                     | &gt;&gt;&gt; array([[ ... ]])
-</pre>
-
-<p>
-There are a few small differences, though:
-</p>
-
-<ul class="org-ul">
+</code></pre><p>There are a few small differences, though:</p>
+<ul>
 <li>Function documentation in the MEfP is only available as <code>eng.help('funcname')</code>. Transplant will populate a function's <code>__doc__</code>, and thus documentation tools like IPython's <code>?</code> operator just work.</li>
 <li>Transplant converts empty matrices to <code>None</code>, whereas the MEfP represents them as <code>matlab.double([])</code>.</li>
 <li>Transplant represents <code>dict</code> as <code>containers.Map</code>, while the MEfP uses <code>struct</code> (the former is more correct, the latter arguable more useful).</li>
@@ -96,65 +81,34 @@ There are a few small differences, though:
 <li>The MEfP can't return non-scalar structs, such as the return value of <code>whos</code>. Transplant can do this.</li>
 <li>The MEfP can't return anonymous functions, such as <code>eng.eval('@(x, y) x&gt;y')</code>. Transplant can do this.</li>
 </ul>
-</div>
-</div>
+<h2>Performance</h2>
+<p>The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.</p>
+<p>More interesting is the time it takes to call a Matlab function from Python. Have a look:</p>
+<p><img src="http://bastibe.de/static/2015-11/execution-time.png" alt="execution-time" /></p>
+<p>This is running <code>sum(randn(n,1))</code> from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.</p>
+<p>There is a gap of about a factor of 10 between Transplant and the MEfP. In practice, this gap is highly significant! In my particular use case, I have <a href="http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/doc/voicebox/fxpefac.html">a function</a> that takes about one second of computation time for an audio signal of ten seconds (half a million values). When I call this function with Transplant, it takes about 1.3 seconds. With MEfP, it takes 4.5 seconds.</p>
+<p>Transplant spends its time serializing the arguments to JSON, sending that JSON over <a href="http:_zeromq.org_">ZeroMQ</a> to Matlab, and parsing the JSON there. Well, to be honest, only the parsing part takes any significant time, overall. While it might seem onerous to serialize everything to JSON, this architecture allows Transplant to run over a network connection.</p>
+<p>It is a bit baffling to me that MEfP manages to be slower than <em>that</em>, despite being written in C. Looking at the number of function calls in the profiler, the MEfP calls 25 functions (!) on each value (!!) of the input data. This is a shockingly inefficient way of doing things.</p>
+<h2>TL;DR</h2>
+<p>It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.</p>
+<p>If you want to try Transplant, just head over to <a href="https://github.com/bastibe/transplant">Github</a> and use it. If you find any bugs, feature requests, or improvements, please let me know in the Github issues.</p>
 
-<div id="outline-container-orgb087e4f" class="outline-2">
-<h2 id="orgb087e4f">Performance</h2>
-<div class="outline-text-2" id="text-orgb087e4f">
-<p>
-The time to start a Matlab instance is shorter in MEfP (3.8 s) than in Transplant (6.1 s). But since you're doing this relatively seldomly, the difference typically doesn't matter too much.
-</p>
-
-<p>
-More interesting is the time it takes to call a Matlab function from Python. Have a look:
-</p>
-
-
-<figure id="org8d35fdb">
-<img src="http://bastibe.de/static/2015-11/execution%20time.png" alt="execution%20time.png">
-
-</figure>
-
-<p>
-This is running <code>sum(randn(n,1))</code> from Transplant, the MEfP, and in Matlab itself. As you can see, the MEfP is a constant factor of about 1000 slower than Matlab. Transplant is a constant factor of about 100 slower than Matlab, but always takes at least 0.05 s.
-</p>
-
-<p>
-There is a gap of about a factor of 10 between Transplant and the MEfP. In practice, this gap is highly significant! In my particular use case, I have <a href="http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/doc/voicebox/fxpefac.html">a function</a> that takes about one second of computation time for an audio signal of ten seconds (half a million values). When I call this function with Transplant, it takes about 1.3 seconds. With MEfP, it takes 4.5 seconds.
-</p>
-
-<p>
-Transplant spends its time serializing the arguments to JSON, sending that JSON over <a href="http://zeromq.org/">ZeroMQ</a> to Matlab, and parsing the JSON there. Well, to be honest, only the parsing part takes any significant time, overall. While it might seem onerous to serialize everything to JSON, this architecture allows Transplant to run over a network connection.
-</p>
-
-<p>
-It is a bit baffling to me that MEfP manages to be slower than <i>that</i>, despite being written in C. Looking at the number of function calls in the profiler, the MEfP calls 25 functions (!) on each value (!!) of the input data. This is a shockingly inefficient way of doing things.
-</p>
-</div>
-</div>
-
-<div id="outline-container-org9ae3522" class="outline-2">
-<h2 id="org9ae3522">TL;DR</h2>
-<div class="outline-text-2" id="text-org9ae3522">
-<p>
-It used to be very difficult to work in a mixed-language environment, particularly with one of those languages being Matlab. Nowadays, this has thankfully gotten much easier. Even Mathworks themselves have stepped up their game, and can interact with Python, C, Java, and FORTRAN. But their interface to Python does leave something to be desired, and there are better alternatives available.
-</p>
-
-<p>
-If you want to try Transplant, just head over to <a href="https://github.com/bastibe/transplant">Github</a> and use it. If you find any bugs, feature requests, or improvements, please let me know in the Github issues.
-</p>
-</div>
-</div>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a> <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a>, <a href="https://bastibe.de/tag-python.html">python</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>

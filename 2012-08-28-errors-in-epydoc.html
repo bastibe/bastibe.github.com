@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <link rel="alternate"
       type="application/rss+xml"
       href="https://bastibe.de/rss.xml"
-      title="RSS feed for https://bastibe.de/">
+      title="RSS feed for https://bastibe.de">
 <title>Fixing Errors in Epydoc</title>
 <meta name="author" content="Bastian Bechtold">
 <meta name="referrer" content="no-referrer">
@@ -18,82 +19,65 @@
 <script src="static/auto-render.min.js"></script>
 <script src="static/lightbox.js"></script>
 <link rel="stylesheet" href="static/katex.min.css">
-<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body); });</script>
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
-<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1"></head>
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
 <body>
-<div id="preamble" class="status"><div class="header">
+<div class="header">
   <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
   <div class="sitelinks">
     <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
   </div>
-</div></div>
+</div>
+
 <div id="content">
-<div class="post-date">28 Aug 2012</div><h1 class="post-title"><a href="https://bastibe.de/2012-08-28-errors-in-epydoc.html">Fixing Errors in Epydoc</a></h1>
-<p>
-I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.
-</p>
-
-<p>
-If you ever get this error when using <a href="http://epydoc.sourceforge.net/">epydoc</a>:
-</p>
-
-<pre class="example" id="orgcb72f57">
-    UNEXPECTED ERROR:
+<div class="post-date">28 Aug 2012</div>
+<h1 class="post-title"><a href="https://bastibe.de/2012-08-28-errors-in-epydoc.html">Fixing Errors in Epydoc</a></h1>
+<p>I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.</p>
+<p>If you ever get this error when using <a href="http:_epydoc.sourceforge.net_">epydoc</a>:</p>
+<pre><code>    UNEXPECTED ERROR:
     'Text' object has no attribute 'data'
-</pre>
+</code></pre><p>You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.</p>
+<p>Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.</p>
+<p>Short answer: Find your <em>site-packages</em> directory:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">distutils.sysconfig</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_python_lib</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">get_python_lib</span><span class="p">())</span>
+</pre></div>
+<p>Go there, navigate to the /epydoc_markup_ directory and change line 307 of the file <em>restructuredtext.py</em> from</p>
+<div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+<p>to</p>
+<div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+		<span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_SUMMARY_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+	<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+		<span class="n">m</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+<p>This should fix that problem.</p>
 
-<p>
-You are probably running a version of Python that is greater than the latest one that is supported by epydoc. This is because epydoc has not been updated since 2008 and Python 2.5.
-</p>
-
-<p>
-Luckily, some <a href="http://www.agapow.net/programming/python/epydoc-go-boom">fine</a> <a href="http://stackoverflow.com/questions/6704770/epydoc-attributeerror-text-object-has-no-attribute-data">folks</a> on the internet have figured out how to fix these things.
-</p>
-
-<p>
-Short answer: Find your <i>site-packages</i> directory:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">    from distutils.sysconfig import get_python_lib
-	print(get_python_lib())
-</pre>
-</div>
-
-<p>
-Go there, navigate to the <i>epydoc\/markup</i> directory and change line 307 of the file <i>restructuredtext.py</i> from
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">	m = self._SUMMARY_RE.match(child.data)
-</pre>
-</div>
-
-<p>
-to
-</p>
-
-<div class="org-src-container">
-<pre class="src src-python">	try:
-		m = self._SUMMARY_RE.match(child.data)
-	except AttributeError:
-		m = None
-</pre>
-</div>
-
-<p>
-This should fix that problem.
-</p>
-<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a> </div>
-<div id="comments"><script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-python.html">python</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
 <hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
 <script type="text/javascript">
     document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
-</script></div></div>
-<div id="postamble" class="status"><div id="archive">
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
   <a href="https://bastibe.de/archive.html">Other posts</a>
 </div>
-<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
 </body>
 </html>
