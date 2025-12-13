@@ -4,6 +4,18 @@ import tomllib
 import collections
 
 import mistune
+import pygments
+import pygments.lexers
+import pygments.formatters.html
+
+class CodeHighlightRenderer(mistune.HTMLRenderer):
+    def block_code(self, code, info=None):
+        if info:
+            lexer = pygments.lexers.get_lexer_by_name(info, stripall=True)
+            formatter = pygments.formatters.html.HtmlFormatter()
+            return pygments.highlight(code, lexer, formatter)
+        return '<pre><code>' + mistune.escape(code) + '</code></pre>'
+
 
 Post = collections.namedtuple('Post', ['path', 'metadata', 'body'])
 
@@ -21,7 +33,7 @@ def main():
 
     # create post pages
     for path, metadata, body in posts + drafts:
-        page_url = f"{base_url}/posts/{path.stem}.html"
+        page_url = f"{base_url}/{path.stem}.html"
         html = assemble_post(config, metadata, page_url, body, base_url)
         output_path = root_path / f"{path.stem}.html"
         output_path.write_text(html, encoding='utf-8')
@@ -53,7 +65,7 @@ def main():
 
 
 def collect_posts(config, posts_path, root_path, base_url):
-    markdown_parser = mistune.create_markdown(escape=False)
+    markdown_parser = mistune.create_markdown(renderer=CodeHighlightRenderer(), escape=False, plugins=['footnotes'])
     posts = []
     for file in posts_path.glob('*.md'):
         text = file.read_text(encoding='utf-8')
@@ -117,7 +129,7 @@ def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
 def assemble_archive(config, posts, base_url):
     content = ['<h1>Archive</h1>']
     for post_path, metadata, body in posts:
-        post_url = f"{base_url}/posts/{post_path.stem}.html"
+        post_url = f"/{post_path.stem}.html"
         date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
         content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
     html = '\n'.join(content)
@@ -131,7 +143,7 @@ def assemble_index(config, posts, base_url, title=''):
     if title:
         content.append(f'<h1>{title}</h1>')
     for post_path, metadata, body in posts:
-        post_url = f"{base_url}/posts/{post_path.stem}.html"
+        post_url = f"{base_url}/{post_path.stem}.html"
         date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
         content.append(f"""
 <div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>
@@ -146,7 +158,7 @@ def assemble_index(config, posts, base_url, title=''):
 def assemble_rss(config, posts, base_url):
     items = []
     for post_path, metadata, body in posts:
-        post_url = f"{base_url}/posts/{post_path.stem}.html"
+        post_url = f"{base_url}/{post_path.stem}.html"
         pub_date = time.strftime('%a, %d %b %Y %H:%M:%S +0000', time.strptime(metadata['date'], '%Y-%m-%d'))
         items.append(f"""<item>
 <title>{metadata['title']}</title>
@@ -187,7 +199,7 @@ def assemble_tag_archive(config, tagged_posts, base_url):
     for tag, posts in tagged_posts:
         content.append(f'<h1 class="tags-title">Posts tagged "{tag}":</h1>')
         for post_path, metadata, body in posts:
-            post_url = f"{base_url}/posts/{post_path.stem}.html"
+            post_url = f"{base_url}/{post_path.stem}.html"
             date = time.strftime(config['date_format'], time.strptime(metadata['date'], '%Y-%m-%d'))
             content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
     html = '\n'.join(content)
