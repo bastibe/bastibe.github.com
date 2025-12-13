@@ -55,7 +55,7 @@ def assemble_post(config, metadata, page_url, body, base_url):
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="{metadata['description']}">
+{f'<meta name="description" content="{metadata["description"]}">' if 'description' in metadata else ''}
 <link rel="alternate"
       type="application/rss+xml"
       href="{config['base_url']}/rss.xml"
