@@ -40,6 +40,8 @@ With that, I conducted a huge comparison study between a very large number of pi
 In the end, the work was more about data science than signal processing. Regrettably, I was [not able to publish](https://bastibe.de_2019-07-09-publish-or-perish.html) my results in journals.
 
 ## Finished or Abandoned Projects
+### [RawDev](https://github.com/bastibe/rawdev)
+My own raw developer, based on algorithms of Darktable, but running entirely on the GPU. Turns out, the GPU is plenty fast enough to run a complete raw development pipeline in real time on a full raw file. However, it turned out that my technology choices (QML) were not ideally suited for the task, and the asset management side of things was too much trouble to maintain. And meanwhile, Darktable itself got so many cool new features that I wanted to try without first porting them over. Still, this was an extremly fun and educational side project! (Status: educational)
 ### [PySoundCard](https://github.com/bastibe_PySoundCard)
 My second attempt at getting cross-platform audio to work in Python. Uses [CFFI](https://cffi.readthedocs.org/) and [portaudio](http://www.portaudio.com/), much like [SoundFile](https://github.com/bastibe/SoundFile). But it just didn't work out between portaudio and me. Use [SoundCard](https://github.com/bastibe/SoundCard) for a better solution, or [SoundDevice](https://github.com/spatialaudio_python-sounddevice) for a maintained portaudio bridge. (Status: starting to smell)
 ### [Map-Matlab](https://github.com/bastibe_Map-Matlab)
