@@ -4,8 +4,7 @@ date: 2023-03-23
 filetags: nocomments
 ---
 
-I like to keep notes on stuff I use. Some of this was originally
-hosted on [DPReview](https://dpreview.com/members/4868424004/gearlist) back when that was still a thing, RIP.
+I like to keep notes on stuff I use. Mostly a copy of my [DPReview](https://dpreview.com/members/4868424004/gearlist) gear list.
 
 ## Current Cameras
 <div class="columns">
@@ -43,12 +42,12 @@ I bought this originally as a backup camera, and to hand to my kids. It does ser
 <div class="columns">
 
 <div class="block">
-<h3>Fujifilm XF 23mm f/1.4 R</h3>
+<h3>Fujifilm XF 23mm f/1.4 R LM WR</h3>
 <figure>
-<img src="/static/2023-03/fujifilm_xf23_14.png"/>
+<img src="/static/2023-03/fujifilm_xf23_14_wr.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
-Finally, a 23mm I like. It's a bit big, and a bit slow, but it makes up for that with a wonderfully smooth bokeh that doesn't change across the frame. The focus transition is nicely gradual as well. Really, this replicates the magic of the Sony RX1 on Fuji, and that's just about the highest praise I can give to any lens.
+A perfect lens does not exists. There's always a tradeoff between price, weight, size, and optical quality. Well, this lens is optically just about perfect, while remaining just light enough to be worthwhile. A tremendous lens. 
 </div>
 
 <div class="block">
@@ -312,6 +311,15 @@ When my D3000 broke, this is what I picked up instead. It taught me about the va
 
 ## Previous Lenses
 <div class="columns">
+
+<div class="block">
+<h3>Fujifilm XF 23mm f/1.4 R</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xf23_14.png"/>
+<figcaption>★★★★★</figcaption>
+</figure>
+Finally, a 23mm I like. It's a bit big, and a bit slow, but it makes up for that with a wonderfully smooth bokeh that doesn't change across the frame. The focus transition is nicely gradual as well. Really, this replicates the magic of the Sony RX1 on Fuji, and that's just about the highest praise I can give to any lens.
+</div>
 
 <div class="block">
 <h3>Fujifilm XF 14mm f/2.8 R</h3>
