@@ -61,6 +61,7 @@
 <p>Unsurprisingly, preallocation is indeed faster than growing an array. What <em>is</em> surprising is that it is faster by a constant factor of about 2 instead of scaling with the array length. Only appending by <code>x = [x {42}]</code> actually becomes slower for larger arrays. (The same thing happens for numerical arrays, struct arrays, and object arrays.)</p>
 <p><em>TL;DR:</em> Do not use <code>x = [x $something]</code>, ever. Instead, use <code>x(end+1) = $something</code>. Preallocation is generally overrated.</p>
 
+<div class="previous-post"><a href="https://bastibe.de/2018-04-07-defeating-news-addiction.html">Previous post</a></div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-matlab.html">matlab</a></div>
 <div id="comments">
 <script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
@@ -73,7 +74,7 @@
 </div>
 <div id="postamble" class="status">
 <div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
+  <a href="https://bastibe.de/archive.html">Archive</a>
 </div>
 <center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
 

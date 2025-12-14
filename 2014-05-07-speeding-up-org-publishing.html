@@ -47,6 +47,7 @@
 <p>Some package in my configuration set up <code>vc-find-file-hook</code> as part of <code>find-file-hook</code>. This means that every time <code>org-publish</code> opens a file, Emacs will look for the containing git repository and query its status. This takes forever! Worse yet, I don't even use <code>vc-git</code> at all. All my git interaction is done through <code>magit</code>.</p>
 <p>But Emacs wouldn't be Emacs if this could not be fixed with a line or two of elisp. <code>(remove-hook 'find-file-hooks 'vc-find-file-hook)</code> will do the trick. This brought the runtime of <code>org-publish</code> down to 15 seconds. Yay for profiling and yay for Emacs!</p>
 
+<div class="previous-post"><a href="https://bastibe.de/2014-05-03-snow-crash.html">Previous post</a></div>
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-org-mode.html">org-mode</a>, <a href="https://bastibe.de/tag-emacs.html">emacs</a></div>
 <div id="comments">
 <script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
@@ -59,7 +60,7 @@
 </div>
 <div id="postamble" class="status">
 <div id="archive">
-  <a href="https://bastibe.de/archive.html">Other posts</a>
+  <a href="https://bastibe.de/archive.html">Archive</a>
 </div>
 <center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
 

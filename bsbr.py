@@ -8,7 +8,9 @@ import pygments
 import pygments.lexers
 import pygments.formatters.html
 
+
 class CodeHighlightRenderer(mistune.HTMLRenderer):
+    """The default markdown renderer, with code highlighting by Pygments."""
     def block_code(self, code, info=None):
         if info:
             lexer = pygments.lexers.get_lexer_by_name(info, stripall=True)
@@ -32,9 +34,10 @@ def main():
     drafts = collect_posts(config, drafts_path, root_path, base_url)
 
     # create post pages
-    for path, metadata, body in posts + drafts:
+    for idx, [path, metadata, body] in enumerate(posts + drafts):
         page_url = f"{base_url}/{path.stem}.html"
-        html = assemble_post(config, metadata, page_url, body, base_url)
+        html = assemble_post(config, metadata, page_url, body, base_url, 
+                             previous_url=(f"{base_url}/{posts[idx+1].path.stem}.html" if idx + 1 < len(posts) else None))
         output_path = root_path / f"{path.stem}.html"
         output_path.write_text(html, encoding='utf-8')
         
@@ -92,7 +95,7 @@ def parse_frontmatter(text):
     return frontmatter, markdown
 
 
-def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
+def assemble_post(config, metadata, page_url, body, base_url, is_index=False, previous_url=None):
     date = time.strftime(config['date_format'], metadata['date'])
     tags = [tag.strip() for tag in metadata['filetags'].split(' ')]
     taglist = ', '.join(f'<a href="{base_url}/tag-{tag}.html">{tag}</a>' for tag in tags if tag != 'nocomments')
@@ -116,6 +119,7 @@ def assemble_post(config, metadata, page_url, body, base_url, is_index=False):
 {f'<div class="post-date">{date}</div>' if not is_index else ''}
 {f'<h1 class="post-title"><a href="{page_url}">{metadata["title"]}</a></h1>' if not is_index else ''}
 {body}
+{f'<div class="previous-post"><a href="{previous_url}">Previous post</a></div>' if previous_url else ''}
 <div class="taglist"><a href="{base_url}/tags.html">Tags</a>: {taglist or 'none'}</div>
 {f'<div id="comments">\n{config["page_comments"]}\n</div>' if (not is_index) and (not no_comments) else ''}
 </div>
