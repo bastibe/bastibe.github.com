@@ -8,7 +8,7 @@ Some of my photographic lenses are reknown for their outstanding sharpness, othe
 
 These questions recently came to a head for me, in the choice between two compact cameras: [A Fujifilm X100T, 16 MP, with a 23 mm lens, and a Ricoh GR III, 24 MP, with an 18 mm lens](https://camerasize.com/compact/#566,819,ha,f). In the last few months, I grew to like the X100T's 23 mm viewpoint, but did not enjoy how bulky the camera is in comparison to the GR III. So I wondered if I could replace the X100T with the Ricoh GR III and simply crop to 23 mm.
 
-Being a scientist and all that, I set up an experiment: I printed out a [resolution chart](https:_www.graphics.cornell.edu_~westin/misc/res-chart.html), set my cameras on a tripod, and took pictures with all my cameras such that the chart filled a similar portion of each image. Base ISO, two-second timer, processed in Capture One. White balance and contrast were equalized.
+Being a scientist and all that, I set up an experiment: I printed out a [resolution chart](https://www.graphics.cornell.edu/~westin/misc/res-chart.html), set my cameras on a tripod, and took pictures with all my cameras such that the chart filled a similar portion of each image. Base ISO, two-second timer, processed in Capture One. White balance and contrast were equalized.
 
 <figure style="text-align: center;">
 <a href="/static/2021-05/comparison.svg"><img src="/static/2021-05/comparison.svg" alt="camera resolution comparison" width="80%"/></a>

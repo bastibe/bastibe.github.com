@@ -8,7 +8,7 @@ filetags: backup macos
 
 Yesterday, I wrote about how Time Machine has failed me. Time Machine keeps regular backups, going back as far as your hard drive space permits. In theory. In practice, every year or so it messes up somehow and has to start over, thereby deleting all your older backups. A backup that is not reliable is not a backup.
 
-Luckily, there are alternatives. Probably the easiest is [rsync](https:_rsync.samba.org_)[^1], a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. [rsnapshot](http:_rsnapshot.org_) automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand [^2].
+Luckily, there are alternatives. Probably the easiest is [rsync](https://rsync.samba.org/)[^1], a very cool tool that copies files and directories from one place to another. You could simply run this once a day, and have a new backup every day. You can even configure rsync so it doesn't need to copy unchanged files, and instead hard-links them from an older backup. [rsnapshot](http://rsnapshot.org/) automates this process to keep a number of tiered copies, for example ten hourly backups, seven daily backups, four weekly backups, and a hundred monthly backups. Each backup is then simply a directory that contains your files. No fancy starfield-GUI, but utterly reliable and trivial to understand [^2].
 
 Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and I couldn't find a great guide online. So, without further ado, here's how to configure rsnapshot on macOS:
 
@@ -139,7 +139,7 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 [^1]: rsync is one of those reliable tools [I talked about](http://bastibe.de/2017-12-28-dropbox-timemachine-is-useless.html). It is rock solid, incredibly versatile, and unapologetically single-minded. A true gem!
 
-[^2]: This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), [this post](https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/) recommends [Borg](https:_www.borgbackup.org_) instead of rsnapshot, but you will lose the simplicity of simple directories.
+[^2]: This works great for local backups. If you need encrypted backups or compressed backups (maybe on an untrusted remote machine), [this post](https://www.reddit.com/r/linux/comments/42feqz/i_asked_here_for_the_optimal_backup_solution_and/czbeuby/) recommends [Borg](https://www.borgbackup.org/) instead of rsnapshot, but you will lose the simplicity of simple directories.
 
 [^3]: I use launchd instead of cron since launchd will re-schedule missed backups if the computer was asleep.
 

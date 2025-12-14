@@ -32,7 +32,7 @@ Which means that Darktable does not know about any Fujifilm-specific raw file me
 
 Notice how all the DR200/DR400 images are underexposed by one and two stops, how the first JPG is a square crop, but the RAF is 3:2, how the color of the grass and the train are subtly different in RAF and JPG.
 
-But thankfully, Darktable has a scripting interface for automating things. And what I've done here is a little script that uses [exiftool](https:_www.exiftool.org_) to read the missing metadata from the RAF file and apply appropriate styles to get Darktable's default rendering close to the JPG.
+But thankfully, Darktable has a scripting interface for automating things. And what I've done here is a little script that uses [exiftool](https://www.exiftool.org/) to read the missing metadata from the RAF file and apply appropriate styles to get Darktable's default rendering close to the JPG.
 
 Here's the lua script in its entirety:
 

@@ -8,7 +8,7 @@ A while ago, I bought a Time Capsule to take care of my backups. I can't say it 
 
 This might be bad luck or it might be due to a defective Time Capsule or it might be due to my computer. I have no idea. But the thing is, if I have to hack on my backup system anyway, lets do it in style, at least. So here goes:
 
-## Ingredients: [A Raspberry Pi](http:_www.raspberrypi.org_), an external hard drive, some patience
+## Ingredients: [A Raspberry Pi](http://www.raspberrypi.org/), an external hard drive, some patience
 
 Format an SD card as described [in the wiki](http://elinux.org/RPi_Easy_SD_Card_Setup). I just installed the version of Debian that is provided on [the official website](http://www.raspberrypi.org/downloads). Now just boot up.
 

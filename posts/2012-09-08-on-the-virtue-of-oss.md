@@ -6,9 +6,9 @@ filetags: open-source
 
 I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
 
-About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for [numpy](http:_numpy.scipy.org_) [scipy](http:_scipy.org_) and [matplotlib](http:_matplotlib.sourceforge.net_) that, for my particular purposes, rivals Matlab.
+About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for [numpy](http://numpy.scipy.org/) [scipy](http://scipy.org/) and [matplotlib](http://matplotlib.sourceforge.net/) that, for my particular purposes, rivals Matlab.
 
-However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used [Playrec](http:_playrec.co.uk_) for that purpose, which implements [PortAudio](http:_www.portaudio.com_) bindings for Matlab. Luckily, there was a similar package available for Python, called [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/).
+However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used [Playrec](http://playrec.co.uk/) for that purpose, which implements [PortAudio](http://www.portaudio.com/) bindings for Matlab. Luckily, there was a similar package available for Python, called [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/).
 
 But, it had one crucial flaw: it only implemented blocking-mode audio I/O, so not much luck for my real time requirements. (Blocking mode means that whenever you want to play some audio, you have to wait until the piece of audio finishes playing before you can begin to play the next piece or do some computation. Clearly, you can not process audio while it is playing with such a scheme). After a lot of research, I figured that my best bet would be to dive in and add non blocking I/O to PyAudio.
 

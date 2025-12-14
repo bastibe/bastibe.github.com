@@ -85,6 +85,6 @@ With all this love, why am I still using a Mac? Well, for one thing, the hardwar
 [^1]: As a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point
 
 
-And then there is software. Where is [Tower](http:_www.git-tower.com_) for Windows or Linux? Or [Sparrow](http:_www.sparrowmailapp.com_) or [Tweetbot](http://tapbots.com/blog/tweetbot/tweetbot-for-mac) or [Reeder](http://reederapp.com/mac/) or [Pixelmator](http:_www.pixelmator.com_) or iPhoto? I'm not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.
+And then there is software. Where is [Tower](http://www.git-tower.com/) for Windows or Linux? Or [Sparrow](http://www.sparrowmailapp.com/) or [Tweetbot](http://tapbots.com/blog/tweetbot/tweetbot-for-mac) or [Reeder](http://reederapp.com/mac/) or [Pixelmator](http://www.pixelmator.com/) or iPhoto? I'm not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.
 
 That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and Fedora 17 and I must say, I am quite taken with them. All of them. As for the next computer I am going to buy, I am doubtful if it will be an Apple computer again.

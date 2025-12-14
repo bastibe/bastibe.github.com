@@ -41,7 +41,7 @@ My main text editor is Emacs, and I am very used to its keyboard shortcuts. Of p
 CTRL-A/E for going to the beginning/end of a line, and Alt-B/F for navigating forward/backwards by
 word. I have long wanted to use these shortcuts not just in Emacs and readline-enabled terminal
 applications, but everywhere else, too. And with MacOS, this is finally possible: Install
-[BetterTouchTool ($22)](https:_folivora.ai_), and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
+[BetterTouchTool ($22)](https://folivora.ai/), and create keyboard shortcuts that maps, e.g. Alt-B/F to Alt-←/→. Ideally,
 put this in a new activation group that excludes Emacs. It may be necessary to remove the keyboard
 character for Alt-B/F from your keyboard layout before this works. I've spent an embarrassing number
 of hours trying to get this to work on Windows and Linux, and really got nowhere[^autohotkey].
@@ -49,7 +49,7 @@ Actually, however, most readline shortcuts such as Ctrl-A/E/B/F/K/Y already work
 MacOS!
 
 [^autohotkey]: It occurs to me that it might actually be possible to do something like on Windows
-this with [AutoHotkey (free)](https:_www.autohotkey.com_). I'll have to try that!
+this with [AutoHotkey (free)](https://www.autohotkey.com/). I'll have to try that!
 
 ## Mouse Configuration
 
@@ -60,8 +60,8 @@ usable.
 
 After experimenting with many a trackpad device, I have found Apple touch pads the best trackpads on
 the market[^trackpads]. On MacOS, they lacks a middle mouse click. So I created a trackpad
-shortcut in the aforementioned [BetterTouchTool ($22)](https:_folivora.ai_) to map the middle click on a three-finger tap
-(can also be had for free with [MiddleClick (OSS)](https://github.com/artginzburg/MiddleClick-Ventura)). For Windows, [Magic Utilities ($17/y)](https:_magicutilities.net_) provides a
+shortcut in the aforementioned [BetterTouchTool ($22)](https://folivora.ai/) to map the middle click on a three-finger tap
+(can also be had for free with [MiddleClick (OSS)](https://github.com/artginzburg/MiddleClick-Ventura)). For Windows, [Magic Utilities ($17/y)](https://magicutilities.net/) provides a
 wonderful third-party driver for Apple devices that also supports the three-finger tap. I have not
 gotten the Apple touch pad to pair reliably on Linux, and have generally found their touch pad
 driver _libinput_ a bit lacking.
@@ -86,7 +86,7 @@ Frankly, Windows does window management correctly. Win-←/→ moves windows to 
 of the screen, as does dragging the window to the screen border. Further Win-←/→ then moves the
 window to the next half-screen in that direction, even across display boundaries. KDE does this
 correctly out of the box as well, Gnome does not do the latter, and it drives me mad. MacOS doesn't
-do any of these things. But [Rectangle (OSS)](https:_rectangleapp.com_) does. Easy fix. (BetterTouchTool can do it, too, but
+do any of these things. But [Rectangle (OSS)](https://rectangleapp.com/) does. Easy fix. (BetterTouchTool can do it, too, but
 Rectangle is prettier)
 
 Furthermore, I want Alt-Tab to switch between windows. Again, MacOS is the odd one out, which uses
@@ -104,7 +104,7 @@ the screen, where it stays out of the way. Windows 10 had a sane dock, but then 
 it to the bottom of the screen. Dear OS makers, every modern screen has plenty of horizontal space.
 But vertical space is somewhat limited. So why on earth would you make a rarely used menu such as
 the dock consume that precious vertical space by default? And Microsoft, specifically, /why not make
-it movable/? Thankfully, there's [StartAllBack ($5)](https:_www.startallback.com_), which replaces the Windows task bar with
+it movable/? Thankfully, there's [StartAllBack ($5)](https://www.startallback.com/), which replaces the Windows task bar with
 something sensible, and additionally cleans up the start menu if you so desire. On KDE, I
 fractionally prefer [Latte (OSS)](https://github.com/KDE/latte-dock) over KDE's native dock. The MacOS dock is uniquely dumb, offering no
 start menu, and allowing no window selections. But it's unobtrusive and can be moved to the right
@@ -150,12 +150,12 @@ I'm not holding my breath. Windows and Linux of course natively support NTFS.
 ## System Management
 
 I have learned from experience not to trust graphical backup programs. TimeMachine in particular has
-eaten my backups many times already, and can not be trusted. But I have used [Borg (OSS)](https:_www.borgbackup.org_) for years,
+eaten my backups many times already, and can not be trusted. But I have used [Borg (OSS)](https://www.borgbackup.org/) for years,
 and it has so far performed flawlessly. Even more impressive, my Borg backups have a continuous
 history despite moving operating systems several times. It truly is wonderful software!
 
 On Windows, I run Borg inside the WSL, and schedule its backups with the Windows Task Scheduler. On
-Linux, I schedule them with systemd units. On MacOS, I install Borg with [Homebrew (OSS)](https:_brew.sh_) and schedule
+Linux, I schedule them with systemd units. On MacOS, I install Borg with [Homebrew (OSS)](https://brew.sh/) and schedule
 the backups with launchd tasks. It's all pretty equivalent. One nice thing about launchd, however,
 is how the OS immediately pops up a notification if there's a new task file added, and adds the task
 to the graphical system settings.
@@ -178,7 +178,7 @@ works almost flawlessly, making video games no longer a Windows-only proposition
 
 What doesn't work well on Linux are commercial applications. Wine generally does not play well with
 them, and frustratingly for my photo editing, neither [VMWare Workstation Player (free)](https://www.vmware.com/products/workstation-player.html) nor
-[VirtualBox (OSS)](https:_www.virtualbox.org_) support hardware-accelerated VMs on up-to-date Linux[^VMs]. So where MacOS lacks
+[VirtualBox (OSS)](https://www.virtualbox.org/) support hardware-accelerated VMs on up-to-date Linux[^VMs]. So where MacOS lacks
 games, Linux lacks Photoshop. Desktop applications in general tend to be unnecessarily cumbersome to
 manage and update on Linux. Flatpak is helping in this regard, by installing user-facing
 applications outside of the OS package managers, but it remains more work than on Windows or MacOS.
@@ -186,8 +186,8 @@ The occasional scanner driver or camera interface app can also be troublesome on
 easily handled with a VirtualBox VM (with the proprietary _Extension Pack_ for USB2 support), and
 hasn't really bothered me too much.
 
-Luckily for me, my most-used apps are generally OSS tools such as [Darktable (OSS)](https:_www.darktable.org_) and [DigiKam (OSS)](https:_www.digikam.org_),
-or cross-platform programs like [Fish (OSS)](https:_fishshell.com_), [Git (OSS)](https:_git-scm.com_), and [Emacs (OSS)](https://www.gnu.org/software/emacs/). This is however, where
+Luckily for me, my most-used apps are generally OSS tools such as [Darktable (OSS)](https://www.darktable.org/) and [DigiKam (OSS)](https://www.digikam.org/),
+or cross-platform programs like [Fish (OSS)](https://fishshell.com/), [Git (OSS)](https://git-scm.com/), and [Emacs (OSS)](https://www.gnu.org/software/emacs/). This is however, where
 Windows has a bit of a sore spot, as these programs tend to perform noticeably worse on Windows than
 on other platforms. Emacs and git in particular are just terribly slow on Windows, taking several
 seconds for routine operations that are _instant_ on other platforms. That's probably due to

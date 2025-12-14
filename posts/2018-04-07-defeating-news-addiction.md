@@ -14,7 +14,7 @@ And it all works thank to the magic of RSS:
   I read several blogs, newspapers, and webcomics. All of them have RSS feeds. Easy.
 
 - **Hacker News:**
-  The brilliant service [hnrss.org](https:_hnrss.org_) provides RSS feeds for Hacker News, and filters them to for example only include posts that made it to the front page, and have accumulated [at least 100 points](https://hnrss.org/frontpage?points=100).
+  The brilliant service [hnrss.org](https://hnrss.org/) provides RSS feeds for Hacker News, and filters them to for example only include posts that made it to the front page, and have accumulated [at least 100 points](https://hnrss.org/frontpage?points=100).
 
 - **Reddit:**
   Every subreddit has its own feed, at [reddit.com/r/subreddit.rss](https://www.reddit.com/r/emacs.rss). Sadly there is no way to filter for a minimum number of upvotes.
@@ -22,7 +22,7 @@ And it all works thank to the magic of RSS:
 - **YouTube:**
   Again, every YouTube channel has its own RSS feed, but Google is trying very hard to make it as cumbersome as possible to get at those feeds. You need to go to your [Subscription Manager](https://www.youtube.com/subscription_manager), then scroll all the way down, and "Export Subscriptions". The resulting file helpfully does not have a file extension, which you will have to add before you can import it into your RSS reader. I honestly can't reconstruct how I found that subscription manager, either, but presumably there is some series of clicks that would take you there.
 
-With all this settled, I have a veritable firehose of news every day. I estimate that only 1 % of this is actually worth reading. So in the next step, I filter this list for spam. For this purpose, I use [Feedbin](https:_feedbin.com_), which aggegates all these feeds, and remembers whether I have read an article. The remaining ham I either read immediately, or forward it to [Pinboard](http:_pinboard.in_) for later consumption.
+With all this settled, I have a veritable firehose of news every day. I estimate that only 1 % of this is actually worth reading. So in the next step, I filter this list for spam. For this purpose, I use [Feedbin](https://feedbin.com/), which aggegates all these feeds, and remembers whether I have read an article. The remaining ham I either read immediately, or forward it to [Pinboard](http://pinboard.in/) for later consumption.
 
 With this system, I never miss anything, but once I consume all the news in my feed reader, I know I am done, and there is no point in checking and re-checking various websites over and over again.
 

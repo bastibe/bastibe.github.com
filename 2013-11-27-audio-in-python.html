@@ -43,7 +43,7 @@
 <h1 class="post-title"><a href="https://bastibe.de/2013-11-27-audio-in-python.html">Sound in Python</a></h1>
 <p>Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.</p>
 <p>It's not for a lack of libraries though. You can read sound files using <a href="http://docs.python.org/2/library/wave.html">wave</a>, SciPy provides <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile">scipy.io.wavfile</a>, and there is a SciKit called <a href="http://scikits.appspot.com/audiolab">scikits.audiolab</a>. And except for <code>scikits.audiolab</code>, these return the data as raw <code>bytes</code>. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.</p>
-<p>The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http:_www.portaudio.com_">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.</p>
+<p>The same thing goes for playing/recording audio: <a href="http://people.csail.mit.edu/hubert/pyaudio/">PyAudio</a> provides nifty bindings to <a href="http://www.portaudio.com/">portaudio</a>, but you still have to decode your raw <code>bytes</code> by hand.</p>
 <p>But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not <code>bytes</code>. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!</p>
 <p>So one fateful day, I was sufficiently frustrated with the state of things that I set out to create just that. Really, I only wanted to play around with <a href="http://cffi.readthedocs.org">cffi</a>, but that is beside the point.</p>
 <p>So, lets read some audio data, shall we?</p>
@@ -77,7 +77,7 @@
 <section class="footnotes">
 <ol>
 <li id="fn-1"><p>You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
-<li id="fn-2"><p>More precisely: Everything that <a href="http:_www.portaudio.com_">portaudio</a> supports.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>More precisely: Everything that <a href="http://www.portaudio.com/">portaudio</a> supports.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
 <li id="fn-3"><p>More precisely: Everything that <a href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> supports.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
 </ol>
 </section>

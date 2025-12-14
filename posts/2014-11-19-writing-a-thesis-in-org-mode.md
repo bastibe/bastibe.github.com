@@ -4,7 +4,7 @@ date: 2014-11-19 00:00
 filetags: org-mode emacs
 ---
 
-Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in [Org Mode](http:_orgmode.org_) instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
+Most of my peers write all their scientific documents in LaTeX. Being a true believer in the power of Emacs, I opted for writing my master's thesis in [Org Mode](http://orgmode.org/) instead. Here's my thoughts on this process and how it compares to the usual LaTeX work flow.
 
 In my area of study, a thesis is a document of about 60 pages that contains numerous figures, math, citations, and the occasional table or source code snippet. Figures are usually graphs that are generated in some programming environment and creating those graphis is a substantial part of writing the thesis.
 

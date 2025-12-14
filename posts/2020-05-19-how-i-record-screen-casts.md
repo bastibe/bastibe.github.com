@@ -6,7 +6,7 @@ filetags: programming
 
 This semester is weird. Instead of holding my "Applied Programming" lecture as I normally would, live-coding in front of the students and narrating my foibles, this time it all had to be done online, thanks to the ongoing pandemic. Which meant I had to record videos. I had no idea how to record videos. This is a writeup of what I did, in case I have to do more of it. You can see the results of my efforts in my [Qt for Python video tutorials](https://bastibe.de/2020-03-20-qt-for-python-tutorial.html) and my [file parsing with Python video tutorials](https://bastibe.de/2020-05-20-file-parsing-tutorial.html). Through some strange coincidences, wired.com wrote an [article](https://www.wired.com/story/anyones-celebrity-streamer-open-source-app/) about my use of OBS.
 
-Working on Linux, I used the [Open Broadcaster Software](https:_obsproject.com_), or OBS for short, as my recording program. OBS can do much more than record screencasts, but I only use it for two things: Recording a portion of my screen, and switching between different portions.
+Working on Linux, I used the [Open Broadcaster Software](https://obsproject.com/), or OBS for short, as my recording program. OBS can do much more than record screencasts, but I only use it for two things: Recording a portion of my screen, and switching between different portions.
 
 <img src="/static/2020-05/OBS_screenshot.png">
 
@@ -18,7 +18,7 @@ The second ingredient to my recording setup is KDE, where I assign F3 and F4 to 
 
 With these shortcuts, I hit F1 and F3 to switch focus and scene to the browser, or F2 and F4 for the text editor. To make this work smoothly, I disabled these shortcuts within my terminal, browser, and text editor. But always be weary of accidentally getting those out of sync. I don't know how often I accidentally recorded the wrong part of the screen and had to redo a recording.
 
-Anyway, with this setup, I can record screen casts with very minimal effort. The last ingredient however is editing; and I loathe video editing. I'd much rather record a few more takes than spend the same time in a video editor. Instead, I record short snippets of a few minutes each, and simply concatenate them with [FFmpeg](https:_ffmpeg.org_):
+Anyway, with this setup, I can record screen casts with very minimal effort. The last ingredient however is editing; and I loathe video editing. I'd much rather record a few more takes than spend the same time in a video editor. Instead, I record short snippets of a few minutes each, and simply concatenate them with [FFmpeg](https://ffmpeg.org/):
 
 Create a file _concatenate.txt_, that lists all the files to be concatenated:
 

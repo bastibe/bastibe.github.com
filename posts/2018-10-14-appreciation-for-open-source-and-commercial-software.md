@@ -4,7 +4,7 @@ date: 2018-10-14 10:20
 filetags: open-source thank-you
 ---
 
-I recently released my first-ever piece of commercial software, a [plugin](https:_missiongenerator.eu_) for the [X-Plane](https:_www.x-plane.com_) flight simulator. I wrote this primarily to scratch my own itch, but thought other users might like it, too, so I put it up on [the store](https://store.x-plane.org/Mission-Generator_p_877.html). What struck me however, were the stark difference between the kinds of responses I got to this, as compared to my open source projects: They were astonishingly, resoundingly, _positive_!
+I recently released my first-ever piece of commercial software, a [plugin](https://missiongenerator.eu/) for the [X-Plane](https://www.x-plane.com/) flight simulator. I wrote this primarily to scratch my own itch, but thought other users might like it, too, so I put it up on [the store](https://store.x-plane.org/Mission-Generator_p_877.html). What struck me however, were the stark difference between the kinds of responses I got to this, as compared to my open source projects: They were astonishingly, resoundingly, _positive_!
 
 You see, I have a bunch of open source projects, with a few thousand downloads per month, and a dozen or so issues on Github per week. Most of my interactions with my users are utilitarian, and efficient. Someone reports a bug or asks for help, I ask for clarification or a pull request, we iterate a few times until the issue is resolved. The process is mechanical and the tone of our conversation is equally unemotional. This is as it should be.
 

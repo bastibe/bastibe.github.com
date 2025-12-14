@@ -8,7 +8,7 @@ Have you ever wanted to work with audio data in Python? I know I do. I want to r
 
 It's not for a lack of libraries though. You can read sound files using [wave](http://docs.python.org/2/library/wave.html), SciPy provides [scipy.io.wavfile](http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile), and there is a SciKit called [scikits.audiolab](http://scikits.appspot.com/audiolab). And except for `scikits.audiolab`, these return the data as raw `bytes`. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
 
-The same thing goes for playing/recording audio: [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/) provides nifty bindings to [portaudio](http:_www.portaudio.com_), but you still have to decode your raw `bytes` by hand.
+The same thing goes for playing/recording audio: [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/) provides nifty bindings to [portaudio](http://www.portaudio.com/), but you still have to decode your raw `bytes` by hand.
 
 But really, what I want is something different: When I record from the microphone, I want to get a NumPy array, not `bytes`. You know, something I can work with! And then I want to throw that array into a sound file, or play it on a different sound card, or do some calculations on it!
 
@@ -61,5 +61,5 @@ You can download these libraries from [PyPi](https://pypi.python.org/pypi), or u
 *UPDATE:* It used to be that you could use indexing on SoundFile objects. For various political reasons, this is no longer the case. I updated the examples above accordingly.
 
 [^1]: You can use any block size you want. Less than 4 frames per block can be really taxing for your CPU though, so be careful or you start dropping frames.
-[^2]: More precisely: Everything that [portaudio](http:_www.portaudio.com_) supports.
+[^2]: More precisely: Everything that [portaudio](http://www.portaudio.com/) supports.
 [^3]: More precisely: Everything that [libsndfile](http://www.mega-nerd.com/libsndfile/) supports.

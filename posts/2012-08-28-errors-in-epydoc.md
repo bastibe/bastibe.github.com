@@ -6,7 +6,7 @@ filetags: python
 
 I ran into this error twice now and wasted an hour both times, so it is time to put this on my universal scratchpad, i.e. this blog.
 
-If you ever get this error when using [epydoc](http:_epydoc.sourceforge.net_):
+If you ever get this error when using [epydoc](http://epydoc.sourceforge.net/):
 
 ```
     UNEXPECTED ERROR:

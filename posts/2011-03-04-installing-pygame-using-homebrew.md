@@ -44,7 +44,7 @@ and you will get the headers, too. Isn't Homebrew great?
 
 Now that all the prerequisites are met, lets look at Pygame itself. This is rather more difficult, as it will not build properly against Homebrew libraries on its own. First, download the source package of Pygame from the [official website](http://www.pygame.org/download.shtml). Unpack it to some directory.
 
-Now open a terminal and navigate to that directory. Me, I like [iTerm](http:_iterm.sourceforge.net_), but Terminal.app will do just fine, too. In there, run `python config.py` to create an initial setup file.
+Now open a terminal and navigate to that directory. Me, I like [iTerm](http://iterm.sourceforge.net/), but Terminal.app will do just fine, too. In there, run `python config.py` to create an initial setup file.
 
 At this point, the setup file is mostly useless since `config.py` failed to find any homebrew-installed library. It is also strangely garbled, so there is some manual labor to do. Open the file `Setup` (no extension) in your favourite text editor. After the first comment block, you will see a line that looks like this
 

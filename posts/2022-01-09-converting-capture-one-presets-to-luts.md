@@ -4,7 +4,7 @@ date: 2022-01-09 14:37
 filetags: photography
 ---
 
-A while ago, I bought an [RNI film pack](https:_www.reallyniceimages.com_) for Capture One. That's a set of presets that makes your digital photos look similar to analog film scans. However, since then my _other_ image editor, [Darktable](https:_www.darktable.org_) just released a new version, I'm now back to using Darktable instead of Capture One, thus without access to those presets.
+A while ago, I bought an [RNI film pack](https://www.reallyniceimages.com/) for Capture One. That's a set of presets that makes your digital photos look similar to analog film scans. However, since then my _other_ image editor, [Darktable](https://www.darktable.org/) just released a new version, I'm now back to using Darktable instead of Capture One, thus without access to those presets.
 
 Here's how to export Capture One presets to LUTs, to make them accessable to other programs.
 

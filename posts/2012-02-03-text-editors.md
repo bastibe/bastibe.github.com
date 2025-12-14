@@ -12,7 +12,7 @@ As far as I can tell, there has been a resurgence of development in the landscap
 
 During a very short period of time though, a raft of new text editors became available. Sublime Text in particular has been getting a lot of attention and rave reviews by many people. To me, this warrants another look at what these new (and old) text editors are offering.
 
-### [Vim](http:_www.vim.org_)
+### [Vim](http://www.vim.org/)
 
 ![vim_small](http://bastibe.de/static/2012-02/vim_small.png)
 
@@ -41,13 +41,13 @@ The thing you have to realize about Emacs is that… Emacs is powerful. People h
 
 Similar to Vim, Emacs is old software. It was invented in the late 1970s at MIT and has been growing ever since. Also like Vim, its terminal inheritance shows its teeth sometimes: mouseweel scrolling can be awkward, especially if you like your inertial scrolling, the menu bar seems to not get much love and keyboard shortcuts are not conformant with what you might be used to from other text editors. On the other hand, Emacs has some very modern features like mixing of proportional fonts and fixed-width fonts or inline image display.
 
-The upside of being old is that Emacs is very mature software. There is a ginormous selection of extensions available for Emacs, most of it actually distributed right with Emacs itself and a lot of it is superbly documented. Besides that, there are [several](http://tromey.com/elpa/) [integrated](http:_marmalade-repo.org_) [repositories](http:_elpa.gnu.org_) for additional tools that can be downloaded and installed from the internet.
+The upside of being old is that Emacs is very mature software. There is a ginormous selection of extensions available for Emacs, most of it actually distributed right with Emacs itself and a lot of it is superbly documented. Besides that, there are [several](http://tromey.com/elpa/) [integrated](http://marmalade-repo.org/) [repositories](http://elpa.gnu.org/) for additional tools that can be downloaded and installed from the internet.
 
 The real power of Emacs is in that it is really not so much a text editor but a virtual machine for a programming language called eLisp. Really anything that can possibly be written in Lisp and remotely involves text editing is possible and probably already available in Emacs. As such, Emacs probably has the most diverse feature set of any text editor out there. Most relevant to programmers will be debugger integration, automatic syntax and spell checking, powerful and context-aware autocompletion, refactoring capabilities and much much more. Emacs is the only program in this list which can actually be used as a full fledged IDE on its own.
 
 ![emacs_full_window_small](http://bastibe.de/static/2012-02/emacs_full_window_small.png)
 
-But Emacs is not limited to programming at all. As mentioned before, it includes an Email client, a great calendar with an agenda, several IM clients, RSS readers, an [astoundingly powerful outliner](http:_orgmode.org_) and spreadsheet editor, it is frequently used for blogging, writing screen plays, books or really anything you can think of.
+But Emacs is not limited to programming at all. As mentioned before, it includes an Email client, a great calendar with an agenda, several IM clients, RSS readers, an [astoundingly powerful outliner](http://orgmode.org/) and spreadsheet editor, it is frequently used for blogging, writing screen plays, books or really anything you can think of.
 
 The only real downside to this is that Emacs is, well, old. There is great power there, but is is only accessible to those willing to learn the myriad key combinations to invoke it. Rellay, mastering Emacs is a task for years, not weeks. But of course, you are not forced to wield all the power Emacs has to offer at once. Getting up to speed with basic text editing in Emacs will only take a few minutes, and the built-in help system and tutorial will guide you further whenever you feel the need to explore.
 
@@ -55,7 +55,7 @@ I have been using Emacs for several months now and I am really enjoying it. It h
 
 At any rate, I would recommend anyone to give Emacs a shot at least for a short while. The power of Emacs can be an exhilarating experience, really.
 
-### [Textmate (2)](http:_macromates.com_)
+### [Textmate (2)](http://macromates.com/)
 
 ![textmate_small](http://bastibe.de/static/2012-02/textmate_small.png)
 
@@ -74,11 +74,11 @@ Textmate also featured a very flexible and easily extensible regex based syntax 
 
 Sadly though, its main developer got stuck somewhere along the way and development all but dried up for five years. This primarily meant that some issues just would not be fixed and thus, got all the more jarring. Most prominently, Textmate lacked split views, regex incremental search and would only do single character undo/redos. Many people left Textmate because of this lack of progress.
 
-While I was in college, I used Textmate extensively and it proved to be a veritable tool for many editing tasks. It is somewhat limited in its integration with programming tools, though, so don't expect any complex compiler or debugger integration. Ultimately, I left it behind for lack of cross platform compatibility and lack of development. There used to be a Windows program called [E Text Editor](http:_e-texteditor.com_), which wanted to become a fully compatible Textmate alternative for Windows and Linux, but development never even reached production quality.
+While I was in college, I used Textmate extensively and it proved to be a veritable tool for many editing tasks. It is somewhat limited in its integration with programming tools, though, so don't expect any complex compiler or debugger integration. Ultimately, I left it behind for lack of cross platform compatibility and lack of development. There used to be a Windows program called [E Text Editor](http://e-texteditor.com/), which wanted to become a fully compatible Textmate alternative for Windows and Linux, but development never even reached production quality.
 
 Recently however, an early alpha version of Textmate 2 has been released that could reinvigorate the community and fix long standing issues. Whether that will actually happen will remain to be seen.
 
-### [Vico](http:_www.vicoapp.com_)
+### [Vico](http://www.vicoapp.com/)
 
 ![vico_small](http://bastibe.de/static/2012-02/vico_small.png)
 
@@ -90,7 +90,7 @@ As it stands though, development of Vico is going slow and its community is not 
 
 Personally, I like it quite a bit and I am hoping very much that it will not be forgotten as a failed attempt to modernize Vim. That said, what with Sublime Text 2 including a limited support for Vim key bindings, I can't really see Vico taking off.
 
-### [Sublime Text 2](http:_www.sublimetext.com_)
+### [Sublime Text 2](http://www.sublimetext.com/)
 
 ![sublimetext_small](http://bastibe.de/static/2012-02/sublimetext_small.png)
 
@@ -130,20 +130,20 @@ The remainder of its feature set seems rather standard crop though. There is som
 TextWrangler is the free smaller brother of BBEdit. Its feature set is somewhat pared down in comparison with BBEdit. In particular, it is missing BBEdit's famous HTML magic and some advanced external tool integration.
 Even for free, there are probably more capable candidates available, though maybe not at the same level of platform integration. That said, TextWrangler is not a bad choice and probably just fine for some casual text editing.
 
-#### [JEdit](http:_www.jedit.org_)
+#### [JEdit](http://www.jedit.org/)
 
 ![jedit](http://bastibe.de/static/2012-02/jedit.png)
 
 I really don't know much about JEdit other than that it is written in Java, it has a sizeable following and it is available cross-platform. It seems like it could be about as useful as any shortcut based text editor can ever be, which is no small achievement. Also, it features a rich plugin system, of which I only heard good things.
 For all I know, this could be a very worthy alternative if you are on a budget (no Sublime Text) and don't want to learn Emacs or Vim.
 
-#### [Chocolat](http:_chocolatapp.com_)
+#### [Chocolat](http://chocolatapp.com/)
 
 ![chocolat](http://bastibe.de/static/2012-02/chocolat.png)
 
 Chocolat is yet another text editor that came into being in the post-Textmate void. It offers a good range of standard features, though notably missing advanced plugins apparently. Apart from that, it seems to be a solid shortcut based Mac text editor that is relatively cheap and actively developed.
 
-#### [Kod](http:_www.kodapp.com_)
+#### [Kod](http://www.kodapp.com/)
 
 ![kod](http://bastibe.de/static/2012-02/kod.png)
 
@@ -201,7 +201,7 @@ Combine the SubEthaEdit text editing engine including its collaborative tools wi
 
 Another text editor gearing specifically for web development. Thus, you get powerful HTML and CSS editing features and good support for typical web development languages such as PHP, Ruby or Markdoen, but no support for other languages. There is an extension system though that could improve language support. This might be a slightly less expensive alternative to Coda.
 
-##### [Taco HTML Editor](http:_tacosw.com_)
+##### [Taco HTML Editor](http://tacosw.com/)
 
 ![taco](http://bastibe.de/static/2012-02/taco.png)
 

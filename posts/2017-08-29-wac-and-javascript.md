@@ -4,7 +4,7 @@ date: 2017-08-27 00:00
 filetags: event
 ---
 
-I am not much of a web programmer. I have written the odd website, I have supervised a few student projects, but I have never worked on any nontrivial JavaScript code base. Nevertheless, last week, I attended the [Web Audio Conference 2017](http:_wac.eecs.qmul.ac.uk_) in London. To put it succinctly: The web is home to fascinating people, but the technology is full of problems.
+I am not much of a web programmer. I have written the odd website, I have supervised a few student projects, but I have never worked on any nontrivial JavaScript code base. Nevertheless, last week, I attended the [Web Audio Conference 2017](http://wac.eecs.qmul.ac.uk/) in London. To put it succinctly: The web is home to fascinating people, but the technology is full of problems.
 
 Those people sure were amazing, though. I talked to a musician/programmer, who spent the last few years writing his own sequencer web app, and did an amazing live performance in his web browser! I witnessed another guy live coding a synthesizer in a web app on stage as a music piece. We attended a gastronomical concert with smartphone-synchronized distributed olfactory and audible experiences. And we played the piano, with each participant controlling one key from his smartphone. It was all truly inspiring!
 

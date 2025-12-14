@@ -26,37 +26,37 @@ Obviously, I am a lot more proficient in my current tool, Darktable, than in any
 [^3]: I don't like rental software, as it locks away all past edits once I stop paying.
 
 # The Contestants
-- Darktable 3.0.2 ([Free](https:_www.darktable.org_))   
+- Darktable 3.0.2 ([Free](https://www.darktable.org/))   
   Free, works on Linux, very familiar to me. Allegedly, not particularly fast, with a confusing user interface.
 - Adobe Lightroom Classic CC 7.5 ([$10/month](https://www.adobe.com/products/photoshop-lightroom.html))   
   Probably the most widespread tool. Somehow unappealing to me. Currently only available at a subscription price, but there is a “free” version available through my university.
-- Capture One 20.0.4 ([$29/month or $350](https:_www.captureone.com_))   
+- Capture One 20.0.4 ([$29/month or $350](https://www.captureone.com/))   
   Enormously expensive, even with the educational discount. Allegedly the best default color rendition, particularly for Fuji cameras.
-- RawTherapee 5.8 ([Free](http:_rawtherapee.com_))   
+- RawTherapee 5.8 ([Free](http://rawtherapee.com/))   
   Free, works on Linux. Allegedly extremely high image quality, but no local adjustments whatsoever.
 - Luminar 4.2.0 ([$90](https://skylum.com/luminar))   
   A rather new developer, with fancy AI features such as automatic sky replacements. Not exactly what I'm looking for, but we'll see about its “normal” RAW development chops.
-- ON1 Photo RAW 2020.1 ([$100](https:_www.on1.com_))   
+- ON1 Photo RAW 2020.1 ([$100](https://www.on1.com/))   
   Another highly regarded developer with rather traditional tools. This one works straight on files in the file system, though, which is highly attractive to me.
-- ACDSee Photo Studio Ultimate 2020 13.0 ([$9/month or $150](https:_www.acdsee.com_))   
+- ACDSee Photo Studio Ultimate 2020 13.0 ([$9/month or $150](https://www.acdsee.com/))   
   Wasn't this a fancy image viewer a few years ago? Apparently it's now a RAW developer.
-- Exposure X5 5.2.1.211 ([$120](https:_exposure.software_))   
+- Exposure X5 5.2.1.211 ([$120](https://exposure.software/))   
   Allegedly super fast, with great sharpening and noise removal.
 - Photo Ninja 1.3.7a ([$130](https://www.picturecode.com/index.php))   
   Another new developer, borne out of a dedicated noise reduction tool, and with an emphasis on “intelligent” tools.
 - Silkypix Developer Studio Pro 10.0.3.0 ([$200](https://silkypix.isl.co.jp/en/))   
   A Japanese RAW developer. I wasn't aware of it until a comment brought it up, thank you for that! And I mention its country of origin, as the English translation is a bit rough sometimes. Quite unusual in its feature set.
-- Zoner Photo Studio X 19.2103.2.317 ([$50/year](https:_www.zoner.com_))   
+- Zoner Photo Studio X 19.2103.2.317 ([$50/year](https://www.zoner.com/))   
   A somewhat unknown RAW developer. So much so that I only stumbled upon it one year after the original article. A true Windows-only product that feels at home in Windows like none of the other programs in this list.
 - DXO Photolab ([$220](https://www.dxo.com/dxo-photolab/))   
   For the longest time, did not support Fuji X-Trans files. But this has changed in version 5, and I am eager to try it out!
 
 Not considered:
-- Aftershot ([$80](https:_www.aftershotpro.com_))   
+- Aftershot ([$80](https://www.aftershotpro.com/))   
   Works on Linux, but doesn't support my Fuji camera because it hasn't been updated in ages.
 - Iridient Developer, Raw Power, Aperture   
   Mac only
-- Affinity Photo ([$55](https:_affinity.serif.com_))   
+- Affinity Photo ([$55](https://affinity.serif.com/))   
   Cheap, awesome, but not non-destructive. I'll probably buy this regardless in a sale, just because it's so affordable.
 
 In terms of price, it is hard to argue with _free_. But considering the price of my other photographic equipment, most prices in this list are pretty adequate. Except for Capture One (and maybe Silkypix). $350 ($200) is a hard price to swallow.

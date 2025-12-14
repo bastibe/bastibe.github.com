@@ -8,15 +8,15 @@ For numerical analysis and signal processing prototyping, you would use [Matlab]
 
 So, you look for alternatives. You could take [Octave](http://www.gnu.org/software/octave/), which is free, but that would not solve that ugly-code issue. You could take any scripting language you fancy, but Ruby, Perl and Python are too slow to do serious number crunching.
 
-Then, you stumble upon that Python package called [Numpy](http:_numpy.scipy.org_), which seems to be nearly as fast as Matlab when it comes to matrix processing and linear algebra. You then discover [SciPy](http:_www.scipy.org_), which would add all that signal processing prowess of Matlab (do quick transformations, random numbers, statistics) to your toolbox. Last but not least, you need plotting. That would be [Matplotlib](http:_matplotlib.sourceforge.net_) then, which provides quick plotting facilities in Python.
+Then, you stumble upon that Python package called [Numpy](http://numpy.scipy.org/), which seems to be nearly as fast as Matlab when it comes to matrix processing and linear algebra. You then discover [SciPy](http://www.scipy.org/), which would add all that signal processing prowess of Matlab (do quick transformations, random numbers, statistics) to your toolbox. Last but not least, you need plotting. That would be [Matplotlib](http://matplotlib.sourceforge.net/) then, which provides quick plotting facilities in Python.
 
 And the best thing is, these three systems work really well together. They seem to be the perfect replacement for Matlab that could even be superiour to it in many regards.
 
 Next up, you need to install all that stuff. If you are like me, you naturally want to do all that on a Mac. Also, you kind of dislike all these installer-thingies, which install stuff to unknown places and are nigh impossible to uninstall or update cleanly. Even though, you could of course just go to the individual websites, download Python, Numpy, SciPy and Matplotlib, run them installers, and be done. You would save yourself a lot of trouble that way.
 
-But since you allegedly are like me, you instead fire up [`brew`](http://mxcl.github.com/homebrew) and try to install all that stuff using that. Again, you could use [MacPorts](http:_www.macports.org_) or [Fink](http:_www.finkproject.org_) instead, but you probably had some bad experiences with them and you generally love the hackishness of Homebrew, so this is your natural first try.
+But since you allegedly are like me, you instead fire up [`brew`](http://mxcl.github.com/homebrew) and try to install all that stuff using that. Again, you could use [MacPorts](http://www.macports.org) or [Fink](http://www.finkproject.org/) instead, but you probably had some bad experiences with them and you generally love the hackishness of Homebrew, so this is your natural first try.
 
-So you set about this, you believe in packet managers and trust them to take care of every obstacle that might be lying in your way. First of all, install the latest developer tools from [developer.apple.com](http:_developer.apple.com_). You might need to register (for free) to get them. Also, you need to install [Homebrew](http://mxcl.github.com/homebrew).
+So you set about this, you believe in packet managers and trust them to take care of every obstacle that might be lying in your way. First of all, install the latest developer tools from [developer.apple.com](http://developer.apple.com). You might need to register (for free) to get them. Also, you need to install [Homebrew](http://mxcl.github.com/homebrew).
 
 To cut this short, here is what you need to get that Python running:
 
@@ -62,7 +62,7 @@ Alright. That was enough. Now on to pip. With all these dependencies cleared, pi
     pip install scipy
 ```
 
-Matplotlib, on the other hand, is more difficult to install. You see, pip is looking at the Python package repository [PyPi](http:_pypi.python.org_) for each package. PyPi then provides a URL. Pip then scans that website for links to suitable package files. But, [Sourceforge](http:_sourceforge.net_) changed its links a while ago, so pip gets confused and will download an outdated version. Sourceforge says, its new links are way better and no way we will change them back; Pip says, well, if Sourceforge can't provide proper links, that's not our problem. Oh My. Silly children.
+Matplotlib, on the other hand, is more difficult to install. You see, pip is looking at the Python package repository [PyPi](http://pypi.python.org/) for each package. PyPi then provides a URL. Pip then scans that website for links to suitable package files. But, [Sourceforge](http://sourceforge.net/) changed its links a while ago, so pip gets confused and will download an outdated version. Sourceforge says, its new links are way better and no way we will change them back; Pip says, well, if Sourceforge can't provide proper links, that's not our problem. Oh My. Silly children.
 
 So we have to do this manually:
 

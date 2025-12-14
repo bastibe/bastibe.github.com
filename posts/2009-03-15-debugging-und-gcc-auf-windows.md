@@ -17,7 +17,7 @@ Das Ergebnis:
   1. Die Datei funktioniert tadellos, ist nur ein wenig langsam (s.o.)
   2. Wer ist schuld? [Realloc](http://www.cplusplus.com/reference/clibrary/cstdlib/realloc.html) ist schuld!
 
-Das kam überraschend! Offenbar ist realloc auf dem Mac um mehrere Größenordnungen performanter als auf [MinGW](http:_www.mingw.org_)_Windows, denn die selbe Anwendung, die auf dem Mac ca. eine Sekunde braucht, braucht auf Windows eine Stunde! Und das allein wegen realloc! (Eigentlich: eine halbe Stunde wegen realloc, der Rest ist der Tatsache geschuldet, dass Windows in einer [VM](http:_/www.vmware.com/de/products/fusion/) läuft)
+Das kam überraschend! Offenbar ist realloc auf dem Mac um mehrere Größenordnungen performanter als auf [MinGW](http://www.mingw.org/)_Windows, denn die selbe Anwendung, die auf dem Mac ca. eine Sekunde braucht, braucht auf Windows eine Stunde! Und das allein wegen realloc! (Eigentlich: eine halbe Stunde wegen realloc, der Rest ist der Tatsache geschuldet, dass Windows in einer [VM](http://www.vmware.com/de/products/fusion/) läuft)
 
 Bei WAV-Dateien werden immer 2048 Samples an einem Stück ausgelesen. Danach verwende ich ein realloc, um meinen haupt-Speicherpuffer um diese Größe zu vergrößern und kopiere die neuen Daten dort hinein. Bei meinen 5:30 min macht das bei einer Samplerate von 44100 kHz und zwei Kanälen ca. 15000 Aufrufe von realloc. Komprimierte Datenformate haben üblicherweise kleinere Frames und damit noch einmal wesentlich mehr realloc-Aufrufe.
 Der Plan ist also, jetzt statt häufiger, kleiner realloc-Aufrufe, seltenere, größere Aufrufe zu machen. Zeit für ein paar Experimente:

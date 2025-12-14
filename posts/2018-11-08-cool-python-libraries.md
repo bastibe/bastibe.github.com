@@ -6,7 +6,7 @@ filetags: python
 
 In my recent post about [appreciation for open source software](https://bastibe.de/2018-10-14-appreciation-for-open-source-and-commercial-software.html), I mentioned that we should praise our open source heros more often. So here are two lesser-known libraries that I use daily, and which are unabashedly awesome:
 
-### [TQDM](https:_tqdm.github.io_)
+### [TQDM](https://tqdm.github.io/)
 
 TQDM draws text progress bars for long-running processes, simply by wrapping your iterator in `tqdm(iterator)`. And this, alone, would be awesome. But, TQDM is one of those libraries that aren't just a good idea, but then go the extra mile, and add fantastic documentation, contingencies for all kinds of weird use cases, and integration with notebooks and GUIs.
 

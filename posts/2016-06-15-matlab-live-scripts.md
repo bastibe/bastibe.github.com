@@ -8,7 +8,7 @@ For a few years now, I have been teaching programming courses using _notebooks_.
 
 You can combine introductory resources with application examples, assignments, and results. And after the lecture, students can refer to these notebooks at their leisure, and re-run example code, or try different approaches with known data.
 
-The first time I saw this was with the [Jupyter notebook](http:_jupyter.org_) (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
+The first time I saw this was with the [Jupyter notebook](http://jupyter.org/) (née IPython notebook). I immediately used it for teaching an introductory programming course in Python.
 
 Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
 

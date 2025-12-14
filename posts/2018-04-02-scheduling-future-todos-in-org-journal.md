@@ -4,11 +4,11 @@ date: 2018-04-02 11:38
 filetags: org-journal org-mode
 ---
 
-I keep a simple journal in [org-journal](https://github.com/bastibe/org-journal): One text file per day, in [org-mode](https:_orgmode.org_). But over the years, org-journal has grown somewhat beyond this simple use case. [About three years ago](https://github.com/bastibe/org-journal/releases/tag/1.7.1), a gentleman named [Vladimir Kazanov](https://github.com/vkazanov) implemented a very fast text search. Thus, my journal became an information archive. [About two years ago](https://github.com/bastibe/org-journal/releases/tag/1.11.0), org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And [today](https://github.com/bastibe/org-journal/releases/tag/1.13.1), org-journal gained the ability to work with future journal entries, thus becoming a calendar.
+I keep a simple journal in [org-journal](https://github.com/bastibe/org-journal): One text file per day, in [org-mode](https://orgmode.org/). But over the years, org-journal has grown somewhat beyond this simple use case. [About three years ago](https://github.com/bastibe/org-journal/releases/tag/1.7.1), a gentleman named [Vladimir Kazanov](https://github.com/vkazanov) implemented a very fast text search. Thus, my journal became an information archive. [About two years ago](https://github.com/bastibe/org-journal/releases/tag/1.11.0), org-journal learned to carry over TODO items to the current day if you hadn't completed them on the previous day. So it to become a to-do list. And [today](https://github.com/bastibe/org-journal/releases/tag/1.13.1), org-journal gained the ability to work with future journal entries, thus becoming a calendar.
 
 Despite all of these features however, org-journal remains one org file per day, with fancy functions to do fancy things if you want them—or ignore them, if the journal is all you need.
 
-Back to scheduling: This work was prompted by [my colleague](https:_zngguvnf.org_), who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:
+Back to scheduling: This work was prompted by [my colleague](https://zngguvnf.org/), who organizes everything in org-mode, but is not a user of org-journal. He even eschews the use of a traditional calendar, and instead uses a few org files and the magic of org-agenda to give him a nice overview like this for the coming week[1]:
 
 <pre>
 <span style="color: #111111; font-weight: bold;">Week-agenda (W14):</span>

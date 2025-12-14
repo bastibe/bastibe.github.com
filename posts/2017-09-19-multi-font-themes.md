@@ -16,7 +16,7 @@ But then, inspiration hit me: Who says that I could only use one single font? No
 
 ![color%20theme](http://bastibe.de/static/2017-09/color%20theme.png)
 
-The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, [Iosevka](https://be5invis.github.io/Iosevka/) Slab[^slab] for strings, and oblique[^obl] Iosevka for comments. [Ubuntu Mono](http:_font.ubuntu.com_) and [InputCompressed](http:_input.fontbureau.com_) work well, too. You can find my current theme [on Github](https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el). The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
+The tricky bit is to find fonts that work well together. In this example, I'm using PragmataPro for all regular code, [Iosevka](https://be5invis.github.io/Iosevka/) Slab[^slab] for strings, and oblique[^obl] Iosevka for comments. [Ubuntu Mono](http://font.ubuntu.com/) and [InputCompressed](http://input.fontbureau.com/) work well, too. You can find my current theme [on Github](https://github.com/bastibe/.emacs.d/blob/master/lisp/my-eink-theme.el). The only downside is that while these fonts share the character width, the heights differ slightly, which sometimes leads to uneven line heights.
 
 Still, I love the look of this! (Of course it won't work in a terminal, or most other text editors.)
 

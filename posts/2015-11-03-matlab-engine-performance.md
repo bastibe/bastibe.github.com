@@ -8,7 +8,7 @@ For my latest experiments, I needed to run both Python functions and Matlab func
 
 ## Usage
 
-As it's name suggests, Matlab is a **mat**rix **lab**oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as `matlab.double` et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called [Numpy](http:_scipy.org_), and just uses that instead.
+As it's name suggests, Matlab is a **mat**rix **lab**oratory, and matrices are the most important data type in Matlab. Since matrices don't exist in plain Python, the MEfP implements it's own as `matlab.double` et al., and you have to convert any data you want to pass to Matlab into one of those. In contrast, Transplant recognizes the fact that Python does in fact know a really good matrix engine called [Numpy](http://scipy.org/), and just uses that instead.
 
 ```
        Matlab Engine for Python        |              Transplant
@@ -70,7 +70,7 @@ This is running `sum(randn(n,1))` from Transplant, the MEfP, and in Matlab itsel
 
 There is a gap of about a factor of 10 between Transplant and the MEfP. In practice, this gap is highly significant! In my particular use case, I have [a function](http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/doc/voicebox/fxpefac.html) that takes about one second of computation time for an audio signal of ten seconds (half a million values). When I call this function with Transplant, it takes about 1.3 seconds. With MEfP, it takes 4.5 seconds.
 
-Transplant spends its time serializing the arguments to JSON, sending that JSON over [ZeroMQ](http:_zeromq.org_) to Matlab, and parsing the JSON there. Well, to be honest, only the parsing part takes any significant time, overall. While it might seem onerous to serialize everything to JSON, this architecture allows Transplant to run over a network connection.
+Transplant spends its time serializing the arguments to JSON, sending that JSON over [ZeroMQ](http://zeromq.org/) to Matlab, and parsing the JSON there. Well, to be honest, only the parsing part takes any significant time, overall. While it might seem onerous to serialize everything to JSON, this architecture allows Transplant to run over a network connection.
 
 It is a bit baffling to me that MEfP manages to be slower than _that_, despite being written in C. Looking at the number of function calls in the profiler, the MEfP calls 25 functions (!) on each value (!!) of the input data. This is a shockingly inefficient way of doing things.
 

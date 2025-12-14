@@ -6,7 +6,7 @@ filetags: programming macos
 
 On my last vacation, I have taken a bunch of pictures, and a bunch of video. The problem is, I hadn't used the video camera in a long time, and it believed that all it's videos were taken on the first of January 2012. So in order for the pictures to show up correctly in my picture library, I wanted to correct that.
 
-For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of [command](http:_www.sentex.net_~mwandel/jhead/) [line](http:_owl.phy.queensu.ca_~phil/exiftool/) [utilities](http:_www.exiv2.org_#util) that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
+For images, this is relatively easy: Most picture libraries support some kind of bulk date changes, and there are a bunch of [command](http://www.sentex.net/~mwandel/jhead/) [line](http://owl.phy.queensu.ca/~phil/exiftool/) [utilities](http://www.exiv2.org/#util) that can do it, too. But none of these tools work for video (exiftool claims be able to do that, but I couldn't get it to work).
 
 So instead, I went about to change the file creation date of the actual video files. And it turns out, this is surprisingly hard! The thing is, most Unix systems (a Mac is technically a Unix system) don't even know the concept of a file creation date. Thus, most Unix utilities, including most programming languages, don't know how to deal with that, either.
 

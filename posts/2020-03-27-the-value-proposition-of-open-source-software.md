@@ -14,7 +14,7 @@ But why should such software be preferable to commercial products? I shall ignor
 
 Richard Stallman makes an argument that it's [all about Freedom](https://www.gnu.org/philosophy/open-source-misses-the-point.html). But I have a suspicion that he really wants the _code_ to be free, not its users[^1]. He argues that "free" licenses make the program's source code available to users. Presumably, to read it and change it. However, I don't do that, generally. And neither do I redistribute software, which is another "freedom" granted by Stallman-style free software. Also, [you don't need access to the source code to change a software](https://discourse.ardour.org/t/is-open-source-a-diversion-from-what-users-really-want/102665). But I still prefer Open Source Software to commercial software, in most cases.
 
-[^1]: See [this link](https:_louigiverona.com_?page=projects&s=writings&t=philosophy&a=philosophy_freedoms) for an exhaustive discussion of that topic. It's an amazing article!
+[^1]: See [this link](https://louigiverona.com/?page=projects&s=writings&t=philosophy&a=philosophy_freedoms) for an exhaustive discussion of that topic. It's an amazing article!
 
 And the reason is, that in my experience, Open Source Software is generally better software. And I believe the reason for this is incentives:
 

@@ -20,7 +20,7 @@ You may also download the videos and share them with your friends. Please do not
 
 Prerequisites: A basic understanding of Python, and a working installation of python ≥3.4.
 
-An overview over the topics discussed in the rest of the videos, and installation of [Qt for Python](https://www.qt.io/qt-for-python) and [Pandas](https:_pandas.pydata.org_).
+An overview over the topics discussed in the rest of the videos, and installation of [Qt for Python](https://www.qt.io/qt-for-python) and [Pandas](https://pandas.pydata.org/).
 
 <video controls width="100%">
   <source src="/static/2020-03/01 intro.mp4" type="video/mp4">
@@ -138,7 +138,7 @@ Improve the code by cutting out a middle man.
 
 ## 13 Pandas
 
-A quick introduction to [Pandas](https:_pandas.pydata.org_).
+A quick introduction to [Pandas](https://pandas.pydata.org/).
 
 <video controls width="100%">
   <source src="/static/2020-03/13 pandas.mp4" type="video/mp4">
