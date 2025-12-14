@@ -5,388 +5,555 @@ filetags: nocomments
 ---
 
 I like to keep notes on stuff I use. Some of this was originally
-hosted on [DPReview](https:_dpreview.com/members/4868424004_gearlist) back when that was still a thing, RIP.
+hosted on [DPReview](https://dpreview.com/members/4868424004/gearlist) back when that was still a thing, RIP.
 
 ## Current Cameras
 <div class="columns">
 
-### Ricoh GR III
+<div class="block">
+<h3>Ricoh GR IV</h3>
 <figure>
-<img src="/static/2023-03/ricoh_griii.png"/>
+<img src="/static/2023-03/ricoh_griv.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
-Ultra fast, ultra sharp, small, unobtrusive, one-handed. And with version III, no longer challenged by dust or low light. Autofocus is only barely fast enough, though. Still, this camera is as close to perfection as I've ever seen any gadget. Kudos to Ricoh for keeping refining this beautiful machine.
+Just like the GR III, only better. That little bit faster, that little bit better AF, that little bit smaller. The only annoyance is the micro-SD-card. This is still a brilliant little camera! 
+</div>
 
-### Fujifilm X-Pro2
+<div class="block">
+<h3>Fujifilm X-T5</h3>
 <figure>
-<img src="/static/2023-03/fujifilm_xpro2.png"/>
+<img src="/static/2023-03/fujifilm_xt5.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
-With the X-Pro2 and a 23-35mm prime on a strap, and a Ricoh GR in my pocket, I am ready for anything! I love seeing beyond the frame lines in the optical viewfinder, and the chunky heft of its body. There's something satisfyingly physical about this camera. But honestly, that's this camera's gimmick. Otherwise the EVF is a bit small, especially with glasses, and I miss USB charging, a touch screen, and screen articulation.
+Like the X-T3, but this time with real-time tracking autofocus, and a bit more resolution. This is just about the perfect camera for me. 
+</div>
 
-### Fujifilm X-T3
+<div class="block">
+<h3>Fujifilm X-M5</h3>
 <figure>
-<img src="/static/2023-03/fujifilm_xt3.png"/>
-<figcaption>★★★★★</figcaption>
+<img src="/static/2023-03/fujifilm_xm5.png"/>
+<figcaption>★★★☆☆</figcaption>
 </figure>
-Just like the X-T2, but a little bit faster, with USB-C charging, and a touch screen. Interestingly, I used the X-T2 mostly as an AF-S camera, whereas the X-T3's tracking AF is actually good enough to use it in AF-C at all times. A brilliant evolution of the X-T camera line, and just a wonderful, versatile camera.
+I bought this originally as a backup camera, and to hand to my kids. It does serve that purpose well. However, it's not quite small enough to make a big difference compared to the X-T5, while missing critical features like the viewfinder and IBIS. I still use it regularly, but often wish it were either smaller or better. 
+</div>
 
 </div>
 
 ## Current Lenses
 <div class="columns">
 
-### Fujifilm XF 23mm f/1.4 R
+<div class="block">
+<h3>Fujifilm XF 23mm f/1.4 R</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf23_14.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 Finally, a 23mm I like. It's a bit big, and a bit slow, but it makes up for that with a wonderfully smooth bokeh that doesn't change across the frame. The focus transition is nicely gradual as well. Really, this replicates the magic of the Sony RX1 on Fuji, and that's just about the highest praise I can give to any lens.
+</div>
 
-### Fujifilm XF 35mm f/1.4 R
+<div class="block">
+<h3>Fujifilm XF 35mm f/1.4 R</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf35_14.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 A perfect companion to the Ricoh GR. With these two lenses I can cover most casual situations. There are sharper lenses than this, but none smaller or brighter. I especially like the metal lens hood for additional protection and a really cool look.
+</div>
 
-### Fujifilm XF 16-80mm f/4.0 R OIS WR
+<div class="block">
+<h3>Fujifilm XF 16-80mm f/4.0 R OIS WR</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf16-80.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 My replacement for the 18-135 for the better bokeh and non-creeping zoom. To me, this lens has the nicest rendering of all non-red-badge Fuji zooms, which makes it a useful portrait lens as well as a decent travel zoom. I do miss the longer tele of the 18-135, and find the wide angle distortion a bit heavy. But overall, a fantastic lens, and in all my testing, I could not find any evidence of its reported softness or susceptibility to shutter shock.
+</div>
 
-### Fujifilm XF 14mm f/2.8 R
-<figure>
-<img src="/static/2023-03/fujifilm_xf14_28.png"/>
-<figcaption>★★★★★</figcaption>
-</figure>
-I'm not much of a fan of wide-angles. So this is only moderately wide, and compact. That said, it is optically distortion-corrected, and nicely sharp even in the corners, which is not entirely a given for wide-angles.
-
-### Fujifilm XF 70-300 f/4.0-5.6 R LM OIS WR
+<div class="block">
+<h3>Fujifilm XF 70-300 f/4.0-5.6 R LM OIS WR</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf70-300.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 I've waited a long time for an affordable Fuji telephoto, and Fuji exceeded my expectations with this one. Very compact and light for its class, compatible with the tele converters, and weather sealed. A fantastic lens.
+</div>
 
-### Fujifilm XF 60mm f/2.4 R Macro
+<div class="block">
+<h3>Fujifilm XF 50mm f/2 R WR</h3>
 <figure>
-<img src="/static/2023-03/fujifilm_xf60_24.png"/>
+<img src="/static/2023-03/fujifilm_xf50_2.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
-My lens for portraits and close-ups and digitizing film. Beautiful rendering, very smooth focus transition and bokeh. Yet small and affordable. Focuses very slowly, though, which limits its usefulness for portraits (of fast-moving kids).
+A friend sold their 50mm, so I thought I'd have a go with it. Somewhat to my surprise, I like it a lot for street photography and abstracts. It's nicely compact, too. Still not my favorite focal length for people, but a nice little lens!
+</div>
 
-### Fujifilm XF 16-55mm f/2.8 R LM WR
+<div class="block">
+<h3>Fujifilm XF 10-24mm f/4 R OIS</h3>
 <figure>
-<img src="/static/2023-03/fujifilm_xf16-55.png"/>
-<figcaption>★★★☆☆</figcaption>
+<img src="/static/2023-03/fujifilm_xf10-24.png"/>
+<figcaption>★★★★☆</figcaption>
 </figure>
-I have always been curious about this "pro" lens. In actual use, however, I just found it too big and front-heavy. The lack of image stabilization was less of a problem than anticipated, actually. I am considering holding on to this until I have an IBIS body with a deeper grip, but I don't actually enjoy using it much. It sure is sharp, though.
+I've given up on wide zooms, until a friend brought theirs on a holiday, and I saw how it could be used. This model is first and foremost affordable. But it's also usefully compact and capable.
+</div>
+
+<div class="block">
+<h3>Laowa 65mm f/2.8 2x Macro</h3>
+<figure>
+<img src="/static/2023-03/laowa_65.png"/>
+<figcaption>★★★★☆</figcaption>
+</figure>
+I originally bought this for film scanning. But it is just a brilliant close-up lens in general, with quite a pleasant rendering. But macro is not my favorite subject, so this remains a rarely used tool. 
+</div>
 
 </div>
 
 ## Previous Cameras
 <div class="columns">
 
-### Sony RX1
+<div class="block">
+<h3>Ricoh GR III</h3>
+<figure>
+<img src="/static/2023-03/ricoh_griii.png"/>
+<figcaption>★★★★★</figcaption>
+</figure>
+Ultra fast, ultra sharp, small, unobtrusive, one-handed. And with version III, no longer challenged by dust or low light. Autofocus is only barely fast enough, though. Still, this camera is as close to perfection as I've ever seen any gadget. Kudos to Ricoh for keeping refining this beautiful machine.
+</div>
+
+<div class="block">
+<h3>Fujifilm X-Pro2</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xpro2.png"/>
+<figcaption>★★★★★</figcaption>
+</figure>
+With the X-Pro2 and a 23-35mm prime on a strap, and a Ricoh GR in my pocket, I am ready for anything! I love seeing beyond the frame lines in the optical viewfinder, and the chunky heft of its body. There's something satisfyingly physical about this camera. But honestly, that's this camera's gimmick. Otherwise the EVF is a bit small, especially with glasses, and I miss USB charging, a touch screen, and screen articulation.
+</div>
+
+<div class="block">
+<h3>Fujifilm X-T3</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xt3.png"/>
+<figcaption>★★★★★</figcaption>
+</figure>
+Just like the X-T2, but a little bit faster, with USB-C charging, and a touch screen. Interestingly, I used the X-T2 mostly as an AF-S camera, whereas the X-T3's tracking AF is actually good enough to use it in AF-C at all times. A brilliant evolution of the X-T camera line, and just a wonderful, versatile camera.
+</div>
+
+<div class="block">
+<h3>Sony RX1</h3>
 <figure>
 <img src="/static/2023-03/sony_rx1.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 A compact full frame camera in my pocket. What's not to like? It's stealthy, it's fast to turn on, and renders beautifully. Reports of its slow autofocus and slippery body are vastly overrated. Compact cameras are such a personal thing. Why do I like this and the GR, yet not the G7X or X100? I don't know, but the RX1 is a ton of fun to me.
+</div>
 
-### Sony RX100 II
+<div class="block">
+<h3>Sony RX100 II</h3>
 <figure>
 <img src="/static/2023-03/sony_rx100ii.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I've only had this for a short time because I found a good deal. Nice form factor, but mediocre lens, and let down by usability. Everything needs a menu dive, and what buttons there are are not used well. I prefer the Canon and Panasonic alternatives.
+</div>
 
-### Ricoh GR
+<div class="block">
+<h3>Ricoh GR</h3>
 <figure>
 <img src="/static/2023-03/ricoh_gr.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 Extremely fast. The sharpest lens I have ever seen. Can take an absurd amount of abuse without breaking or degrading. But it takes practice to get steady images, low light performance is limited, and it has to be disassembled regularly to clean the sensor.
+</div>
 
-### Pentax Q7
+<div class="block">
+<h3>Pentax Q7</h3>
 <figure>
 <img src="/static/2023-03/pentax_q7.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 A real surprise, the little Q7 is. Despite its diminutive size, it actually handles very well, and takes great pictures. There is something adorable about this tiny camera and its tiny lenses. I particularly liked the tele lens with a close-up filter, which produced fantastic macro shots. A truly wonderful little device, and _surprisingly_ capable.
+</div>
 
-### Fujifilm X100T
+<div class="block">
+<h3>Fujifilm X100T</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_x100t.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 Takes nice pictures, feels great in the hand. Somewhat mediocre autofocus. OVF is cool but made me miss focus too often. Ultimately, too bulky for me. And close-up softness is not acceptable for this expensive a camera.
+</div>
 
-### Fujifilm X-Pro1
+<div class="block">
+<h3>Fujifilm X-Pro1</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xpro1.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 This was supposed to be my all-manual black-and-white "rangefinder" camera, to slow down and practice seeing, and being in the moment. Alas, the OVF is not great for manual focus, and the parallax error made me miss focus a number of times. Thus ultimately it couldn't evoke that manual magic of yore, and was replaced by a truly manual film camera.
+</div>
 
-### Fujifilm X-E1
+<div class="block">
+<h3>Fujifilm X-E1</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xe1.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 My introduction to Fujifilm. The X-E1 was meant as a little fun sidekick to my big D7000, but ended up replacing it entirely in a matter of days. Shortly thereafter, it was itself replaced by an X-E3. The E1 itself is a neat little camera, if a little slow by today's standards. A great and cheap introduction to Fujifilm cameras.
+</div>
 
-### Fujifilm X-E2
+<div class="block">
+<h3>Fujifilm X-E2</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xe2.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 I bought this as an upgrade to the X-E1, but it was soon replaced by an X-E3. But during my entire time with the E3, I missed the somewhat chunkier grip of the E2, the directional pad, and the classier looks. And I have a bit of a soft spot for the E2's rendering that the later models can't quite live up to. But ultimately USB charging and more megapixels and better performance did win me over to newer models.
+</div>
 
-### Fujifilm X-E3
+<div class="block">
+<h3>Fujifilm X-E3</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xe3.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 This was my first love in Fuji-land. Just a terrific all-around camera. Compact without being small, extremely capable, and good-looking. I ultimately traded up to an X-T2 because I started wearing glasses, which the X-E3 with its smaller viewfinder and short eye relief is not ideal for. Still, I consider the X-E3's form factor close to perfect and it has served me very well for a long time.
+</div>
 
-### Fujifilm X-T2
+<div class="block">
+<h3>Fujifilm X-T2</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xt2.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 Incredibly versatile camera that controls well, fits my hand, and never let me down. Great weather sealing, too. And a fantastically bright and huge viewfinder, which is delightful especially for wearer of glasses. There is almost nothing I can think of to improve this camera. (A touch screen and USB-C charging come to mind, and made me buy the X-T3)
+</div>
 
-### Panasonic LX100
+<div class="block">
+<h3>Panasonic LX100</h3>
 <figure>
 <img src="/static/2023-03/panasonic_lx100.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 A brilliant little camera. Surprisingly, the 12 Megapixels were never an issue for me. I replaced it with version II for the USB charging and touch screen, but otherwise the LX100 can do everything the II can for a fraction of the price.
+</div>
 
-### Panasonic FZ300
+<div class="block">
+<h3>Panasonic FZ300</h3>
 <figure>
 <img src="/static/2023-03/panasonic_fz300.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 I bought this camera as a cheap birding setup. But the small sensor produced too much noise for my liking. Otherwise however, the camera handled extremely well, and the lens was brilliantly sharp. Highly recommend, But I ultimately replaced it with a much more expensive APS-C lens.
+</div>
 
-### Panasonic ZS100/TZ100
+<div class="block">
+<h3>Panasonic ZS100/TZ100</h3>
 <figure>
 <img src="/static/2023-03/panasonic_zs100.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I was a bit disappointed in this camera. The zoom range is a bit too much for this small a camera, the viewfinder is uselessly tiny, and the dynamic range was a bit limited. I'm sure in the right hands it's a nice little camera, but it was not for me.
+</div>
 
-### Panasonic LX10/LX15
+<div class="block">
+<h3>Panasonic LX10/LX15</h3>
 <figure>
 <img src="/static/2023-03/panasonic_lx10.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I tried this in comparison with a Canon G7X II and a TZ100. I found the aperture ring a bit gimmicky on such a small sensor, but otherwise this was a nice little camera. Overall, I prefer the G7X, however.
+</div>
 
-### Panasonic LX100 II
+<div class="block">
+<h3>Panasonic LX100 II</h3>
 <figure>
 <img src="/static/2023-03/panasonic_lx100ii.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 Actually a brilliant camera. Great lens for a compact camera, fantastic usability, takes wonderful pictures. But it's a bit too big even for a jacket pocket, so I don't use it often. The viewfinder is a bit small, and bokeh could be a bit smoother. But it's great fun to use and takes beautiful pictures.
+</div>
 
-### Panasonic GM1
+<div class="block">
+<h3>Panasonic GM1</h3>
 <figure>
 <img src="/static/2023-03/panasonic_gm1.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 Smaller is better, right? The Pentax Q7 showed me how great a small-sensor ILC could be, and the GM1 was supposed to be better in every way. But we didn't get along. The slippery body did not fit my fingers, the camera relied too much on touch screen interactions, and it couldn't be charged via USB. It took great pictures, though. The GM1 was also my one foray into micro four thirds. I liked the tiny but capable lenses, but ultimately the entire camera system was still too large for pockets, so I might as well take my moderately bigger Fuji gear.
+</div>
 
-### Canon G7 X II
+<div class="block">
+<h3>Canon G7 X II</h3>
 <figure>
 <img src="/static/2023-03/canon_g7xii.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 I wanted to like this camera for kayaking. But even though the usability is actually quite good for such a little camera, it did not inspire me to take it out instead of my other gear.
+</div>
 
-### Nikon D3000
+<div class="block">
+<h3>Nikon D3000</h3>
 <figure>
 <img src="/static/2023-03/nikon_d3000.png"/>
 <figcaption>★★☆☆☆</figcaption>
 </figure>
 My first "real" camera. In retrospect, it was not a good one. Auto white balance barely deserved the name, not fast, not the best auto focus. But I learned a lot on this camera, and it has served me well.
+</div>
 
-### Nikon D7000
+<div class="block">
+<h3>Nikon D7000</h3>
 <figure>
 <img src="/static/2023-03/nikon_d7000.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 When my D3000 broke, this is what I picked up instead. It taught me about the various autofocus modes, manual focus, and so many other things. The only limitation of this camera was its somewhat limited dynamic range and being a bit heavy. Otherwise, this was a brilliant camera in every regard.
+</div>
 
 </div>
 
 ## Previous Lenses
 <div class="columns">
 
-### Nikon AF-S DX Nikkor 18-105mm f/3.5-5.6 G ED VR
+<div class="block">
+<h3>Fujifilm XF 14mm f/2.8 R</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xf14_28.png"/>
+<figcaption>★★★★★</figcaption>
+</figure>
+I'm not much of a fan of wide-angles. So this is only moderately wide, and compact. That said, it is optically distortion-corrected, and nicely sharp even in the corners, which is not entirely a given for wide-angles.
+</div>
+
+<div class="block">
+<h3>Fujifilm XF 60mm f/2.4 R Macro</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xf60_24.png"/>
+<figcaption>★★★★☆</figcaption>
+</figure>
+My lens for portraits and close-ups and digitizing film. Beautiful rendering, very smooth focus transition and bokeh. Yet small and affordable. Focuses very slowly, though, which limits its usefulness for portraits (of fast-moving kids).
+</div>
+
+<div class="block">
+<h3>Fujifilm XF 16-55mm f/2.8 R LM WR</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xf16-55.png"/>
+<figcaption>★★★☆☆</figcaption>
+</figure>
+I have always been curious about this "pro" lens. In actual use, however, I just found it too big and front-heavy. The lack of image stabilization was less of a problem than anticipated, actually. I am considering holding on to this until I have an IBIS body with a deeper grip, but I don't actually enjoy using it much. It sure is sharp, though.
+</div>
+
+<div class="block">
+<h3>Nikon AF-S DX Nikkor 18-105mm f/3.5-5.6 G ED VR</h3>
 <figure>
 <img src="/static/2023-03/nikon_dx18-105.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 This was my first lens on my first camera. It was a good choice. My copy was a bit soft at the long end, but otherwise this lens worked well for me. Affordable and relatively small, too. I later replaced it with an 18-200, which turned out a bad move. I really should have kept this one. A great upgrade for the 18-55 kit lens.
+</div>
 
-### Nikon AF-S DX Nikkor 35mm f/1.8 G
+<div class="block">
+<h3>Nikon AF-S DX Nikkor 35mm f/1.8 G</h3>
 <figure>
 <img src="/static/2023-03/nikon_35_18.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 My first prime lens, back when I didn't know what I was doing. As it turns out, I find 35mm a bit too tight for indoors images. And besides, I moved to Fuji shortly after buying this lens, at which point that issue became moot.
+</div>
 
-### Nikon AF-S DX Nikkor 10-24mm f/3.5-4.5 G ED
+<div class="block">
+<h3>Nikon AF-S DX Nikkor 10-24mm f/3.5-4.5 G ED</h3>
 <figure>
 <img src="/static/2023-03/nikon_dx10-24.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I had this lens back when I really didn't know how to handle a wide-angle lens. It was a steep learning curve. In retrospect, most of the images with this lens were pretty bad, and came out soft. Perhaps my used copy had a fault? I sold it when I left the Nikon system, and haven't missed this sort of wide-angle since (although I did try again later).
+</div>
 
-### Nikon AF-S DX Nikkor 18-200mm f/3.5-5.6 G IF ED VR
+<div class="block">
+<h3>Nikon AF-S DX Nikkor 18-200mm f/3.5-5.6 G IF ED VR</h3>
 <figure>
 <img src="/static/2023-03/nikon_dx18-200.png"/>
 <figcaption>★★☆☆☆</figcaption>
 </figure>
 My sample was heavily used, and probably somewhat broken. It was visibly soft at most focal lengths, and not particularly sturdy. Not a fan, but probably through no fault of the lens per se, but merely my broken sample of it.
+</div>
 
-### Sigma 17-70mm f/2.8-4.0 DC Macro OS HSM (Nikon)
+<div class="block">
+<h3>Sigma 17-70mm f/2.8-4.0 DC Macro OS HSM (Nikon)</h3>
 <figure>
 <img src="/static/2023-03/sigma_17-70.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 I bought this lens after my first child's birth because I wanted a lens that focused more closely than my 18-200, to take photographs of my baby on my lap. Which this lens did perfectly. But it soon turned into my overall favorite lens for all kinds of photography, as it was brighter, sharper, and smaller than my travel zoom. I enjoyed this lens a whole lot, and looking back at my pictures of that time, the 17-70's clearly stand out. A fantastic lens!
+</div>
 
-### Pentax 01 Standard Prime
+<div class="block">
+<h3>Pentax 01 Standard Prime</h3>
 <figure>
 <img src="/static/2023-03/pentax_q01.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 Some of my favorite pictures were shot on this lens and the Pentax Q7. A tiny combination. Yet the lens is sharp and focuses well. I also liked to use it with a macro filter, which enhances its already impressive close focusing to true macro. Probably half my images on the Q7 were taken with this lens.
+</div>
 
-### Pentax 02 Standard Zoom
+<div class="block">
+<h3>Pentax 02 Standard Zoom</h3>
 <figure>
 <img src="/static/2023-03/pentax_q02.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 The only Q lens I didn't really enjoy. On a Q7, it goes surprisingly wide, but not very long. But it is all held back by a lack of sharpness and strong chromatic aberrations. I always came away a bit disappointed from my pictures with this lens. Which is a shame, as the size and range is interesting otherwise.
+</div>
 
-### Pentax 06 Telephoto
+<div class="block">
+<h3>Pentax 06 Telephoto</h3>
 <figure>
 <img src="/static/2023-03/pentax_q06.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 It is still a bit funny to me that a "15-45" makes a "telephoto" on the Pentax Q system. I payed a lot more for this lens than my other two Q lenses, but it was well worth it. The lens is tiny (of course), and sharp, and it is quite refreshing to carry this small a lens with this large a reach. But my biggest enjoyment of this lens came with a macro filter for close-ups. Somehow the Q7's image stabilization worked exceedingly well for macro, and this combination produced stunning pictures of daisies and bees and similar-sized objects. I had a lot of fun with this lens.
+</div>
 
-### Panasonic G 20mm f/1.7 II ASPH
+<div class="block">
+<h3>Panasonic G 20mm f/1.7 II ASPH</h3>
 <figure>
 <img src="/static/2023-03/panasonic_g20_17.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 This was supposed to be my main lens on the Panasonic GM1. But despite being a small lens, it stuck out from the GM1's bottom a bit, and believe it or not, made the GM1 a bit front-heavy, making it a tad unwieldy. Otherwise, I liked the lens. But my experiment with the GM1 was short-lived as I didn't like the camera, so I didn't use this lens for long either.
+</div>
 
-### Panasonic G Vario HD 12-32mm f/3.5-5.6 Mega OIS
+<div class="block">
+<h3>Panasonic G Vario HD 12-32mm f/3.5-5.6 Mega OIS</h3>
 <figure>
 <img src="/static/2023-03/panasonic_g12-32.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 A perfect fit for the Panasonic GM1. Ostensibly. But somehow I didn't like this lens much. Having to extend it before use felt cumbersome, as it prevented one-handed operation, and somehow the lens felt cheap to me, like a cheap point-and-shoot. I didn't take many pictures with this, and generally preferred the 20mm prime. But this had nothing to do with the lenses' optical performance, which was without fault.
+</div>
 
-### Panasonic G Vario 35-100mm f/4.0-5.6 ASPH Mega OIS
+<div class="block">
+<h3>Panasonic G Vario 35-100mm f/4.0-5.6 ASPH Mega OIS</h3>
 <figure>
 <img src="/static/2023-03/panasonic_g35-100.png"/>
 <figcaption>★★★★★</figcaption>
 </figure>
 A fantastic companion to the GM1. Just like the tele zoom on my Pentax Q, it is somehow endearing to have such a far-reaching tele on such a tiny camera. And I very much liked the images coming out of this lens, too. Somehow, I didn't mind that I had to extend this lens before use, even where it annoyed me greatly on the 12-32. Perhaps because a tele lens doesn't need to be used with only one hand. A little gem of a lens!
+</div>
 
-### Fujifilm XF 18-55mm f/2.8-4.0 R LM OIS
+<div class="block">
+<h3>Fujifilm XF 18-55mm f/2.8-4.0 R LM OIS</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf18-55.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 A nice lens. Well-built and small and bright. But the focal range is just too small for my liking. I'd rather take to primes than this. At least back when I last had one of these.
+</div>
 
-### Fujifilm XF 27mm f/2.8
+<div class="block">
+<h3>Fujifilm XF 27mm f/2.8</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf27_28.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 It's small. An X-E3 can fit in a jacket pocket with this. It's also sharp, and well-built. But the bokeh can be a bit rough, and ultimately it didn't fill a role that I wouldn't rather fill with either a faster prime, or a more versatile zoom.
+</div>
 
-### Fujifilm XF 18-135mm f/3.5-5.6 LM OIS WR
+<div class="block">
+<h3>Fujifilm XF 18mm f/2</h3>
+<figure>
+<img src="/static/2023-03/fujifilm_xf18_2.png"/>
+<figcaption>★★★☆☆</figcaption>
+</figure>
+A very nicely compact lens. That's about all there is to say, really. Optically it is only OK, the AF is slow, but it's a good wide-angle for my kids. Personally, I prefer to use the Ricoh GR. 
+</div>
+
+<div class="block">
+<h3>Fujifilm XF 18-135mm f/3.5-5.6 LM OIS WR</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xf18-135.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 Easily my most-used lens. It's sharp, it's versatile, it's weather sealed. I have used it for everything and everywhere. Needs to be stopped down if ultimate sharpness is required, especially in the corners at the wide end. The only thing I don't particularly like is the somewhat rough focus transition.
+</div>
 
-### Fujifilm XC 16-50mm f/3.5-5.6 OIS II
+<div class="block">
+<h3>Fujifilm XC 16-50mm f/3.5-5.6 OIS II</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xc16-50.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 I had to choose between this and the 18-55. In direct comparison, I preferred this 16-50 for being lighter and wider, and didn't see much difference in sharpness. And it focuses closer than most other Fuji zooms. It's an underrated lens, and can be had very cheaply. I only got rid of it once I bought the 18-135.
+</div>
 
-### Fujifilm XC 50-230mm f/4.5-6.7 OIS II
+<div class="block">
+<h3>Fujifilm XC 50-230mm f/4.5-6.7 OIS II</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xc50-230.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 Like all the other XC lenses, I enjoyed this one, but found 230 mm not **quite** long enough for my taste. Eventually, I moved up to a 70-300.
+</div>
 
-### Fujifilm XC 15-45mm f/3.5-5.6 OIS PZ
+<div class="block">
+<h3>Fujifilm XC 15-45mm f/3.5-5.6 OIS PZ</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xc15-45.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I've owned three copies of this lens. Optically, it is outstanding. The power zoom is a bit annoying, but you can program the focus ring to act like a mechanical zoom ring, which works well. And if you tie a cable tie around the zoom collar, you can zoom with your right pinkie. But at the end of the day, wide angles and me are just not made for one another. And if I need one, I now have the 14mm.
+</div>
 
-### Fujifilm XC 35 f/2
+<div class="block">
+<h3>Fujifilm XC 35 f/2</h3>
 <figure>
 <img src="/static/2023-03/fujifilm_xc35_2.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 Nothing wrong with this lens. Small, affordable, good optics. But I didn't like the way it looked on my X-T2, and I found 35mm a bit too tight for my liking.
+</div>
 
-### Viltrox AF 23mm f/1.4 XF
+<div class="block">
+<h3>Viltrox AF 23mm f/1.4 XF</h3>
 <figure>
 <img src="/static/2023-03/viltrox_xf23_14.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 A great affordable lens for the Fuji system. One of the first third-party lenses with working autofocus. Although I have to say that this lens on my X-T2 tended to subtly miss critical focus about 5% of the time for some reason, despite the focus rectangle turning green. In the end I sold it because I realized I just don't enjoy these super-blurred backgrounds or the swirly bokeh this lens produces.
+</div>
 
-### Samyang 12mm f/2.0 NCS CS (Fuji)
+<div class="block">
+<h3>Samyang 12mm f/2.0 NCS CS (Fuji)</h3>
 <figure>
 <img src="/static/2023-03/samyang_xf12_2.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I bought this at the same time as the Fuji XF-14. There is little wrong with this lens, except that I didn't like the manual control without EXIF recording much, and I found I preferred the less wide 14 mm viewpoint.
+</div>
 
-### Canon EF-S 10-18mm f/4.5-f.5 IS STM (adapted to Fuji via Fringer)
+<div class="block">
+<h3>Canon EF-S 10-18mm f/4.5-f.5 IS STM (adapted to Fuji via Fringer)</h3>
 <figure>
 <img src="/static/2023-03/canon_efs10-18.png"/>
 <figcaption>★★★☆☆</figcaption>
 </figure>
 I adapted this to Fuji using the Fringer adapter. To be honest, it didn't see much use. It tended to produce kind of a lot of chromatic aberrations, and I just didn't like the wide angle much. But it was small, light, and affordable. I was a bit sad when I had to sell it, but really haven't missed this wide an angle since.
+</div>
 
-### Canon EF 70-300mm f/4.0-5.6 IS II USM (adapted to Fuji via Fringer)
+<div class="block">
+<h3>Canon EF 70-300mm f/4.0-5.6 IS II USM (adapted to Fuji via Fringer)</h3>
 <figure>
 <img src="/static/2023-03/canon_ef70-300.png"/>
 <figcaption>★★☆☆☆</figcaption>
 </figure>
 I used this lens on a Fringer adapter on Fuji. To be honest it did not work well. Autofocus liked to hunt a lot, manual focus had the weirdest acceleration, and you had to switch both lens and body to manual focus in order to use it. But nothing wrong with it optically. It served me well until Fuji released its own 70-300.
+</div>
 
-### Tamron 100-400mm f/4.5-6.3 Di VC USD (Canon, adapted to Fuji via Fringer)
+<div class="block">
+<h3>Tamron 100-400mm f/4.5-6.3 Di VC USD (Canon, adapted to Fuji via Fringer)</h3>
 <figure>
 <img src="/static/2023-03/tamron_ef100-400.png"/>
 <figcaption>★★★★☆</figcaption>
 </figure>
 Just before Fuji's 70-300 was released, I found a good deal on this lens, adapted to my Fuji using the Fringer adapter. It worked beautifully! The lens zooms clockwise, like Fuji does. It has a manual focus override that works better than Fuji's own. And it's sharp, focuses well, and renders bokeh very nicely. The only downside really was the size. Which is why I reluctantly returned it and bought the Fuji 70-300 instead. Even then, I preferred this 100-400's bokeh, but the size and weight difference was just too great.
+</div>
 
 </div>
