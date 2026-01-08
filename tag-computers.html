@@ -533,6 +533,267 @@ want to use it at home, too.</p>
 
 
 
+<div class="post-date">08 Jan 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-01-08-calendar-typst.html">My own Calendar (with typst)</a></h2>
+<p>I've been printing my own family calendar over the last year. However, most of the calendar templates I found online are ugly or boring. So obviously, I had to make my own:</p>
+<figure style="width: 100%; text-align: center;">
+<img width="75%" src="/static/2026-01/Calendar.png" alt="The month of january, as rendered by my typst program" />
+</figure>
+
+<p>Look, it has my local holidays and vacations!</p>
+<p>The fun thing is, this was generated with <a href="https://typst.app/">typst</a>, which is a TeX-like markdown language that I wanted to play with for a while. But in contrast to TeX, it is easily programmable:</p>
+<aside class="code-box">
+
+<p><a href="https://gist.github.com/bastibe/2881bb2eea02e18bfbc6ab3521cda8f3">calendar.typ</a>
+(Inspired by <a href="https://discuss.pixls.us/t/my-new-calendar-template-engine/53633">a forum post</a>)</p>
+<div class="highlight"><pre><span></span><span class="kd">#let</span><span class="w"> </span><span class="nv">YEAR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2026</span>
+
+<span class="kd">#let</span><span class="w"> </span><span class="nv">months</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="s2">&quot;Januar&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;Februar&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;März&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;April&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;Mai&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;Juni&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;Juli&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;August&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;September&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;Oktober&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;November&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="s2">&quot;Dezember&quot;</span>
+<span class="p">)</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nv">weekdays</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="s2">&quot;Mo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;Di&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;Mi&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;Do&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;Fr&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;Sa&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;So&quot;</span>
+<span class="p">)</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nv">holidays</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Neujahr&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-01-06&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Heilige Drei Könige&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-04-03&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Karfreitag&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-04-05&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ostersonntag&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-04-06&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Ostermontag&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-05-01&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tag der Arbeit&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-05-14&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Christi Himmelfahrt&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-05-24&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Pfingstsonntag&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-05-25&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Pfingstmontag&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-08-15&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mariä Himmelfahrt&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-10-03&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tag der Deutschen Einheit&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-11-01&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Allerheiligen&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-12-25&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1. Weihnachtstag&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">&quot;2026-12-26&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2. Weihnachtstag&quot;</span>
+<span class="p">)</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nv">vacations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-22&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-01-05&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Weihnachtsferien&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-02-16&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-02-20&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Faschingsferien&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-03-30&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-04-10&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Osterferien&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-26&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-05&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Pfingstferien&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-08-03&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-09-14&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sommerferien&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-11-02&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-11-06&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Herbstferien&quot;</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">from</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-12-24&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">to</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2027-01-08&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Weihnachtsferien&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="kd">#let</span><span class="w"> </span><span class="nf">str_to_date</span><span class="p">(</span><span class="nv">s</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nv">dateparts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">s</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="nf">datetime</span><span class="p">(</span>
+<span class="w">    </span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="nf">int</span><span class="p">(</span><span class="nv">dateparts</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+<span class="w">    </span><span class="nv">month</span><span class="p">:</span><span class="w"> </span><span class="nf">int</span><span class="p">(</span><span class="nv">dateparts</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+<span class="w">    </span><span class="nv">day</span><span class="p">:</span><span class="w"> </span><span class="nf">int</span><span class="p">(</span><span class="nv">dateparts</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">is_vacation</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">vac</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">vacations</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">dt</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nf">str_to_date</span><span class="p">(</span><span class="nv">vac</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="s2">&quot;from&quot;</span><span class="p">))</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">dt</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nf">str_to_date</span><span class="p">(</span><span class="nv">vac</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kr">return</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+
+<span class="kd">#let</span><span class="w"> </span><span class="nf">translated_month</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">months</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="nv">dt</span><span class="p">.</span><span class="nf">month</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">translated_weekday</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">weekdays</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="nv">dt</span><span class="p">.</span><span class="nf">weekday</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">dt</span><span class="p">.</span><span class="nf">weekday</span><span class="p">()</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nf">rgb</span><span class="p">(</span><span class="s2">&quot;#a91010&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">black</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">dt</span><span class="p">.</span><span class="nf">display</span><span class="p">()</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">holidays</span><span class="p">.</span><span class="nf">keys</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nf">rgb</span><span class="p">(</span><span class="s2">&quot;#e3e3e3&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">white</span><span class="p">.</span><span class="nf">transparentize</span><span class="p">(</span><span class="m">100</span><span class="kr">%</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">day_stroke_h</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nf">is_vacation</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="nv">top</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="kr">pt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">rgb</span><span class="p">(</span><span class="s2">&quot;#a0a0a0&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="m">0</span><span class="kr">pt</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">day_stroke_v</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nf">is_vacation</span><span class="p">(</span><span class="nv">dt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="nv">left</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="kr">pt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">rgb</span><span class="p">(</span><span class="s2">&quot;#a0a0a0&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="m">0</span><span class="kr">pt</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">max_date</span><span class="p">(</span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">#let</span><span class="w"> </span><span class="nf">min_date</span><span class="p">(</span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">#let</span><span class="w"> </span><span class="nf">calendar</span><span class="p">(</span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">body</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">font</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Candara&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="kd">set</span><span class="w"> </span><span class="nf">document</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="nv">year</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot; calendar&quot;</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">month</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">)</span><span class="w"> </span><span class="p">[</span>
+
+<span class="w">    </span><span class="kd">#let</span><span class="w"> </span><span class="nv">month_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">datetime</span><span class="p">(</span>
+<span class="w">      </span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="nv">year</span><span class="p">,</span>
+<span class="w">      </span><span class="nv">month</span><span class="p">:</span><span class="w"> </span><span class="nv">month</span><span class="p">,</span>
+<span class="w">      </span><span class="nv">day</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="w">    </span><span class="kd">#let</span><span class="w"> </span><span class="nv">monthly_days</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="kr">#for</span><span class="w"> </span><span class="nv">day</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">let</span><span class="w"> </span><span class="nv">month_accumulator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nv">month_date</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="nv">days</span><span class="p">:</span><span class="w"> </span><span class="nv">day</span><span class="p">))</span>
+<span class="w">      </span><span class="kr">if</span><span class="w"> </span><span class="nv">month_accumulator</span><span class="p">.</span><span class="nf">month</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nv">month</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">break</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nv">month_accumulator</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">#let</span><span class="w"> </span><span class="nv">monthly_vacations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="kr">#for</span><span class="w"> </span><span class="nv">vac</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">vacations</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">let</span><span class="w"> </span><span class="nv">vac_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">str_to_date</span><span class="p">(</span><span class="nv">vac</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="s2">&quot;from&quot;</span><span class="p">))</span>
+<span class="w">      </span><span class="kd">let</span><span class="w"> </span><span class="nv">vac_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">str_to_date</span><span class="p">(</span><span class="nv">vac</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">))</span>
+<span class="w">      </span><span class="kr">if</span><span class="w"> </span><span class="nv">vac_end</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nv">vac_start</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">at</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">continue</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="nv">monthly_vacations</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nv">vac</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// ============= HORIZONTAL CALENDARIUM ==============</span>
+
+<span class="w">    </span><span class="kd">#set</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="kr">cm</span><span class="p">,</span><span class="w"> </span><span class="nv">width</span><span class="p">:</span><span class="w"> </span><span class="m">21</span><span class="kr">cm</span><span class="p">,</span><span class="w"> </span><span class="nv">margin</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">mm</span><span class="p">,</span><span class="w"> </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nv">white</span><span class="p">.</span><span class="nf">transparentize</span><span class="p">(</span><span class="m">50</span><span class="kr">%</span><span class="p">))</span>
+
+<span class="w">    </span><span class="kd">#let</span><span class="w"> </span><span class="nv">days_strip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">table</span><span class="p">(</span>
+<span class="w">        </span><span class="nv">columns</span><span class="p">:</span><span class="w"> </span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">len</span><span class="p">(),</span>
+<span class="w">        </span><span class="nv">rows</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">        </span><span class="nv">align</span><span class="p">:</span><span class="w"> </span><span class="nv">center</span><span class="p">,</span>
+<span class="w">        </span><span class="nv">inset</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="kr">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">4</span><span class="kr">pt</span><span class="p">,</span>
+<span class="w">        </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="kr">pt</span><span class="p">,</span>
+
+<span class="w">        </span><span class="p">..</span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nv">day</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nv">table</span><span class="p">.</span><span class="nf">cell</span><span class="p">(</span>
+<span class="w">            </span><span class="nv">x</span><span class="p">:</span><span class="w"> </span><span class="nv">day</span><span class="p">.</span><span class="nf">day</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nv">y</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span><span class="w"> </span>
+<span class="w">            </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="nf">day_stroke_h</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span>
+<span class="w">          </span><span class="p">[</span>
+<span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">day</span><span class="p">))</span>
+<span class="w">            </span><span class="nf">#translated_weekday</span><span class="p">(</span><span class="nv">day</span><span class="p">)</span>
+<span class="w">          </span><span class="p">])</span>
+<span class="w">        </span><span class="p">}),</span>
+
+<span class="w">        </span><span class="p">..</span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nv">day</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nv">table</span><span class="p">.</span><span class="nf">cell</span><span class="p">(</span>
+<span class="w">            </span><span class="nv">x</span><span class="p">:</span><span class="w"> </span><span class="nv">day</span><span class="p">.</span><span class="nf">day</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nv">y</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">            </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">12</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">day</span><span class="p">))</span>
+<span class="w">            </span><span class="nv">#day</span>.display(&quot;[day<span class="w"> </span>padding:none<span class="p">]</span><span class="s2">&quot;)</span>
+<span class="s2">          ])</span>
+<span class="s2">        }),</span>
+
+<span class="s2">        ..monthly_vacations.map(vac =&gt; {</span>
+<span class="s2">          let vac_start_day = max_date(str_to_date(vac.at(&quot;</span><span class="nv">from</span><span class="s2">&quot;)), monthly_days.at(0))</span>
+<span class="s2">          let vac_end_day = min_date(str_to_date(vac.at(&quot;</span><span class="nv">to</span><span class="s2">&quot;)), monthly_days.at(-1))</span>
+<span class="s2">          let start_index = int((vac_start_day - monthly_days.at(0)).days())</span>
+<span class="s2">          let span_days = int((vac_end_day - vac_start_day).days() + 1)</span>
+
+<span class="s2">          table.cell(</span>
+<span class="s2">            x: start_index,</span>
+<span class="s2">            y: 0,</span>
+<span class="s2">            colspan: span_days,</span>
+<span class="s2">            align: center,</span>
+<span class="s2">            [</span>
+<span class="s2">              #set text(size: 10pt, rgb(&quot;</span><span class="err">#</span><span class="nv">a0a0a0</span><span class="s2">&quot;))</span>
+<span class="s2">              #vac.at(&quot;</span><span class="nv">name</span><span class="s2">&quot;)</span>
+<span class="s2">            ]</span>
+<span class="s2">          )</span>
+<span class="s2">        })</span>
+<span class="s2">    )</span>
+
+<span class="s2">    #let month_header = text(size: 27pt, align(left, [#translated_month(month_date)]))</span>
+
+<span class="s2">    #set par(spacing:0.5em)</span>
+<span class="s2">    #month_header</span>
+<span class="s2">    #days_strip</span>
+
+<span class="s2">    #pagebreak(weak: true)</span>
+
+<span class="s2">    // ===========================</span>
+
+<span class="s2">    #set page(height: 21cm, width: 5cm, margin: 10mm, fill: white.transparentize(50%))</span>
+
+<span class="s2">    #for lr in range(2) [</span>
+<span class="s2">      #let curcol = if lr == 1 { (auto, 1fr) } else { (1fr, auto) }</span>
+
+<span class="s2">      #let a = table(</span>
+<span class="s2">          columns: 3,</span>
+<span class="s2">          align: (left, left, right),</span>
+<span class="s2">          inset: 0% + 4pt,</span>
+<span class="s2">          stroke: 0pt,</span>
+<span class="s2">          </span>
+<span class="s2">          ..monthly_days.map(day =&gt; {</span>
+<span class="s2">            table.cell(</span>
+<span class="s2">              x: 1,</span>
+<span class="s2">              y: day.day() - 1,</span>
+<span class="s2">              fill: day_fill(day), </span>
+<span class="s2">              stroke: day_stroke_v(day),</span>
+<span class="s2">              [</span>
+<span class="s2">                #set text(size: 10pt, day_color(day))</span>
+<span class="s2">                #translated_weekday(day)</span>
+<span class="s2">              ])</span>
+<span class="s2">          }),</span>
+
+<span class="s2">          ..monthly_days.map(day =&gt; {</span>
+<span class="s2">            table.cell(</span>
+<span class="s2">              x: 2,</span>
+<span class="s2">              y: day.day() - 1,</span>
+<span class="s2">              fill: day_fill(day), [</span>
+<span class="s2">              #set text(size: 12pt, day_color(day))</span>
+<span class="s2">              #day.display(&quot;</span><span class="p">[</span>day<span class="w"> </span>padding:space<span class="p">]</span><span class="s2">&quot;)</span>
+<span class="s2">            ])</span>
+<span class="s2">          }),</span>
+
+<span class="s2">          ..monthly_vacations.map(vac =&gt; {</span>
+<span class="s2">            let vac_start_day = max_date(str_to_date(vac.at(&quot;</span><span class="nv">from</span><span class="s2">&quot;)), monthly_days.at(0))</span>
+<span class="s2">            let vac_end_day = min_date(str_to_date(vac.at(&quot;</span><span class="nv">to</span><span class="s2">&quot;)), monthly_days.at(-1))</span>
+<span class="s2">            let start_index = int((vac_start_day - monthly_days.at(0)).days())</span>
+<span class="s2">            let span_days = int((vac_end_day - vac_start_day).days() + 1)</span>
+
+<span class="s2">            table.cell(</span>
+<span class="s2">              y: start_index,</span>
+<span class="s2">              x: 0,</span>
+<span class="s2">              rowspan: span_days,</span>
+<span class="s2">              align: center + horizon,</span>
+<span class="s2">              rotate(-90deg, reflow: false, origin: center + horizon,</span>
+<span class="s2">                [</span>
+<span class="s2">                  #set text(size: 10pt, rgb(&quot;</span><span class="err">#</span><span class="nv">a0a0a0</span><span class="s2">&quot;))</span>
+<span class="s2">                  #vac.at(&quot;</span><span class="nv">name</span><span class="err">&quot;</span><span class="p">)</span>
+<span class="w">                </span><span class="err">]</span>
+<span class="w">              </span><span class="p">)</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">          </span><span class="p">})</span>,
+<span class="w">        </span>)
+
+<span class="w">      </span><span class="kd">#let</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">27</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="nv">deg</span><span class="p">,</span><span class="w"> </span><span class="nv">reflow</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nv">origin</span><span class="p">:</span><span class="w"> </span><span class="nv">top</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nf">#translated_month</span><span class="p">(</span><span class="nv">month_date</span><span class="p">)])))</span>
+
+<span class="w">      </span><span class="nf">#grid</span><span class="p">(</span>
+<span class="w">        </span><span class="nv">columns</span><span class="p">:</span><span class="w"> </span><span class="nv">curcol</span><span class="p">,</span>
+<span class="w">        </span><span class="nv">align</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="nv">left</span><span class="p">),</span>
+<span class="w">        </span><span class="nv">column-gutter</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="p">,</span>
+<span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">lr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="nv">b</span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="nv">a</span><span class="p">},</span>
+<span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">lr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="nv">a</span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="nv">b</span><span class="p">}</span>
+<span class="w">      </span><span class="p">)</span>
+<span class="w">      </span><span class="nf">#pagebreak</span><span class="p">(</span><span class="nv">weak</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="err">]</span>
+<span class="p">}</span>
+
+<span class="kd">#show</span><span class="p">:</span><span class="w"> </span><span class="nv">calendar</span><span class="p">.</span><span class="nf">with</span><span class="p">(</span>
+<span class="w">  </span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="nv">YEAR</span>
+<span class="p">)</span>
+</pre></div>
+</aside>
+
+<p>Typst was a complete joy to work with. It combines the notational ease of markdown with the layout chops of TeX and a simple, sane programming model.</p>
+
+
+
 <div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-.html"></a></div>
 
 </div>

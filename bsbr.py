@@ -36,16 +36,16 @@ def main():
     # create post pages
     for idx, [path, metadata, body] in enumerate(posts + drafts):
         page_url = f"{base_url}/{path.stem}.html"
-        html = assemble_post(config, metadata, page_url, body, base_url, 
+        html = assemble_post(config, metadata, page_url, body, base_url,
                              previous_url=(f"{base_url}/{posts[idx+1].path.stem}.html" if idx + 1 < len(posts) else None))
         output_path = root_path / f"{path.stem}.html"
         output_path.write_text(html, encoding='utf-8')
-        
+
     # create archive.html page
     html = assemble_archive(config, posts, base_url)
     archive_path = root_path / 'archive.html'
     archive_path.write_text(html, encoding='utf-8')
-    
+
     # create index.html page
     html = assemble_index(config, posts[:config['index_num_posts']], base_url)
     index_path = root_path / 'index.html'
@@ -89,7 +89,7 @@ def parse_frontmatter(text):
             frontmatter[key] = value
         if line.strip() == '---' and frontmatter:
             break
-    frontmatter['date'] = time.strptime(frontmatter['date'], '%Y-%m-%d %H:%M') if ' ' in frontmatter['date'] else time.strptime(frontmatter['date'], '%Y-%m-%d')
+    frontmatter['date'] = time.strptime(frontmatter['date'], '%Y-%m-%d %H:%M') if ':' in frontmatter['date'] else time.strptime(frontmatter['date'], '%Y-%m-%d')
     front_matter_end = text.find('---', text.find('---') + 3)
     markdown = text[front_matter_end + 3:]
     return frontmatter, markdown
@@ -139,7 +139,7 @@ def assemble_archive(config, posts, base_url):
         content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
     html = '\n'.join(content)
 
-    return assemble_post(config, {'title': 'Archive', 'date': time.localtime(), 'filetags': ''}, 
+    return assemble_post(config, {'title': 'Archive', 'date': time.localtime(), 'filetags': ''},
                          f"{base_url}/archive.html", html, base_url, is_index=True)
 
 
@@ -156,7 +156,7 @@ def assemble_index(config, posts, base_url, title=''):
 """)
     html = '\n'.join(content)
 
-    return assemble_post(config, {'title': 'Home', 'date': time.localtime(), 'filetags': ''}, 
+    return assemble_post(config, {'title': 'Home', 'date': time.localtime(), 'filetags': ''},
                          f"{base_url}/index.html", html, base_url, is_index=True)
 
 
@@ -209,7 +209,7 @@ def assemble_tag_archive(config, tagged_posts, base_url):
             content.append(f'<div class="post-date">{date}</div><h2 class="post-title"><a href="{post_url}">{metadata["title"]}</a></h2>')
     html = '\n'.join(content)
 
-    return assemble_post(config, {'title': 'Archive', 'date': time.localtime(), 'filetags': ''}, 
+    return assemble_post(config, {'title': 'Archive', 'date': time.localtime(), 'filetags': ''},
                          f"{base_url}/archive.html", html, base_url, is_index=True)
 
 
