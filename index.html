@@ -42,6 +42,46 @@
 
 
 
+<div class="post-date">24 Jan 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-01-24-tone-mapping.html">On Tone Mapping</a></h2>
+<p>When we render a photo, we mimic the psychovisual effects of image brightness. I recently realized that we do this to trick our brain into a perception of brightness, even though the image is not actually very bright. Here's my current understanding of this aspect of image formation:</p>
+<p>A camera records brightnesses up to ~30,000 nits of e.g. sunlit snow. Your computer screen, however, displays only ~300 nits, and a print on your living room wall is probably lit at ~100 nits. Due to the Hunt Effect and Stevens Effect, this greatly diminishes our perception of brightness and saturation. You know this, from how everything looks dull after the sun goes down. Thus when displaying or printing a photo, we need to boost contrast and saturation to achieve a realistic perception of the scene we photographed. If we had a 30,000 nit display, this would not be necessary.</p>
+<p>Increasing contrast means pushing bright pixels brighter, and dark pixels darker. However, the brightest and darkest possible colors for our displays and printers are <em>white</em> and <em>black</em>, therefore increasing contrast eventually desaturates highlights and shadows. This is odd, since bright colored lights in reality do not appear to desaturate: Cars' brake lights stay red, and neon signs stay colorful. But the desaturation is necessary for rendering realistic contrast on a display or print.</p>
+<div class="lightbox" style="height: 200px">
+    <figure>
+        <img src="/static/2026-01/lightsabre.jpg">
+        <figcaption>Neon lights: A bright core, with red shine</figcaption>
+    </figure>
+    <figure>
+        <img src="/static/2026-01/pinlights.jpg">
+        <figcaption>Bright LEDs: A bright core, with colorful shine</figcaption>
+    </figure>
+</div>
+
+<p>So what can we do to retain a perception of saturation in bright colored lights? We trick our brain: When our eyes are dark-adapted, and suddenly a bright colored stimulus hits our retina, the cone cells momentarily max out, and we see something approaching white. Then the cells adapt, and color comes back. We simulate this effect with a white core, and a colorful shine, which fools our vision system into a perception of “bright colored light”, even though our display isn’t actually all that bright, and the light isn't actually colored. And thus a light sabre looks red, even though it actually is white.</p>
+<p>Additionally, our hue perception changes as colors go very bright: the Bezold–Brücke effect shifts hues as they go bright, and the Abney effect changes hue with the addition of white light. Thus when we push contrast, we not only need to fade the brightest colors to white, but also twist their hue to create a realistic perception of brightness.</p>
+<div class="lightbox" style="height: 200px">
+    <figure>
+      <img src="/static/2026-01/fire_dt.jpg">
+      <figcaption>An appropriate rendition of fire, in darktable<br>(AgX smooth, preserve hue 30%)</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2026-01/fire_c1.jpg">
+      <figcaption>An appropriate rendition of fire, in Capture One</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2026-01/fire_dxo.jpg">
+      <figcaption>An appropriate rendition of fire, in DxO Photo Lab</figcaption>
+    </figure>
+    <figure>
+      <img src="/static/2026-01/fire_physical.jpg">
+      <figcaption>A "physically correct" rendition of fire<br>(AgX none, preserve hue 100%)</figcaption>
+    </figure>
+</div>
+
+<p>We do all this to mimic the psychovisual effects of very bright light, even though the light from the display or print isn't actually particularly bright. But with a good psychovisual simulation, we fool our brain into a perception of brightness way beyond the capabilities of the display medium. Fascinating stuff!</p>
+
+
+
 <div class="post-date">10 Jan 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-01-10-books-of-2025.html">Books of 2024/2025</a></h2>
 <p>My reading goes in phases; the last phase was a lot of phantastic Science Fiction.</p>
 <h2><a href="https://www.goodreads.com/book/show/48484.Blindsight">Blindsight</a>/<a href="https://www.goodreads.com/book/show/18490708-echopraxia">Echopraxia</a>, by Peter Watts</h2>
@@ -369,62 +409,6 @@
 <p>Whenever we had to replace a phone, it was because the old one could not be repaired in time. With the Fairphone, we could repair the phone easily, and thus didn't have to replace it. Needless to say, the next replacement phone will be a Fairphone.</p>
 <h2>Addendum</h2>
 <p>As it happened, I was able to buy a replacement battery for the Pixel 6a from IFixit, and was able to repair the phone. However, two weeks later, the power button fell out of the other Pixel 6a. The replacement part was cheap, but the repair required prying off the display again, which caused a tiny preexisting crack to shatter the entire screen. A replacement screen was neither available nor economical, so the phone had to be replaced.</p>
-
-
-
-<div class="post-date">06 Apr 2025</div><h2 class="post-title"><a href="https://bastibe.de/2025-04-06-fuji-xf-23.html">The Perfect 23mm Lens</a></h2>
-<p>What's in a perfect lens? Is it sharpness? Contrast? Microcontrast? Bokeh? Whatever does that even mean?</p>
-<p>Today is new lens day. To test my purchase, and get it out of my system, today, I will measure my new lens. It's the Fujifilm XF 23mm f/1.4 R LM WR, a preposterously complex lens for a ridiculously high-resolution camera. Will it prevail against my older Fujifilm XF 23mm f/1.4 R? How will it fare against my travel zoom, the Fujifilm XF 16-80mm f/4 R OIS WR?</p>
-<p>First up, <strong>resolution</strong>: I printed a <a href="https://www.graphics.cornell.edu/~westin/misc/res-chart.html">test chart</a> on A3 paper. First I tried printing the PDF directly with Preview.app, but noticed that the chart itself started blurring lines at 1250 L/PH<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>, which implies that Preview.app prints at 1250/8.7in≈150DPI<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>. Not satisfied, I exported the test chart to a high-DPI tiff, and printed with Canon's print application, which appropriately resolved the finest lines on the test chart.</p>
-<p>I took pictures of the marked 3:2 area on the chart. Since all my lenses are easily sharp enough to resolve the maximum 20 L/PH on the chart, I aligned the chart to the center quadrant of a 3x3 grid on my camera display, and cropped appropriately in post.</p>
-<figure style="width: 100%; text-align: center;">
-<img width="75%" src="/static/2025-04/Resolution-center.svg" alt="Test shots of a resolution chart in the center of the frame" />
-<figcaption>Resolution chart of the image center, with resolution limit as red line in 300x L/PH, and microcontrast in ΔL</figcaption>
-</figure>
-
-<p>Each of these crops is at 1:1 resolution of the original capture, <strong>at the center of the frame</strong>, with no sharpening, straight from the raw file. Exposure was adjusted to a consistent 95% L in HSL. The red line indicates the level of resolution where the lines are just resolvable<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup>. The resolution scale is in 300x L/PH. For instance, a resolution of 14 corresponds to 4200 L/PH, which is slightly short of the 5150 pixels in the 40 MP image. Since the color filter demosaicing is not entirely lossless, this is an excellent result.</p>
-<p>On average, the new lens resolves a good 10% more lines than the old 23 prime, and perhaps 20% more than the zoom. In the real world, these numbers mean <em>nothing</em>. All three of these lenses are easily sharp enough for everything I might throw at them.</p>
-<p>Next to the resolution is the <strong>contrast level</strong> in ΔL<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup> (HSL), measured at the right side of this pack of lines, which is a good proxy for contrast of high frequency detail, or microcontrast. A lower black level means more microcontrast. Indeed, this is where the new lens shows a clear improvement over the other two lenses, with visibly more contrast in fine details.</p>
-<p>Also notable is a visible magenta <strong>color cast</strong> on the old 23mm prime wide open, and a minor blue color cast on the new 23mm. In normal images, color fringe suppression will mostly get rid of these, so these are not usually worrisome.</p>
-<p>And then I repeated the procedure in the <strong>image corners</strong>. I took the same pictures, but this time the resolution chart covered the top-right quadrant of my 3x3 grid:</p>
-<figure style="width: 100%; text-align: center;">
-<img width="75%" src="/static/2025-04/Resolution-corner.svg" alt="Test shots of a resolution chart in the corner of the frame" />
-<figcaption>Resolution chart of the image corner, with resolution limit as red line in 300x L/PH, and microcontrast in ΔL</figcaption>
-</figure>
-
-<p>As expected, resolution and contrast fall off towards the image corners. For the new lens, the falloff is about 20% resolution, and 40% microcontrast at open apertures, lowering it roughly to the level of the old lens' center. For the old 23mm prime, it's about 40% resolution, and 40% contrast at open apertures, which is visibly soft. The effect diminishes rapidly for smaller apertures, however, and is mostly gone at f/4. Consequently, the 16-80 f/4 merely loses a small bit of contrast.</p>
-<p>In <strong>summary</strong> of these objective measurements, the new lens is ridiculously good. In the real world, I would expect to see a minor difference in microcontrast, mostly visible in the image corners. But stop down, and all three lenses will perform very similarly.</p>
-<p>As a sanity check, here's the central resolution target, shot a bit closer, to get a feeling for how the above measurements look like on larger structures:</p>
-<figure style="width: 100%; text-align: center;">
-<img width="75%" src="/static/2025-04/Resolution-sanity.svg" alt="Test shots of a low-resolution resolution chart in the center of the frame" />
-<figcaption>Resolution target, zoomed out</figcaption>
-</figure>
-
-<p>As you can see, the differences in resolution are not a big deal in the real world, and even the contrast levels for larger subjects are not as different as the measurements might suggest. The color fringing wide open is still visible, however.</p>
-<p>Next, let's look at the lenses' <strong>bokeh</strong>. For an objective measure, I took a picture of various film boxes along a measuring stick. Focus was at 50cm distance, with the close box at 25cm, and the far one at 75cm. This should give a good indication of the out-of-focus rendering on both sides of the focus plane.</p>
-<figure style="width: 100%; text-align: center;">
-<img width="75%" src="/static/2025-04/Bokeh.svg" alt="Test shots of out-of-focus subjects, to judge bokeh" />
-<figcaption>Bokeh evaluation 1: focus is at 50cm, close target at 25 cm, far target at 75 cm</figcaption>
-</figure>
-
-<p>You can see a slightly harsher bokeh and very minor color fringes in the old lens at f/1.4. But from these images, I don't see a compelling reason to choose one over the other. Curiously, at f/4, the 16-80 seems to show slightly less blur than the two primes.</p>
-<p>For an assessment in more realistic conditions, I took a few photos of flowers and point lights. The flowers give a good indication of the focus transition from in-focus to out-of-focus, while the point lights show how specular highlights are rendered.</p>
-<figure style="width: 100%; text-align: center;">
-<img width="75%" src="/static/2025-04/Bokeh-real.svg" alt="Test shots of real subjects, to judge bokeh" />
-<figcaption>Bokeh evaluation 2: focus transition in a bed of flowers, and rendering of point lights</figcaption>
-</figure>
-
-<p>The transition pictures once more show a tendency for colored seams on the old prime, which is absent on the new one. This makes the new lens' bokeh seem a little smoother. Apart from that, the differences are very minor. As expected, there is no significant difference in detail between these shots. The point lights essentially confirm this, with a bit more color fringing on the old lens.</p>
-<p>In <strong>conclusion</strong>, I found the new Fujifilm XF 23mm R LM WR slightly sharper than the old Fujifilm XF 23mm R, with noticeably less color fringing, and slightly better microcontrast. Once stopped down to f/4, these differences become insignificant. At that point, both prime lenses retain a very minor resolution advantage over the Fujifilm XF 16-80 R OIS WR.</p>
-<p>Thus my curiosity in the technical quality of these lenses is satisfied, I verified that my lens is functioning properly, and I can now go out and shoot pictures.</p>
-<section class="footnotes">
-<ol>
-<li id="fn-1"><p>lines per picture height<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
-<li id="fn-2"><p>the height of the measuring area was 8.7in (of the 11.7in paper)<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
-<li id="fn-3"><p>as judged by my eyes<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
-<li id="fn-4"><p>I calibrated the white level to L=95, and ΔL is the difference between the white level and the black level on these lines.<a href="#fnref-4" class="footnote">&#8617;</a></p></li>
-</ol>
-</section>
 
 
 
