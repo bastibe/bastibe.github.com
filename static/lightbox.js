@@ -13,7 +13,7 @@ document.addEventListener('keyup', e => {
 });
 
 
-function lightboxClickCallback(event) {
+function lightboxFigureClickCallback(event) {
     // if the browser issues both click and touch events, ignore
     // the later one:
     if (event.timeStamp - lightboxTime < 300) {
@@ -21,14 +21,8 @@ function lightboxClickCallback(event) {
     }
     lightboxTime = event.timeStamp;
 
-    let figure, image
-    if (event.target.tagName == "FIGURE") {
-        figure = event.target;
-        image = figure.getElementsByTagName('img')[0];
-    } else if (event.target.tagName == "IMG") {
-        image = event.target;
-        figure = image.parentNode;
-    }
+    let figure = event.target;
+    let image = figure.getElementsByTagName('img')[0];
 
     event.stopImmediatePropagation();
     if (figure.classList.contains('lightbox')) {
@@ -38,6 +32,27 @@ function lightboxClickCallback(event) {
             return;
         }
         exitLightbox(figure, image);
+    }
+}
+
+function lightboxImgClickCallback(event) {
+    // if the browser issues both click and touch events, ignore
+    // the later one:
+    if (event.timeStamp - lightboxTime < 300) {
+        return;
+    }
+    lightboxTime = event.timeStamp;
+
+    let image = event.target;
+    let figure = image.parentNode;
+
+    event.stopImmediatePropagation();
+    if (figure.classList.contains('lightbox')) {
+        // don't exit if we came here from a drag
+        if (wasDragged === true) {
+            wasDragged = false;
+            return;
+        }
     } else {
         // reset dragging state
         wasDragged = false;
@@ -47,6 +62,16 @@ function lightboxClickCallback(event) {
 
 
 function enterLightbox(figure, image) {
+    // save all image state
+    for (let img of figure.getElementsByTagName('img')) {
+      img.originalStyleWidth = img.style['width'];
+      img.originalStyleHeight = img.style['height'];
+      img.originalWidth = img.width;
+      img.originalHeight = img.height;
+      if (img != image) {
+        img.style['visibility'] = 'hidden';
+      }
+    }
     // fix body in place so it doesn't scroll when the lightbox is
     // moved by touch
     document.body.style['top'] = `${-window.scrollY}px`;
@@ -69,6 +94,7 @@ function enterLightbox(figure, image) {
     image.classList.add('lightbox');
     image.style['max-width'] = '90%';
     image.style['max-height'] = '90%';
+    image.style['width'] = image.style['height'] = 'auto';
     image.setAttribute('draggable', false);
     image.addEventListener('wheel', lightboxScrollCallback);
     image.addEventListener('mousedown', lightboxMouseDownCallback);
@@ -112,6 +138,14 @@ function exitLightbox(figure, image) {
     image.style['max-height'] = '';
     image.style['top'] = '';
     image.style['left'] = '';
+    // reset image styles
+    for (let img of figure.getElementsByTagName('img')) {
+      img.style['width'] = img.originalStyleWidth;
+      img.style['height'] = img.originalStyleHeight;
+      img.width = img.originalWidth;
+      img.height = img.originalHeight;
+      img.style['visibility'] = '';
+    }
     image.removeEventListener('wheel', lightboxScrollCallback);
     image.removeEventListener('mousedown', lightboxMouseDownCallback);
     image.removeEventListener('mousemove', lightboxMouseMoveCallback);
@@ -213,9 +247,9 @@ function moveImageIntoBorders(image) {
 window.addEventListener('DOMContentLoaded', (event) => {
     var figures = document.getElementsByTagName('figure');
     for (let figure of figures) {
-        figure.addEventListener("click", lightboxClickCallback);
+        figure.addEventListener("click", lightboxFigureClickCallback);
         let images = figure.querySelectorAll('img');
         for (let image of images) {
-            image.addEventListener("click", lightboxClickCallback);
+            image.addEventListener("click", lightboxImgClickCallback);
         }
     }});
