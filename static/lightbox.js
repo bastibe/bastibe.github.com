@@ -182,15 +182,35 @@ function lightboxMouseUpCallback(event) {
 
 
 function lightboxScrollCallback(event) {
-    let image = event.target; // relative position on image:
+    let image = event.target;
     let imageRect = image.getBoundingClientRect();
-    let imageX = (event.clientX-imageRect.left)/imageRect.width;
+
+    // remember relative cursor position on image, for later:
+    let imageX = (event.clientX - imageRect.left) / imageRect.width;
     let imageY = (event.clientY - imageRect.top) / imageRect.height;
 
-    // zoom in:
+    // zoom:
     let zoomFactor = 1.0 + event.wheelDeltaY / 360;
-    image.style['width'] = `${imageRect.width*zoomFactor}px`;
-    image.style['height'] = `${imageRect.height * zoomFactor}px`;
+    let newImageWidth = imageRect.width * zoomFactor;
+    let newImageHeight = imageRect.height * zoomFactor;
+
+    // limit zoom in to 400% pixel size:
+    if (newImageWidth > image.naturalWidth * 4) {
+      newImageWidth = image.naturalWidth * 4;
+      newImageHeight = image.naturalHeight * 4;
+    }
+    // limit zoom out to 10% screen width:
+    let aspectRatio = newImageWidth / newImageHeight;
+    if (newImageWidth < window.innerWidth * 0.1) {
+      newImageWidth = window.innerWidth * 0.1;
+      newImageHeight = newImageWidth / aspectRatio;
+    } else if (newImageHeight < window.innerHeight * 0.1) {
+      newImageHeight = window.innerHeight * 0.1;
+      newImageWidth = newImageHeight * aspectRatio;
+    }
+
+    image.style['width'] = `${newImageWidth}px`;
+    image.style['height'] = `${newImageHeight}px`;
 
     // pan so the image does not move under cursor:
     let newImageRect = image.getBoundingClientRect();
