@@ -91,12 +91,14 @@ function enterLightbox(figure, image) {
     // activate lightbox
     figure.classList.add('lightbox');
     image.classList.add('lightbox');
-    if (image.naturalWidth > image.naturalHeight) {
-      image.style['width'] = '90%';
-      image.style['height'] = 'auto';
+    let aspectRatio = image.naturalWidth / image.naturalHeight;
+    let screenAspectRatio = window.innerWidth / window.innerHeight;
+    if (aspectRatio > screenAspectRatio) {
+      image.style['width'] = `${window.innerWidth*0.9}px`;
+      image.style['height'] = `${window.innerWidth*0.9/aspectRatio}px`;
     } else {
-      image.style['height'] = '90%';
-      image.style['width'] = 'auto';
+      image.style['height'] = `${window.innerHeight*0.9}px`;
+      image.style['width'] = `${window.innerHeight*0.9*aspectRatio}px`;
     }
     image.style['max-width'] = 'none';
     image.style['max-height'] = 'none';
@@ -183,22 +185,12 @@ function lightboxScrollCallback(event) {
     let image = event.target; // relative position on image:
     let imageRect = image.getBoundingClientRect();
     let imageX = (event.clientX-imageRect.left)/imageRect.width;
-    let imageY = (event.clientY-imageRect.top)/imageRect.height;
+    let imageY = (event.clientY - imageRect.top) / imageRect.height;
 
     // zoom in:
-    let zoomFactor = Math.max(imageRect.width / window.innerWidth,
-                              imageRect.height / window.innerHeight);
-    zoomFactor /= 1.0 - event.wheelDeltaY / 360;
-    zoomFactor = Math.min(Math.max(zoomFactor, 0.9), 5);
-
-    let aspectRatio = image.naturalWidth / image.naturalHeight;
-    if (aspectRatio > 1) {
-      image.style['width'] = `${zoomFactor*100}%`;
-      image.style['height'] = `${zoomFactor*100/aspectRatio}%`;
-    } else {
-      image.style['height'] = `${zoomFactor*100}%`;
-      image.style['width'] = `${zoomFactor*100*aspectRatio}%`;
-    }
+    let zoomFactor = 1.0 + event.wheelDeltaY / 360;
+    image.style['width'] = `${imageRect.width*zoomFactor}px`;
+    image.style['height'] = `${imageRect.height * zoomFactor}px`;
 
     // pan so the image does not move under cursor:
     let newImageRect = image.getBoundingClientRect();
