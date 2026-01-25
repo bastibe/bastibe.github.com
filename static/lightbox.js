@@ -199,7 +199,7 @@ function lightboxScrollCallback(event) {
     image.style['left'] = `${newPositionX}px`;
     image.style['top'] = `${newPositionY}px`;
 
-    //moveImageIntoBorders(image);
+    moveImageIntoBorders(image);
 
     // do not scroll background
     event.preventDefault();
