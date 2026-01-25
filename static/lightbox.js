@@ -22,7 +22,6 @@ function lightboxFigureClickCallback(event) {
     lightboxTime = event.timeStamp;
 
     let figure = event.target;
-    let image = figure.getElementsByTagName('img')[0];
 
     event.stopImmediatePropagation();
     if (figure.classList.contains('lightbox')) {
@@ -31,7 +30,7 @@ function lightboxFigureClickCallback(event) {
             wasDragged = false;
             return;
         }
-        exitLightbox(figure, image);
+        exitLightbox(figure);
     }
 }
 
@@ -92,9 +91,15 @@ function enterLightbox(figure, image) {
     // activate lightbox
     figure.classList.add('lightbox');
     image.classList.add('lightbox');
-    image.style['max-width'] = '90%';
-    image.style['max-height'] = '90%';
-    image.style['width'] = image.style['height'] = 'auto';
+    if (image.naturalWidth > image.naturalHeight) {
+      image.style['width'] = '90%';
+      image.style['height'] = 'auto';
+    } else {
+      image.style['height'] = '90%';
+      image.style['width'] = 'auto';
+    }
+    image.style['max-width'] = 'none';
+    image.style['max-height'] = 'none';
     image.setAttribute('draggable', false);
     image.addEventListener('wheel', lightboxScrollCallback);
     image.addEventListener('mousedown', lightboxMouseDownCallback);
@@ -121,7 +126,7 @@ function enterLightbox(figure, image) {
 }
 
 
-function exitLightbox(figure, image) {
+function exitLightbox(figure) {
     // release body
     let scrollY = parseInt(document.body.style['top']);
     document.body.style['top'] = '';
@@ -133,27 +138,21 @@ function exitLightbox(figure, image) {
     fakeFig.remove();
     // disable lightbox
     figure.classList.remove('lightbox');
-    image.classList.remove('lightbox');
-    image.style['max-width'] = '';
-    image.style['max-height'] = '';
-    image.style['top'] = '';
-    image.style['left'] = '';
-    // reset image styles
+    // reset images
     for (let img of figure.getElementsByTagName('img')) {
-      img.style['width'] = img.originalStyleWidth;
-      img.style['height'] = img.originalStyleHeight;
-      img.width = img.originalWidth;
-      img.height = img.originalHeight;
-      img.style['visibility'] = '';
-    }
-    image.removeEventListener('wheel', lightboxScrollCallback);
-    image.removeEventListener('mousedown', lightboxMouseDownCallback);
-    image.removeEventListener('mousemove', lightboxMouseMoveCallback);
-    image.removeEventListener('mouseup', lightboxMouseUpCallback);
-    image.setAttribute('draggable', true);
-    // unhide all images in this figure:
-    for (let otherImage of figure.querySelectorAll('img')) {
-        otherImage.style['visibility'] = '';
+        img.classList.remove('lightbox');
+        img.style['top'] = '';
+        img.style['left'] = '';
+        img.style['width'] = img.originalStyleWidth;
+        img.style['height'] = img.originalStyleHeight;
+        img.width = img.originalWidth;
+        img.height = img.originalHeight;
+        img.style['visibility'] = '';
+        img.removeEventListener('wheel', lightboxScrollCallback);
+        img.removeEventListener('mousedown', lightboxMouseDownCallback);
+        img.removeEventListener('mousemove', lightboxMouseMoveCallback);
+        img.removeEventListener('mouseup', lightboxMouseUpCallback);
+        img.setAttribute('draggable', true);
     }
 }
 
@@ -191,8 +190,15 @@ function lightboxScrollCallback(event) {
                               imageRect.height / window.innerHeight);
     zoomFactor /= 1.0 - event.wheelDeltaY / 360;
     zoomFactor = Math.min(Math.max(zoomFactor, 0.9), 5);
-    image.style['max-width'] = `${zoomFactor*100}%`;
-    image.style['max-height'] = `${zoomFactor*100}%`;
+
+    let aspectRatio = image.naturalWidth / image.naturalHeight;
+    if (aspectRatio > 1) {
+      image.style['width'] = `${zoomFactor*100}%`;
+      image.style['height'] = `${zoomFactor*100/aspectRatio}%`;
+    } else {
+      image.style['height'] = `${zoomFactor*100}%`;
+      image.style['width'] = `${zoomFactor*100*aspectRatio}%`;
+    }
 
     // pan so the image does not move under cursor:
     let newImageRect = image.getBoundingClientRect();
@@ -201,7 +207,7 @@ function lightboxScrollCallback(event) {
     image.style['left'] = `${newPositionX}px`;
     image.style['top'] = `${newPositionY}px`;
 
-    moveImageIntoBorders(image);
+    //moveImageIntoBorders(image);
 
     // do not scroll background
     event.preventDefault();
