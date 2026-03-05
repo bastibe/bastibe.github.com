@@ -1,7 +1,7 @@
 ---
 title: On Tone Mapping
 date: 2026-01-24
-description: foo
+description: how image formation uses psychovisual simulations to render brightness
 filetags: photography
 ---
 

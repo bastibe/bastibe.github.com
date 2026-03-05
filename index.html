@@ -42,6 +42,23 @@
 
 
 
+<div class="post-date">05 Mar 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-03-05-apple-woes.html">Apple: enough is enough</a></h2>
+<p>Yesterday, my wife wanted to use Discord on her Apple laptop. It was right there in the applications folder. But MacOS couldn't find it. Launching it manually took several minutes, for some reason.</p>
+<p>We wanted to download a clip using yt_dlp (a Python program). Terminal told us, this would require dev tools (which it doesn't). So we installed Python from python.org instead, which worked. Except, that non-blessed python could not access the internet because of some MacOS &quot;security&quot; feature.</p>
+<p>Another &quot;security&quot; feature requires all apps on Apple computers to be notarized, even the ones I built myself. This used to have a relatively easy workaround (right click, open, accept the risk). Now it needs a terminal command.</p>
+<p>I maintain a python library for playing and recording real-time audio from the system's sound cards. On some Apple systems, this fails to show any audio devices, &quot;for security reasons&quot;.</p>
+<p>I live and work in a multi-lingual environment, and regularly switch between the German and English keyboard layout. Lately, the keyboard layout no longer sticks. It resets to English when I press shift. Sometimes it does work, sometimes it doesn't.</p>
+<p>The German keyboard layout for MacOS on non-Apple keyboards is insane. So I made my own layout. This is relatively easy, and worked well. Except, every few OS updates, it reinstates Apple's insane layout.</p>
+<p>Sometimes my Mac does not wake from sleep. Pressing the power button does nothing. Hitting keyboard keys does nothing. Only a long-press of the power button eventually reboots it. The power button on the Mac Studio is in an insane place of course.</p>
+<p>There is no indication anywhere that the hard drive is getting full.</p>
+<p>There is no simple way to reset the computer to factory conditions.</p>
+<p>Gaming is largely impossible, even though the hardware is very capable.</p>
+<p>Apple computers ship with a backup program called Time Machine. Except Time Machine invariably corrupts its own backup after a few months. Sometimes this can be recovered with some command line surgery, sometimes it can't. In which case, the backup needs to be rebuilt from scratch, and all previous history is lost. I have observed this on many Apple computers with many Time Machine volumes, from Apple's own hardware to external hard drives, to network drives. The only reliable option is to not use Time Machine.</p>
+<p>Mac OS is getting less user friendly and usable with every release. Previously, when you renamed a file in Finder.app, Apple's anemic file manager, the file would not immediately re-sort, but wait a second, so as to allow me to arrow over to the next file. This was useful, but it was removed. I won't even mention the new &quot;liquid glass&quot; design that nobody asked for, and which is categorically worse than before.</p>
+<p>Suffice it to say, I have ordered a Linx PC, which will replace the Mac. I've had enough. It will require wine for two apps, and a VM for two others. At this point, that's a price I'm willing to pay.</p>
+
+
+
 <div class="post-date">24 Jan 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-01-24-tone-mapping.html">On Tone Mapping</a></h2>
 <p>When we render a photo, we mimic the psychovisual effects of image brightness. I recently realized that we do this to trick our brain into a perception of brightness, even though the image is not actually very bright. Here's my current understanding of this aspect of image formation:</p>
 <p>A camera records brightnesses up to ~30,000 nits of e.g. sunlit snow. Your computer screen, however, displays only ~300 nits, and a print on your living room wall is probably lit at ~100 nits. Due to the Hunt Effect and Stevens Effect, this greatly diminishes our perception of brightness and saturation. You know this, from how everything looks dull after the sun goes down. Thus when displaying or printing a photo, we need to boost contrast and saturation to achieve a realistic perception of the scene we photographed. If we had a 30,000 nit display, this would not be necessary.</p>
@@ -387,28 +404,6 @@
 <p>A few weeks ago, my Surface tablet somehow broke its Windows installation and got stuck in a boot loop. System restore didn't work. Safe mode didn't work. Finally it booted me to a defeated screen saying &quot;it seems you're f*cked&quot;. But right after that, the very new <a href="https://learn.microsoft.com/en-us/windows/configuration/quick-machine-recovery/"><strong>Quick Machine Recovery</strong></a> kicked in, re-downloaded a new copy of Windows, and recovered the machine and all my data. It took half an hour, but it worked perfectly.</p>
 <p>I'll stop here. There are a few more notable features, but most of them are more widely known. For example, there's now a handy search feature in the Task Manager. The On-Screen Touch Keyboard is now almost as good as a mobile keyboard. The new Terminal app doesn't stink any more. the RDP client is faster and better-looking. And of course WSL keeps improving.</p>
 <p>Next up, can I please have proper color management in the Windows shell, so app icons don't look all clownish on my wide-gamut monitor? It's 2025, and most new screens now come with decent DP3 support, so it's about time.</p>
-
-
-
-<div class="post-date">26 Jul 2025</div><h2 class="post-title"><a href="https://bastibe.de/2025-07-26-phone-reliability.html">Phone Reliability</a></h2>
-<p>One of our Pixel 6a phones recently had its battery bricked by a <a href="https://support.google.com/pixelphone/answer/16340779">mandatory software update</a>. Conveniently, Google only &quot;found out&quot; about this issue a few months after the warranty period ended for anyone who bought the phone when it was new. Lucky for us, we had bought ours later, when its predecessor broke on vacation and couldn't be repaired. So ours was still covered by its warranty, and we got a full refund.</p>
-<p>I noticed that issues such as this have caused all our phone replacements in the last years:</p>
-<ul>
-<li>This Pixel 6a got a mandatory update that bricked its battery, and can't be repaired before we go on vacation. So we now have to buy a new phone.</li>
-<li>A Pixel 5a's screen broke on vacation and local repair shops refused to repair foreign devices. So we had to buy a new phone.</li>
-<li>A Pixel 4a suddenly refused to charge, and I didn't want to wait two weeks to get it repaired. So I bought a new phone.</li>
-<li><em><strong>Added:</strong></em> The other Pixel 6a's power button fell out, and the repair broke the screen.</li>
-</ul>
-<p>However, before we used Pixel phones, we had Fairphones, which had quite a different record:</p>
-<ul>
-<li>A screen broke when I dropped it face-first on a radiator. I got a replacement screen fast-shipped within 24h, one day before we left on a trip. The replacement screen with priority shipping cost €98.</li>
-<li>A battery became very weak, and we got a replacement part for €27.</li>
-<li>A charging port became unreliable and we got a replacement part under warranty.</li>
-<li>We replaced a broken headphone socket. The replacement part cost €36.</li>
-</ul>
-<p>Whenever we had to replace a phone, it was because the old one could not be repaired in time. With the Fairphone, we could repair the phone easily, and thus didn't have to replace it. Needless to say, the next replacement phone will be a Fairphone.</p>
-<h2>Addendum</h2>
-<p>As it happened, I was able to buy a replacement battery for the Pixel 6a from IFixit, and was able to repair the phone. However, two weeks later, the power button fell out of the other Pixel 6a. The replacement part was cheap, but the repair required prying off the display again, which caused a tiny preexisting crack to shatter the entire screen. A replacement screen was neither available nor economical, so the phone had to be replaced.</p>
 
 
 
