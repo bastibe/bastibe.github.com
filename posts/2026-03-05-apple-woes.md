@@ -19,9 +19,9 @@ The German keyboard layout for MacOS on non-Apple keyboards is insane. So I made
 
 Sometimes my Mac does not wake from sleep. Pressing the power button does nothing. Hitting keyboard keys does nothing. Only a long-press of the power button eventually reboots it. The power button on the Mac Studio is in an insane place of course.
 
-There is no indication anywhere that the hard drive is getting full.
+There is no indication anywhere that the hard drive is getting full. **Edit:** A commenter pointed out that as of 2022, there is at least a _Storage_ page in _System Settings_ → _General_ → _Storage_. Better than nothing.
 
-There is no simple way to reset the computer to factory conditions.
+There is no simple way to reset the computer to factory conditions. **Edit:** A commenter pointed out that this does exist as of 2021, in _System Settings_ → _General_ → _Transfer or Reset_ → _Erase All Content and Settings..._. 
 
 Gaming is largely impossible, even though the hardware is very capable.
 
