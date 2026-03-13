@@ -4,7 +4,26 @@
 <title>bastibe.de</title>
 <description>bastibe.de</description>
 <link>https://bastibe.de</link>
-<lastBuildDate>Sat, 07 Mar 2026 14:24:26 +0000</lastBuildDate>
+<lastBuildDate>Fri, 13 Mar 2026 22:00:15 +0000</lastBuildDate>
+<item>
+<title>🔥 This is not fine 🔥</title>
+<description><![CDATA[<p>So I was <a href="https://bastibe.de/2026-03-05-apple-woes.html">annoyed with my Apple computer</a>, and decided to try Linux again. I even got a fancy Framework Desktop to do it!</p>
+<p>After a week, the hardware arrived. To be honest, I was a bit under-whelmed. It's a cute little black box, but at the end of the day, it is just a black box. Somehow I had hoped it would look a bit more classy. Oh well. At least it's very quiet.</p>
+<p>Since I wanted color management in Linux, KDE is the only option until Gnome 50 is released next month. So I installed Fedora KDE. This worked well. All my hardware worked immediately, including the odd headphone amplifier, the weird flightsim controller, and the Apple touchpad. Even the two 4K160 P3 screens came up correctly without issues. Weirdly, the GPU was configured with merely 512 MB of memory by default. But a quick trip to the BIOS fixed that.</p>
+<p>Much more annoying was installing apps. I like to use Darktable, Digikam, Signal, Spotify, Zen, and Zed. Installing these required installing AppImages, Flatpaks, and the odd RPM repo, and even hand-editing a few desktop shortcuts. I can deal with this, but elegant it is not. The rest of the software was of course trivially installed from the package repos.</p>
+<p>Steam and games worked immediately without any trouble. But gaming performance in Microsoft Flight Simulator was merely good, I had hoped for a bit more.</p>
+<p>Performance in Darktable was a bit of a letdown. I had thought the Framework Desktop would clearly outclass my Mac Studio M2. But it didn't. It was slower. After messing with stuff for a while, I found that the RustiCL runtime ran faster than RocM once you set up the environment variable. Fine, be that way. Not the end of the world.</p>
+<p>I was less amused about KDE. This was my preferred environment in the past, but even compared to Liquid Glass, it was a bit of a mess. Why are some directory icons monochrome, and others colorful? Why are font sizes and rounding radii and colors inconsistent everywhere? Why do some apps scroll with inertia, and others don't? Why do apps crash frequently? I am apparently spoiled by MacOS.</p>
+<p>Meanwhile I noticed that the computer did not recover from sleep correctly. USB would wake it, but then immediately die, so I couldn't enter my password and resume my session. I futzed with GRUB params and udev rules, but that didn't fix anything.</p>
+<p>Then I wanted to set up a home banking app. I knew I'd have to use a Windows app for that, and thought Wine should easily be able to handle them. It. Did. Not. After a few hours of tinkering, I gave up. Alright, a VM then. I'd need one for printing and scanning anyways. So I tried to set up VirtualBox.</p>
+<p>At this point the plot finally turned. Fedora does not include VirtualBox in its repos. There is hardly any documentation for anything on VirtualBox's website. Meanwhile the <em>third</em> kernel update had installed, and this time it apparently broke the GPU driver. God damn it, I just want a running computer, not a tinkering box. And why do reboots take a long time?</p>
+<p>Look, I really wanted to like this. But I'm already fighting with computers eight hours a workday, I don't need this shit at home. I'm not giving up just yet. I have now installed Ubuntu 25.10. It doesn't have proper color management yet, but that's only temporary until 26.04 releases. I'm still trying to make this work. But my patience is close to running out.</p>
+]]></description>
+<category>computers</category>
+<link>https://bastibe.de/2026-03-26-this-is-not-fine.html</link>
+<guid>https://bastibe.de/2026-03-26-this-is-not-fine.html</guid>
+<pubDate>Thu, 26 Mar 2026 00:00:00 +0000</pubDate>
+</item>
 <item>
 <title>Apple: enough is enough</title>
 <description><![CDATA[<p>Yesterday, my wife wanted to use Discord on her Apple laptop. It was right there in the applications folder. But MacOS couldn't find it. Launching it manually took several minutes, for some reason.</p>
@@ -247,7 +266,6 @@
 <span class="w">            </span><span class="nv">y</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">            </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span><span class="w"> </span>
 <span class="w">            </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="nf">day_stroke_h</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span>
-<span class="w">          </span><span class="p">[</span>
 <span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">day</span><span class="p">))</span>
 <span class="w">            </span><span class="nf">#translated_weekday</span><span class="p">(</span><span class="nv">day</span><span class="p">)</span>
 <span class="w">          </span><span class="p">])</span>
@@ -344,40 +362,101 @@
 <span class="w">              </span><span class="p">)</span>
 <span class="w">            </span><span class="p">)</span>
 <span class="w">          </span><span class="p">})</span>,
-<span class="w">        </span>)
-
 <span class="w">      </span><span class="kd">#let</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">27</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="nv">deg</span><span class="p">,</span><span class="w"> </span><span class="nv">reflow</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nv">origin</span><span class="p">:</span><span class="w"> </span><span class="nv">top</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nf">#translated_month</span><span class="p">(</span><span class="nv">month_date</span><span class="p">)])))</span>
 
-<span class="w">      </span><span class="nf">#grid</span><span class="p">(</span>
+<span class="w">        </span><span class="p">..</span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nv">day</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nv">table</span><span class="p">.</span><span class="nf">cell</span><span class="p">(</span>
+<span class="w">            </span><span class="nv">x</span><span class="p">:</span><span class="w"> </span><span class="nv">day</span><span class="p">.</span><span class="nf">day</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nv">y</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">            </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">12</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">day</span><span class="p">))</span>
+<span class="w">            </span><span class="nv">#day</span>.display(&quot;[day<span class="w"> </span>padding:none<span class="p">]</span><span class="s2">&quot;)</span>
+<span class="s2">          ])</span>
+<span class="s2">        }),</span>
+
+<span class="s2">        ..monthly_vacations.map(vac =&gt; {</span>
+<span class="s2">          let vac_start_day = max_date(str_to_date(vac.at(&quot;</span><span class="nv">from</span><span class="s2">&quot;)), monthly_days.at(0))</span>
+<span class="s2">          let vac_end_day = min_date(str_to_date(vac.at(&quot;</span><span class="nv">to</span><span class="s2">&quot;)), monthly_days.at(-1))</span>
+<span class="s2">          let start_index = int((vac_start_day - monthly_days.at(0)).days())</span>
+<span class="s2">          let span_days = int((vac_end_day - vac_start_day).days() + 1)</span>
+
+<span class="s2">          table.cell(</span>
+<span class="s2">            x: start_index,</span>
+<span class="s2">            y: 0,</span>
+<span class="s2">            colspan: span_days,</span>
+<span class="s2">            align: center,</span>
+<span class="s2">            [</span>
+<span class="s2">              #set text(size: 10pt, rgb(&quot;</span><span class="err">#</span><span class="nv">a0a0a0</span><span class="s2">&quot;))</span>
+<span class="s2">              #vac.at(&quot;</span><span class="nv">name</span><span class="s2">&quot;)</span>
+<span class="s2">            ]</span>
+<span class="s2">          )</span>
+<span class="s2">        })</span>
+<span class="s2">    )</span>
+
+<span class="s2">    #let month_header = text(size: 27pt, align(left, [#translated_month(month_date)]))</span>
+
+<span class="s2">    #set par(spacing:0.5em)</span>
+<span class="s2">    #month_header</span>
+<span class="s2">    #days_strip</span>
+
+<span class="s2">    #pagebreak(weak: true)</span>
+
+<span class="s2">    // ===========================</span>
+
+<span class="s2">    #set page(height: 21cm, width: 5cm, margin: 10mm, fill: white.transparentize(50%))</span>
+
+<span class="s2">    #for lr in range(2) [</span>
+<span class="s2">      #let curcol = if lr == 1 { (auto, 1fr) } else { (1fr, auto) }</span>
+
+<span class="s2">      #let a = table(</span>
+<span class="s2">          columns: 3,</span>
+<span class="s2">          align: (left, left, right),</span>
+<span class="s2">          inset: 0% + 4pt,</span>
+<span class="s2">          stroke: 0pt,</span>
+<span class="s2">          </span>
+<span class="s2">          ..monthly_days.map(day =&gt; {</span>
+<span class="s2">            table.cell(</span>
+<span class="s2">              x: 1,</span>
+<span class="s2">              y: day.day() - 1,</span>
+<span class="s2">              fill: day_fill(day), </span>
+<span class="s2">              stroke: day_stroke_v(day),</span>
+<span class="s2">              [</span>
+<span class="s2">                #set text(size: 10pt, day_color(day))</span>
+<span class="s2">                #translated_weekday(day)</span>
+<span class="s2">              ])</span>
+<span class="s2">          }),</span>
+
+<span class="s2">          ..monthly_days.map(day =&gt; {</span>
+<span class="s2">            table.cell(</span>
+<span class="s2">              x: 2,</span>
+<span class="s2">              y: day.day() - 1,</span>
+<span class="s2">              fill: day_fill(day), [</span>
+<span class="s2">              #set text(size: 12pt, day_color(day))</span>
+<span class="s2">              #day.display(&quot;</span><span class="p">[</span>day<span class="w"> </span>padding:space<span class="p">]</span><span class="s2">&quot;)</span>
+<span class="s2">            ])</span>
+<span class="s2">          }),</span>
+
 <span class="w">        </span><span class="nv">columns</span><span class="p">:</span><span class="w"> </span><span class="nv">curcol</span><span class="p">,</span>
 <span class="w">        </span><span class="nv">align</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="nv">left</span><span class="p">),</span>
 <span class="w">        </span><span class="nv">column-gutter</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="p">,</span>
 <span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">lr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="nv">b</span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="nv">a</span><span class="p">},</span>
 <span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">lr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="nv">a</span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="nv">b</span><span class="p">}</span>
 <span class="w">      </span><span class="p">)</span>
-<span class="w">      </span><span class="nf">#pagebreak</span><span class="p">(</span><span class="nv">weak</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="err">]</span>
-<span class="p">}</span>
 
-<span class="kd">#show</span><span class="p">:</span><span class="w"> </span><span class="nv">calendar</span><span class="p">.</span><span class="nf">with</span><span class="p">(</span>
-<span class="w">  </span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="nv">YEAR</span>
-<span class="p">)</span>
-</pre></div>
-</aside>
-
-<p>Typst was a complete joy to work with. It combines the notational ease of markdown with the layout chops of TeX and a simple, sane programming model.</p>
-]]></description>
-<category>computers</category>
-<link>https://bastibe.de/2026-01-08-calendar-typst.html</link>
-<guid>https://bastibe.de/2026-01-08-calendar-typst.html</guid>
-<pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
-</item>
-<item>
-<title>Windows 11</title>
-<description><![CDATA[<p>My friends and colleagues often complain about Windows 11. Personally, however, I much prefer it to Windows 10. In particular, here are some standout features:</p>
-<p>Windows Explorer now has tabs! Coming from macOS and Linux, I so missed <strong>explorer tabs</strong> that I added them to Windows 10 with <a href="https://www.stardock.com/products/groupy/">a plugin</a>. I still feel handicapped whenever I have to interact with an older Windows box that doesn't have them. But Windows 11 does. Next, please fix the inevitable hangs in Explorer, please.</p>
-<p>Windows 11 includes a very useful <strong>clipboard manager</strong>! Just hit ❖-V instead of Ctrl-V, and select any of your previously copied snippets. I use this all the time, to copy items from multiple places into a common list. Or to share that link I copied half an hour ago.</p>
+<span class="s2">            table.cell(</span>
+<span class="s2">              y: start_index,</span>
+<span class="s2">              x: 0,</span>
+<span class="s2">              rowspan: span_days,</span>
+<span class="s2">              align: center + horizon,</span>
+<span class="s2">              rotate(-90deg, reflow: false, origin: center + horizon,</span>
+<span class="s2">                [</span>
+<span class="s2">                  #set text(size: 10pt, rgb(&quot;</span><span class="err">#</span><span class="nv">a0a0a0</span><span class="s2">&quot;))</span>
+<span class="s2">                  #vac.at(&quot;</span><span class="nv">name</span><span class="err">&quot;</span><span class="p">)</span>
+<span class="w">                </span><span class="err">]</span>
+<span class="w">              </span><span class="p">)</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">          </span><span class="p">})</span>,
+f your previously copied snippets. I use this all the time, to copy items from multiple places into a common list. Or to share that link I copied half an hour ago.</p>
 <p>The Windows 11 <strong>screenshot tool</strong> is hands-down the best screenshot tool of all the operating systems I know. Why? Because it captures the full screen content at the time of capture, including the mouse pointer, hover states, tooltips, and everything else. And it copies the capture immediately to the clipboard, ready to paste into documentation or notes. I hit ❖-⇧-S many times every day. Another useful feature is <strong>text recognition</strong> that is now part of the screenshot viewer and image viewer.</p>
 <p>At work, I spend many hours every day in Microsoft Teams. Teams is not a high point in Microsoft's portfolio. But at least I can <strong>mute and unmute my microphone</strong> from anywhere in the OS with ❖-Alt-K. This is highly useful whenever I want to present something, without having to manually switch to Teams and back just to unmute myself. Oh, and after a year of waiting, the &quot;new&quot; Teams finally re-learned to spell-check more than one language at a time this year. About time.</p>
 <p>Sometimes I have to annotate PDFs, especially for signing forms. Windows now includes a very competent little <strong>PDF annotator</strong> in Edge, of all places. It's not as good as macOS's Preview.app, or Okular. But hey, at least it's there.</p>
