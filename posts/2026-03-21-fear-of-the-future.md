@@ -5,9 +5,9 @@ description: where I grapple with existential uncertainty, and Linux
 filetags: computers
 ---
 
-I've been feeling unmoored lately. I changed roles at work, from a very comfortable programming position to a new challenging new management role. At the same time, AI is threatening to take away the fun part of programming, and leave my profession a hollow shell. So when I relax and edit photos after work, it is with some pent up anxiety and insecurity.
+I've been feeling unmoored lately. I changed roles at work, from a very comfortable programming position to a challenging new management role. At the same time, AI is threatening to take away the fun part of programming, and leave my profession a hollow shell. So when I relax and edit photos after work, it is with some pent up anxiety and insecurity.
 
-Thus when Apple added their latest “liquid glass” insult to the injury that is modern macOS[^macos], it was the straw that broke the camel's back. I decided it was time to try the grass on the other side, and bought a Framework Desktop. That's a very fanciful small form factor computer that should combine great power in a compact and quiet case. Essentially the PC equivalent to my Mac Studio M2 Max.
+Thus when Apple added their latest “liquid glass” insult to the injury that is modern macOS[^macos], it was the straw that broke the camel's back. I decided it was time to try the grass on the other side, and bought a Framework Desktop. That's a very fanciful small form factor computer that should combine great power in a compact and quiet case. Essentially the PC equivalent to my Mac Studio.
 
 [^macos]: I have a long history of bitching about Apple computers ([2012](https://bastibe.de/2012-07-09-apple-is-failing-me.html), [2015](https://bastibe.de/2015-10-16-finder-woes.html), [2020](https://bastibe.de/2020-01-21-i-miss-my-mac.html), [2020](https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html), [2026](https://bastibe.de/2026-03-05-apple-woes.html)).
 
@@ -23,15 +23,18 @@ In terms of hardware, the Framework Desktop is a very nice machine. Perhaps I'd 
 
 Performance was good, but not much of an upgrade over my current setup:
 
-| Task                                             | Framework | Mac[^mac]/Handheld[^deck] |
-| ------------------------------------------------ | --------- | ------------------------- |
-| Darktable [61MP benchmark][bench] export         | 3.4s      | 6.0s                      |
-| Darktable [61MP benchmark][bench] interact[^int] | 0.30s     | 0.25s                     |
-| Darktable [61MP benchmark][bench] export         | 1.2s      | 1.2s                      |
-| Darktable [61MP benchmark][bench] interact[^int] | 0.45s     | 0.25s                     |
-| Gaming: MSFS2020 high preset[^msfs]              | 35 FPS    | 30 FPS                    |
-| Gaming: MSFS2020 medium preset[^msfs]            | 45 FPS    | 40 FPS                    |
-| Gaming: System Shock medium preset               | 25 FPS    | 35 FPS                    |
+| Task                                             | Framework | Mac[^mac]       |
+| ------------------------------------------------ | --------- | --------------- |
+| Darktable [61MP benchmark][bench] export         | 3.4s      | 6.0s            |
+| Darktable [61MP benchmark][bench] interact[^int] | 0.30s     | 0.25s           |
+| Darktable [24MP benchmark][bench] export         | 1.2s      | 1.2s            |
+| Darktable [24MP benchmark][bench] interact[^int] | 0.45s     | 0.25s           |
+
+| Task                                             | Framework | Handheld[^deck] |
+| ------------------------------------------------ | --------- | --------------- |
+| Gaming: MSFS2020 high preset[^msfs]              | 35 FPS    | 30 FPS          |
+| Gaming: MSFS2020 medium preset[^msfs]            | 45 FPS    | 40 FPS          |
+| Gaming: System Shock medium preset               | 25 FPS    | 35 FPS          |
 
 [^mac]: A Mac Studio M2 Pro with 32 GB of memory, my previous computer.
 [^deck]: A Legion Go S Z1 16G running SteamOS. I play almost exclusively on the handheld, but was considering streaming from the Framework to the handheld for more demanding titles.
