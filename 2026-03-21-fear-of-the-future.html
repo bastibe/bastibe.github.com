@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="where I grapple with existential uncertainty, and Linux">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://bastibe.de/rss.xml"
+      title="RSS feed for https://bastibe.de">
+<title>Linux on the Framework Desktop</title>
+<meta name="author" content="Bastian Bechtold">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="static/favicon-152.png">
+<link rel="msapplication-TitleImage" href="static/favicon-144.png">
+<link rel="msapplication-TitleColor" href="#0141ff">
+<script src="static/katex.min.js"></script>
+<script src="static/auto-render.min.js"></script>
+<script src="static/lightbox.js"></script>
+<link rel="stylesheet" href="static/katex.min.css">
+<script>document.addEventListener("DOMContentLoaded", function() { renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false}
+          ]
+        }); });</script>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1,width=device-width,minimum-scale=1">
+
+</head>
+<body>
+<div class="header">
+  <a href="https://bastibe.de">Basti's Scratchpad on the Internet</a>
+  <div class="sitelinks">
+    <a href="https://github.com/bastibe">Github</a> | <a href="https://bastibe.de/projects.html">Projects</a> | <a href="https://bastibe.de/uses.html">Uses</a> | <a href="https://bastibe.de/reviews.html">Reviews</a> | <a href="https://bastibe.de/about.html">About</a>
+  </div>
+</div>
+
+<div id="content">
+<div class="post-date">26 Mar 2026</div>
+<h1 class="post-title"><a href="https://bastibe.de/2026-03-21-fear-of-the-future.html">Linux on the Framework Desktop</a></h1>
+<p>I've been feeling unmoored lately. I changed roles at work, from a very comfortable programming position to a new challenging new management role. At the same time, AI is threatening to take away the fun part of programming, and leave my profession a hollow shell. So when I relax and edit photos after work, it is with some pent up anxiety and insecurity.</p>
+<p>Thus when Apple added their latest “liquid glass” insult to the injury that is modern macOS<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>, it was the straw that broke the camel's back. I decided it was time to try the grass on the other side, and bought a Framework Desktop. That's a very fanciful small form factor computer that should combine great power in a compact and quiet case. Essentially the PC equivalent to my Mac Studio M2 Max.</p>
+<p>In particular, I bought this computer specifically to run Linux. My first try with Fedora KDE <a href="https://bastibe.de/2026-03-26-this-is-not-fine.html">went poorly</a>. But the second try with Ubuntu 25.11 resulted in a very pleasant system!</p>
+<p><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">Compared to the Mac</a>, GNOME was a breeze to customize to my liking. I replaced the built-in <em>Ubuntu Tiling Assistant</em> extension with the <a href="https://extensions.gnome.org/extension/7065/tiling-shell/">Tiling Shell</a> extension, to get <kbd>❖-Left</kbd>/<kbd>❖-Right</kbd> window snapping to work across multiple screens, and installed <a href="https://extensions.gnome.org/extension/7850/touchpad-gesture-customization/">Touchpad Gesture Customization</a> for quad-swipe-up to enable the window switcher. Beyond that, the dock was already on the right, <a href="https://bastibe.de/2010-07-03-strangeness-of-widescreen-displays-in-modern-operating-systems.html">where it should be</a> (<em>*cough*</em> Microsoft), the file manager was fast and simple, and the whole system just worked very well and looked fairly good. All my hardware worked immediately. This was actually the nicest desktop environment I've used in a long while.</p>
+<p>Of course there were details that annoyed me a bit. In particular, many apps could only spelling-correct a single language. Mouse acceleration was different from what I'm used to. More annoying was that the computer would not wake from sleep on USB input, if I had switched my KVM to a different source while it was asleep. I'm sure this could be fixed, but I didn't get to it. Well, and since I couldn't wake the computer by just mashing a few keys on the keyboard, I had to crawl under my desk to find the power button on the Framework Desktop, and it is not a good button: it can't be located by touch, wobbles a lot, and just feels cheap. A minor detail, but I felt it daily.</p>
+<p>Installing apps was straight-forward. Most apps were either available in the repo or as flatpacks, including Zen, Spotify, Darktable, Thunderbird, Obsidian, DigiKam, Publii, Zed, Signal, and Telegram. There were minor gripes such as the odd window frame not looking right, but that's not something I get hung up on. Only three applications required a VM, for banking, scanning, and photo printing. This was expected, and fine. Affinity was the only application that I'd really need to find an alternative for, but I don't foresee much of a problem with that.</p>
+<p>In terms of hardware, the Framework Desktop is a very nice machine. Perhaps I'd have preferred a few more USB ports, and a bit more style than a simple black box. But at the end of the day, it was simply sitting under my desk, and it's certainly pretty enough for that. The fan kept quiet at all times.</p>
+<p>Performance was good, but not much of an upgrade over my current setup:</p>
+<table>
+<thead>
+<tr>
+  <th>Task</th>
+  <th>Framework</th>
+  <th>Mac<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>/Handheld<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> export</td>
+  <td>3.4s</td>
+  <td>6.0s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> interact<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup></td>
+  <td>0.30s</td>
+  <td>0.25s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> export</td>
+  <td>1.2s</td>
+  <td>1.2s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> interact<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup></td>
+  <td>0.45s</td>
+  <td>0.25s</td>
+</tr>
+<tr>
+  <td>Gaming: MSFS2020 high preset<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup></td>
+  <td>35 FPS</td>
+  <td>30 FPS</td>
+</tr>
+<tr>
+  <td>Gaming: MSFS2020 medium preset<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup></td>
+  <td>45 FPS</td>
+  <td>40 FPS</td>
+</tr>
+<tr>
+  <td>Gaming: System Shock medium preset</td>
+  <td>25 FPS</td>
+  <td>35 FPS</td>
+</tr>
+</tbody>
+</table>
+<p>These are not fair performance comparisons, but they represent how I use my computer. The Framework did of course run games a bit faster than my handheld, but only 50% more frames for 4x the TDP was less than expected. Darktable performance was actually a bit of a downgrade to my Mac, probably due to relatively poor driver support for OpenCL<sup class="footnote-ref" id="fnref-6"><a href="#fn-6">6</a></sup>. But all of that is fine.</p>
+<p>Overall, it has to be said, the Framework Desktop turned out to be an awesome system! It does everything I'd hoped for, while being small and quiet and unobtrusive. Truly a great machine.</p>
+<p>But, through all of this ordeal of installing Fedora, seeing it <em>break</em> very disconcertingly before my eyes, setting it up again with Ubuntu, figuring things out, blogging about it... <em>I wasn't having fun</em>. This new computer was actually wonderful, but it did not fix my annoyance with computers in general, nor my general unease with the direction the tech industry is going. This is of course perfectly obvious in retrospect, but wasn't apparent to me when it overlapped with various other annoyances.</p>
+<p>So, a big fat recommendation for the Framework Desktop, and Linux on the Desktop, if that's your jam. But the Framework Desktop was a complication I didn't need, so I'll stick with MacOS for the time being, and work through my other problems first.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>I have a long history of bitching about Apple computers (<a href="https://bastibe.de/2012-07-09-apple-is-failing-me.html">2012</a>, <a href="https://bastibe.de/2015-10-16-finder-woes.html">2015</a>, <a href="https://bastibe.de/2020-01-21-i-miss-my-mac.html">2020</a>, <a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">2020</a>, <a href="https://bastibe.de/2026-03-05-apple-woes.html">2026</a>).<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>A Mac Studio M2 Pro with 32 GB of memory, my previous computer.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>A Legion Go S Z1 16G running SteamOS. I play almost exclusively on the handheld, but was considering streaming from the Framework to the handheld for more demanding titles.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+<li id="fn-4"><p>The time it takes to change the first exposure instance, as measured by <code>darktable -d perf</code>.<a href="#fnref-4" class="footnote">&#8617;</a></p></li>
+<li id="fn-5"><p>On the Framework, at 50% resolution scale (1080p), on the handheld, at 66% resolution scale (720p). That's not a fair comparison, but it's how I'd play them.<a href="#fnref-5" class="footnote">&#8617;</a></p></li>
+<li id="fn-6"><p>That's with the RustiCL implementation, and pinned memory enabled. ROCm was significantly slower.<a href="#fnref-6" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+<div class="previous-post"><a href="https://bastibe.de/2026-03-26-this-is-not-fine.html">Previous post</a></div>
+<div class="taglist"><a href="https://bastibe.de/tags.html">Tags</a>: <a href="https://bastibe.de/tag-computers.html">computers</a></div>
+<div id="comments">
+<script async src="https://talk.hyvor.com/embed/embed.js" type="module"></script>
+<hyvor-talk-comments id="hyvorcomments" website-id="3390" page-id=""></hyvor-talk-comments>
+<script type="text/javascript">
+    document.getElementById("hyvorcomments").setAttribute("page-id", location.pathname);
+</script>
+
+</div>
+</div>
+<div id="postamble" class="status">
+<div id="archive">
+  <a href="https://bastibe.de/archive.html">Archive</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center>
+
+</div>
+</body>
+</html>

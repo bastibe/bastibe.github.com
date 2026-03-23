@@ -42,7 +42,79 @@
 
 
 
-<div class="post-date">26 Mar 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-03-26-this-is-not-fine.html">🔥 This is not fine 🔥</a></h2>
+<div class="post-date">26 Mar 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-03-21-fear-of-the-future.html">Linux on the Framework Desktop</a></h2>
+<p>I've been feeling unmoored lately. I changed roles at work, from a very comfortable programming position to a new challenging new management role. At the same time, AI is threatening to take away the fun part of programming, and leave my profession a hollow shell. So when I relax and edit photos after work, it is with some pent up anxiety and insecurity.</p>
+<p>Thus when Apple added their latest “liquid glass” insult to the injury that is modern macOS<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>, it was the straw that broke the camel's back. I decided it was time to try the grass on the other side, and bought a Framework Desktop. That's a very fanciful small form factor computer that should combine great power in a compact and quiet case. Essentially the PC equivalent to my Mac Studio M2 Max.</p>
+<p>In particular, I bought this computer specifically to run Linux. My first try with Fedora KDE <a href="https://bastibe.de/2026-03-26-this-is-not-fine.html">went poorly</a>. But the second try with Ubuntu 25.11 resulted in a very pleasant system!</p>
+<p><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">Compared to the Mac</a>, GNOME was a breeze to customize to my liking. I replaced the built-in <em>Ubuntu Tiling Assistant</em> extension with the <a href="https://extensions.gnome.org/extension/7065/tiling-shell/">Tiling Shell</a> extension, to get <kbd>❖-Left</kbd>/<kbd>❖-Right</kbd> window snapping to work across multiple screens, and installed <a href="https://extensions.gnome.org/extension/7850/touchpad-gesture-customization/">Touchpad Gesture Customization</a> for quad-swipe-up to enable the window switcher. Beyond that, the dock was already on the right, <a href="https://bastibe.de/2010-07-03-strangeness-of-widescreen-displays-in-modern-operating-systems.html">where it should be</a> (<em>*cough*</em> Microsoft), the file manager was fast and simple, and the whole system just worked very well and looked fairly good. All my hardware worked immediately. This was actually the nicest desktop environment I've used in a long while.</p>
+<p>Of course there were details that annoyed me a bit. In particular, many apps could only spelling-correct a single language. Mouse acceleration was different from what I'm used to. More annoying was that the computer would not wake from sleep on USB input, if I had switched my KVM to a different source while it was asleep. I'm sure this could be fixed, but I didn't get to it. Well, and since I couldn't wake the computer by just mashing a few keys on the keyboard, I had to crawl under my desk to find the power button on the Framework Desktop, and it is not a good button: it can't be located by touch, wobbles a lot, and just feels cheap. A minor detail, but I felt it daily.</p>
+<p>Installing apps was straight-forward. Most apps were either available in the repo or as flatpacks, including Zen, Spotify, Darktable, Thunderbird, Obsidian, DigiKam, Publii, Zed, Signal, and Telegram. There were minor gripes such as the odd window frame not looking right, but that's not something I get hung up on. Only three applications required a VM, for banking, scanning, and photo printing. This was expected, and fine. Affinity was the only application that I'd really need to find an alternative for, but I don't foresee much of a problem with that.</p>
+<p>In terms of hardware, the Framework Desktop is a very nice machine. Perhaps I'd have preferred a few more USB ports, and a bit more style than a simple black box. But at the end of the day, it was simply sitting under my desk, and it's certainly pretty enough for that. The fan kept quiet at all times.</p>
+<p>Performance was good, but not much of an upgrade over my current setup:</p>
+<table>
+<thead>
+<tr>
+  <th>Task</th>
+  <th>Framework</th>
+  <th>Mac<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>/Handheld<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> export</td>
+  <td>3.4s</td>
+  <td>6.0s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> interact<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup></td>
+  <td>0.30s</td>
+  <td>0.25s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> export</td>
+  <td>1.2s</td>
+  <td>1.2s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> interact<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup></td>
+  <td>0.45s</td>
+  <td>0.25s</td>
+</tr>
+<tr>
+  <td>Gaming: MSFS2020 high preset<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup></td>
+  <td>35 FPS</td>
+  <td>30 FPS</td>
+</tr>
+<tr>
+  <td>Gaming: MSFS2020 medium preset<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup></td>
+  <td>45 FPS</td>
+  <td>40 FPS</td>
+</tr>
+<tr>
+  <td>Gaming: System Shock medium preset</td>
+  <td>25 FPS</td>
+  <td>35 FPS</td>
+</tr>
+</tbody>
+</table>
+<p>These are not fair performance comparisons, but they represent how I use my computer. The Framework did of course run games a bit faster than my handheld, but only 50% more frames for 4x the TDP was less than expected. Darktable performance was actually a bit of a downgrade to my Mac, probably due to relatively poor driver support for OpenCL<sup class="footnote-ref" id="fnref-6"><a href="#fn-6">6</a></sup>. But all of that is fine.</p>
+<p>Overall, it has to be said, the Framework Desktop turned out to be an awesome system! It does everything I'd hoped for, while being small and quiet and unobtrusive. Truly a great machine.</p>
+<p>But, through all of this ordeal of installing Fedora, seeing it <em>break</em> very disconcertingly before my eyes, setting it up again with Ubuntu, figuring things out, blogging about it... <em>I wasn't having fun</em>. This new computer was actually wonderful, but it did not fix my annoyance with computers in general, nor my general unease with the direction the tech industry is going. This is of course perfectly obvious in retrospect, but wasn't apparent to me when it overlapped with various other annoyances.</p>
+<p>So, a big fat recommendation for the Framework Desktop, and Linux on the Desktop, if that's your jam. But the Framework Desktop was a complication I didn't need, so I'll stick with MacOS for the time being, and work through my other problems first.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>I have a long history of bitching about Apple computers (<a href="https://bastibe.de/2012-07-09-apple-is-failing-me.html">2012</a>, <a href="https://bastibe.de/2015-10-16-finder-woes.html">2015</a>, <a href="https://bastibe.de/2020-01-21-i-miss-my-mac.html">2020</a>, <a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">2020</a>, <a href="https://bastibe.de/2026-03-05-apple-woes.html">2026</a>).<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>A Mac Studio M2 Pro with 32 GB of memory, my previous computer.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>A Legion Go S Z1 16G running SteamOS. I play almost exclusively on the handheld, but was considering streaming from the Framework to the handheld for more demanding titles.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+<li id="fn-4"><p>The time it takes to change the first exposure instance, as measured by <code>darktable -d perf</code>.<a href="#fnref-4" class="footnote">&#8617;</a></p></li>
+<li id="fn-5"><p>On the Framework, at 50% resolution scale (1080p), on the handheld, at 66% resolution scale (720p). That's not a fair comparison, but it's how I'd play them.<a href="#fnref-5" class="footnote">&#8617;</a></p></li>
+<li id="fn-6"><p>That's with the RustiCL implementation, and pinned memory enabled. ROCm was significantly slower.<a href="#fnref-6" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+
+
+
+<div class="post-date">16 Mar 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-03-26-this-is-not-fine.html">🔥 This is not fine 🔥</a></h2>
 <p>So I was <a href="https://bastibe.de/2026-03-05-apple-woes.html">annoyed with my Apple computer</a>, and decided to try Linux again. I even got a fancy Framework Desktop to do it!</p>
 <p>After a week, the hardware arrived. To be honest, I was a bit under-whelmed. It's a cute little black box, but at the end of the day, it is just a black box. Somehow I had hoped it would look a bit more classy. Oh well. At least it's very quiet.</p>
 <p>Since I wanted color management in Linux, KDE is the only option until Gnome 50 is released next month. So I installed Fedora KDE. This worked well. All my hardware worked immediately, including the odd headphone amplifier, the weird flightsim controller, and the Apple touchpad. Even the two 4K160 P3 screens came up correctly without issues. Weirdly, the GPU was configured with merely 512 MB of memory by default. But a quick trip to the BIOS fixed that.</p>
@@ -145,267 +217,6 @@
 <p>And then there's that ending...</p>
 <h2>Notable Shoutouts</h2>
 <p>to the Fallout and Murderbot TV shows, which were delightful. The book series <a href="https://www.goodreads.com/series/344870-arcana-imperii">Arcana Imperii</a> series by Miles Cameron, and <a href="https://www.goodreads.com/book/show/81992.Singularity_Sky">Singularity Sky</a>/<a href="https://www.goodreads.com/book/show/101864.Iron_Sunrise">Iron Sunrise</a> by Charles Stross were great reads, too.</p>
-
-
-
-<div class="post-date">08 Jan 2026</div><h2 class="post-title"><a href="https://bastibe.de/2026-01-08-calendar-typst.html">My own Calendar (with typst)</a></h2>
-<p>I've been printing my own family calendar over the last year. However, most of the calendar templates I found online are ugly or boring. So obviously, I had to make my own:</p>
-<figure style="width: 100%; text-align: center;">
-<img width="75%" src="/static/2026-01/Calendar.png" alt="The month of january, as rendered by my typst program" />
-</figure>
-
-<p>Look, it has my local holidays and vacations!</p>
-<p>The fun thing is, this was generated with <a href="https://typst.app/">typst</a>, which is a TeX-like markdown language that I wanted to play with for a while. But in contrast to TeX, it is easily programmable:</p>
-<aside class="code-box">
-
-<p><a href="https://gist.github.com/bastibe/2881bb2eea02e18bfbc6ab3521cda8f3">calendar.typ</a>
-(Inspired by <a href="https://discuss.pixls.us/t/my-new-calendar-template-engine/53633">a forum post</a>)</p>
-<div class="highlight"><pre><span></span><span class="kd">#let</span><span class="w"> </span>YEAR = 2026
-
-<span class="kd">#let</span><span class="w"> </span>months = (
-<span class="w">  </span>&quot;Januar&quot;, 
-<span class="w">  </span>&quot;Februar&quot;, 
-<span class="w">  </span>&quot;März&quot;, 
-<span class="w">  </span>&quot;April&quot;, 
-<span class="w">  </span>&quot;Mai&quot;, 
-<span class="w">  </span>&quot;Juni&quot;, 
-<span class="w">  </span>&quot;Juli&quot;, 
-<span class="w">  </span>&quot;August&quot;, 
-<span class="w">  </span>&quot;September&quot;, 
-<span class="w">  </span>&quot;Oktober&quot;,
-<span class="w">  </span>&quot;November&quot;, 
-<span class="w">  </span>&quot;Dezember&quot;
-)
-<span class="kd">#let</span><span class="w"> </span>weekdays = (
-<span class="w">  </span>&quot;Mo&quot;,
-<span class="w">  </span>&quot;Di&quot;,
-<span class="w">  </span>&quot;Mi&quot;,
-<span class="w">  </span>&quot;Do&quot;,
-<span class="w">  </span>&quot;Fr&quot;,
-<span class="w">  </span>&quot;Sa&quot;,
-<span class="w">  </span>&quot;So&quot;
-)
-<span class="kd">#let</span><span class="w"> </span>holidays = (
-<span class="w">  </span>&quot;2026-01-01&quot;: &quot;Neujahr&quot;,
-<span class="w">  </span>&quot;2026-01-06&quot;: &quot;Heilige Drei Könige&quot;,
-<span class="w">  </span>&quot;2026-04-03&quot;: &quot;Karfreitag&quot;,
-<span class="w">  </span>&quot;2026-04-05&quot;: &quot;Ostersonntag&quot;,
-<span class="w">  </span>&quot;2026-04-06&quot;: &quot;Ostermontag&quot;,
-<span class="w">  </span>&quot;2026-05-01&quot;: &quot;Tag der Arbeit&quot;,
-<span class="w">  </span>&quot;2026-05-14&quot;: &quot;Christi Himmelfahrt&quot;,
-<span class="w">  </span>&quot;2026-05-24&quot;: &quot;Pfingstsonntag&quot;,
-<span class="w">  </span>&quot;2026-05-25&quot;: &quot;Pfingstmontag&quot;,
-<span class="w">  </span>&quot;2026-08-15&quot;: &quot;Mariä Himmelfahrt&quot;,
-<span class="w">  </span>&quot;2026-10-03&quot;: &quot;Tag der Deutschen Einheit&quot;,
-<span class="w">  </span>&quot;2026-11-01&quot;: &quot;Allerheiligen&quot;,
-<span class="w">  </span>&quot;2026-12-25&quot;: &quot;1. Weihnachtstag&quot;,
-<span class="w">  </span>&quot;2026-12-26&quot;: &quot;2. Weihnachtstag&quot;
-)
-<span class="kd">#let</span><span class="w"> </span>vacations = (
-<span class="w">  </span>(from: &quot;2025-12-22&quot;, to: &quot;2026-01-05&quot;, name: &quot;Weihnachtsferien&quot;),
-<span class="w">  </span>(from: &quot;2026-02-16&quot;, to: &quot;2026-02-20&quot;, name: &quot;Faschingsferien&quot;),
-<span class="w">  </span>(from: &quot;2026-03-30&quot;, to: &quot;2026-04-10&quot;, name: &quot;Osterferien&quot;),
-<span class="w">  </span>(from: &quot;2026-05-26&quot;, to: &quot;2026-06-05&quot;, name: &quot;Pfingstferien&quot;),
-<span class="w">  </span>(from: &quot;2026-08-03&quot;, to: &quot;2026-09-14&quot;, name: &quot;Sommerferien&quot;),
-<span class="w">  </span>(from: &quot;2026-11-02&quot;, to: &quot;2026-11-06&quot;, name: &quot;Herbstferien&quot;),
-<span class="w">  </span>(from: &quot;2026-12-24&quot;, to: &quot;2027-01-08&quot;, name: &quot;Weihnachtsferien&quot;)
-)
-
-<span class="kd">#let</span><span class="w"> </span><span class="nf">str_to_date</span><span class="p">(</span>s) = {
-<span class="w">  </span>let dateparts = s.split(&quot;-&quot;)
-<span class="w">  </span>datetime(
-<span class="w">    </span>year: int(dateparts.at(0)),
-<span class="w">    </span>month: int(dateparts.at(1)),
-<span class="w">    </span>day: int(dateparts.at(2)),
-<span class="w">  </span>)
-}
-<span class="kd">#let</span><span class="w"> </span><span class="nf">is_vacation</span><span class="p">(</span>dt) = {
-<span class="w">  </span>for vac in vacations {
-<span class="w">    </span>if dt &gt;= str_to_date(vac.at(&quot;from&quot;)) and dt &lt;= str_to_date(vac.at(&quot;to&quot;)) {
-<span class="w">      </span>return true
-<span class="w">    </span>}
-<span class="w">  </span>}
-<span class="w">  </span>return false
-}
-
-<span class="kd">#let</span><span class="w"> </span><span class="nf">translated_month</span><span class="p">(</span>dt) = months.at(dt.month() - 1)
-<span class="kd">#let</span><span class="w"> </span><span class="nf">translated_weekday</span><span class="p">(</span>dt) = weekdays.at(dt.weekday() - 1)
-<span class="kd">#let</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span>dt) = if dt.weekday() in (6, 7) { rgb(&quot;#a91010&quot;) } else { black }
-<span class="kd">#let</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span>dt) = if dt.display() in holidays.keys() { rgb(&quot;#e3e3e3&quot;) } else { white.transparentize(100%) }
-<span class="kd">#let</span><span class="w"> </span><span class="nf">day_stroke_h</span><span class="p">(</span>dt) = if is_vacation(dt) { (top: 2pt + rgb(&quot;#a0a0a0&quot;)) } else { 0pt }
-<span class="kd">#let</span><span class="w"> </span><span class="nf">day_stroke_v</span><span class="p">(</span>dt) = if is_vacation(dt) { (left: 2pt + rgb(&quot;#a0a0a0&quot;)) } else { 0pt }
-<span class="kd">#let</span><span class="w"> </span><span class="nf">max_date</span><span class="p">(</span>a, b) = if a &gt; b { a } else { b }
-<span class="kd">#let</span><span class="w"> </span><span class="nf">min_date</span><span class="p">(</span>a, b) = if a &lt; b { a } else { b }
-
-<span class="kd">#let</span><span class="w"> </span><span class="nf">calendar</span><span class="p">(</span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="o">,</span><span class="w"> </span>body) = {
-
-<span class="w">  </span>set text(font: &quot;Candara&quot;)
-<span class="w">  </span>set document(title: str(year) + &quot; calendar&quot;)
-
-<span class="w">  </span>for month in range(1, 13) [
-
-<span class="w">    </span><span class="kd">#let</span><span class="w"> </span>month_date = datetime(
-<span class="w">      </span>year: year,
-<span class="w">      </span>month: month,
-<span class="w">      </span>day: 1,
-<span class="w">    </span>)
-
-<span class="w">    </span><span class="kd">#let</span><span class="w"> </span>monthly_days = ()
-<span class="w">    </span><span class="nv">#for</span><span class="w"> </span>day in range(0, 31) {
-<span class="w">      </span>let month_accumulator = (month_date + duration(days: day))
-<span class="w">      </span>if month_accumulator.month() != month {
-<span class="w">        </span>break
-<span class="w">      </span>}
-<span class="w">      </span>monthly_days.push(month_accumulator)
-<span class="w">    </span>}
-
-<span class="w">    </span><span class="kd">#let</span><span class="w"> </span>monthly_vacations = ()
-<span class="w">    </span><span class="nv">#for</span><span class="w"> </span>vac in vacations {
-<span class="w">      </span>let vac_start = str_to_date(vac.at(&quot;from&quot;))
-<span class="w">      </span>let vac_end = str_to_date(vac.at(&quot;to&quot;))
-<span class="w">      </span>if vac_end &lt; monthly_days.at(0) or vac_start &gt; monthly_days.at(-1) {
-<span class="w">        </span>continue
-<span class="w">      </span>}
-<span class="w">      </span>monthly_vacations.push(vac)
-<span class="w">    </span>}
-
-<span class="w">    </span><span class="c1">// ============= HORIZONTAL CALENDARIUM ==============</span>
-
-<span class="w">    </span><span class="kd">#set</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="kr">cm</span><span class="o">,</span><span class="w"> </span><span class="nv">width</span><span class="p">:</span><span class="w"> </span><span class="m">21</span><span class="kr">cm</span><span class="o">,</span><span class="w"> </span><span class="nv">margin</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">mm</span><span class="o">,</span><span class="w"> </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span>white.transparentize(50%))
-
-<span class="w">    </span><span class="kd">#let</span><span class="w"> </span>days_strip = table(
-<span class="w">        </span>columns: monthly_days.len(),
-<span class="w">        </span>rows: 2,
-<span class="w">        </span>align: center,
-<span class="w">        </span>inset: 0% + 4pt,
-<span class="w">        </span>stroke: 0pt,
-
-<span class="p">        ..</span>monthly_days.map(day =&gt; {
-<span class="w">          </span>table.cell(
-<span class="w">            </span>x: day.day() - 1,
-<span class="w">            </span>y: 1,
-<span class="w">            </span>fill: day_fill(day), 
-<span class="w">            </span>stroke: day_stroke_h(day),
-<span class="w">          </span><span class="p">[</span>
-<span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="o">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span>day))
-<span class="w">            </span><span class="nf">#translated_weekday</span><span class="p">(</span>day)
-<span class="w">          </span><span class="p">]</span>)
-<span class="w">        </span>}),
-
-<span class="p">        ..</span>monthly_days.map(day =&gt; {
-<span class="w">          </span>table.cell(
-<span class="w">            </span>x: day.day() - 1,
-<span class="w">            </span>y: 2,
-<span class="w">            </span>fill: day_fill(day), [
-<span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">12</span><span class="kr">pt</span><span class="o">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span>day))
-<span class="w">            </span><span class="nv">#day</span>.display(&quot;[day padding:none]&quot;)
-<span class="w">          </span><span class="p">]</span>)
-<span class="w">        </span>}),
-
-<span class="p">        ..</span>monthly_vacations.map(vac =&gt; {
-<span class="w">          </span>let vac_start_day = max_date(str_to_date(vac.at(&quot;from&quot;)), monthly_days.at(0))
-<span class="w">          </span>let vac_end_day = min_date(str_to_date(vac.at(&quot;to&quot;)), monthly_days.at(-1))
-<span class="w">          </span>let start_index = int((vac_start_day - monthly_days.at(0)).days())
-<span class="w">          </span>let span_days = int((vac_end_day - vac_start_day).days() + 1)
-
-<span class="w">          </span>table.cell(
-<span class="w">            </span>x: start_index,
-<span class="w">            </span>y: 0,
-<span class="w">            </span>colspan: span_days,
-<span class="w">            </span>align: center,
-<span class="w">            </span><span class="p">[</span>
-<span class="w">              </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="o">,</span><span class="w"> </span><span class="nf">rgb</span><span class="p">(</span><span class="s2">&quot;#a0a0a0&quot;</span><span class="p">))</span>
-<span class="w">              </span><span class="nv">#vac</span>.at(&quot;name&quot;)
-<span class="w">            </span><span class="p">]</span>
-<span class="w">          </span>)
-<span class="w">        </span>})
-<span class="w">    </span>)
-
-<span class="w">    </span><span class="kd">#let</span><span class="w"> </span>month_header = text(size: 27pt, align(left, [#translated_month(month_date)]))
-
-<span class="w">    </span><span class="kd">#set</span><span class="w"> </span><span class="nf">par</span><span class="p">(</span><span class="nv">spacing</span><span class="p">:</span><span class="m">0.5</span><span class="kr">em</span><span class="p">)</span>
-<span class="w">    </span><span class="nv">#month_header</span>
-<span class="w">    </span><span class="nv">#days_strip</span>
-
-<span class="w">    </span><span class="nf">#pagebreak</span><span class="p">(</span><span class="nv">weak</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-
-<span class="w">    </span><span class="c1">// ===========================</span>
-
-<span class="w">    </span><span class="kd">#set</span><span class="w"> </span><span class="nf">page</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span><span class="w"> </span><span class="m">21</span><span class="kr">cm</span><span class="o">,</span><span class="w"> </span><span class="nv">width</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="kr">cm</span><span class="o">,</span><span class="w"> </span><span class="nv">margin</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">mm</span><span class="o">,</span><span class="w"> </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span>white.transparentize(50%))
-
-<span class="w">    </span><span class="nv">#for</span><span class="w"> </span>lr in range(2) [
-<span class="w">      </span><span class="kd">#let</span><span class="w"> </span>curcol = if lr == 1 { (auto, 1fr) } else { (1fr, auto) }
-
-<span class="w">      </span><span class="kd">#let</span><span class="w"> </span>a = table(
-<span class="w">          </span>columns: 3,
-<span class="w">          </span>align: (left, left, right),
-<span class="w">          </span>inset: 0% + 4pt,
-<span class="w">          </span>stroke: 0pt,
-<span class="p">          </span>
-<span class="p">          ..</span>monthly_days.map(day =&gt; {
-<span class="w">            </span>table.cell(
-<span class="w">              </span>x: 1,
-<span class="w">              </span>y: day.day() - 1,
-<span class="w">              </span>fill: day_fill(day), 
-<span class="w">              </span>stroke: day_stroke_v(day),
-<span class="w">              </span><span class="p">[</span>
-<span class="w">                </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="o">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span>day))
-<span class="w">                </span><span class="nf">#translated_weekday</span><span class="p">(</span>day)
-<span class="w">              </span><span class="p">]</span>)
-<span class="w">          </span>}),
-
-<span class="p">          ..</span>monthly_days.map(day =&gt; {
-<span class="w">            </span>table.cell(
-<span class="w">              </span>x: 2,
-<span class="w">              </span>y: day.day() - 1,
-<span class="w">              </span>fill: day_fill(day), [
-<span class="w">              </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">12</span><span class="kr">pt</span><span class="o">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span>day))
-<span class="w">              </span><span class="nv">#day</span>.display(&quot;[day padding:space]&quot;)
-<span class="w">            </span><span class="p">]</span>)
-<span class="w">          </span>}),
-
-<span class="p">          ..</span>monthly_vacations.map(vac =&gt; {
-<span class="w">            </span>let vac_start_day = max_date(str_to_date(vac.at(&quot;from&quot;)), monthly_days.at(0))
-<span class="w">            </span>let vac_end_day = min_date(str_to_date(vac.at(&quot;to&quot;)), monthly_days.at(-1))
-<span class="w">            </span>let start_index = int((vac_start_day - monthly_days.at(0)).days())
-<span class="w">            </span>let span_days = int((vac_end_day - vac_start_day).days() + 1)
-
-<span class="w">            </span>table.cell(
-<span class="w">              </span>y: start_index,
-<span class="w">              </span>x: 0,
-<span class="w">              </span>rowspan: span_days,
-<span class="w">              </span>align: center + horizon,
-<span class="w">              </span>rotate(-90deg, reflow: false, origin: center + horizon,
-<span class="w">                </span><span class="p">[</span>
-<span class="w">                  </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="o">,</span><span class="w"> </span><span class="nf">rgb</span><span class="p">(</span><span class="s2">&quot;#a0a0a0&quot;</span><span class="p">))</span>
-<span class="w">                  </span><span class="nv">#vac</span>.at(&quot;name&quot;)
-<span class="w">                </span><span class="p">]</span>
-<span class="w">              </span>)
-<span class="w">            </span>)
-<span class="w">          </span>}),
-<span class="w">        </span>)
-
-<span class="w">      </span><span class="kd">#let</span><span class="w"> </span>b = text(size: 27pt, align(right, rotate(-90deg, reflow: true, origin: top + right, [#translated_month(month_date)])))
-
-<span class="w">      </span><span class="nf">#grid</span><span class="p">(</span>
-<span class="w">        </span>columns: curcol,
-<span class="w">        </span>align: (right, left),
-<span class="w">        </span>column-gutter: 10pt,
-<span class="w">        </span>if lr == 1 {b} else {a},
-<span class="w">        </span>if lr == 1 {a} else {b}
-<span class="w">      </span>)
-<span class="w">      </span><span class="nf">#pagebreak</span><span class="p">(</span><span class="nv">weak</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="w">  </span><span class="p">]</span>
-}
-
-<span class="kd">#show</span>: calendar.with(
-<span class="w">  </span>year: YEAR
-)
-</pre></div>
-</aside>
-
-<p>Typst was a complete joy to work with. It combines the notational ease of markdown with the layout chops of TeX and a simple, sane programming model.</p>
 
 
 

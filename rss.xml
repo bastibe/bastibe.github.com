@@ -4,7 +4,83 @@
 <title>bastibe.de</title>
 <description>bastibe.de</description>
 <link>https://bastibe.de</link>
-<lastBuildDate>Fri, 13 Mar 2026 22:00:15 +0000</lastBuildDate>
+<lastBuildDate>Mon, 23 Mar 2026 17:13:35 +0000</lastBuildDate>
+<item>
+<title>Linux on the Framework Desktop</title>
+<description><![CDATA[<p>I've been feeling unmoored lately. I changed roles at work, from a very comfortable programming position to a new challenging new management role. At the same time, AI is threatening to take away the fun part of programming, and leave my profession a hollow shell. So when I relax and edit photos after work, it is with some pent up anxiety and insecurity.</p>
+<p>Thus when Apple added their latest “liquid glass” insult to the injury that is modern macOS<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup>, it was the straw that broke the camel's back. I decided it was time to try the grass on the other side, and bought a Framework Desktop. That's a very fanciful small form factor computer that should combine great power in a compact and quiet case. Essentially the PC equivalent to my Mac Studio M2 Max.</p>
+<p>In particular, I bought this computer specifically to run Linux. My first try with Fedora KDE <a href="https://bastibe.de/2026-03-26-this-is-not-fine.html">went poorly</a>. But the second try with Ubuntu 25.11 resulted in a very pleasant system!</p>
+<p><a href="https://bastibe.de/2023-04-21-os-customization-and-macos.html">Compared to the Mac</a>, GNOME was a breeze to customize to my liking. I replaced the built-in <em>Ubuntu Tiling Assistant</em> extension with the <a href="https://extensions.gnome.org/extension/7065/tiling-shell/">Tiling Shell</a> extension, to get <kbd>❖-Left</kbd>/<kbd>❖-Right</kbd> window snapping to work across multiple screens, and installed <a href="https://extensions.gnome.org/extension/7850/touchpad-gesture-customization/">Touchpad Gesture Customization</a> for quad-swipe-up to enable the window switcher. Beyond that, the dock was already on the right, <a href="https://bastibe.de/2010-07-03-strangeness-of-widescreen-displays-in-modern-operating-systems.html">where it should be</a> (<em>*cough*</em> Microsoft), the file manager was fast and simple, and the whole system just worked very well and looked fairly good. All my hardware worked immediately. This was actually the nicest desktop environment I've used in a long while.</p>
+<p>Of course there were details that annoyed me a bit. In particular, many apps could only spelling-correct a single language. Mouse acceleration was different from what I'm used to. More annoying was that the computer would not wake from sleep on USB input, if I had switched my KVM to a different source while it was asleep. I'm sure this could be fixed, but I didn't get to it. Well, and since I couldn't wake the computer by just mashing a few keys on the keyboard, I had to crawl under my desk to find the power button on the Framework Desktop, and it is not a good button: it can't be located by touch, wobbles a lot, and just feels cheap. A minor detail, but I felt it daily.</p>
+<p>Installing apps was straight-forward. Most apps were either available in the repo or as flatpacks, including Zen, Spotify, Darktable, Thunderbird, Obsidian, DigiKam, Publii, Zed, Signal, and Telegram. There were minor gripes such as the odd window frame not looking right, but that's not something I get hung up on. Only three applications required a VM, for banking, scanning, and photo printing. This was expected, and fine. Affinity was the only application that I'd really need to find an alternative for, but I don't foresee much of a problem with that.</p>
+<p>In terms of hardware, the Framework Desktop is a very nice machine. Perhaps I'd have preferred a few more USB ports, and a bit more style than a simple black box. But at the end of the day, it was simply sitting under my desk, and it's certainly pretty enough for that. The fan kept quiet at all times.</p>
+<p>Performance was good, but not much of an upgrade over my current setup:</p>
+<table>
+<thead>
+<tr>
+  <th>Task</th>
+  <th>Framework</th>
+  <th>Mac<sup class="footnote-ref" id="fnref-2"><a href="#fn-2">2</a></sup>/Handheld<sup class="footnote-ref" id="fnref-3"><a href="#fn-3">3</a></sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> export</td>
+  <td>3.4s</td>
+  <td>6.0s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> interact<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup></td>
+  <td>0.30s</td>
+  <td>0.25s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> export</td>
+  <td>1.2s</td>
+  <td>1.2s</td>
+</tr>
+<tr>
+  <td>Darktable <a href="https://darktable.info/en/system-ui-2/performance-analysis/performance-analysis-why/">61MP benchmark</a> interact<sup class="footnote-ref" id="fnref-4"><a href="#fn-4">4</a></sup></td>
+  <td>0.45s</td>
+  <td>0.25s</td>
+</tr>
+<tr>
+  <td>Gaming: MSFS2020 high preset<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup></td>
+  <td>35 FPS</td>
+  <td>30 FPS</td>
+</tr>
+<tr>
+  <td>Gaming: MSFS2020 medium preset<sup class="footnote-ref" id="fnref-5"><a href="#fn-5">5</a></sup></td>
+  <td>45 FPS</td>
+  <td>40 FPS</td>
+</tr>
+<tr>
+  <td>Gaming: System Shock medium preset</td>
+  <td>25 FPS</td>
+  <td>35 FPS</td>
+</tr>
+</tbody>
+</table>
+<p>These are not fair performance comparisons, but they represent how I use my computer. The Framework did of course run games a bit faster than my handheld, but only 50% more frames for 4x the TDP was less than expected. Darktable performance was actually a bit of a downgrade to my Mac, probably due to relatively poor driver support for OpenCL<sup class="footnote-ref" id="fnref-6"><a href="#fn-6">6</a></sup>. But all of that is fine.</p>
+<p>Overall, it has to be said, the Framework Desktop turned out to be an awesome system! It does everything I'd hoped for, while being small and quiet and unobtrusive. Truly a great machine.</p>
+<p>But, through all of this ordeal of installing Fedora, seeing it <em>break</em> very disconcertingly before my eyes, setting it up again with Ubuntu, figuring things out, blogging about it... <em>I wasn't having fun</em>. This new computer was actually wonderful, but it did not fix my annoyance with computers in general, nor my general unease with the direction the tech industry is going. This is of course perfectly obvious in retrospect, but wasn't apparent to me when it overlapped with various other annoyances.</p>
+<p>So, a big fat recommendation for the Framework Desktop, and Linux on the Desktop, if that's your jam. But the Framework Desktop was a complication I didn't need, so I'll stick with MacOS for the time being, and work through my other problems first.</p>
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>I have a long history of bitching about Apple computers (<a href="https://bastibe.de/2012-07-09-apple-is-failing-me.html">2012</a>, <a href="https://bastibe.de/2015-10-16-finder-woes.html">2015</a>, <a href="https://bastibe.de/2020-01-21-i-miss-my-mac.html">2020</a>, <a href="https://bastibe.de/2020-09-17-dear-computer-we-need-to-talk.html">2020</a>, <a href="https://bastibe.de/2026-03-05-apple-woes.html">2026</a>).<a href="#fnref-1" class="footnote">&#8617;</a></p></li>
+<li id="fn-2"><p>A Mac Studio M2 Pro with 32 GB of memory, my previous computer.<a href="#fnref-2" class="footnote">&#8617;</a></p></li>
+<li id="fn-3"><p>A Legion Go S Z1 16G running SteamOS. I play almost exclusively on the handheld, but was considering streaming from the Framework to the handheld for more demanding titles.<a href="#fnref-3" class="footnote">&#8617;</a></p></li>
+<li id="fn-4"><p>The time it takes to change the first exposure instance, as measured by <code>darktable -d perf</code>.<a href="#fnref-4" class="footnote">&#8617;</a></p></li>
+<li id="fn-5"><p>On the Framework, at 50% resolution scale (1080p), on the handheld, at 66% resolution scale (720p). That's not a fair comparison, but it's how I'd play them.<a href="#fnref-5" class="footnote">&#8617;</a></p></li>
+<li id="fn-6"><p>That's with the RustiCL implementation, and pinned memory enabled. ROCm was significantly slower.<a href="#fnref-6" class="footnote">&#8617;</a></p></li>
+</ol>
+</section>
+]]></description>
+<category>computers</category>
+<link>https://bastibe.de/2026-03-21-fear-of-the-future.html</link>
+<guid>https://bastibe.de/2026-03-21-fear-of-the-future.html</guid>
+<pubDate>Thu, 26 Mar 2026 00:00:00 +0000</pubDate>
+</item>
 <item>
 <title>🔥 This is not fine 🔥</title>
 <description><![CDATA[<p>So I was <a href="https://bastibe.de/2026-03-05-apple-woes.html">annoyed with my Apple computer</a>, and decided to try Linux again. I even got a fancy Framework Desktop to do it!</p>
@@ -22,7 +98,7 @@
 <category>computers</category>
 <link>https://bastibe.de/2026-03-26-this-is-not-fine.html</link>
 <guid>https://bastibe.de/2026-03-26-this-is-not-fine.html</guid>
-<pubDate>Thu, 26 Mar 2026 00:00:00 +0000</pubDate>
+<pubDate>Mon, 16 Mar 2026 00:00:00 +0000</pubDate>
 </item>
 <item>
 <title>Apple: enough is enough</title>
@@ -266,6 +342,7 @@
 <span class="w">            </span><span class="nv">y</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <span class="w">            </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span><span class="w"> </span>
 <span class="w">            </span><span class="nv">stroke</span><span class="p">:</span><span class="w"> </span><span class="nf">day_stroke_h</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span>
+<span class="w">          </span><span class="p">[</span>
 <span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">day</span><span class="p">))</span>
 <span class="w">            </span><span class="nf">#translated_weekday</span><span class="p">(</span><span class="nv">day</span><span class="p">)</span>
 <span class="w">          </span><span class="p">])</span>
@@ -362,101 +439,40 @@
 <span class="w">              </span><span class="p">)</span>
 <span class="w">            </span><span class="p">)</span>
 <span class="w">          </span><span class="p">})</span>,
+<span class="w">        </span>)
+
 <span class="w">      </span><span class="kd">#let</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">27</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="nf">rotate</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="nv">deg</span><span class="p">,</span><span class="w"> </span><span class="nv">reflow</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nv">origin</span><span class="p">:</span><span class="w"> </span><span class="nv">top</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nf">#translated_month</span><span class="p">(</span><span class="nv">month_date</span><span class="p">)])))</span>
 
-<span class="w">        </span><span class="p">..</span><span class="nv">monthly_days</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nv">day</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="nv">table</span><span class="p">.</span><span class="nf">cell</span><span class="p">(</span>
-<span class="w">            </span><span class="nv">x</span><span class="p">:</span><span class="w"> </span><span class="nv">day</span><span class="p">.</span><span class="nf">day</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">            </span><span class="nv">y</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-<span class="w">            </span><span class="nv">fill</span><span class="p">:</span><span class="w"> </span><span class="nf">day_fill</span><span class="p">(</span><span class="nv">day</span><span class="p">),</span><span class="w"> </span><span class="p">[</span>
-<span class="w">            </span><span class="kd">#set</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span><span class="w"> </span><span class="m">12</span><span class="kr">pt</span><span class="p">,</span><span class="w"> </span><span class="nf">day_color</span><span class="p">(</span><span class="nv">day</span><span class="p">))</span>
-<span class="w">            </span><span class="nv">#day</span>.display(&quot;[day<span class="w"> </span>padding:none<span class="p">]</span><span class="s2">&quot;)</span>
-<span class="s2">          ])</span>
-<span class="s2">        }),</span>
-
-<span class="s2">        ..monthly_vacations.map(vac =&gt; {</span>
-<span class="s2">          let vac_start_day = max_date(str_to_date(vac.at(&quot;</span><span class="nv">from</span><span class="s2">&quot;)), monthly_days.at(0))</span>
-<span class="s2">          let vac_end_day = min_date(str_to_date(vac.at(&quot;</span><span class="nv">to</span><span class="s2">&quot;)), monthly_days.at(-1))</span>
-<span class="s2">          let start_index = int((vac_start_day - monthly_days.at(0)).days())</span>
-<span class="s2">          let span_days = int((vac_end_day - vac_start_day).days() + 1)</span>
-
-<span class="s2">          table.cell(</span>
-<span class="s2">            x: start_index,</span>
-<span class="s2">            y: 0,</span>
-<span class="s2">            colspan: span_days,</span>
-<span class="s2">            align: center,</span>
-<span class="s2">            [</span>
-<span class="s2">              #set text(size: 10pt, rgb(&quot;</span><span class="err">#</span><span class="nv">a0a0a0</span><span class="s2">&quot;))</span>
-<span class="s2">              #vac.at(&quot;</span><span class="nv">name</span><span class="s2">&quot;)</span>
-<span class="s2">            ]</span>
-<span class="s2">          )</span>
-<span class="s2">        })</span>
-<span class="s2">    )</span>
-
-<span class="s2">    #let month_header = text(size: 27pt, align(left, [#translated_month(month_date)]))</span>
-
-<span class="s2">    #set par(spacing:0.5em)</span>
-<span class="s2">    #month_header</span>
-<span class="s2">    #days_strip</span>
-
-<span class="s2">    #pagebreak(weak: true)</span>
-
-<span class="s2">    // ===========================</span>
-
-<span class="s2">    #set page(height: 21cm, width: 5cm, margin: 10mm, fill: white.transparentize(50%))</span>
-
-<span class="s2">    #for lr in range(2) [</span>
-<span class="s2">      #let curcol = if lr == 1 { (auto, 1fr) } else { (1fr, auto) }</span>
-
-<span class="s2">      #let a = table(</span>
-<span class="s2">          columns: 3,</span>
-<span class="s2">          align: (left, left, right),</span>
-<span class="s2">          inset: 0% + 4pt,</span>
-<span class="s2">          stroke: 0pt,</span>
-<span class="s2">          </span>
-<span class="s2">          ..monthly_days.map(day =&gt; {</span>
-<span class="s2">            table.cell(</span>
-<span class="s2">              x: 1,</span>
-<span class="s2">              y: day.day() - 1,</span>
-<span class="s2">              fill: day_fill(day), </span>
-<span class="s2">              stroke: day_stroke_v(day),</span>
-<span class="s2">              [</span>
-<span class="s2">                #set text(size: 10pt, day_color(day))</span>
-<span class="s2">                #translated_weekday(day)</span>
-<span class="s2">              ])</span>
-<span class="s2">          }),</span>
-
-<span class="s2">          ..monthly_days.map(day =&gt; {</span>
-<span class="s2">            table.cell(</span>
-<span class="s2">              x: 2,</span>
-<span class="s2">              y: day.day() - 1,</span>
-<span class="s2">              fill: day_fill(day), [</span>
-<span class="s2">              #set text(size: 12pt, day_color(day))</span>
-<span class="s2">              #day.display(&quot;</span><span class="p">[</span>day<span class="w"> </span>padding:space<span class="p">]</span><span class="s2">&quot;)</span>
-<span class="s2">            ])</span>
-<span class="s2">          }),</span>
-
+<span class="w">      </span><span class="nf">#grid</span><span class="p">(</span>
 <span class="w">        </span><span class="nv">columns</span><span class="p">:</span><span class="w"> </span><span class="nv">curcol</span><span class="p">,</span>
 <span class="w">        </span><span class="nv">align</span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="nv">right</span><span class="p">,</span><span class="w"> </span><span class="nv">left</span><span class="p">),</span>
 <span class="w">        </span><span class="nv">column-gutter</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="kr">pt</span><span class="p">,</span>
 <span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">lr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="nv">b</span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="nv">a</span><span class="p">},</span>
 <span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nv">lr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="nv">a</span><span class="p">}</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">{</span><span class="nv">b</span><span class="p">}</span>
 <span class="w">      </span><span class="p">)</span>
+<span class="w">      </span><span class="nf">#pagebreak</span><span class="p">(</span><span class="nv">weak</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="err">]</span>
+<span class="p">}</span>
 
-<span class="s2">            table.cell(</span>
-<span class="s2">              y: start_index,</span>
-<span class="s2">              x: 0,</span>
-<span class="s2">              rowspan: span_days,</span>
-<span class="s2">              align: center + horizon,</span>
-<span class="s2">              rotate(-90deg, reflow: false, origin: center + horizon,</span>
-<span class="s2">                [</span>
-<span class="s2">                  #set text(size: 10pt, rgb(&quot;</span><span class="err">#</span><span class="nv">a0a0a0</span><span class="s2">&quot;))</span>
-<span class="s2">                  #vac.at(&quot;</span><span class="nv">name</span><span class="err">&quot;</span><span class="p">)</span>
-<span class="w">                </span><span class="err">]</span>
-<span class="w">              </span><span class="p">)</span>
-<span class="w">            </span><span class="p">)</span>
-<span class="w">          </span><span class="p">})</span>,
-f your previously copied snippets. I use this all the time, to copy items from multiple places into a common list. Or to share that link I copied half an hour ago.</p>
+<span class="kd">#show</span><span class="p">:</span><span class="w"> </span><span class="nv">calendar</span><span class="p">.</span><span class="nf">with</span><span class="p">(</span>
+<span class="w">  </span><span class="nv">year</span><span class="p">:</span><span class="w"> </span><span class="nv">YEAR</span>
+<span class="p">)</span>
+</pre></div>
+</aside>
+
+<p>Typst was a complete joy to work with. It combines the notational ease of markdown with the layout chops of TeX and a simple, sane programming model.</p>
+]]></description>
+<category>computers</category>
+<link>https://bastibe.de/2026-01-08-calendar-typst.html</link>
+<guid>https://bastibe.de/2026-01-08-calendar-typst.html</guid>
+<pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
+</item>
+<item>
+<title>Windows 11</title>
+<description><![CDATA[<p>My friends and colleagues often complain about Windows 11. Personally, however, I much prefer it to Windows 10. In particular, here are some standout features:</p>
+<p>Windows Explorer now has tabs! Coming from macOS and Linux, I so missed <strong>explorer tabs</strong> that I added them to Windows 10 with <a href="https://www.stardock.com/products/groupy/">a plugin</a>. I still feel handicapped whenever I have to interact with an older Windows box that doesn't have them. But Windows 11 does. Next, please fix the inevitable hangs in Explorer, please.</p>
+<p>Windows 11 includes a very useful <strong>clipboard manager</strong>! Just hit ❖-V instead of Ctrl-V, and select any of your previously copied snippets. I use this all the time, to copy items from multiple places into a common list. Or to share that link I copied half an hour ago.</p>
 <p>The Windows 11 <strong>screenshot tool</strong> is hands-down the best screenshot tool of all the operating systems I know. Why? Because it captures the full screen content at the time of capture, including the mouse pointer, hover states, tooltips, and everything else. And it copies the capture immediately to the clipboard, ready to paste into documentation or notes. I hit ❖-⇧-S many times every day. Another useful feature is <strong>text recognition</strong> that is now part of the screenshot viewer and image viewer.</p>
 <p>At work, I spend many hours every day in Microsoft Teams. Teams is not a high point in Microsoft's portfolio. But at least I can <strong>mute and unmute my microphone</strong> from anywhere in the OS with ❖-Alt-K. This is highly useful whenever I want to present something, without having to manually switch to Teams and back just to unmute myself. Oh, and after a year of waiting, the &quot;new&quot; Teams finally re-learned to spell-check more than one language at a time this year. About time.</p>
 <p>Sometimes I have to annotate PDFs, especially for signing forms. Windows now includes a very competent little <strong>PDF annotator</strong> in Edge, of all places. It's not as good as macOS's Preview.app, or Okular. But hey, at least it's there.</p>

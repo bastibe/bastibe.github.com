@@ -1,6 +1,6 @@
 ---
 title: 🔥 This is not fine 🔥
-date: 2026-03-26
+date: 2026-03-16
 description: where I try to live with Linux
 filetags: computers
 ---
