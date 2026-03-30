@@ -90,6 +90,8 @@ function enterLightbox(figure, image) {
     figure.parentNode.insertBefore(fakeFig, figure);
     // activate lightbox
     figure.classList.add('lightbox');
+    figure.originalWide = figure.classList.contains('wide-figure');
+    figure.classList.remove('wide-figure');
     image.classList.add('lightbox');
     let aspectRatio = image.naturalWidth / image.naturalHeight;
     let screenAspectRatio = window.innerWidth / window.innerHeight;
@@ -140,6 +142,9 @@ function exitLightbox(figure) {
     fakeFig.remove();
     // disable lightbox
     figure.classList.remove('lightbox');
+    if (figure.originalWide) {
+      figure.classList.add('wide-figure');
+    }
     // reset images
     for (let img of figure.getElementsByTagName('img')) {
         img.classList.remove('lightbox');
