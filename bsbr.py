@@ -2,6 +2,8 @@ import pathlib
 import time
 import tomllib
 import collections
+import re
+import subprocess
 
 import mistune
 import pygments
@@ -74,9 +76,30 @@ def collect_posts(config, posts_path, root_path, base_url):
         text = file.read_text(encoding='utf-8')
         metadata, markdown = parse_frontmatter(text)
         body = markdown_parser(markdown)
+        body = compress_imgs(body)
         posts.append(Post(file, metadata, body))
     posts = sorted(posts, key=lambda post: post.metadata['date'], reverse=True)
     return posts
+
+
+def compress_imgs(body):
+    """Compress any >512KB jpg <img> to a thumbnail. lighttable.js will load the original."""
+    def replace_img(match):
+        src = match.group(1)
+        if not src.lower().endswith('.jpg') or src.lower().endswith('.thumb.jpg') or 'static' not in src:
+            return match.group(0)
+        src = src[src.find('static'):]
+        img_path = pathlib.Path(src)
+        if not img_path.exists() or img_path.stat().st_size <= 512 * 1024:
+            return match.group(0)
+        thumb_path = img_path.with_suffix('.thumb.jpg')
+        if not thumb_path.exists():
+            print(f'Compressing {img_path} to {thumb_path}')
+            subprocess.run(['magick', str(img_path), '-resize', '3840x2160>', '-quality', '75', str(thumb_path)], check=True)
+        return match.group(0).replace(src, str(thumb_path))
+
+    body = re.sub(r'<img[^>]*src=["\']([^"\']+)["\'][^>]*>', replace_img, body)
+    return body
 
 
 def parse_frontmatter(text):
