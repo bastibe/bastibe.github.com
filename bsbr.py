@@ -96,7 +96,7 @@ def compress_imgs(body):
         if not thumb_path.exists():
             print(f'Compressing {img_path} to {thumb_path}')
             subprocess.run(['magick', str(img_path), '-resize', '3840x2160>', '-quality', '75', str(thumb_path)], check=True)
-        return match.group(0).replace(src, str(thumb_path))
+        return match.group(0).replace(src, thumb_path.as_posix())
 
     body = re.sub(r'<img[^>]*src=["\']([^"\']+)["\'][^>]*>', replace_img, body)
     return body
