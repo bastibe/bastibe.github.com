@@ -79,7 +79,7 @@ started, there were not yet any good Python libraries for working with
 audio data, so I had to write my own. [SoundFile](https://python-soundfile.readthedocs.io) and [SoundCard](https://soundcard.readthedocs.io) in
 particular have almost a million downloads per month, and are included
 in tens of thousands of other projects. Find a more complete list of
-my contributions [here](https://bastibe.de_projects.html).
+my contributions [here](https://bastibe.de/projects.html).
 
 ---
 
