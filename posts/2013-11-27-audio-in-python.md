@@ -6,7 +6,7 @@ filetags: python audio
 
 Have you ever wanted to work with audio data in Python? I know I do. I want to record from the microphone, I want to play sounds. I want to read and write audio files. If you ever tried this in Python, you know it is kind of a pain.
 
-It's not for a lack of libraries though. You can read sound files using [wave](http://docs.python.org/2/library/wave.html), SciPy provides [scipy.io.wavfile](http://docs.scipy.org/doc/scipy/reference/tutorial/io.html#module-scipy.io.wavfile), and there is a SciKit called [scikits.audiolab](http://scikits.appspot.com/audiolab). And except for `scikits.audiolab`, these return the data as raw `bytes`. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
+It's not for a lack of libraries though. You can read sound files using [wave](http://docs.python.org/2/library/wave.html), SciPy provides [scipy.io.wavfile](https://docs.scipy.org/doc/scipy/reference/io.html#module-scipy.io.wavfile), and there is a SciKit called [scikits.audiolab](https://cournape.github.io/audiolab/). And except for `scikits.audiolab`, these return the data as raw `bytes`. Like, they parse the WAVE header and that is great and all, but you still have to decode your audio data yourself.
 
 The same thing goes for playing/recording audio: [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/) provides nifty bindings to [portaudio](http://www.portaudio.com/), but you still have to decode your raw `bytes` by hand.
 

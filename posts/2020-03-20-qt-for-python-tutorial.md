@@ -38,7 +38,7 @@ Our first GUI program, a window with a text label.
 
 ## 3 Main Window
 
-Create a [QMainWindow](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QMainWindow.html), and build some structure for later episodes.
+Create a [QMainWindow](https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QMainWindow.html), and build some structure for later episodes.
 
 <video controls width="100%">
   <source src="/static/2020-03/03 main window.mp4" type="video/mp4">
@@ -47,7 +47,7 @@ Create a [QMainWindow](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QMainWind
 
 ## 4 Layouts
 
-Position a [QLabel](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QLabel.html) and a [QPushButton](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QPushButton.html) side by side, using layouts.
+Position a [QLabel](https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QLabel.html) and a [QPushButton](https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QPushButton.html) side by side, using layouts.
 
 <video controls width="100%">
   <source src="/static/2020-03/04 layouts.mp4" type="video/mp4">
@@ -78,7 +78,7 @@ Load the data required to draw a map.
 
 ## 7 Drawing the Map
 
-Draw a world map into a [QGraphicsScene](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QGraphicsScene.html).
+Draw a world map into a [QGraphicsScene](https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QGraphicsScene.html).
 
 <video controls width="100%">
   <source src="/static/2020-03/07 drawing the map.mp4" type="video/mp4">
@@ -88,7 +88,7 @@ Draw a world map into a [QGraphicsScene](https://doc.qt.io/qtforpython/PySide2/Q
 
 ## 8 Pens and Brushes
 
-Make the map pretty, using [QPens](https://doc.qt.io/qtforpython/PySide2/QtGui/QPen.html) and [QBrushes](https://doc.qt.io/qtforpython/PySide2/QtGui/QBrush.html).
+Make the map pretty, using [QPens](https://doc.qt.io/qtforpython-5/PySide2/QtGui/QPen.html) and [QBrushes](https://doc.qt.io/qtforpython-5/PySide2/QtGui/QBrush.html).
 
 <video controls width="100%">
   <source src="/static/2020-03/08 pens and brushes.mp4" type="video/mp4">
@@ -98,7 +98,7 @@ Make the map pretty, using [QPens](https://doc.qt.io/qtforpython/PySide2/QtGui/Q
 
 ## 9 Resize Event
 
-Resize the map when the window size changes, by overloading [`resizeEvent`](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.PySide2.QtWidgets.QWidget.resizeEvent).
+Resize the map when the window size changes, by overloading [`resizeEvent`](https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QWidget.html#PySide2.QtWidgets.QWidget.resizeEvent).
 
 <video controls width="100%">
   <source src="/static/2020-03/09 resize event.mp4" type="video/mp4">
@@ -158,7 +158,7 @@ Load the COVID19 dataset and print some stats.
 
 ## 15 Model View Tables
 
-Display the COVID19 dataset in a [QTableView](https://doc.qt.io/qtforpython/PySide2/QtWidgets/QTableView.html).
+Display the COVID19 dataset in a [QTableView](https://doc.qt.io/qtforpython-5/PySide2/QtWidgets/QTableView.html).
 
 <video controls width="100%">
   <source src="/static/2020-03/15 model view tables.mp4" type="video/mp4">

@@ -22,7 +22,7 @@ Interestingly, this leads to a somewhat different editing workflow in Darktable 
 [^1]: similar to the high dynamic range module, but more fine-grained
 [^2]: essentially a tone curve adjustment
 
-A related area of rapid development in Darktable has been the color balance rgb module, and color calibration. Both of these allow for very fine-grained control over various aspects of color, handily parametrized by hue or tone or channel. There is some subtlety in the [various controls](https://www.darktable.org/usermanual/3.6/en/special-topics/color-management/color-dimensions/) for "colorfulness", "vibrance", "chroma", "brilliance", and "saturation" that took some learning. But it also taught me to see color in a more nuanced way, which is a good thing. In mixed lighting, I can now use several instances of color calibration modules[^3] for different image areas, producing more natural results that I am capable of in Capture One.
+A related area of rapid development in Darktable has been the color balance rgb module, and color calibration. Both of these allow for very fine-grained control over various aspects of color, handily parametrized by hue or tone or channel. There is some subtlety in the [various controls](https://docs.darktable.org/usermanual/development/en/special-topics/color-management/color-dimensions/) for "colorfulness", "vibrance", "chroma", "brilliance", and "saturation" that took some learning. But it also taught me to see color in a more nuanced way, which is a good thing. In mixed lighting, I can now use several instances of color calibration modules[^3] for different image areas, producing more natural results that I am capable of in Capture One.
 
 [^3]: the new way of doing white balance
 

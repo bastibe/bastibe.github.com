@@ -19,7 +19,7 @@ My five contestants are:
 - A [Google Pixel 2](https://en.wikipedia.org/wiki/Pixel_2), with a 12.2 MP 5.75 × 4.32 mm “1/2.55 in” sensor from 2017, and a 3.8 mm f/1.8 lens (27 mm f/13 equivalent, crop 7.14),
 - A [Pentax Q7](https://en.wikipedia.org/wiki/Pentax_Q7), with a 12 MP 7.44 × 5.58 mm “1/1.7 in” sensor from 2013, and a 5-15 mm f/2.8-4.5 lens (24-70 mm f/13-22 equivalent, crop 4.76),
 - A [Panasonic LX100](https://en.wikipedia.org/wiki/Panasonic_Lumix_DMC-LX100), with a 13 MP, cropped 17.3 × 13 mm “micro four thirds” sensor from 2014, and a 11-34 mm f/1.7-2.8 lens (24-75 mm f/3.8-6 equivalent, crop 2.2),
-- A [Ricoh GR](https://en.wikipedia.org/wiki/Ricoh_GR_(large_sensor_compact_camera)), with a 16 MP 23.7 × 15.7 mm “APS-C” sensor from 2013, and a 28 mm f/2.8 lens (27 mm f/4.2 equivalent, crop 1.5),
+- A [Ricoh GR](https://en.wikipedia.org/wiki/Ricoh_GR_%28large_sensor_compact_camera%29), with a 16 MP 23.7 × 15.7 mm “APS-C” sensor from 2013, and a 28 mm f/2.8 lens (27 mm f/4.2 equivalent, crop 1.5),
 - A [Fujifilm X-T2](https://en.wikipedia.org/wiki/Fujifilm_X-T2), with a 24 MP 23.6 × 15.6 mm “APS-C” sensor from 2016, and a 18-135 mm f/3.5-5.6 lens (27-200 mm f/5.25-8.4 equivalent, crop 1.5).
 
 So I went for a walk around the neighborhood, and took a few pictures with a bag full of cameras. In particular, I was looking for a high dynamic range scene, in the form of a sunset. All pictures were taken at a low ISO[^2] and underexposed by two stops to account for the backlighting. All images were taken at 27 mm (equivalent[^3]) focal length.

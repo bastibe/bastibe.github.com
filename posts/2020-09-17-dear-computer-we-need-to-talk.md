@@ -36,7 +36,7 @@ Now that I have my SSH key, I open a Git Bash to download a project. It says my 
 
 There are several programs that claim to be able to read Linux file systems from Windows. They do not work. But Microsoft has just announced that you will be able to mount Linux file systems from WSL in a few weeks or months. So maybe that will work!
 
-I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many "solutions" are offered [in the support fora](https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1). What works for me is to first set the lock screen to "Windows Spotlight", then to "Slideshow". Only in that order will my pictures be shown.
+I set my lock screen to a slideshow of my pictures. Except my pictures do not show up, and I get to see Window's default pictures instead. An internet search reveals that this is a wide-spread problem. Many "solutions" are offered [in the support fora](http://web.archive.org/web/20210613125149/https://answers.microsoft.com/en-us/windows/forum/windows_10-start/windows-10-lock-screen-slideshow-not-showing/01975f7f-11e8-457e-a8ef-5b494af135f1). What works for me is to first set the lock screen to "Windows Spotlight", then to "Slideshow". Only in that order will my pictures be shown.
 
 I will stop here. I could probably go on ad infinitum if I wanted to. This was my experience of using Windows for one day. I consider these problems relatively benign, in that all of them had solutions, if non-obvious ones.
 

@@ -6,7 +6,7 @@ filetags: open-source
 
 I am a mostly self-taught programmer. Apart from a few programming side jobs at the university, I have been programming professionally for the last two and a half years.
 
-About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for [numpy](http://numpy.scipy.org/) [scipy](http://scipy.org/) and [matplotlib](http://matplotlib.sourceforge.net/) that, for my particular purposes, rivals Matlab.
+About two years ago, we wanted to buy a Matlab license for our company. However, our investors declined for dubious reasons. So I started looking for alternatives. Inspired by a good friend (thank you, Marc), I looked into Python. Python has this brilliant environment for [numpy](https://numpy.org/) [scipy](http://scipy.org/) and [matplotlib](http://matplotlib.sourceforge.net/) that, for my particular purposes, rivals Matlab.
 
 However, just like Matlab, Python lacked a way of playing real time audio out of the box. At the university, we used [Playrec](http://playrec.co.uk/) for that purpose, which implements [PortAudio](http://www.portaudio.com/) bindings for Matlab. Luckily, there was a similar package available for Python, called [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/).
 
@@ -16,7 +16,7 @@ At the time, I knew nothing of the Python C API (or Python, really), so those fi
 
 This was a revelation to me: I could not only _use_ a piece of software, I could also _change_ it and mold it to my special needs!
 
-Thus, I put up my changes on [github](https://github.com/bastibe/PyAudio) and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!
+Thus, I put up my changes on [github](http://web.archive.org/web/20131020132848/https://github.com/bastibe/PyAudio) and emailed the PyAudio maintainer. While the maintainer at the time did not have the time to incorporate my changes into the official PyAudio distribution, a few people discovered my version of it on github and contributed to it!
 
 This, again, was a revelation to me: Not only could /I/ change stuff other people did, wonderful people from around the world could collaborate and help each other. It always gave me a warm feeling of appreciation when some stranger on the internet chose to work with me!
 

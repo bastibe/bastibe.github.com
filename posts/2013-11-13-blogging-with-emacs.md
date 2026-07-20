@@ -4,7 +4,7 @@ date: 2013-11-13 00:00
 filetags: emacs blog
 ---
 
-When I first started blogging, it was on [blogger.com](http://blogger.com) (on the now-abandoned domain [daskrachen.com](http://daskrachen.com)). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
+When I first started blogging, it was on [blogger.com](http://blogger.com) (on the now-abandoned domain [daskrachen.com](http://web.archive.org/web/20210122194927/http://www.daskrachen.com/)). On blogger, writing new posts (back then) involved typing raw HTML into a web form. Not what I would call ideal. This improved somewhat when they introduced a fancy rich text editor that would automatically transform beautiful text into a horrible formatting mess.
 
 Thus I switched. Getting my blog posts out of blogger was... Let's just say that I lost anything I didn't have a plain-text backup of. And [I switched](http://bastibe.de/2012-07-18-blogging-with-pelican.html) to [Pelican](http://pelican.readthedocs.org/en/3.3.0/), a static site generator written in Python. It worked beautifully, until I updated something, at which point it resorted to just throwing errors. Now I don't have anything in particular against Python stack traces, but these particular traces traced deep into stuff that was (then?) too complex for me to understand.
 

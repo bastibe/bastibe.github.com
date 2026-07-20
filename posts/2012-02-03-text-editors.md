@@ -51,7 +51,7 @@ But Emacs is not limited to programming at all. As mentioned before, it includes
 
 The only real downside to this is that Emacs is, well, old. There is great power there, but is is only accessible to those willing to learn the myriad key combinations to invoke it. Rellay, mastering Emacs is a task for years, not weeks. But of course, you are not forced to wield all the power Emacs has to offer at once. Getting up to speed with basic text editing in Emacs will only take a few minutes, and the built-in help system and tutorial will guide you further whenever you feel the need to explore.
 
-I have been using Emacs for several months now and I am really enjoying it. It has a few shortcomings, but it is constantly being improved and getting more modern every day. I can see myself giving in to it and just live in Emacs all day long, but for now, I'm happy with it just being my primary text editor. However, I can't quite get beyond the fact that its pure text editing chops are nowhere near Vim. Then again, Emacs does [support Vim key bindings](http://gitorious.org/evil/pages/Home), so this might turn out not to bother me in the long run.
+I have been using Emacs for several months now and I am really enjoying it. It has a few shortcomings, but it is constantly being improved and getting more modern every day. I can see myself giving in to it and just live in Emacs all day long, but for now, I'm happy with it just being my primary text editor. However, I can't quite get beyond the fact that its pure text editing chops are nowhere near Vim. Then again, Emacs does [support Vim key bindings](https://github.com/emacs-evil/evil), so this might turn out not to bother me in the long run.
 
 At any rate, I would recommend anyone to give Emacs a shot at least for a short while. The power of Emacs can be an exhilarating experience, really.
 
@@ -78,7 +78,7 @@ While I was in college, I used Textmate extensively and it proved to be a verita
 
 Recently however, an early alpha version of Textmate 2 has been released that could reinvigorate the community and fix long standing issues. Whether that will actually happen will remain to be seen.
 
-### [Vico](http://www.vicoapp.com/)
+### [Vico](https://github.com/vicoapp/vico)
 
 ![vico_small](http://bastibe.de/static/2012-02/vico_small.png)
 
@@ -171,7 +171,7 @@ SlickEdit is easily the most expensive text editor in this list. A single user l
 It's feature list reads very well and checks all mayor boxes. It is available on pretty much any platform out there and is probably only rivalled by Emacs or Vim in that regard. It also supports emulation for Emacs or Vim key bindings.
 That said, 300-600 $ per developer is a pretty hefty price tag. Personally, I doubt that SlickEdit can live up to that price if you compare it to some of the other examples in this list. It is undoubtedly a well-maintained and powerful text editor though.
 
-#### [Komodo Edit](http://www.activestate.com/komodo-edit)
+#### [Komodo Edit](https://github.com/Komodo/KomodoEdit)
 
 ![komodo](http://bastibe.de/static/2012-02/komodo.png)
 
@@ -207,7 +207,7 @@ Another text editor gearing specifically for web development. Thus, you get powe
 
 Another text editor geared exclusively towards web development. This time around though, there is no support for languages other than HTML, CSS and PHP, which makes this program a rather poor choice.
 
-##### [skEdit](http://www.beforedawnsolutions.com/applications/skedit)
+##### [skEdit](https://www.jemstartech.com/applications/skedit-editor)
 
 ![skedit](http://bastibe.de/static/2012-02/skedit.png)
 

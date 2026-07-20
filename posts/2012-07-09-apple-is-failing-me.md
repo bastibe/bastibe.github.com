@@ -22,7 +22,7 @@ At the moment, there are three ways of getting software on your Mac.
 
 Really, this is beyond ridiculous. There is no way of uninstalling software that has been installed from a `*.pkg`. How the heck am I supposed to use my computer without uninstalling software? Seriously, Apple? Is this a joke?
 
-(So as a rule, I will only install `*.pkg` if there is absolutely no other way. Most of the time, I use or abuse [homebrew](http://mxcl.github.com/homebrew/) to mitigate this problem.)
+(So as a rule, I will only install `*.pkg` if there is absolutely no other way. Most of the time, I use or abuse [homebrew](https://brew.sh/) to mitigate this problem.)
 
 ### Failing Time Machine
 
@@ -50,7 +50,7 @@ But to do that, we had to convert his old library from iPhoto 1876 to iPhoto 200
 
 And then there was my own library, started in late 2007 and handed through different revisions of iPhoto to today. It countains about 25 Gb worth of photos. Funny enough, its size on disk is actually 65 Gb. What. The. Heck?
 
-At this point, a giant **thank you** to the [iPhoto Library Manager](http://www.fatcatsoftware.com/iplm/) by Fat Cat Software, which saved both my library and my sanity! Those guys rock!
+At this point, a giant **thank you** to the [iPhoto Library Manager](https://www.fatcatsoftware.com/powerphotos/) by Fat Cat Software, which saved both my library and my sanity! Those guys rock!
 
 ### OS X Lion with Auto Save and Versions
 
@@ -85,6 +85,6 @@ With all this love, why am I still using a Mac? Well, for one thing, the hardwar
 [^1]: As a matter of fact, I would love to see well enough to see Retina at all, but that is beside the point
 
 
-And then there is software. Where is [Tower](http://www.git-tower.com/) for Windows or Linux? Or [Sparrow](http://www.sparrowmailapp.com/) or [Tweetbot](http://tapbots.com/blog/tweetbot/tweetbot-for-mac) or [Reeder](http://reederapp.com/mac/) or [Pixelmator](http://www.pixelmator.com/) or iPhoto? I'm not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.
+And then there is software. Where is [Tower](http://www.git-tower.com/) for Windows or Linux? Or [Sparrow](http://web.archive.org/web/20150214062207/http://www.sparrowmailapp.com:80/) or [Tweetbot](http://tapbots.com/blog/tweetbot/tweetbot-for-mac) or [Reeder](http://reederapp.com/mac/) or [Pixelmator](http://www.pixelmator.com/) or iPhoto? I'm not saying there are no alternatives, but I certainly have not been able to find any that were really up to the same level of polish.
 
 That said, I have recently been playing around with Windows 8, Ubuntu 12.04 and Fedora 17 and I must say, I am quite taken with them. All of them. As for the next computer I am going to buy, I am doubtful if it will be an Apple computer again.

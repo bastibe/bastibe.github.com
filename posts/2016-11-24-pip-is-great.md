@@ -8,7 +8,7 @@ filetags: python
 
 To recap, the problem is that many Python packages rely on C code, which needs to be compiled before installation. In the past, this burden was mostly on the user. Depending on the user's knowledge of C and compilers, and the user's operating system, this could become almost arbitrarily hairy.
 
-This problem was solved, to some extent, using pre-compiled packages, first as [binary installers](http://www.lfd.uci.edu/~gohlke/pythonlibs/) on the package websites, then pre-packaged [Python](http://winpython.github.io/) [distributions](https://www.continuum.io/anaconda-overview), and later through third-party package managers such as [conda](http://conda.pydata.org/docs/).
+This problem was solved, to some extent, using pre-compiled packages, first as [binary installers](http://www.lfd.uci.edu/~gohlke/pythonlibs/) on the package websites, then pre-packaged [Python](http://winpython.github.io/) [distributions](https://www.anaconda.com/), and later through third-party package managers such as [conda](http://conda.pydata.org/docs/).
 
 This worked well, but it fractured the ecosystem into several different mostly-compatible package sources. This was no big problem, but users had to decide on a package-by-package basis whether to download an installer, use conda, or use pip.
 

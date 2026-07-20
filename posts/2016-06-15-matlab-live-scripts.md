@@ -12,7 +12,7 @@ The first time I saw this was with the [Jupyter notebook](http://jupyter.org/) (
 
 Later, I took over a Matlab course, but Matlab lacked a notebook. So for the next two years of teaching Matlab, I hacked up a small IPython extension that allowed me to run Matlab code in an Jupyter notebook as a cell magic.
 
-Now, with 2016a, Matlab introduced [Live Scripts](http://de.mathworks.com/help/releases/R2016a/matlab/live-scripts.html), which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
+Now, with 2016a, Matlab introduced [Live Scripts](https://www.mathworks.com/help/matlab/matlab_prog/create-live-scripts.html), which is Mathworkian for notebook. This blog post is about how Live Scripts compare to Jupyter notebooks.
 
 First off, Live Scripts _work_. The basic functionality is there: Code, prose, figures, and math can be saved in one document; The notebook can be exported as PDF and HTML, and Students can download the notebook and play with it. This latter part was not possible with my homegrown solution earlier.
 

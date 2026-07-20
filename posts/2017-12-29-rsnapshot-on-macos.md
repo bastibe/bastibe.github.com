@@ -60,7 +60,7 @@ Setting up rsnapshot on macOS is not quite as straight-forward as I'd like, and 
 
 - Write launchd Agent
 
-  Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script[^3], which tells launchd when and how to run your backups. In my case, I create four files in `/Users/bb/Library/LaunchAgents/`, called `rsnapshot.{hourly,daily,weekly,monthly}.plist`. Apple's [documentation](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html) for these files is only mildly useful (as usual), but [`man launchd.plist`](https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/launchd.plist.5.html) and [`man plist`](https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/plist.5.html#//apple_ref/doc/man/5/plist) should give you an idea how this works.
+  Next, we have to tell macOS to run the backups in regular intervals. Conceptually, you do this by writing a launchd agent script[^3], which tells launchd when and how to run your backups. In my case, I create four files in `/Users/bb/Library/LaunchAgents/`, called `rsnapshot.{hourly,daily,weekly,monthly}.plist`. Apple's [documentation](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/ScheduledJobs.html) for these files is only mildly useful (as usual), but [`man launchd.plist`](https://keith.github.io/xcode-man-pages/launchd.plist.5.html) and [`man plist`](https://keith.github.io/xcode-man-pages/plist.5.html) should give you an idea how this works.
 
   Here is my hourly launchd agent (I'll explain the bash/sleep thing later):
 

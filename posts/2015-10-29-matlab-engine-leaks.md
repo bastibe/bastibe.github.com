@@ -4,7 +4,7 @@ date: 2015-10-29 12:18
 filetags: matlab
 ---
 
-As of Matlab 2014b, Matlab includes a [Python module](http://mathworks.com/help/matlab/matlab-engine-for-python.html) for calling Matlab code from Python. This is how you use it:
+As of Matlab 2014b, Matlab includes a [Python module](https://www.mathworks.com/help/matlab/matlab-engine-for-python.html) for calling Matlab code from Python. This is how you use it:
 
 ```python
 import numpy

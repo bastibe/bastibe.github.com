@@ -6,7 +6,7 @@ filetags: compiling python macos
 
 So I upgraded to Lion. Predictably, some things went wrong. This time, the main thing that bit me was that for some reason, `pip` stopped working. After a bit of messing around with `brew`, `pip` and `easy_install`, I found out it was almost entirely my own fault. I messed up my `PATH`.
 
-In the meantime, I had uninstalled all of `brew`'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some `veclib_cabi_c.c` would report errors. A quick [round of googling](http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html) reveals:
+In the meantime, I had uninstalled all of `brew`'s Python, so I had to reinstall. For me, that entails Python, Numpy, Scipy and Matplotlib. Only this time, Scipy would not build. Some obscure error in some `veclib_cabi_c.c` would report errors. A quick [round of googling](https://web.archive.org/web/20151203105623/http://mail.scipy.org/pipermail/scipy-user/2009-June/021383.html) reveals:
 
 In order to get Scipy to compile, you need to insert `#include <complex.h>` in
 

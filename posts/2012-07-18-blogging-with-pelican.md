@@ -6,7 +6,7 @@ filetags: blog
 
 For a while now, I have been moving more and more services I use off Google. The reasons for that are manyfold, and few of them have anything to do with Google being evil or not--just to get that out of the way.
 
-One of the last holdouts has been [my neglected Blogspot blog](http://daskrachen.com). And one of the reasons for it being neglected is that it was hosted on Blogspot. Now don't get me wrong here, Blogspot is a terriffic blogging platform. You have this very nice nearly-WYSIWYG text editor right in your browser, you can upload images, you can publish instantly to your blog... Basically everything is taken care of for you conveniently right there in your browser. Google Style.
+One of the last holdouts has been [my neglected Blogspot blog](http://web.archive.org/web/20210122194927/http://www.daskrachen.com/). And one of the reasons for it being neglected is that it was hosted on Blogspot. Now don't get me wrong here, Blogspot is a terriffic blogging platform. You have this very nice nearly-WYSIWYG text editor right in your browser, you can upload images, you can publish instantly to your blog... Basically everything is taken care of for you conveniently right there in your browser. Google Style.
 
 Its just that I don't like to work that way. I like plain text. I like typing stuff into a plain text editor. I like to be in control. And Blogspot might be convenient, but it did not make me feel like I was in control. In fact, I lost at least one article to Blogspot for unknown reasons.
 

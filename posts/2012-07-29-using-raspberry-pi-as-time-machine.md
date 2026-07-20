@@ -88,5 +88,5 @@ Further testing shows that transfer speeds are very comparable to the Time Capsu
 This article heavily steals from these fine folks on the internet:
 
 - [Matthias Kretschmann](http://kremalicious.com/ubuntu-as-mac-file-server-and-time-machine-volume/)
-- [Steffen L. Norgren](http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/)
+- [Steffen L. Norgren](http://web.archive.org/web/20130419045530/http://trollop.org:80/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/)
 - [Mike Palmer](http://www.mikepalmer.net/build-a-netatalk-time-machine-for-osx-lion-using-debian-6-0-squeeze/)
