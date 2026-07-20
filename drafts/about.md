@@ -36,8 +36,8 @@ framework robust to scientific code running amok, and an interface
 library for running Matlab code from Python, all released as Open
 Source software.
 
-#MASTER OF SCIENCE*, Carl von Ossietzky University Oldenburg (2012-2014)   
-#BACHELOR OF ENGINEERING*, University of Applied Sciences Oldenburg (2006-2010)
+**MASTER OF SCIENCE**, Carl von Ossietzky University Oldenburg (2012-2014)   
+**BACHELOR OF ENGINEERING**, University of Applied Sciences Oldenburg (2006-2010)
 
 Two parts of _Hearing Technology and Audiology_, an engineering course
 about all things audio across medicine, acoustics, electronics, and
@@ -47,6 +47,17 @@ and Psychoacoustics.
 -----
 
 ## Work
+
+**MUETEC GMBH**, Aholming (2023-today)
+
+_Team Lead: Image Processing_, - C++, Python
+
+Migrating from signal processing to image processing was surprisingly
+easy. It's similar enough math, and what's another dimension or two? 
+The hard part is engineering good software, negotiating with customers, 
+and coordinating work across groups of developers.
+
+---
 
 **FRAUNHOFER IDMT**, Oldenburg (2021-2023)
 
