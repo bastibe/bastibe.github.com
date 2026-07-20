@@ -142,7 +142,7 @@ In the following list, the RAW developer name links to the sidecar file, if ther
 - [Exposure](https://bastibe.de/static/2020-05/DSCF3861.RAF.exposurex5): Highlights -100, Whites -50, Shadows +50 (less Whites desaturates)
 - [Lightroom](https://bastibe.de/static/2020-05/DSCF3861.xmp): Highlight -100, Shadow +50
 - Luminar: Highlights -100, Whites -50, Shadows +25
-- [ON1](https://bastibe.de/static/2020-05/DSF3861.on1): Highlights -50, Shadows +25 (More Highlights produce lightness reversals)
+- [ON1](https://bastibe.de/static/2020-05/DSCF3861.on1): Highlights -50, Shadows +25 (More Highlights produce lightness reversals)
 - Photo Ninja: Illumination 27, Exposure offset -1.62, Highlights -0.50 (all chosen automatically)
 - [RawTherapee](https://bastibe.de/static/2020-05/DSCF3861.RAF.pp3): Highlight Compression 250, Highlights 100, Shadows 25
 - [Silkypix](https://bastibe.de/static/2020-05/DSCF3861.RAF.10.spd): Highlight Dynamic Range +3, Hue 100

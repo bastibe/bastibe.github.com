@@ -41,7 +41,7 @@
 <div id="content">
 <div class="post-date">23 Sep 2014</div>
 <h1 class="post-title"><a href="https://bastibe.de/2014-09-23-org-cite.html">Org Mode Citation Links</a></h1>
-<p>I am writing my master's thesis in <a href="http:/orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.</p>
+<p>I am writing my master's thesis in <a href="http://orgmode.org/">Org Mode</a>, and export to LaTeX for publishing. For the most part, this works incredibly well. Using Org Mode instead of plain LaTeX means no more fiddly <code>\backslash{curly brace}</code> all over the place. No more scattering code fragments and markup across hundreds of files. And on top of that, deep integration with my research notes and task tracking system.</p>
 <p>But not everything is perfect. For one thing, citations do not work well. Sure, you can always write <code>\cite{cohen93}</code>, but then you are writing LaTeX again. Also, all the other references and footnotes are clickable, highlighted Org Mode links, but <code>\cite{cohen93}</code> is just inline LaTeX.</p>
 <p>But luckily, this is Emacs, and Emacs is programmable. And better yet, Org Mode has just the tool for the job:</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">org-add-link-type</span><span class="w"> </span><span class="s">&quot;cite&quot;</span>

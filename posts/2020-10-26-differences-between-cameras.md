@@ -4,7 +4,7 @@ date: 2020-10-27 10:00
 filetags: photography
 ---
 
-# get sRGB coordinates here: https://www.babelcolor.com/index_htm_files/RGB%20Coordinates%20of%20the%20Macbeth%20ColorChecker.pdf
+<!-- get sRGB coordinates here: https://www.babelcolor.com/index_htm_files/RGB%20Coordinates%20of%20the%20Macbeth%20ColorChecker.pdf -->
 
 Most cameras have the option to capture _raw_ images, i.e. un-processed image data right from the image sensor. In theory, these images are pure physical measurements of light, and should therefore be very comparable between cameras. But are they? To investigate, I took a _raw_ picture of [a color target](https://en.wikipedia.org/wiki/ColorChecker) with each of my five cameras, and compared their output.
 
